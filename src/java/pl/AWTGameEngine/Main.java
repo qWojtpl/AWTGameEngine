@@ -4,6 +4,7 @@ import pl.AWTGameEngine.components.SpriteRenderer;
 import pl.AWTGameEngine.custom.CustomComponent;
 import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
+import pl.AWTGameEngine.engine.KeyListener;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.DuplicatedObjectException;
 import pl.AWTGameEngine.scenes.Scene;
@@ -31,6 +32,7 @@ public class Main {
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+        window.addKeyListener(new KeyListener());
         SceneLoader.loadScene("main");
 //        Image img = null;
 //        try {

@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.Main;
+import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.io.File;
@@ -18,6 +19,14 @@ import java.util.List;
 public class SceneLoader {
 
     private static Scene currentScene;
+
+    public static void updateScene() {
+        for(GameObject go : currentScene.getGameObjects()) {
+            for(ObjectComponent component : go.getComponents()) {
+                component.onUpdate(go);
+            }
+        }
+    }
 
     public static void loadScene(String sceneName) {
         currentScene = new Scene(sceneName);

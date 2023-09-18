@@ -11,6 +11,10 @@ import java.awt.*;
  */
 public abstract class ObjectComponent {
 
+    public void onUpdate(GameObject object) {
+
+    }
+
     public void onRender(GameObject object, Graphics g) {
 
     }

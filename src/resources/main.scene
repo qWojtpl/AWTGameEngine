@@ -1,3 +1,3 @@
-object1="pos{300;200}scale{100;200}TextRenderer:ObjectComponent{text^hello^color^BLACK^size^30^}";
-object2="pos{100;200}scale{100;200}Button:ObjectComponent{}";
-object3="pos{400;500}scale{100;200}SpriteRenderer:ObjectComponent{image^beaver.jpg^}";
+title="pos{400;200}scale{100;200}priority{2}TextRenderer:ObjectComponent{text^hello^color^BLACK^size^30^}";
+object1="pos{0;0}scale{400;400}priority{1}SpriteRenderer:ObjectComponent{image^beaver.jpg^}CustomComponent:ObjectComponent-C{}";
+background="pos{0;0}scale{0;0}priority{0}BackgroundRenderer:ObjectComponent-C{}"

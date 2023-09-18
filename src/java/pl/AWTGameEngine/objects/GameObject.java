@@ -16,6 +16,7 @@ public class GameObject {
     private int y = 0;
     private int scaleX = 100;
     private int scaleY = 100;
+    private int priority = 0;
     private List<ObjectComponent> components = new ArrayList<>();
 
     public GameObject(String identifier) {
@@ -61,6 +62,10 @@ public class GameObject {
         return this.scaleY;
     }
 
+    public int getPriority() {
+        return this.priority;
+    }
+
     public boolean setX(int x) {
         if(!updatePosition(x, getY())) {
             return false;
@@ -83,6 +88,10 @@ public class GameObject {
 
     public void setScaleY(int y) {
         this.scaleY = y;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public void render(Graphics g) {
@@ -133,6 +142,11 @@ public class GameObject {
                 try {
                     this.setX(Integer.parseInt(split[0]));
                     this.setY(Integer.parseInt(split[1]));
+                } catch(NumberFormatException ignored) {
+                }
+            } else if(propertyName.equalsIgnoreCase("priority")) {
+                try {
+                    this.setPriority(Integer.parseInt(properties.get(propertyName)));
                 } catch(NumberFormatException ignored) {
                 }
             } else if(propertyName.equalsIgnoreCase("scale")) {

@@ -1,38 +1,30 @@
 package pl.AWTGameEngine.engine;
 
 import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class KeyListener implements java.awt.event.KeyListener {
 
-    private static int lastType;
-    private static int lastPress;
-    private static int lastRelease;
+    private static Set<Integer> pressedKeys = new HashSet<>();
 
     @Override
     public void keyTyped(KeyEvent e) {
-        lastType = e.getKeyCode();
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        lastPress = e.getKeyCode();
+        pressedKeys.add(e.getKeyCode());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        lastRelease = e.getKeyCode();
+        pressedKeys.remove(e.getKeyCode());
     }
 
-    public static int getLastType() {
-        return lastType;
-    }
-
-    public static int getLastPress() {
-        return lastPress;
-    }
-
-    public static int getLastRelease() {
-        return lastRelease;
+    public static boolean hasPressedKey(int key) {
+        return pressedKeys.contains(key);
     }
 
 }

@@ -22,6 +22,10 @@ public class BlankRenderer extends ObjectComponent {
         this.color = color;
     }
 
+    public void setColor(String color) {
+        setColor(Color.getColor(color));
+    }
+
 
 
 }

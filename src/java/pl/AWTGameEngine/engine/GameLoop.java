@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.Main;
+import pl.AWTGameEngine.scenes.SceneLoader;
 
 public class GameLoop extends Thread {
 
@@ -17,6 +18,7 @@ public class GameLoop extends Thread {
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
             if(delta >= 1) {
+                SceneLoader.updateScene();
                 Main.getPanel().repaint();
                 delta--;
             }

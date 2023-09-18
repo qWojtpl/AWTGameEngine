@@ -1,11 +1,14 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
 
@@ -21,8 +24,20 @@ public class GamePanel extends JPanel {
         if(g == null || SceneLoader.getCurrentScene() == null) {
             return;
         }
+        HashMap<Integer, List<GameObject>> sortedObjects = new HashMap<>();
+        int maxPriority = 0;
         for(GameObject go : SceneLoader.getCurrentScene().getGameObjects()) {
-            go.render(g);
+            if(go.getPriority() > maxPriority) {
+                maxPriority = go.getPriority();
+            }
+            List<GameObject> objects = sortedObjects.getOrDefault(go.getPriority(), new ArrayList<>());
+            objects.add(go);
+            sortedObjects.put(go.getPriority(), objects);
+        }
+        for(int i = 0; i <= maxPriority; i++) {
+            for(GameObject go : sortedObjects.getOrDefault(i, new ArrayList<>())) {
+                go.render(g);
+            }
         }
         g.dispose();
     }
