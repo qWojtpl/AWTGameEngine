@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;

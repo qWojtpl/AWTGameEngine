@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,10 +18,10 @@ public class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(g == null || Main.getCurrentScene() == null) {
+        if(g == null || SceneLoader.getCurrentScene() == null) {
             return;
         }
-        for(GameObject go : Main.getCurrentScene().getGameObjects()) {
+        for(GameObject go : SceneLoader.getCurrentScene().getGameObjects()) {
             go.render(g);
         }
         g.dispose();

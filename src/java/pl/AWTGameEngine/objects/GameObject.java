@@ -2,9 +2,11 @@ package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.TextRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GameObject {
@@ -98,6 +100,91 @@ public class GameObject {
             }
         }
         return returnable;
+    }
+
+    public void deserialize(String data) {
+        HashMap<String, String> properties = new HashMap<>();
+        String key = "";
+        String value = "";
+        boolean valuesOpened = false;
+        for(int i = 0; i < data.length(); i++) {
+            if(data.charAt(i) == '{') {
+                valuesOpened = true;
+                continue;
+            } else if(data.charAt(i) == '}') {
+                valuesOpened = false;
+                properties.put(key, value);
+                key = "";
+                value = "";
+                continue;
+            }
+            if(!valuesOpened) {
+                key += data.charAt(i);
+            } else {
+                value += data.charAt(i);
+            }
+        }
+        for(String propertyName : properties.keySet()) {
+            if(propertyName.equalsIgnoreCase("pos")) {
+                String[] split = properties.get(propertyName).split(";");
+                if(split.length < 2) {
+                    continue;
+                }
+                try {
+                    this.setX(Integer.parseInt(split[0]));
+                    this.setY(Integer.parseInt(split[1]));
+                } catch(NumberFormatException ignored) {
+                }
+            } else if(propertyName.equalsIgnoreCase("scale")) {
+                String[] split = properties.get(propertyName).split(";");
+                if(split.length < 2) {
+                    continue;
+                }
+                try {
+                    this.setScaleX(Integer.parseInt(split[0]));
+                    this.setScaleY(Integer.parseInt(split[1]));
+                } catch(NumberFormatException ignored) {
+                }
+            } else if(propertyName.contains(":ObjectComponent")) {
+                String className;
+                if(propertyName.contains(":ObjectComponent-C")) {
+                    className = "custom." + propertyName.replace(":ObjectComponent-C", "");
+                } else {
+                    className = "components." + propertyName.replace(":ObjectComponent", "");
+                }
+                HashMap<String, String> fields = new HashMap<>();
+                String property = properties.get(propertyName);
+                boolean fieldValueOpened = false;
+                for(int i = 0; i < property.length(); i++) {
+                    if(property.charAt(i) == '^') {
+                        fieldValueOpened = !fieldValueOpened;
+                        if(!fieldValueOpened) {
+                            fields.put(key, value);
+                            key = "";
+                            value = "";
+                        }
+                        continue;
+                    }
+                    if(!fieldValueOpened) {
+                        key += property.charAt(i);
+                    } else {
+                        value += property.charAt(i);
+                    }
+                }
+                try {
+                    Class<? extends ObjectComponent> clazz = Class.forName("pl.AWTGameEngine." + className)
+                            .asSubclass(ObjectComponent.class);
+                    ObjectComponent o = clazz.getConstructor().newInstance();
+                    for(String fieldName : fields.keySet()) {
+                        String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                        clazz.getDeclaredMethod(methodName, String.class).invoke(o, fields.get(fieldName));
+                    }
+                    this.addComponent(o);
+                } catch(Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
     }
 
 }

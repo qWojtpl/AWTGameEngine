@@ -27,8 +27,19 @@ public class Scene {
         return go;
     }
 
+    public void addGameObject(GameObject object) throws DuplicatedObjectException {
+        if(gameObjects.containsKey(object.getIdentifier())) {
+            throw new DuplicatedObjectException(object.getIdentifier());
+        }
+        gameObjects.put(object.getIdentifier(), object);
+    }
+
     public Collection<GameObject> getGameObjects() {
         return gameObjects.values();
+    }
+
+    public void removeAllObjects() {
+        gameObjects.clear();
     }
 
 }

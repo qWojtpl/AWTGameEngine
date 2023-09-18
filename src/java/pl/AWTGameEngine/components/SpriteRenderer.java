@@ -1,9 +1,11 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.objects.GameObject;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 
 public class SpriteRenderer extends ObjectComponent {
 
@@ -20,6 +22,18 @@ public class SpriteRenderer extends ObjectComponent {
 
     public void setImage(Image image) {
         this.image = image;
+    }
+
+    public void setImage(String imageSource) {
+        try {
+            URL url = this.getClass().getClassLoader().getResource(imageSource);
+            if(url == null) {
+                throw new IOException();
+            }
+            this.image = ImageIO.read(url);
+        } catch(IOException e) {
+            System.out.println("Can't set image to " + imageSource + "!");
+        }
     }
 
 }
