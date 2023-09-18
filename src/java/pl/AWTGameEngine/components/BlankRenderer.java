@@ -8,8 +8,12 @@ public class BlankRenderer extends ObjectComponent {
 
     private Color color = Color.BLACK;
 
+    public BlankRenderer(GameObject object) {
+        super(object);
+    }
+
     @Override
-    public void onRender(GameObject object, Graphics g) {
+    public void onRender(Graphics g) {
         g.setColor(getColor());
         g.fillRect(object.getX(), object.getY(), object.getScaleX(), object.getScaleY());
     }

@@ -25,7 +25,7 @@ public class GameObject {
 
     public void addComponent(ObjectComponent component) {
         this.components.add(component);
-        component.onAddComponent(this);
+        component.onAddComponent();
     }
 
     public String getIdentifier() {
@@ -96,19 +96,18 @@ public class GameObject {
 
     public void render(Graphics g) {
         for(ObjectComponent component : getComponents()) {
-            component.onRender(this, g);
+            component.onRender(g);
         }
     }
 
     public boolean updatePosition(int newX, int newY) {
-        boolean returnable = true;
         for(ObjectComponent component : getComponents()) {
-            boolean good = component.onUpdatePosition(this, newX, newY);
+            boolean good = component.onUpdatePosition(newX, newY);
             if(!good) {
-                returnable = false;
+                return false;
             }
         }
-        return returnable;
+        return true;
     }
 
     public void deserialize(String data) {
@@ -188,7 +187,7 @@ public class GameObject {
                 try {
                     Class<? extends ObjectComponent> clazz = Class.forName("pl.AWTGameEngine." + className)
                             .asSubclass(ObjectComponent.class);
-                    ObjectComponent o = clazz.getConstructor().newInstance();
+                    ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(this);
                     for(String fieldName : fields.keySet()) {
                         String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
                         clazz.getDeclaredMethod(methodName, String.class).invoke(o, fields.get(fieldName));

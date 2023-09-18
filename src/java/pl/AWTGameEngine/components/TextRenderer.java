@@ -10,8 +10,12 @@ public class TextRenderer extends ObjectComponent {
     private Color color = Color.BLACK;
     private float size = 30.0f;
 
+    public TextRenderer(GameObject object) {
+        super(object);
+    }
+
     @Override
-    public void onRender(GameObject object, Graphics g) {
+    public void onRender(Graphics g) {
         g.setColor(getColor());
         g.setFont(g.getFont().deriveFont(getSize()));
         g.drawString(getText(), object.getX(), object.getY());

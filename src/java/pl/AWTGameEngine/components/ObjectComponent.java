@@ -11,19 +11,37 @@ import java.awt.*;
  */
 public abstract class ObjectComponent {
 
-    public void onUpdate(GameObject object) {
+    protected final GameObject object;
+
+    public ObjectComponent(GameObject object) {
+        this.object = object;
+    }
+
+    public void onPreUpdate() {
 
     }
 
-    public void onRender(GameObject object, Graphics g) {
+    public void onUpdate() {
 
     }
 
-    public boolean onUpdatePosition(GameObject object, int newX, int newY) {
+    public void onAfterUpdate() {
+
+    }
+
+    public void onRender(Graphics g) {
+
+    }
+
+    public boolean onUpdatePosition(int newX, int newY) {
         return true;
     }
 
-    public void onAddComponent(GameObject object) {
+    public void onAddComponent() {
+
+    }
+
+    public void onRemoveComponent() {
 
     }
 

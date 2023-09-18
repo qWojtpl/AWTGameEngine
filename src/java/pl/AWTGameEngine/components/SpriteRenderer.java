@@ -11,8 +11,12 @@ public class SpriteRenderer extends ObjectComponent {
 
     private Image image;
 
+    public SpriteRenderer(GameObject object) {
+        super(object);
+    }
+
     @Override
-    public void onRender(GameObject object, Graphics g) {
+    public void onRender(Graphics g) {
         g.drawImage(image, object.getX(), object.getY(), object.getScaleX(), object.getScaleY(), null);
     }
 
@@ -24,7 +28,7 @@ public class SpriteRenderer extends ObjectComponent {
         this.image = image;
     }
 
-    public void setImage(String imageSource) {
+    public Image setImage(String imageSource) {
         try {
             URL url = this.getClass().getClassLoader().getResource(imageSource);
             if(url == null) {
@@ -34,6 +38,7 @@ public class SpriteRenderer extends ObjectComponent {
         } catch(IOException e) {
             System.out.println("Can't set image to " + imageSource + "!");
         }
+        return this.image;
     }
 
 }

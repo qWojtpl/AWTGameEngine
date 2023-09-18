@@ -27,4 +27,8 @@ public class KeyListener implements java.awt.event.KeyListener {
         return pressedKeys.contains(key);
     }
 
+    public static void releaseKey(int key) {
+        pressedKeys.remove(key);
+    }
+
 }

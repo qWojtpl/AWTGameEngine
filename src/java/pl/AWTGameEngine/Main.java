@@ -34,29 +34,8 @@ public class Main {
         window.setVisible(true);
         window.addKeyListener(new KeyListener());
         SceneLoader.loadScene("main");
-//        Image img = null;
-//        try {
-//            img = ImageIO.read(new File("C:/Users/wojto/OneDrive/Obrazy/0193fb7685c8d7b0f3a204a85b135af0 (1).jpg"));
-//        } catch(IOException e) {
-//            e.printStackTrace();
-//        }
-//        for(int x = 0; x < 8; x++) {
-//            for (int y = 0; y < 8; y++) {
-//                try {
-//                    GameObject go = currentScene.createGameObject(x + "x" + y);
-//                    go.setX(100 + x * 100);
-//                    go.setY(100 + y * 100);
-//                    SpriteRenderer renderer = new SpriteRenderer();
-//                    renderer.setImage(img);
-//                    go.addComponent(renderer);
-//                    go.addComponent(new CustomComponent());
-//                    //go.addComponent(new BlankRenderer());
-//                } catch (DuplicatedObjectException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
         new GameLoop().start();
+        System.console();
     }
 
     public static JFrame getWindow() {

@@ -8,8 +8,12 @@ public class Button extends ObjectComponent {
     private String text = "Button";
     private java.awt.Button button;
 
+    public Button(GameObject object) {
+        super(object);
+    }
+
     @Override
-    public void onAddComponent(GameObject object) {
+    public void onAddComponent() {
         button = new java.awt.Button(getText());
         Main.getPanel().add(button);
         button.setLabel(getText());
@@ -17,7 +21,12 @@ public class Button extends ObjectComponent {
     }
 
     @Override
-    public boolean onUpdatePosition(GameObject object, int newX, int newY) {
+    public void onRemoveComponent() {
+        Main.getPanel().remove(button);
+    }
+
+    @Override
+    public boolean onUpdatePosition(int newX, int newY) {
         button.setBounds(newX, newY, object.getScaleX(), object.getScaleY());
         return true;
     }
