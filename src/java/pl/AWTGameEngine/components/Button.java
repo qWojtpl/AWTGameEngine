@@ -11,7 +11,7 @@ public class Button extends ObjectComponent {
     @Override
     public void onAddComponent(GameObject object) {
         button = new java.awt.Button(getText());
-        Main.getInstance().add(button);
+        Main.getPanel().add(button);
         button.setBounds(object.getX(), object.getY(), object.getScaleX(), object.getScaleY());
     }
 

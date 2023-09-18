@@ -4,7 +4,7 @@ import pl.AWTGameEngine.Main;
 
 public class GameLoop extends Thread {
 
-    private double FPS = 60;
+    private final double FPS = 60;
 
     @Override
     public void run() {
@@ -17,8 +17,7 @@ public class GameLoop extends Thread {
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
             if(delta >= 1) {
-                Main.getInstance().paint(Main.getInstance().getGraphics());
-                Main.getInstance().repaint();
+                Main.getPanel().repaint();
                 delta--;
             }
         }

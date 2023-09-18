@@ -10,8 +10,7 @@ public class BlankRenderer extends ObjectComponent {
     private Color color = Color.BLACK;
 
     @Override
-    public void onRender(GameObject object) {
-        Graphics2D g = (Graphics2D) Main.getInstance().getGraphics();
+    public void onRender(GameObject object, Graphics g) {
         g.setColor(getColor());
         g.fillRect(object.getX(), object.getY(), object.getScaleX(), object.getScaleY());
     }

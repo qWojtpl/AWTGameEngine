@@ -2,9 +2,11 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.objects.GameObject;
 
+import java.awt.*;
+
 public abstract class ObjectComponent {
 
-    public void onRender(GameObject object) {
+    public void onRender(GameObject object, Graphics g) {
 
     }
 

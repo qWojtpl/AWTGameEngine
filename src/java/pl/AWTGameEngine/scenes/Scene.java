@@ -22,7 +22,7 @@ public class Scene {
         if(gameObjects.containsKey(identifier)) {
             throw new DuplicatedObjectException(identifier);
         }
-        GameObject go = new GameObject();
+        GameObject go = new GameObject(identifier);
         gameObjects.put(identifier, go);
         return go;
     }

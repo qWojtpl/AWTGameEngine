@@ -2,75 +2,74 @@ package pl.AWTGameEngine;
 
 import pl.AWTGameEngine.components.BlankRenderer;
 import pl.AWTGameEngine.components.Button;
+import pl.AWTGameEngine.components.SpriteRenderer;
 import pl.AWTGameEngine.components.TextRenderer;
 import pl.AWTGameEngine.custom.CustomComponent;
 import pl.AWTGameEngine.engine.GameLoop;
+import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.KeyListener;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.DuplicatedObjectException;
 import pl.AWTGameEngine.scenes.Scene;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
-public class Main extends Frame {
+public class Main {
 
-    private static Main instance;
-    private Scene currentScene;
+    private static Scene currentScene;
+    private static JFrame window;
+    private static GamePanel panel;
 
     public static void main(String[] args) {
-        new Main();
-    }
-
-    public Main() {
-        super("Java 2D test");
-        instance = this;
-        setSize(400, 300);
-        setResizable(false);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //setCursor(Cursor.WAIT_CURSOR);
-        setUndecorated(true);
-        setVisible(true);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                dispose();
-                System.out.println("Window exit.");
-                System.exit(0);
-            }
-        });
-        addKeyListener(new KeyListener());
+        window = new JFrame();
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //window.setResizable(false);
+        window.setTitle("Java 2D test");
+        panel = new GamePanel();
+        window.add(panel);
+        window.pack();
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
         currentScene = new Scene("main");
+        Image img = null;
         try {
-            GameObject go = currentScene.createGameObject("0");
-            go.setX(100);
-            go.setY(100);
-            TextRenderer renderer = new TextRenderer();
-            renderer.setText("test");
-            go.addComponent(new BlankRenderer());
-            go.addComponent(new Button());
-            go.addComponent(new CustomComponent());
-            go.addComponent(renderer);
-        } catch(DuplicatedObjectException e) {
+            img = ImageIO.read(new File("C:/Users/wojto/OneDrive/Obrazy/0193fb7685c8d7b0f3a204a85b135af0 (1).jpg"));
+        } catch(IOException e) {
             e.printStackTrace();
+        }
+        for(int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                try {
+                    GameObject go = currentScene.createGameObject(x + "x" + y);
+                    go.setX(100 + x * 100);
+                    go.setY(100 + y * 100);
+                    SpriteRenderer renderer = new SpriteRenderer();
+                    renderer.setImage(img);
+                    go.addComponent(renderer);
+                    go.addComponent(new CustomComponent());
+                    //go.addComponent(new BlankRenderer());
+                } catch (DuplicatedObjectException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         new GameLoop().start();
     }
 
-    public void paint(Graphics g) {
-        if(g == null || currentScene == null) {
-            return;
-        }
-        for(GameObject go : currentScene.getGameObjects()) {
-            go.render();
-        }
-        g.dispose();
+    public static Scene getCurrentScene() {
+        return currentScene;
     }
 
-    public static Main getInstance() {
-        return instance;
+    public static JFrame getWindow() {
+        return window;
+    }
+
+    public static GamePanel getPanel() {
+        return panel;
     }
 
 }

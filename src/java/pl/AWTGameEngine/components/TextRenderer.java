@@ -12,9 +12,7 @@ public class TextRenderer extends ObjectComponent {
     private Color color = Color.BLACK;
 
     @Override
-    public void onRender(GameObject object) {
-        setText("key: " + KeyListener.getLastPress());
-        Graphics2D g = (Graphics2D) Main.getInstance().getGraphics();
+    public void onRender(GameObject object, Graphics g) {
         g.setFont(g.getFont().deriveFont(30f));
         g.drawString(getText(), object.getX(), object.getY());
     }
