@@ -4,6 +4,8 @@ import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
+import java.awt.*;
+
 public class Button extends ObjectComponent {
 
     private String text = "Button";
@@ -19,7 +21,8 @@ public class Button extends ObjectComponent {
         Main.getPanel().add(button);
         button.setLabel(getText());
         button.setFocusable(false);
-        button.setBounds(object.getX(), object.getY(), object.getScaleX(), object.getScaleY());
+        button.setLocation(object.getX(), object.getY());
+        button.setSize(object.getScaleX(), object.getScaleY());
     }
 
     @Override
@@ -28,9 +31,9 @@ public class Button extends ObjectComponent {
     }
 
     @Override
-    public boolean onUpdatePosition(int newX, int newY) {
-        button.setBounds(newX - Camera.getX(), newY - Camera.getY(), object.getScaleX(), object.getScaleY());
-        return true;
+    public void onRender(Graphics g) {
+        button.setLocation(object.getX() - Camera.getRelativeX(object), object.getY() - Camera.getRelativeY(object));
+        button.setSize(object.getScaleX(), object.getScaleY());
     }
 
     public String getText() {

@@ -4,6 +4,7 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 
 public class BlankRenderer extends ObjectComponent {
 
@@ -16,7 +17,8 @@ public class BlankRenderer extends ObjectComponent {
     @Override
     public void onRender(Graphics g) {
         g.setColor(getColor());
-        g.fillRect(object.getX() - Camera.getX(), object.getY() - Camera.getY(), object.getScaleX(), object.getScaleY());
+        g.fillRect(object.getX() - Camera.getRelativeX(object), object.getY() - Camera.getRelativeY(object),
+                object.getScaleX(), object.getScaleY());
     }
 
     public Color getColor() {
@@ -28,7 +30,14 @@ public class BlankRenderer extends ObjectComponent {
     }
 
     public void setColor(String color) {
-        setColor(Color.getColor(color));
+        Color c;
+        try {
+            Field field = Class.forName("java.awt.Color").getField(color.toLowerCase());
+            c = (Color) field.get(null);
+        } catch (Exception e) {
+            c = Color.BLACK;
+        }
+        setColor(c);
     }
 
 

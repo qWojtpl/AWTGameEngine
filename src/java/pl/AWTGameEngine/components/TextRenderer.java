@@ -19,7 +19,7 @@ public class TextRenderer extends ObjectComponent {
     public void onRender(Graphics g) {
         g.setColor(getColor());
         g.setFont(g.getFont().deriveFont(getSize()));
-        g.drawString(getText(), object.getX() - Camera.getX(), object.getY() - Camera.getY());
+        g.drawString(getText(), object.getX() - Camera.getRelativeX(object), object.getY() - Camera.getRelativeY(object));
     }
 
     public String getText() {

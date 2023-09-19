@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.objects;
 
+import pl.AWTGameEngine.components.Canvas;
+
 public class Camera {
 
     private static int x = 0;
@@ -9,7 +11,21 @@ public class Camera {
         return x;
     }
 
+    public static int getRelativeX(GameObject object) {
+        if(object.getComponentsByClass(Canvas.class).size() > 0) {
+            return 0;
+        }
+        return x;
+    }
+
     public static int getY() {
+        return y;
+    }
+
+    public static int getRelativeY(GameObject object) {
+        if(object.getComponentsByClass(Canvas.class).size() > 0) {
+            return 0;
+        }
         return y;
     }
 

@@ -18,7 +18,8 @@ public class SpriteRenderer extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        g.drawImage(image, object.getX() - Camera.getX(), object.getY() - Camera.getY(), object.getScaleX(), object.getScaleY(), null);
+        g.drawImage(image, object.getX() - Camera.getRelativeX(object), object.getY() - Camera.getRelativeY(object),
+                object.getScaleX(), object.getScaleY(), null);
     }
 
     public Image getImage() {

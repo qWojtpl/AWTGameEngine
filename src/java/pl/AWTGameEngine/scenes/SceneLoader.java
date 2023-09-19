@@ -39,6 +39,7 @@ public class SceneLoader {
 
     public static void loadScene(String sceneName) {
         ColliderRegistry.clearRegistry();
+        Main.getPanel().removeAll();
         Camera.setBounds(0, 0);
         currentScene = new Scene(sceneName);
         List<String> lines;

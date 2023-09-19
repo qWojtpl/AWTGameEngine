@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.custom;
 
+import pl.AWTGameEngine.components.Canvas;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.SpriteRenderer;
 import pl.AWTGameEngine.objects.GameObject;

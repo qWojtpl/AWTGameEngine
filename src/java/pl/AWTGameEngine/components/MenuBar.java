@@ -17,29 +17,6 @@ public class MenuBar extends ObjectComponent {
         super(object);
     }
 
-//    @Override
-//    public void onAddComponent() {
-//        this.menuBar = new JMenuBar();
-//        setNextMenu("Menu");
-//        setNextItem("Item 1");
-//        JMenu menu = new JMenu("Menu");
-//        JMenu submenu = new JMenu("Sub Menu");
-//        JMenuItem i1 = new JMenuItem("Item 1");
-//        JMenuItem i2 = new JMenuItem("Item 2");
-//        JMenuItem i3 = new JMenuItem("Item 3");
-//        JMenuItem i4 = new JMenuItem("Item 4");
-//        JMenuItem i5 = new JMenuItem("Item 5");
-//        menu.add(i1);
-//        menu.add(i2);
-//        menu.add(i3);
-//        submenu.add(i4);
-//        submenu.add(i5);
-//        menu.add(submenu);
-//        menuBar.add(menu);
-//        menuBar.setFont(Main.getPanel().getFont().deriveFont(90f));
-//        updateWindow();
-//    }
-
     public void setNextMenu(String menuName) {
         initBar();
         JMenu menu = new JMenu(menuName);

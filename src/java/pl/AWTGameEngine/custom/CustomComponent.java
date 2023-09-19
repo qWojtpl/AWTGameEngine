@@ -13,7 +13,7 @@ public class CustomComponent extends ObjectComponent {
     }
 
     @Override
-    public void onUpdate() {
+    public void onPreUpdate() {
         if(KeyListener.hasPressedKey(87)) {
             object.setY(object.getY() - 3);
         }
@@ -27,16 +27,16 @@ public class CustomComponent extends ObjectComponent {
             object.setX(object.getX() + 3);
         }
         if(KeyListener.hasPressedKey(37)) {
-            Camera.setX(Camera.getX() - 1);
+            Camera.setX(Camera.getX() - 8);
         }
         if(KeyListener.hasPressedKey(39)) {
-            Camera.setX(Camera.getX() + 1);
+            Camera.setX(Camera.getX() + 8);
         }
         if(KeyListener.hasPressedKey(38)) {
-            Camera.setY(Camera.getY() - 1);
+            Camera.setY(Camera.getY() - 8);
         }
         if(KeyListener.hasPressedKey(40)) {
-            Camera.setY(Camera.getY() + 1);
+            Camera.setY(Camera.getY() + 8);
         }
         if(KeyListener.hasPressedKey(82)) {
             SceneLoader.loadScene("main");

@@ -27,7 +27,7 @@ public class BoxCollider extends ObjectComponent {
     public void onRender(Graphics g) {
         if(isVisualize()) {
             g.setColor(Color.GREEN);
-            g.drawRect(object.getX() + x1 - Camera.getX(), object.getY() - Camera.getY(),
+            g.drawRect(object.getX() + x1 - Camera.getRelativeX(object), object.getY() - Camera.getRelativeY(object),
                     object.getScaleX() + x2 - x1, object.getScaleY() + y1 - y2);
         }
     }
