@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class KeyListener implements java.awt.event.KeyListener {
 
-    private static Set<Integer> pressedKeys = new HashSet<>();
+    private final static Set<Integer> pressedKeys = new HashSet<>();
 
     @Override
     public void keyTyped(KeyEvent e) {

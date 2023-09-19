@@ -2,6 +2,7 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.KeyListener;
+import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
@@ -24,6 +25,18 @@ public class CustomComponent extends ObjectComponent {
         }
         if(KeyListener.hasPressedKey(68)) {
             object.setX(object.getX() + 3);
+        }
+        if(KeyListener.hasPressedKey(37)) {
+            Camera.setX(Camera.getX() - 1);
+        }
+        if(KeyListener.hasPressedKey(39)) {
+            Camera.setX(Camera.getX() + 1);
+        }
+        if(KeyListener.hasPressedKey(38)) {
+            Camera.setY(Camera.getY() - 1);
+        }
+        if(KeyListener.hasPressedKey(40)) {
+            Camera.setY(Camera.getY() + 1);
         }
         if(KeyListener.hasPressedKey(82)) {
             SceneLoader.loadScene("main");

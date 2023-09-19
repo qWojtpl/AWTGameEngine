@@ -3,3 +3,5 @@ object1="pos{0;0}scale{40;40}priority{1}SpriteRenderer:ObjectComponent{image^bea
 collider="pos{600;300}scale{200;200}priority{1}BoxCollider:ObjectComponent{visualize^true^}";
 collider2="pos{600;0}scale{200;200}priority{1}BoxCollider:ObjectComponent{visualize^true^}";
 background="pos{0;0}scale{0;0}priority{0}BackgroundRenderer:ObjectComponent-C{}";
+menuBar="pos{0;0}scale{0;0}priority{0}MenuBar:ObjectComponent{nextMenu^Project^nextItem^Save^nextItem^Build^nextSubMenu^Settings^nextSubItem^Preferences^nextSubItem^Build settings^nextSubItem^Editor settings^}";
+canvas="pos{0;0}scale{100;100}BlankRenderer:ObjectComponent{}Canvas:ObjectComponent{}Button:ObjectComponent{}"

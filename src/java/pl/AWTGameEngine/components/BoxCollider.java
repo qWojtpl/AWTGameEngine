@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.engine.ColliderRegistry;
+import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -26,7 +27,8 @@ public class BoxCollider extends ObjectComponent {
     public void onRender(Graphics g) {
         if(isVisualize()) {
             g.setColor(Color.GREEN);
-            g.drawRect(object.getX() + x1, object.getY(), object.getScaleX() + x2 - x1, object.getScaleY() + y1 - y2);
+            g.drawRect(object.getX() + x1 - Camera.getX(), object.getY() - Camera.getY(),
+                    object.getScaleX() + x2 - x1, object.getScaleY() + y1 - y2);
         }
     }
 

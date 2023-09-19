@@ -5,7 +5,6 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -35,6 +34,9 @@ public class GamePanel extends JPanel {
             sortedObjects.put(go.getPriority(), objects);
         }
         for(int i = 0; i <= maxPriority; i++) {
+            if(!sortedObjects.containsKey(i)) {
+                continue;
+            }
             for(GameObject go : sortedObjects.getOrDefault(i, new ArrayList<>())) {
                 go.render(g);
             }

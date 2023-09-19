@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -15,7 +16,7 @@ public class BlankRenderer extends ObjectComponent {
     @Override
     public void onRender(Graphics g) {
         g.setColor(getColor());
-        g.fillRect(object.getX(), object.getY(), object.getScaleX(), object.getScaleY());
+        g.fillRect(object.getX() - Camera.getX(), object.getY() - Camera.getY(), object.getScaleX(), object.getScaleY());
     }
 
     public Color getColor() {

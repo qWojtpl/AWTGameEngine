@@ -3,6 +3,7 @@ package pl.AWTGameEngine.scenes;
 import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.ColliderRegistry;
+import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.io.IOException;
@@ -22,7 +23,15 @@ public class SceneLoader {
         for(GameObject go : currentScene.getGameObjects()) {
             for(ObjectComponent component : go.getComponents()) {
                 component.onPreUpdate();
+            }
+        }
+        for(GameObject go : currentScene.getGameObjects()) {
+            for(ObjectComponent component : go.getComponents()) {
                 component.onUpdate();
+            }
+        }
+        for(GameObject go : currentScene.getGameObjects()) {
+            for(ObjectComponent component : go.getComponents()) {
                 component.onAfterUpdate();
             }
         }
@@ -30,6 +39,7 @@ public class SceneLoader {
 
     public static void loadScene(String sceneName) {
         ColliderRegistry.clearRegistry();
+        Camera.setBounds(0, 0);
         currentScene = new Scene(sceneName);
         List<String> lines;
         Path path = null;

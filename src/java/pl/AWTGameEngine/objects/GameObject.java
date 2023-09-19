@@ -1,12 +1,9 @@
 package pl.AWTGameEngine.objects;
 
-import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.components.TextRenderer;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
 public class GameObject {
@@ -17,7 +14,7 @@ public class GameObject {
     private int scaleX = 100;
     private int scaleY = 100;
     private int priority = 0;
-    private List<ObjectComponent> components = new ArrayList<>();
+    private final List<ObjectComponent> components = new ArrayList<>();
 
     public GameObject(String identifier) {
         this.identifier = identifier;
@@ -165,13 +162,16 @@ public class GameObject {
                 } else {
                     className = "components." + propertyName.replace(":ObjectComponent", "");
                 }
-                HashMap<String, String> fields = new HashMap<>();
+                LinkedHashMap<String, String> fields = new LinkedHashMap<>();
                 String property = properties.get(propertyName);
                 boolean fieldValueOpened = false;
                 for(int i = 0; i < property.length(); i++) {
                     if(property.charAt(i) == '^') {
                         fieldValueOpened = !fieldValueOpened;
                         if(!fieldValueOpened) {
+                            while(fields.containsKey(key)) {
+                                key += "~";
+                            }
                             fields.put(key, value);
                             key = "";
                             value = "";
@@ -189,8 +189,10 @@ public class GameObject {
                             .asSubclass(ObjectComponent.class);
                     ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(this);
                     for(String fieldName : fields.keySet()) {
+                        String v = fields.get(fieldName);
+                        fieldName = fieldName.replace("~", "");
                         String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                        clazz.getDeclaredMethod(methodName, String.class).invoke(o, fields.get(fieldName));
+                        clazz.getDeclaredMethod(methodName, String.class).invoke(o, v);
                     }
                     this.addComponent(o);
                 } catch(Exception e) {
