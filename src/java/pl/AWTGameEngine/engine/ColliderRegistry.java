@@ -13,17 +13,23 @@ public class ColliderRegistry {
         colliders.put(collider, go);
     }
 
-    public static boolean isColliding(BoxCollider collider, int newX, int newY) {
+    public static boolean isColliding(GameObject object, int newX, int newY) {
+        if(object.getComponentsByClass(BoxCollider.class).size() == 0) {
+            return false;
+        }
         for(BoxCollider c : colliders.keySet()) {
-            if(c.equals(collider)) {
+            if(object.getComponentsByClass(BoxCollider.class).contains(c)) {
                 continue;
             }
             GameObject go = getColliderObject(c);
             if(go == null) {
                 continue;
             }
-            if(newX + go.getScaleX() >= c.getX1() + go.getX() - go.getScaleX() && newX <= c.getX2() + go.getX() + go.getScaleX()
-                && newY + go.getScaleY() >= c.getY1() + go.getY() - go.getScaleY() && newY <= c.getY2() + go.getY() + go.getScaleY()) {
+            System.out.println(newX);
+            System.out.println(go.getX() + c.getX1());
+            System.out.println(go.getX() + c.getX2() + go.getScaleX());
+            if(newX + object.getScaleX() >= go.getX() + c.getX1() && newX <= go.getX() + c.getX2() + go.getScaleX()
+                && newY + object.getScaleY() >= go.getY() + c.getY1() && newY <= go.getY() + c.getY2() + go.getScaleY()) {
                 return true;
             }
         }
