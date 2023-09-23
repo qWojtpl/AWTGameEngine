@@ -14,6 +14,7 @@ public class SpriteRenderer extends ObjectComponent {
 
     public SpriteRenderer(GameObject object) {
         super(object);
+        setUnique(true);
     }
 
     @Override

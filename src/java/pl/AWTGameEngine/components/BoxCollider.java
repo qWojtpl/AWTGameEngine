@@ -27,14 +27,14 @@ public class BoxCollider extends ObjectComponent {
     public void onRender(Graphics g) {
         if(isVisualize()) {
             g.setColor(Color.GREEN);
-            g.drawRect(object.getX() + x1 - Camera.getRelativeX(object), object.getY() - Camera.getRelativeY(object),
+            g.drawRect(object.getX() + x1 - Camera.getRelativeX(object), object.getY() + y1 - Camera.getRelativeY(object),
                     object.getScaleX() + x2 - x1, object.getScaleY() + y1 - y2);
         }
     }
 
     @Override
     public boolean onUpdatePosition(int newX, int newY) {
-        return !ColliderRegistry.isColliding(object, newX, newY);
+        return !ColliderRegistry.isColliding(object, this, newX, newY);
     }
 
     public int getX1() {

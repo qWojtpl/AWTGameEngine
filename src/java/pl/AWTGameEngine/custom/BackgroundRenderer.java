@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.components.Canvas;
+import pl.AWTGameEngine.components.BoxCollider;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.SpriteRenderer;
 import pl.AWTGameEngine.objects.GameObject;
@@ -31,6 +31,9 @@ public class BackgroundRenderer extends ObjectComponent {
                     SpriteRenderer s = new SpriteRenderer(tile);
                     s.setImage(img);
                     tile.addComponent(s);
+                    //BoxCollider collider = new BoxCollider(tile);
+                    //collider.setVisualize(true);
+                    //tile.addComponent(collider);
                 } catch (DuplicatedObjectException e) {
                     throw new RuntimeException(e);
                 }

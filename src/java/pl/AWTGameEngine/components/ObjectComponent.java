@@ -12,6 +12,7 @@ import java.awt.*;
 public abstract class ObjectComponent {
 
     protected final GameObject object;
+    protected boolean unique = false;
 
     public ObjectComponent(GameObject object) {
         this.object = object;
@@ -43,6 +44,14 @@ public abstract class ObjectComponent {
 
     public void onRemoveComponent() {
 
+    }
+
+    public boolean isUnique() {
+        return this.unique;
+    }
+
+    protected void setUnique(boolean unique) {
+        this.unique = unique;
     }
 
 }

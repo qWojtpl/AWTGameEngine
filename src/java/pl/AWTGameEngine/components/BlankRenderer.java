@@ -12,6 +12,7 @@ public class BlankRenderer extends ObjectComponent {
 
     public BlankRenderer(GameObject object) {
         super(object);
+        setUnique(true);
     }
 
     @Override

@@ -21,6 +21,10 @@ public class GameObject {
     }
 
     public void addComponent(ObjectComponent component) {
+        if(component.isUnique() && getComponentsByClass(component.getClass()).size() > 0) {
+            System.out.println("Component " + component.getClass().getName() + " is unique, cannot add another...");
+            return;
+        }
         this.components.add(component);
         component.onAddComponent();
     }
@@ -64,18 +68,44 @@ public class GameObject {
     }
 
     public boolean setX(int x) {
-        if(!updatePosition(x, getY())) {
-            return false;
+        int x2 = x;
+        int i = 0;
+        while(!updatePosition(x2, getY())) {
+            if(x > this.x) {
+                x2--;
+                if(i > x - this.x) {
+                    break;
+                }
+            } else {
+                x2++;
+                if(i > this.x - x) {
+                    break;
+                }
+            }
+            i++;
         }
-        this.x = x;
+        this.x = x2;
         return true;
     }
 
     public boolean setY(int y) {
-        if(!updatePosition(getX(), y)) {
-            return false;
+        int y2 = y;
+        int i = 0;
+        while(!updatePosition(getX(), y2)) {
+            if(y > this.y) {
+                y2--;
+                if(i > y - this.y) {
+                    break;
+                }
+            } else {
+                y2++;
+                if(i > this.y - y) {
+                    break;
+                }
+            }
+            i++;
         }
-        this.y = y;
+        this.y = y2;
         return true;
     }
 
@@ -99,8 +129,7 @@ public class GameObject {
 
     public boolean updatePosition(int newX, int newY) {
         for(ObjectComponent component : getComponents()) {
-            boolean good = component.onUpdatePosition(newX, newY);
-            if(!good) {
+            if(!component.onUpdatePosition(newX, newY)) {
                 return false;
             }
         }
@@ -108,7 +137,7 @@ public class GameObject {
     }
 
     public void deserialize(String data) {
-        HashMap<String, String> properties = new HashMap<>();
+        LinkedHashMap<String, String> properties = new LinkedHashMap<>();
         String key = "";
         String value = "";
         boolean valuesOpened = false;
@@ -118,6 +147,9 @@ public class GameObject {
                 continue;
             } else if(data.charAt(i) == '}') {
                 valuesOpened = false;
+                while(properties.containsKey(key)) {
+                    key += "~";
+                }
                 properties.put(key, value);
                 key = "";
                 value = "";
@@ -185,6 +217,7 @@ public class GameObject {
                     }
                 }
                 try {
+                    className = className.replace("~", "");
                     Class<? extends ObjectComponent> clazz = Class.forName("pl.AWTGameEngine." + className)
                             .asSubclass(ObjectComponent.class);
                     ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(this);

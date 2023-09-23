@@ -13,6 +13,7 @@ public class Button extends ObjectComponent {
 
     public Button(GameObject object) {
         super(object);
+        setUnique(true);
     }
 
     @Override

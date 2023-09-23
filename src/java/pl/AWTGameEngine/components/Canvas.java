@@ -6,6 +6,7 @@ public class Canvas extends ObjectComponent {
 
     public Canvas(GameObject object) {
         super(object);
+        setUnique(true);
     }
 
 }
