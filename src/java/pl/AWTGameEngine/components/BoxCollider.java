@@ -34,7 +34,13 @@ public class BoxCollider extends ObjectComponent {
 
     @Override
     public boolean onUpdatePosition(int newX, int newY) {
-        return !ColliderRegistry.isColliding(object, this, newX, newY);
+        if(ColliderRegistry.isColliding(object, this, newX, newY)) {
+            for(ObjectComponent component : object.getComponents()) {
+                component.onCollide();
+            }
+            return false;
+        }
+        return true;
     }
 
     public int getX() {

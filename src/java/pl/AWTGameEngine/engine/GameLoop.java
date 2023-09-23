@@ -9,18 +9,13 @@ public class GameLoop extends Thread {
 
     @Override
     public void run() {
-        double drawInterval = 1000000000 / FPS;
-        double delta = 0;
-        long lastTime = System.nanoTime();
-        long currentTime;
         while(true) {
-            currentTime = System.nanoTime();
-            delta += (currentTime - lastTime) / drawInterval;
-            lastTime = currentTime;
-            if(delta >= 1) {
-                SceneLoader.updateScene();
-                Main.getPanel().repaint();
-                delta--;
+            SceneLoader.updateScene();
+            Main.getPanel().repaint();
+            try {
+                Thread.sleep((long) (1000 / FPS));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
