@@ -1,24 +1,14 @@
 package pl.AWTGameEngine;
 
-import pl.AWTGameEngine.components.SpriteRenderer;
-import pl.AWTGameEngine.custom.CustomComponent;
 import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.KeyListener;
-import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.scenes.DuplicatedObjectException;
-import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Main {
 
-    private static Scene currentScene;
     private static JFrame window;
     private static GamePanel panel;
 
@@ -35,7 +25,6 @@ public class Main {
         window.addKeyListener(new KeyListener());
         SceneLoader.loadScene("main");
         new GameLoop().start();
-        System.console();
     }
 
     public static JFrame getWindow() {
