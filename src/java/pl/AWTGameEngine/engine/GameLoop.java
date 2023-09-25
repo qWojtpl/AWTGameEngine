@@ -14,10 +14,14 @@ public class GameLoop extends Thread {
             Main.getPanel().repaint();
             try {
                 Thread.sleep((long) (1000 / FPS));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            } catch(InterruptedException ignored) {
+                break;
             }
         }
+    }
+
+    public double getFPS() {
+        return FPS;
     }
 
 }

@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.Main;
+import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
@@ -11,8 +13,16 @@ import java.util.ArrayList;
 
 public class GamePanel extends JPanel {
 
+    private final int WIDTH = 480;
+    private final int HEIGHT = (int) (WIDTH * 1.77);
+    private int multipler = 2;
+
     public GamePanel() {
-        this.setPreferredSize(new Dimension(1200, 800));
+        if(Main.isFullScreen()) {
+            multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
+        }
+        this.setPreferredSize(new Dimension(WIDTH * multipler, HEIGHT * multipler));
+        Camera.setZoom(multipler / 2f);
         this.setBackground(Color.WHITE);
         this.setDoubleBuffered(true);
     }

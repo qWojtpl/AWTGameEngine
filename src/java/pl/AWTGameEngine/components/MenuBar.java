@@ -4,6 +4,7 @@ import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 
 public class MenuBar extends ObjectComponent {
@@ -59,6 +60,10 @@ public class MenuBar extends ObjectComponent {
             return;
         }
         this.menuBar = new JMenuBar();
+        Font f = new Font("sans-serif", Font.PLAIN, 18);
+        UIManager.put("Menu.font", f);
+        UIManager.put("MenuItem.font", f);
+        Main.getPanel().setPreferredSize(new Dimension((int) (Main.getPanel().getPreferredSize().getWidth() + 18), (int) Main.getPanel().getPreferredSize().getHeight()));
     }
 
 }

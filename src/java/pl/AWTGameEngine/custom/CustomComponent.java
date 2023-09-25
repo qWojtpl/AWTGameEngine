@@ -38,6 +38,14 @@ public class CustomComponent extends ObjectComponent {
         if(KeyListener.hasPressedKey(40)) {
             Camera.setY(Camera.getY() + 8);
         }
+        if(KeyListener.hasPressedKey(75)) {
+            Camera.setZoom(Camera.getZoom() - 0.25f);
+            KeyListener.releaseKey(75);
+        }
+        if(KeyListener.hasPressedKey(76)) {
+            Camera.setZoom(Camera.getZoom() + 0.25f);
+            KeyListener.releaseKey(76);
+        }
         if(KeyListener.hasPressedKey(82)) {
             SceneLoader.loadScene("main");
             KeyListener.releaseKey(82);

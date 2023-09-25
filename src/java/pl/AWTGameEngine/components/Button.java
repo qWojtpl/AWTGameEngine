@@ -33,7 +33,8 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        button.setLocation(object.getX() - Camera.getRelativeX(object), object.getY() - Camera.getRelativeY(object));
+        button.setLocation(object.getX() - Camera.getRelativeX(object),
+                object.getY() - Camera.getRelativeY(object));
         button.setSize(object.getScaleX(), object.getScaleY());
     }
 

@@ -18,8 +18,10 @@ public class BlankRenderer extends ObjectComponent {
     @Override
     public void onRender(Graphics g) {
         g.setColor(getColor());
-        g.fillRect(object.getX() - Camera.getRelativeX(object), object.getY() - Camera.getRelativeY(object),
-                object.getScaleX(), object.getScaleY());
+        g.fillRect((int) ((object.getX() - Camera.getRelativeX(object)) * Camera.getZoom()),
+                (int) ((object.getY() - Camera.getRelativeY(object)) * Camera.getZoom()),
+                (int) ((object.getScaleX()) * Camera.getZoom()),
+                (int) ((object.getScaleY()) * Camera.getZoom()));
     }
 
     public Color getColor() {

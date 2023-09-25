@@ -6,6 +6,7 @@ public class Camera {
 
     private static int x = 0;
     private static int y = 0;
+    private static float zoom = 1;
 
     public static int getX() {
         return x;
@@ -40,6 +41,14 @@ public class Camera {
     public static void setBounds(int x, int y) {
         Camera.x = x;
         Camera.y = y;
+    }
+
+    public static float getZoom() {
+        return zoom;
+    }
+
+    public static void setZoom(float zoom) {
+        Camera.zoom = zoom;
     }
 
 }

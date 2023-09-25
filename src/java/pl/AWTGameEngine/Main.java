@@ -11,12 +11,17 @@ public class Main {
 
     private static JFrame window;
     private static GamePanel panel;
+    private static boolean fullScreen = true;
 
     public static void main(String[] args) {
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //window.setResizable(false);
-        window.setTitle("Java 2D test");
+        window.setResizable(false);
+        if(isFullScreen()) {
+            window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            window.setUndecorated(true);
+        }
+        window.setTitle("AWTGameEngine");
         panel = new GamePanel();
         window.add(panel);
         window.pack();
@@ -33,6 +38,10 @@ public class Main {
 
     public static GamePanel getPanel() {
         return panel;
+    }
+
+    public static boolean isFullScreen() {
+        return fullScreen;
     }
 
 }
