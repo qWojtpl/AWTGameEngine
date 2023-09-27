@@ -19,9 +19,9 @@ public class SpriteRenderer extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        g.drawImage(image, (int) ((object.getX() - getCamera().getRelativeX(object)) * getCamera().getZoom()),
-                (int) ((object.getY() - getCamera().getRelativeY(object)) * getCamera().getZoom()),
-                (int) (object.getScaleX() * getCamera().getZoom()), (int) (object.getScaleY() * getCamera().getZoom()), null);
+        g.drawImage(image, (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
+                (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
+                (int) (getObject().getScaleX() * getCamera().getZoom()), (int) (getObject().getScaleY() * getCamera().getZoom()), null);
     }
 
     public Image getImage() {

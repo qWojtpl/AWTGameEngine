@@ -15,16 +15,16 @@ public class CustomComponent extends ObjectComponent {
     @Override
     public void onPreUpdate() {
         if(getKeyListener().hasPressedKey(87)) {
-            object.setY(object.getY() - 3);
+            getObject().setY(getObject().getY() - 3);
         }
         if(getKeyListener().hasPressedKey(83)) {
-            object.setY(object.getY() + 3);
+            getObject().setY(getObject().getY() + 3);
         }
         if(getKeyListener().hasPressedKey(65)) {
-            object.setX(object.getX() - 3);
+            getObject().setX(getObject().getX() - 3);
         }
         if(getKeyListener().hasPressedKey(68)) {
-            object.setX(object.getX() + 3);
+            getObject().setX(getObject().getX() + 3);
         }
         if(getKeyListener().hasPressedKey(37)) {
             getCamera().setX(getCamera().getX() - 8);
@@ -47,7 +47,7 @@ public class CustomComponent extends ObjectComponent {
             getKeyListener().releaseKey(76);
         }
         if(getKeyListener().hasPressedKey(82)) {
-            SceneLoader.loadScene("main", getWindow());
+            getSceneLoader().loadScene("main");
             getKeyListener().releaseKey(82);
         }
     }

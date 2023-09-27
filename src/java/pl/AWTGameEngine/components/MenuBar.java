@@ -51,8 +51,8 @@ public class MenuBar extends ObjectComponent {
 
     public void updateWindow() {
         menuBar.setVisible(true);
-        object.getScene().getWindow().setJMenuBar(menuBar);
-        object.getScene().getWindow().setVisible(true);
+        getScene().getWindow().setJMenuBar(menuBar);
+        getScene().getWindow().setVisible(true);
     }
 
     public void initBar() {
@@ -63,10 +63,10 @@ public class MenuBar extends ObjectComponent {
         Font f = new Font("sans-serif", Font.PLAIN, 18);
         UIManager.put("Menu.font", f);
         UIManager.put("MenuItem.font", f);
-        object.getScene().getWindow().getPanel().setPreferredSize(
+        getScene().getWindow().getPanel().setPreferredSize(
                 new Dimension(
-                        (int) (object.getScene().getWindow().getPanel().getPreferredSize().getWidth() + 18),
-                        (int) object.getScene().getWindow().getPanel().getPreferredSize().getHeight())
+                        (int) (getScene().getWindow().getPanel().getPreferredSize().getWidth() + 18),
+                        (int) getScene().getWindow().getPanel().getPreferredSize().getHeight())
                 );
     }
 

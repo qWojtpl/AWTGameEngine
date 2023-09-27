@@ -5,6 +5,7 @@ import pl.AWTGameEngine.engine.KeyListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.Scene;
+import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
@@ -16,11 +17,15 @@ import java.awt.*;
  */
 public abstract class ObjectComponent {
 
-    protected final GameObject object;
+    private final GameObject object;
     protected boolean unique = false;
 
     public ObjectComponent(GameObject object) {
         this.object = object;
+    }
+
+    protected GameObject getObject() {
+        return this.object;
     }
 
     protected KeyListener getKeyListener() {
@@ -40,7 +45,11 @@ public abstract class ObjectComponent {
     }
 
     protected Scene getScene() {
-        return object.getScene();
+        return getObject().getScene();
+    }
+
+    protected SceneLoader getSceneLoader() {
+        return getWindow().getSceneLoader();
     }
 
     /**

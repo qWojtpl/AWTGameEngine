@@ -1,11 +1,9 @@
 package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.Main;
-import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
-import pl.AWTGameEngine.windows.WindowsManager;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,7 +16,13 @@ import java.util.List;
 
 public class SceneLoader {
 
-    public static void loadScene(String sceneName, Window window) {
+    private final Window window;
+
+    public SceneLoader(Window window) {
+        this.window = window;
+    }
+
+    public void loadScene(String sceneName) {
         window.getPanel().removeAll();
         window.setCurrentScene(new Scene(sceneName, window));
         window.getCurrentScene().setCamera(new Camera());
@@ -76,13 +80,7 @@ public class SceneLoader {
             data.put(key, value);
         }
         for(String objectName : data.keySet()) {
-            GameObject object;
-            try {
-                object = window.getCurrentScene().createGameObject(objectName);
-            } catch(DuplicatedObjectException e) {
-                System.out.println(e.getMessage());
-                continue;
-            }
+            GameObject object = window.getCurrentScene().createGameObject(objectName);
             object.deserialize(data.get(objectName));
         }
     }

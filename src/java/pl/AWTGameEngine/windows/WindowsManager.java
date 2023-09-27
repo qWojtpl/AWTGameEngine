@@ -28,7 +28,8 @@ public class WindowsManager {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         window.setKeyListener(new KeyListener());
-        SceneLoader.loadScene(sceneName, window);
+        window.setSceneLoader(new SceneLoader(window));
+        window.getSceneLoader().loadScene(sceneName);
         windows.add(window);
         GameLoop loop = new GameLoop(window);
         loop.start();

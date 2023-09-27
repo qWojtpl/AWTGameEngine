@@ -5,6 +5,7 @@ import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.KeyListener;
 import pl.AWTGameEngine.scenes.Scene;
+import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
 
@@ -14,6 +15,7 @@ public class Window extends JFrame {
     private GameLoop loop;
     private KeyListener keyListener;
     private Scene currentScene;
+    private SceneLoader sceneLoader;
 
     public GamePanel getPanel() {
         return this.panel;
@@ -29,6 +31,10 @@ public class Window extends JFrame {
 
     public Scene getCurrentScene() {
         return this.currentScene;
+    }
+
+    public SceneLoader getSceneLoader() {
+        return this.sceneLoader;
     }
 
     public void setPanel(GamePanel panel) {
@@ -53,6 +59,10 @@ public class Window extends JFrame {
 
     public void setCurrentScene(Scene scene) {
         this.currentScene = scene;
+    }
+
+    public void setSceneLoader(SceneLoader sceneLoader) {
+        this.sceneLoader = sceneLoader;
     }
 
 }

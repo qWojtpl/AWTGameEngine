@@ -1,7 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.Main;
-import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -19,23 +17,23 @@ public class Button extends ObjectComponent {
     @Override
     public void onAddComponent() {
         button = new java.awt.Button(getText());
-        object.getScene().getWindow().getPanel().add(button);
+        getScene().getWindow().getPanel().add(button);
         button.setLabel(getText());
         button.setFocusable(false);
-        button.setLocation(object.getX(), object.getY());
-        button.setSize(object.getScaleX(), object.getScaleY());
+        button.setLocation(getObject().getX(), getObject().getY());
+        button.setSize(getObject().getScaleX(), getObject().getScaleY());
     }
 
     @Override
     public void onRemoveComponent() {
-        object.getScene().getWindow().getPanel().remove(button);
+        getScene().getWindow().getPanel().remove(button);
     }
 
     @Override
     public void onRender(Graphics g) {
-        button.setLocation((int) (object.getX() - getCamera().getRelativeX(object) * getCamera().getZoom()),
-                (int) ((object.getY() - getCamera().getRelativeY(object)) * getCamera().getZoom()));
-        button.setSize((int) (object.getScaleX() * getCamera().getZoom()), (int) (object.getScaleY() * getCamera().getZoom()));
+        button.setLocation((int) (getObject().getX() - getCamera().getRelativeX(getObject()) * getCamera().getZoom()),
+                (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
+        button.setSize((int) (getObject().getScaleX() * getCamera().getZoom()), (int) (getObject().getScaleY() * getCamera().getZoom()));
     }
 
     public String getText() {

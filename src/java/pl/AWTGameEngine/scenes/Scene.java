@@ -48,18 +48,19 @@ public class Scene {
         this.camera = camera;
     }
 
-    public GameObject createGameObject(String identifier) throws DuplicatedObjectException {
+    public GameObject createGameObject(String identifier) {
         if(gameObjects.containsKey(identifier)) {
-            throw new DuplicatedObjectException(identifier);
+            return createGameObject(identifier + "!");
         }
         GameObject go = new GameObject(identifier, this);
         gameObjects.put(identifier, go);
         return go;
     }
 
-    public void addGameObject(GameObject object) throws DuplicatedObjectException {
+    public void addGameObject(GameObject object) {
         if(gameObjects.containsKey(object.getIdentifier())) {
-            throw new DuplicatedObjectException(object.getIdentifier());
+            System.out.println("Object with this identifier already exists.");
+            return;
         }
         if(!object.getScene().equals(this)) {
             System.out.println("Cannot add object which doesn't have this scene as a scene.");

@@ -11,7 +11,7 @@ public class PhysicsBody extends ObjectComponent {
 
     @Override
     public void onPreUpdate() {
-        object.setY(object.getY() + 10);
+        getObject().setY(getObject().getY() + 10);
     }
 
 }

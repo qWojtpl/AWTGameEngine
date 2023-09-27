@@ -20,24 +20,24 @@ public class BoxCollider extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        getColliderRegistry().registerCollider(this, object);
+        getColliderRegistry().registerCollider(this, getObject());
     }
 
     @Override
     public void onRender(Graphics g) {
         if(isVisualize()) {
             g.setColor(Color.GREEN);
-            g.drawRect((int) ((object.getX() + x - getCamera().getRelativeX(object)) * getCamera().getZoom()),
-                    (int) ((object.getY() + y - getCamera().getRelativeY(object)) * getCamera().getZoom()),
-                    (int) ((object.getScaleX() + scaleX) * getCamera().getZoom()),
-                    (int) ((object.getScaleY() + scaleY) * getCamera().getZoom()));
+            g.drawRect((int) ((getObject().getX() + x - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
+                    (int) ((getObject().getY() + y - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
+                    (int) ((getObject().getScaleX() + scaleX) * getCamera().getZoom()),
+                    (int) ((getObject().getScaleY() + scaleY) * getCamera().getZoom()));
         }
     }
 
     @Override
     public boolean onUpdatePosition(int newX, int newY) {
-        if(getColliderRegistry().isColliding(object, this, newX, newY)) {
-            for(ObjectComponent component : object.getComponents()) {
+        if(getColliderRegistry().isColliding(getObject(), this, newX, newY)) {
+            for(ObjectComponent component : getObject().getComponents()) {
                 component.onCollide();
             }
             return false;

@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -20,8 +19,8 @@ public class TextRenderer extends ObjectComponent {
         g.setColor(getColor());
         g.setFont(g.getFont().deriveFont(getSize() * getCamera().getZoom()));
         g.drawString(getText(),
-                (int) ((object.getX() - getCamera().getRelativeX(object)) * getCamera().getZoom()),
-                (int) ((object.getY() - getCamera().getRelativeY(object)) * getCamera().getZoom()));
+                (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
+                (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
     }
 
     public String getText() {
