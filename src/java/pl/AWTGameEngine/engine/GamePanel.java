@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel {
 
     private final int WIDTH = 480;
-    private final int HEIGHT = (int) (WIDTH * 1.77);
+    private final int HEIGHT = (int) (WIDTH * 0.5625);
     private final Window window;
     private int multipler = 2;
 
