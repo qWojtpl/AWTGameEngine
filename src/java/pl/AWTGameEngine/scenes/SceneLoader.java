@@ -2,9 +2,10 @@ package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.WindowsManager;
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,31 +18,11 @@ import java.util.List;
 
 public class SceneLoader {
 
-    private static Scene currentScene;
-
-    public static void updateScene() {
-        for(GameObject go : currentScene.getGameObjects()) {
-            for(ObjectComponent component : go.getComponents()) {
-                component.onPreUpdate();
-            }
-        }
-        for(GameObject go : currentScene.getGameObjects()) {
-            for(ObjectComponent component : go.getComponents()) {
-                component.onUpdate();
-            }
-        }
-        for(GameObject go : currentScene.getGameObjects()) {
-            for(ObjectComponent component : go.getComponents()) {
-                component.onAfterUpdate();
-            }
-        }
-    }
-
-    public static void loadScene(String sceneName) {
-        ColliderRegistry.clearRegistry();
-        Main.getPanel().removeAll();
-        Camera.setBounds(0, 0);
-        currentScene = new Scene(sceneName);
+    public static void loadScene(String sceneName, Window window) {
+        window.getPanel().removeAll();
+        window.setCurrentScene(new Scene(sceneName, window));
+        window.getCurrentScene().setCamera(new Camera());
+        window.getCurrentScene().getCamera().setZoom(window.getPanel().getMultipler() / 2f);
         List<String> lines;
         Path path = null;
         URL url = Main.class.getClassLoader().getResource(sceneName + ".scene");
@@ -97,17 +78,13 @@ public class SceneLoader {
         for(String objectName : data.keySet()) {
             GameObject object;
             try {
-                object = currentScene.createGameObject(objectName);
+                object = window.getCurrentScene().createGameObject(objectName);
             } catch(DuplicatedObjectException e) {
                 System.out.println(e.getMessage());
                 continue;
             }
             object.deserialize(data.get(objectName));
         }
-    }
-
-    public static Scene getCurrentScene() {
-        return currentScene;
     }
 
 }

@@ -1,9 +1,8 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.Main;
-import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.SceneLoader;
+import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,14 +14,15 @@ public class GamePanel extends JPanel {
 
     private final int WIDTH = 480;
     private final int HEIGHT = (int) (WIDTH * 1.77);
+    private final Window window;
     private int multipler = 2;
 
-    public GamePanel() {
-        if(Main.isFullScreen()) {
-            multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
-        }
+    public GamePanel(Window window) {
+        this.window = window;
+//        if(Main.isFullScreen()) {
+//            multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
+//        }
         this.setPreferredSize(new Dimension(WIDTH * multipler, HEIGHT * multipler));
-        Camera.setZoom(multipler / 2f);
         this.setBackground(Color.WHITE);
         this.setDoubleBuffered(true);
     }
@@ -30,12 +30,12 @@ public class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(g == null || SceneLoader.getCurrentScene() == null) {
+        if(g == null || window.getCurrentScene() == null) {
             return;
         }
         HashMap<Integer, List<GameObject>> sortedObjects = new HashMap<>();
         int maxPriority = 0;
-        for(GameObject go : SceneLoader.getCurrentScene().getGameObjects()) {
+        for(GameObject go : window.getCurrentScene().getGameObjects()) {
             if(go.getPriority() > maxPriority) {
                 maxPriority = go.getPriority();
             }
@@ -52,6 +52,10 @@ public class GamePanel extends JPanel {
             }
         }
         g.dispose();
+    }
+
+    public int getMultipler() {
+        return this.multipler;
     }
 
 }

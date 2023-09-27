@@ -19,7 +19,7 @@ public class Button extends ObjectComponent {
     @Override
     public void onAddComponent() {
         button = new java.awt.Button(getText());
-        Main.getPanel().add(button);
+        object.getScene().getWindow().getPanel().add(button);
         button.setLabel(getText());
         button.setFocusable(false);
         button.setLocation(object.getX(), object.getY());
@@ -28,14 +28,14 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onRemoveComponent() {
-        Main.getPanel().remove(button);
+        object.getScene().getWindow().getPanel().remove(button);
     }
 
     @Override
     public void onRender(Graphics g) {
-        button.setLocation(object.getX() - Camera.getRelativeX(object),
-                object.getY() - Camera.getRelativeY(object));
-        button.setSize(object.getScaleX(), object.getScaleY());
+        button.setLocation((int) (object.getX() - getCamera().getRelativeX(object) * getCamera().getZoom()),
+                (int) ((object.getY() - getCamera().getRelativeY(object)) * getCamera().getZoom()));
+        button.setSize((int) (object.getScaleX() * getCamera().getZoom()), (int) (object.getScaleY() * getCamera().getZoom()));
     }
 
     public String getText() {

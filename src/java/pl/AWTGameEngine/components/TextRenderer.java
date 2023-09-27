@@ -18,10 +18,10 @@ public class TextRenderer extends ObjectComponent {
     @Override
     public void onRender(Graphics g) {
         g.setColor(getColor());
-        g.setFont(g.getFont().deriveFont(getSize() * Camera.getZoom()));
+        g.setFont(g.getFont().deriveFont(getSize() * getCamera().getZoom()));
         g.drawString(getText(),
-                (int) ((object.getX() - Camera.getRelativeX(object)) * Camera.getZoom()),
-                (int) ((object.getY() - Camera.getRelativeY(object)) * Camera.getZoom()));
+                (int) ((object.getX() - getCamera().getRelativeX(object)) * getCamera().getZoom()),
+                (int) ((object.getY() - getCamera().getRelativeY(object)) * getCamera().getZoom()));
     }
 
     public String getText() {

@@ -1,11 +1,9 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.components.BoxCollider;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.SpriteRenderer;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.DuplicatedObjectException;
-import pl.AWTGameEngine.scenes.SceneLoader;
 
 import java.awt.*;
 
@@ -22,7 +20,7 @@ public class BackgroundRenderer extends ObjectComponent {
         for(int x = 0; x < 10; x++) {
             for(int y = 0; y < 30; y++) {
                 try {
-                    GameObject tile = SceneLoader.getCurrentScene().createGameObject("background-" + x + "x" + y);
+                    GameObject tile = getScene().createGameObject("background-" + x + "x" + y);
                     tile.setX(x * 16);
                     tile.setY(y * 16);
                     tile.setScaleX(16);

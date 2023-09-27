@@ -7,13 +7,13 @@ import java.util.HashMap;
 
 public class ColliderRegistry {
 
-    private static final HashMap<BoxCollider, GameObject> colliders = new HashMap<>();
+    private final HashMap<BoxCollider, GameObject> colliders = new HashMap<>();
 
-    public static void registerCollider(BoxCollider collider, GameObject go) {
+    public void registerCollider(BoxCollider collider, GameObject go) {
         colliders.put(collider, go);
     }
 
-    public static boolean isColliding(GameObject object, BoxCollider collider, int newX, int newY) {
+    public boolean isColliding(GameObject object, BoxCollider collider, int newX, int newY) {
         if(object.getComponentsByClass(BoxCollider.class).size() == 0) {
             return false;
         }
@@ -35,11 +35,11 @@ public class ColliderRegistry {
         return false;
     }
 
-    public static GameObject getColliderObject(BoxCollider collider) {
+    public GameObject getColliderObject(BoxCollider collider) {
         return colliders.getOrDefault(collider, null);
     }
 
-    public static void clearRegistry() {
+    public void clearRegistry() {
         colliders.clear();
     }
 

@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.scenes.Scene;
 
 import java.awt.*;
 import java.util.*;
@@ -9,6 +10,7 @@ import java.util.List;
 public class GameObject {
 
     private final String identifier;
+    private final Scene scene;
     private int x = 0;
     private int y = 0;
     private int scaleX = 100;
@@ -16,8 +18,9 @@ public class GameObject {
     private int priority = 0;
     private final List<ObjectComponent> components = new ArrayList<>();
 
-    public GameObject(String identifier) {
+    public GameObject(String identifier, Scene scene) {
         this.identifier = identifier;
+        this.scene = scene;
     }
 
     public void addComponent(ObjectComponent component) {
@@ -31,6 +34,10 @@ public class GameObject {
 
     public String getIdentifier() {
         return this.identifier;
+    }
+
+    public Scene getScene() {
+        return this.scene;
     }
 
     public List<ObjectComponent> getComponents() {

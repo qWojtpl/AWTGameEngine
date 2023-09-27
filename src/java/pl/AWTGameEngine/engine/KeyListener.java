@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class KeyListener implements java.awt.event.KeyListener {
 
-    private final static Set<Integer> pressedKeys = new HashSet<>();
+    private final Set<Integer> pressedKeys = new HashSet<>();
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -23,11 +23,11 @@ public class KeyListener implements java.awt.event.KeyListener {
         pressedKeys.remove(e.getKeyCode());
     }
 
-    public static boolean hasPressedKey(int key) {
+    public boolean hasPressedKey(int key) {
         return pressedKeys.contains(key);
     }
 
-    public static void releaseKey(int key) {
+    public void releaseKey(int key) {
         pressedKeys.remove(key);
     }
 

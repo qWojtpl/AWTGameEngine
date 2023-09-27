@@ -1,10 +1,10 @@
 package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.engine.KeyListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.SceneLoader;
+import pl.AWTGameEngine.windows.WindowsManager;
 
 public class CustomComponent extends ObjectComponent {
 
@@ -14,41 +14,41 @@ public class CustomComponent extends ObjectComponent {
 
     @Override
     public void onPreUpdate() {
-        if(KeyListener.hasPressedKey(87)) {
+        if(getKeyListener().hasPressedKey(87)) {
             object.setY(object.getY() - 3);
         }
-        if(KeyListener.hasPressedKey(83)) {
+        if(getKeyListener().hasPressedKey(83)) {
             object.setY(object.getY() + 3);
         }
-        if(KeyListener.hasPressedKey(65)) {
+        if(getKeyListener().hasPressedKey(65)) {
             object.setX(object.getX() - 3);
         }
-        if(KeyListener.hasPressedKey(68)) {
+        if(getKeyListener().hasPressedKey(68)) {
             object.setX(object.getX() + 3);
         }
-        if(KeyListener.hasPressedKey(37)) {
-            Camera.setX(Camera.getX() - 8);
+        if(getKeyListener().hasPressedKey(37)) {
+            getCamera().setX(getCamera().getX() - 8);
         }
-        if(KeyListener.hasPressedKey(39)) {
-            Camera.setX(Camera.getX() + 8);
+        if(getKeyListener().hasPressedKey(39)) {
+            getCamera().setX(getCamera().getX() + 8);
         }
-        if(KeyListener.hasPressedKey(38)) {
-            Camera.setY(Camera.getY() - 8);
+        if(getKeyListener().hasPressedKey(38)) {
+            getCamera().setY(getCamera().getY() - 8);
         }
-        if(KeyListener.hasPressedKey(40)) {
-            Camera.setY(Camera.getY() + 8);
+        if(getKeyListener().hasPressedKey(40)) {
+            getCamera().setY(getCamera().getY() + 8);
         }
-        if(KeyListener.hasPressedKey(75)) {
-            Camera.setZoom(Camera.getZoom() - 0.25f);
-            KeyListener.releaseKey(75);
+        if(getKeyListener().hasPressedKey(75)) {
+            getCamera().setZoom(getCamera().getZoom() - 0.25f);
+            getKeyListener().releaseKey(75);
         }
-        if(KeyListener.hasPressedKey(76)) {
-            Camera.setZoom(Camera.getZoom() + 0.25f);
-            KeyListener.releaseKey(76);
+        if(getKeyListener().hasPressedKey(76)) {
+            getCamera().setZoom(getCamera().getZoom() + 0.25f);
+            getKeyListener().releaseKey(76);
         }
-        if(KeyListener.hasPressedKey(82)) {
-            SceneLoader.loadScene("main");
-            KeyListener.releaseKey(82);
+        if(getKeyListener().hasPressedKey(82)) {
+            SceneLoader.loadScene("main", getWindow());
+            getKeyListener().releaseKey(82);
         }
     }
 

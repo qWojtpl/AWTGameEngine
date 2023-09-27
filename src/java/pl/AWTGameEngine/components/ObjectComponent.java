@@ -1,6 +1,11 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.engine.ColliderRegistry;
+import pl.AWTGameEngine.engine.KeyListener;
+import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.scenes.Scene;
+import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
 
@@ -16,6 +21,26 @@ public abstract class ObjectComponent {
 
     public ObjectComponent(GameObject object) {
         this.object = object;
+    }
+
+    protected KeyListener getKeyListener() {
+        return getWindow().getKeyListener();
+    }
+
+    protected ColliderRegistry getColliderRegistry() {
+        return getScene().getColliderRegistry();
+    }
+
+    protected Camera getCamera() {
+        return getScene().getCamera();
+    }
+
+    protected Window getWindow() {
+        return getScene().getWindow();
+    }
+
+    protected Scene getScene() {
+        return object.getScene();
     }
 
     /**
