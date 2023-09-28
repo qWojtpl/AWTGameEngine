@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.imageio.ImageIO;
@@ -21,7 +20,8 @@ public class SpriteRenderer extends ObjectComponent {
     public void onRender(Graphics g) {
         g.drawImage(image, (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
-                (int) (getObject().getScaleX() * getCamera().getZoom()), (int) (getObject().getScaleY() * getCamera().getZoom()), null);
+                (int) (getObject().getScaleX() * getCamera().getZoom()), (int) (getObject().getScaleY() * getCamera().getZoom()),
+                null);
     }
 
     public Image getImage() {

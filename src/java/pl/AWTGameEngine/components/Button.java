@@ -20,8 +20,6 @@ public class Button extends ObjectComponent {
         getScene().getWindow().getPanel().add(button);
         button.setLabel(getText());
         button.setFocusable(false);
-        button.setLocation(getObject().getX(), getObject().getY());
-        button.setSize(getObject().getScaleX(), getObject().getScaleY());
     }
 
     @Override
@@ -31,9 +29,10 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        button.setLocation((int) (getObject().getX() - getCamera().getRelativeX(getObject()) * getCamera().getZoom()),
+        button.setLocation((int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
-        button.setSize((int) (getObject().getScaleX() * getCamera().getZoom()), (int) (getObject().getScaleY() * getCamera().getZoom()));
+        button.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
+                (int) (getObject().getScaleY() * getCamera().getZoom()));
     }
 
     public String getText() {

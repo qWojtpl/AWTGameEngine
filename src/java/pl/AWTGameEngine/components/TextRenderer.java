@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 
 public class TextRenderer extends ObjectComponent {
 
@@ -44,7 +45,14 @@ public class TextRenderer extends ObjectComponent {
     }
 
     public void setColor(String color) {
-        setColor(Color.getColor(color));
+        Color c;
+        try {
+            Field field = Class.forName("java.awt.Color").getField(color.toLowerCase());
+            c = (Color) field.get(null);
+        } catch (Exception e) {
+            c = Color.BLACK;
+        }
+        setColor(c);
     }
 
     public void setSize(float size) {

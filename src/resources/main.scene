@@ -1,8 +1,8 @@
-text="pos{200;100}scale{50;100}priority{2}TextRenderer:ObjectComponent{text^hello^color^BLACK^size^30^}";
-object1="pos{0;0}scale{45;45}priority{1}SpriteRenderer:ObjectComponent{image^beaver.jpg^}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^}BoxCollider:ObjectComponent{visualize^true^scaleX^50^scaleY^-45^}";
+text="pos{200;100}scale{50;100}priority{2}TextRenderer:ObjectComponent{text^test^color^BLACK^size^30^}";
+object1="pos{0;0}scale{45;45}priority{1}SpriteRenderer:ObjectComponent{image^beaver.jpg^}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^}BoxCollider:ObjectComponent{visualize^true^scaleX^50^scaleY^-45^}Animator:ObjectComponent{nextFrame^beaver.jpg^nextDelay^60^nextFrame^beaver2.png^nextDelay^60^}";
 collider="pos{300;150}scale{100;100}priority{1}BoxCollider:ObjectComponent{visualize^true^x^10^scaleX^20^}";
 collider2="pos{300;0}scale{100;100}priority{1}BoxCollider:ObjectComponent{visualize^true^}";
 background="pos{0;0}scale{0;0}priority{0}BackgroundRenderer:ObjectComponent-C{}";
 menuBar="pos{0;0}scale{0;0}priority{3}MenuBar:ObjectComponent{nextMenu^Project^nextItem^Save^nextItem^Build^nextSubMenu^Settings^nextSubItem^Preferences^nextSubItem^Build settings^nextSubItem^Editor settings^}";
-canvas="pos{50;50}scale{50;50}priority{101}BlankRenderer:ObjectComponent{color^GREEN^}Canvas:ObjectComponent{}Canvas:ObjectComponent{}";
+canvas="pos{50;50}scale{50;50}priority{101}BlankRenderer:ObjectComponent{color^GREEN^}Canvas:ObjectComponent{}Button:ObjectComponent{}";
 canvas2="pos{45;45}scale{60;60}priority{100}BlankRenderer:ObjectComponent{color^BLACK^}Canvas:ObjectComponent{}";

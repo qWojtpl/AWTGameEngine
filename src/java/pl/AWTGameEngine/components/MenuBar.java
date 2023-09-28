@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
@@ -12,7 +11,6 @@ public class MenuBar extends ObjectComponent {
     private JMenuBar menuBar;
     private JMenu activeMenu;
     private JMenu activeSubMenu;
-    private final HashMap<String, JMenu> menus = new HashMap<>();
 
     public MenuBar(GameObject object) {
         super(object);

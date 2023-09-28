@@ -15,7 +15,7 @@ public class GamePanel extends JPanel {
     private final int WIDTH = 480;
     private final int HEIGHT = (int) (WIDTH * 0.5625);
     private final Window window;
-    private int multipler = 2;
+    private int multipler = 3;
 
     public GamePanel(Window window) {
         this.window = window;
