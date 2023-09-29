@@ -14,14 +14,13 @@ public class WindowsManager {
     private static final List<Window> windows = new ArrayList<>();
     private static Window defaultWindow;
 
-    public static Window createWindow(String sceneName) {
+    public static Window createWindow(String sceneName, boolean fullScreen) {
         Window window = new Window();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-/*        if(isFullScreen()) {
+        if(fullScreen) {
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
             window.setUndecorated(true);
-        }*/
+        }
         window.setTitle("AWTGameEngine");
         window.setPanel(new GamePanel(window));
         window.pack();
@@ -38,7 +37,8 @@ public class WindowsManager {
     }
 
     public static void createDefaultWindow() {
-        defaultWindow = createWindow("main");
+        defaultWindow = createWindow("main", false);
+        defaultWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public static Window getDefaultWindow() {

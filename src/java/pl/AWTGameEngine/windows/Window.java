@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.windows;
 
-import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.KeyListener;
@@ -16,6 +15,7 @@ public class Window extends JFrame {
     private KeyListener keyListener;
     private Scene currentScene;
     private SceneLoader sceneLoader;
+    private boolean staticMode;
 
     public GamePanel getPanel() {
         return this.panel;
@@ -35,6 +35,10 @@ public class Window extends JFrame {
 
     public SceneLoader getSceneLoader() {
         return this.sceneLoader;
+    }
+
+    public boolean isStaticMode() {
+        return this.staticMode;
     }
 
     public void setPanel(GamePanel panel) {
@@ -63,6 +67,10 @@ public class Window extends JFrame {
 
     public void setSceneLoader(SceneLoader sceneLoader) {
         this.sceneLoader = sceneLoader;
+    }
+
+    public void setStaticMode(boolean staticMode) {
+        this.staticMode = staticMode;
     }
 
 }

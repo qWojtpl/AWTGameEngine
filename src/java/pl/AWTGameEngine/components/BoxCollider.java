@@ -1,7 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.engine.ColliderRegistry;
-import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;

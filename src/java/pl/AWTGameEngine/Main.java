@@ -6,7 +6,6 @@ public class Main {
 
     public static void main(String[] args) {
         WindowsManager.createDefaultWindow();
-        //WindowsManager.createWindow("main");
     }
 
 }

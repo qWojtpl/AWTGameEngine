@@ -4,51 +4,51 @@ import pl.AWTGameEngine.components.Canvas;
 
 public class Camera {
 
-    private static int x = 0;
-    private static int y = 0;
-    private static float zoom = 1;
+    private int x = 0;
+    private int y = 0;
+    private float zoom = 1;
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public int getRelativeX(GameObject object) {
         if(object.getComponentsByClass(Canvas.class).size() > 0) {
             return 0;
         }
-        return x;
+        return this.x;
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public int getRelativeY(GameObject object) {
         if(object.getComponentsByClass(Canvas.class).size() > 0) {
             return 0;
         }
-        return y;
+        return this.y;
     }
 
     public void setX(int x) {
-        Camera.x = x;
+        this.x = x;
     }
 
     public void setY(int y) {
-        Camera.y = y;
+        this.y = y;
     }
 
     public void setBounds(int x, int y) {
-        Camera.x = x;
-        Camera.y = y;
+        this.x = x;
+        this.y = y;
     }
 
     public float getZoom() {
-        return zoom;
+        return this.zoom;
     }
 
     public void setZoom(float zoom) {
-        Camera.zoom = zoom;
+        this.zoom = zoom;
     }
 
 }

@@ -1,11 +1,9 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,31 +84,22 @@ public class Animator extends ObjectComponent {
         }
     }
 
-}
+    public static class AnimationFrame {
 
-class AnimationFrame {
+        private Image image;
 
-    private Image image;
-
-    public Image getImage() {
-        return this.image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
-    public Image setImage(String imageSource) {
-        try {
-            URL url = Animator.class.getClassLoader().getResource(imageSource);
-            if(url == null) {
-                throw new IOException();
-            }
-            this.image = ImageIO.read(url);
-        } catch(IOException e) {
-            System.out.println("Can't set image to " + imageSource + "!");
+        public Image getImage() {
+            return this.image;
         }
-        return this.image;
+
+        public void setImage(Image image) {
+            this.image = image;
+        }
+
+        public void setImage(String imageSource) {
+            setImage(ResourceManager.getResourceAsImage(imageSource));
+        }
+
     }
 
 }

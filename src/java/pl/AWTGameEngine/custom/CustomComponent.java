@@ -1,10 +1,7 @@
 package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.scenes.SceneLoader;
-import pl.AWTGameEngine.windows.WindowsManager;
 
 public class CustomComponent extends ObjectComponent {
 

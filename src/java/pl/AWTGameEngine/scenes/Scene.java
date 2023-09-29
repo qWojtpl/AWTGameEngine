@@ -77,6 +77,9 @@ public class Scene {
     }
 
     public void update() {
+        if(window.isStaticMode()) {
+            return;
+        }
         for(GameObject go : getGameObjects()) {
             for(ObjectComponent component : go.getComponents()) {
                 component.onPreUpdate();

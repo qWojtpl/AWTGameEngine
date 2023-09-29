@@ -4,7 +4,6 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 
 public class MenuBar extends ObjectComponent {
 
