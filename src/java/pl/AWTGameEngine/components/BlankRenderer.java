@@ -42,6 +42,33 @@ public class BlankRenderer extends ObjectComponent {
         setColor(c);
     }
 
+    public void setRGBColor(String rgb) {
+        int r, g, b;
+        try {
+            String[] split = rgb.split(";");
+            r = Integer.parseInt(split[0]);
+            g = Integer.parseInt(split[1]);
+            b = Integer.parseInt(split[2]);
+        } catch(NumberFormatException | IndexOutOfBoundsException e) {
+            setColor(Color.BLACK);
+            return;
+        }
+        setColor(new Color(r, g, b));
+    }
 
+    public void setRGBAColor(String rgba) {
+        int r, g, b, a;
+        try {
+            String[] split = rgba.split(";");
+            r = Integer.parseInt(split[0]);
+            g = Integer.parseInt(split[1]);
+            b = Integer.parseInt(split[2]);
+            a = Integer.parseInt(split[3]);
+        } catch(NumberFormatException | IndexOutOfBoundsException e) {
+            setColor(Color.BLACK);
+            return;
+        }
+        setColor(new Color(r, g, b, a));
+    }
 
 }

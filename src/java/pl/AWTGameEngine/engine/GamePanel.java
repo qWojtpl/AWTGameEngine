@@ -18,6 +18,7 @@ public class GamePanel extends JPanel {
     private int multipler = 3;
 
     public GamePanel(Window window) {
+        super(new GridBagLayout());
         this.window = window;
 //        if(Main.isFullScreen()) {
 //            multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
