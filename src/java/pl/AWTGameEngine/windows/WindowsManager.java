@@ -3,6 +3,7 @@ package pl.AWTGameEngine.windows;
 import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.KeyListener;
+import pl.AWTGameEngine.engine.MouseListener;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class WindowsManager {
         Window window = new Window();
         window.setResizable(false);
         if(fullScreen) {
+            window.setFullScreen(true);
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
             window.setUndecorated(true);
         }
@@ -27,6 +29,7 @@ public class WindowsManager {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         window.setKeyListener(new KeyListener());
+        window.addMouseListener(new MouseListener());
         window.setSceneLoader(new SceneLoader(window));
         window.getSceneLoader().loadScene(sceneName);
         windows.add(window);

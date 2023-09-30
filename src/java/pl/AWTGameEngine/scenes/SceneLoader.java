@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.scenes;
 
-import pl.AWTGameEngine.Main;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
@@ -8,12 +7,9 @@ import pl.AWTGameEngine.windows.Window;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class SceneLoader {
@@ -41,7 +37,7 @@ public class SceneLoader {
             e.printStackTrace();
             return;
         }
-        HashMap<String, String> data = new HashMap<>();
+        LinkedHashMap<String, String> data = new LinkedHashMap<>();
         for(String line : lines) {
             boolean stringOpened = false;
             boolean valueOpened = false;

@@ -16,6 +16,7 @@ public class Window extends JFrame {
     private Scene currentScene;
     private SceneLoader sceneLoader;
     private boolean staticMode;
+    private boolean fullScreen;
 
     public GamePanel getPanel() {
         return this.panel;
@@ -39,6 +40,10 @@ public class Window extends JFrame {
 
     public boolean isStaticMode() {
         return this.staticMode;
+    }
+
+    public boolean isFullScreen() {
+        return this.fullScreen;
     }
 
     public void setPanel(GamePanel panel) {
@@ -71,6 +76,10 @@ public class Window extends JFrame {
 
     public void setStaticMode(boolean staticMode) {
         this.staticMode = staticMode;
+    }
+
+    public void setFullScreen(boolean fullScreen) {
+        this.fullScreen = fullScreen;
     }
 
 }

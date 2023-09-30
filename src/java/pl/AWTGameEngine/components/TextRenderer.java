@@ -10,6 +10,8 @@ public class TextRenderer extends ObjectComponent {
     private String text = "Empty text renderer";
     private Color color = Color.BLACK;
     private float size = 30.0f;
+    private int x = 0;
+    private int y = 0;
 
     public TextRenderer(GameObject object) {
         super(object);
@@ -20,8 +22,9 @@ public class TextRenderer extends ObjectComponent {
         g.setColor(getColor());
         g.setFont(g.getFont().deriveFont(getSize() * getCamera().getZoom()));
         g.drawString(getText(),
-                (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
-                (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
+                (int) ((getObject().getX() - getCamera().getRelativeX(getObject()) + getX()) * getCamera().getZoom()),
+                (int) ((getObject().getY() - getCamera().getRelativeY(getObject()) + getY() + getObject().getScaleY() - getSize() / 2.5)
+                        * getCamera().getZoom()));
     }
 
     public String getText() {
@@ -34,6 +37,14 @@ public class TextRenderer extends ObjectComponent {
 
     public float getSize() {
         return this.size;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
     }
 
     public void setText(String text) {
@@ -61,6 +72,30 @@ public class TextRenderer extends ObjectComponent {
 
     public void setSize(String size) {
         setSize(Float.parseFloat(size));
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setX(String x) {
+        try {
+            setX(Integer.parseInt(x));
+        } catch(NumberFormatException e) {
+            setX(0);
+        }
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setY(String y) {
+        try {
+            setY(Integer.parseInt(y));
+        } catch(NumberFormatException e) {
+            setY(0);
+        }
     }
 
 }

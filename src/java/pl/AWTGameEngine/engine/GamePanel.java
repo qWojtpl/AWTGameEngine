@@ -20,9 +20,9 @@ public class GamePanel extends JPanel {
     public GamePanel(Window window) {
         super(new GridBagLayout());
         this.window = window;
-//        if(Main.isFullScreen()) {
-//            multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
-//        }
+        if(window.isFullScreen()) {
+            multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
+        }
         this.setPreferredSize(new Dimension(WIDTH * multipler, HEIGHT * multipler));
         this.setBackground(Color.WHITE);
         this.setDoubleBuffered(true);

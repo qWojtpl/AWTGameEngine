@@ -8,11 +8,12 @@ import pl.AWTGameEngine.windows.Window;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Scene {
 
     private final String name;
-    private final HashMap<String, GameObject> gameObjects = new HashMap<>();
+    private final LinkedHashMap<String, GameObject> gameObjects = new LinkedHashMap<>();
     private final Window window;
     private ColliderRegistry colliderRegistry;
     private Camera camera;
@@ -62,8 +63,9 @@ public class Scene {
             System.out.println("Object with this identifier already exists.");
             return;
         }
-        if(!object.getScene().equals(this)) {
+        if(!this.equals(object.getScene())) {
             System.out.println("Cannot add object which doesn't have this scene as a scene.");
+            return;
         }
         gameObjects.put(object.getIdentifier(), object);
     }
