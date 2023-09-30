@@ -2,7 +2,7 @@ package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
-import pl.AWTGameEngine.engine.KeyListener;
+import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 

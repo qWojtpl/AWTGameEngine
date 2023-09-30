@@ -7,9 +7,9 @@ import java.awt.*;
 
 public class MenuBar extends ObjectComponent {
 
-    private JMenuBar menuBar;
-    private JMenu activeMenu;
-    private JMenu activeSubMenu;
+    private java.awt.MenuBar menuBar;
+    private Menu activeMenu;
+    private Menu activeSubMenu;
 
     public MenuBar(GameObject object) {
         super(object);
@@ -17,7 +17,7 @@ public class MenuBar extends ObjectComponent {
 
     public void setNextMenu(String menuName) {
         initBar();
-        JMenu menu = new JMenu(menuName);
+        Menu menu = new Menu(menuName);
         menuBar.add(menu);
         activeMenu = menu;
         activeSubMenu = menu;
@@ -26,7 +26,7 @@ public class MenuBar extends ObjectComponent {
 
     public void setNextSubMenu(String menuName) {
         initBar();
-        JMenu menu = new JMenu(menuName);
+        Menu menu = new Menu(menuName);
         activeMenu.add(menu);
         activeSubMenu = menu;
         updateWindow();
@@ -34,29 +34,28 @@ public class MenuBar extends ObjectComponent {
 
     public void setNextItem(String itemName) {
         initBar();
-        JMenuItem item = new JMenuItem(itemName);
+        MenuItem item = new MenuItem(itemName);
         activeMenu.add(item);
         updateWindow();
     }
 
     public void setNextSubItem(String itemName) {
         initBar();
-        JMenuItem item = new JMenuItem(itemName);
+        MenuItem item = new MenuItem(itemName);
         activeSubMenu.add(item);
         updateWindow();
     }
 
     public void updateWindow() {
-        menuBar.setVisible(true);
-        getScene().getWindow().setJMenuBar(menuBar);
-        getScene().getWindow().setVisible(true);
+        menuBar.setFont(new Font("sans-serif", Font.PLAIN, 18));
+        getWindow().setMenuBar(menuBar);
     }
 
     public void initBar() {
         if(this.menuBar != null) {
             return;
         }
-        this.menuBar = new JMenuBar();
+        this.menuBar = new java.awt.MenuBar();
         Font f = new Font("sans-serif", Font.PLAIN, 18);
         UIManager.put("Menu.font", f);
         UIManager.put("MenuItem.font", f);

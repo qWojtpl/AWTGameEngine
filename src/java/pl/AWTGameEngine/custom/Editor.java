@@ -1,9 +1,7 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.components.BlankRenderer;
-import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.*;
 import pl.AWTGameEngine.components.Canvas;
-import pl.AWTGameEngine.components.TextRenderer;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -27,27 +25,18 @@ public class Editor extends ObjectComponent {
         for(GameObject go : getScene().getGameObjects()) {
             identifiers.add(go.getIdentifier());
         }
+        List<ObjectComponent> components = getObject().getComponentsByClass(ListComponent.class);
+        if(components.size() == 0) {
+            return;
+        }
+        java.awt.List list = ((ListComponent) components.get(0)).getList();
         for(String identifier : identifiers) {
-            GameObject newGo = getScene().createGameObject("editor-" + identifier);
-            y += 20;
-            newGo.setX(25);
-            newGo.setY(y);
-            newGo.setScaleX(125);
-            newGo.setScaleY(18);
-            newGo.setPriority(1100);
-            newGo.addComponent(new BlankRenderer(newGo));
-            newGo.addComponent(new Canvas(newGo));
-            TextRenderer text = new TextRenderer(newGo);
-            text.setText(identifier);
-            text.setColor(Color.WHITE);
-            text.setSize(13);
-            text.setX(10);
-            newGo.addComponent(text);
+            list.add(identifier);
         }
     }
 
     @Override
-    public void onRender(Graphics g) {
+    public void onStaticUpdate() {
         if(getKeyListener().hasPressedKey(37)) {
             getCamera().setX(getCamera().getX() - 8);
         }

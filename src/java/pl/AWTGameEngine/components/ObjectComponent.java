@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.engine.ColliderRegistry;
-import pl.AWTGameEngine.engine.KeyListener;
+import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.Scene;
@@ -73,6 +73,10 @@ public abstract class ObjectComponent {
      * AfterUpdate is called after Update.
      */
     public void onAfterUpdate() {
+
+    }
+
+    public void onStaticUpdate() {
 
     }
 

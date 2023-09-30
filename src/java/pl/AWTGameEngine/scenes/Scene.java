@@ -80,6 +80,11 @@ public class Scene {
 
     public void update() {
         if(window.isStaticMode()) {
+            for(GameObject go : getGameObjects()) {
+                for(ObjectComponent component : go.getComponents()) {
+                    component.onStaticUpdate();
+                }
+            }
             return;
         }
         for(GameObject go : getGameObjects()) {
