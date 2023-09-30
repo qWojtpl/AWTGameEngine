@@ -49,4 +49,9 @@ public class CustomComponent extends ObjectComponent {
         }
     }
 
+    @Override
+    public void onButtonClick() {
+        System.out.println("Clicked button!");
+    }
+
 }

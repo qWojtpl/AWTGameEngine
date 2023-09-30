@@ -116,6 +116,14 @@ public abstract class ObjectComponent {
 
     }
 
+    public void onButtonClick() {
+
+    }
+
+    public void onCreateGameObject(GameObject newObject) {
+
+    }
+
     public boolean isUnique() {
         return this.unique;
     }

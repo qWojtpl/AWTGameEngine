@@ -5,6 +5,8 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 public class Button extends ObjectComponent {
@@ -20,14 +22,26 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        button = new JButton(getText());
+        button = new JButton(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(ObjectComponent component : getObject().getComponents()) {
+                    component.onButtonClick();
+                }
+            }
+
+        });
         getWindow().getPanel().add(button);
         button.setFocusable(false);
-        ImageIcon icon = new ImageIcon();
-        icon.setImage(image);
-        button.setIcon(icon);
+        if(image != null) {
+            ImageIcon icon = new ImageIcon();
+            icon.setImage(image);
+            button.setIcon(icon);
+        }
         button.setFocusPainted(false);
         button.setBackground(Color.WHITE);
+        button.setText(getText());
     }
 
     @Override
@@ -37,13 +51,18 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
+        if(button == null) {
+            return;
+        }
         button.setLocation((int) ((getObject().getX() - getObject().getScaleX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
         button.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
                 (int) (getObject().getScaleY() * getCamera().getZoom()));
-        ImageIcon icon = new ImageIcon();
-        icon.setImage(image);
-        button.setIcon(icon);
+        if(image != null) {
+            ImageIcon icon = new ImageIcon();
+            icon.setImage(image);
+            button.setIcon(icon);
+        }
     }
 
     public String getText() {
@@ -59,6 +78,10 @@ public class Button extends ObjectComponent {
     }
 
     public void setImage(Image image) {
+        if(image == null) {
+            System.out.println("Image is null.");
+            return;
+        }
         this.image = image;
     }
 

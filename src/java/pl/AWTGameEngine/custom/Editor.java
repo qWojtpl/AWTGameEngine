@@ -29,9 +29,9 @@ public class Editor extends ObjectComponent {
         if(components.size() == 0) {
             return;
         }
-        java.awt.List list = ((ListComponent) components.get(0)).getList();
+        ListComponent list = ((ListComponent) components.get(0));
         for(String identifier : identifiers) {
-            list.add(identifier);
+            list.setNextItem(identifier);
         }
     }
 
@@ -49,6 +49,16 @@ public class Editor extends ObjectComponent {
         if(getKeyListener().hasPressedKey(40)) {
             getCamera().setY(getCamera().getY() + 8);
         }
+    }
+
+    @Override
+    public void onCreateGameObject(GameObject newObject) {
+        List<ObjectComponent> components = getObject().getComponentsByClass(ListComponent.class);
+        if(components.size() == 0) {
+            return;
+        }
+        ListComponent list = ((ListComponent) components.get(0));
+        list.setNextItem(newObject.getIdentifier());
     }
 
 }

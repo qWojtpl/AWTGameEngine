@@ -54,7 +54,7 @@ public class Scene {
             return createGameObject(identifier + "!");
         }
         GameObject go = new GameObject(identifier, this);
-        gameObjects.put(identifier, go);
+        addGameObject(go);
         return go;
     }
 
@@ -66,6 +66,11 @@ public class Scene {
         if(!this.equals(object.getScene())) {
             System.out.println("Cannot add object which doesn't have this scene as a scene.");
             return;
+        }
+        for(GameObject obj : getGameObjects()) {
+            for(ObjectComponent component : obj.getComponents()) {
+                component.onCreateGameObject(object);
+            }
         }
         gameObjects.put(object.getIdentifier(), object);
     }

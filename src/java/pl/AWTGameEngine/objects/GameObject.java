@@ -41,7 +41,7 @@ public class GameObject {
     }
 
     public List<ObjectComponent> getComponents() {
-        return this.components;
+        return new ArrayList<>(this.components);
     }
 
     public List<ObjectComponent> getComponentsByClass(Class<?> clazz) {

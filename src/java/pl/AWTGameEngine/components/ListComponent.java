@@ -16,12 +16,11 @@ public class ListComponent extends ObjectComponent {
     @Override
     public void onAddComponent() {
         list = new List();
-        list.add("item1");
         list.setFocusable(false);
-        getWindow().getPanel().add(list);
         list.setLocation(getObject().getX(), getObject().getY());
         list.setSize(getObject().getScaleX(), getObject().getScaleY());
         list.setFont(getWindow().getFont().deriveFont(24f));
+        getWindow().getPanel().add(list);
     }
 
     @Override
@@ -31,14 +30,17 @@ public class ListComponent extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
+        if(list == null) {
+            return;
+        }
         list.setLocation((int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
         list.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
                 (int) (getObject().getScaleY() * getCamera().getZoom()));
     }
 
-    public List getList() {
-        return list;
+    public void setNextItem(String item) {
+        list.add(item);
     }
 
 }
