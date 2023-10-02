@@ -30,7 +30,7 @@ public class WindowsManager {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
         window.setKeyListener(new KeyListener());
-        window.addMouseListener(new MouseListener());
+        window.setMouseListener(new MouseListener());
         window.setSceneLoader(new SceneLoader(window));
         window.getSceneLoader().loadScene(sceneName);
         windows.add(window);

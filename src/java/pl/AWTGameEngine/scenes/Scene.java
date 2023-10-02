@@ -90,6 +90,7 @@ public class Scene {
                     component.onStaticUpdate();
                 }
             }
+            window.getMouseListener().refresh();
             return;
         }
         for(GameObject go : getGameObjects()) {
@@ -107,6 +108,7 @@ public class Scene {
                 component.onAfterUpdate();
             }
         }
+        window.getMouseListener().refresh();
     }
 
 }
