@@ -5,6 +5,7 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +22,7 @@ public class SceneLoader {
     }
 
     public void loadScene(String sceneName) {
+        window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         window.getPanel().removeAll();
         window.setCurrentScene(new Scene(sceneName, window));
         window.getCurrentScene().setCamera(new Camera());
@@ -65,6 +67,7 @@ public class SceneLoader {
             GameObject object = window.getCurrentScene().createGameObject(objectName);
             object.deserialize(data.get(objectName));
         }
+        window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
 }

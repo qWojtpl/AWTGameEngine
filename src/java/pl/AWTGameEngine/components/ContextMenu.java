@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 @Unique
 public class ContextMenu extends ObjectComponent {
@@ -39,7 +40,18 @@ public class ContextMenu extends ObjectComponent {
 
     public void setNextItem(String content) {
         initMenu();
-        JMenuItem item = new JMenuItem(content);
+        int c = menu.getComponentCount();
+        JMenuItem item = new JMenuItem(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(ObjectComponent component : getObject().getComponents()) {
+                    component.onContextMenuClick(c);
+                }
+            }
+
+        });
+        item.setText(content);
         item.setFont(getWindow().getFont().deriveFont(18f));
         menu.add(item);
     }

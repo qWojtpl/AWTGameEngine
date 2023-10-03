@@ -6,14 +6,13 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 public class Scene {
 
     private final String name;
     private final LinkedHashMap<String, GameObject> gameObjects = new LinkedHashMap<>();
+    private LinkedHashMap<Integer, List<GameObject>> sortedObjects = new LinkedHashMap<>();
     private final Window window;
     private ColliderRegistry colliderRegistry;
     private Camera camera;
@@ -67,6 +66,7 @@ public class Scene {
             System.out.println("Cannot add object which doesn't have this scene as a scene.");
             return;
         }
+        sortObjects();
         for(GameObject obj : getGameObjects()) {
             for(ObjectComponent component : obj.getComponents()) {
                 component.onCreateGameObject(object);
@@ -77,6 +77,34 @@ public class Scene {
 
     public Collection<GameObject> getGameObjects() {
         return gameObjects.values();
+    }
+
+    public LinkedHashMap<Integer, List<GameObject>> getSortedObjects() {
+        return this.sortedObjects;
+    }
+
+    public void sortObjects() {
+        sortedObjects = new LinkedHashMap<>();
+        List<Integer> priorities = new ArrayList<>();
+        int maxPriority = 0;
+        for(GameObject go : getGameObjects()) {
+            if(go.getPriority() > maxPriority) {
+                maxPriority = go.getPriority();
+            }
+            if(!priorities.contains(go.getPriority())) {
+                priorities.add(go.getPriority());
+            }
+        }
+        for(int i = 0; i <= maxPriority; i++) {
+            if(priorities.contains(i)) {
+                sortedObjects.put(i, new ArrayList<>());
+            }
+        }
+        for(GameObject go : getGameObjects()) {
+            List<GameObject> objects = sortedObjects.getOrDefault(go.getPriority(), new ArrayList<>());
+            objects.add(go);
+            sortedObjects.put(go.getPriority(), objects);
+        }
     }
 
     public void removeAllObjects() {

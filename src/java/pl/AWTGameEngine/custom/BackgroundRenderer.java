@@ -6,7 +6,7 @@ import pl.AWTGameEngine.components.SpriteRenderer;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 
-import java.awt.*;
+
 
 public class BackgroundRenderer extends ObjectComponent {
 
@@ -16,8 +16,8 @@ public class BackgroundRenderer extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        for(int x = 0; x < 10; x++) {
-            for(int y = 0; y < 30; y++) {
+        for(int x = 0; x < 100; x++) {
+            for(int y = 0; y < 300; y++) {
                 GameObject tile = getScene().createGameObject("background-" + x + "x" + y);
                 tile.setX(x * 16);
                 tile.setY(y * 16);

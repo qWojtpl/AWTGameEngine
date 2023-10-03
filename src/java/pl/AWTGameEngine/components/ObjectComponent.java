@@ -120,6 +120,10 @@ public abstract class ObjectComponent {
 
     }
 
+    public void onContextMenuClick(int option) {
+
+    }
+
     public void onCreateGameObject(GameObject newObject) {
 
     }

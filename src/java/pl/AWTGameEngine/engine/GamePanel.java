@@ -7,6 +7,7 @@ import pl.AWTGameEngine.windows.Window;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -34,21 +35,10 @@ public class GamePanel extends JPanel {
         if(g == null || window.getCurrentScene() == null) {
             return;
         }
-        HashMap<Integer, List<GameObject>> sortedObjects = new HashMap<>();
-        int maxPriority = 0;
-        for(GameObject go : window.getCurrentScene().getGameObjects()) {
-            if(go.getPriority() > maxPriority) {
-                maxPriority = go.getPriority();
-            }
-            List<GameObject> objects = sortedObjects.getOrDefault(go.getPriority(), new ArrayList<>());
-            objects.add(go);
-            sortedObjects.put(go.getPriority(), objects);
-        }
-        for(int i = 0; i <= maxPriority; i++) {
-            if(!sortedObjects.containsKey(i)) {
-                continue;
-            }
-            for(GameObject go : sortedObjects.getOrDefault(i, new ArrayList<>())) {
+        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
+        for(int i : sortedObjects.keySet()) {
+            System.out.println(i);
+            for(GameObject go : sortedObjects.get(i)) {
                 go.render(g);
             }
         }

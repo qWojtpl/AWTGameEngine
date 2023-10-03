@@ -20,18 +20,6 @@ public class Editor extends ObjectComponent {
     public void onAddComponent() {
         getWindow().setStaticMode(true);
         getCamera().setX(getCamera().getX() - 175);
-        List<String> identifiers = new ArrayList<>();
-        for(GameObject go : getScene().getGameObjects()) {
-            identifiers.add(go.getIdentifier());
-        }
-        List<ObjectComponent> components = getObject().getComponentsByClass(ListComponent.class);
-        if(components.size() == 0) {
-            return;
-        }
-        ListComponent list = ((ListComponent) components.get(0));
-        for(String identifier : identifiers) {
-            list.setNextItem(identifier);
-        }
     }
 
     @Override
@@ -58,6 +46,11 @@ public class Editor extends ObjectComponent {
         }
         ListComponent list = ((ListComponent) components.get(0));
         list.setNextItem(newObject.getIdentifier());
+    }
+
+    @Override
+    public void onContextMenuClick(int option) {
+        System.out.println("Option: " + option);
     }
 
 }

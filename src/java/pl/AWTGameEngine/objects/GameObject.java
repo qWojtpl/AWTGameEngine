@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.objects;
 
-import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.scenes.Scene;
 

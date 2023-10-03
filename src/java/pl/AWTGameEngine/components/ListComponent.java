@@ -18,8 +18,10 @@ public class ListComponent extends ObjectComponent {
     public void onAddComponent() {
         list = new List();
         list.setFocusable(false);
-        list.setLocation(getObject().getX(), getObject().getY());
-        list.setSize(getObject().getScaleX(), getObject().getScaleY());
+        list.setLocation((int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
+                (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
+        list.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
+                (int) (getObject().getScaleY() * getCamera().getZoom()));
         list.setFont(getWindow().getFont().deriveFont(24f));
         getWindow().getPanel().add(list);
     }
