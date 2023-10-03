@@ -1,16 +1,17 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 
+@Unique
 public class ContextMenu extends ObjectComponent {
 
     private JPopupMenu menu;
 
     public ContextMenu(GameObject object) {
         super(object);
-        setUnique(true);
     }
 
     @Override

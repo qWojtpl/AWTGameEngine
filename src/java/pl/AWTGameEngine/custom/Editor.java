@@ -1,20 +1,19 @@
 package pl.AWTGameEngine.custom;
 
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
-import pl.AWTGameEngine.components.Canvas;
 import pl.AWTGameEngine.objects.GameObject;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Unique
 public class Editor extends ObjectComponent {
 
     private int y = 30;
 
     public Editor(GameObject object) {
         super(object);
-        setUnique(true);
     }
 
     @Override

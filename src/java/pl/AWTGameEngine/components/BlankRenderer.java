@@ -1,17 +1,18 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 import java.lang.reflect.Field;
 
+@Unique
 public class BlankRenderer extends ObjectComponent {
 
     private Color color = Color.BLACK;
 
     public BlankRenderer(GameObject object) {
         super(object);
-        setUnique(true);
     }
 
     @Override

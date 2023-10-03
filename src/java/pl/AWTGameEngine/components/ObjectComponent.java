@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.objects.Camera;
@@ -18,7 +19,6 @@ import java.awt.*;
 public abstract class ObjectComponent {
 
     private final GameObject object;
-    protected boolean unique = false;
 
     public ObjectComponent(GameObject object) {
         this.object = object;
@@ -125,11 +125,7 @@ public abstract class ObjectComponent {
     }
 
     public boolean isUnique() {
-        return this.unique;
-    }
-
-    protected void setUnique(boolean unique) {
-        this.unique = unique;
+        return this.getClass().isAnnotationPresent(Unique.class);
     }
 
 }

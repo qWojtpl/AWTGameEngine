@@ -1,16 +1,17 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 
+@Unique
 public class ListComponent extends ObjectComponent {
 
     private List list;
 
     public ListComponent(GameObject object) {
         super(object);
-        setUnique(true);
     }
 
     @Override

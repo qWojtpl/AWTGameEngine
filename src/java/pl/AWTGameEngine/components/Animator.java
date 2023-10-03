@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -7,6 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Unique
 public class Animator extends ObjectComponent {
 
     private final List<AnimationFrame> frames = new ArrayList<>();
@@ -17,7 +19,6 @@ public class Animator extends ObjectComponent {
 
     public Animator(GameObject object) {
         super(object);
-        setUnique(true);
     }
 
     @Override

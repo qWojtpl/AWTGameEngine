@@ -1,14 +1,14 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
+@Unique
 public class Button extends ObjectComponent {
 
     private String text = "Button";
@@ -17,7 +17,6 @@ public class Button extends ObjectComponent {
 
     public Button(GameObject object) {
         super(object);
-        setUnique(true);
     }
 
     @Override

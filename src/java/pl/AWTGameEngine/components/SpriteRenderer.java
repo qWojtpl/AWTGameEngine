@@ -1,24 +1,25 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.IOException;
-import java.net.URL;
 
+@Unique
 public class SpriteRenderer extends ObjectComponent {
 
     private Image image;
 
     public SpriteRenderer(GameObject object) {
         super(object);
-        setUnique(true);
     }
 
     @Override
     public void onRender(Graphics g) {
+        if(image == null) {
+            return;
+        }
         g.drawImage(image, (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
                 (int) (getObject().getScaleX() * getCamera().getZoom()), (int) (getObject().getScaleY() * getCamera().getZoom()),

@@ -1,10 +1,12 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 import java.awt.*;
 
+@Unique
 public class MenuBar extends ObjectComponent {
 
     private java.awt.MenuBar menuBar;
