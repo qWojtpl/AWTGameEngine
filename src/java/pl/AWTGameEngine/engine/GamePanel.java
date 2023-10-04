@@ -41,7 +41,6 @@ public class GamePanel extends JPanel {
                 go.render(g);
             }
         }
-        g.dispose();
     }
 
     public int getMultipler() {

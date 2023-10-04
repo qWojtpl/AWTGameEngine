@@ -66,13 +66,16 @@ public class Scene {
             System.out.println("Cannot add object which doesn't have this scene as a scene.");
             return;
         }
+        gameObjects.put(object.getIdentifier(), object);
         sortObjects();
         for(GameObject obj : getActiveGameObjects()) {
+            if(obj.equals(object)) {
+                continue;
+            }
             for(ObjectComponent component : obj.getComponents()) {
                 component.onCreateGameObject(object);
             }
         }
-        gameObjects.put(object.getIdentifier(), object);
     }
 
     public GameObject getGameObjectByName(String identifier) {

@@ -28,7 +28,6 @@ public class WindowsManager {
         window.setPanel(new GamePanel(window));
         window.pack();
         window.setLocationRelativeTo(null);
-        window.setVisible(true);
         window.setKeyListener(new KeyListener());
         window.setMouseListener(new MouseListener());
         window.setSceneLoader(new SceneLoader(window));
@@ -37,6 +36,7 @@ public class WindowsManager {
         GameLoop loop = new GameLoop(window);
         loop.start();
         window.setLoop(loop);
+        window.setVisible(true);
         return window;
     }
 
