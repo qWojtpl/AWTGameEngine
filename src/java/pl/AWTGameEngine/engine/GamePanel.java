@@ -37,7 +37,6 @@ public class GamePanel extends JPanel {
         }
         LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
         for(int i : sortedObjects.keySet()) {
-            System.out.println(i);
             for(GameObject go : sortedObjects.get(i)) {
                 go.render(g);
             }

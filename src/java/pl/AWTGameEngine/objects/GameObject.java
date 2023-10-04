@@ -11,11 +11,14 @@ public class GameObject {
 
     private final String identifier;
     private final Scene scene;
+    private boolean active = true;
     private int x = 0;
     private int y = 0;
     private int scaleX = 100;
     private int scaleY = 100;
     private int priority = 0;
+    private GameObject parent;
+    private final List<GameObject> children = new ArrayList<>();
     private final List<ObjectComponent> components = new ArrayList<>();
 
     public GameObject(String identifier, Scene scene) {
@@ -54,6 +57,10 @@ public class GameObject {
         return componentList;
     }
 
+    public boolean isActive() {
+        return this.active;
+    }
+
     public int getX() {
         return this.x;
     }
@@ -74,6 +81,18 @@ public class GameObject {
         return this.priority;
     }
 
+    public GameObject getParent() {
+        return this.parent;
+    }
+
+    public List<GameObject> getChildren() {
+        return new ArrayList<>(children);
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public boolean setX(int x) {
         int x2 = x;
         int i = 0;
@@ -90,6 +109,20 @@ public class GameObject {
                 }
             }
             i++;
+        }
+        if(x2 - this.x == 0) {
+            return false;
+        }
+        for(GameObject object : getChildren()) {
+            if(!object.setX(object.getX() + x - this.x)) {
+                for(GameObject object2 : getChildren()) {
+                    if(object2.equals(object)) {
+                        break;
+                    }
+                    object.setX(object.getX() - x - this.x);
+                }
+                return false;
+            }
         }
         this.x = x2;
         return true;
@@ -112,6 +145,20 @@ public class GameObject {
             }
             i++;
         }
+        if(y2 - this.y == 0) {
+            return false;
+        }
+        for(GameObject object : getChildren()) {
+            if(!object.setY(object.getY() + y - this.y)) {
+                for(GameObject object2 : getChildren()) {
+                    if(object2.equals(object)) {
+                        break;
+                    }
+                    object.setY(object.getY() - y - this.y);
+                }
+                return false;
+            }
+        }
         this.y = y2;
         return true;
     }
@@ -126,6 +173,29 @@ public class GameObject {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public void setParent(GameObject parent) {
+        if(this.parent != null) {
+            this.parent.removeChild(this);
+        }
+        this.parent = parent;
+        parent.addChild(this);
+    }
+
+    public void addChild(GameObject object) {
+        if(this.children.contains(object)) {
+            return;
+        }
+        if(!object.getParent().equals(this)) {
+            object.setParent(this);
+            return;
+        }
+        this.children.add(object);
+    }
+
+    public void removeChild(GameObject object) {
+        this.children.remove(object);
     }
 
     public void render(Graphics g) {
@@ -179,10 +249,21 @@ public class GameObject {
                     this.setY(Integer.parseInt(split[1]));
                 } catch(NumberFormatException ignored) {
                 }
+            } else if(propertyName.equalsIgnoreCase("active")) {
+                if(!Boolean.parseBoolean(properties.get(propertyName))) {
+                    this.setActive(false);
+                }
             } else if(propertyName.equalsIgnoreCase("priority")) {
                 try {
                     this.setPriority(Integer.parseInt(properties.get(propertyName)));
                 } catch(NumberFormatException ignored) {
+                }
+            } else if(propertyName.equalsIgnoreCase("parent")) {
+                GameObject go = scene.getGameObjectByName(properties.get(propertyName));
+                if(go != null) {
+                    this.setParent(go);
+                } else {
+                    System.out.println("Can't find object: " + properties.get(propertyName));
                 }
             } else if(propertyName.equalsIgnoreCase("scale")) {
                 String[] split = properties.get(propertyName).split(";");

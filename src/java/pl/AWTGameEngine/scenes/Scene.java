@@ -67,7 +67,7 @@ public class Scene {
             return;
         }
         sortObjects();
-        for(GameObject obj : getGameObjects()) {
+        for(GameObject obj : getActiveGameObjects()) {
             for(ObjectComponent component : obj.getComponents()) {
                 component.onCreateGameObject(object);
             }
@@ -75,8 +75,22 @@ public class Scene {
         gameObjects.put(object.getIdentifier(), object);
     }
 
+    public GameObject getGameObjectByName(String identifier) {
+        return gameObjects.getOrDefault(identifier, null);
+    }
+
     public Collection<GameObject> getGameObjects() {
         return gameObjects.values();
+    }
+
+    public Collection<GameObject> getActiveGameObjects() {
+        Collection<GameObject> objects = new ArrayList<>();
+        for(GameObject object : getGameObjects()) {
+            if(object.isActive()) {
+                objects.add(object);
+            }
+        }
+        return objects;
     }
 
     public LinkedHashMap<Integer, List<GameObject>> getSortedObjects() {
@@ -87,7 +101,7 @@ public class Scene {
         sortedObjects = new LinkedHashMap<>();
         List<Integer> priorities = new ArrayList<>();
         int maxPriority = 0;
-        for(GameObject go : getGameObjects()) {
+        for(GameObject go : getActiveGameObjects()) {
             if(go.getPriority() > maxPriority) {
                 maxPriority = go.getPriority();
             }
@@ -100,7 +114,7 @@ public class Scene {
                 sortedObjects.put(i, new ArrayList<>());
             }
         }
-        for(GameObject go : getGameObjects()) {
+        for(GameObject go : getActiveGameObjects()) {
             List<GameObject> objects = sortedObjects.getOrDefault(go.getPriority(), new ArrayList<>());
             objects.add(go);
             sortedObjects.put(go.getPriority(), objects);
@@ -113,7 +127,7 @@ public class Scene {
 
     public void update() {
         if(window.isStaticMode()) {
-            for(GameObject go : getGameObjects()) {
+            for(GameObject go : getActiveGameObjects()) {
                 for(ObjectComponent component : go.getComponents()) {
                     component.onStaticUpdate();
                 }
@@ -121,17 +135,17 @@ public class Scene {
             window.getMouseListener().refresh();
             return;
         }
-        for(GameObject go : getGameObjects()) {
+        for(GameObject go : getActiveGameObjects()) {
             for(ObjectComponent component : go.getComponents()) {
                 component.onPreUpdate();
             }
         }
-        for(GameObject go : getGameObjects()) {
+        for(GameObject go : getActiveGameObjects()) {
             for(ObjectComponent component : go.getComponents()) {
                 component.onUpdate();
             }
         }
-        for(GameObject go : getGameObjects()) {
+        for(GameObject go : getActiveGameObjects()) {
             for(ObjectComponent component : go.getComponents()) {
                 component.onAfterUpdate();
             }

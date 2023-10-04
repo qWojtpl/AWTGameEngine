@@ -52,6 +52,10 @@ public abstract class ObjectComponent {
         return getWindow().getSceneLoader();
     }
 
+    protected GameObject getObjectByName(String name) {
+        return getScene().getGameObjectByName(name);
+    }
+
     /**
      * Method is called before frame draw.
      * PreUpdate is called first.

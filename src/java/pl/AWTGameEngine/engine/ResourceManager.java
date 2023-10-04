@@ -21,7 +21,8 @@ public class ResourceManager {
             if(url == null) {
                 throw new Exception();
             }
-            File file = new File(url.toURI());
+            String path = url.getPath();
+            File file = new File(path);
             resources.put(name, file);
             return file;
         } catch(Exception e) {
