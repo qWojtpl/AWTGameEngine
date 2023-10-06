@@ -4,7 +4,6 @@ import java.awt.event.MouseEvent;
 
 public class MouseListener implements java.awt.event.MouseListener {
 
-    private boolean mouseReleased = false;
     private MouseEvent releaseEvent;
 
     @Override
@@ -19,7 +18,6 @@ public class MouseListener implements java.awt.event.MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        mouseReleased = true;
         releaseEvent = e;
     }
 
@@ -34,12 +32,11 @@ public class MouseListener implements java.awt.event.MouseListener {
     }
 
     public void refresh() {
-        mouseReleased = false;
         releaseEvent = null;
     }
 
     public boolean isMouseReleased() {
-        return this.mouseReleased;
+        return this.releaseEvent != null;
     }
 
     public MouseEvent getReleaseEvent() {

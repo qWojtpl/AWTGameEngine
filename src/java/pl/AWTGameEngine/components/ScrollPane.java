@@ -1,14 +1,19 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Parentless;
 import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 import java.awt.*;
 
 @Unique
+@Parentless
 public class ScrollPane extends ObjectComponent {
 
+    private NestedPanel scrollPaneContainer;
+    private NestedPanel contentPanel;
     private JScrollPane scrollPane;
 
     public ScrollPane(GameObject object) {
@@ -17,10 +22,25 @@ public class ScrollPane extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        scrollPane = new JScrollPane();
-        scrollPane.add(new Label("test"));
-        scrollPane.setVisible(true);
-        getWindow().getPanel().add(scrollPane);
+/*        scrollPaneContainer = new NestedPanel(getWindow());
+        scrollPaneContainer.setLayout(new BorderLayout());
+        contentPanel = new NestedPanel(getWindow());
+
+        contentPanel.setBackground(Color.RED);
+        scrollPane = new JScrollPane(contentPanel);
+        scrollPaneContainer.add(scrollPane);
+        onRender(null);
+        getObject().getPanel().add(scrollPaneContainer);
+        getPanelRegistry().addPanel(contentPanel);*/
+        scrollPaneContainer = new NestedPanel(getWindow());
+        scrollPaneContainer.setLayout(new BorderLayout());
+        contentPanel = new NestedPanel(getWindow());
+        contentPanel.setBackground(Color.WHITE);
+        scrollPane = new JScrollPane(contentPanel);
+        scrollPaneContainer.add(scrollPane);
+        onRender(null);
+        getObject().getPanel().add(scrollPaneContainer);
+        getPanelRegistry().addPanel(contentPanel);
     }
 
     @Override
@@ -28,13 +48,25 @@ public class ScrollPane extends ObjectComponent {
         if(scrollPane == null) {
             return;
         }
-/*        System.out.println(getObject().getX());
-        System.out.println(getObject().getY());*/
-/*        scrollPane.setLocation((int) ((getObject().getX() - getObject().getScaleX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
+        scrollPaneContainer.setLocation((int) ((getObject().getX() - getObject().getScaleX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
-        scrollPane.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
+        scrollPaneContainer.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
                 (int) (getObject().getScaleY() * getCamera().getZoom()));
-        scrollPane.setVisible(true);*/
+/*        scrollPane.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
+                (int) (getObject().getScaleY() * getCamera().getZoom()));*/
+    }
+
+    @Override
+    public void onAddChild(GameObject child) {
+        child.setPanel(contentPanel);
+        System.out.println(getObject().getHeight());
+        contentPanel.setPreferredSize(new Dimension(getObject().getWidth(), getObject().getHeight()));
+        scrollPane.setPreferredSize(new Dimension(getObject().getWidth(), getObject().getHeight()));
+    }
+
+    @Override
+    public void onRemoveChild(GameObject child) {
+        child.setPanel(getWindow().getPanel());
     }
 
 }

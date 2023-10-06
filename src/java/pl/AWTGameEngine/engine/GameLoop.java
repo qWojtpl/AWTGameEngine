@@ -16,12 +16,14 @@ public class GameLoop extends Thread {
     @Override
     public void run() {
         while(true) {
-            window.getCurrentScene().update();
-            window.getPanel().repaint();
             try {
                 Thread.sleep((long) (1000 / FPS));
             } catch(InterruptedException ignored) {
                 break;
+            }
+            window.getCurrentScene().update();
+            for(NestedPanel panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
+                panel.repaint();
             }
         }
     }

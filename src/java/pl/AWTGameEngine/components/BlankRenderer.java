@@ -37,7 +37,7 @@ public class BlankRenderer extends ObjectComponent {
         try {
             Field field = Class.forName("java.awt.Color").getField(color.toLowerCase());
             c = (Color) field.get(null);
-        } catch (Exception e) {
+        } catch(Exception e) {
             c = Color.BLACK;
         }
         setColor(c);

@@ -2,6 +2,7 @@ package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.ColliderRegistry;
+import pl.AWTGameEngine.engine.PanelRegistry;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
@@ -15,13 +16,15 @@ public class Scene {
     private LinkedHashMap<Integer, List<GameObject>> sortedObjects = new LinkedHashMap<>();
     private final Window window;
     private ColliderRegistry colliderRegistry;
+    private PanelRegistry panelRegistry;
     private Camera camera;
 
     public Scene(String name, Window window) {
         this.name = name;
         this.window = window;
-        this.colliderRegistry = new ColliderRegistry();
-        this.camera = new Camera();
+        setColliderRegistry(new ColliderRegistry());
+        setPanelRegistry(new PanelRegistry());
+        setCamera(new Camera());
     }
 
     public String getName() {
@@ -36,12 +39,20 @@ public class Scene {
         return this.colliderRegistry;
     }
 
+    public PanelRegistry getPanelRegistry() {
+        return this.panelRegistry;
+    }
+
     public Camera getCamera() {
         return this.camera;
     }
 
     public void setColliderRegistry(ColliderRegistry registry) {
         this.colliderRegistry = registry;
+    }
+
+    public void setPanelRegistry(PanelRegistry registry) {
+        this.panelRegistry = registry;
     }
 
     public void setCamera(Camera camera) {
@@ -66,6 +77,7 @@ public class Scene {
             System.out.println("Cannot add object which doesn't have this scene as a scene.");
             return;
         }
+        object.setPanel(window.getPanel());
         gameObjects.put(object.getIdentifier(), object);
         sortObjects();
         for(GameObject obj : getActiveGameObjects()) {

@@ -17,13 +17,14 @@ public class BackgroundRenderer extends ObjectComponent {
     @Override
     public void onAddComponent() {
         for(int x = 0; x < 10; x++) {
-            for(int y = 0; y < 30; y++) {
+            for(int y = 0; y < 50; y++) {
                 GameObject tile = getScene().createGameObject("background-" + x + "x" + y);
                 tile.setX(x * 16);
                 tile.setY(y * 16);
                 tile.setScaleX(16);
                 tile.setScaleY(16);
                 tile.setPriority(0);
+                tile.setParent(getObject().getParent());
                 SpriteRenderer s = new SpriteRenderer(tile);
                 s.setImage(ResourceManager.getResourceAsImage("beaver.jpg"));
                 tile.addComponent(s);

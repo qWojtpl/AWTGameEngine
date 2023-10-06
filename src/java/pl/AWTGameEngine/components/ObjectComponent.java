@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ColliderRegistry;
+import pl.AWTGameEngine.engine.PanelRegistry;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
@@ -34,6 +35,10 @@ public abstract class ObjectComponent {
 
     protected ColliderRegistry getColliderRegistry() {
         return getScene().getColliderRegistry();
+    }
+
+    protected PanelRegistry getPanelRegistry() {
+        return getScene().getPanelRegistry();
     }
 
     protected Camera getCamera() {
@@ -129,6 +134,14 @@ public abstract class ObjectComponent {
     }
 
     public void onCreateGameObject(GameObject newObject) {
+
+    }
+
+    public void onAddChild(GameObject child) {
+
+    }
+
+    public void onRemoveChild(GameObject child) {
 
     }
 

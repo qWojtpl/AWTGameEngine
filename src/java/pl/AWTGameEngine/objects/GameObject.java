@@ -1,6 +1,8 @@
 package pl.AWTGameEngine.objects;
 
+import pl.AWTGameEngine.annotations.Parentless;
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.scenes.Scene;
 
 import java.awt.*;
@@ -18,6 +20,7 @@ public class GameObject {
     private int scaleY = 100;
     private int priority = 0;
     private GameObject parent;
+    private NestedPanel panel;
     private final List<GameObject> children = new ArrayList<>();
     private final List<ObjectComponent> components = new ArrayList<>();
 
@@ -83,6 +86,10 @@ public class GameObject {
 
     public GameObject getParent() {
         return this.parent;
+    }
+
+    public NestedPanel getPanel() {
+        return this.panel;
     }
 
     public List<GameObject> getChildren() {
@@ -179,6 +186,12 @@ public class GameObject {
         if(this.parent != null) {
             this.parent.removeChild(this);
         }
+        for(ObjectComponent component : getComponents()) {
+            if(component.getClass().isAnnotationPresent(Parentless.class)) {
+                System.out.println("Can't add parent to object " + identifier + ", object is parentless!");
+                return;
+            }
+        }
         this.parent = parent;
         parent.addChild(this);
     }
@@ -192,10 +205,55 @@ public class GameObject {
             return;
         }
         this.children.add(object);
+        for(ObjectComponent component : getComponents()) {
+            component.onAddChild(object);
+        }
     }
 
     public void removeChild(GameObject object) {
         this.children.remove(object);
+        for(ObjectComponent component : getComponents()) {
+            component.onRemoveChild(object);
+        }
+    }
+
+    public void setPanel(NestedPanel panel) {
+        this.panel = panel;
+    }
+
+
+    public int getWidth() {
+        int width = 0;
+        for(GameObject object : getChildren()) {
+            if(object.getChildren().size() > 0) {
+                int w = object.getWidth();
+                if(w > width) {
+                    width += w;
+                }
+            } else {
+                if(object.getX() + object.getScaleX() > width) {
+                    width += object.getX() + object.getScaleX();
+                }
+            }
+        }
+        return width;
+    }
+
+    public int getHeight() {
+        int height = 0;
+        for(GameObject object : getChildren()) {
+            if(object.getChildren().size() > 0) {
+                int h = object.getHeight();
+                if(h > height) {
+                    height += h;
+                }
+            } else {
+                if(object.getY() + object.getScaleY() > height) {
+                    height += object.getY() + object.getScaleY();
+                }
+            }
+        }
+        return height;
     }
 
     public void render(Graphics g) {

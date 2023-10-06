@@ -1,17 +1,10 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
 
-import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ArrayList;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends NestedPanel {
 
     private final int WIDTH = 480;
     private final int HEIGHT = (int) (WIDTH * 0.5625);
@@ -19,7 +12,7 @@ public class GamePanel extends JPanel {
     private int multipler = 3;
 
     public GamePanel(Window window) {
-        super(new GridBagLayout());
+        super(window);
         this.window = window;
         if(window.isFullScreen()) {
             multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
@@ -27,20 +20,6 @@ public class GamePanel extends JPanel {
         this.setPreferredSize(new Dimension(WIDTH * multipler, HEIGHT * multipler));
         this.setBackground(Color.WHITE);
         this.setDoubleBuffered(true);
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if(g == null || window.getCurrentScene() == null) {
-            return;
-        }
-        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
-        for(int i : sortedObjects.keySet()) {
-            for(GameObject go : sortedObjects.get(i)) {
-                go.render(g);
-            }
-        }
     }
 
     public int getMultipler() {

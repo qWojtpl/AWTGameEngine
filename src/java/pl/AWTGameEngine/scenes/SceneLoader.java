@@ -27,7 +27,7 @@ public class SceneLoader {
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         window.getPanel().removeAll();
         window.setCurrentScene(new Scene(sceneName, window));
-        window.getCurrentScene().setCamera(new Camera());
+        window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
         window.getCurrentScene().getCamera().setZoom(window.getPanel().getMultipler() / 2f);
         List<String> lines;
         File sceneFile = ResourceManager.getResource(sceneName + ".scene");

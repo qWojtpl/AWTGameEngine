@@ -16,6 +16,9 @@ public class Camera {
         if(object.getComponentsByClass(Canvas.class).size() > 0) {
             return 0;
         }
+        if(!object.getScene().getWindow().getPanel().equals(object.getPanel())) {
+            return 0;
+        }
         return this.x;
     }
 
@@ -25,6 +28,9 @@ public class Camera {
 
     public int getRelativeY(GameObject object) {
         if(object.getComponentsByClass(Canvas.class).size() > 0) {
+            return 0;
+        }
+        if(!object.getScene().getWindow().getPanel().equals(object.getPanel())) {
             return 0;
         }
         return this.y;
