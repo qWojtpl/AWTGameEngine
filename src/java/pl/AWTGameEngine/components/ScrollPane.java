@@ -22,16 +22,6 @@ public class ScrollPane extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-/*        scrollPaneContainer = new NestedPanel(getWindow());
-        scrollPaneContainer.setLayout(new BorderLayout());
-        contentPanel = new NestedPanel(getWindow());
-
-        contentPanel.setBackground(Color.RED);
-        scrollPane = new JScrollPane(contentPanel);
-        scrollPaneContainer.add(scrollPane);
-        onRender(null);
-        getObject().getPanel().add(scrollPaneContainer);
-        getPanelRegistry().addPanel(contentPanel);*/
         scrollPaneContainer = new NestedPanel(getWindow());
         scrollPaneContainer.setLayout(new BorderLayout());
         contentPanel = new NestedPanel(getWindow());
@@ -48,20 +38,23 @@ public class ScrollPane extends ObjectComponent {
         if(scrollPane == null) {
             return;
         }
-        scrollPaneContainer.setLocation((int) ((getObject().getX() - getObject().getScaleX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
+        scrollPaneContainer.setLocation(
+                (int) ((getObject().getX() - getObject().getScaleX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
-        scrollPaneContainer.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
+        scrollPaneContainer.setSize(
+                (int) (getObject().getScaleX() * getCamera().getZoom()),
                 (int) (getObject().getScaleY() * getCamera().getZoom()));
-/*        scrollPane.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
-                (int) (getObject().getScaleY() * getCamera().getZoom()));*/
+        scrollPane.setPreferredSize(new Dimension(
+                (int) (getObject().getScaleX() * getCamera().getZoom()),
+                (int) (getObject().getScaleY() * getCamera().getZoom())));
     }
 
     @Override
     public void onAddChild(GameObject child) {
         child.setPanel(contentPanel);
-        System.out.println(getObject().getHeight());
-        contentPanel.setPreferredSize(new Dimension(getObject().getWidth(), getObject().getHeight()));
-        scrollPane.setPreferredSize(new Dimension(getObject().getWidth(), getObject().getHeight()));
+        contentPanel.setPreferredSize(new Dimension(
+                (int) (getObject().getWidth() * 1.5),
+                (int) (getObject().getHeight() * 1.5)));
     }
 
     @Override

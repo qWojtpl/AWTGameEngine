@@ -1,4 +1,4 @@
-pane="pos{920;0}scale{175;525}priority{1}ScrollPane:ObjectComponent{}Canvas:ObjectComponent{}";
+pane="pos{961;0}scale{175;525}priority{1}ScrollPane:ObjectComponent{}Canvas:ObjectComponent{}";
 tree="pos{0;0}scale{100;100}Tree:ObjectComponent{}";
 editor="pos{0;0}scale{175;525}Editor:ObjectComponent-C{}Canvas:ObjectComponent{}ListComponent:ObjectComponent{}ContextMenu:ObjectComponent{nextItem^Create GameObject^nextItem^remove^}";
 object1="pos{0;0}scale{45;45}priority{1}SpriteRenderer:ObjectComponent{image^beaver.jpg^}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^}BoxCollider:ObjectComponent{visualize^true^scaleX^50^scaleY^-45^}Animator:ObjectComponent{nextFrame^beaver.jpg^nextDelay^60^nextFrame^beaver2.png^nextDelay^60^}";

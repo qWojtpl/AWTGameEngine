@@ -200,9 +200,14 @@ public class GameObject {
         if(this.children.contains(object)) {
             return;
         }
-        if(!object.getParent().equals(this)) {
+        if(!this.equals(object.getParent())) {
             object.setParent(this);
             return;
+        }
+        if(getPanel() != null) {
+            if(!this.getPanel().equals(object.getPanel())) {
+                object.setPanel(getPanel());
+            }
         }
         this.children.add(object);
         for(ObjectComponent component : getComponents()) {
@@ -225,15 +230,8 @@ public class GameObject {
     public int getWidth() {
         int width = 0;
         for(GameObject object : getChildren()) {
-            if(object.getChildren().size() > 0) {
-                int w = object.getWidth();
-                if(w > width) {
-                    width += w;
-                }
-            } else {
-                if(object.getX() + object.getScaleX() > width) {
-                    width += object.getX() + object.getScaleX();
-                }
+            if(object.getX() + object.getScaleX() > width) {
+                width = object.getX() + object.getScaleX();
             }
         }
         return width;
@@ -243,16 +241,17 @@ public class GameObject {
         int height = 0;
         for(GameObject object : getChildren()) {
             if(object.getChildren().size() > 0) {
-                int h = object.getHeight();
-                if(h > height) {
-                    height += h;
-                }
-            } else {
-                if(object.getY() + object.getScaleY() > height) {
-                    height += object.getY() + object.getScaleY();
+                for(GameObject child : object.getChildren()) {
+                    if(child.getY() + child.getScaleY() > height) {
+                        height = child.getY() + child.getScaleY();
+                    }
                 }
             }
+            if(object.getY() + object.getScaleY() > height) {
+                height = object.getY() + object.getScaleY();
+            }
         }
+        System.out.println(height);
         return height;
     }
 
