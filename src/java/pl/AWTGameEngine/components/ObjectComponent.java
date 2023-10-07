@@ -11,6 +11,7 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 /**
  * Every component field should have dedicated method to set the value of this field.
@@ -129,11 +130,15 @@ public abstract class ObjectComponent {
 
     }
 
-    public void onContextMenuClick(int option) {
+    public void onContextMenuClick(int option, int x, int y) {
 
     }
 
     public void onCreateGameObject(GameObject newObject) {
+
+    }
+
+    public void onUpdateGameObject(GameObject updatedObject) {
 
     }
 

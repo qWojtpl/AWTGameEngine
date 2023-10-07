@@ -213,12 +213,22 @@ public class GameObject {
         for(ObjectComponent component : getComponents()) {
             component.onAddChild(object);
         }
+        for(GameObject gameObject : getScene().getActiveGameObjects()) {
+            for(ObjectComponent component : gameObject.getComponents()) {
+                component.onUpdateGameObject(this);
+            }
+        }
     }
 
     public void removeChild(GameObject object) {
         this.children.remove(object);
         for(ObjectComponent component : getComponents()) {
             component.onRemoveChild(object);
+        }
+        for(GameObject gameObject : getScene().getActiveGameObjects()) {
+            for(ObjectComponent component : gameObject.getComponents()) {
+                component.onUpdateGameObject(this);
+            }
         }
     }
 

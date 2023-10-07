@@ -2,8 +2,11 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
+import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 
+import javax.swing.*;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 @Unique
@@ -46,8 +49,39 @@ public class Editor extends ObjectComponent {
     }
 
     @Override
-    public void onContextMenuClick(int option) {
-        System.out.println("Option: " + option);
+    public void onUpdateGameObject(GameObject updatedObject) {
+
+    }
+
+    @Override
+    public void onContextMenuClick(int option, int x, int y) {
+        switch(option) {
+            case 0:
+                String identifier = (String) JOptionPane.showInputDialog(getWindow(),
+                        "Provide new object name",
+                        "New GameObject",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        null,
+                        "GameObject");
+                if(identifier != null) {
+                    if(getScene().getGameObjectByName(identifier) != null) {
+                        JOptionPane.showMessageDialog(getWindow(),
+                                "GameObject with this identifier already exists.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        GameObject go = getScene().createGameObject(identifier);
+                        go.setX(x);
+                        go.setY(y);
+                        System.out.println(x + " " + y);
+                        SpriteRenderer spriteRenderer = new SpriteRenderer(go);
+                        spriteRenderer.setImage(ResourceManager.getResourceAsImage("beaver.jpg"));
+                        go.addComponent(spriteRenderer);
+                    }
+                }
+                break;
+        }
     }
 
 }

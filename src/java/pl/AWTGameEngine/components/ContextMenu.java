@@ -5,11 +5,13 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 
 @Unique
 public class ContextMenu extends ObjectComponent {
 
     private JPopupMenu menu;
+    private MouseEvent mouseEvent;
 
     public ContextMenu(GameObject object) {
         super(object);
@@ -25,9 +27,10 @@ public class ContextMenu extends ObjectComponent {
         if(!menu.isShowing()) {
             if(getWindow().getMouseListener().isMouseReleased()) {
                 if(getWindow().getMouseListener().getReleaseEvent().isPopupTrigger()) {
-                    menu.show(getWindow().getMouseListener().getReleaseEvent().getComponent(),
-                            getWindow().getMouseListener().getReleaseEvent().getX(),
-                            getWindow().getMouseListener().getReleaseEvent().getY());
+                    mouseEvent = getWindow().getMouseListener().getReleaseEvent();
+                    menu.show(mouseEvent.getComponent(),
+                            mouseEvent.getX(),
+                            mouseEvent.getY());
                 }
             }
         }
@@ -46,7 +49,7 @@ public class ContextMenu extends ObjectComponent {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for(ObjectComponent component : getObject().getComponents()) {
-                    component.onContextMenuClick(c);
+                    component.onContextMenuClick(c, (int) (mouseEvent.getX() / 4.2), (int) (mouseEvent.getY() / 2.1));
                 }
             }
 
