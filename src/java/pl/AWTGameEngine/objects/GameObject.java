@@ -135,6 +135,10 @@ public class GameObject {
         return true;
     }
 
+    public void setXForced(int x) {
+        this.x = x;
+    }
+
     public boolean setY(int y) {
         int y2 = y;
         int i = 0;
@@ -168,6 +172,10 @@ public class GameObject {
         }
         this.y = y2;
         return true;
+    }
+
+    public void setYForced(int y) {
+        this.y = y;
     }
 
     public void setScaleX(int x) {
@@ -239,7 +247,6 @@ public class GameObject {
     public void setPanel(NestedPanel panel) {
         this.panel = panel;
     }
-
 
     public int getWidth() {
         int width = 0;

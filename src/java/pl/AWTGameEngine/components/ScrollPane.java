@@ -31,7 +31,13 @@ public class ScrollPane extends ObjectComponent {
         onRender(null);
         getObject().getPanel().add(scrollPaneContainer);
         getPanelRegistry().addPanel(contentPanel);
-        getObject().setX(getObject().getX() + getObject().getScaleX());
+    }
+
+    @Override
+    public void onUpdate() {
+        for(GameObject child : getObject().getChildren()) {
+            child.setPanel(contentPanel);
+        }
     }
 
     @Override
@@ -40,7 +46,7 @@ public class ScrollPane extends ObjectComponent {
             return;
         }
         scrollPaneContainer.setLocation(
-                (int) ((getObject().getX() - getObject().getScaleX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
+                (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
         scrollPaneContainer.setSize(
                 (int) (getObject().getScaleX() * getCamera().getZoom()),

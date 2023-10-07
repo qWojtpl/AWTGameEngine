@@ -23,16 +23,8 @@ public class Tree extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Objects");
-        DefaultMutableTreeNode color=new DefaultMutableTreeNode("color");
-        DefaultMutableTreeNode font=new DefaultMutableTreeNode("font");
-        root.add(color);
-        root.add(font);
-        DefaultMutableTreeNode red=new DefaultMutableTreeNode("red");
-        DefaultMutableTreeNode blue=new DefaultMutableTreeNode("blue");
-        DefaultMutableTreeNode black=new DefaultMutableTreeNode("black");
-        DefaultMutableTreeNode green=new DefaultMutableTreeNode("green");
-        color.add(red); color.add(blue); color.add(black); color.add(green);
+        DefaultMutableTreeNode root = addElement("Objects");
+        elements.put("root", root);
         tree = new JTree(root);
         tree.setBorder(BorderFactory.createEmptyBorder(8, 16, 1, 1));
         tree.setFocusable(false);
@@ -47,16 +39,15 @@ public class Tree extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        System.out.println((int) (getObject().getScaleX() * getCamera().getZoom()));
         if(container == null) {
             return;
         }
-/*        container.setLocation(
-                (int) ((getObject().getX() - getObject().getScaleX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
+        container.setLocation(
+                (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
         container.setSize(
                 (int) (getObject().getScaleX() * getCamera().getZoom()),
-                (int) (getObject().getScaleY() * getCamera().getZoom()));*/
+                (int) (getObject().getScaleY() * getCamera().getZoom()));
     }
 
     @Override
@@ -65,8 +56,16 @@ public class Tree extends ObjectComponent {
         getObject().getPanel().add(container);
     }
 
-    public void addElement(String element) {
-        elements.put(element, new DefaultMutableTreeNode(element));
+    public DefaultMutableTreeNode addElement(String element) {
+        DefaultMutableTreeNode e = new DefaultMutableTreeNode(element);
+        elements.put(element, e);
+        return e;
+    }
+
+    public void addElementTo(DefaultMutableTreeNode element, DefaultMutableTreeNode newParent) {
+        newParent.add(element);
+        tree.setVisible(false);
+        tree.setVisible(true);
     }
 
     public DefaultMutableTreeNode getElement(String element) {

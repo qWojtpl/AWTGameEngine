@@ -1,5 +1,5 @@
 objectList="pos{0;0}scale{175;525}priority{1}ScrollPane:ObjectComponent{}Canvas:ObjectComponent{}";
-objectTree="pos{0;0}scale{175;1000}parent{objectList}Tree:ObjectComponent{}";
+objectTree="pos{0;0}scale{175;1000}priority{1}parent{objectList}Tree:ObjectComponent{}";
 objectInfo="pos{786;0}scale{175;525}priority{1}ScrollPane:ObjectComponent{}Canvas:ObjectComponent{}";
 editor="pos{0;0}scale{0;0}Editor:ObjectComponent-C{}ContextMenu:ObjectComponent{nextItem^Create GameObject^nextItem^remove^}";
 object1="pos{0;0}scale{45;45}priority{1}SpriteRenderer:ObjectComponent{image^beaver.jpg^}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^}BoxCollider:ObjectComponent{visualize^true^scaleX^50^scaleY^-45^}Animator:ObjectComponent{nextFrame^beaver.jpg^nextDelay^60^nextFrame^beaver2.png^nextDelay^60^}";
