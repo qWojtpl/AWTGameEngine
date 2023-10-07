@@ -192,7 +192,11 @@ public class GameObject {
                 return;
             }
         }
+        GameObject oldParent = this.parent;
         this.parent = parent;
+        for(ObjectComponent component : getComponents()) {
+            component.onParentChange(oldParent);
+        }
         parent.addChild(this);
     }
 
@@ -261,7 +265,6 @@ public class GameObject {
                 height = object.getY() + object.getScaleY();
             }
         }
-        System.out.println(height);
         return height;
     }
 

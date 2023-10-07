@@ -31,6 +31,7 @@ public class ScrollPane extends ObjectComponent {
         onRender(null);
         getObject().getPanel().add(scrollPaneContainer);
         getPanelRegistry().addPanel(contentPanel);
+        getObject().setX(getObject().getX() + getObject().getScaleX());
     }
 
     @Override

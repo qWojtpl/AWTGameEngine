@@ -150,6 +150,10 @@ public abstract class ObjectComponent {
 
     }
 
+    public void onParentChange(GameObject oldParent) {
+
+    }
+
     public boolean isUnique() {
         return this.getClass().isAnnotationPresent(Unique.class);
     }
