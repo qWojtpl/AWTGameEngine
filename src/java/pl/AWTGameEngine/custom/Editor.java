@@ -58,6 +58,7 @@ public class Editor extends ObjectComponent {
                 tree.addElementTo(newElement, tree.getElement(parent.getIdentifier()));
             }
         }
+        tree.reload();
     }
 
     @Override

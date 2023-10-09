@@ -7,6 +7,7 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.util.HashMap;
 
@@ -29,9 +30,10 @@ public class Tree extends ObjectComponent {
         tree.setBorder(BorderFactory.createEmptyBorder(8, 16, 1, 1));
         tree.setFocusable(false);
         tree.setFont(getWindow().getFont().deriveFont(18f));
+        tree.setRootVisible(true);
         container = new NestedPanel(getObject());
         container.setBackground(Color.WHITE);
-        container.setSize(new Dimension(100, 1000));
+        container.setSize(new Dimension((int) (getObject().getScaleX() * getCamera().getZoom()), 1000));
         container.setLayout(new BorderLayout());
         container.add(tree);
         getObject().getPanel().add(container);
@@ -64,8 +66,12 @@ public class Tree extends ObjectComponent {
 
     public void addElementTo(DefaultMutableTreeNode element, DefaultMutableTreeNode newParent) {
         newParent.add(element);
-        tree.setVisible(false);
-        tree.setVisible(true);
+    }
+
+    public void reload() {
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        model.reload(root);
     }
 
     public DefaultMutableTreeNode getElement(String element) {
