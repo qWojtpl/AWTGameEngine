@@ -1,8 +1,6 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
-import pl.AWTGameEngine.windows.WindowsManager;
 
 public class GameLoop extends Thread {
 

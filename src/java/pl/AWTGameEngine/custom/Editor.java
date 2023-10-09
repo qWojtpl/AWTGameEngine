@@ -7,7 +7,6 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 @Unique
@@ -41,7 +40,7 @@ public class Editor extends ObjectComponent {
 
     @Override
     public void onCreateGameObject(GameObject newObject) {
-        GameObject treeObject = getScene().getGameObjectByName("objectTree");
+        GameObject treeObject = getScene().getGameObjectByName("@objectTree");
         List<ObjectComponent> components = treeObject.getComponentsByClass(Tree.class);
         if(components.size() == 0) {
             return;
@@ -50,11 +49,17 @@ public class Editor extends ObjectComponent {
         DefaultMutableTreeNode root = tree.getElement("root");
         root.removeAllChildren();
         for(GameObject go : getScene().getGameObjects()) {
+            if(go.getIdentifier().startsWith("@")) {
+                continue;
+            }
             DefaultMutableTreeNode newElement = tree.addElement(go.getIdentifier());
             GameObject parent = go.getParent();
             if(parent == null) {
                 tree.addElementTo(newElement, root);
             } else {
+                if(parent.getIdentifier().startsWith("@")) {
+                    continue;
+                }
                 tree.addElementTo(newElement, tree.getElement(parent.getIdentifier()));
             }
         }

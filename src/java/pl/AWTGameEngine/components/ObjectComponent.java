@@ -11,7 +11,6 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
 /**
  * Every component field should have dedicated method to set the value of this field.

@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.Unique;
-import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -33,7 +32,7 @@ public class Tree extends ObjectComponent {
         tree.setRootVisible(true);
         container = new NestedPanel(getObject());
         container.setBackground(Color.WHITE);
-        container.setSize(new Dimension((int) (getObject().getScaleX() * getCamera().getZoom()), 1000));
+        updatePosition();
         container.setLayout(new BorderLayout());
         container.add(tree);
         getObject().getPanel().add(container);
@@ -44,6 +43,10 @@ public class Tree extends ObjectComponent {
         if(container == null) {
             return;
         }
+        updatePosition();
+    }
+
+    private void updatePosition() {
         container.setLocation(
                 (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));

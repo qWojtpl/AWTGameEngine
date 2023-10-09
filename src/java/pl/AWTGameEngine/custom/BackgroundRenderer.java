@@ -1,12 +1,9 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.components.Animator;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.SpriteRenderer;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
-
-
 
 public class BackgroundRenderer extends ObjectComponent {
 

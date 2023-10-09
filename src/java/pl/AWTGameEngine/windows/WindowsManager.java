@@ -7,7 +7,6 @@ import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

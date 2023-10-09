@@ -27,6 +27,8 @@ public class ScrollPane extends ObjectComponent {
         contentPanel = new NestedPanel(getWindow());
         contentPanel.setBackground(Color.WHITE);
         scrollPane = new JScrollPane(contentPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
         scrollPaneContainer.add(scrollPane);
         onRender(null);
         getObject().getPanel().add(scrollPaneContainer);

@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.engine.ResourceManager;
-import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -12,8 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SceneLoader {
 
