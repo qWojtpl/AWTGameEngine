@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.ConflictsWith;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.PanelRegistry;
@@ -159,6 +160,13 @@ public abstract class ObjectComponent {
 
     public boolean isUnique() {
         return this.getClass().isAnnotationPresent(Unique.class);
+    }
+
+    public boolean conflictsWith(Class<? extends ObjectComponent> component) {
+        if(!this.getClass().isAnnotationPresent(ConflictsWith.class)) {
+            return false;
+        }
+        return this.getClass().getAnnotation(ConflictsWith.class).value().equals(component);
     }
 
 }

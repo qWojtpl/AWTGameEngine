@@ -34,6 +34,13 @@ public class GameObject {
             System.out.println("Component " + component.getClass().getName() + " is unique, cannot add another...");
             return;
         }
+        for(ObjectComponent c : getComponents()) {
+            if(c.conflictsWith(component.getClass())) {
+                System.out.println("Component " + c.getClass().getName() + " has conflict with "
+                        + component.getClass().getName() + "; cannot add component " + component.getClass().getName());
+                break;
+            }
+        }
         this.components.add(component);
         component.onAddComponent();
     }
