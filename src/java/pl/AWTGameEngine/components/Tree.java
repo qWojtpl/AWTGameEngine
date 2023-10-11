@@ -35,6 +35,7 @@ public class Tree extends ObjectComponent {
         updatePosition();
         container.setLayout(new BorderLayout());
         container.add(tree);
+        tree.addMouseListener(getWindow().getMouseListener());
         getObject().getPanel().add(container);
     }
 

@@ -129,6 +129,10 @@ public abstract class ObjectComponent {
 
     }
 
+    public void onContextMenuOpen(int x, int y) {
+
+    }
+
     public void onContextMenuClick(int option, int x, int y) {
 
     }

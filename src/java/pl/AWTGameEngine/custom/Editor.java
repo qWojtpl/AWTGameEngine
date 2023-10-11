@@ -72,6 +72,11 @@ public class Editor extends ObjectComponent {
     }
 
     @Override
+    public void onContextMenuOpen(int x, int y) {
+        System.out.println(x + " " + y);
+    }
+
+    @Override
     public void onContextMenuClick(int option, int x, int y) {
         switch(option) {
             case 0:
@@ -96,6 +101,7 @@ public class Editor extends ObjectComponent {
                         SpriteRenderer spriteRenderer = new SpriteRenderer(go);
                         spriteRenderer.setImage(ResourceManager.getResourceAsImage("beaver.jpg"));
                         go.addComponent(spriteRenderer);
+                        System.out.println(go.getX() + " " + go.getY());
                     }
                 }
                 break;
