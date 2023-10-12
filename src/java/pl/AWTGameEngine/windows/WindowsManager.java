@@ -30,7 +30,7 @@ public class WindowsManager {
         window.setKeyListener(new KeyListener());
         window.setMouseListener(new MouseListener());
         window.setSceneLoader(new SceneLoader(window));
-        window.getSceneLoader().loadScene(sceneName);
+        window.getSceneLoader().loadSceneFile(sceneName);
         windows.add(window);
         GameLoop loop = new GameLoop(window);
         loop.start();

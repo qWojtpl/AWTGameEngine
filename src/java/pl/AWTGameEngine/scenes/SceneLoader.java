@@ -20,26 +20,19 @@ public class SceneLoader {
         this.window = window;
     }
 
-    public void loadScene(String sceneName) {
+    public void loadSceneFile(String sceneName) {
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         window.getPanel().removeAll();
         window.setCurrentScene(new Scene(sceneName, window));
         window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
         window.getCurrentScene().getCamera().setZoom(window.getPanel().getMultipler() / 2f);
-        List<String> lines;
-        File sceneFile = ResourceManager.getResource(sceneName + ".scene");
-        if(sceneFile == null) {
+        List<String> sceneLines = ResourceManager.getResource(sceneName + ".scene");
+        if(sceneLines == null) {
             System.out.println("Scene not found.");
             return;
         }
-        try {
-            lines = Files.readAllLines(sceneFile.toPath(), StandardCharsets.UTF_8);
-        } catch(IOException e) {
-            e.printStackTrace();
-            return;
-        }
         LinkedHashMap<String, String> data = new LinkedHashMap<>();
-        for(String line : lines) {
+        for(String line : sceneLines) {
             boolean stringOpened = false;
             boolean valueOpened = false;
             String key = "";
