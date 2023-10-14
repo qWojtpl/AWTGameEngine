@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 
 public class TextRenderer extends ObjectComponent {
 
-    private String text = "Empty text renderer";
+    private String text = "Text";
     private Color color = Color.BLACK;
     private float size = 30.0f;
     private int x = 0;

@@ -2,6 +2,7 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
+import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -80,19 +81,14 @@ public class Editor extends ObjectComponent {
     public void onContextMenuClick(int option, int x, int y) {
         switch(option) {
             case 0:
-                String identifier = (String) JOptionPane.showInputDialog(getWindow(),
-                        "Provide new object name",
+                String identifier = DialogManager.createInput(
+                        getWindow(),
                         "New GameObject",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        null,
+                        "Provide new object name",
                         "GameObject");
                 if(identifier != null) {
                     if(getScene().getGameObjectByName(identifier) != null) {
-                        JOptionPane.showMessageDialog(getWindow(),
-                                "GameObject with this identifier already exists.",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
+                        DialogManager.createError(getWindow(), "Error", "GameObject with this identifier already exists.");
                     } else {
                         GameObject go = getScene().createGameObject(identifier);
                         go.setX(x);
