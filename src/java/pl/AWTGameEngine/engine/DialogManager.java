@@ -50,9 +50,11 @@ public class DialogManager {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         Label label = new Label(message);
         panel.add(label);
+        label.setFont(window.getFont().deriveFont(16f));
         TextArea textArea = new TextArea(errorMessage);
         textArea.setEditable(false);
         textArea.setPreferredSize(new Dimension(100, 100));
+        textArea.setFont(window.getFont().deriveFont(14f));
         panel.add(textArea);
         JOptionPane.showMessageDialog(
                 window,

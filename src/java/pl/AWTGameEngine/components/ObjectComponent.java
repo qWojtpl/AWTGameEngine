@@ -5,6 +5,7 @@ import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.PanelRegistry;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
+import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.Scene;
@@ -32,6 +33,10 @@ public abstract class ObjectComponent {
 
     protected KeyListener getKeyListener() {
         return getWindow().getKeyListener();
+    }
+
+    protected MouseListener getMouseListener() {
+        return getWindow().getMouseListener();
     }
 
     protected ColliderRegistry getColliderRegistry() {
@@ -155,6 +160,10 @@ public abstract class ObjectComponent {
     }
 
     public void onParentChange(GameObject oldParent) {
+
+    }
+
+    public void onMouseTrigger() {
 
     }
 

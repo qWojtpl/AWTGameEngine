@@ -28,7 +28,7 @@ public class WindowsManager {
         window.pack();
         window.setLocationRelativeTo(null);
         window.setKeyListener(new KeyListener());
-        window.setMouseListener(new MouseListener());
+        window.setMouseListener(new MouseListener(window));
         window.setSceneLoader(new SceneLoader(window));
         window.getSceneLoader().loadSceneFile(sceneName);
         windows.add(window);

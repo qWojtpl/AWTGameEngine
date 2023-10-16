@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 public class ContextMenu extends ObjectComponent {
 
     private JPopupMenu menu;
-    private MouseEvent mouseEvent;
 
     public ContextMenu(GameObject object) {
         super(object);
@@ -29,14 +28,10 @@ public class ContextMenu extends ObjectComponent {
         if(!menu.isShowing()) {
             if(getWindow().getMouseListener().isMouseReleased()) {
                 if(getWindow().getMouseListener().getReleaseEvent().isPopupTrigger()) {
-                    mouseEvent = getWindow().getMouseListener().getReleaseEvent();
-                    menu.show(mouseEvent.getComponent(),
-                            mouseEvent.getX(),
-                            mouseEvent.getY());
+                    MouseEvent mouseEvent = getWindow().getMouseListener().getReleaseEvent();
+                    menu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
                     for(ObjectComponent component : getObject().getComponents()) {
-                        component.onContextMenuOpen(
-                                (int) (mouseEvent.getX() / getCamera().getZoom() + getCamera().getRelativeX(getObject())),
-                                (int) (mouseEvent.getY() / getCamera().getZoom() + getCamera().getRelativeY(getObject())));
+                        component.onContextMenuOpen(getMouseListener().getMouseX(), getMouseListener().getMouseY());
                     }
                 }
             }
@@ -56,9 +51,7 @@ public class ContextMenu extends ObjectComponent {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for(ObjectComponent component : getObject().getComponents()) {
-                    component.onContextMenuClick(c,
-                            (int) (mouseEvent.getX() / getCamera().getZoom() + getCamera().getRelativeX(getObject())),
-                            (int) (mouseEvent.getY() / getCamera().getZoom() + getCamera().getRelativeY(getObject())));
+                    component.onContextMenuClick(c, getMouseListener().getMouseX(), getMouseListener().getMouseY());
                 }
             }
 
@@ -66,6 +59,11 @@ public class ContextMenu extends ObjectComponent {
         item.setText(content);
         item.setFont(getWindow().getFont().deriveFont(18f));
         menu.add(item);
+    }
+
+    public void clearMenu() {
+        menu = null;
+        initMenu();
     }
 
     private void initMenu() {
