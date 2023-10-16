@@ -2,6 +2,7 @@ package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.annotations.Parentless;
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.scenes.Scene;
 
@@ -36,9 +37,14 @@ public class GameObject {
         }
         for(ObjectComponent c : getComponents()) {
             if(c.conflictsWith(component.getClass())) {
-                System.out.println("Component " + c.getClass().getName() + " has conflict with "
-                        + component.getClass().getName() + "; cannot add component " + component.getClass().getName());
-                break;
+                DialogManager.createExtendedError(
+                        scene.getWindow(),
+                        "Error",
+                        "Runtime error:",
+                        "GameObject: " + getIdentifier() + "\nObject components: " + getComponents() + "\n" +
+                                "Component " + c.getClass().getName() + " has conflict with "
+                                + component.getClass().getName() + "; cannot add component " + component.getClass().getName());
+                return;
             }
         }
         this.components.add(component);

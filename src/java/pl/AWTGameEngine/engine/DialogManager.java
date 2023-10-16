@@ -4,6 +4,7 @@ import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.LineBreakMeasurer;
 
 public class DialogManager {
 
@@ -11,6 +12,7 @@ public class DialogManager {
         UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 16));
         UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.PLAIN, 14));
         UIManager.put("TextField.font", new Font("Arial", Font.PLAIN, 14));
+        UIManager.put("OptionPane.minimumSize", new Dimension(500,300));
     }
 
     public static String createInput(Window window, String windowTitle, String message, String defaultValue) {
@@ -41,6 +43,22 @@ public class DialogManager {
                 message,
                 windowTitle,
                 JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void createExtendedError(Window window, String windowTitle, String message, String errorMessage) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        Label label = new Label(message);
+        panel.add(label);
+        TextArea textArea = new TextArea(errorMessage);
+        textArea.setEditable(false);
+        textArea.setPreferredSize(new Dimension(100, 100));
+        panel.add(textArea);
+        JOptionPane.showMessageDialog(
+                window,
+                panel,
+                windowTitle,
+                JOptionPane.PLAIN_MESSAGE);
     }
 
 }
