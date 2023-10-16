@@ -75,9 +75,11 @@ public class Window extends JFrame {
     public void setMouseListener(MouseListener mouseListener) {
         if(this.mouseListener != null) {
             getPanel().removeMouseListener(this.mouseListener);
+            getPanel().removeMouseMotionListener(this.mouseListener);
         }
         this.mouseListener = mouseListener;
         getPanel().addMouseListener(mouseListener);
+        getPanel().addMouseMotionListener(mouseListener);
     }
 
     public void setCurrentScene(Scene scene) {

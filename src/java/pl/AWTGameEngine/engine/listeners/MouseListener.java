@@ -1,14 +1,11 @@
 package pl.AWTGameEngine.engine.listeners;
 
-
-import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.objects.Camera;
-import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.event.MouseEvent;
 
-public class MouseListener implements java.awt.event.MouseListener {
+public class MouseListener implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener {
 
     private final Window window;
     private int mouseX;
@@ -22,6 +19,8 @@ public class MouseListener implements java.awt.event.MouseListener {
     private MouseEvent releaseEvent;
     private MouseEvent enterEvent;
     private MouseEvent exitEvent;
+    private MouseEvent dragEvent;
+    private MouseEvent moveEvent;
 
     public MouseListener(Window window) {
         this.window = window;
@@ -30,7 +29,6 @@ public class MouseListener implements java.awt.event.MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         clickEvent = e;
-        updateMouse(e);
 /*        for(GameObject object : window.getCurrentScene().getActiveGameObjects()) {
             for(ObjectComponent component : object.getComponents()) {
                 component.onMouseTrigger();
@@ -41,25 +39,38 @@ public class MouseListener implements java.awt.event.MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         pressEvent = e;
-        updateMouse(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         releaseEvent = e;
-        updateMouse(e);
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         enterEvent = e;
-        updateMouse(e);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         exitEvent = e;
-        updateMouse(e);
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        dragEvent = e;
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        Camera camera = window.getCurrentScene().getCamera();
+        mouseX = (int) (e.getX() / camera.getZoom() + camera.getX());
+        mouseY = (int) (e.getY() / camera.getZoom() + camera.getY());
+        mouseWindowX = e.getX();
+        mouseWindowY = e.getY();
+        mouseScreenX = e.getXOnScreen();
+        mouseScreenY = e.getYOnScreen();
+        moveEvent = e;
     }
 
     public void refresh() {
@@ -68,16 +79,8 @@ public class MouseListener implements java.awt.event.MouseListener {
         releaseEvent = null;
         enterEvent = null;
         exitEvent = null;
-    }
-
-    public void updateMouse(MouseEvent e) {
-        Camera camera = window.getCurrentScene().getCamera();
-        mouseX = (int) (e.getX() / camera.getZoom() + camera.getX());
-        mouseY = (int) (e.getY() / camera.getZoom() + camera.getY());
-        mouseWindowX = e.getX();
-        mouseWindowY = e.getY();
-        mouseScreenX = e.getXOnScreen();
-        mouseScreenY = e.getYOnScreen();
+        dragEvent = null;
+        moveEvent = null;
     }
 
     public Window getWindow() {
@@ -146,6 +149,14 @@ public class MouseListener implements java.awt.event.MouseListener {
         return this.exitEvent;
     }
 
+    public MouseEvent getDragEvent() {
+        return this.dragEvent;
+    }
+
+    public MouseEvent getMoveEvent() {
+        return this.moveEvent;
+    }
+
     public boolean isMouseClicked() {
         return getClickEvent() != null;
     }
@@ -164,6 +175,14 @@ public class MouseListener implements java.awt.event.MouseListener {
 
     public boolean isMouseExited() {
         return getExitEvent() != null;
+    }
+
+    public boolean isMouseDragged() {
+        return getDragEvent() != null;
+    }
+
+    public boolean isMouseMoved() {
+        return getMoveEvent() != null;
     }
 
 }
