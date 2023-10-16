@@ -13,6 +13,10 @@ public class MouseListener implements java.awt.event.MouseListener {
     private final Window window;
     private int mouseX;
     private int mouseY;
+    private int mouseWindowX;
+    private int mouseWindowY;
+    private int mouseScreenX;
+    private int mouseScreenY;
     private MouseEvent clickEvent;
     private MouseEvent pressEvent;
     private MouseEvent releaseEvent;
@@ -70,18 +74,56 @@ public class MouseListener implements java.awt.event.MouseListener {
         Camera camera = window.getCurrentScene().getCamera();
         mouseX = (int) (e.getX() / camera.getZoom() + camera.getX());
         mouseY = (int) (e.getY() / camera.getZoom() + camera.getY());
+        mouseWindowX = e.getX();
+        mouseWindowY = e.getY();
+        mouseScreenX = e.getXOnScreen();
+        mouseScreenY = e.getYOnScreen();
     }
 
     public Window getWindow() {
         return this.window;
     }
 
+    /**
+     * Returns mouse position in window relative to camera.
+     */
     public int getMouseX() {
         return this.mouseX;
     }
 
+    /**
+     * Returns mouse position in window relative to camera.
+     */
     public int getMouseY() {
         return this.mouseY;
+    }
+
+    /**
+     * Returns mouse position in window. For the top left corner of window it will return 0. Not relative to camera.
+     */
+    public int getWindowMouseX() {
+        return this.mouseWindowX;
+    }
+
+    /**
+     * Returns mouse position in window. For the top left corner of window it will return 0. Not relative to camera.
+     */
+    public int getWindowMouseY() {
+        return this.mouseWindowY;
+    }
+
+    /**
+     * Returns mouse position on screen. For the top left corner of screen it will return 0. Not relative to window or camera.
+     */
+    public int getMouseScreenX() {
+        return this.mouseScreenX;
+    }
+
+    /**
+     * Returns mouse position on screen. For the top left corner of screen it will return 0. Not relative to window or camera.
+     */
+    public int getMouseScreenY() {
+        return this.mouseScreenY;
     }
 
     public MouseEvent getClickEvent() {
