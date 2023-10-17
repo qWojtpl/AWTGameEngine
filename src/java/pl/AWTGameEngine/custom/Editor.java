@@ -13,6 +13,8 @@ import java.util.List;
 @Unique
 public class Editor extends ObjectComponent {
 
+    private GameObject selectedObject;
+
     public Editor(GameObject object) {
         super(object);
     }
@@ -75,6 +77,11 @@ public class Editor extends ObjectComponent {
     @Override
     public void onContextMenuOpen(int x, int y) {
         System.out.println(x + " " + y);
+    }
+
+    @Override
+    public void onMouseClick(GameObject object) {
+        selectedObject = object;
     }
 
     @Override

@@ -35,12 +35,38 @@ public class ColliderRegistry {
         return false;
     }
 
+    public GameObject getCollidingObject(GameObject object, BoxCollider collider, int newX, int newY) {
+        if(object.getComponentsByClass(BoxCollider.class).size() == 0) {
+            return null;
+        }
+        for(BoxCollider c : colliders.keySet()) {
+            if(object.getComponentsByClass(BoxCollider.class).contains(c)) {
+                continue;
+            }
+            GameObject go = getColliderObject(c);
+            if(go == null) {
+                continue;
+            }
+            if(newX + object.getScaleX() + collider.getX() + collider.getScaleX() > go.getX() + c.getX()
+                    && newX + collider.getX() < go.getX() + go.getScaleX() + c.getX() + c.getScaleX()
+                    && newY + object.getScaleY() + collider.getY() + collider.getScaleY() > go.getY() + c.getY()
+                    && newY + collider.getY() < go.getY() + go.getScaleY() + c.getY() + c.getScaleY()) {
+                return go;
+            }
+        }
+        return null;
+    }
+
     public GameObject getColliderObject(BoxCollider collider) {
         return colliders.getOrDefault(collider, null);
     }
 
     public void clearRegistry() {
         colliders.clear();
+    }
+
+    public void removeCollider(BoxCollider collider) {
+        colliders.remove(collider);
     }
 
 }

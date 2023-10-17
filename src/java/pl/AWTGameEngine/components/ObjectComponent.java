@@ -163,7 +163,11 @@ public abstract class ObjectComponent {
 
     }
 
-    public void onMouseTrigger() {
+    public void onMouseClick() {
+
+    }
+
+    public void onMouseClick(GameObject object) {
 
     }
 

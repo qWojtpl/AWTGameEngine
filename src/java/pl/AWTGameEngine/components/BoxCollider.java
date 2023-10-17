@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 
 public class BoxCollider extends ObjectComponent {
 
@@ -11,6 +12,7 @@ public class BoxCollider extends ObjectComponent {
     private int scaleX;
     private int scaleY;
     private boolean visualize;
+    private Color visualizeColor = Color.GREEN;
 
     public BoxCollider(GameObject object) {
         super(object);
@@ -24,7 +26,7 @@ public class BoxCollider extends ObjectComponent {
     @Override
     public void onRender(Graphics g) {
         if(isVisualize()) {
-            g.setColor(Color.GREEN);
+            g.setColor(visualizeColor);
             g.drawRect((int) ((getObject().getX() + x - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                     (int) ((getObject().getY() + y - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
                     (int) ((getObject().getScaleX() + scaleX) * getCamera().getZoom()),
@@ -61,6 +63,10 @@ public class BoxCollider extends ObjectComponent {
 
     public boolean isVisualize() {
         return this.visualize;
+    }
+
+    public Color getVisualizeColor() {
+        return this.visualizeColor;
     }
 
     public void setX(int x) {
@@ -101,6 +107,21 @@ public class BoxCollider extends ObjectComponent {
 
     public void setVisualize(String visualize) {
         setVisualize(Boolean.parseBoolean(visualize));
+    }
+
+    public void setVisualizeColor(Color color) {
+        this.visualizeColor = color;
+    }
+
+    public void setVisualizeColor(String color) {
+        Color c;
+        try {
+            Field field = Class.forName("java.awt.Color").getField(color.toLowerCase());
+            c = (Color) field.get(null);
+        } catch (Exception e) {
+            c = Color.BLACK;
+        }
+        setVisualizeColor(c);
     }
 
 }

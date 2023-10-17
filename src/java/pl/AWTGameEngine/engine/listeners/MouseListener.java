@@ -1,6 +1,9 @@
 package pl.AWTGameEngine.engine.listeners;
 
+import pl.AWTGameEngine.components.BoxCollider;
+import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.event.MouseEvent;
@@ -29,11 +32,32 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
     @Override
     public void mouseClicked(MouseEvent e) {
         clickEvent = e;
-/*        for(GameObject object : window.getCurrentScene().getActiveGameObjects()) {
-            for(ObjectComponent component : object.getComponents()) {
-                component.onMouseTrigger();
+        GameObject virtualObject = new GameObject("--virtualClickedObject", getWindow().getCurrentScene());
+        virtualObject.setX(getMouseX());
+        virtualObject.setY(getMouseY());
+        virtualObject.setScaleX(2);
+        virtualObject.setScaleY(2);
+        BoxCollider collider = new BoxCollider(virtualObject);
+        collider.setX(-1);
+        collider.setY(-1);
+        virtualObject.addComponent(collider);
+        GameObject collidingObject = getWindow().getCurrentScene().getColliderRegistry().getCollidingObject(
+                virtualObject,
+                collider,
+                getMouseX(),
+                getMouseY()
+        );
+        getWindow().getCurrentScene().getColliderRegistry().removeCollider(collider);
+        if(collidingObject != null) {
+            for(ObjectComponent component : collidingObject.getComponents()) {
+                component.onMouseClick();
             }
-        }*/
+        }
+        for(GameObject object : window.getCurrentScene().getActiveGameObjects()) {
+            for(ObjectComponent component : object.getComponents()) {
+                component.onMouseClick(collidingObject);
+            }
+        }
     }
 
     @Override
