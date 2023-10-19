@@ -5,9 +5,14 @@ import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 
 @Unique
@@ -36,6 +41,25 @@ public class Tree extends ObjectComponent {
         container.setLayout(new BorderLayout());
         container.add(tree);
         tree.addMouseListener(getWindow().getMouseListener());
+        tree.addTreeSelectionListener(e -> {
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+            if(selectedNode == null) {
+                return;
+            }
+            for(String key : elements.keySet()) {
+                if(selectedNode.equals(elements.get(key))) {
+                    for(GameObject object : getScene().getActiveGameObjects()) {
+                        for(ObjectComponent component : object.getComponents()) {
+                            String[] nodeNames = new String[selectedNode.getPath().length];
+                            for(int i = 0; i < selectedNode.getPath().length; i++) {
+                                nodeNames[i] = selectedNode.getPath()[i].toString();
+                            }
+                            component.onTreeValueChange(getObject(), nodeNames);
+                        }
+                    }
+                }
+            }
+        });
         getObject().getPanel().add(container);
     }
 
@@ -80,6 +104,14 @@ public class Tree extends ObjectComponent {
 
     public DefaultMutableTreeNode getElement(String element) {
         return elements.getOrDefault(element, null);
+    }
+
+    public void setSelection(String key) {
+        if(key == null) {
+            tree.clearSelection();
+            return;
+        }
+        tree.setSelectionPath(new TreePath(getElement(key).getPath()));
     }
 
 }

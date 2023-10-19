@@ -15,6 +15,7 @@ import java.util.List;
 public class Editor extends ObjectComponent {
 
     private GameObject selectedObject;
+    private boolean cancelClick = false;
     private final HashMap<GameObject, Border> borderComponents = new HashMap<>();
 
     public Editor(GameObject object) {
@@ -102,10 +103,29 @@ public class Editor extends ObjectComponent {
 
     @Override
     public void onMouseClick(GameObject object) {
+        if(cancelClick) {
+            cancelClick = false;
+            return;
+        }
+        selectObject(object);
+    }
+
+    @Override
+    public void onTreeValueChange(GameObject object, String[] path) {
+        if(!object.getIdentifier().equals("@objectTree")) {
+            return;
+        }
+        selectObject(getScene().getGameObjectByName(path[path.length - 1]));
+        cancelClick = true;
+    }
+
+    public void selectObject(GameObject object) {
+        Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
         if(selectedObject != null) {
             removeHighlight(selectedObject);
         }
         if(object == null) {
+            tree.setSelection(null);
             selectedObject = null;
             return;
         }
@@ -114,7 +134,7 @@ public class Editor extends ObjectComponent {
         }
         selectedObject = object;
         if(object.getParent() != null) {
-            onMouseClick(object.getParent());
+            selectObject(object.getParent());
             return;
         }
         List<GameObject> children = object.getAllChildren();
@@ -125,6 +145,8 @@ public class Editor extends ObjectComponent {
             all.addComponent(borderComponent);
             borderComponents.put(all, borderComponent);
         }
+        tree.setSelection(object.getIdentifier());
+        cancelClick = false;
     }
 
     @Override

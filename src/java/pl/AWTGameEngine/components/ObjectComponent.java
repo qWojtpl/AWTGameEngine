@@ -171,6 +171,10 @@ public abstract class ObjectComponent {
 
     }
 
+    public void onTreeValueChange(GameObject object, String[] path) {
+
+    }
+
     public boolean isUnique() {
         return this.getClass().isAnnotationPresent(Unique.class);
     }
