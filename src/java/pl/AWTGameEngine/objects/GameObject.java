@@ -250,7 +250,9 @@ public class GameObject {
         for(ObjectComponent component : getComponents()) {
             component.onParentChange(oldParent);
         }
-        parent.addChild(this);
+        if(parent != null) {
+            parent.addChild(this);
+        }
     }
 
     public void addChild(GameObject object) {

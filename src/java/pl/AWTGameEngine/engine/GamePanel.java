@@ -8,12 +8,10 @@ public class GamePanel extends NestedPanel {
 
     private final int WIDTH = 480;
     private final int HEIGHT = (int) (WIDTH * 0.5625);
-    private final Window window;
     private int multipler = 3;
 
     public GamePanel(Window window) {
         super(window);
-        this.window = window;
         if(window.isFullScreen()) {
             multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
         }

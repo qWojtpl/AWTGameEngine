@@ -147,6 +147,10 @@ public abstract class ObjectComponent {
 
     }
 
+    public void onRemoveGameObject(GameObject object) {
+
+    }
+
     public void onUpdateGameObject(GameObject updatedObject) {
 
     }

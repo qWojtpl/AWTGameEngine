@@ -90,6 +90,28 @@ public class Scene {
         }
     }
 
+    public void removeGameObject(GameObject object) {
+        if(object == null) {
+            return;
+        }
+        for(ObjectComponent component : object.getComponents()) {
+            component.onRemoveComponent();
+        }
+        for(GameObject child : object.getChildren()) {
+            child.setParent(object.getParent());
+        }
+        gameObjects.remove(object.getIdentifier());
+        sortObjects();
+        for(GameObject obj : getActiveGameObjects()) {
+            if(obj.equals(object)) {
+                continue;
+            }
+            for(ObjectComponent component : obj.getComponents()) {
+                component.onRemoveGameObject(object);
+            }
+        }
+    }
+
     public GameObject getGameObjectByName(String identifier) {
         return gameObjects.getOrDefault(identifier, null);
     }

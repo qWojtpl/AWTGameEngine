@@ -25,6 +25,9 @@ public class ContextMenu extends ObjectComponent {
 
     @Override
     public void onStaticUpdate() {
+        if(menu == null) {
+            return;
+        }
         if(!menu.isShowing()) {
             if(getWindow().getMouseListener().isMouseReleased()) {
                 if(getWindow().getMouseListener().getReleaseEvent().isPopupTrigger()) {

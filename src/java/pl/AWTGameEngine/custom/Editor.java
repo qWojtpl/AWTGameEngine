@@ -50,12 +50,11 @@ public class Editor extends ObjectComponent {
 
     @Override
     public void onCreateGameObject(GameObject newObject) {
-        GameObject treeObject = getScene().getGameObjectByName("@objectTree");
-        List<ObjectComponent> components = treeObject.getComponentsByClass(Tree.class);
-        if(components.size() == 0) {
-            return;
-        }
-        Tree tree = ((Tree) components.get(0));
+        mapTree();
+    }
+
+    private void mapTree() {
+        Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
         DefaultMutableTreeNode root = tree.getElement("root");
         root.removeAllChildren();
         for(GameObject go : getScene().getGameObjects()) {
@@ -74,6 +73,11 @@ public class Editor extends ObjectComponent {
             }
         }
         tree.reload();
+    }
+
+    @Override
+    public void onRemoveGameObject(GameObject object) {
+        mapTree();
     }
 
     @Override
@@ -120,6 +124,9 @@ public class Editor extends ObjectComponent {
     }
 
     public void selectObject(GameObject object) {
+        ContextMenu menu = (ContextMenu) getObject().getComponentsByClass(ContextMenu.class).get(0);
+        menu.clearMenu();
+        menu.setNextItem("Create GameObject");
         Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
         if(selectedObject != null) {
             removeHighlight(selectedObject);
@@ -147,6 +154,7 @@ public class Editor extends ObjectComponent {
         }
         tree.setSelection(object.getIdentifier());
         cancelClick = false;
+        menu.setNextItem("Remove GameObject");
     }
 
     @Override
@@ -172,6 +180,9 @@ public class Editor extends ObjectComponent {
                         System.out.println(go.getX() + " " + go.getY());
                     }
                 }
+                break;
+            case 1:
+                getScene().removeGameObject(selectedObject);
                 break;
         }
     }

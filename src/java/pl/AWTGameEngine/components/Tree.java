@@ -96,6 +96,17 @@ public class Tree extends ObjectComponent {
         newParent.add(element);
     }
 
+    public void removeElement(String name) {
+        for(String key : elements.keySet()) {
+            for(int i = 0; i < getElement(key).getChildCount(); i++) {
+                if(getElement(key).getChildAt(i).toString().equals(name)) {
+                    getElement(key).remove(getElement(name));
+                }
+            }
+        }
+        elements.remove(name);
+    }
+
     public void reload() {
         DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
