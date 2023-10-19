@@ -105,10 +105,14 @@ public class Editor extends ObjectComponent {
         if(selectedObject != null) {
             removeHighlight(selectedObject);
         }
-        selectedObject = object;
         if(object == null) {
+            selectedObject = null;
             return;
         }
+        if(object.getIdentifier().startsWith("@")) {
+            return;
+        }
+        selectedObject = object;
         if(object.getParent() != null) {
             onMouseClick(object.getParent());
             return;

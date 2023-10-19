@@ -32,30 +32,22 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
     @Override
     public void mouseClicked(MouseEvent e) {
         clickEvent = e;
-        GameObject virtualObject = new GameObject("--virtualClickedObject", getWindow().getCurrentScene());
-        virtualObject.setX(getMouseX());
-        virtualObject.setY(getMouseY());
-        virtualObject.setScaleX(2);
-        virtualObject.setScaleY(2);
-        BoxCollider collider = new BoxCollider(virtualObject);
-        collider.setX(-1);
-        collider.setY(-1);
-        virtualObject.addComponent(collider);
-        GameObject collidingObject = getWindow().getCurrentScene().getColliderRegistry().getCollidingObject(
-                virtualObject,
-                collider,
-                getMouseX(),
-                getMouseY()
-        );
-        getWindow().getCurrentScene().getColliderRegistry().removeCollider(collider);
-        if(collidingObject != null) {
-            for(ObjectComponent component : collidingObject.getComponents()) {
-                component.onMouseClick();
+        GameObject clickedObject = null;
+        for(GameObject object : getWindow().getCurrentScene().getActiveGameObjects()) {
+            if(!object.getPanel().equals(getWindow().getPanel())) {
+                continue;
             }
-        }
-        for(GameObject object : window.getCurrentScene().getActiveGameObjects()) {
-            for(ObjectComponent component : object.getComponents()) {
-                component.onMouseClick(collidingObject);
+            if(getMouseX() >= object.getX() && getMouseX() <= object.getX() + object.getScaleX()
+            && getMouseY() >= object.getY() && getMouseY() <= object.getY() + object.getScaleY()) {
+                for(ObjectComponent component : object.getComponents()) {
+                    component.onMouseClick();
+                }
+                clickedObject = object;
+                for(GameObject object2 : getWindow().getCurrentScene().getActiveGameObjects()) {
+                    for(ObjectComponent component : object2.getComponents()) {
+                        component.onMouseClick(clickedObject);
+                    }
+                }
             }
         }
     }
