@@ -24,6 +24,11 @@ public class BoxCollider extends ObjectComponent {
     }
 
     @Override
+    public void onRemoveComponent() {
+        getColliderRegistry().removeCollider(this);
+    }
+
+    @Override
     public void onRender(Graphics g) {
         if(isVisualize()) {
             g.setColor(visualizeColor);

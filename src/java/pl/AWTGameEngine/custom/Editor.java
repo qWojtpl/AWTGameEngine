@@ -6,17 +6,16 @@ import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
 
 @Unique
 public class Editor extends ObjectComponent {
 
     private GameObject selectedObject;
-    private boolean lastVisualized;
-    private Color lastVisualizeColor;
+    private final HashMap<GameObject, Border> borderComponents = new HashMap<>();
 
     public Editor(GameObject object) {
         super(object);
@@ -88,18 +87,16 @@ public class Editor extends ObjectComponent {
 
     private void removeHighlight(GameObject object) {
         if(object.getParent() != null) {
-            System.out.println(object.getParent().getIdentifier());
             removeHighlight(object.getParent());
             return;
         }
         List<GameObject> children = object.getAllChildren();
         children.add(object);
         for(GameObject all : children) {
-            for(ObjectComponent component : all.getComponentsByClass(BoxCollider.class)) {
-                BoxCollider collider = (BoxCollider) component;
-                collider.setVisualizeColor(lastVisualizeColor);
-                collider.setVisualize(lastVisualized);
+            if(!borderComponents.containsKey(all)) {
+                continue;
             }
+            all.removeComponent(borderComponents.get(all));
         }
     }
 
@@ -119,13 +116,10 @@ public class Editor extends ObjectComponent {
         List<GameObject> children = object.getAllChildren();
         children.add(object);
         for(GameObject all : children) {
-            for (ObjectComponent component : all.getComponentsByClass(BoxCollider.class)) {
-                BoxCollider collider = (BoxCollider) component;
-                lastVisualized = collider.isVisualize();
-                lastVisualizeColor = collider.getVisualizeColor();
-                collider.setVisualizeColor(Color.RED);
-                collider.setVisualize(true);
-            }
+            Border borderComponent = new Border(all);
+            borderComponent.setColor(Color.RED);
+            all.addComponent(borderComponent);
+            borderComponents.put(all, borderComponent);
         }
     }
 

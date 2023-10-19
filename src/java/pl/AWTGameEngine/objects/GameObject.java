@@ -51,6 +51,11 @@ public class GameObject {
         component.onAddComponent();
     }
 
+    public void removeComponent(ObjectComponent component) {
+        this.components.remove(component);
+        component.onRemoveComponent();
+    }
+
     public String getIdentifier() {
         return this.identifier;
     }
