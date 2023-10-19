@@ -83,10 +83,15 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
     @Override
     public void mouseDragged(MouseEvent e) {
         dragEvent = e;
+        updatePosition(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        updatePosition(e);
+    }
+
+    public void updatePosition(MouseEvent e) {
         Camera camera = window.getCurrentScene().getCamera();
         mouseX = (int) (e.getX() / camera.getZoom() + camera.getX());
         mouseY = (int) (e.getY() / camera.getZoom() + camera.getY());

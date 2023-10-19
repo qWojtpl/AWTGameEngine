@@ -109,11 +109,20 @@ public class GameObject {
         return new ArrayList<>(children);
     }
 
+    public List<GameObject> getAllChildren() {
+        List<GameObject> r = new ArrayList<>();
+        for(GameObject c : getChildren()) {
+            r.add(c);
+            r.addAll(c.getAllChildren());
+        }
+        return r;
+    }
+
     public void setActive(boolean active) {
         this.active = active;
     }
 
-    public boolean setX(int x) {
+    public int updateX(int x) {
         int x2 = x;
         int i = 0;
         while(!updatePosition(x2, getY())) {
@@ -130,21 +139,30 @@ public class GameObject {
             }
             i++;
         }
-        if(x2 - this.x == 0) {
+        return x2;
+    }
+
+    public boolean setX(int x) {
+        int update = updateX(x);
+        int delta = update - this.x;
+        if(delta == 0) {
             return false;
         }
-        for(GameObject object : getChildren()) {
-            if(!object.setX(object.getX() + x - this.x)) {
-                for(GameObject object2 : getChildren()) {
-                    if(object2.equals(object)) {
-                        break;
-                    }
-                    object.setX(object.getX() - x - this.x);
-                }
+        List<GameObject> updateList = new ArrayList<>();
+        for(GameObject object : getAllChildren()) {
+            int childUpdate = object.updateX(object.getX() + delta);
+            int childDelta = childUpdate - object.getX();
+            if(Math.abs(childDelta) > Math.abs(delta) || childDelta == 0) {
                 return false;
+            } else if(Math.abs(childDelta) < Math.abs(delta)) {
+                return setX(getX() + childDelta);
             }
+            updateList.add(object);
         }
-        this.x = x2;
+        for(GameObject object : updateList) {
+            object.setXForced(object.getX() + delta);
+        }
+        this.x = update;
         return true;
     }
 
@@ -152,7 +170,7 @@ public class GameObject {
         this.x = x;
     }
 
-    public boolean setY(int y) {
+    public int updateY(int y) {
         int y2 = y;
         int i = 0;
         while(!updatePosition(getX(), y2)) {
@@ -169,21 +187,30 @@ public class GameObject {
             }
             i++;
         }
-        if(y2 - this.y == 0) {
+        return y2;
+    }
+
+    public boolean setY(int y) {
+        int update = updateY(y);
+        int delta = update - this.y;
+        if(delta == 0) {
             return false;
         }
-        for(GameObject object : getChildren()) {
-            if(!object.setY(object.getY() + y - this.y)) {
-                for(GameObject object2 : getChildren()) {
-                    if(object2.equals(object)) {
-                        break;
-                    }
-                    object.setY(object.getY() - y - this.y);
-                }
+        List<GameObject> updateList = new ArrayList<>();
+        for(GameObject object : getAllChildren()) {
+            int childUpdate = object.updateY(object.getY() + delta);
+            int childDelta = childUpdate - object.getY();
+            if(Math.abs(childDelta) > Math.abs(delta) || childDelta == 0) {
                 return false;
+            } else if(Math.abs(childDelta) < Math.abs(delta)) {
+                return setY(getY() + childDelta);
             }
+            updateList.add(object);
         }
-        this.y = y2;
+        for(GameObject object : updateList) {
+            object.setYForced(object.getY() + delta);
+        }
+        this.y = update;
         return true;
     }
 

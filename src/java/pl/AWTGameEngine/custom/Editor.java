@@ -8,12 +8,15 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
 import java.util.List;
 
 @Unique
 public class Editor extends ObjectComponent {
 
     private GameObject selectedObject;
+    private boolean lastVisualized;
+    private Color lastVisualizeColor;
 
     public Editor(GameObject object) {
         super(object);
@@ -38,6 +41,10 @@ public class Editor extends ObjectComponent {
         }
         if(getKeyListener().hasPressedKey(40)) {
             getCamera().setY(getCamera().getY() + 8);
+        }
+        if(getMouseListener().isMouseDragged() && selectedObject != null) {
+            selectedObject.setX(getMouseListener().getMouseX());
+            selectedObject.setY(getMouseListener().getMouseY());
         }
     }
 
@@ -79,9 +86,47 @@ public class Editor extends ObjectComponent {
         System.out.println(x + " " + y);
     }
 
+    private void removeHighlight(GameObject object) {
+        if(object.getParent() != null) {
+            System.out.println(object.getParent().getIdentifier());
+            removeHighlight(object.getParent());
+            return;
+        }
+        List<GameObject> children = object.getAllChildren();
+        children.add(object);
+        for(GameObject all : children) {
+            for(ObjectComponent component : all.getComponentsByClass(BoxCollider.class)) {
+                BoxCollider collider = (BoxCollider) component;
+                collider.setVisualizeColor(lastVisualizeColor);
+                collider.setVisualize(lastVisualized);
+            }
+        }
+    }
+
     @Override
     public void onMouseClick(GameObject object) {
+        if(selectedObject != null) {
+            removeHighlight(selectedObject);
+        }
         selectedObject = object;
+        if(object == null) {
+            return;
+        }
+        if(object.getParent() != null) {
+            onMouseClick(object.getParent());
+            return;
+        }
+        List<GameObject> children = object.getAllChildren();
+        children.add(object);
+        for(GameObject all : children) {
+            for (ObjectComponent component : all.getComponentsByClass(BoxCollider.class)) {
+                BoxCollider collider = (BoxCollider) component;
+                lastVisualized = collider.isVisualize();
+                lastVisualizeColor = collider.getVisualizeColor();
+                collider.setVisualizeColor(Color.RED);
+                collider.setVisualize(true);
+            }
+        }
     }
 
     @Override

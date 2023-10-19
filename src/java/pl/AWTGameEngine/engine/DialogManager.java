@@ -4,7 +4,6 @@ import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.LineBreakMeasurer;
 
 public class DialogManager {
 
