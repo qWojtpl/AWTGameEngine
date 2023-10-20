@@ -95,10 +95,18 @@ public abstract class ObjectComponent {
 
     }
 
+    public void onPreRender(Graphics g) {
+
+    }
+
     /**
      * Method is called while frame is drawing.
      */
     public void onRender(Graphics g) {
+
+    }
+
+    public void onAfterRender(Graphics g) {
 
     }
 

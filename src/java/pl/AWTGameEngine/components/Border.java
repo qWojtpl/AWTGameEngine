@@ -19,7 +19,7 @@ public class Border extends ObjectComponent {
     }
 
     @Override
-    public void onRender(Graphics g) {
+    public void onAfterRender(Graphics g) {
         if(!isEnabled()) {
             return;
         }

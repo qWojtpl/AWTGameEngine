@@ -322,9 +322,21 @@ public class GameObject {
         return height;
     }
 
+    public void preRender(Graphics g) {
+        for(ObjectComponent component : getComponents()) {
+            component.onPreRender(g);
+        }
+    }
+
     public void render(Graphics g) {
         for(ObjectComponent component : getComponents()) {
             component.onRender(g);
+        }
+    }
+
+    public void afterRender(Graphics g) {
+        for(ObjectComponent component : getComponents()) {
+            component.onAfterRender(g);
         }
     }
 

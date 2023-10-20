@@ -5,6 +5,7 @@ import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -31,12 +32,20 @@ public class NestedPanel extends JPanel {
             return;
         }
         LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
+        List<GameObject> renderList = new ArrayList<>();
         for(int i : sortedObjects.keySet()) {
             for(GameObject go : sortedObjects.get(i)) {
                 if(this.equals(go.getPanel())) {
-                    go.render(g);
+                    renderList.add(go);
+                    go.preRender(g);
                 }
             }
+        }
+        for(GameObject go : renderList) {
+            go.render(g);
+        }
+        for(GameObject go : renderList) {
+            go.afterRender(g);
         }
     }
 

@@ -2,6 +2,7 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
+import pl.AWTGameEngine.components.MenuBar;
 import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
@@ -26,6 +27,8 @@ public class Editor extends ObjectComponent {
     public void onAddComponent() {
         getWindow().setStaticMode(true);
         getCamera().setX(getCamera().getX() - 175);
+        MenuBar menuBar = (MenuBar) getScene().getGameObjectByName("@menuBar").getComponentsByClass(MenuBar.class).get(0);
+        menuBar.addItemToMenu(menuBar.getMenu("Preferences"), "test");
     }
 
     @Override
@@ -46,6 +49,9 @@ public class Editor extends ObjectComponent {
             selectedObject.setX(getMouseListener().getMouseX());
             selectedObject.setY(getMouseListener().getMouseY());
         }
+        TextRenderer cameraPos = (TextRenderer) getScene().getGameObjectByName("@cameraPosText")
+                .getComponentsByClass(TextRenderer.class).get(0);
+        cameraPos.setText("   x: " + getCamera().getX() + ", y: " + getCamera().getY());
     }
 
     @Override
@@ -186,7 +192,9 @@ public class Editor extends ObjectComponent {
                 }
                 break;
             case 1:
-                getScene().removeGameObject(selectedObject);
+                GameObject objectToRemove = selectedObject;
+                selectObject(null);
+                getScene().removeGameObject(objectToRemove);
                 break;
         }
     }
