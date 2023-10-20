@@ -20,7 +20,7 @@ public class Border extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        if(!enabled) {
+        if(!isEnabled()) {
             return;
         }
         g.setColor(getColor());

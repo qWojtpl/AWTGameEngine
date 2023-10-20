@@ -53,10 +53,19 @@ public class Editor extends ObjectComponent {
         mapTree();
     }
 
+    @Override
+    public void onRemoveGameObject(GameObject object) {
+        mapTree();
+    }
+
+    @Override
+    public void onUpdateGameObject(GameObject updatedObject) {
+        mapTree();
+    }
+
     private void mapTree() {
         Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
-        DefaultMutableTreeNode root = tree.getElement("root");
-        root.removeAllChildren();
+        tree.removeAllElements();
         for(GameObject go : getScene().getGameObjects()) {
             if(go.getIdentifier().startsWith("@")) {
                 continue;
@@ -64,7 +73,7 @@ public class Editor extends ObjectComponent {
             DefaultMutableTreeNode newElement = tree.addElement(go.getIdentifier());
             GameObject parent = go.getParent();
             if(parent == null) {
-                tree.addElementTo(newElement, root);
+                tree.addElementTo(newElement, tree.getElement("root"));
             } else {
                 if(parent.getIdentifier().startsWith("@")) {
                     continue;
@@ -73,16 +82,6 @@ public class Editor extends ObjectComponent {
             }
         }
         tree.reload();
-    }
-
-    @Override
-    public void onRemoveGameObject(GameObject object) {
-        mapTree();
-    }
-
-    @Override
-    public void onUpdateGameObject(GameObject updatedObject) {
-
     }
 
     @Override
@@ -119,6 +118,10 @@ public class Editor extends ObjectComponent {
         if(!object.getIdentifier().equals("@objectTree")) {
             return;
         }
+        if(cancelClick) {
+            cancelClick = false;
+            return;
+        }
         selectObject(getScene().getGameObjectByName(path[path.length - 1]));
         cancelClick = true;
     }
@@ -152,9 +155,10 @@ public class Editor extends ObjectComponent {
             all.addComponent(borderComponent);
             borderComponents.put(all, borderComponent);
         }
-        tree.setSelection(object.getIdentifier());
-        cancelClick = false;
         menu.setNextItem("Remove GameObject");
+        cancelClick = true;
+        tree.setSelection(object.getIdentifier());
+        System.out.println("creating new item");
     }
 
     @Override

@@ -5,14 +5,12 @@ import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Unique
@@ -105,6 +103,17 @@ public class Tree extends ObjectComponent {
             }
         }
         elements.remove(name);
+    }
+
+    public void removeAllElements() {
+        getElement("root").removeAllChildren();
+        List<String> keys = new ArrayList<>(elements.keySet());
+        for(String key : keys) {
+            if(key.equals("root")) {
+                continue;
+            }
+            elements.remove(key);
+        }
     }
 
     public void reload() {
