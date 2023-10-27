@@ -28,16 +28,19 @@ public class ContextMenu extends ObjectComponent {
         if(menu == null) {
             return;
         }
-        if(!menu.isShowing()) {
-            if(getWindow().getMouseListener().isMouseReleased()) {
-                if(getWindow().getMouseListener().getReleaseEvent().isPopupTrigger()) {
-                    MouseEvent mouseEvent = getWindow().getMouseListener().getReleaseEvent();
-                    menu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-                    for(ObjectComponent component : getObject().getComponents()) {
-                        component.onContextMenuOpen(getMouseListener().getMouseX(), getMouseListener().getMouseY());
-                    }
-                }
-            }
+        if(menu.isShowing()) {
+            return;
+        }
+        if(!getMouseListener().isMouseReleased()) {
+            return;
+        }
+        if(!getMouseListener().getReleaseEvent().isPopupTrigger()) {
+            return;
+        }
+        MouseEvent mouseEvent = getWindow().getMouseListener().getReleaseEvent();
+        menu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+        for(ObjectComponent component : getObject().getComponents()) {
+            component.onContextMenuOpen(getMouseListener().getMouseX(), getMouseListener().getMouseY());
         }
     }
 
@@ -70,9 +73,10 @@ public class ContextMenu extends ObjectComponent {
     }
 
     private void initMenu() {
-        if(menu == null) {
-            menu = new JPopupMenu();
+        if(menu != null) {
+            return;
         }
+        menu = new JPopupMenu();
     }
 
 }

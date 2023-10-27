@@ -36,6 +36,10 @@ public class Camera {
         return this.y;
     }
 
+    public float getZoom() {
+        return this.zoom;
+    }
+
     public void setX(int x) {
         this.x = x;
     }
@@ -47,10 +51,6 @@ public class Camera {
     public void setBounds(int x, int y) {
         this.x = x;
         this.y = y;
-    }
-
-    public float getZoom() {
-        return this.zoom;
     }
 
     public void setZoom(float zoom) {

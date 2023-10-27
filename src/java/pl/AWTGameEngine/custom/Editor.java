@@ -17,6 +17,7 @@ public class Editor extends ObjectComponent {
 
     private GameObject selectedObject;
     private boolean cancelClick = false;
+    private TextRenderer cameraPosText;
     private final HashMap<GameObject, Border> borderComponents = new HashMap<>();
 
     public Editor(GameObject object) {
@@ -27,8 +28,11 @@ public class Editor extends ObjectComponent {
     public void onAddComponent() {
         getWindow().setStaticMode(true);
         getCamera().setX(getCamera().getX() - 175);
-        MenuBar menuBar = (MenuBar) getScene().getGameObjectByName("@menuBar").getComponentsByClass(MenuBar.class).get(0);
+        MenuBar menuBar = (MenuBar) getObject().getComponentsByClass(MenuBar.class).get(0);
         menuBar.addItemToMenu(menuBar.getMenu("Preferences"), "test");
+        cameraPosText = (TextRenderer) getScene()
+                .getGameObjectByName("@cameraPosText")
+                .getComponentsByClass(TextRenderer.class).get(0);
     }
 
     @Override
@@ -49,9 +53,7 @@ public class Editor extends ObjectComponent {
             selectedObject.setX(getMouseListener().getMouseX());
             selectedObject.setY(getMouseListener().getMouseY());
         }
-        TextRenderer cameraPos = (TextRenderer) getScene().getGameObjectByName("@cameraPosText")
-                .getComponentsByClass(TextRenderer.class).get(0);
-        cameraPos.setText("   x: " + getCamera().getX() + ", y: " + getCamera().getY());
+        cameraPosText.setText("   x: " + getCamera().getX() + ", y: " + getCamera().getY());
     }
 
     @Override
@@ -197,6 +199,12 @@ public class Editor extends ObjectComponent {
                 getScene().removeGameObject(objectToRemove);
                 break;
         }
+
+    }
+
+    @Override
+    public void onMenuBarClick(String path) {
+        System.out.println(path);
     }
 
 }

@@ -151,6 +151,10 @@ public abstract class ObjectComponent {
 
     }
 
+    public void onMenuBarClick(String path) {
+
+    }
+
     public void onCreateGameObject(GameObject newObject) {
 
     }

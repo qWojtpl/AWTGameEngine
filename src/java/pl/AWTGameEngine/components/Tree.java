@@ -18,7 +18,7 @@ public class Tree extends ObjectComponent {
 
     private JTree tree;
     private NestedPanel container;
-    private HashMap<String, DefaultMutableTreeNode> elements = new HashMap<>();
+    private final HashMap<String, DefaultMutableTreeNode> elements = new HashMap<>();
 
     public Tree(GameObject object) {
         super(object);

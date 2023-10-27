@@ -14,12 +14,22 @@ public class Preferences {
     }
 
     public static void savePreference(String key, String preference) {
+        if(key == null) {
+            key = "";
+        }
+        if(preference == null) {
+            preference = "";
+        }
         preferences.put(key, preference);
         writeToFile();
     }
 
     public static String getPreference(String key) {
         return preferences.getOrDefault(key, null);
+    }
+
+    public static String getPreference(String key, String defaultValue) {
+        return preferences.getOrDefault(key, defaultValue);
     }
 
     public static void writeToFile() {
