@@ -22,11 +22,13 @@ public class TextRenderer extends ObjectComponent {
     public void onRender(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         AffineTransform oldTransform = g2d.getTransform();
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(getObject().getRotation()),
-                (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
-                (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
-        g2d.transform(transform);
+        if(getObject().getRotation() > 0) {
+            AffineTransform transform = new AffineTransform();
+            transform.rotate(Math.toRadians(getObject().getRotation()),
+                    (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
+                    (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
+            g2d.transform(transform);
+        }
         g2d.setColor(getColor());
         g2d.setFont(g.getFont().deriveFont(getSize() * getCamera().getZoom()));
         g2d.drawString(getText(),

@@ -100,14 +100,14 @@ public class GameObject {
 
     public int getCenterX() {
         if(this.parent == null) {
-            return getX() + getScaleX() >> 1;
+            return getX() + getScaleX() / 2;
         }
         return this.parent.getCenterX();
     }
 
     public int getCenterY() {
         if(this.parent == null) {
-            return getY() + getScaleY() >> 1;
+            return getY() + getScaleY() / 2;
         }
         return this.parent.getCenterY();
     }
@@ -418,6 +418,11 @@ public class GameObject {
             } else if(propertyName.equalsIgnoreCase("priority")) {
                 try {
                     this.setPriority(Integer.parseInt(properties.get(propertyName)));
+                } catch(NumberFormatException ignored) {
+                }
+            } else if(propertyName.equalsIgnoreCase("rotation")) {
+                try {
+                    this.setRotation(Integer.parseInt(properties.get(propertyName)));
                 } catch(NumberFormatException ignored) {
                 }
             } else if(propertyName.equalsIgnoreCase("parent")) {

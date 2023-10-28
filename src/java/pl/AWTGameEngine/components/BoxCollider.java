@@ -31,21 +31,24 @@ public class BoxCollider extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        if(isVisualize()) {
-            Graphics2D g2d = (Graphics2D) g;
-            AffineTransform oldTransform = g2d.getTransform();
+        if(!isVisualize()) {
+            return;
+        }
+        Graphics2D g2d = (Graphics2D) g;
+        AffineTransform oldTransform = g2d.getTransform();
+        if(getObject().getRotation() > 0) {
             AffineTransform transform = new AffineTransform();
             transform.rotate(Math.toRadians(getObject().getRotation()),
                     (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
                     (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
             g2d.transform(transform);
-            g2d.setColor(visualizeColor);
-            g2d.drawRect((int) ((getObject().getX() + x - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
-                    (int) ((getObject().getY() + y - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
-                    (int) ((getObject().getScaleX() + scaleX) * getCamera().getZoom()),
-                    (int) ((getObject().getScaleY() + scaleY) * getCamera().getZoom()));
-            g2d.setTransform(oldTransform);
         }
+        g2d.setColor(visualizeColor);
+        g2d.drawRect((int) ((getObject().getX() + x - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
+                (int) ((getObject().getY() + y - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
+                (int) ((getObject().getScaleX() + scaleX) * getCamera().getZoom()),
+                (int) ((getObject().getScaleY() + scaleY) * getCamera().getZoom()));
+        g2d.setTransform(oldTransform);
     }
 
     @Override
