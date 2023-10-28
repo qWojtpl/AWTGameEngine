@@ -17,6 +17,7 @@ public class GameObject {
     private boolean active = true;
     private int x = 0;
     private int y = 0;
+    private int rotation = 0;
     private int scaleX = 100;
     private int scaleY = 100;
     private int priority = 0;
@@ -88,6 +89,10 @@ public class GameObject {
 
     public int getY() {
         return this.y;
+    }
+
+    public int getRotation() {
+        return this.rotation;
     }
 
     public int getScaleX() {
@@ -221,6 +226,10 @@ public class GameObject {
 
     public void setYForced(int y) {
         this.y = y;
+    }
+
+    public void setRotation(int angle) {
+        this.rotation = angle;
     }
 
     public void setScaleX(int x) {

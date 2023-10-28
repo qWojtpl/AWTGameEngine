@@ -5,6 +5,8 @@ import pl.AWTGameEngine.objects.GameObject;
 
 public class CustomComponent extends ObjectComponent {
 
+    private int r = 0;
+
     public CustomComponent(GameObject object) {
         super(object);
     }
@@ -47,6 +49,11 @@ public class CustomComponent extends ObjectComponent {
             getSceneLoader().loadSceneFile("main");
             getKeyListener().releaseKey(82);
         }
+    }
+
+    @Override
+    public void onStaticUpdate() {
+        getObject().setRotation(r++);
     }
 
     @Override
