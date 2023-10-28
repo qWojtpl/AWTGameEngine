@@ -92,7 +92,24 @@ public class GameObject {
     }
 
     public int getRotation() {
-        return this.rotation;
+        if(this.parent == null) {
+            return this.rotation;
+        }
+        return this.rotation + this.parent.getRotation();
+    }
+
+    public int getCenterX() {
+        if(this.parent == null) {
+            return getX() + getScaleX() >> 1;
+        }
+        return this.parent.getCenterX();
+    }
+
+    public int getCenterY() {
+        if(this.parent == null) {
+            return getY() + getScaleY() >> 1;
+        }
+        return this.parent.getCenterY();
     }
 
     public int getScaleX() {

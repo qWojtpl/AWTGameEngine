@@ -25,8 +25,8 @@ public class SpriteRenderer extends ObjectComponent {
         AffineTransform oldTransform = g2d.getTransform();
         AffineTransform transform = new AffineTransform();
         transform.rotate(Math.toRadians(getObject().getRotation()),
-                (getObject().getX() + (getObject().getScaleX() >> 1) - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
-                (getObject().getY() + (getObject().getScaleY() >> 1) - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
+                (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
+                (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
         g2d.transform(transform);
         g2d.drawImage(image, (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),

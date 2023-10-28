@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.lang.reflect.Field;
 
 public class TextRenderer extends ObjectComponent {
@@ -19,12 +20,20 @@ public class TextRenderer extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        g.setColor(getColor());
-        g.setFont(g.getFont().deriveFont(getSize() * getCamera().getZoom()));
-        g.drawString(getText(),
+        Graphics2D g2d = (Graphics2D) g;
+        AffineTransform oldTransform = g2d.getTransform();
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(getObject().getRotation()),
+                (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
+                (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
+        g2d.transform(transform);
+        g2d.setColor(getColor());
+        g2d.setFont(g.getFont().deriveFont(getSize() * getCamera().getZoom()));
+        g2d.drawString(getText(),
                 (int) ((getObject().getX() - getCamera().getRelativeX(getObject()) + getX()) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject()) + getY() + getObject().getScaleY() - getSize() / 2.5)
                         * getCamera().getZoom()));
+        g2d.setTransform(oldTransform);
     }
 
     public String getText() {
