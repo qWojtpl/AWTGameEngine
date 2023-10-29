@@ -118,6 +118,10 @@ public abstract class ObjectComponent {
         return true;
     }
 
+    public boolean onUpdateRotation(int newRotation) {
+        return true;
+    }
+
     /**
      * Method will be called when component will be added to the object.
      */

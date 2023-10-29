@@ -245,8 +245,14 @@ public class GameObject {
         this.y = y;
     }
 
-    public void setRotation(int angle) {
+    public boolean setRotation(int angle) {
+        for(ObjectComponent component : getComponents()) {
+            if(!component.onUpdateRotation(angle)) {
+                return false;
+            }
+        }
         this.rotation = angle;
+        return true;
     }
 
     public void setScaleX(int x) {

@@ -5,6 +5,8 @@ import pl.AWTGameEngine.objects.GameObject;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoxCollider extends ObjectComponent {
 
@@ -14,6 +16,8 @@ public class BoxCollider extends ObjectComponent {
     private int scaleY;
     private boolean visualize;
     private Color visualizeColor = Color.GREEN;
+    private List<Integer> pointsX = new ArrayList<>();
+    private List<Integer> pointsY = new ArrayList<>();
 
     public BoxCollider(GameObject object) {
         super(object);
@@ -36,7 +40,7 @@ public class BoxCollider extends ObjectComponent {
         }
         Graphics2D g2d = (Graphics2D) g;
         AffineTransform oldTransform = g2d.getTransform();
-        if(getObject().getRotation() > 0) {
+        if(getObject().getRotation() != 0) {
             AffineTransform transform = new AffineTransform();
             transform.rotate(Math.toRadians(getObject().getRotation()),
                     (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
@@ -58,6 +62,30 @@ public class BoxCollider extends ObjectComponent {
                 component.onCollide();
             }
             return false;
+        }
+        return true;
+    }
+
+    /**
+     Method source:
+     <a href="https://gamedev.stackexchange.com/questions/86755/how-to-calculate-corner-positions-marks-of-a-rotated-tilted-rectangle">StackExchange</a>
+     */
+    @Override
+    public boolean onUpdateRotation(int newRotation) {
+        int[] fixedX = new int[]{0, getObject().getScaleX(), getObject().getScaleX(), 0};
+        int[] fixedY = new int[]{0, getObject().getScaleY(), 0, getObject().getScaleY()};
+        pointsX = new ArrayList<>();
+        pointsY = new ArrayList<>();
+        for(int i = 0; i < 4; i++) {
+            float tempX = getObject().getX() + x + fixedX[i] - getObject().getCenterX();
+            float tempY = getObject().getY() + y + fixedY[i] - getObject().getCenterY();
+            double theta = Math.toRadians(newRotation);
+            float rotatedX = (float) (tempX * Math.cos(theta) - tempY * Math.sin(theta));
+            float rotatedY = (float) (tempX * Math.sin(theta) + tempY * Math.cos(theta));
+            int xP = (int) (rotatedX + getObject().getCenterX());
+            int yP = (int) (rotatedY + getObject().getCenterY());
+            pointsX.add(xP);
+            pointsY.add(yP);
         }
         return true;
     }

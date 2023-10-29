@@ -71,9 +71,10 @@ public class MenuBar extends ObjectComponent {
         UIManager.put("JMenuItem.font", f);
         getScene().getWindow().getPanel().setPreferredSize(
                 new Dimension(
-                        (int) (getScene().getWindow().getPanel().getPreferredSize().getWidth() + 18),
-                        (int) getScene().getWindow().getPanel().getPreferredSize().getHeight())
+                        (int) (getScene().getWindow().getPanel().getPreferredSize().getWidth()),
+                        (int) getScene().getWindow().getPanel().getPreferredSize().getHeight() + 8)
                 );
+        getScene().getWindow().pack();
     }
 
     public String getMenuNameByValue(JMenu menu) {

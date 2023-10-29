@@ -71,7 +71,6 @@ public class Preferences {
                 if(key == null) {
                     key = newLine;
                 } else {
-                    System.out.println("Loaded preference: " + key + " => " + newLine);
                     preferences.put(key, newLine);
                     key = null;
                 }

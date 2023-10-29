@@ -122,7 +122,8 @@ public class Scene {
 
     public Collection<GameObject> getActiveGameObjects() {
         Collection<GameObject> objects = new ArrayList<>();
-        for(GameObject object : getGameObjects()) {
+        List<GameObject> gameObjects = new ArrayList<>(getGameObjects());
+        for(GameObject object : gameObjects) {
             if(object.isActive()) {
                 objects.add(object);
             }

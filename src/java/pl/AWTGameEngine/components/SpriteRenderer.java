@@ -23,7 +23,7 @@ public class SpriteRenderer extends ObjectComponent {
         }
         Graphics2D g2d = (Graphics2D) g;
         AffineTransform oldTransform = g2d.getTransform();
-        if(getObject().getRotation() > 0) {
+        if(getObject().getRotation() != 0) {
             AffineTransform transform = new AffineTransform();
             transform.rotate(Math.toRadians(getObject().getRotation()),
                     (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
