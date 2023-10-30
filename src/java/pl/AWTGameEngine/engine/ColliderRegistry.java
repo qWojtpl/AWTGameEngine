@@ -25,12 +25,6 @@ public class ColliderRegistry {
             if(go == null) {
                 continue;
             }
-            if(newX + object.getScaleX() + collider.getX() + collider.getScaleX() > go.getX() + c.getX()
-                && newX + collider.getX() < go.getX() + go.getScaleX() + c.getX() + c.getScaleX()
-                && newY + object.getScaleY() + collider.getY() + collider.getScaleY() > go.getY() + c.getY()
-                && newY + collider.getY() < go.getY() + go.getScaleY() + c.getY() + c.getScaleY()) {
-                return true;
-            }
         }
         return false;
     }

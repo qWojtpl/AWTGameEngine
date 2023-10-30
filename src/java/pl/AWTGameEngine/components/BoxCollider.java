@@ -10,11 +10,11 @@ import java.util.List;
 
 public class BoxCollider extends ObjectComponent {
 
-    private int x;
-    private int y;
-    private int scaleX;
-    private int scaleY;
-    private boolean visualize;
+    private int x = 0;
+    private int y = 0;
+    private int scaleX = 0;
+    private int scaleY = 0;
+    private boolean visualize = false;
     private Color visualizeColor = Color.GREEN;
     private List<Integer> pointsX = new ArrayList<>();
     private List<Integer> pointsY = new ArrayList<>();
@@ -25,6 +25,7 @@ public class BoxCollider extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
+        onUpdateRotation(getObject().getRotation());
         getColliderRegistry().registerCollider(this, getObject());
     }
 
@@ -72,12 +73,12 @@ public class BoxCollider extends ObjectComponent {
      */
     @Override
     public boolean onUpdateRotation(int newRotation) {
-        int[] fixedX = new int[]{0, getObject().getScaleX(), getObject().getScaleX(), 0};
-        int[] fixedY = new int[]{0, getObject().getScaleY(), 0, getObject().getScaleY()};
+        int[] fixedX = new int[]{0, getObject().getScaleX() + scaleX, getObject().getScaleX() + scaleX, 0};
+        int[] fixedY = new int[]{0, getObject().getScaleY() + scaleY, 0, getObject().getScaleY() + scaleY};
         pointsX = new ArrayList<>();
         pointsY = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
-            float tempX = getObject().getX() + x + fixedX[i] - getObject().getCenterX();
+            float tempX = getObject().getX() + x + fixedX[i] - getObject().getCenterX(); // todo - center with collider scale
             float tempY = getObject().getY() + y + fixedY[i] - getObject().getCenterY();
             double theta = Math.toRadians(newRotation);
             float rotatedX = (float) (tempX * Math.cos(theta) - tempY * Math.sin(theta));
@@ -112,6 +113,14 @@ public class BoxCollider extends ObjectComponent {
 
     public Color getVisualizeColor() {
         return this.visualizeColor;
+    }
+
+    public List<Integer> getPointsX() {
+        return new ArrayList<>(pointsX);
+    }
+
+    public List<Integer> getPointsY() {
+        return new ArrayList<>(pointsY);
     }
 
     public void setX(int x) {
