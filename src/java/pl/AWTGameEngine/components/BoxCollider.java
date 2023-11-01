@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class BoxCollider extends ObjectComponent {
 
@@ -78,13 +79,13 @@ public class BoxCollider extends ObjectComponent {
         pointsX = new ArrayList<>();
         pointsY = new ArrayList<>();
         for(int i = 0; i < 4; i++) {
-            float tempX = getObject().getX() + x + fixedX[i] - getObject().getCenterX(); // todo - center with collider scale
-            float tempY = getObject().getY() + y + fixedY[i] - getObject().getCenterY();
+            int tempX = getObject().getX() + x + fixedX[i] - getObject().getCenterX() - x - scaleX / 2;
+            int tempY = getObject().getY() + y + fixedY[i] - getObject().getCenterY() - y - scaleY / 2;
             double theta = Math.toRadians(newRotation);
-            float rotatedX = (float) (tempX * Math.cos(theta) - tempY * Math.sin(theta));
-            float rotatedY = (float) (tempX * Math.sin(theta) + tempY * Math.cos(theta));
-            int xP = (int) (rotatedX + getObject().getCenterX());
-            int yP = (int) (rotatedY + getObject().getCenterY());
+            int rotatedX = (int) (tempX * Math.cos(theta) - tempY * Math.sin(theta));
+            int rotatedY = (int) (tempX * Math.sin(theta) + tempY * Math.cos(theta));
+            int xP = rotatedX + getObject().getCenterX() + x + scaleX / 2;
+            int yP = rotatedY + getObject().getCenterY() + y + scaleY / 2;
             pointsX.add(xP);
             pointsY.add(yP);
         }
