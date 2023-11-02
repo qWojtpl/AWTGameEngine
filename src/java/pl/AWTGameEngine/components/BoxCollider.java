@@ -4,10 +4,10 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class BoxCollider extends ObjectComponent {
 
@@ -19,6 +19,7 @@ public class BoxCollider extends ObjectComponent {
     private Color visualizeColor = Color.GREEN;
     private List<Integer> pointsX = new ArrayList<>();
     private List<Integer> pointsY = new ArrayList<>();
+    private Path2D path;
 
     public BoxCollider(GameObject object) {
         super(object);
@@ -26,7 +27,7 @@ public class BoxCollider extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        onUpdateRotation(getObject().getRotation());
+        calculatePoints(getObject().getRotation());
         getColliderRegistry().registerCollider(this, getObject());
     }
 
@@ -59,6 +60,7 @@ public class BoxCollider extends ObjectComponent {
 
     @Override
     public boolean onUpdatePosition(int newX, int newY) {
+        calculatePoints(getObject().getRotation());
         if(getColliderRegistry().isColliding(getObject(), this, newX, newY)) {
             for(ObjectComponent component : getObject().getComponents()) {
                 component.onCollide();
@@ -74,22 +76,33 @@ public class BoxCollider extends ObjectComponent {
      */
     @Override
     public boolean onUpdateRotation(int newRotation) {
+        calculatePoints(newRotation);
+        return true;
+    }
+
+    public void calculatePoints(int rotation) {
         int[] fixedX = new int[]{0, getObject().getScaleX() + scaleX, getObject().getScaleX() + scaleX, 0};
-        int[] fixedY = new int[]{0, getObject().getScaleY() + scaleY, 0, getObject().getScaleY() + scaleY};
+        int[] fixedY = new int[]{0, 0, getObject().getScaleY() + scaleY, getObject().getScaleY() + scaleY};
         pointsX = new ArrayList<>();
         pointsY = new ArrayList<>();
+        path = new Path2D.Double();
         for(int i = 0; i < 4; i++) {
             int tempX = getObject().getX() + x + fixedX[i] - getObject().getCenterX() - x - scaleX / 2;
             int tempY = getObject().getY() + y + fixedY[i] - getObject().getCenterY() - y - scaleY / 2;
-            double theta = Math.toRadians(newRotation);
+            double theta = Math.toRadians(rotation);
             int rotatedX = (int) (tempX * Math.cos(theta) - tempY * Math.sin(theta));
             int rotatedY = (int) (tempX * Math.sin(theta) + tempY * Math.cos(theta));
             int xP = rotatedX + getObject().getCenterX() + x + scaleX / 2;
             int yP = rotatedY + getObject().getCenterY() + y + scaleY / 2;
             pointsX.add(xP);
             pointsY.add(yP);
+            if(i == 0) {
+                path.moveTo(xP, yP);
+            } else {
+                path.lineTo(xP, yP);
+            }
         }
-        return true;
+        path.closePath();
     }
 
     public int getX() {
@@ -122,6 +135,10 @@ public class BoxCollider extends ObjectComponent {
 
     public List<Integer> getPointsY() {
         return new ArrayList<>(pointsY);
+    }
+
+    public Path2D getPath() {
+        return (Path2D) path.clone();
     }
 
     public void setX(int x) {

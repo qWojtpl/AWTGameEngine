@@ -53,7 +53,7 @@ public class CustomComponent extends ObjectComponent {
 
     @Override
     public void onStaticUpdate() {
-        getObject().setRotation(r++);
+        //getObject().setRotation(r++);
     }
 
     @Override

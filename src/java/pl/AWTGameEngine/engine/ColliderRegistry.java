@@ -3,6 +3,8 @@ package pl.AWTGameEngine.engine;
 import pl.AWTGameEngine.components.BoxCollider;
 import pl.AWTGameEngine.objects.GameObject;
 
+import java.awt.geom.Area;
+import java.awt.geom.Path2D;
 import java.util.HashMap;
 
 public class ColliderRegistry {
@@ -17,6 +19,16 @@ public class ColliderRegistry {
         if(object.getComponentsByClass(BoxCollider.class).size() == 0) {
             return false;
         }
+        Path2D path = new Path2D.Double();
+        for(int i = 0; i < 4; i++) {
+            if(i == 0) {
+                path.moveTo(collider.getPointsX().get(i) + newX - object.getX(), collider.getPointsY().get(i) + newY - object.getY());
+            } else {
+                path.lineTo(collider.getPointsX().get(i) + newX - object.getX(), collider.getPointsY().get(i) + newY - object.getY());
+            }
+        }
+        path.closePath();
+        Area baseArea = new Area(path);
         for(BoxCollider c : colliders.keySet()) {
             if(object.getComponentsByClass(BoxCollider.class).contains(c)) {
                 continue;
@@ -24,6 +36,12 @@ public class ColliderRegistry {
             GameObject go = getColliderObject(c);
             if(go == null) {
                 continue;
+            }
+            Area colliderArea = new Area(c.getPath());
+            Area clonedArea = (Area) baseArea.clone();
+            clonedArea.intersect(colliderArea);
+            if(!clonedArea.isEmpty()) {
+                return true;
             }
         }
         return false;
