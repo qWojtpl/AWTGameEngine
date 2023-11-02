@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.annotations.Parentless;
+import pl.AWTGameEngine.components.Collider;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.NestedPanel;
@@ -486,7 +487,11 @@ public class GameObject {
                         String v = fields.get(fieldName);
                         fieldName = fieldName.replace("~", "");
                         String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                        clazz.getDeclaredMethod(methodName, String.class).invoke(o, v);
+                        if(clazz.getSuperclass().equals(ObjectComponent.class)) {
+                            clazz.getDeclaredMethod(methodName, String.class).invoke(o, v);
+                        } else {
+                            clazz.getSuperclass().getDeclaredMethod(methodName, String.class).invoke(o, v);
+                        }
                     }
                     this.addComponent(o);
                 } catch(Exception e) {

@@ -9,14 +9,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoxCollider extends ObjectComponent {
+public class BoxCollider extends Collider {
 
-    private int x = 0;
-    private int y = 0;
-    private int scaleX = 0;
-    private int scaleY = 0;
-    private boolean visualize = false;
-    private Color visualizeColor = Color.GREEN;
     private List<Integer> pointsX = new ArrayList<>();
     private List<Integer> pointsY = new ArrayList<>();
     private Path2D path;
@@ -70,16 +64,16 @@ public class BoxCollider extends ObjectComponent {
         return true;
     }
 
-    /**
-     Method source:
-     <a href="https://gamedev.stackexchange.com/questions/86755/how-to-calculate-corner-positions-marks-of-a-rotated-tilted-rectangle">StackExchange</a>
-     */
     @Override
     public boolean onUpdateRotation(int newRotation) {
         calculatePoints(newRotation);
         return true;
     }
 
+    /**
+     Method source:
+     <a href="https://gamedev.stackexchange.com/questions/86755/how-to-calculate-corner-positions-marks-of-a-rotated-tilted-rectangle">StackExchange</a>
+     */
     public void calculatePoints(int rotation) {
         int[] fixedX = new int[]{0, getObject().getScaleX() + scaleX, getObject().getScaleX() + scaleX, 0};
         int[] fixedY = new int[]{0, 0, getObject().getScaleY() + scaleY, getObject().getScaleY() + scaleY};
@@ -105,31 +99,7 @@ public class BoxCollider extends ObjectComponent {
         path.closePath();
     }
 
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
-    }
-
-    public int getScaleX() {
-        return this.scaleX;
-    }
-
-    public int getScaleY() {
-        return this.scaleY;
-    }
-
-    public boolean isVisualize() {
-        return this.visualize;
-    }
-
-    public Color getVisualizeColor() {
-        return this.visualizeColor;
-    }
-
-    public List<Integer> getPointsX() {
+    public java.util.List<Integer> getPointsX() {
         return new ArrayList<>(pointsX);
     }
 
@@ -139,61 +109,6 @@ public class BoxCollider extends ObjectComponent {
 
     public Path2D getPath() {
         return (Path2D) path.clone();
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setX(String x) {
-        setX(Integer.parseInt(x));
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setY(String y) {
-        setY(Integer.parseInt(y));
-    }
-
-    public void setScaleX(int scaleX) {
-        this.scaleX = scaleX;
-    }
-
-    public void setScaleX(String scaleX) {
-        setScaleX(Integer.parseInt(scaleX));
-    }
-
-    public void setScaleY(int scaleY) {
-        this.scaleY = scaleY;
-    }
-
-    public void setScaleY(String scaleY) {
-        setScaleY(Integer.parseInt(scaleY));
-    }
-
-    public void setVisualize(boolean visualize) {
-        this.visualize = visualize;
-    }
-
-    public void setVisualize(String visualize) {
-        setVisualize(Boolean.parseBoolean(visualize));
-    }
-
-    public void setVisualizeColor(Color color) {
-        this.visualizeColor = color;
-    }
-
-    public void setVisualizeColor(String color) {
-        Color c;
-        try {
-            Field field = Class.forName("java.awt.Color").getField(color.toLowerCase());
-            c = (Color) field.get(null);
-        } catch (Exception e) {
-            c = Color.BLACK;
-        }
-        setVisualizeColor(c);
     }
 
 }
