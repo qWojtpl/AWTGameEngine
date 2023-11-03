@@ -55,10 +55,18 @@ public class CustomComponent extends ObjectComponent {
 
     @Override
     public void onStaticUpdate() {
-        if(getKeyListener().hasPressedKey(82)) {
-            PhysicsBody body = (PhysicsBody) getObject().getComponentsByClass(PhysicsBody.class).get(0);
-            body.push(50, new Vector(1, 0));
-            getKeyListener().releaseKey(82);
+        PhysicsBody body = (PhysicsBody) getObject().getComponentsByClass(PhysicsBody.class).get(0);
+        if(getKeyListener().hasPressedKey(102)) {
+            body.push(10, new Vector(1, 0));
+        }
+        if(getKeyListener().hasPressedKey(104)) {
+            body.push(10, new Vector(0, -1));
+        }
+        if(getKeyListener().hasPressedKey(98)) {
+            body.push(10, new Vector(0, 1));
+        }
+        if(getKeyListener().hasPressedKey(100)) {
+            body.push(10, new Vector(-1, 0));
         }
     }
 

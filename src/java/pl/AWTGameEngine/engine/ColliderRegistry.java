@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.components.BoxCollider;
+import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.geom.Area;
@@ -12,6 +13,7 @@ import java.util.List;
 public class ColliderRegistry {
 
     private final HashMap<BoxCollider, GameObject> colliders = new HashMap<>();
+    private List<BoxCollider> lastColliders = new ArrayList<>();
 
     public void registerCollider(BoxCollider collider, GameObject go) {
         colliders.put(collider, go);
@@ -31,27 +33,31 @@ public class ColliderRegistry {
         }
         path.closePath();
         Area baseArea = new Area(path);
-        List<BoxCollider> collisionList = new ArrayList<>();
+        boolean colliding = false;
+        List<GameObject> collided = new ArrayList<>();
         for(BoxCollider c : colliders.keySet()) {
             if(object.getComponentsByClass(BoxCollider.class).contains(c)) {
                 continue;
             }
-            GameObject go = getColliderObject(c);
-            if(go == null) {
+            if(collided.contains(c.getObject())) {
                 continue;
             }
             Area colliderArea = new Area(c.getPath());
             Area clonedArea = (Area) baseArea.clone();
             clonedArea.intersect(colliderArea);
             if(!clonedArea.isEmpty()) {
-                collisionList.add(c);
+                for(ObjectComponent component : object.getAbsoluteParent().getComponents()) {
+                    component.onCollide(c.getObject());
+                }
+                collided.add(c.getObject());
+                colliding = true;
             }
         }
-        return collisionList.size() > 0;
+        return colliding;
     }
 
-    public GameObject getColliderObject(BoxCollider collider) {
-        return colliders.getOrDefault(collider, null);
+    public List<BoxCollider> getLastColliders() {
+        return new ArrayList<>(this.lastColliders);
     }
 
     public void clearRegistry() {

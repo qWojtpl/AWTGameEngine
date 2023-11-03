@@ -13,6 +13,7 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.util.List;
 
 /**
  * Every component field should have dedicated method to set the value of this field.
@@ -139,7 +140,7 @@ public abstract class ObjectComponent {
     /**
      * Method will be called when collision will be registered.
      */
-    public void onCollide() {
+    public void onCollide(GameObject object) {
 
     }
 

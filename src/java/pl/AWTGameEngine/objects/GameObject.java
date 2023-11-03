@@ -1,8 +1,10 @@
 package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.annotations.Parentless;
+import pl.AWTGameEngine.components.BoxCollider;
 import pl.AWTGameEngine.components.Collider;
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.PhysicsBody;
 import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.scenes.Scene;
@@ -127,6 +129,13 @@ public class GameObject {
 
     public GameObject getParent() {
         return this.parent;
+    }
+
+    public GameObject getAbsoluteParent() {
+        if(getParent() == null) {
+            return this;
+        }
+        return getParent().getAbsoluteParent();
     }
 
     public NestedPanel getPanel() {

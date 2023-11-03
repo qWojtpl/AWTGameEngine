@@ -55,13 +55,7 @@ public class BoxCollider extends Collider {
     @Override
     public boolean onUpdatePosition(int newX, int newY) {
         calculatePoints(getObject().getRotation());
-        if(getColliderRegistry().isColliding(getObject(), this, newX, newY)) {
-            for(ObjectComponent component : getObject().getComponents()) {
-                component.onCollide();
-            }
-            return false;
-        }
-        return true;
+        return !getColliderRegistry().isColliding(getObject(), this, newX, newY);
     }
 
     @Override
