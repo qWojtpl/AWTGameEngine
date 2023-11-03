@@ -23,16 +23,16 @@ public class PhysicsBody extends ObjectComponent {
         if(forceX == 0) {
             return;
         }
-
+        int move = (int) (forceX / 8);
         if(forceX > 0) {
-            if(!getObject().setX(getObject().getX() + 1)) {
+            if(!getObject().setX(getObject().getX() + move)) {
                 forceX = (int) (forceX / 2);
                 forceX = -forceX;
             } else {
                 forceX -= 1;
             }
         } else if(forceX < 0) {
-            if(!getObject().setX(getObject().getX() - 1)) {
+            if(!getObject().setX(getObject().getX() + move)) {
                 forceX = (int) (forceX / 2);
                 forceX = -forceX;
             } else {

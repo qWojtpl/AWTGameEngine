@@ -27,7 +27,7 @@ public abstract class ObjectComponent {
         this.object = object;
     }
 
-    protected GameObject getObject() {
+    public GameObject getObject() {
         return this.object;
     }
 
