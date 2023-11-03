@@ -3,7 +3,6 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
-import java.lang.reflect.Field;
 
 public class SphereCollider extends Collider {
 

@@ -1,7 +1,9 @@
 package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.PhysicsBody;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.Vector;
 
 public class CustomComponent extends ObjectComponent {
 
@@ -53,7 +55,11 @@ public class CustomComponent extends ObjectComponent {
 
     @Override
     public void onStaticUpdate() {
-        //getObject().setRotation(r++);
+        if(getKeyListener().hasPressedKey(82)) {
+            PhysicsBody body = (PhysicsBody) getObject().getComponentsByClass(PhysicsBody.class).get(0);
+            body.push(50, new Vector(1, 0));
+            getKeyListener().releaseKey(82);
+        }
     }
 
     @Override

@@ -3,10 +3,10 @@
 @objectInfo="pos{786;0}scale{175;525}priority{1}ScrollPane:ObjectComponent{}Canvas:ObjectComponent{}";
 @cameraPosText="pos{175;506}scale{144;18}priority{100}BlankRenderer:ObjectComponent{color^white^}TextRenderer:ObjectComponent{color^black^size^12^text^   x: 0, y: 0^}Canvas:ObjectComponent{}";
 @editor="pos{0;0}scale{0;0}MenuBar:ObjectComponent{nextMenu^Project^nextMenu^Preferences^nextItem^Collisions in editor    ✓^}Editor:ObjectComponent-C{}ContextMenu:ObjectComponent{nextItem^Create GameObject^}Canvas:ObjectComponent{}";
-object1="pos{0;0}scale{45;45}priority{1}SpriteRenderer:ObjectComponent{image^beaver.jpg^}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^}BoxCollider:ObjectComponent{visualize^true^scaleX^50^scaleY^-44^}Animator:ObjectComponent{nextFrame^beaver.jpg^nextDelay^60^nextFrame^beaver2.png^nextDelay^60^}";
+object1="pos{0;0}scale{45;45}priority{1}SpriteRenderer:ObjectComponent{image^beaver.jpg^}PhysicsBody:ObjectComponent{}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^}BoxCollider:ObjectComponent{visualize^true^scaleX^50^scaleY^-44^}Animator:ObjectComponent{nextFrame^beaver.jpg^nextDelay^60^nextFrame^beaver2.png^nextDelay^60^}";
 text="pos{200;100}scale{50;50}parent{object1}priority{2}TextRenderer:ObjectComponent{text^test^color^BLACK^size^30^}BoxCollider:ObjectComponent{visualize^true^}";
 object2="pos{100;100}scale{45;45}priority{1}parent{text}SpriteRenderer:ObjectComponent{image^beaver2.png^}BoxCollider:ObjectComponent{visualize^true^}";
-collider="pos{300;150}scale{100;100}rotation{45}priority{1}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^x^0^scaleX^0^}";
+collider="pos{300;150}scale{100;100}rotation{45}priority{1}PhysicsBody:ObjectComponent{}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^x^0^scaleX^0^}";
 collider2="pos{300;0}scale{100;100}priority{1}BoxCollider:ObjectComponent{visualize^true^}";
 sphereCollider="pos{500;0}scale{100;100}priority{1}SphereCollider:ObjectComponent{visualize^true^}";
 background="pos{0;0}scale{0;0}priority{0}parent{@objectInfo}BackgroundRenderer:ObjectComponent-C{}";

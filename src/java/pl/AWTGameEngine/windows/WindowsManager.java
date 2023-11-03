@@ -33,6 +33,7 @@ public class WindowsManager {
         window.getSceneLoader().loadSceneFile(sceneName);
         windows.add(window);
         GameLoop loop = new GameLoop(window);
+        loop.setFPS(60);
         loop.start();
         window.setLoop(loop);
         window.setVisible(true);

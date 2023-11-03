@@ -5,7 +5,9 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ColliderRegistry {
 
@@ -29,6 +31,7 @@ public class ColliderRegistry {
         }
         path.closePath();
         Area baseArea = new Area(path);
+        List<BoxCollider> collisionList = new ArrayList<>();
         for(BoxCollider c : colliders.keySet()) {
             if(object.getComponentsByClass(BoxCollider.class).contains(c)) {
                 continue;
@@ -41,10 +44,10 @@ public class ColliderRegistry {
             Area clonedArea = (Area) baseArea.clone();
             clonedArea.intersect(colliderArea);
             if(!clonedArea.isEmpty()) {
-                return true;
+                collisionList.add(c);
             }
         }
-        return false;
+        return collisionList.size() > 0;
     }
 
     public GameObject getColliderObject(BoxCollider collider) {

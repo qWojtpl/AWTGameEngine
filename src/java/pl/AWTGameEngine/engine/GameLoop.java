@@ -5,7 +5,7 @@ import pl.AWTGameEngine.windows.Window;
 public class GameLoop extends Thread {
 
     private final Window window;
-    private final double FPS = 60;
+    private double FPS = 1;
 
     public GameLoop(Window window) {
         this.window = window;
@@ -28,6 +28,10 @@ public class GameLoop extends Thread {
 
     public double getFPS() {
         return FPS;
+    }
+
+    public void setFPS(double FPS) {
+        this.FPS = FPS;
     }
 
 }

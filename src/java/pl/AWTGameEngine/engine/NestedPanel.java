@@ -49,4 +49,8 @@ public class NestedPanel extends JPanel {
         }
     }
 
+    public Window getWindow() {
+        return this.window;
+    }
+
 }
