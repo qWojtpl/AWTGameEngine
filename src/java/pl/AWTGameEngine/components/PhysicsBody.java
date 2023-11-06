@@ -23,6 +23,7 @@ public class PhysicsBody extends ObjectComponent {
     @Override
     public void onStaticUpdate() {
         onUpdate();
+        //push(0, 16);
     }
 
     @Override
@@ -77,6 +78,8 @@ public class PhysicsBody extends ObjectComponent {
             return;
         }
         int move = (int) Math.floor(forceY / 8 / mass);
+        System.out.println("M: " + move);
+        System.out.println("F: " + forceX);
         if(forceY > 0) {
             if(!getObject().setY(getObject().getY() + move)) {
                 forceY = (int) (forceY / 2);

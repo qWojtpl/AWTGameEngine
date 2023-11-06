@@ -274,7 +274,9 @@ public class GameObject {
     }
 
     public void setPriority(int priority) {
+        getScene().removeSortedObject(this.priority, this);
         this.priority = priority;
+        getScene().addSortedObject(priority, this);
     }
 
     public void setParent(GameObject parent) {

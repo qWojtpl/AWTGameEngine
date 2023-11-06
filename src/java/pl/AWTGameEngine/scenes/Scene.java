@@ -79,7 +79,7 @@ public class Scene {
         }
         object.setPanel(window.getPanel());
         gameObjects.put(object.getIdentifier(), object);
-        sortObjects();
+        addSortedObject(object.getPriority(), object);
         for(GameObject obj : getActiveGameObjects()) {
             if(obj.equals(object)) {
                 continue;
@@ -101,7 +101,7 @@ public class Scene {
             child.setParent(object.getParent());
         }
         gameObjects.remove(object.getIdentifier());
-        sortObjects();
+        removeSortedObject(object.getPriority(), object);
         for(GameObject obj : getActiveGameObjects()) {
             if(obj.equals(object)) {
                 continue;
@@ -110,6 +110,26 @@ public class Scene {
                 component.onRemoveGameObject(object);
             }
         }
+    }
+
+    public void addSortedObject(int priority, GameObject object) {
+        boolean hasKey = false;
+        ArrayList<GameObject> empty = new ArrayList<>();
+        List<GameObject> objects = sortedObjects.getOrDefault(priority, empty);
+        if(!objects.equals(empty)) {
+            hasKey = true;
+        }
+        objects.add(object);
+        sortedObjects.put(priority, objects);
+        if(!hasKey) {
+            sortedObjects = new LinkedHashMap<>(new TreeMap<>(sortedObjects)); // Sort keys
+        }
+    }
+
+    public void removeSortedObject(int priority, GameObject object) {
+        List<GameObject> objects = sortedObjects.getOrDefault(priority, new ArrayList<>());
+        objects.remove(object);
+        sortedObjects.put(priority, objects);
     }
 
     public GameObject getGameObjectByName(String identifier) {
