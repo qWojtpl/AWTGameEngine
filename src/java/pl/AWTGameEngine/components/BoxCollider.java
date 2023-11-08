@@ -22,7 +22,7 @@ public class BoxCollider extends Collider {
     @Override
     public void onAddComponent() {
         calculatePoints(getObject().getRotation());
-        getColliderRegistry().registerCollider(this, getObject());
+        getColliderRegistry().registerCollider(this);
     }
 
     @Override
@@ -93,7 +93,20 @@ public class BoxCollider extends Collider {
         path.closePath();
     }
 
-    public java.util.List<Integer> getPointsX() {
+    @Override
+    public Path2D calculatePath(int newX, int newY) {
+        Path2D path = new Path2D.Double();
+        for(int i = 0; i < 4; i++) {
+            if(i == 0) {
+                path.moveTo(pointsX.get(i) + newX - getObject().getX(), pointsY.get(i) + newY - getObject().getY());
+            } else {
+                path.lineTo(pointsX.get(i) + newX - getObject().getX(), pointsY.get(i) + newY - getObject().getY());
+            }
+        }
+        return path;
+    }
+
+    public List<Integer> getPointsX() {
         return new ArrayList<>(pointsX);
     }
 
@@ -101,6 +114,7 @@ public class BoxCollider extends Collider {
         return new ArrayList<>(pointsY);
     }
 
+    @Override
     public Path2D getPath() {
         return (Path2D) path.clone();
     }

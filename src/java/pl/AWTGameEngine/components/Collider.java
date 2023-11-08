@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
+import java.awt.geom.Path2D;
 import java.lang.reflect.Field;
 
 public abstract class Collider extends ObjectComponent {
@@ -16,6 +17,10 @@ public abstract class Collider extends ObjectComponent {
 
     public Collider(GameObject object) {
         super(object);
+    }
+
+    public Path2D calculatePath(int newX, int newY) {
+        return new Path2D.Double();
     }
 
     public int getX() {
@@ -32,6 +37,10 @@ public abstract class Collider extends ObjectComponent {
 
     public int getScaleY() {
         return this.scaleY;
+    }
+
+    public Path2D getPath() {
+        return new Path2D.Double();
     }
 
     public boolean isVisualize() {
