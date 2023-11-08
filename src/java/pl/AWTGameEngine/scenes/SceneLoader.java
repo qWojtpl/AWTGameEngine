@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.scenes;
 
+import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
@@ -11,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Properties;
 
 public class SceneLoader {
 
@@ -21,6 +23,12 @@ public class SceneLoader {
     }
 
     public void loadSceneFile(String scenePath) {
+        Properties customProperties = AppProperties.getCustomProperties(getScenePropertiesPath(scenePath));
+        if(customProperties != null) {
+            window.setTitle(AppProperties.getProperty("title", customProperties));
+        } else {
+            window.setTitle(AppProperties.getProperty("title"));
+        }
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         window.getPanel().removeAll();
         window.setCurrentScene(new Scene(scenePath, window));
@@ -60,6 +68,15 @@ public class SceneLoader {
             object.deserialize(data.get(objectName));
         }
         window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+    }
+
+    public String getScenePropertiesPath(String scenePath) {
+        String path = "";
+        for(int i = 0; i < scenePath.length() - 5; i++) {
+            path += scenePath.charAt(i);
+        }
+        path += "properties";
+        return path;
     }
 
 }

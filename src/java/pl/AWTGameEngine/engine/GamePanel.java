@@ -16,7 +16,6 @@ public class GamePanel extends NestedPanel {
             multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
         }
         this.setPreferredSize(new Dimension(WIDTH * multipler, HEIGHT * multipler));
-        this.setBackground(Color.WHITE);
         this.setDoubleBuffered(true);
     }
 

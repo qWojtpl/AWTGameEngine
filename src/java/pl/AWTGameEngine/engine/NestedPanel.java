@@ -16,12 +16,14 @@ public class NestedPanel extends JPanel {
     public NestedPanel(GameObject parentObject) {
         super();
         setLayout(null);
+        setBackground(Color.WHITE);
         this.window = parentObject.getScene().getWindow();
     }
 
     public NestedPanel(Window window) {
         super();
         setLayout(null);
+        setBackground(Color.WHITE);
         this.window = window;
     }
 
