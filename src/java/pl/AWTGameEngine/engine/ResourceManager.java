@@ -61,6 +61,20 @@ public class ResourceManager {
         return null;
     }
 
+    public static InputStream getResourceAsStream(String name) {
+        try {
+            InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
+            if(stream == null) {
+                throw new Exception();
+            }
+            return stream;
+        } catch(Exception e) {
+            System.out.println("Cannot get stream from resource: " + name);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static HashMap<String, List<String>> getResources() {
         return new HashMap<>(resources);
     }

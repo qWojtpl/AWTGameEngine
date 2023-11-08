@@ -20,13 +20,13 @@ public class SceneLoader {
         this.window = window;
     }
 
-    public void loadSceneFile(String sceneName) {
+    public void loadSceneFile(String scenePath) {
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         window.getPanel().removeAll();
-        window.setCurrentScene(new Scene(sceneName, window));
+        window.setCurrentScene(new Scene(scenePath, window));
         window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
         window.getCurrentScene().getCamera().setZoom(window.getPanel().getMultipler() / 2f);
-        List<String> sceneLines = ResourceManager.getResource(sceneName + ".scene");
+        List<String> sceneLines = ResourceManager.getResource(scenePath);
         if(sceneLines == null) {
             System.out.println("Scene not found.");
             return;

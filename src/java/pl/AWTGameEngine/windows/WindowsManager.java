@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.windows;
 
+import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
@@ -15,7 +16,7 @@ public class WindowsManager {
     private static final List<Window> windows = new ArrayList<>();
     private static Window defaultWindow;
 
-    public static Window createWindow(String sceneName, boolean fullScreen) {
+    public static Window createWindow(String scenePath, boolean fullScreen) {
         Window window = new Window();
         window.setResizable(false);
         if(fullScreen) {
@@ -30,7 +31,7 @@ public class WindowsManager {
         window.setKeyListener(new KeyListener());
         window.setMouseListener(new MouseListener(window));
         window.setSceneLoader(new SceneLoader(window));
-        window.getSceneLoader().loadSceneFile(sceneName);
+        window.getSceneLoader().loadSceneFile(scenePath);
         windows.add(window);
         GameLoop loop = new GameLoop(window);
         loop.setFPS(60);
@@ -41,7 +42,7 @@ public class WindowsManager {
     }
 
     public static void createDefaultWindow() {
-        defaultWindow = createWindow("main", false);
+        defaultWindow = createWindow(AppProperties.getProperty("main"), false);
         defaultWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 

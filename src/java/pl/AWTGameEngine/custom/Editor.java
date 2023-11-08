@@ -187,7 +187,7 @@ public class Editor extends ObjectComponent {
                         go.setY(y);
                         System.out.println(x + " " + y);
                         SpriteRenderer spriteRenderer = new SpriteRenderer(go);
-                        spriteRenderer.setImage(ResourceManager.getResourceAsImage("beaver.jpg"));
+                        spriteRenderer.setImage(ResourceManager.getResourceAsImage("sprites/beaver.jpg"));
                         go.addComponent(spriteRenderer);
                         System.out.println(go.getX() + " " + go.getY());
                     }
