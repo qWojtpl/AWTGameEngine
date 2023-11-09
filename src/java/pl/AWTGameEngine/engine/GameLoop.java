@@ -31,6 +31,9 @@ public class GameLoop extends Thread {
     }
 
     public void setFPS(double FPS) {
+        if(FPS < 1) {
+            FPS = 1;
+        }
         this.FPS = FPS;
     }
 

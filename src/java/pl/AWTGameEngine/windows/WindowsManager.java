@@ -21,7 +21,7 @@ public class WindowsManager {
         Window window = new Window();
         window.setSceneLoader(new SceneLoader(window));
         window.setResizable(false);
-        Properties customProperties = AppProperties.getCustomProperties(window.getSceneLoader().getScenePropertiesPath(scenePath));
+        window.setTitle(AppProperties.getProperty("title"));
         if(Boolean.parseBoolean(AppProperties.getProperty("fullscreen"))) {
             window.setFullScreen(true);
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -32,21 +32,12 @@ public class WindowsManager {
         window.setLocationRelativeTo(null);
         window.setKeyListener(new KeyListener());
         window.setMouseListener(new MouseListener(window));
-        window.getSceneLoader().loadSceneFile(scenePath);
-        windows.add(window);
         GameLoop loop = new GameLoop(window);
-        int fps;
-        if(customProperties != null) {
-            fps = AppProperties.getPropertyAsInteger("fps", customProperties);
-        } else {
-            fps = AppProperties.getPropertyAsInteger("fps");
-        }
-        if(fps < 1) {
-            fps = 1;
-        }
-        loop.setFPS(fps);
-        loop.start();
+        loop.setFPS(AppProperties.getPropertyAsInteger("fps"));
         window.setLoop(loop);
+        window.getSceneLoader().loadSceneFile(scenePath);
+        loop.start();
+        windows.add(window);
         window.setVisible(true);
         return window;
     }

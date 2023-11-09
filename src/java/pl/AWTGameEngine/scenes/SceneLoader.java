@@ -6,10 +6,6 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
@@ -26,6 +22,7 @@ public class SceneLoader {
         Properties customProperties = AppProperties.getCustomProperties(getScenePropertiesPath(scenePath));
         if(customProperties != null) {
             window.setTitle(AppProperties.getProperty("title", customProperties));
+            window.getLoop().setFPS(AppProperties.getPropertyAsInteger("fps", customProperties));
         } else {
             window.setTitle(AppProperties.getProperty("title"));
         }

@@ -15,6 +15,7 @@ public class ResourceManager {
 
     private final static HashMap<String, List<String>> resources = new HashMap<>();
     private final static HashMap<String, Image> imageResources = new HashMap<>();
+    private final static HashMap<String, InputStream> streamResources = new HashMap<>();
 
     public static List<String> getResource(String name) {
         if(resources.containsKey(name)) {
@@ -62,11 +63,15 @@ public class ResourceManager {
     }
 
     public static InputStream getResourceAsStream(String name) {
+        if(streamResources.containsKey(name)) {
+            return streamResources.get(name);
+        }
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
                 throw new Exception();
             }
+            streamResources.put(name, stream);
             return stream;
         } catch(Exception e) {
             System.out.println("Cannot get stream from resource: " + name);
