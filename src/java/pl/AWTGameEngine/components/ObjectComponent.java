@@ -196,6 +196,10 @@ public abstract class ObjectComponent {
 
     }
 
+    public void onSceneReadyStateChanged(boolean newState) {
+
+    }
+
     public boolean isUnique() {
         return this.getClass().isAnnotationPresent(Unique.class);
     }

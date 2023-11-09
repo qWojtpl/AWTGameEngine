@@ -166,7 +166,6 @@ public class Editor extends ObjectComponent {
         menu.setNextItem("Remove GameObject");
         cancelClick = true;
         tree.setSelection(object.getIdentifier());
-        System.out.println("creating new item");
     }
 
     @Override
@@ -185,11 +184,9 @@ public class Editor extends ObjectComponent {
                         GameObject go = getScene().createGameObject(identifier);
                         go.setX(x);
                         go.setY(y);
-                        System.out.println(x + " " + y);
                         SpriteRenderer spriteRenderer = new SpriteRenderer(go);
                         spriteRenderer.setImage(ResourceManager.getResourceAsImage("sprites/beaver.jpg"));
                         go.addComponent(spriteRenderer);
-                        System.out.println(go.getX() + " " + go.getY());
                     }
                 }
                 break;

@@ -67,7 +67,7 @@ public class SceneLoader {
         window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
-    public String getScenePropertiesPath(String scenePath) {
+    public static String getScenePropertiesPath(String scenePath) {
         String path = "";
         for(int i = 0; i < scenePath.length() - 5; i++) {
             path += scenePath.charAt(i);
