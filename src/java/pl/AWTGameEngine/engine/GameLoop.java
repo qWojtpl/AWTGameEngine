@@ -6,11 +6,10 @@ import pl.AWTGameEngine.windows.WindowsManager;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-public class GameLoop extends Thread implements WindowListener {
+public class GameLoop extends Thread {
 
     private final Window window;
     private double FPS = 1;
-    private boolean windowOpened = true;
 
     public GameLoop(Window window) {
         this.window = window;
@@ -18,7 +17,7 @@ public class GameLoop extends Thread implements WindowListener {
 
     @Override
     public void run() {
-        while(windowOpened) {
+        while(window.getWindowListener().isOpened()) {
             System.out.println(Thread.currentThread().getName());
             try {
                 Thread.sleep((long) (1000 / getFPS()));
@@ -41,42 +40,6 @@ public class GameLoop extends Thread implements WindowListener {
             FPS = 1;
         }
         this.FPS = FPS;
-    }
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-        windowOpened = true;
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-        windowOpened = false;
-        WindowsManager.removeWindow(window);
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
     }
 
 }

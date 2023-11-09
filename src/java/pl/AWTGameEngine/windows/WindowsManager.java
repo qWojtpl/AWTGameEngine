@@ -5,6 +5,7 @@ import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
+import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
@@ -44,13 +45,13 @@ public class WindowsManager {
         window.setLocationRelativeTo(null);
         window.setKeyListener(new KeyListener());
         window.setMouseListener(new MouseListener(window));
+        window.setWindowListener(new WindowListener(window));
         GameLoop loop = new GameLoop(window);
         loop.setFPS(AppProperties.getPropertyAsInteger("fps"));
         window.setLoop(loop);
         window.getSceneLoader().loadSceneFile(scenePath);
         loop.start();
         windows.add(window);
-        window.addWindowListener(loop);
         window.setVisible(true);
         return window;
     }

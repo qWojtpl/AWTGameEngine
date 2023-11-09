@@ -196,7 +196,7 @@ public abstract class ObjectComponent {
 
     }
 
-    public void onSceneReadyStateChanged(boolean newState) {
+    public void onWindowClosing() {
 
     }
 

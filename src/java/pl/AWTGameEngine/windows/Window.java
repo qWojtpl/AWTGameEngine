@@ -4,6 +4,7 @@ import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
+import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
@@ -15,6 +16,7 @@ public class Window extends JFrame {
     private GameLoop loop;
     private KeyListener keyListener;
     private MouseListener mouseListener;
+    private WindowListener windowListener;
     private Scene currentScene;
     private SceneLoader sceneLoader;
     private boolean staticMode;
@@ -34,6 +36,10 @@ public class Window extends JFrame {
 
     public MouseListener getMouseListener() {
         return this.mouseListener;
+    }
+
+    public WindowListener getWindowListener() {
+        return this.windowListener;
     }
 
     public Scene getCurrentScene() {
@@ -80,6 +86,14 @@ public class Window extends JFrame {
         this.mouseListener = mouseListener;
         getPanel().addMouseListener(mouseListener);
         getPanel().addMouseMotionListener(mouseListener);
+    }
+
+    public void setWindowListener(WindowListener windowListener) {
+        if(this.windowListener != null) {
+            removeWindowListener(this.windowListener);
+        }
+        this.windowListener = windowListener;
+        addWindowListener(windowListener);
     }
 
     public void setCurrentScene(Scene scene) {
