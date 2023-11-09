@@ -15,3 +15,4 @@ wall1="pos{-10;-1000}scale{1000;1000}BoxCollider:ObjectComponent{visualize^true^
 wall2="pos{-45;500}scale{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
 wall3="pos{-1000;0}scale{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
 wall4="pos{500;0}scale{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
+cbutton="pos{200;200}scale{800;200}CButton:ObjectComponent{}";

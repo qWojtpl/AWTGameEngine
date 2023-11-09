@@ -1,13 +1,9 @@
 package pl.AWTGameEngine.engine;
 
-import sun.misc.BASE64Decoder;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 

@@ -1,7 +1,5 @@
 package pl.AWTGameEngine.engine;
 
-import javafx.beans.property.Property;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;

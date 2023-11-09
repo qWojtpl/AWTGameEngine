@@ -4,6 +4,7 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.lang.reflect.Field;
 
 public class TextRenderer extends ObjectComponent {
@@ -13,6 +14,7 @@ public class TextRenderer extends ObjectComponent {
     private float size = 30.0f;
     private int x = 0;
     private int y = 0;
+    private int width = 0;
 
     public TextRenderer(GameObject object) {
         super(object);
@@ -33,9 +35,9 @@ public class TextRenderer extends ObjectComponent {
         g2d.setFont(g.getFont().deriveFont(getSize() * getCamera().getZoom()));
         g2d.drawString(getText(),
                 (int) ((getObject().getX() - getCamera().getRelativeX(getObject()) + getX()) * getCamera().getZoom()),
-                (int) ((getObject().getY() - getCamera().getRelativeY(getObject()) + getY() + getObject().getScaleY() - getSize() / 2.5)
-                        * getCamera().getZoom()));
+                (int) ((getObject().getY() - getCamera().getRelativeY(getObject()) + getY()) * getCamera().getZoom()));
         g2d.setTransform(oldTransform);
+        width = g.getFontMetrics().stringWidth(text);
     }
 
     public String getText() {
@@ -107,6 +109,43 @@ public class TextRenderer extends ObjectComponent {
         } catch(NumberFormatException e) {
             setY(0);
         }
+    }
+
+    public void align(Horizontal horizontal, Vertical vertical) {
+        align(horizontal);
+        align(vertical);
+    }
+
+    public void align(Horizontal horizontal) {
+        if(Horizontal.LEFT.equals(horizontal)) {
+            x = 0;
+        } else if(Horizontal.RIGHT.equals(horizontal)) {
+            x = (int) (getObject().getScaleX() - width / getCamera().getZoom());
+        } else {
+            x = (int) (getObject().getScaleX() / 2 - width / 2 / getCamera().getZoom());
+        }
+    }
+
+    public void align(Vertical vertical) {
+        if(Vertical.TOP.equals(vertical)) {
+            y = (int) size;
+        } else if(Vertical.BOTTOM.equals(vertical)) {
+            y = getObject().getScaleY();
+        } else {
+            y = (int) ((size + getObject().getScaleY()) / 2 - size / 8);
+        }
+    }
+
+    public enum Horizontal {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
+    public enum Vertical {
+        TOP,
+        CENTER,
+        BOTTOM
     }
 
 }

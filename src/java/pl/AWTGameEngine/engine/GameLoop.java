@@ -18,7 +18,6 @@ public class GameLoop extends Thread {
     @Override
     public void run() {
         while(window.getWindowListener().isOpened()) {
-            System.out.println(Thread.currentThread().getName());
             try {
                 Thread.sleep((long) (1000 / getFPS()));
             } catch(InterruptedException ignored) {

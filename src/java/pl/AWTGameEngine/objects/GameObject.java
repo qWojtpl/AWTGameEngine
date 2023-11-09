@@ -39,6 +39,10 @@ public class GameObject {
             System.out.println("Component " + component.getClass().getName() + " is unique, cannot add another...");
             return;
         }
+        if(!component.getObject().equals(this)) {
+            System.out.println("Component's object is wrong!");
+            return;
+        }
         for(ObjectComponent c : getComponents()) {
             if(c.conflictsWith(component.getClass())) {
                 DialogManager.createExtendedError(
