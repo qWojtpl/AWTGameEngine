@@ -1,17 +1,14 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.Unique;
-import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 @Unique
 public class Button extends ObjectComponent {
 
-    private String text = "Button";
+    /*private String text = "Button";
     private JButton button;
     private Image image;
 
@@ -86,6 +83,47 @@ public class Button extends ObjectComponent {
 
     public void setImage(String imageSource) {
         setImage(ResourceManager.getResourceAsImage(imageSource));
+    }*/
+
+    private BlankRenderer background;
+    private TextRenderer text;
+
+    public Button(GameObject object) {
+        super(object);
+    }
+
+    @Override
+    public void onAddComponent() {
+        background = new BlankRenderer(getObject());
+        background.setColor(Color.BLACK);
+        text = new TextRenderer(getObject());
+        text.setText("button");
+        text.setColor(Color.RED);
+        text.setSize(20);
+        getObject().addComponent(background);
+        getObject().addComponent(text);
+    }
+
+    @Override
+    public void onRemoveComponent() {
+        getObject().removeComponent(background);
+        getObject().removeComponent(text);
+    }
+
+    @Override
+    public void onUpdate() {
+        onStaticUpdate();
+    }
+
+    @Override
+    public void onStaticUpdate() {
+        background.setColor(Color.BLACK);
+        if(getMouseListener().getMouseX() >= getObject().getX() && getMouseListener().getMouseX() <= getObject().getX() + getObject().getScaleX()) {
+            if(getMouseListener().getMouseY() >= getObject().getY() && getMouseListener().getMouseY() <= getObject().getY() + getObject().getScaleY()) {
+                background.setColor(Color.GREEN);
+            }
+        }
+        text.align(TextRenderer.Horizontal.CENTER, TextRenderer.Vertical.CENTER);
     }
 
 }

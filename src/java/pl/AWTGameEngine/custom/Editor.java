@@ -179,7 +179,7 @@ public class Editor extends ObjectComponent {
                         "GameObject");
                 if(identifier != null) {
                     if(getScene().getGameObjectByName(identifier) != null) {
-                        DialogManager.createError(getWindow(), "Error", "GameObject with this identifier already exists.");
+                        DialogManager.createError("GameObject with this identifier already exists.");
                     } else {
                         GameObject go = getScene().createGameObject(identifier);
                         go.setX(x);

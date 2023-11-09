@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.components.TextRenderer;
+import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 
@@ -37,12 +39,10 @@ public class DialogManager {
                 null);
     }
 
-    public static void createError(Window window, String windowTitle, String message) {
-        JOptionPane.showMessageDialog(
-                window,
-                message,
-                windowTitle,
-                JOptionPane.ERROR_MESSAGE);
+    public static void createError(String message) {
+        Window w = WindowsManager.createWindow(AppProperties.getProperty("error"));
+        GameObject go = w.getCurrentScene().getGameObjectByName("@errorMessage");
+        ((TextRenderer) go.getComponentsByClass(TextRenderer.class).get(0)).setText(message);
     }
 
     public static void createExtendedError(Window window, String windowTitle, String message, String errorMessage) {
