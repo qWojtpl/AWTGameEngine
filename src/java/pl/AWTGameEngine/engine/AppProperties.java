@@ -29,7 +29,19 @@ public class AppProperties {
     public static int getPropertyAsInteger(String key, Properties properties) {
         try {
             return Integer.parseInt(getProperty(key, properties));
-        } catch(NumberFormatException e) {
+        } catch(Exception e) {
+            return 0;
+        }
+    }
+
+    public static double getPropertyAsDouble(String key) {
+        return getPropertyAsDouble(key, properties);
+    }
+
+    public static double getPropertyAsDouble(String key, Properties properties) {
+        try {
+            return Double.parseDouble(getProperty(key, properties));
+        } catch(Exception e) {
             return 0;
         }
     }

@@ -8,19 +8,29 @@ public class GamePanel extends NestedPanel {
 
     private final int WIDTH = 480;
     private final int HEIGHT = (int) (WIDTH * 0.5625);
-    private int multipler = 3;
+    private double multiplier = 3;
 
     public GamePanel(Window window) {
         super(window);
         if(window.isFullScreen()) {
-            multipler = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
+            multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
         }
-        this.setPreferredSize(new Dimension(WIDTH * multipler, HEIGHT * multipler));
+        this.setPreferredSize(new Dimension((int) (WIDTH * multiplier), (int) (HEIGHT * multiplier)));
         this.setDoubleBuffered(true);
     }
 
-    public int getMultipler() {
-        return this.multipler;
+    public GamePanel(Window window, double multiplier) {
+        super(window);
+        this.multiplier = multiplier;
+        if(window.isFullScreen()) {
+            multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
+        }
+        this.setPreferredSize(new Dimension((int) (WIDTH * multiplier), (int) (HEIGHT * multiplier)));
+        this.setDoubleBuffered(true);
+    }
+
+    public double getMultiplier() {
+        return this.multiplier;
     }
 
 }

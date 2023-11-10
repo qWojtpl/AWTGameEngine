@@ -40,7 +40,16 @@ public class WindowsManager {
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
             window.setUndecorated(true);
         }
-        window.setPanel(new GamePanel(window));
+        Properties customProperties = AppProperties.getCustomProperties(SceneLoader.getScenePropertiesPath(scenePath));
+        if(customProperties != null) {
+            if(AppProperties.getProperty("multiplier", customProperties) != null) {
+                window.setPanel(new GamePanel(window, AppProperties.getPropertyAsDouble("multiplier", customProperties)));
+            } else {
+                window.setPanel(new GamePanel(window));
+            }
+        } else {
+            window.setPanel(new GamePanel(window));
+        }
         window.pack();
         window.setLocationRelativeTo(null);
         window.setKeyListener(new KeyListener());
