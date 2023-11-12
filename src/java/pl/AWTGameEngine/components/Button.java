@@ -100,6 +100,7 @@ public class Button extends ObjectComponent {
         text.setText("button");
         text.setColor(Color.RED);
         text.setSize(20);
+        text.align(TextRenderer.Horizontal.CENTER, TextRenderer.Vertical.CENTER);
         getObject().addComponent(background);
         getObject().addComponent(text);
     }
@@ -123,7 +124,16 @@ public class Button extends ObjectComponent {
                 background.setColor(Color.GREEN);
             }
         }
-        text.align(TextRenderer.Horizontal.CENTER, TextRenderer.Vertical.CENTER);
+    }
+
+    @Override
+    public void onMouseClick(GameObject object) {
+        if(!getObject().equals(object)) {
+            return;
+        }
+        for(ObjectComponent component : getObject().getComponents()) {
+            component.onButtonClick();
+        }
     }
 
 }

@@ -14,7 +14,8 @@ public class TextRenderer extends ObjectComponent {
     private float size = 30.0f;
     private int x = 0;
     private int y = 0;
-    private int width = 0;
+    private Horizontal horizontal;
+    private Vertical vertical;
 
     public TextRenderer(GameObject object) {
         super(object);
@@ -22,6 +23,21 @@ public class TextRenderer extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
+        int width = g.getFontMetrics().stringWidth(text);
+        if(Horizontal.LEFT.equals(horizontal)) {
+            x = 0;
+        } else if(Horizontal.RIGHT.equals(horizontal)) {
+            x = (int) (getObject().getScaleX() - width / getCamera().getZoom());
+        } else {
+            x = (int) (getObject().getScaleX() / 2 - width / 2 / getCamera().getZoom());
+        }
+        if(Vertical.TOP.equals(vertical)) {
+            y = (int) size;
+        } else if(Vertical.BOTTOM.equals(vertical)) {
+            y = getObject().getScaleY();
+        } else {
+            y = (int) ((size + getObject().getScaleY()) / 2 - size / 8);
+        }
         Graphics2D g2d = (Graphics2D) g;
         AffineTransform oldTransform = g2d.getTransform();
         if(getObject().getRotation() != 0) {
@@ -37,7 +53,6 @@ public class TextRenderer extends ObjectComponent {
                 (int) ((getObject().getX() - getCamera().getRelativeX(getObject()) + getX()) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject()) + getY()) * getCamera().getZoom()));
         g2d.setTransform(oldTransform);
-        width = g.getFontMetrics().stringWidth(text);
     }
 
     public String getText() {
@@ -117,23 +132,11 @@ public class TextRenderer extends ObjectComponent {
     }
 
     public void align(Horizontal horizontal) {
-        if(Horizontal.LEFT.equals(horizontal)) {
-            x = 0;
-        } else if(Horizontal.RIGHT.equals(horizontal)) {
-            x = (int) (getObject().getScaleX() - width / getCamera().getZoom());
-        } else {
-            x = (int) (getObject().getScaleX() / 2 - width / 2 / getCamera().getZoom());
-        }
+        this.horizontal = horizontal;
     }
 
     public void align(Vertical vertical) {
-        if(Vertical.TOP.equals(vertical)) {
-            y = (int) size;
-        } else if(Vertical.BOTTOM.equals(vertical)) {
-            y = getObject().getScaleY();
-        } else {
-            y = (int) ((size + getObject().getScaleY()) / 2 - size / 8);
-        }
+        this.vertical = vertical;
     }
 
     public enum Horizontal {

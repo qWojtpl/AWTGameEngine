@@ -53,6 +53,7 @@ public class Editor extends ObjectComponent {
             selectedObject.setX(getMouseListener().getMouseX());
             selectedObject.setY(getMouseListener().getMouseY());
         }
+        cameraPosText.align(TextRenderer.Horizontal.LEFT, TextRenderer.Vertical.CENTER);
         cameraPosText.setText("   x: " + getCamera().getX() + ", y: " + getCamera().getY());
     }
 

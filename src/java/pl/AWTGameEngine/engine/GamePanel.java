@@ -21,10 +21,10 @@ public class GamePanel extends NestedPanel {
 
     public GamePanel(Window window, double multiplier) {
         super(window);
-        this.multiplier = multiplier;
         if(window.isFullScreen()) {
             multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
         }
+        this.multiplier = multiplier;
         this.setPreferredSize(new Dimension((int) (WIDTH * multiplier), (int) (HEIGHT * multiplier)));
         this.setDoubleBuffered(true);
     }
