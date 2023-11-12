@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.Conflicts;
 import pl.AWTGameEngine.annotations.ConflictsWith;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
@@ -9,7 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
 @Unique
-@ConflictsWith(Canvas.class)
+@Conflicts
+({
+        @ConflictsWith(Canvas.class),
+        @ConflictsWith(BlankRenderer.class)
+})
 public class ContextMenu extends ObjectComponent {
 
     private JPopupMenu menu;
