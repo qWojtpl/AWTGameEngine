@@ -88,6 +88,7 @@ public class Button extends ObjectComponent {
 
     private BlankRenderer background;
     private TextRenderer text;
+    private ColorObject backgroundColor = new ColorObject();
 
     public Button(GameObject object) {
         super(object);
@@ -96,7 +97,7 @@ public class Button extends ObjectComponent {
     @Override
     public void onAddComponent() {
         background = new BlankRenderer(getObject());
-        background.setColor(new ColorObject());
+        background.setColor(backgroundColor);
         text = new TextRenderer(getObject());
         text.setText("button");
         text.setColor(new ColorObject(Color.RED));
@@ -119,10 +120,10 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onStaticUpdate() {
-        background.setColor(new ColorObject());
+        backgroundColor.setColor(Color.BLACK);
         if(getMouseListener().getMouseX() >= getObject().getX() && getMouseListener().getMouseX() <= getObject().getX() + getObject().getScaleX()) {
             if(getMouseListener().getMouseY() >= getObject().getY() && getMouseListener().getMouseY() <= getObject().getY() + getObject().getScaleY()) {
-                background.setColor(new ColorObject(Color.GREEN));
+                backgroundColor.setColor(Color.GREEN);
             }
         }
     }
@@ -135,6 +136,7 @@ public class Button extends ObjectComponent {
         for(ObjectComponent component : getObject().getComponents()) {
             component.onButtonClick();
         }
+        backgroundColor.transientAlpha(0, 1000);
     }
 
 }

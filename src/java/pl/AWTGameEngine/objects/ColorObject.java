@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 public class ColorObject {
 
     private Color color;
+    private Transient transientThread;
 
     public ColorObject() {
         setColor(Color.BLACK);
@@ -52,8 +53,20 @@ public class ColorObject {
         return c;
     }
 
+    public void transientAlpha(int newAlpha, int time) {
+        if(transientThread != null) {
+            transientThread.cancel();
+        }
+        transientThread = new Transient(this, getColor().getAlpha(), newAlpha, time);
+        transientThread.start();
+    }
+
     public Color getColor() {
         return this.color;
+    }
+
+    public boolean isTransiting() {
+        return transientThread != null;
     }
 
     public void setColor(Color color) {
@@ -62,6 +75,49 @@ public class ColorObject {
 
     public void setColor(String color) {
         this.color = deserialize(color);
+    }
+
+    static class Transient extends Thread {
+
+        private final ColorObject parent;
+        private int alpha;
+        private final int newAlpha;
+        private final double interval;
+        private boolean canceled = false;
+
+        public Transient(ColorObject parent, int alpha, int newAlpha, double time) {
+            this.parent = parent;
+            this.alpha = alpha;
+            this.newAlpha = newAlpha;
+            double interval = time / Math.abs(newAlpha - alpha);
+            if(interval < 1) {
+                interval = 1;
+            }
+            this.interval = interval;
+        }
+
+        @Override
+        public void run() {
+            while(alpha != newAlpha && !canceled) {
+                try {
+                    Thread.sleep((long) interval);
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(alpha > newAlpha) {
+                    alpha--;
+                } else {
+                    alpha++;
+                }
+                Color c = parent.getColor();
+                parent.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha));
+            }
+        }
+
+        public void cancel() {
+            canceled = true;
+        }
+
     }
 
 }
