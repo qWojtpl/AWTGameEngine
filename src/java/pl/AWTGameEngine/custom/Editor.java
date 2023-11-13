@@ -5,6 +5,7 @@ import pl.AWTGameEngine.components.*;
 import pl.AWTGameEngine.components.MenuBar;
 import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -160,7 +161,7 @@ public class Editor extends ObjectComponent {
         children.add(object);
         for(GameObject all : children) {
             Border borderComponent = new Border(all);
-            borderComponent.setColor(Color.RED);
+            borderComponent.setColor(new ColorObject(Color.RED));
             all.addComponent(borderComponent);
             borderComponents.put(all, borderComponent);
         }

@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -13,7 +14,7 @@ public abstract class Collider extends ObjectComponent {
     protected int scaleX = 0;
     protected int scaleY = 0;
     protected boolean visualize = false;
-    protected Color visualizeColor = Color.GREEN;
+    protected ColorObject visualizeColor = new ColorObject(Color.GREEN);
 
     public Collider(GameObject object) {
         super(object);
@@ -47,7 +48,7 @@ public abstract class Collider extends ObjectComponent {
         return this.visualize;
     }
 
-    public Color getVisualizeColor() {
+    public ColorObject getVisualizeColor() {
         return this.visualizeColor;
     }
 
@@ -91,19 +92,15 @@ public abstract class Collider extends ObjectComponent {
         setVisualize(Boolean.parseBoolean(visualize));
     }
 
-    public void setVisualizeColor(Color color) {
+    public void setVisualizeColor(ColorObject color) {
+        if(color == null) {
+            return;
+        }
         this.visualizeColor = color;
     }
 
     public void setVisualizeColor(String color) {
-        Color c;
-        try {
-            Field field = Class.forName("java.awt.Color").getField(color.toLowerCase());
-            c = (Color) field.get(null);
-        } catch (Exception e) {
-            c = Color.BLACK;
-        }
-        setVisualizeColor(c);
+        this.visualizeColor.setColor(color);
     }
 
 }

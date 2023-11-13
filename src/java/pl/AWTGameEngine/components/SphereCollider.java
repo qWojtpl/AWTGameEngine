@@ -30,7 +30,7 @@ public class SphereCollider extends Collider {
         if(!isVisualize()) {
             return;
         }
-        g.setColor(visualizeColor);
+        g.setColor(visualizeColor.getColor());
         g.drawOval((int) ((getObject().getX() + x - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() + y - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getScaleX() + scaleX) * getCamera().getZoom()),

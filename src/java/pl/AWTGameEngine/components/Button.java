@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -95,10 +96,10 @@ public class Button extends ObjectComponent {
     @Override
     public void onAddComponent() {
         background = new BlankRenderer(getObject());
-        background.setColor(Color.BLACK);
+        background.setColor(new ColorObject());
         text = new TextRenderer(getObject());
         text.setText("button");
-        text.setColor(Color.RED);
+        text.setColor(new ColorObject(Color.RED));
         text.setSize(20);
         text.align(TextRenderer.Horizontal.CENTER, TextRenderer.Vertical.CENTER);
         getObject().addComponent(background);
@@ -118,10 +119,10 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onStaticUpdate() {
-        background.setColor(Color.BLACK);
+        background.setColor(new ColorObject());
         if(getMouseListener().getMouseX() >= getObject().getX() && getMouseListener().getMouseX() <= getObject().getX() + getObject().getScaleX()) {
             if(getMouseListener().getMouseY() >= getObject().getY() && getMouseListener().getMouseY() <= getObject().getY() + getObject().getScaleY()) {
-                background.setColor(Color.GREEN);
+                background.setColor(new ColorObject(Color.GREEN));
             }
         }
     }

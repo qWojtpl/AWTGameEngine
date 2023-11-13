@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.RemoveOnCompile;
 import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -13,7 +14,7 @@ import java.lang.reflect.Field;
 public class Border extends ObjectComponent {
 
     private boolean enabled = true;
-    private Color color = Color.BLACK;
+    private ColorObject color = new ColorObject();
 
     public Border(GameObject object) {
         super(object);
@@ -33,7 +34,7 @@ public class Border extends ObjectComponent {
                     (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
             g2d.transform(transform);
         }
-        g2d.setColor(getColor());
+        g2d.setColor(color.getColor());
         g2d.drawRect((int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getScaleX()) * getCamera().getZoom()),
@@ -45,7 +46,7 @@ public class Border extends ObjectComponent {
         return this.enabled;
     }
 
-    public Color getColor() {
+    public ColorObject getColor() {
         return this.color;
     }
 
@@ -57,19 +58,15 @@ public class Border extends ObjectComponent {
         setEnabled(Boolean.parseBoolean(enabled));
     }
 
-    public void setColor(Color color) {
+    public void setColor(ColorObject color) {
+        if(color == null) {
+            return;
+        }
         this.color = color;
     }
 
     public void setColor(String color) {
-        Color c;
-        try {
-            Field field = Class.forName("java.awt.Color").getField(color.toLowerCase());
-            c = (Color) field.get(null);
-        } catch (Exception e) {
-            c = Color.BLACK;
-        }
-        setColor(c);
+        this.color.setColor(color);
     }
 
 }

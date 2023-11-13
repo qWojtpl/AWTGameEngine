@@ -1,10 +1,6 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.windows.Window;
-import pl.AWTGameEngine.windows.WindowsManager;
-
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 public class GameLoop extends Thread {
 

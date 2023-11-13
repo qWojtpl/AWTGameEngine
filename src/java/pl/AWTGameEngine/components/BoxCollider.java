@@ -44,7 +44,7 @@ public class BoxCollider extends Collider {
                     (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
             g2d.transform(transform);
         }
-        g2d.setColor(visualizeColor);
+        g2d.setColor(visualizeColor.getColor());
         g2d.drawRect((int) ((getObject().getX() + x - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() + y - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getScaleX() + scaleX) * getCamera().getZoom()),

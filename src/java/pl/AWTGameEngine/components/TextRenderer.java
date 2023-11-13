@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -9,7 +10,7 @@ import java.lang.reflect.Field;
 public class TextRenderer extends ObjectComponent {
 
     private String text = "Text";
-    private Color color = Color.BLACK;
+    private ColorObject color = new ColorObject();
     private float size = 30.0f;
     private int x = 0;
     private int y = 0;
@@ -46,7 +47,7 @@ public class TextRenderer extends ObjectComponent {
                     (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
             g2d.transform(transform);
         }
-        g2d.setColor(getColor());
+        g2d.setColor(color.getColor());
         g2d.setFont(g.getFont().deriveFont(getSize() * getCamera().getZoom()));
         g2d.drawString(getText(),
                 (int) ((getObject().getX() - getCamera().getRelativeX(getObject()) + getX()) * getCamera().getZoom()),
@@ -58,7 +59,7 @@ public class TextRenderer extends ObjectComponent {
         return this.text;
     }
 
-    public Color getColor() {
+    public ColorObject getColor() {
         return this.color;
     }
 
@@ -78,19 +79,15 @@ public class TextRenderer extends ObjectComponent {
         this.text = text;
     }
 
-    public void setColor(Color color) {
+    public void setColor(ColorObject color) {
+        if(color == null) {
+            return;
+        }
         this.color = color;
     }
 
     public void setColor(String color) {
-        Color c;
-        try {
-            Field field = Class.forName("java.awt.Color").getField(color.toLowerCase());
-            c = (Color) field.get(null);
-        } catch (Exception e) {
-            c = Color.BLACK;
-        }
-        setColor(c);
+        this.color.setColor(color);
     }
 
     public void setSize(float size) {
