@@ -9,86 +9,14 @@ import java.awt.*;
 @Unique
 public class Button extends ObjectComponent {
 
-    /*private String text = "Button";
-    private JButton button;
-    private Image image;
-
-    public Button(GameObject object) {
-        super(object);
-    }
-
-    @Override
-    public void onAddComponent() {
-        button = new JButton(new AbstractAction() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for(ObjectComponent component : getObject().getComponents()) {
-                    component.onButtonClick();
-                }
-            }
-
-        });
-        getWindow().getPanel().add(button);
-        button.setFocusable(false);
-        if(image != null) {
-            ImageIcon icon = new ImageIcon();
-            icon.setImage(image);
-            button.setIcon(icon);
-        }
-        button.setFocusPainted(false);
-        button.setBackground(Color.WHITE);
-        button.setText(getText());
-    }
-
-    @Override
-    public void onRemoveComponent() {
-        getScene().getWindow().getPanel().remove(button);
-    }
-
-    @Override
-    public void onRender(Graphics g) {
-        if(button == null) {
-            return;
-        }
-        button.setLocation((int) ((getObject().getX() - getObject().getScaleX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
-                (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
-        button.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
-                (int) (getObject().getScaleY() * getCamera().getZoom()));
-        if(image != null) {
-            ImageIcon icon = new ImageIcon();
-            icon.setImage(image);
-            button.setIcon(icon);
-        }
-    }
-
-    public String getText() {
-        return this.text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Image getImage() {
-        return this.image;
-    }
-
-    public void setImage(Image image) {
-        if(image == null) {
-            System.out.println("Image is null.");
-            return;
-        }
-        this.image = image;
-    }
-
-    public void setImage(String imageSource) {
-        setImage(ResourceManager.getResourceAsImage(imageSource));
-    }*/
-
     private BlankRenderer background;
-    private TextRenderer text;
-    private ColorObject backgroundColor = new ColorObject();
+    private TextRenderer textRenderer;
+    private ColorObject backgroundColor = new ColorObject(Color.GRAY);
+    private ColorObject highlightColor = new ColorObject(Color.BLACK);
+    private ColorObject textColor = new ColorObject(Color.BLACK);
+    private ColorObject highlightTextColor = new ColorObject(Color.GRAY);
+    private final ColorObject backgroundComponentColor = new ColorObject();
+    private final ColorObject textComponentColor = new ColorObject();
 
     public Button(GameObject object) {
         super(object);
@@ -97,20 +25,20 @@ public class Button extends ObjectComponent {
     @Override
     public void onAddComponent() {
         background = new BlankRenderer(getObject());
-        background.setColor(backgroundColor);
-        text = new TextRenderer(getObject());
-        text.setText("button");
-        text.setColor(new ColorObject(Color.RED));
-        text.setSize(20);
-        text.align(TextRenderer.Horizontal.CENTER, TextRenderer.Vertical.CENTER);
+        background.setColor(backgroundComponentColor);
+        textRenderer = new TextRenderer(getObject());
+        textRenderer.setText("Button");
+        textRenderer.setColor(textComponentColor);
+        textRenderer.setSize(20);
+        textRenderer.align(TextRenderer.Horizontal.CENTER, TextRenderer.Vertical.CENTER);
         getObject().addComponent(background);
-        getObject().addComponent(text);
+        getObject().addComponent(textRenderer);
     }
 
     @Override
     public void onRemoveComponent() {
         getObject().removeComponent(background);
-        getObject().removeComponent(text);
+        getObject().removeComponent(textRenderer);
     }
 
     @Override
@@ -120,10 +48,12 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onStaticUpdate() {
-        backgroundColor.setColor(Color.BLACK);
+        backgroundComponentColor.setColor(backgroundColor.getColor());
+        textComponentColor.setColor(textColor.getColor());
         if(getMouseListener().getMouseX() >= getObject().getX() && getMouseListener().getMouseX() <= getObject().getX() + getObject().getScaleX()) {
             if(getMouseListener().getMouseY() >= getObject().getY() && getMouseListener().getMouseY() <= getObject().getY() + getObject().getScaleY()) {
-                backgroundColor.setColor(Color.GREEN);
+                backgroundComponentColor.setColor(highlightColor.getColor());
+                textComponentColor.setColor(highlightTextColor.getColor());
             }
         }
     }
@@ -136,7 +66,76 @@ public class Button extends ObjectComponent {
         for(ObjectComponent component : getObject().getComponents()) {
             component.onButtonClick();
         }
-        backgroundColor.transientAlpha(0, 1000);
+        //backgroundColor.transientAlpha(0, 1000);
     }
+
+    public TextRenderer getTextRenderer() {
+        return this.textRenderer;
+    }
+
+    public String getText() {
+        return textRenderer.getText();
+    }
+
+    public float getSize() {
+        return textRenderer.getSize();
+    }
+
+    public ColorObject getBackgroundColor() {
+        return this.backgroundColor;
+    }
+
+    public ColorObject getHighlightColor() {
+        return this.highlightColor;
+    }
+
+    public ColorObject getTextColor() {
+        return this.textColor;
+    }
+
+    public ColorObject getHighlightTextColor() {
+        return this.highlightTextColor;
+    }
+
+    public void setText(String text) {
+        textRenderer.setText(text);
+    }
+
+    public void setSize(float size) {
+        textRenderer.setSize(size);
+    }
+
+    public void setBackgroundColor(ColorObject color) {
+        this.backgroundColor = color;
+    }
+
+    public void setBackgroundColor(String color) {
+        this.backgroundColor = new ColorObject(color);
+    }
+
+    public void setHighlightColor(ColorObject color) {
+        this.highlightColor = color;
+    }
+
+    public void setHighlightColor(String color) {
+        this.highlightColor = new ColorObject(color);
+    }
+
+    public void setTextColor(ColorObject color) {
+        this.textColor = color;
+    }
+
+    public void setTextColor(String color) {
+        this.textColor = new ColorObject(color);
+    }
+
+    public void setHighlightTextColor(ColorObject color) {
+        this.highlightTextColor = color;
+    }
+
+    public void setHighlightTextColor(String color) {
+        this.highlightTextColor = new ColorObject(color);
+    }
+
 
 }
