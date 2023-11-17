@@ -6,9 +6,7 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.lang.reflect.Field;
 
-@Unique
 public class BlankRenderer extends ObjectComponent {
 
     private ColorObject color = new ColorObject();

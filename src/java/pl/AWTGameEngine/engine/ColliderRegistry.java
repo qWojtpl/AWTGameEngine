@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.components.BoxCollider;
 import pl.AWTGameEngine.components.Collider;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;

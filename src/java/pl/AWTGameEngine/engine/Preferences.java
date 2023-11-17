@@ -44,10 +44,10 @@ public class Preferences {
                 String newKey = "";
                 String newPreference = "";
                 for(int i = 0; i < key.length(); i++) {
-                    newKey += (char) (key.charAt(i) + 32);
+                    newKey += (char) (key.charAt(i) + AppProperties.getPropertyAsInteger("preferenceShift"));
                 }
                 for(int i = 0; i < preference.length(); i++) {
-                    newPreference += (char) (preference.charAt(i) + 32);
+                    newPreference += (char) (preference.charAt(i) + AppProperties.getPropertyAsInteger("preferenceShift"));
                 }
                 writer.write(newKey + "\n");
                 writer.write(newPreference + "\n");
@@ -66,7 +66,7 @@ public class Preferences {
             for(String line : fileContent) {
                 String newLine = "";
                 for(int i = 0; i < line.length(); i++) {
-                    newLine += (char) (line.charAt(i) - 32);
+                    newLine += (char) (line.charAt(i) - AppProperties.getPropertyAsInteger("preferenceShift"));
                 }
                 if(key == null) {
                     key = newLine;

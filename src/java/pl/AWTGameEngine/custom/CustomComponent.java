@@ -48,7 +48,7 @@ public class CustomComponent extends ObjectComponent {
             getKeyListener().releaseKey(76);
         }
         if(getKeyListener().hasPressedKey(82)) {
-            getSceneLoader().loadSceneFile("/scenes/main.scene");
+            getSceneLoader().loadSceneFile("scenes/main.scene");
             getKeyListener().releaseKey(82);
         }
     }

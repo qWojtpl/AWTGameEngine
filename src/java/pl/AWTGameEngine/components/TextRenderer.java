@@ -5,7 +5,6 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.lang.reflect.Field;
 
 public class TextRenderer extends ObjectComponent {
 

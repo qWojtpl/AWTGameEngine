@@ -5,7 +5,6 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
-import java.lang.reflect.Field;
 
 public abstract class Collider extends ObjectComponent {
 

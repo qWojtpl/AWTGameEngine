@@ -20,7 +20,7 @@ public class ResourceManager {
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
-                throw new Exception();
+                throw new Exception("Stream is null.");
             }
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             List<String> lines = new ArrayList<>();
