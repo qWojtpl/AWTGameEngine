@@ -45,10 +45,10 @@ public class WindowsManager {
             if(AppProperties.getProperty("multiplier", customProperties) != null) {
                 window.setPanel(new GamePanel(window, AppProperties.getPropertyAsDouble("multiplier", customProperties)));
             } else {
-                window.setPanel(new GamePanel(window));
+                window.setPanel(new GamePanel(window, AppProperties.getPropertyAsDouble("multiplier")));
             }
         } else {
-            window.setPanel(new GamePanel(window));
+            window.setPanel(new GamePanel(window, AppProperties.getPropertyAsDouble("multiplier")));
         }
         window.pack();
         window.setLocationRelativeTo(null);

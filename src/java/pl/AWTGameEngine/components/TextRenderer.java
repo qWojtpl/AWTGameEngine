@@ -13,8 +13,8 @@ public class TextRenderer extends ObjectComponent {
     private float size = 30.0f;
     private int x = 0;
     private int y = 0;
-    private Horizontal horizontal;
-    private Vertical vertical;
+    private HorizontalAlign horizontal;
+    private VerticalAlign vertical;
 
     public TextRenderer(GameObject object) {
         super(object);
@@ -22,17 +22,17 @@ public class TextRenderer extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        int width = g.getFontMetrics().stringWidth(text);
-        if(Horizontal.LEFT.equals(horizontal)) {
+        int width = g.getFontMetrics(getWindow().getFont().deriveFont(size)).stringWidth(text);
+        if(HorizontalAlign.LEFT.equals(horizontal)) {
             x = 0;
-        } else if(Horizontal.RIGHT.equals(horizontal)) {
-            x = (int) (getObject().getScaleX() - width / getCamera().getZoom());
+        } else if(HorizontalAlign.RIGHT.equals(horizontal)) {
+            x = getObject().getScaleX() - width;
         } else {
-            x = (int) (getObject().getScaleX() / 2 - width / 2 / getCamera().getZoom());
+            x = getObject().getScaleX() / 2 - width / 2;
         }
-        if(Vertical.TOP.equals(vertical)) {
+        if(VerticalAlign.TOP.equals(vertical)) {
             y = (int) size;
-        } else if(Vertical.BOTTOM.equals(vertical)) {
+        } else if(VerticalAlign.BOTTOM.equals(vertical)) {
             y = getObject().getScaleY();
         } else {
             y = (int) ((size + getObject().getScaleY()) / 2 - size / 8);
@@ -121,26 +121,26 @@ public class TextRenderer extends ObjectComponent {
         }
     }
 
-    public void align(Horizontal horizontal, Vertical vertical) {
+    public void align(HorizontalAlign horizontal, VerticalAlign vertical) {
         align(horizontal);
         align(vertical);
     }
 
-    public void align(Horizontal horizontal) {
+    public void align(HorizontalAlign horizontal) {
         this.horizontal = horizontal;
     }
 
-    public void align(Vertical vertical) {
+    public void align(VerticalAlign vertical) {
         this.vertical = vertical;
     }
 
-    public enum Horizontal {
+    public enum HorizontalAlign {
         LEFT,
         CENTER,
         RIGHT
     }
 
-    public enum Vertical {
+    public enum VerticalAlign {
         TOP,
         CENTER,
         BOTTOM

@@ -21,6 +21,9 @@ public class GamePanel extends NestedPanel {
 
     public GamePanel(Window window, double multiplier) {
         super(window);
+        if(multiplier <= 0) {
+            multiplier = 1;
+        }
         if(window.isFullScreen()) {
             multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
         }

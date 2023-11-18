@@ -10,8 +10,8 @@ import java.awt.*;
 @Unique
 public class Button extends ObjectComponent {
 
-    private BlankRenderer background;
-    private TextRenderer textRenderer;
+    private final BlankRenderer background = new BlankRenderer(getObject());
+    private final TextRenderer textRenderer = new TextRenderer(getObject());
     private ColorObject backgroundColor = new ColorObject(Color.GRAY);
     private ColorObject highlightColor = new ColorObject(Color.BLACK);
     private ColorObject textColor = new ColorObject(Color.BLACK);
@@ -21,17 +21,14 @@ public class Button extends ObjectComponent {
 
     public Button(GameObject object) {
         super(object);
+        background.setColor(backgroundComponentColor);
+        textRenderer.setText("Button");
+        textRenderer.setColor(textComponentColor);
+        textRenderer.align(TextRenderer.HorizontalAlign.CENTER, TextRenderer.VerticalAlign.CENTER);
     }
 
     @Override
     public void onAddComponent() {
-        background = new BlankRenderer(getObject());
-        background.setColor(backgroundComponentColor);
-        textRenderer = new TextRenderer(getObject());
-        textRenderer.setText("Button");
-        textRenderer.setColor(textComponentColor);
-        textRenderer.setSize(20);
-        textRenderer.align(TextRenderer.Horizontal.CENTER, TextRenderer.Vertical.CENTER);
         getObject().addComponent(background);
         getObject().addComponent(textRenderer);
     }
@@ -51,8 +48,10 @@ public class Button extends ObjectComponent {
     public void onStaticUpdate() {
         backgroundComponentColor.setColor(backgroundColor.getColor());
         textComponentColor.setColor(textColor.getColor());
-        if(getMouseListener().getMouseX() >= getObject().getX() && getMouseListener().getMouseX() <= getObject().getX() + getObject().getScaleX()) {
-            if(getMouseListener().getMouseY() >= getObject().getY() && getMouseListener().getMouseY() <= getObject().getY() + getObject().getScaleY()) {
+        if(getMouseListener().getMouseX() >= getObject().getX()
+        && getMouseListener().getMouseX() <= getObject().getX() + getObject().getScaleX()) {
+            if(getMouseListener().getMouseY() >= getObject().getY()
+            && getMouseListener().getMouseY() <= getObject().getY() + getObject().getScaleY()) {
                 backgroundComponentColor.setColor(highlightColor.getColor());
                 textComponentColor.setColor(highlightTextColor.getColor());
             }
@@ -67,7 +66,6 @@ public class Button extends ObjectComponent {
         for(ObjectComponent component : getObject().getComponents()) {
             component.onButtonClick();
         }
-        //backgroundColor.transientAlpha(0, 1000);
     }
 
     public TextRenderer getTextRenderer() {
@@ -104,6 +102,14 @@ public class Button extends ObjectComponent {
 
     public void setSize(float size) {
         textRenderer.setSize(size);
+    }
+
+    public void setSize(String size) {
+        try {
+            setSize(Float.parseFloat(size));
+        } catch(NumberFormatException ignored) {
+            setSize(20f);
+        }
     }
 
     public void setBackgroundColor(ColorObject color) {
