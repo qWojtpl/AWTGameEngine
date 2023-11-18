@@ -22,7 +22,7 @@ public class TextRenderer extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        int width = g.getFontMetrics(getWindow().getFont().deriveFont(size)).stringWidth(text);
+        int width = g.getFontMetrics(getWindow().getDefaultFont(size)).stringWidth(text);
         if(HorizontalAlign.LEFT.equals(horizontal)) {
             x = 0;
         } else if(HorizontalAlign.RIGHT.equals(horizontal)) {
@@ -47,7 +47,7 @@ public class TextRenderer extends ObjectComponent {
             g2d.transform(transform);
         }
         g2d.setColor(color.getColor());
-        g2d.setFont(g.getFont().deriveFont(getSize() * getCamera().getZoom()));
+        g2d.setFont(getWindow().getDefaultFont((getSize() * getCamera().getZoom())));
         g2d.drawString(getText(),
                 (int) ((getObject().getX() - getCamera().getRelativeX(getObject()) + getX()) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject()) + getY()) * getCamera().getZoom()));

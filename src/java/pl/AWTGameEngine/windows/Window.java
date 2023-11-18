@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.windows;
 
+import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
@@ -9,6 +10,7 @@ import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Window extends JFrame {
 
@@ -21,6 +23,15 @@ public class Window extends JFrame {
     private SceneLoader sceneLoader;
     private boolean staticMode;
     private boolean fullScreen;
+    private final Font defaultFont;
+
+    public Window() {
+        defaultFont = new Font(
+                AppProperties.getProperty("font"),
+                Font.PLAIN,
+                AppProperties.getPropertyAsInteger("fontSize")
+        );
+    }
 
     public GamePanel getPanel() {
         return this.panel;
@@ -48,6 +59,14 @@ public class Window extends JFrame {
 
     public SceneLoader getSceneLoader() {
         return this.sceneLoader;
+    }
+
+    public Font getDefaultFont() {
+        return this.defaultFont;
+    }
+
+    public Font getDefaultFont(float size) {
+        return getDefaultFont().deriveFont(size);
     }
 
     public boolean isStaticMode() {

@@ -57,7 +57,7 @@ public class MenuBar extends ObjectComponent {
     }
 
     public void updateWindow() {
-        menuBar.setFont(new Font("sans-serif", Font.PLAIN, 18));
+        menuBar.setFont(getWindow().getDefaultFont());
         getWindow().setJMenuBar(menuBar);
     }
 
@@ -66,9 +66,8 @@ public class MenuBar extends ObjectComponent {
             return;
         }
         this.menuBar = new JMenuBar();
-        Font f = new Font("sans-serif", Font.PLAIN, 18);
-        UIManager.put("Menu.font", f);
-        UIManager.put("JMenuItem.font", f);
+        UIManager.put("Menu.font", getWindow().getDefaultFont());
+        UIManager.put("JMenuItem.font", getWindow().getDefaultFont());
         getScene().getWindow().getPanel().setPreferredSize(
                 new Dimension(
                         (int) (getScene().getWindow().getPanel().getPreferredSize().getWidth()),
@@ -105,7 +104,7 @@ public class MenuBar extends ObjectComponent {
             }
 
         });
-        item.setFont(getWindow().getFont().deriveFont(18f));
+        item.setFont(getWindow().getDefaultFont());
         initBar();
         List<JMenuItem> i = getJMenuItems(getMenuNameByValue(menu));
         i.add(item);

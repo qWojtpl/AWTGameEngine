@@ -22,7 +22,7 @@ public class ListComponent extends ObjectComponent {
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
         list.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
                 (int) (getObject().getScaleY() * getCamera().getZoom()));
-        list.setFont(getWindow().getFont().deriveFont(24f));
+        list.setFont(getWindow().getDefaultFont(24f));
         getWindow().getPanel().add(list);
     }
 

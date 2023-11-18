@@ -31,7 +31,7 @@ public class Tree extends ObjectComponent {
         tree = new JTree(root);
         tree.setBorder(BorderFactory.createEmptyBorder(8, 16, 1, 1));
         tree.setFocusable(false);
-        tree.setFont(getWindow().getFont().deriveFont(18f));
+        tree.setFont(getWindow().getDefaultFont());
         tree.setRootVisible(true);
         container = new NestedPanel(getObject());
         container.setBackground(Color.WHITE);

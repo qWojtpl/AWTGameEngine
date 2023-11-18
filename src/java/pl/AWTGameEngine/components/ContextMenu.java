@@ -68,7 +68,7 @@ public class ContextMenu extends ObjectComponent {
 
         });
         item.setText(content);
-        item.setFont(getWindow().getFont().deriveFont(18f));
+        item.setFont(getWindow().getDefaultFont(18f));
         menu.add(item);
     }
 
