@@ -1,1 +1,2 @@
-@errorMessage="pos{0;100}scale{0;300}TextRenderer:ObjectComponent{text^Error!^}";
+@image="pos{0;50}scale{192;192}SpriteRenderer:ObjectComponent{image^sprites/base/error.png^}";
+@errorMessage="pos{0;100}scale{500;0}TextRenderer:ObjectComponent{text^Error!^horizontal^center^vertical^center^}";

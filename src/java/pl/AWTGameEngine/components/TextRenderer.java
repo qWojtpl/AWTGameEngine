@@ -134,6 +134,26 @@ public class TextRenderer extends ObjectComponent {
         this.vertical = vertical;
     }
 
+    public void setHorizontal(String horizontal) {
+        HorizontalAlign align;
+        try {
+            align = HorizontalAlign.valueOf(horizontal.toUpperCase());
+        } catch(IllegalArgumentException e) {
+            align = HorizontalAlign.LEFT;
+        }
+        align(align);
+    }
+
+    public void setVertical(String vertical) {
+        VerticalAlign align;
+        try {
+            align = VerticalAlign.valueOf(vertical.toUpperCase());
+        } catch(IllegalArgumentException e) {
+            align = VerticalAlign.TOP;
+        }
+        align(align);
+    }
+
     public enum HorizontalAlign {
         LEFT,
         CENTER,
