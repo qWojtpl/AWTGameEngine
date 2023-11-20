@@ -52,7 +52,7 @@ public class WindowsManager {
         }
         window.pack();
         window.setLocationRelativeTo(null);
-        window.setKeyListener(new KeyListener());
+        window.setKeyListener(new KeyListener(window));
         window.setMouseListener(new MouseListener(window));
         window.setWindowListener(new WindowListener(window));
         GameLoop loop = new GameLoop(window);

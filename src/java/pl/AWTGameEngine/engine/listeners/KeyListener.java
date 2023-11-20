@@ -1,26 +1,45 @@
 package pl.AWTGameEngine.engine.listeners;
 
+import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.windows.Window;
+
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 
 public class KeyListener implements java.awt.event.KeyListener {
 
+    private final Window window;
     private final Set<Integer> pressedKeys = new HashSet<>();
+    private final Set<Character> pressedKeysChars = new HashSet<>();
+
+    public KeyListener(Window window) {
+        this.window = window;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        int keyCode = e.getKeyCode();
+        char keyChar = e.getKeyChar();
+        for(GameObject object : window.getCurrentScene().getActiveGameObjects()) {
+            for(ObjectComponent component : object.getComponents()) {
+                component.onKeyType(keyCode);
+                component.onKeyType(keyChar);
+            }
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         pressedKeys.add(e.getKeyCode());
+        pressedKeysChars.add(e.getKeyChar());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         pressedKeys.remove(e.getKeyCode());
+        pressedKeysChars.remove(e.getKeyChar());
     }
 
     public boolean hasPressedKey(int key) {
@@ -29,6 +48,14 @@ public class KeyListener implements java.awt.event.KeyListener {
 
     public void releaseKey(int key) {
         pressedKeys.remove(key);
+    }
+
+    public Set<Integer> getPressedKeys() {
+        return this.pressedKeys;
+    }
+
+    public Set<Character> getPressedKeysChars() {
+        return this.pressedKeysChars;
     }
 
 }

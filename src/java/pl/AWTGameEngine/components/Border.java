@@ -10,7 +10,6 @@ import java.awt.geom.AffineTransform;
 import java.lang.reflect.Field;
 
 @Unique
-@RemoveOnCompile
 public class Border extends ObjectComponent {
 
     private boolean enabled = true;
