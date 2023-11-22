@@ -19,7 +19,7 @@ public class TextArea extends ObjectComponent {
     @Override
     public void onAddComponent() {
         setText(text);
-        textRenderer.align(TextRenderer.HorizontalAlign.LEFT, TextRenderer.VerticalAlign.TOP);
+        textRenderer.align(TextRenderer.HorizontalAlign.LEFT, TextRenderer.VerticalAlign.CENTER);
         getObject().addComponent(textRenderer);
         getObject().addComponent(border);
     }

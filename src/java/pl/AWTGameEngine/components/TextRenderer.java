@@ -11,10 +11,8 @@ public class TextRenderer extends ObjectComponent {
     private String text = "Text";
     private ColorObject color = new ColorObject();
     private float size = 30.0f;
-    private int x = 0;
-    private int y = 0;
-    private HorizontalAlign horizontal;
-    private VerticalAlign vertical;
+    private HorizontalAlign horizontal = HorizontalAlign.LEFT;
+    private VerticalAlign vertical = VerticalAlign.TOP;
 
     public TextRenderer(GameObject object) {
         super(object);
@@ -22,36 +20,43 @@ public class TextRenderer extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        int width = g.getFontMetrics(getWindow().getDefaultFont(size)).stringWidth(text);
-        if(HorizontalAlign.LEFT.equals(horizontal)) {
-            x = 0;
-        } else if(HorizontalAlign.RIGHT.equals(horizontal)) {
-            x = getObject().getScaleX() - width;
-        } else {
-            x = getObject().getScaleX() / 2 - width / 2;
+        final String[] lines = text.split("\n");
+        final int height = g.getFontMetrics(getWindow().getDefaultFont()).getHeight();
+        final int totalHeight = lines.length * height;
+        for(int i = 0; i < lines.length; i++) {
+            final String line = lines[i];
+            final int width = g.getFontMetrics(getWindow().getDefaultFont(size)).stringWidth(line);
+            int x, y;
+            if (HorizontalAlign.LEFT.equals(horizontal)) {
+                x = 0;
+            } else if (HorizontalAlign.RIGHT.equals(horizontal)) {
+                x = getObject().getScaleX() - width;
+            } else {
+                x = getObject().getScaleX() / 2 - width / 2;
+            }
+            if (VerticalAlign.TOP.equals(vertical)) {
+                y = (int) size;
+            } else if (VerticalAlign.BOTTOM.equals(vertical)) {
+                y = getObject().getScaleY() - totalHeight + height;
+            } else {
+                y = (getObject().getScaleY() - totalHeight) / 2;
+            }
+            Graphics2D g2d = (Graphics2D) g;
+            AffineTransform oldTransform = g2d.getTransform();
+            if (getObject().getRotation() != 0) {
+                AffineTransform transform = new AffineTransform();
+                transform.rotate(Math.toRadians(getObject().getRotation()),
+                        (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
+                        (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
+                g2d.transform(transform);
+            }
+            g2d.setColor(color.getColor());
+            g2d.setFont(getWindow().getDefaultFont((getSize() * getCamera().getZoom())));
+            g2d.drawString(line,
+                    (int) ((x - getCamera().getRelativeX(getObject()) + x) * getCamera().getZoom()),
+                    (int) ((y - getCamera().getRelativeY(getObject()) + y + height * i) * getCamera().getZoom()));
+            g2d.setTransform(oldTransform);
         }
-        if(VerticalAlign.TOP.equals(vertical)) {
-            y = (int) size;
-        } else if(VerticalAlign.BOTTOM.equals(vertical)) {
-            y = getObject().getScaleY();
-        } else {
-            y = (int) ((size + getObject().getScaleY()) / 2 - size / 8);
-        }
-        Graphics2D g2d = (Graphics2D) g;
-        AffineTransform oldTransform = g2d.getTransform();
-        if(getObject().getRotation() != 0) {
-            AffineTransform transform = new AffineTransform();
-            transform.rotate(Math.toRadians(getObject().getRotation()),
-                    (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
-                    (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
-            g2d.transform(transform);
-        }
-        g2d.setColor(color.getColor());
-        g2d.setFont(getWindow().getDefaultFont((getSize() * getCamera().getZoom())));
-        g2d.drawString(getText(),
-                (int) ((getObject().getX() - getCamera().getRelativeX(getObject()) + getX()) * getCamera().getZoom()),
-                (int) ((getObject().getY() - getCamera().getRelativeY(getObject()) + getY()) * getCamera().getZoom()));
-        g2d.setTransform(oldTransform);
     }
 
     public String getText() {
@@ -64,14 +69,6 @@ public class TextRenderer extends ObjectComponent {
 
     public float getSize() {
         return this.size;
-    }
-
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
     }
 
     public void setText(String text) {
@@ -95,30 +92,6 @@ public class TextRenderer extends ObjectComponent {
 
     public void setSize(String size) {
         setSize(Float.parseFloat(size));
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setX(String x) {
-        try {
-            setX(Integer.parseInt(x));
-        } catch(NumberFormatException e) {
-            setX(0);
-        }
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setY(String y) {
-        try {
-            setY(Integer.parseInt(y));
-        } catch(NumberFormatException e) {
-            setY(0);
-        }
     }
 
     public void align(HorizontalAlign horizontal, VerticalAlign vertical) {
@@ -164,6 +137,12 @@ public class TextRenderer extends ObjectComponent {
         TOP,
         CENTER,
         BOTTOM
+    }
+
+    public enum TextWrap {
+        WRAP,
+        NOWRAP,
+        WRAP_AFTER_SPACE
     }
 
 }
