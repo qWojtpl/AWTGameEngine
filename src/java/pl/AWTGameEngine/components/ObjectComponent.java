@@ -194,7 +194,7 @@ public abstract class ObjectComponent {
 
     }
 
-    public void onKeyType(int key) {
+    public void onKeyType(int keyCode) {
 
     }
 

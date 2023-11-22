@@ -48,26 +48,22 @@ public class TextArea extends ObjectComponent {
         if(!isFocused()) {
             return;
         }
-        String newText = "";
-        for(int i = 0; i < text.length() + 1; i++) {
-            if(i == pointerLocation) {
-                newText += key;
-            }
-            if(i < text.length()) {
-                newText += text.charAt(i);
-            }
-        }
-        setText(newText);
-        setPointerLocation(getPointerLocation() + 1);
+        write(key);
     }
 
     @Override
-    public void onKeyType(int key) {
-        if(key == 37) {
-            setPointerLocation(pointerLocation - 1);
+    public void onKeyType(int keyCode) {
+        if(!isFocused()) {
+            return;
         }
-        if(key == 39) {
-            setPointerLocation(pointerLocation + 1);
+        if(keyCode == 37) {
+            setPointerLocation(getPointerLocation() - 1);
+        } else if(keyCode == 39) {
+            setPointerLocation(getPointerLocation() + 1);
+        } else if(keyCode == 8) {
+            deleteBack();
+        } else if(keyCode == 127) {
+            deleteNext();
         }
     }
 
@@ -82,6 +78,46 @@ public class TextArea extends ObjectComponent {
         if(!getObject().equals(object)) {
             focused = false;
         }
+    }
+
+    public void write(char key) {
+        if(key == 8 || key == 127) {
+            return;
+        }
+        String newText = "";
+        for(int i = 0; i < text.length() + 1; i++) {
+            if(i == pointerLocation) {
+                newText += key;
+            }
+            if(i < text.length()) {
+                newText += text.charAt(i);
+            }
+        }
+        setText(newText);
+        setPointerLocation(getPointerLocation() + 1);
+    }
+
+    public void deleteBack() {
+        if(!isFocused()) {
+            return;
+        }
+        String newText = "";
+        for(int i = 0; i < text.length(); i++) {
+            if(i == pointerLocation - 1) {
+                continue;
+            }
+            newText += text.charAt(i);
+        }
+        setText(newText);
+        setPointerLocation(getPointerLocation() - 1);
+    }
+
+    public void deleteNext() {
+        if(getPointerLocation() == text.length()) {
+            return;
+        }
+        setPointerLocation(getPointerLocation() + 1);
+        deleteBack();
     }
 
     private String getRenderedText() {
