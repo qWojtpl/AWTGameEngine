@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.objects.GameObject;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class TextArea extends ObjectComponent {
 
@@ -19,7 +18,7 @@ public class TextArea extends ObjectComponent {
     @Override
     public void onAddComponent() {
         setText(text);
-        textRenderer.align(TextRenderer.HorizontalAlign.LEFT, TextRenderer.VerticalAlign.CENTER);
+        textRenderer.align(TextRenderer.HorizontalAlign.CENTER, TextRenderer.VerticalAlign.CENTER);
         getObject().addComponent(textRenderer);
         getObject().addComponent(border);
     }
