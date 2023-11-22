@@ -20,12 +20,9 @@ public class KeyListener implements java.awt.event.KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        char keyChar = e.getKeyChar();
         for(GameObject object : window.getCurrentScene().getActiveGameObjects()) {
             for(ObjectComponent component : object.getComponents()) {
-                component.onKeyType(keyCode);
-                component.onKeyType(keyChar);
+                component.onKeyType(e.getKeyChar());
             }
         }
     }
@@ -34,6 +31,11 @@ public class KeyListener implements java.awt.event.KeyListener {
     public void keyPressed(KeyEvent e) {
         pressedKeys.add(e.getKeyCode());
         pressedKeysChars.add(e.getKeyChar());
+        for(GameObject object : window.getCurrentScene().getActiveGameObjects()) {
+            for(ObjectComponent component : object.getComponents()) {
+                component.onKeyType(e.getKeyCode());
+            }
+        }
     }
 
     @Override
