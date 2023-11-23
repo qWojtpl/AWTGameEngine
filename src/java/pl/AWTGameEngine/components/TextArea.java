@@ -1,13 +1,19 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+
+import java.awt.*;
 
 public class TextArea extends ObjectComponent {
 
     private String text = "Text";
+    private final BlankRenderer background = new BlankRenderer(getObject());
+    private final BlankRenderer backgroundDisabled = new BlankRenderer(getObject());
     private final TextRenderer textRenderer = new TextRenderer(getObject());
     private final Border border = new Border(getObject());
     private boolean focused = false;
+    private boolean disabled = false;
     private int pointerIterator = 0;
     private int pointerLocation = 0;
 
@@ -18,20 +24,26 @@ public class TextArea extends ObjectComponent {
     @Override
     public void onAddComponent() {
         setText(text);
-        textRenderer.align(TextRenderer.HorizontalAlign.CENTER, TextRenderer.VerticalAlign.CENTER);
+        textRenderer.align(TextRenderer.HorizontalAlign.LEFT, TextRenderer.VerticalAlign.TOP);
+        background.setColor(new ColorObject(Color.WHITE));
+        backgroundDisabled.setColor(new ColorObject(ColorObject.deserialize("rgba(222,222,222,0)")));
+        getObject().addComponent(background);
+        getObject().addComponent(backgroundDisabled);
         getObject().addComponent(textRenderer);
         getObject().addComponent(border);
     }
 
     @Override
     public void onRemoveComponent() {
+        getObject().removeComponent(background);
+        getObject().removeComponent(backgroundDisabled);
         getObject().removeComponent(textRenderer);
-        getObject().addComponent(border);
+        getObject().removeComponent(border);
     }
 
     @Override
     public void onUpdate() {
-        if(!isFocused()) {
+        if(!isFocused() || isDisabled()) {
             return;
         }
         textRenderer.setText(getRenderedText());
@@ -44,7 +56,7 @@ public class TextArea extends ObjectComponent {
 
     @Override
     public void onKeyType(char key) {
-        if(!isFocused()) {
+        if(!isFocused() || isDisabled()) {
             return;
         }
         write(key);
@@ -52,7 +64,7 @@ public class TextArea extends ObjectComponent {
 
     @Override
     public void onKeyType(int keyCode) {
-        if(!isFocused()) {
+        if(!isFocused() || isDisabled()) {
             return;
         }
         if(keyCode == 37) {
@@ -70,6 +82,7 @@ public class TextArea extends ObjectComponent {
     public void onMouseClick() {
         focused = true;
         setPointerLocation(text.length());
+        setDisabled(!isDisabled());
     }
 
     @Override
@@ -127,6 +140,10 @@ public class TextArea extends ObjectComponent {
             }
             if(i < text.length()) {
                 rendered += text.charAt(i);
+            } else if(i != 0) {
+                if(text.charAt(i - 1) == '\n' && rendered.charAt(rendered.length() - 1) != '|') {
+                    rendered += " ";
+                }
             }
         }
         return rendered;
@@ -144,6 +161,10 @@ public class TextArea extends ObjectComponent {
         return this.focused;
     }
 
+    public boolean isDisabled() {
+        return this.disabled;
+    }
+
     public int getPointerLocation() {
         return this.pointerLocation;
     }
@@ -151,6 +172,15 @@ public class TextArea extends ObjectComponent {
     public void setText(String text) {
         this.text = text;
         textRenderer.setText(text);
+    }
+
+    public void setDisabled(boolean disabled) {
+        if(disabled) {
+            backgroundDisabled.getColor().transientAlpha(255, 100);
+        } else {
+            backgroundDisabled.getColor().transientAlpha(0, 100);
+        }
+        this.disabled = disabled;
     }
 
     public void setPointerLocation(int location) {

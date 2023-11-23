@@ -41,8 +41,8 @@ public class DialogManager {
 
     public static void createError(String message) {
         Window w = WindowsManager.createWindow(AppProperties.getProperty("error"));
-        GameObject go = w.getCurrentScene().getGameObjectByName("@errorMessage");
-        ((TextRenderer) go.getComponentsByClass(TextRenderer.class).get(0)).setText(message);
+        GameObject go = w.getCurrentScene().getGameObjectByName("@textArea");
+        ((pl.AWTGameEngine.components.TextArea) go.getComponentsByClass(pl.AWTGameEngine.components.TextArea.class).get(0)).setText(message);
     }
 
     public static void createExtendedError(Window window, String windowTitle, String message, String errorMessage) {
