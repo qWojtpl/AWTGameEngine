@@ -11,6 +11,7 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 
 public class Window extends JFrame {
 
@@ -31,6 +32,10 @@ public class Window extends JFrame {
                 Font.PLAIN,
                 AppProperties.getPropertyAsInteger("fontSize")
         );
+    }
+
+    public void close() {
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
     public GamePanel getPanel() {

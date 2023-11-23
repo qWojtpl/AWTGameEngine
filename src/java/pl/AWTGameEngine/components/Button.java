@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.ConflictsWith;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -12,12 +11,14 @@ public class Button extends ObjectComponent {
 
     private final BlankRenderer background = new BlankRenderer(getObject());
     private final TextRenderer textRenderer = new TextRenderer(getObject());
+    private final Border border = new Border(getObject());
     private ColorObject backgroundColor = new ColorObject(Color.GRAY);
     private ColorObject highlightColor = new ColorObject(Color.BLACK);
     private ColorObject textColor = new ColorObject(Color.BLACK);
     private ColorObject highlightTextColor = new ColorObject(Color.GRAY);
     private final ColorObject backgroundComponentColor = new ColorObject();
     private final ColorObject textComponentColor = new ColorObject();
+    private Action action = Action.DO_NOTHING;
 
     public Button(GameObject object) {
         super(object);
@@ -30,12 +31,14 @@ public class Button extends ObjectComponent {
     @Override
     public void onAddComponent() {
         getObject().addComponent(background);
+        getObject().addComponent(border);
         getObject().addComponent(textRenderer);
     }
 
     @Override
     public void onRemoveComponent() {
         getObject().removeComponent(background);
+        getObject().removeComponent(border);
         getObject().removeComponent(textRenderer);
     }
 
@@ -59,12 +62,12 @@ public class Button extends ObjectComponent {
     }
 
     @Override
-    public void onMouseClick(GameObject object) {
-        if(!getObject().equals(object)) {
-            return;
-        }
+    public void onMouseClick() {
         for(ObjectComponent component : getObject().getComponents()) {
             component.onButtonClick();
+        }
+        if(Action.CLOSE_WINDOW.equals(action)) {
+            getWindow().close();
         }
     }
 
@@ -94,6 +97,10 @@ public class Button extends ObjectComponent {
 
     public ColorObject getHighlightTextColor() {
         return this.highlightTextColor;
+    }
+
+    public Action getAction() {
+        return this.action;
     }
 
     public void setText(String text) {
@@ -144,5 +151,24 @@ public class Button extends ObjectComponent {
         this.highlightTextColor = new ColorObject(color);
     }
 
+    public void setAction(Action action) {
+        if(action == null) {
+            action = Action.DO_NOTHING;
+        }
+        this.action = action;
+    }
+
+    public void setAction(String action) {
+        try {
+            setAction(Action.valueOf(action.toUpperCase()));
+        } catch(IllegalArgumentException e) {
+            setAction(Action.DO_NOTHING);
+        }
+    }
+
+    public enum Action {
+        CLOSE_WINDOW,
+        DO_NOTHING
+    }
 
 }

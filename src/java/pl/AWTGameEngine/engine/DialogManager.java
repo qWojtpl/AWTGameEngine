@@ -1,9 +1,10 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.components.TextRenderer;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
+import pl.AWTGameEngine.components.TextArea;
+import pl.AWTGameEngine.components.Button;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,11 +43,11 @@ public class DialogManager {
     public static void createError(String message) {
         Window w = WindowsManager.createWindow(AppProperties.getProperty("error"));
         GameObject go = w.getCurrentScene().getGameObjectByName("@textArea");
-        ((pl.AWTGameEngine.components.TextArea) go.getComponentsByClass(pl.AWTGameEngine.components.TextArea.class).get(0)).setText(message);
+        ((TextArea) go.getComponentsByClass(TextArea.class).get(0)).setText(message);
     }
 
     public static void createExtendedError(Window window, String windowTitle, String message, String errorMessage) {
-        JPanel panel = new JPanel();
+/*        JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         Label label = new Label(message);
         panel.add(label);
@@ -60,7 +61,7 @@ public class DialogManager {
                 window,
                 panel,
                 windowTitle,
-                JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.PLAIN_MESSAGE);*/
     }
 
 }

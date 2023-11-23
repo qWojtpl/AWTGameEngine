@@ -43,9 +43,6 @@ public class TextArea extends ObjectComponent {
 
     @Override
     public void onUpdate() {
-        if(!isFocused() || isDisabled()) {
-            return;
-        }
         textRenderer.setText(getRenderedText());
         if(pointerIterator >= getWindow().getLoop().getFPS()) {
             pointerIterator = 0;
@@ -82,7 +79,6 @@ public class TextArea extends ObjectComponent {
     public void onMouseClick() {
         focused = true;
         setPointerLocation(text.length());
-        setDisabled(!isDisabled());
     }
 
     @Override
@@ -133,6 +129,9 @@ public class TextArea extends ObjectComponent {
     }
 
     private String getRenderedText() {
+        if(!isFocused() || isDisabled()) {
+            return text;
+        }
         String rendered = "";
         for(int i = 0; i < text.length() + 1; i++) {
             if(pointerLocation == i && pointerIterator >= getWindow().getLoop().getFPS() / 2) {
