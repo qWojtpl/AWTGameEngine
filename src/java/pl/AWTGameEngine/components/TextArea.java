@@ -19,14 +19,15 @@ public class TextArea extends ObjectComponent {
 
     public TextArea(GameObject object) {
         super(object);
+        setText(text);
+        textRenderer.align(TextRenderer.HorizontalAlign.LEFT, TextRenderer.VerticalAlign.TOP);
+        textRenderer.setWrap(TextRenderer.TextWrap.WRAP);
+        background.setColor(new ColorObject(Color.WHITE));
+        backgroundDisabled.setColor(new ColorObject(ColorObject.deserialize("rgba(222,222,222,0)")));
     }
 
     @Override
     public void onAddComponent() {
-        setText(text);
-        textRenderer.align(TextRenderer.HorizontalAlign.LEFT, TextRenderer.VerticalAlign.TOP);
-        background.setColor(new ColorObject(Color.WHITE));
-        backgroundDisabled.setColor(new ColorObject(ColorObject.deserialize("rgba(222,222,222,0)")));
         getObject().addComponent(background);
         getObject().addComponent(backgroundDisabled);
         getObject().addComponent(textRenderer);
@@ -182,6 +183,10 @@ public class TextArea extends ObjectComponent {
         this.disabled = disabled;
     }
 
+    public void setDisabled(String disabled) {
+        setDisabled(Boolean.parseBoolean(disabled));
+    }
+
     public void setPointerLocation(int location) {
         if(location < 0) {
             location = 0;
@@ -192,4 +197,36 @@ public class TextArea extends ObjectComponent {
         this.pointerLocation = location;
     }
 
+    public void setBackgroundColor(ColorObject color) {
+        background.setColor(color);
+    }
+
+    public void setBackgroundColor(String color) {
+        background.getColor().setColor(color);
+    }
+
+    public void setDisabledColor(ColorObject color) {
+        backgroundDisabled.setColor(color);
+    }
+
+    public void setDisabledColor(String color) {
+        backgroundDisabled.getColor().setColor(color);
+    }
+
+    public void setTextColor(ColorObject color) {
+        textRenderer.setColor(color);
+    }
+
+    public void setTextColor(String color) {
+        textRenderer.getColor().setColor(color);
+    }
+
+    public void setBorderColor(ColorObject color) {
+        border.setColor(color);
+    }
+
+    public void setBorderColor(String color) {
+        border.getColor().setColor(color);
+    }
+    
 }

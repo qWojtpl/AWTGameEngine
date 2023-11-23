@@ -1,13 +1,11 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.RemoveOnCompile;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.lang.reflect.Field;
 
 @Unique
 public class Border extends ObjectComponent {

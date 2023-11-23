@@ -13,29 +13,32 @@ public class TextRenderer extends ObjectComponent {
     private float size = 30.0f;
     private HorizontalAlign horizontal = HorizontalAlign.LEFT;
     private VerticalAlign vertical = VerticalAlign.TOP;
+    private TextWrap wrap = TextWrap.NO_WRAP;
 
     public TextRenderer(GameObject object) {
         super(object);
     }
 
-    //todo: cache
     @Override
     public void onRender(Graphics g) {
         final String[] lines = text.split("\n");
         final int height = g.getFontMetrics(getWindow().getDefaultFont()).getHeight();
         final int totalHeight = lines.length * height;
         for(int i = 1; i <= lines.length; i++) {
-            final String line = lines[i - 1];
-            final int width = g.getFontMetrics(getWindow().getDefaultFont(size)).stringWidth(line);
+            String line = lines[i - 1];
+            int width = g.getFontMetrics(getWindow().getDefaultFont(size)).stringWidth(line);
             int x, y;
-            if (HorizontalAlign.LEFT.equals(horizontal)) {
+            if(TextWrap.WRAP.equals(wrap)) {
+                //todo: implement wrap
+            }
+            if(HorizontalAlign.LEFT.equals(horizontal)) {
                 x = 0;
             } else if (HorizontalAlign.RIGHT.equals(horizontal)) {
                 x = getObject().getScaleX() - width;
             } else {
                 x = (getObject().getScaleX() - width) / 2;
             }
-            if (VerticalAlign.TOP.equals(vertical)) {
+            if(VerticalAlign.TOP.equals(vertical)) {
                 y = height / 4;
             } else if (VerticalAlign.BOTTOM.equals(vertical)) {
                 y = getObject().getScaleY() - totalHeight - height / 4;
@@ -70,6 +73,18 @@ public class TextRenderer extends ObjectComponent {
 
     public float getSize() {
         return this.size;
+    }
+
+    public HorizontalAlign getHorizontalAlign() {
+        return this.horizontal;
+    }
+
+    public VerticalAlign getVerticalAlign() {
+        return this.vertical;
+    }
+
+    public TextWrap getWrap() {
+        return this.wrap;
     }
 
     public void setText(String text) {
@@ -128,6 +143,18 @@ public class TextRenderer extends ObjectComponent {
         align(align);
     }
 
+    public void setWrap(TextWrap wrap) {
+        this.wrap = wrap;
+    }
+
+    public void setWrap(String wrap) {
+        try {
+            setWrap(TextWrap.valueOf(wrap.toUpperCase()));
+        } catch(IllegalArgumentException e) {
+            setWrap(TextWrap.NO_WRAP);
+        }
+    }
+
     public enum HorizontalAlign {
         LEFT,
         CENTER,
@@ -142,7 +169,7 @@ public class TextRenderer extends ObjectComponent {
 
     public enum TextWrap {
         WRAP,
-        NOWRAP,
+        NO_WRAP,
         WRAP_AFTER_SPACE
     }
 
