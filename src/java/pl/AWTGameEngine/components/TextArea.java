@@ -3,7 +3,10 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
+import javax.tools.Tool;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 
 public class TextArea extends ObjectComponent {
 
@@ -16,6 +19,8 @@ public class TextArea extends ObjectComponent {
     private boolean disabled = false;
     private int pointerIterator = 0;
     private int pointerLocation = 0;
+    private int selectionStart = -1;
+    private int selectionEnd = -1;
 
     public TextArea(GameObject object) {
         super(object);
@@ -92,11 +97,32 @@ public class TextArea extends ObjectComponent {
     public void write(char key) {
         if(key == 8 || key == 127) {
             return;
+        } else if(key == 1) {
+            selectionStart = 0;
+            selectionEnd = text.length();
+            return;
+        } else if(key == 3) {
+            copyText(getSelectedText());
+            return;
+        } else if(key == 22) {
+            String clipboardText = getClipboardText();
+            for(int i = 0; i < clipboardText.length(); i++) {
+                write(clipboardText.charAt(i));
+            }
+            resetSelection();
+            return;
+        } else if(key == 24) {
+            copyText(getSelectedText());
+            deleteSelectedText();
+            return;
         }
         String newText = "";
-        for(int i = 0; i < text.length() + 1; i++) {
+        for(int i = 0; i <= text.length(); i++) {
             if(i == pointerLocation) {
                 newText += key;
+            }
+            if(i >= selectionStart && i <= selectionEnd) {
+                continue;
             }
             if(i < text.length()) {
                 newText += text.charAt(i);
@@ -104,10 +130,15 @@ public class TextArea extends ObjectComponent {
         }
         setText(newText);
         setPointerLocation(getPointerLocation() + 1);
+        resetSelection();
     }
 
     public void deleteBack() {
         if(!isFocused()) {
+            return;
+        }
+        if(selectionStart != -1 && selectionEnd != -1) {
+            deleteSelectedText();
             return;
         }
         String newText = "";
@@ -119,9 +150,14 @@ public class TextArea extends ObjectComponent {
         }
         setText(newText);
         setPointerLocation(getPointerLocation() - 1);
+        resetSelection();
     }
 
     public void deleteNext() {
+        if(selectionStart != -1 && selectionEnd != -1) {
+            deleteSelectedText();
+            return;
+        }
         if(getPointerLocation() == text.length()) {
             return;
         }
@@ -129,12 +165,53 @@ public class TextArea extends ObjectComponent {
         deleteBack();
     }
 
+    public void resetSelection() {
+        selectionStart = -1;
+        selectionEnd = -1;
+    }
+
+    public void copyText(String text) {
+        StringSelection textToCopy = new StringSelection(text);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(textToCopy, textToCopy);
+    }
+
+    public void deleteSelectedText() {
+        String newText = "";
+        for(int i = 0; i < text.length(); i++) {
+            if(i >= selectionStart && i <= selectionEnd) {
+                continue;
+            }
+            newText += text.charAt(i);
+        }
+        setText(newText);
+        resetSelection();
+        setPointerLocation(text.length());
+    }
+
+    public String getClipboardText() {
+        String clipboardText;
+        try {
+            clipboardText = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+        } catch(Exception e) {
+            return "";
+        }
+        return clipboardText;
+    }
+
+    public String getSelectedText() {
+        String selectedText = "";
+        for(int i = selectionStart; i < selectionEnd; i++) {
+            selectedText += text.charAt(i);
+        }
+        return selectedText;
+    }
+
     private String getRenderedText() {
         if(!isFocused() || isDisabled()) {
             return text;
         }
         String rendered = "";
-        for(int i = 0; i < text.length() + 1; i++) {
+        for(int i = 0; i <= text.length(); i++) {
             if(pointerLocation == i && pointerIterator >= getWindow().getLoop().getFPS() / 2) {
                 rendered += "|";
             }
@@ -228,5 +305,5 @@ public class TextArea extends ObjectComponent {
     public void setBorderColor(String color) {
         border.getColor().setColor(color);
     }
-    
+
 }
