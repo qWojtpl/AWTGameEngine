@@ -15,4 +15,5 @@ wall1="pos{-10;-1000}scale{1000;1000}BoxCollider:ObjectComponent{visualize^true^
 wall2="pos{-45;500}scale{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
 wall3="pos{-1000;0}scale{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
 wall4="pos{500;0}scale{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
-button="pos{200;200}scale{200;200}Button:ObjectComponent{size^20^text^Button ;)^}";
+button="pos{200;200}scale{00;00}Button:ObjectComponent{size^20^text^Button ;)^}";
+@scroll="pos{300;200}scale{10;100}ScrollComponent:ObjectComponent{}";

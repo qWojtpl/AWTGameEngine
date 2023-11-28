@@ -7,7 +7,6 @@ import pl.AWTGameEngine.objects.GameObject;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-@Unique
 public class Border extends ObjectComponent {
 
     private boolean enabled = true;
