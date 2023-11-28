@@ -10,11 +10,13 @@ public class ScrollComponent extends ObjectComponent {
     private final BlankRenderer background = new BlankRenderer(getObject());
     private GameObject scroll;
     private BlankRenderer scrollRenderer;
+    private ColorObject backgroundColor = new ColorObject("rgb(175,175,175)");
     private ColorObject scrollColor = new ColorObject("rgb(150,150,150)");
     private ColorObject selectedScrollColor = new ColorObject("rgb(160,160,160)");
-    private int additionalHeight = 0;
+    private int shift = 0;
     private double value = 0;
     private boolean selected = false;
+    private boolean horizontal = false;
 
     public ScrollComponent(GameObject object) {
         super(object);
@@ -22,7 +24,7 @@ public class ScrollComponent extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        background.setColor(new ColorObject("rgb(175,175,175)"));
+        background.setColor(backgroundColor);
         getObject().addComponent(background);
         scroll = getScene().createGameObject("@vo-" + getObject().getIdentifier() + System.nanoTime());
         scrollRenderer = new BlankRenderer(scroll);
@@ -53,7 +55,11 @@ public class ScrollComponent extends ObjectComponent {
             }
         }
         if(getMouseListener().isMouseDragged() && selected) {
-            additionalHeight = getMouseListener().getMouseY() - getObject().getY();
+            if(!horizontal) {
+                shift = getMouseListener().getMouseY() - getObject().getY();
+            } else {
+                shift = getMouseListener().getMouseX() - getObject().getX();
+            }
         }
         if(getMouseListener().isMouseReleased()) {
             selected = false;
@@ -62,20 +68,37 @@ public class ScrollComponent extends ObjectComponent {
     }
 
     private void updatePosition() {
-        scroll.setX(getObject().getX());
-        scroll.setScaleX(getObject().getScaleX());
-        scroll.setScaleY(getObject().getScaleY() / 4);
-        int y = getObject().getY() + additionalHeight;
-        value = (double) additionalHeight / getObject().getScaleY();
-        if(y < getObject().getY()) {
-            y = getObject().getY();
-            value = 0;
+        if(!horizontal) {
+            scroll.setX(getObject().getX());
+            scroll.setScaleX(getObject().getScaleX());
+            scroll.setScaleY(getObject().getScaleY() / 4);
+            int y = getObject().getY() + shift;
+            value = (double) shift / getObject().getScaleY();
+            if(y < getObject().getY()) {
+                y = getObject().getY();
+                value = 0;
+            }
+            if(y > getObject().getY() + getObject().getScaleY() - scroll.getScaleY()) {
+                y = getObject().getY() + getObject().getScaleY() - scroll.getScaleY();
+                value = 1;
+            }
+            scroll.setY(y);
+        } else {
+            scroll.setY(getObject().getY());
+            scroll.setScaleX(getObject().getScaleX() / 4);
+            scroll.setScaleY(getObject().getScaleY());
+            int x = getObject().getX() + shift;
+            value = (double) shift / getObject().getScaleX();
+            if (x < getObject().getX()) {
+                x = getObject().getX();
+                value = 0;
+            }
+            if(x > getObject().getX() + getObject().getScaleX() - scroll.getScaleX()) {
+                x = getObject().getX() + getObject().getScaleX() - scroll.getScaleX();
+                value = 1;
+            }
+            scroll.setX(x);
         }
-        if(y > getObject().getY() + getObject().getScaleY() - scroll.getScaleY()) {
-            y = getObject().getY() + getObject().getScaleY() - scroll.getScaleY();
-            value = 1;
-        }
-        scroll.setY(y);
     }
 
     public double getValue() {
@@ -98,12 +121,24 @@ public class ScrollComponent extends ObjectComponent {
         return this.selectedScrollColor;
     }
 
+    public boolean isHorizontal() {
+        return this.horizontal;
+    }
+
+    public void setHorizontal(boolean horizontal) {
+        this.horizontal = horizontal;
+    }
+
+    public void setHorizontal(String horizontal) {
+        setHorizontal(Boolean.parseBoolean(horizontal));
+    }
+
     public void setBackgroundColor(ColorObject object) {
-        background.setColor(object);
+        backgroundColor = object;
     }
 
     public void setBackgroundColor(String color) {
-        background.getColor().setColor(color);
+        backgroundColor.setColor(color);
     }
 
     public void setScrollColor(ColorObject object) {
