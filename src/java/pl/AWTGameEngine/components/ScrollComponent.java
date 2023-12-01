@@ -48,7 +48,8 @@ public class ScrollComponent extends ObjectComponent {
     public void onUpdate() {
         scrollRenderer.setColor(scrollColor);
         if((getMouseListener().getMouseX() >= scroll.getX() && getMouseListener().getMouseX() <= scroll.getX() + scroll.getScaleX()
-        && getMouseListener().getMouseY() >= scroll.getY() && getMouseListener().getMouseY() <= scroll.getY() + scroll.getScaleY()) || selected) {
+        && getMouseListener().getMouseY() >= scroll.getY() && getMouseListener().getMouseY() <= scroll.getY() + scroll.getScaleY())
+        || selected) {
             scrollRenderer.setColor(selectedScrollColor);
             if(getMouseListener().isMousePressed()) {
                 selected = true;

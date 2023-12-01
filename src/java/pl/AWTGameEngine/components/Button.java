@@ -114,7 +114,7 @@ public class Button extends ObjectComponent {
     public void setSize(String size) {
         try {
             setSize(Float.parseFloat(size));
-        } catch(NumberFormatException ignored) {
+        } catch(NumberFormatException e) {
             setSize(20f);
         }
     }

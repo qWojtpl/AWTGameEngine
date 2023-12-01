@@ -8,6 +8,22 @@ public class Camera {
     private int y = 0;
     private float zoom = 1;
 
+    public int parseX(GameObject object, int value) {
+        return parse(value, getRelativeX(object));
+    }
+
+    public int parseY(GameObject object, int value) {
+        return parse(value, getRelativeY(object));
+    }
+
+    private int parse(int value, int relative) {
+        return (int) ((value - relative) * getZoom());
+    }
+
+    public int parseScale(int scale) {
+        return (int) (scale * getZoom());
+    }
+
     public int getX() {
         return this.x;
     }

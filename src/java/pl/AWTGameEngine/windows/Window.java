@@ -28,9 +28,9 @@ public class Window extends JFrame {
 
     public Window() {
         defaultFont = new Font(
-                AppProperties.getProperty("font"),
-                Font.PLAIN,
-                AppProperties.getPropertyAsInteger("fontSize")
+            AppProperties.getProperty("font"),
+            Font.PLAIN,
+            AppProperties.getPropertyAsInteger("fontSize")
         );
     }
 

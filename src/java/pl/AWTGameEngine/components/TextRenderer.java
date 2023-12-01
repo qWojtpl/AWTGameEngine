@@ -50,15 +50,15 @@ public class TextRenderer extends ObjectComponent {
             if (getObject().getRotation() != 0) {
                 AffineTransform transform = new AffineTransform();
                 transform.rotate(Math.toRadians(getObject().getRotation()),
-                        (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
-                        (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
+                        getCamera().parseX(getObject(), getObject().getCenterX()),
+                        getCamera().parseY(getObject(), getObject().getCenterY()));
                 g2d.transform(transform);
             }
             g2d.setColor(color.getColor());
             g2d.setFont(getWindow().getDefaultFont((getSize() * getCamera().getZoom())));
             g2d.drawString(line,
-                    (int) ((getObject().getX() - getCamera().getRelativeX(getObject()) + x) * getCamera().getZoom()),
-                    (int) ((getObject().getY() - getCamera().getRelativeY(getObject()) + y + height * i) * getCamera().getZoom()));
+                    getCamera().parseX(getObject(), getObject().getX() + x),
+                    getCamera().parseY(getObject(), getObject().getY() + y + height * i));
             g2d.setTransform(oldTransform);
         }
     }

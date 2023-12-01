@@ -22,15 +22,17 @@ public class BlankRenderer extends ObjectComponent {
         if(getObject().getRotation() != 0) {
             AffineTransform transform = new AffineTransform();
             transform.rotate(Math.toRadians(getObject().getRotation()),
-                    (getObject().getCenterX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom(),
-                    (getObject().getCenterY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom());
+                    getCamera().parseX(getObject(), getObject().getCenterX()),
+                    getCamera().parseY(getObject(), getObject().getCenterY()));
             g2d.transform(transform);
         }
         g2d.setColor(color.getColor());
-        g2d.fillRect((int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
-                (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
-                (int) ((getObject().getScaleX()) * getCamera().getZoom()),
-                (int) ((getObject().getScaleY()) * getCamera().getZoom()));
+        g2d.fillRect(
+                getCamera().parseX(getObject(), getObject().getX()),
+                getCamera().parseY(getObject(), getObject().getY()),
+                getCamera().parseScale(getObject().getScaleX()),
+                getCamera().parseScale(getObject().getScaleY())
+        );
         g2d.setTransform(oldTransform);
     }
 
