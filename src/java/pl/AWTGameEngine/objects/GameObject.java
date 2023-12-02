@@ -1,10 +1,7 @@
 package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.annotations.Parentless;
-import pl.AWTGameEngine.components.BoxCollider;
-import pl.AWTGameEngine.components.Collider;
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.components.PhysicsBody;
 import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.scenes.Scene;
