@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationMethod;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -87,6 +88,7 @@ public class TextRenderer extends ObjectComponent {
         return this.wrap;
     }
 
+    @SerializationMethod
     public void setText(String text) {
         this.text = text;
     }
@@ -98,14 +100,16 @@ public class TextRenderer extends ObjectComponent {
         this.color = color;
     }
 
+    @SerializationMethod
     public void setColor(String color) {
-        this.color.setColor(color);
+        setColor(new ColorObject(color));
     }
 
     public void setSize(float size) {
         this.size = size;
     }
 
+    @SerializationMethod
     public void setSize(String size) {
         setSize(Float.parseFloat(size));
     }
@@ -123,6 +127,7 @@ public class TextRenderer extends ObjectComponent {
         this.vertical = vertical;
     }
 
+    @SerializationMethod
     public void setHorizontal(String horizontal) {
         HorizontalAlign align;
         try {
@@ -133,6 +138,7 @@ public class TextRenderer extends ObjectComponent {
         align(align);
     }
 
+    @SerializationMethod
     public void setVertical(String vertical) {
         VerticalAlign align;
         try {
@@ -147,6 +153,7 @@ public class TextRenderer extends ObjectComponent {
         this.wrap = wrap;
     }
 
+    @SerializationMethod
     public void setWrap(String wrap) {
         try {
             setWrap(TextWrap.valueOf(wrap.toUpperCase()));

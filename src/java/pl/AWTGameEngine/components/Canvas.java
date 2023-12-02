@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationMethod;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -14,10 +15,11 @@ public class Canvas extends ObjectComponent {
         if(CanvasAlign.LEFT.equals(canvasAlign)) {
             getObject().setXForced(0);
         } else if(CanvasAlign.RIGHT.equals(canvasAlign)) {
-            getObject().setXForced((int) (480 * (getWindow().getPanel().getMultiplier() - 1) - getObject().getScaleX()));
+            getObject().setXForced(960 - getObject().getScaleX());
         }
     }
 
+    @SerializationMethod
     public void setAlign(String align) {
         try {
             CanvasAlign canvasAlign = CanvasAlign.valueOf(align.toUpperCase());

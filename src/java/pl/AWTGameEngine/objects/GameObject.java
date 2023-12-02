@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.annotations.Parentless;
+import pl.AWTGameEngine.annotations.SerializationMethod;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.NestedPanel;
@@ -500,14 +501,24 @@ public class GameObject {
                         fieldName = fieldName.replace("~", "");
                         String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
                         if(clazz.getSuperclass().equals(ObjectComponent.class)) {
-                            clazz.getDeclaredMethod(methodName, String.class).invoke(o, v);
+                            if(clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationMethod.class)) {
+                                clazz.getDeclaredMethod(methodName, String.class).invoke(o, v);
+                            } else {
+                                System.out.println("Tried to invoke " + methodName
+                                        + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
+                            }
                         } else {
-                            clazz.getSuperclass().getDeclaredMethod(methodName, String.class).invoke(o, v);
+                            if(clazz.getSuperclass().getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationMethod.class)) {
+                                clazz.getSuperclass().getDeclaredMethod(methodName, String.class).invoke(o, v);
+                            } else {
+                                System.out.println("Tried to invoke " + methodName
+                                        + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
+                            }
                         }
                     }
                     this.addComponent(o);
                 } catch(Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }

@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationMethod;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Vector;
@@ -113,6 +114,7 @@ public class PhysicsBody extends ObjectComponent {
         this.mass = mass;
     }
 
+    @SerializationMethod
     public void setMass(String mass) {
         try {
             setMass(Double.parseDouble(mass));

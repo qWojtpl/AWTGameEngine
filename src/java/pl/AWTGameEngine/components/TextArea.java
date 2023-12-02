@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationMethod;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -246,6 +247,7 @@ public class TextArea extends ObjectComponent {
         return this.pointerLocation;
     }
 
+    @SerializationMethod
     public void setText(String text) {
         this.text = text;
         textRenderer.setText(text);
@@ -260,6 +262,7 @@ public class TextArea extends ObjectComponent {
         this.disabled = disabled;
     }
 
+    @SerializationMethod
     public void setDisabled(String disabled) {
         setDisabled(Boolean.parseBoolean(disabled));
     }
@@ -278,32 +281,36 @@ public class TextArea extends ObjectComponent {
         background.setColor(color);
     }
 
+    @SerializationMethod
     public void setBackgroundColor(String color) {
-        background.getColor().setColor(color);
+        setBackgroundColor(new ColorObject(color));
     }
 
     public void setDisabledColor(ColorObject color) {
         backgroundDisabled.setColor(color);
     }
 
+    @SerializationMethod
     public void setDisabledColor(String color) {
-        backgroundDisabled.getColor().setColor(color);
+        setDisabledColor(new ColorObject(color));
     }
 
     public void setTextColor(ColorObject color) {
         textRenderer.setColor(color);
     }
 
+    @SerializationMethod
     public void setTextColor(String color) {
-        textRenderer.getColor().setColor(color);
+        setDisabledColor(new ColorObject(color));
     }
 
     public void setBorderColor(ColorObject color) {
         border.setColor(color);
     }
 
+    @SerializationMethod
     public void setBorderColor(String color) {
-        border.getColor().setColor(color);
+        setBorderColor(new ColorObject(color));
     }
 
 }

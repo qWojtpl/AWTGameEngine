@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationMethod;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
@@ -53,6 +54,7 @@ public class Animator extends ObjectComponent {
         this.loop = loop;
     }
 
+    @SerializationMethod
     public void setLoop(String loop) {
         this.loop = Boolean.parseBoolean(loop);
     }
@@ -61,6 +63,7 @@ public class Animator extends ObjectComponent {
         frames.add(frame);
     }
 
+    @SerializationMethod
     public void setNextFrame(String source) {
         AnimationFrame animFrame = new AnimationFrame();
         animFrame.setImage(source);
@@ -77,6 +80,7 @@ public class Animator extends ObjectComponent {
         delays.add(delay);
     }
 
+    @SerializationMethod
     public void setNextDelay(String delay) {
         try {
             setNextDelay(Integer.parseInt(delay));

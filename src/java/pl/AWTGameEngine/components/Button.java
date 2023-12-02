@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationMethod;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -103,6 +104,7 @@ public class Button extends ObjectComponent {
         return this.action;
     }
 
+    @SerializationMethod
     public void setText(String text) {
         textRenderer.setText(text);
     }
@@ -111,6 +113,7 @@ public class Button extends ObjectComponent {
         textRenderer.setSize(size);
     }
 
+    @SerializationMethod
     public void setSize(String size) {
         try {
             setSize(Float.parseFloat(size));
@@ -123,32 +126,36 @@ public class Button extends ObjectComponent {
         this.backgroundColor = color;
     }
 
+    @SerializationMethod
     public void setBackgroundColor(String color) {
-        this.backgroundColor = new ColorObject(color);
+        setBackgroundColor(new ColorObject(color));
     }
 
     public void setHighlightColor(ColorObject color) {
         this.highlightColor = color;
     }
 
+    @SerializationMethod
     public void setHighlightColor(String color) {
-        this.highlightColor = new ColorObject(color);
+        setHighlightColor(new ColorObject(color));
     }
 
     public void setTextColor(ColorObject color) {
         this.textColor = color;
     }
 
+    @SerializationMethod
     public void setTextColor(String color) {
-        this.textColor = new ColorObject(color);
+        setTextColor(new ColorObject(color));
     }
 
     public void setHighlightTextColor(ColorObject color) {
         this.highlightTextColor = color;
     }
 
+    @SerializationMethod
     public void setHighlightTextColor(String color) {
-        this.highlightTextColor = new ColorObject(color);
+        setHighlightTextColor(new ColorObject(color));
     }
 
     public void setAction(Action action) {
@@ -158,6 +165,7 @@ public class Button extends ObjectComponent {
         this.action = action;
     }
 
+    @SerializationMethod
     public void setAction(String action) {
         try {
             setAction(Action.valueOf(action.toUpperCase()));
