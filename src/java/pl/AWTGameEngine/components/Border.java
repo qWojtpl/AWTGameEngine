@@ -27,7 +27,7 @@ public class Border extends ObjectComponent {
             AffineTransform transform = new AffineTransform();
             transform.rotate(Math.toRadians(getObject().getRotation()),
                     getCamera().parseX(getObject(), getObject().getCenterX()),
-                    getCamera().parseX(getObject(), getObject().getCenterY()));
+                    getCamera().parseY(getObject(), getObject().getCenterY()));
             g2d.transform(transform);
         }
         g2d.setColor(color.getColor());
