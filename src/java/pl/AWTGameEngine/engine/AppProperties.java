@@ -2,16 +2,28 @@ package pl.AWTGameEngine.engine;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 public class AppProperties {
 
     private final static Properties properties;
     private final static HashMap<String, Properties> customProperties = new HashMap<>();
+    private final static List<String> startupArgs = new ArrayList<>();
 
     static {
         properties = getCustomProperties("app.properties");
+    }
+
+    public static void addStartupArgument(String argument) {
+        startupArgs.add(argument);
+    }
+
+    public static List<String> getStartupArguments() {
+        return new ArrayList<>(startupArgs);
+    }
+
+    public static boolean isStartupArgumentPresent(String argument) {
+        return getStartupArguments().contains(argument);
     }
 
     public static String getProperty(String key) {
