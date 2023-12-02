@@ -152,31 +152,11 @@ public class Scene {
     }
 
     public LinkedHashMap<Integer, List<GameObject>> getSortedObjects() {
-        return this.sortedObjects;
-    }
-
-    public void sortObjects() {
-        sortedObjects = new LinkedHashMap<>();
-        List<Integer> priorities = new ArrayList<>();
-        int maxPriority = 0;
-        for(GameObject go : getActiveGameObjects()) {
-            if(go.getPriority() > maxPriority) {
-                maxPriority = go.getPriority();
-            }
-            if(!priorities.contains(go.getPriority())) {
-                priorities.add(go.getPriority());
-            }
+        LinkedHashMap<Integer, List<GameObject>> sorted = new LinkedHashMap<>();
+        for(int key : sortedObjects.keySet()) {
+            sorted.put(key, new ArrayList<>(sortedObjects.get(key)));
         }
-        for(int i = 0; i <= maxPriority; i++) {
-            if(priorities.contains(i)) {
-                sortedObjects.put(i, new ArrayList<>());
-            }
-        }
-        for(GameObject go : getActiveGameObjects()) {
-            List<GameObject> objects = sortedObjects.getOrDefault(go.getPriority(), new ArrayList<>());
-            objects.add(go);
-            sortedObjects.put(go.getPriority(), objects);
-        }
+        return sorted;
     }
 
     public void removeAllObjects() {

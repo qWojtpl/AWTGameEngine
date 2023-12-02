@@ -42,9 +42,11 @@ public class WindowListener implements java.awt.event.WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        for(GameObject go : window.getCurrentScene().getActiveGameObjects()) {
-            for(ObjectComponent component : go.getComponents()) {
-                component.onWindowClosing();
+        if(window.getCurrentScene() != null) {
+            for(GameObject go : window.getCurrentScene().getActiveGameObjects()) {
+                for(ObjectComponent component : go.getComponents()) {
+                    component.onWindowClosing();
+                }
             }
         }
         removeWindow();

@@ -48,14 +48,8 @@ public class LineChart extends ObjectComponent {
             sum += key;
         }
         int stepX = getObject().getScaleX() / sum;
-        int stepY = 0;
-        int delta = 1;
         for(i = 0; i < values.size(); i++) {
             int x = keys[i];
-            if(i > 0) {
-                delta = x - keys[i - 1];
-                System.out.println(delta);
-            }
             int y = values.get(x);
             x += stepX * x * i;
             y += 0;

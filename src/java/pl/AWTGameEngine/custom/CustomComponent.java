@@ -39,18 +39,6 @@ public class CustomComponent extends ObjectComponent {
         if(getKeyListener().hasPressedKey(40)) {
             getCamera().setY(getCamera().getY() + 8);
         }
-        if(getKeyListener().hasPressedKey(75)) {
-            getCamera().setZoom(getCamera().getZoom() - 0.25f);
-            getKeyListener().releaseKey(75);
-        }
-        if(getKeyListener().hasPressedKey(76)) {
-            getCamera().setZoom(getCamera().getZoom() + 0.25f);
-            getKeyListener().releaseKey(76);
-        }
-        if(getKeyListener().hasPressedKey(82)) {
-            getSceneLoader().loadSceneFile("scenes/main.scene");
-            getKeyListener().releaseKey(82);
-        }
     }
 
     @Override
@@ -67,6 +55,18 @@ public class CustomComponent extends ObjectComponent {
         }
         if(getKeyListener().hasPressedKey(100)) {
             body.push(10, new Vector(-1, 0));
+        }
+        if(getKeyListener().hasPressedKey(75)) {
+            getCamera().setZoom(getCamera().getZoom() - 0.25f);
+            getKeyListener().releaseKey(75);
+        }
+        if(getKeyListener().hasPressedKey(76)) {
+            getCamera().setZoom(getCamera().getZoom() + 0.25f);
+            getKeyListener().releaseKey(76);
+        }
+        if(getKeyListener().hasPressedKey(82)) {
+            getSceneLoader().loadSceneFile("scenes/main.scene");
+            getKeyListener().releaseKey(82);
         }
     }
 

@@ -19,6 +19,11 @@ public class SceneLoader {
     }
 
     public void loadSceneFile(String scenePath) {
+        if(window.getCurrentScene() != null) {
+            Scene scene = window.getCurrentScene();
+            window.setCurrentScene(null);
+            scene.removeAllObjects();
+        }
         Properties customProperties = AppProperties.getCustomProperties(getScenePropertiesPath(scenePath));
         if(customProperties != null) {
             window.setTitle(AppProperties.getProperty("title", customProperties));
