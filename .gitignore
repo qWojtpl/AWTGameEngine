@@ -1,5 +1,11 @@
-*
-!.gitignore
-!LICENSE.txt
-!README.md
-!*/src
+*.iml
+*.txt
+/.idea
+.idea/*
+/META-INF
+META-INF/*
+/out
+out/*
+!/.gitignore
+!/LICENSE.txt
+!/README.md
