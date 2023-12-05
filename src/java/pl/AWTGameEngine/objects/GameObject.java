@@ -42,11 +42,8 @@ public class GameObject {
             return;
         }
         for(ObjectComponent c : getComponents()) {
-            if(c.conflictsWith(component.getClass())) {
-                DialogManager.createExtendedError(
-                        scene.getWindow(),
-                        "Error",
-                        "Runtime error:",
+            if(c.conflictsWith(component.getClass()) || component.conflictsWith(c.getClass())) {
+                DialogManager.createError(
                         "GameObject: " + getIdentifier() + "\nObject components: " + getComponents() + "\n" +
                                 "Component " + c.getClass().getName() + " has conflict with "
                                 + component.getClass().getName() + "; cannot add component " + component.getClass().getName());

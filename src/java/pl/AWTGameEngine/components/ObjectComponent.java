@@ -30,43 +30,43 @@ public abstract class ObjectComponent {
         this.object = object;
     }
 
-    public GameObject getObject() {
+    public final GameObject getObject() {
         return this.object;
     }
 
-    protected KeyListener getKeyListener() {
+    protected final KeyListener getKeyListener() {
         return getWindow().getKeyListener();
     }
 
-    protected MouseListener getMouseListener() {
+    protected final MouseListener getMouseListener() {
         return getWindow().getMouseListener();
     }
 
-    protected ColliderRegistry getColliderRegistry() {
+    protected final ColliderRegistry getColliderRegistry() {
         return getScene().getColliderRegistry();
     }
 
-    protected PanelRegistry getPanelRegistry() {
+    protected final PanelRegistry getPanelRegistry() {
         return getScene().getPanelRegistry();
     }
 
-    protected Camera getCamera() {
+    protected final Camera getCamera() {
         return getScene().getCamera();
     }
 
-    protected Window getWindow() {
+    protected final Window getWindow() {
         return getScene().getWindow();
     }
 
-    protected Scene getScene() {
+    protected final Scene getScene() {
         return getObject().getScene();
     }
 
-    protected SceneLoader getSceneLoader() {
+    protected final SceneLoader getSceneLoader() {
         return getWindow().getSceneLoader();
     }
 
-    protected GameObject getObjectByName(String name) {
+    protected final GameObject getObjectByName(String name) {
         return getScene().getGameObjectByName(name);
     }
 
@@ -210,24 +210,27 @@ public abstract class ObjectComponent {
 
     }
 
-    public boolean isUnique() {
+    public final boolean isUnique() {
         return this.getClass().isAnnotationPresent(Unique.class);
     }
 
-    public boolean conflictsWith(Class<? extends ObjectComponent> component) {
-        List<Class<? extends ObjectComponent>> conflicts = new ArrayList<>();
+    public final boolean conflictsWith(Class<? extends ObjectComponent> component) {
+        if(component == null) {
+            return false;
+        }
         if(this.getClass().isAnnotationPresent(ConflictsWith.class)) {
-            conflicts.add(this.getClass().getAnnotation(ConflictsWith.class).value());
+            if(this.getClass().getAnnotation(ConflictsWith.class).value().equals(component)) {
+                return true;
+            }
         }
         if(this.getClass().isAnnotationPresent(Conflicts.class)) {
             for(ConflictsWith conflictsWith : this.getClass().getAnnotation(Conflicts.class).value()) {
-                conflicts.add(conflictsWith.value());
+                if(conflictsWith.value().equals(component)) {
+                    return true;
+                }
             }
         }
-        if(conflicts.size() == 0) {
-            return false;
-        }
-        return conflicts.contains(component);
+        return false;
     }
 
 }

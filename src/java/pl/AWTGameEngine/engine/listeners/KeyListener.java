@@ -20,6 +20,9 @@ public class KeyListener implements java.awt.event.KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+        if(window.getCurrentScene() == null) {
+            return;
+        }
         for(GameObject object : window.getCurrentScene().getActiveGameObjects()) {
             for(ObjectComponent component : object.getComponents()) {
                 component.onKeyType(e.getKeyChar());
