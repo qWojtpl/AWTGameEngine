@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.objects.Sprite;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
@@ -10,7 +12,7 @@ import java.util.List;
 public abstract class ResourceManager {
 
     private final static HashMap<String, List<String>> resources = new HashMap<>();
-    private final static HashMap<String, Image> imageResources = new HashMap<>();
+    private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
     private final static HashMap<String, InputStream> streamResources = new HashMap<>();
 
     public static List<String> getResource(String name) {
@@ -38,9 +40,9 @@ public abstract class ResourceManager {
         return null;
     }
 
-    public static Image getResourceAsImage(String name) {
-        if(imageResources.containsKey(name)) {
-            return imageResources.get(name);
+    public static Sprite getResourceAsSprite(String name) {
+        if(spriteResources.containsKey(name)) {
+            return spriteResources.get(name);
         }
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
@@ -48,9 +50,10 @@ public abstract class ResourceManager {
                 throw new Exception();
             }
             Image img = ImageIO.read(stream);
-            imageResources.put(name, img);
+            Sprite sprite = new Sprite(name, img);
+            spriteResources.put(name, sprite);
             stream.close();
-            return img;
+            return sprite;
         } catch(Exception e) {
             System.out.println("Cannot get image from resource: " + name);
             e.printStackTrace();
@@ -80,8 +83,8 @@ public abstract class ResourceManager {
         return new HashMap<>(resources);
     }
 
-    public static HashMap<String, Image> getImageResources() {
-        return new HashMap<>(imageResources);
+    public static HashMap<String, Sprite> getSpriteResources() {
+        return new HashMap<>(spriteResources);
     }
 
 }

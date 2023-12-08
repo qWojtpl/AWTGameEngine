@@ -5,6 +5,7 @@ import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.Sprite;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -12,7 +13,7 @@ import java.awt.geom.AffineTransform;
 @Unique
 public class SpriteRenderer extends ObjectComponent {
 
-    private Image image;
+    private Sprite sprite;
 
     public SpriteRenderer(GameObject object) {
         super(object);
@@ -20,7 +21,7 @@ public class SpriteRenderer extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
-        if(image == null) {
+        if(sprite == null) {
             return;
         }
         Graphics2D g2d = (Graphics2D) g;
@@ -32,7 +33,7 @@ public class SpriteRenderer extends ObjectComponent {
                     getCamera().parseY(getObject(), getObject().getCenterY()));
             g2d.transform(transform);
         }
-        g2d.drawImage(image,
+        g2d.drawImage(sprite.getImage(),
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseScale(getObject().getScaleX()),
@@ -41,17 +42,22 @@ public class SpriteRenderer extends ObjectComponent {
         g2d.setTransform(oldTransform);
     }
 
-    public Image getImage() {
-        return this.image;
+    public Sprite getSprite() {
+        return this.sprite;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
+    @SerializationGetter
+    public String getSpriteSource() {
+        return getSprite().getImagePath();
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
     }
 
     @SerializationSetter
-    public void setImage(String imageSource) {
-        setImage(ResourceManager.getResourceAsImage(imageSource));
+    public void setSpriteSource(String spriteSource) {
+        setSprite(ResourceManager.getResourceAsSprite(spriteSource));
     }
 
 }

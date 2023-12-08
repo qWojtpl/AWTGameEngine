@@ -5,6 +5,7 @@ import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.Sprite;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class Animator extends ObjectComponent {
         }
         for(ObjectComponent component : getObject().getComponentsByClass(SpriteRenderer.class)) {
             SpriteRenderer spriteRenderer = (SpriteRenderer) component;
-            spriteRenderer.setImage(frames.get(iterator).getImage());
+            spriteRenderer.setSprite(frames.get(iterator).getSprite());
             iterator++;
         }
     }
@@ -68,13 +69,13 @@ public class Animator extends ObjectComponent {
     @SerializationSetter
     public void setNextFrame(String source) {
         AnimationFrame animFrame = new AnimationFrame();
-        animFrame.setImage(source);
+        animFrame.setSprite(source);
         setNextFrame(animFrame);
     }
 
-    public void setNextFrame(Image image) {
+    public void setNextFrame(Sprite sprite) {
         AnimationFrame animFrame = new AnimationFrame();
-        animFrame.setImage(image);
+        animFrame.setSprite(sprite);
         setNextFrame(animFrame);
     }
 
@@ -93,18 +94,18 @@ public class Animator extends ObjectComponent {
 
     public static class AnimationFrame {
 
-        private Image image;
+        private Sprite sprite;
 
-        public Image getImage() {
-            return this.image;
+        public Sprite getSprite() {
+            return this.sprite;
         }
 
-        public void setImage(Image image) {
-            this.image = image;
+        public void setSprite(Sprite sprite) {
+            this.sprite = sprite;
         }
 
-        public void setImage(String imageSource) {
-            setImage(ResourceManager.getResourceAsImage(imageSource));
+        public void setSprite(String spriteSource) {
+            setSprite(ResourceManager.getResourceAsSprite(spriteSource));
         }
 
     }

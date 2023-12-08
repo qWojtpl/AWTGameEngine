@@ -23,7 +23,7 @@ public class BackgroundRenderer extends ObjectComponent {
                 tile.setPriority(0);
                 tile.setParent(getObject().getParent());
                 SpriteRenderer s = new SpriteRenderer(tile);
-                s.setImage(ResourceManager.getResourceAsImage("sprites/beaver.jpg"));
+                s.setSprite(ResourceManager.getResourceAsSprite("sprites/beaver.jpg"));
                 tile.addComponent(s);
             }
         }
