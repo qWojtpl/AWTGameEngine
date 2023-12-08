@@ -77,13 +77,19 @@ public class GameObject {
     }
 
     public String getSerializeString(HashMap<String, HashMap<String, String>> data) {
-        String serializeString = "";
+        String serializeString =
+                "pos{" + getX() + ";" + getY() + "}" +
+                "scale{" + getScaleX() + ";" + getScaleY() + "}" +
+                "priority{" + getPriority() + "}" +
+                "active{" + isActive() + "}" +
+                "rotation{" + getRotation() + "}" + (getParent() != null ?
+                "parent{" + getParent().getIdentifier() + "}" : "");
         for(String componentName : data.keySet()) {
             String insideComponentData = "";
             for(String fieldName : data.get(componentName).keySet()) {
                 insideComponentData += fieldName + "^" + data.get(componentName).get(fieldName) + "^";
             }
-            serializeString = componentName + "{" + insideComponentData + "}";
+            serializeString += componentName + "{" + insideComponentData + "}";
         }
         return serializeString;
     }

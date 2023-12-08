@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -226,6 +227,7 @@ public class TextArea extends ObjectComponent {
         return rendered;
     }
 
+    @SerializationGetter
     public String getText() {
         return this.text;
     }
@@ -234,10 +236,12 @@ public class TextArea extends ObjectComponent {
         return this.textRenderer;
     }
 
+    @SerializationGetter
     public boolean isFocused() {
         return this.focused;
     }
 
+    @SerializationGetter
     public boolean isDisabled() {
         return this.disabled;
     }

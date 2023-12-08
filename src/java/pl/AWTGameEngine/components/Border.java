@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -40,6 +41,7 @@ public class Border extends ObjectComponent {
         g2d.setTransform(oldTransform);
     }
 
+    @SerializationGetter
     public boolean isEnabled() {
         return this.enabled;
     }

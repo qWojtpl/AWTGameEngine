@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -123,6 +124,7 @@ public class ScrollComponent extends ObjectComponent {
         return this.selectedScrollColor;
     }
 
+    @SerializationGetter
     public boolean isHorizontal() {
         return this.horizontal;
     }
