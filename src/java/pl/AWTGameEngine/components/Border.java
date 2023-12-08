@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.SerializationMethod;
+import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -52,7 +52,7 @@ public class Border extends ObjectComponent {
         this.enabled = enabled;
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setEnabled(String enabled) {
         setEnabled(Boolean.parseBoolean(enabled));
     }
@@ -64,7 +64,7 @@ public class Border extends ObjectComponent {
         this.color = color;
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setColor(String color) {
         setColor(new ColorObject(color));
     }

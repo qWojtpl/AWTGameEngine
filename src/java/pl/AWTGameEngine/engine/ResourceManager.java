@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ResourceManager {
+public abstract class ResourceManager {
 
     private final static HashMap<String, List<String>> resources = new HashMap<>();
     private final static HashMap<String, Image> imageResources = new HashMap<>();

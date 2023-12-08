@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.SerializationMethod;
+import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -131,7 +131,7 @@ public class ScrollComponent extends ObjectComponent {
         this.horizontal = horizontal;
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setHorizontal(String horizontal) {
         setHorizontal(Boolean.parseBoolean(horizontal));
     }
@@ -140,7 +140,7 @@ public class ScrollComponent extends ObjectComponent {
         backgroundColor = object;
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setBackgroundColor(String color) {
         setBackgroundColor(new ColorObject(color));
     }
@@ -149,7 +149,7 @@ public class ScrollComponent extends ObjectComponent {
         scrollColor = object;
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setScrollColor(String color) {
         setScrollColor(new ColorObject(color));
     }
@@ -158,7 +158,7 @@ public class ScrollComponent extends ObjectComponent {
         selectedScrollColor = object;
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setSelectedScrollColor(String color) {
         setSelectedScrollColor(new ColorObject(color));
     }

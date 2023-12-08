@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.Conflicts;
 import pl.AWTGameEngine.annotations.ConflictsWith;
-import pl.AWTGameEngine.annotations.SerializationMethod;
+import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -55,7 +55,7 @@ public class ContextMenu extends ObjectComponent {
         onStaticUpdate();
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setNextItem(String content) {
         initMenu();
         int c = menu.getComponentCount();

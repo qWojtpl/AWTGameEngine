@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.SerializationMethod;
+import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -47,7 +47,7 @@ public class BlankRenderer extends ObjectComponent {
         this.color = color;
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setColor(String color) {
         this.color.setColor(color);
     }

@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 
-public class Preferences {
+public abstract class Preferences {
 
     private static final HashMap<String, String> preferences = new HashMap<>();
 

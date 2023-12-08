@@ -1,11 +1,10 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.SerializationMethod;
+import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class MenuBar extends ObjectComponent {
         super(object);
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setNextMenu(String menuName) {
         initBar();
         JMenu menu = new JMenu(menuName);
@@ -35,7 +34,7 @@ public class MenuBar extends ObjectComponent {
         updateWindow();
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setNextSubMenu(String menuName) {
         initBar();
         JMenu menu = new JMenu(menuName);
@@ -45,12 +44,12 @@ public class MenuBar extends ObjectComponent {
         updateWindow();
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setNextItem(String itemName) {
         addItemToMenu(activeMenu, itemName);
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setNextSubItem(String itemName) {
         initBar();
         JMenuItem item = new JMenuItem(itemName);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class WindowsManager {
+public abstract class WindowsManager {
 
     private static final List<Window> windows = new ArrayList<>();
     private static Window defaultWindow;

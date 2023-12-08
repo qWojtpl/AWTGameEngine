@@ -9,7 +9,7 @@ import pl.AWTGameEngine.components.Button;
 import javax.swing.*;
 import java.awt.*;
 
-public class DialogManager {
+public abstract class DialogManager {
 
     static {
         UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 16));
@@ -44,24 +44,6 @@ public class DialogManager {
         Window w = WindowsManager.createWindow(AppProperties.getProperty("error"));
         GameObject go = w.getCurrentScene().getGameObjectByName("@textArea");
         ((TextArea) go.getComponentsByClass(TextArea.class).get(0)).setText(message);
-    }
-
-    public static void createExtendedError(Window window, String windowTitle, String message, String errorMessage) {
-/*        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        Label label = new Label(message);
-        panel.add(label);
-        label.setFont(window.getFont().deriveFont(16f));
-        TextArea textArea = new TextArea(errorMessage);
-        textArea.setEditable(false);
-        textArea.setPreferredSize(new Dimension(100, 100));
-        textArea.setFont(window.getFont().deriveFont(14f));
-        panel.add(textArea);
-        JOptionPane.showMessageDialog(
-                window,
-                panel,
-                windowTitle,
-                JOptionPane.PLAIN_MESSAGE);*/
     }
 
 }

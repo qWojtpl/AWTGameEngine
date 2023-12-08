@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class AppProperties {
+public abstract class AppProperties {
 
     private final static Properties properties;
     private final static HashMap<String, Properties> customProperties = new HashMap<>();

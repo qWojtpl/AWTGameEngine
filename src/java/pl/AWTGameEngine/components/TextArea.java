@@ -1,10 +1,9 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.SerializationMethod;
+import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
-import javax.tools.Tool;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -247,7 +246,7 @@ public class TextArea extends ObjectComponent {
         return this.pointerLocation;
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setText(String text) {
         this.text = text;
         textRenderer.setText(text);
@@ -262,7 +261,7 @@ public class TextArea extends ObjectComponent {
         this.disabled = disabled;
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setDisabled(String disabled) {
         setDisabled(Boolean.parseBoolean(disabled));
     }
@@ -281,7 +280,7 @@ public class TextArea extends ObjectComponent {
         background.setColor(color);
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setBackgroundColor(String color) {
         setBackgroundColor(new ColorObject(color));
     }
@@ -290,7 +289,7 @@ public class TextArea extends ObjectComponent {
         backgroundDisabled.setColor(color);
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setDisabledColor(String color) {
         setDisabledColor(new ColorObject(color));
     }
@@ -299,7 +298,7 @@ public class TextArea extends ObjectComponent {
         textRenderer.setColor(color);
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setTextColor(String color) {
         setDisabledColor(new ColorObject(color));
     }
@@ -308,7 +307,7 @@ public class TextArea extends ObjectComponent {
         border.setColor(color);
     }
 
-    @SerializationMethod
+    @SerializationSetter
     public void setBorderColor(String color) {
         setBorderColor(new ColorObject(color));
     }
