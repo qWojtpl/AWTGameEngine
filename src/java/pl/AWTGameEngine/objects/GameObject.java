@@ -62,7 +62,12 @@ public class GameObject {
     public HashMap<String, HashMap<String, String>> serializeComponents() {
         HashMap<String, HashMap<String, String>> data = new HashMap<>();
         for(ObjectComponent component : getComponents()) {
-            data.put(component.getClass().getName(), component.serialize());
+            String className = component.getClass().getName().replace("pl.AWTGameEngine.components.", "")
+                    + ":ObjectComponent";
+            if(!component.getClass().getName().startsWith("pl.AWTGameEngine.components")) {
+                className = component.getClass().getName().replace("pl.AWTGameEngine.custom.", "") + ":ObjectComponent-C";
+            }
+            data.put(className, component.serialize());
         }
         return data;
     }
@@ -72,10 +77,15 @@ public class GameObject {
     }
 
     public String getSerializeString(HashMap<String, HashMap<String, String>> data) {
+        String serializeString = "";
         for(String componentName : data.keySet()) {
-
+            String insideComponentData = "";
+            for(String fieldName : data.get(componentName).keySet()) {
+                insideComponentData += fieldName + "^" + data.get(componentName).get(fieldName) + "^";
+            }
+            serializeString = componentName + "{" + insideComponentData + "}";
         }
-        return "";
+        return serializeString;
     }
 
     public String getIdentifier() {

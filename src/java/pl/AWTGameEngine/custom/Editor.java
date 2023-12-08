@@ -168,6 +168,7 @@ public class Editor extends ObjectComponent {
         menu.setNextItem("Remove GameObject");
         cancelClick = true;
         tree.setSelection(object.getIdentifier());
+        System.out.println(object.getSerializeString());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -24,18 +25,22 @@ public abstract class Collider extends ObjectComponent {
         return new Path2D.Double();
     }
 
+    @SerializationGetter
     public int getX() {
         return this.x;
     }
 
+    @SerializationGetter
     public int getY() {
         return this.y;
     }
 
+    @SerializationGetter
     public int getScaleX() {
         return this.scaleX;
     }
 
+    @SerializationGetter
     public int getScaleY() {
         return this.scaleY;
     }
@@ -44,6 +49,7 @@ public abstract class Collider extends ObjectComponent {
         return new Path2D.Double();
     }
 
+    @SerializationGetter
     public boolean isVisualize() {
         return this.visualize;
     }
