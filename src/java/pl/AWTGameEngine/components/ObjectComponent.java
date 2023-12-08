@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.Conflicts;
 import pl.AWTGameEngine.annotations.ConflictsWith;
+import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.PanelRegistry;
@@ -14,7 +15,9 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -231,6 +234,25 @@ public abstract class ObjectComponent {
             }
         }
         return false;
+    }
+
+    public final HashMap<String, String> serialize() {
+        HashMap<String, String> data = new HashMap<>();
+        for(Method method : this.getClass().getDeclaredMethods()) {
+            if(!method.isAnnotationPresent(SerializationGetter.class)) {
+                continue;
+            }
+            String methodName = method.getName();
+            methodName = methodName.replace("get", "");
+            methodName = methodName.substring(0, 0).toLowerCase() + methodName.substring(1);
+            try {
+                data.put(methodName, method.invoke(this, (Object) null).toString());
+            } catch(Exception e) {
+                System.out.println("Exception while serializing " + this.getClass().getName());
+                e.printStackTrace();
+            }
+        }
+        return data;
     }
 
 }

@@ -59,6 +59,25 @@ public class GameObject {
         component.onRemoveComponent();
     }
 
+    public HashMap<String, HashMap<String, String>> serializeComponents() {
+        HashMap<String, HashMap<String, String>> data = new HashMap<>();
+        for(ObjectComponent component : getComponents()) {
+            data.put(component.getClass().getName(), component.serialize());
+        }
+        return data;
+    }
+
+    public String getSerializeString() {
+        return getSerializeString(serializeComponents());
+    }
+
+    public String getSerializeString(HashMap<String, HashMap<String, String>> data) {
+        for(String componentName : data.keySet()) {
+
+        }
+        return "";
+    }
+
     public String getIdentifier() {
         return this.identifier;
     }
