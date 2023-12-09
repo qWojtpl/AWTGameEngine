@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Sprite {
 
-    private String imagePath;
+    private final String imagePath;
     private final Image image;
 
     public Sprite(String imagePath, Image image) {

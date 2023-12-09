@@ -54,8 +54,13 @@ public abstract class Collider extends ObjectComponent {
         return this.visualize;
     }
 
-    public ColorObject getVisualizeColor() {
+    public ColorObject getVisualizeColorObject() {
         return this.visualizeColor;
+    }
+
+    @SerializationGetter
+    public String getVisualizeColor() {
+        return this.visualizeColor.serialize();
     }
 
     public void setX(int x) {

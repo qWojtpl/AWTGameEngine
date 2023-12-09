@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -36,8 +37,13 @@ public class BlankRenderer extends ObjectComponent {
         g2d.setTransform(oldTransform);
     }
 
-    public ColorObject getColor() {
+    public ColorObject getColorObject() {
         return this.color;
+    }
+
+    @SerializationGetter
+    public String getColor() {
+        return this.color.serialize();
     }
 
     public void setColor(ColorObject color) {

@@ -46,8 +46,13 @@ public class Border extends ObjectComponent {
         return this.enabled;
     }
 
-    public ColorObject getColor() {
+    public ColorObject getColorObject() {
         return this.color;
+    }
+
+    @SerializationGetter
+    public String getColor() {
+        return this.color.serialize();
     }
 
     public void setEnabled(boolean enabled) {

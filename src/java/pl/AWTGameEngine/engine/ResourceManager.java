@@ -47,7 +47,7 @@ public abstract class ResourceManager {
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
-                throw new Exception();
+                throw new Exception("Stream is null.");
             }
             Image img = ImageIO.read(stream);
             Sprite sprite = new Sprite(name, img);
@@ -68,7 +68,7 @@ public abstract class ResourceManager {
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
-                throw new Exception();
+                throw new Exception("Stream is null.");
             }
             streamResources.put(name, stream);
             return stream;

@@ -87,20 +87,40 @@ public class Button extends ObjectComponent {
         return textRenderer.getSize();
     }
 
-    public ColorObject getBackgroundColor() {
+    public ColorObject getBackgroundColorObject() {
         return this.backgroundColor;
     }
 
-    public ColorObject getHighlightColor() {
+    public ColorObject getHighlightColorObject() {
         return this.highlightColor;
     }
 
-    public ColorObject getTextColor() {
+    public ColorObject getTextColorObject() {
         return this.textColor;
     }
 
-    public ColorObject getHighlightTextColor() {
+    public ColorObject getHighlightTextColorObject() {
         return this.highlightTextColor;
+    }
+
+    @SerializationGetter
+    public String getBackgroundColor() {
+        return this.backgroundColor.serialize();
+    }
+
+    @SerializationGetter
+    public String getHighlightColor() {
+        return this.highlightColor.serialize();
+    }
+
+    @SerializationGetter
+    public String getTextColor() {
+        return this.textColor.serialize();
+    }
+
+    @SerializationGetter
+    public String getHighlightTextColor() {
+        return this.highlightTextColor.serialize();
     }
 
     @SerializationGetter

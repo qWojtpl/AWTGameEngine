@@ -258,9 +258,9 @@ public class TextArea extends ObjectComponent {
 
     public void setDisabled(boolean disabled) {
         if(disabled) {
-            backgroundDisabled.getColor().transientAlpha(255, 100);
+            backgroundDisabled.getColorObject().transientAlpha(255, 100);
         } else {
-            backgroundDisabled.getColor().transientAlpha(0, 100);
+            backgroundDisabled.getColorObject().transientAlpha(0, 100);
         }
         this.disabled = disabled;
     }

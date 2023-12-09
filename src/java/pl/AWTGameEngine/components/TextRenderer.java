@@ -70,8 +70,12 @@ public class TextRenderer extends ObjectComponent {
         return this.text;
     }
 
-    public ColorObject getColor() {
+    public ColorObject getColorObject() {
         return this.color;
+    }
+
+    public String getColor() {
+        return this.color.serialize();
     }
 
     @SerializationGetter

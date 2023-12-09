@@ -20,6 +20,26 @@ public class ColorObject {
         setColor(color);
     }
 
+    public static String serialize(ColorObject object) {
+        if(object.getColor().getAlpha() != 255) {
+            return "rgba(" +
+                    object.getColor().getRed() + "," +
+                    object.getColor().getGreen() + "," +
+                    object.getColor().getBlue() + "," +
+                    object.getColor().getAlpha() +
+                    ")";
+        }
+        return "rgb(" +
+                object.getColor().getRed() + "," +
+                object.getColor().getGreen() + "," +
+                object.getColor().getBlue() +
+                ")";
+    }
+
+    public String serialize() {
+        return serialize(this);
+    }
+
     public static Color deserialize(String color) {
         Color c = Color.BLACK;
         if(color.toLowerCase().startsWith("rgb")) {

@@ -16,9 +16,7 @@ import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Every component field should have dedicated method to set the value of this field.
