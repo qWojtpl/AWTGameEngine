@@ -17,14 +17,12 @@ public class Scene {
     private final Window window;
     private ColliderRegistry colliderRegistry;
     private PanelRegistry panelRegistry;
-    private Camera camera;
 
     public Scene(String name, Window window) {
         this.name = name;
         this.window = window;
         setColliderRegistry(new ColliderRegistry());
         setPanelRegistry(new PanelRegistry());
-        setCamera(new Camera());
     }
 
     public String getName() {
@@ -43,20 +41,12 @@ public class Scene {
         return this.panelRegistry;
     }
 
-    public Camera getCamera() {
-        return this.camera;
-    }
-
     public void setColliderRegistry(ColliderRegistry registry) {
         this.colliderRegistry = registry;
     }
 
     public void setPanelRegistry(PanelRegistry registry) {
         this.panelRegistry = registry;
-    }
-
-    public void setCamera(Camera camera) {
-        this.camera = camera;
     }
 
     public GameObject createGameObject(String identifier) {

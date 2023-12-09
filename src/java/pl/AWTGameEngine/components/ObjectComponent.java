@@ -52,7 +52,7 @@ public abstract class ObjectComponent {
     }
 
     protected final Camera getCamera() {
-        return getScene().getCamera();
+        return getObject().getPanel().getCamera();
     }
 
     protected final Window getWindow() {

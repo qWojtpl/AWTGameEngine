@@ -86,7 +86,7 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
         if(window.getCurrentScene() == null) {
             return;
         }
-        Camera camera = window.getCurrentScene().getCamera();
+        Camera camera = window.getPanel().getCamera();
         mouseX = (int) (e.getX() / camera.getZoom() + camera.getX());
         mouseY = (int) (e.getY() / camera.getZoom() + camera.getY());
         mouseWindowX = e.getX();

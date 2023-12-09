@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -12,12 +13,14 @@ import java.util.List;
 public class NestedPanel extends JPanel {
 
     private final Window window;
+    private Camera camera;
 
     public NestedPanel(GameObject parentObject) {
         super();
         setLayout(null);
         setBackground(Color.WHITE);
         this.window = parentObject.getScene().getWindow();
+        this.camera = new Camera();
     }
 
     public NestedPanel(Window window) {
@@ -25,6 +28,7 @@ public class NestedPanel extends JPanel {
         setLayout(null);
         setBackground(Color.WHITE);
         this.window = window;
+        this.camera = new Camera();
     }
 
     @Override
@@ -53,6 +57,10 @@ public class NestedPanel extends JPanel {
 
     public Window getWindow() {
         return this.window;
+    }
+
+    public Camera getCamera() {
+        return this.camera;
     }
 
 }
