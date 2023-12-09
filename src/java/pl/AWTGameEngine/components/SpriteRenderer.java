@@ -36,8 +36,8 @@ public class SpriteRenderer extends ObjectComponent {
         g2d.drawImage(sprite.getImage(),
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
-                getCamera().parseScale(getObject().getScaleX()),
-                getCamera().parseScale(getObject().getScaleY()),
+                getCamera().parseScale(getObject().getSizeX()),
+                getCamera().parseScale(getObject().getSizeY()),
                 null);
         g2d.setTransform(oldTransform);
     }

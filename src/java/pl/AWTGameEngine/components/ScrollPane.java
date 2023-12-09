@@ -51,11 +51,11 @@ public class ScrollPane extends ObjectComponent {
                 (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
         scrollPaneContainer.setSize(
-                (int) (getObject().getScaleX() * getCamera().getZoom()),
-                (int) (getObject().getScaleY() * getCamera().getZoom()));
+                (int) (getObject().getSizeX() * getCamera().getZoom()),
+                (int) (getObject().getSizeY() * getCamera().getZoom()));
         scrollPane.setPreferredSize(new Dimension(
-                (int) (getObject().getScaleX() * getCamera().getZoom()),
-                (int) (getObject().getScaleY() * getCamera().getZoom())));
+                (int) (getObject().getSizeX() * getCamera().getZoom()),
+                (int) (getObject().getSizeY() * getCamera().getZoom())));
     }
 
     @Override

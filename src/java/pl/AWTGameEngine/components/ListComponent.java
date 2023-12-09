@@ -20,8 +20,8 @@ public class ListComponent extends ObjectComponent {
         list.setFocusable(false);
         list.setLocation((int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
-        list.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
-                (int) (getObject().getScaleY() * getCamera().getZoom()));
+        list.setSize((int) (getObject().getSizeX() * getCamera().getZoom()),
+                (int) (getObject().getSizeY() * getCamera().getZoom()));
         list.setFont(getWindow().getDefaultFont(24f));
         getWindow().getPanel().add(list);
     }
@@ -38,8 +38,8 @@ public class ListComponent extends ObjectComponent {
         }
         list.setLocation((int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
-        list.setSize((int) (getObject().getScaleX() * getCamera().getZoom()),
-                (int) (getObject().getScaleY() * getCamera().getZoom()));
+        list.setSize((int) (getObject().getSizeX() * getCamera().getZoom()),
+                (int) (getObject().getSizeY() * getCamera().getZoom()));
     }
 
     public void setNextItem(String item) {

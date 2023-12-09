@@ -31,8 +31,8 @@ public class BlankRenderer extends ObjectComponent {
         g2d.fillRect(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
-                getCamera().parseScale(getObject().getScaleX()),
-                getCamera().parseScale(getObject().getScaleY())
+                getCamera().parseScale(getObject().getSizeX()),
+                getCamera().parseScale(getObject().getSizeY())
         );
         g2d.setTransform(oldTransform);
     }

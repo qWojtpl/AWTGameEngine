@@ -54,9 +54,9 @@ public class Button extends ObjectComponent {
         backgroundComponentColor.setColor(backgroundColor.getColor());
         textComponentColor.setColor(textColor.getColor());
         if(getMouseListener().getMouseX() >= getObject().getX()
-        && getMouseListener().getMouseX() <= getObject().getX() + getObject().getScaleX()) {
+        && getMouseListener().getMouseX() <= getObject().getX() + getObject().getSizeX()) {
             if(getMouseListener().getMouseY() >= getObject().getY()
-            && getMouseListener().getMouseY() <= getObject().getY() + getObject().getScaleY()) {
+            && getMouseListener().getMouseY() <= getObject().getY() + getObject().getSizeY()) {
                 backgroundComponentColor.setColor(highlightColor.getColor());
                 textComponentColor.setColor(highlightTextColor.getColor());
             }

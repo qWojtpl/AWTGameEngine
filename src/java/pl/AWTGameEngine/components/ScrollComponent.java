@@ -49,8 +49,8 @@ public class ScrollComponent extends ObjectComponent {
     @Override
     public void onUpdate() {
         scrollRenderer.setColor(scrollColor);
-        if((getMouseListener().getMouseX() >= scroll.getX() && getMouseListener().getMouseX() <= scroll.getX() + scroll.getScaleX()
-        && getMouseListener().getMouseY() >= scroll.getY() && getMouseListener().getMouseY() <= scroll.getY() + scroll.getScaleY())
+        if((getMouseListener().getMouseX() >= scroll.getX() && getMouseListener().getMouseX() <= scroll.getX() + scroll.getSizeX()
+        && getMouseListener().getMouseY() >= scroll.getY() && getMouseListener().getMouseY() <= scroll.getY() + scroll.getSizeY())
         || selected) {
             scrollRenderer.setColor(selectedScrollColor);
             if(getMouseListener().isMousePressed()) {
@@ -73,31 +73,31 @@ public class ScrollComponent extends ObjectComponent {
     private void updatePosition() {
         if(!horizontal) {
             scroll.setX(getObject().getX());
-            scroll.setScaleX(getObject().getScaleX());
-            scroll.setScaleY(getObject().getScaleY() / 4);
+            scroll.setSizeX(getObject().getSizeX());
+            scroll.setSizeY(getObject().getSizeY() / 4);
             int y = getObject().getY() + shift;
-            value = (double) shift / getObject().getScaleY();
+            value = (double) shift / getObject().getSizeY();
             if(y < getObject().getY()) {
                 y = getObject().getY();
                 value = 0;
             }
-            if(y > getObject().getY() + getObject().getScaleY() - scroll.getScaleY()) {
-                y = getObject().getY() + getObject().getScaleY() - scroll.getScaleY();
+            if(y > getObject().getY() + getObject().getSizeY() - scroll.getSizeY()) {
+                y = getObject().getY() + getObject().getSizeY() - scroll.getSizeY();
                 value = 1;
             }
             scroll.setY(y);
         } else {
             scroll.setY(getObject().getY());
-            scroll.setScaleX(getObject().getScaleX() / 4);
-            scroll.setScaleY(getObject().getScaleY());
+            scroll.setSizeX(getObject().getSizeX() / 4);
+            scroll.setSizeY(getObject().getSizeY());
             int x = getObject().getX() + shift;
-            value = (double) shift / getObject().getScaleX();
+            value = (double) shift / getObject().getSizeX();
             if (x < getObject().getX()) {
                 x = getObject().getX();
                 value = 0;
             }
-            if(x > getObject().getX() + getObject().getScaleX() - scroll.getScaleX()) {
-                x = getObject().getX() + getObject().getScaleX() - scroll.getScaleX();
+            if(x > getObject().getX() + getObject().getSizeX() - scroll.getSizeX()) {
+                x = getObject().getX() + getObject().getSizeX() - scroll.getSizeX();
                 value = 1;
             }
             scroll.setX(x);

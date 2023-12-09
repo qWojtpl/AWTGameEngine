@@ -32,13 +32,13 @@ public class LineChart extends ObjectComponent {
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseX(getObject(), getObject().getX()),
-                getCamera().parseY(getObject(), getObject().getY() + getObject().getScaleY())
+                getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY())
         );
         g.drawLine(
                 getCamera().parseX(getObject(), getObject().getX()),
-                getCamera().parseY(getObject(), getObject().getY() + getObject().getScaleY()),
-                getCamera().parseX(getObject(), getObject().getX() + getObject().getScaleX()),
-                getCamera().parseY(getObject(), getObject().getY() + getObject().getScaleY())
+                getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY()),
+                getCamera().parseX(getObject(), getObject().getX() + getObject().getSizeX()),
+                getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY())
         );
         int i = 0;
         int[] keys = new int[values.size()];
@@ -47,7 +47,7 @@ public class LineChart extends ObjectComponent {
             keys[i++] = key;
             sum += key;
         }
-        int stepX = getObject().getScaleX() / sum;
+        int stepX = getObject().getSizeX() / sum;
         for(i = 0; i < values.size(); i++) {
             int x = keys[i];
             int y = values.get(x);
@@ -62,7 +62,7 @@ public class LineChart extends ObjectComponent {
     }
 
     public int getRelativeChartY(int y) {
-        return getObject().getY() + getObject().getScaleY() - y;
+        return getObject().getY() + getObject().getSizeY() - y;
     }
 
 }

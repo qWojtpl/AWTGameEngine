@@ -18,8 +18,8 @@ public class BackgroundRenderer extends ObjectComponent {
                 GameObject tile = getScene().createGameObject("background-" + x + "x" + y);
                 tile.setX(x * 32);
                 tile.setY(y * 32);
-                tile.setScaleX(32);
-                tile.setScaleY(32);
+                tile.setSizeX(32);
+                tile.setSizeY(32);
                 tile.setPriority(0);
                 tile.setParent(getObject().getParent());
                 SpriteRenderer s = new SpriteRenderer(tile);

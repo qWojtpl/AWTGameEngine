@@ -74,8 +74,8 @@ public class Tree extends ObjectComponent {
                 (int) ((getObject().getX() - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() - getCamera().getRelativeY(getObject())) * getCamera().getZoom()));
         container.setSize(
-                (int) (getObject().getScaleX() * getCamera().getZoom()),
-                (int) (getObject().getScaleY() * getCamera().getZoom()));
+                (int) (getObject().getSizeX() * getCamera().getZoom()),
+                (int) (getObject().getSizeY() * getCamera().getZoom()));
     }
 
     @Override

@@ -5,7 +5,6 @@ import pl.AWTGameEngine.objects.GameObject;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +47,8 @@ public class BoxCollider extends Collider {
         g2d.drawRect(
                 getCamera().parseX(getObject(), getObject().getX() + x),
                 getCamera().parseY(getObject(), getObject().getY() + y),
-                getCamera().parseScale(getObject().getScaleX() + scaleX),
-                getCamera().parseScale(getObject().getScaleY() + scaleY)
+                getCamera().parseScale(getObject().getSizeX() + sizeX),
+                getCamera().parseScale(getObject().getSizeY() + sizeY)
         );
         g2d.setTransform(oldTransform);
     }
@@ -71,19 +70,19 @@ public class BoxCollider extends Collider {
      <a href="https://gamedev.stackexchange.com/questions/86755/how-to-calculate-corner-positions-marks-of-a-rotated-tilted-rectangle">StackExchange</a>
      */
     public void calculatePoints(int rotation) {
-        int[] fixedX = new int[]{0, getObject().getScaleX() + scaleX, getObject().getScaleX() + scaleX, 0};
-        int[] fixedY = new int[]{0, 0, getObject().getScaleY() + scaleY, getObject().getScaleY() + scaleY};
+        int[] fixedX = new int[]{0, getObject().getSizeX() + sizeX, getObject().getSizeX() + sizeX, 0};
+        int[] fixedY = new int[]{0, 0, getObject().getSizeY() + sizeY, getObject().getSizeY() + sizeY};
         pointsX = new ArrayList<>();
         pointsY = new ArrayList<>();
         path = new Path2D.Double();
         for(int i = 0; i < 4; i++) {
-            int tempX = getObject().getX() + x + fixedX[i] - getObject().getCenterX() - x - scaleX / 2;
-            int tempY = getObject().getY() + y + fixedY[i] - getObject().getCenterY() - y - scaleY / 2;
+            int tempX = getObject().getX() + x + fixedX[i] - getObject().getCenterX() - x - sizeX / 2;
+            int tempY = getObject().getY() + y + fixedY[i] - getObject().getCenterY() - y - sizeY / 2;
             double theta = Math.toRadians(rotation);
             int rotatedX = (int) (tempX * Math.cos(theta) - tempY * Math.sin(theta));
             int rotatedY = (int) (tempX * Math.sin(theta) + tempY * Math.cos(theta));
-            int xP = rotatedX + getObject().getCenterX() + x + scaleX / 2;
-            int yP = rotatedY + getObject().getCenterY() + y + scaleY / 2;
+            int xP = rotatedX + getObject().getCenterX() + x + sizeX / 2;
+            int yP = rotatedY + getObject().getCenterY() + y + sizeY / 2;
             pointsX.add(xP);
             pointsY.add(yP);
             if(i == 0) {

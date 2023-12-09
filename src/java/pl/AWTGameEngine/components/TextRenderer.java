@@ -36,16 +36,16 @@ public class TextRenderer extends ObjectComponent {
             if(HorizontalAlign.LEFT.equals(horizontal)) {
                 x = 0;
             } else if (HorizontalAlign.RIGHT.equals(horizontal)) {
-                x = getObject().getScaleX() - width;
+                x = getObject().getSizeX() - width;
             } else {
-                x = (getObject().getScaleX() - width) / 2;
+                x = (getObject().getSizeX() - width) / 2;
             }
             if(VerticalAlign.TOP.equals(vertical)) {
                 y = height / 4;
             } else if (VerticalAlign.BOTTOM.equals(vertical)) {
-                y = getObject().getScaleY() - totalHeight - height / 4;
+                y = getObject().getSizeY() - totalHeight - height / 4;
             } else {
-                y = (getObject().getScaleY() - totalHeight) / 2;
+                y = (getObject().getSizeY() - totalHeight) / 2;
             }
             Graphics2D g2d = (Graphics2D) g;
             AffineTransform oldTransform = g2d.getTransform();

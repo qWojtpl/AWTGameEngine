@@ -12,8 +12,8 @@ public abstract class Collider extends ObjectComponent {
 
     protected int x = 0;
     protected int y = 0;
-    protected int scaleX = 0;
-    protected int scaleY = 0;
+    protected int sizeX = 0;
+    protected int sizeY = 0;
     protected boolean visualize = false;
     protected ColorObject visualizeColor = new ColorObject(Color.GREEN);
 
@@ -36,13 +36,13 @@ public abstract class Collider extends ObjectComponent {
     }
 
     @SerializationGetter
-    public int getScaleX() {
-        return this.scaleX;
+    public int getSizeX() {
+        return this.sizeX;
     }
 
     @SerializationGetter
-    public int getScaleY() {
-        return this.scaleY;
+    public int getSizeY() {
+        return this.sizeY;
     }
 
     public Path2D getPath() {
@@ -81,22 +81,22 @@ public abstract class Collider extends ObjectComponent {
         setY(Integer.parseInt(y));
     }
 
-    public void setScaleX(int scaleX) {
-        this.scaleX = scaleX;
+    public void setSizeX(int sizeX) {
+        this.sizeX = sizeX;
     }
 
     @SerializationSetter
-    public void setScaleX(String scaleX) {
-        setScaleX(Integer.parseInt(scaleX));
+    public void setSizeX(String sizeX) {
+        setSizeX(Integer.parseInt(sizeX));
     }
 
-    public void setScaleY(int scaleY) {
-        this.scaleY = scaleY;
+    public void setSizeY(int sizeY) {
+        this.sizeY = sizeY;
     }
 
     @SerializationSetter
-    public void setScaleY(String scaleY) {
-        setScaleY(Integer.parseInt(scaleY));
+    public void setSizeY(String sizeY) {
+        setSizeY(Integer.parseInt(sizeY));
     }
 
     public void setVisualize(boolean visualize) {

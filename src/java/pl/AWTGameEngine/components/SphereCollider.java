@@ -33,8 +33,8 @@ public class SphereCollider extends Collider {
         g.setColor(visualizeColor.getColor());
         g.drawOval((int) ((getObject().getX() + x - getCamera().getRelativeX(getObject())) * getCamera().getZoom()),
                 (int) ((getObject().getY() + y - getCamera().getRelativeY(getObject())) * getCamera().getZoom()),
-                (int) ((getObject().getScaleX() + scaleX) * getCamera().getZoom()),
-                (int) ((getObject().getScaleY() + scaleY) * getCamera().getZoom()));
+                (int) ((getObject().getSizeX() + sizeX) * getCamera().getZoom()),
+                (int) ((getObject().getSizeY() + sizeY) * getCamera().getZoom()));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class SphereCollider extends Collider {
     @Override
     public Path2D calculatePath(int newX, int newY) {
         Path2D path = new Path2D.Double();
-        path.append(new Ellipse2D.Double(newX, newY, getObject().getScaleX(), getObject().getScaleY()), true);
+        path.append(new Ellipse2D.Double(newX, newY, getObject().getSizeX(), getObject().getSizeY()), true);
         return path;
     }
 

@@ -1,4 +1,4 @@
-@image="pos{10;10}scale{192;192}SpriteRenderer:ObjectComponent{spriteSource^sprites/base/error.png^}";
-@text="pos{210;0}scale{720;100}TextRenderer:ObjectComponent{text^Runtime generated an error:^horizontal^left^vertical^center^}";
-@textArea="pos{210;100}scale{720;300}TextArea:ObjectComponent{}";
-@button="pos{280;430}scale{400;75}Button:ObjectComponent{text^Ok^backgroundColor^white^highlightTextColor^white^action^close_window^}";
+@image="pos{10;10}size{192;192}SpriteRenderer:ObjectComponent{spriteSource^sprites/base/error.png^}";
+@text="pos{210;0}size{720;100}TextRenderer:ObjectComponent{text^Runtime generated an error:^horizontal^left^vertical^center^}";
+@textArea="pos{210;100}size{720;300}TextArea:ObjectComponent{}";
+@button="pos{280;430}size{400;75}Button:ObjectComponent{text^Ok^backgroundColor^white^highlightTextColor^white^action^close_window^}";

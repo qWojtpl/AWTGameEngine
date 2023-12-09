@@ -19,8 +19,8 @@ public class GameObject {
     private int x = 0;
     private int y = 0;
     private int rotation = 0;
-    private int scaleX = 100;
-    private int scaleY = 100;
+    private int sizeX = 100;
+    private int sizeY = 100;
     private int priority = 0;
     private GameObject parent;
     private NestedPanel panel;
@@ -79,7 +79,7 @@ public class GameObject {
     public String getSerializeString(HashMap<String, HashMap<String, String>> data) {
         String serializeString =
                 "pos{" + getX() + ";" + getY() + "}" +
-                "scale{" + getScaleX() + ";" + getScaleY() + "}" +
+                "size{" + getSizeX() + ";" + getSizeY() + "}" +
                 "priority{" + getPriority() + "}" +
                 "active{" + isActive() + "}" +
                 "rotation{" + getRotation() + "}" + (getParent() != null ?
@@ -137,24 +137,24 @@ public class GameObject {
 
     public int getCenterX() {
         if(this.parent == null) {
-            return getX() + getScaleX() / 2;
+            return getX() + getSizeX() / 2;
         }
         return this.parent.getCenterX();
     }
 
     public int getCenterY() {
         if(this.parent == null) {
-            return getY() + getScaleY() / 2;
+            return getY() + getSizeY() / 2;
         }
         return this.parent.getCenterY();
     }
 
-    public int getScaleX() {
-        return this.scaleX;
+    public int getSizeX() {
+        return this.sizeX;
     }
 
-    public int getScaleY() {
-        return this.scaleY;
+    public int getSizeY() {
+        return this.sizeY;
     }
 
     public int getPriority() {
@@ -299,12 +299,12 @@ public class GameObject {
         return true;
     }
 
-    public void setScaleX(int x) {
-        this.scaleX = x;
+    public void setSizeX(int x) {
+        this.sizeX = x;
     }
 
-    public void setScaleY(int y) {
-        this.scaleY = y;
+    public void setSizeY(int y) {
+        this.sizeY = y;
     }
 
     public void setPriority(int priority) {
@@ -376,8 +376,8 @@ public class GameObject {
     public int getWidth() {
         int width = 0;
         for(GameObject object : getChildren()) {
-            if(object.getX() + object.getScaleX() > width) {
-                width = object.getX() + object.getScaleX();
+            if(object.getX() + object.getSizeX() > width) {
+                width = object.getX() + object.getSizeX();
             }
         }
         return width;
@@ -388,13 +388,13 @@ public class GameObject {
         for(GameObject object : getChildren()) {
             if(object.getChildren().size() > 0) {
                 for(GameObject child : object.getChildren()) {
-                    if(child.getY() + child.getScaleY() > height) {
-                        height = child.getY() + child.getScaleY();
+                    if(child.getY() + child.getSizeY() > height) {
+                        height = child.getY() + child.getSizeY();
                     }
                 }
             }
-            if(object.getY() + object.getScaleY() > height) {
-                height = object.getY() + object.getScaleY();
+            if(object.getY() + object.getSizeY() > height) {
+                height = object.getY() + object.getSizeY();
             }
         }
         return height;
@@ -484,14 +484,14 @@ public class GameObject {
                 } else {
                     System.out.println("Can't find object: " + properties.get(propertyName));
                 }
-            } else if(propertyName.equalsIgnoreCase("scale")) {
+            } else if(propertyName.equalsIgnoreCase("size")) {
                 String[] split = properties.get(propertyName).split(";");
                 if(split.length < 2) {
                     continue;
                 }
                 try {
-                    this.setScaleX(Integer.parseInt(split[0]));
-                    this.setScaleY(Integer.parseInt(split[1]));
+                    this.setSizeX(Integer.parseInt(split[0]));
+                    this.setSizeY(Integer.parseInt(split[1]));
                 } catch(NumberFormatException ignored) {
                 }
             } else if(propertyName.contains(":ObjectComponent")) {
