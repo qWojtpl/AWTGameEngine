@@ -58,6 +58,18 @@ public abstract class AppProperties {
         }
     }
 
+    public static boolean getPropertyAsBoolean(String key) {
+        return getPropertyAsBoolean(key, properties);
+    }
+
+    public static boolean getPropertyAsBoolean(String key, Properties properties) {
+        try {
+            return Boolean.parseBoolean(getProperty(key, properties));
+        } catch(Exception e) {
+            return false;
+        }
+    }
+
     public static Properties getCustomProperties(String propertiesPath) {
         if(customProperties.containsKey(propertiesPath)) {
             return customProperties.get(propertiesPath);
