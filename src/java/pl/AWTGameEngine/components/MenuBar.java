@@ -23,6 +23,12 @@ public class MenuBar extends ObjectComponent {
         super(object);
     }
 
+    @Override
+    public void onRemoveComponent() {
+        getWindow().setMenuBar(null);
+        getWindow().setJMenuBar(null);
+    }
+
     @SerializationSetter
     public void setNextMenu(String menuName) {
         initBar();

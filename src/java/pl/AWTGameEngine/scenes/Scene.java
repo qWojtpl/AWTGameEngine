@@ -150,6 +150,11 @@ public class Scene {
     }
 
     public void removeAllObjects() {
+        for(GameObject object : getActiveGameObjects()) {
+            for(ObjectComponent component : object.getComponents()) {
+                component.onRemoveComponent();
+            }
+        }
         gameObjects.clear();
     }
 

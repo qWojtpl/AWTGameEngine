@@ -28,16 +28,13 @@ public class SceneLoader {
         if(customProperties != null) {
             window.setTitle(AppProperties.getProperty("title", customProperties));
             window.getLoop().setFPS(AppProperties.getPropertyAsInteger("fps", customProperties));
-        } else {
-            window.setTitle(AppProperties.getProperty("title"));
-        }
-        if(customProperties != null) {
             if(AppProperties.getProperty("multiplier", customProperties) != null) {
                 window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier", customProperties));
             } else {
                 window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier"));
             }
         } else {
+            window.setTitle(AppProperties.getProperty("title"));
             window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier"));
         }
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
