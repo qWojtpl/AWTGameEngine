@@ -31,11 +31,20 @@ public class SceneLoader {
         } else {
             window.setTitle(AppProperties.getProperty("title"));
         }
+        if(customProperties != null) {
+            if(AppProperties.getProperty("multiplier", customProperties) != null) {
+                window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier", customProperties));
+            } else {
+                window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier"));
+            }
+        } else {
+            window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier"));
+        }
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         window.getPanel().removeAll();
         window.setCurrentScene(new Scene(scenePath, window));
         window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
-        window.getPanel().getCamera().setZoom((float) (window.getPanel().getMultiplier() / 2f));
+        window.setLocationRelativeTo(null);
         List<String> sceneLines = ResourceManager.getResource(scenePath);
         if(sceneLines == null) {
             System.out.println("Scene not found.");

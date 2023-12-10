@@ -2,7 +2,7 @@ package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.GameLoop;
-import pl.AWTGameEngine.engine.GamePanel;
+import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
@@ -15,7 +15,10 @@ import java.awt.event.WindowEvent;
 
 public class Window extends JFrame {
 
-    private GamePanel panel;
+    private double multiplier = 3;
+    private final int WIDTH = 480;
+    private final int HEIGHT = (int) (WIDTH * 0.5625);
+    private NestedPanel panel;
     private GameLoop loop;
     private KeyListener keyListener;
     private MouseListener mouseListener;
@@ -38,7 +41,11 @@ public class Window extends JFrame {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
-    public GamePanel getPanel() {
+    public double getMultiplier() {
+        return this.multiplier;
+    }
+
+    public NestedPanel getPanel() {
         return this.panel;
     }
 
@@ -82,12 +89,26 @@ public class Window extends JFrame {
         return this.fullScreen;
     }
 
-    public void setPanel(GamePanel panel) {
-        if(this.panel != null) {
+    public void setMultiplier(double multiplier) {
+        if(multiplier <= 0) {
+            multiplier = 1;
+        }
+        if(isFullScreen()) {
+            multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
+        }
+        this.multiplier = multiplier;
+        if(panel != null) {
+            if(getCurrentScene() != null) {
+                getCurrentScene().getPanelRegistry().removePanel(panel);
+            }
             remove(panel);
         }
-        this.panel = panel;
+        this.panel = new NestedPanel(this);
         add(panel);
+        panel.setPreferredSize(new Dimension((int) (WIDTH * multiplier), (int) (HEIGHT * multiplier)));
+        pack();
+        setKeyListener(new KeyListener(this));
+        setMouseListener(new MouseListener(this));
     }
 
     public void setLoop(GameLoop loop) {
@@ -96,20 +117,23 @@ public class Window extends JFrame {
 
     public void setKeyListener(KeyListener listener) {
         if(this.keyListener != null) {
-            this.removeKeyListener(this.keyListener);
+            removeKeyListener(this.keyListener);
         }
         this.keyListener = listener;
-        this.addKeyListener(listener);
+        addKeyListener(listener);
     }
 
     public void setMouseListener(MouseListener mouseListener) {
+        if(panel == null) {
+            return;
+        }
         if(this.mouseListener != null) {
-            getPanel().removeMouseListener(this.mouseListener);
-            getPanel().removeMouseMotionListener(this.mouseListener);
+            panel.removeMouseListener(this.mouseListener);
+            panel.removeMouseMotionListener(this.mouseListener);
         }
         this.mouseListener = mouseListener;
-        getPanel().addMouseListener(mouseListener);
-        getPanel().addMouseMotionListener(mouseListener);
+        panel.addMouseListener(mouseListener);
+        panel.addMouseMotionListener(mouseListener);
     }
 
     public void setWindowListener(WindowListener windowListener) {

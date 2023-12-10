@@ -19,9 +19,11 @@ public class GameLoop extends Thread {
             } catch(InterruptedException ignored) {
                 break;
             }
-            window.getCurrentScene().update();
-            for(NestedPanel panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
-                panel.repaint();
+            if(window.getCurrentScene() != null) {
+                window.getCurrentScene().update();
+                for (NestedPanel panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
+                    panel.repaint();
+                }
             }
         }
     }

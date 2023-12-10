@@ -13,14 +13,14 @@ import java.util.List;
 public class NestedPanel extends JPanel {
 
     private final Window window;
-    private Camera camera;
+    private final Camera camera;
 
     public NestedPanel(GameObject parentObject) {
         super();
         setLayout(null);
         setBackground(Color.WHITE);
         this.window = parentObject.getScene().getWindow();
-        this.camera = new Camera();
+        this.camera = new Camera(this);
     }
 
     public NestedPanel(Window window) {
@@ -28,7 +28,7 @@ public class NestedPanel extends JPanel {
         setLayout(null);
         setBackground(Color.WHITE);
         this.window = window;
-        this.camera = new Camera();
+        this.camera = new Camera(this);
     }
 
     @Override

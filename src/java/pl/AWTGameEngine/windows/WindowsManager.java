@@ -2,7 +2,6 @@ package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.GameLoop;
-import pl.AWTGameEngine.engine.GamePanel;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
@@ -40,20 +39,6 @@ public abstract class WindowsManager {
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
             window.setUndecorated(true);
         }
-        Properties customProperties = AppProperties.getCustomProperties(SceneLoader.getScenePropertiesPath(scenePath));
-        if(customProperties != null) {
-            if(AppProperties.getProperty("multiplier", customProperties) != null) {
-                window.setPanel(new GamePanel(window, AppProperties.getPropertyAsDouble("multiplier", customProperties)));
-            } else {
-                window.setPanel(new GamePanel(window, AppProperties.getPropertyAsDouble("multiplier")));
-            }
-        } else {
-            window.setPanel(new GamePanel(window, AppProperties.getPropertyAsDouble("multiplier")));
-        }
-        window.pack();
-        window.setLocationRelativeTo(null);
-        window.setKeyListener(new KeyListener(window));
-        window.setMouseListener(new MouseListener(window));
         window.setWindowListener(new WindowListener(window));
         GameLoop loop = new GameLoop(window);
         loop.setFPS(AppProperties.getPropertyAsInteger("fps"));
