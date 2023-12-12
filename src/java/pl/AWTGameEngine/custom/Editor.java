@@ -168,7 +168,7 @@ public class Editor extends ObjectComponent {
         cancelClick = true;
 //        tree.setSelection(object.getIdentifier());
         System.out.println(object.getSerializeString());
-        getSceneLoader().loadSceneFile("scenes/error.scene");
+        //getSceneLoader().loadSceneFile("scenes/error.scene");
     }
 
     @Override

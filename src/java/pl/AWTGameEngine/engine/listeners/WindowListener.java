@@ -5,9 +5,11 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 
-public class WindowListener implements java.awt.event.WindowListener {
+public class WindowListener extends ComponentAdapter implements java.awt.event.WindowListener {
 
     private final Window window;
     private boolean opened = true;
@@ -33,6 +35,16 @@ public class WindowListener implements java.awt.event.WindowListener {
 
     public boolean isActivated() {
         return activated;
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
     }
 
     @Override

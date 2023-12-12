@@ -14,3 +14,4 @@ wall4="pos{500;0}size{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
 button="pos{200;200}size{00;00}Button:ObjectComponent{size^20^text^Button ;)^}";
 @scroll="pos{300;200}size{10;200}ScrollComponent:ObjectComponent{}";
 chart="pos{0;0}size{200;200}LineChart:ObjectComponent{}";
+panel="pos{0;0}size{300;300}PanelComponent:ObjectComponent{}";
