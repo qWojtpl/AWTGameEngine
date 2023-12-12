@@ -1,6 +1,3 @@
-@objectList="pos{0;0}size{175;525}priority{1}ScrollPane:ObjectComponent{}Canvas:ObjectComponent{}";
-@objectTree="pos{0;0}size{160;1000}priority{1}parent{@objectList}Tree:ObjectComponent{}";
-@objectInfo="pos{0;0}size{175;525}priority{1}ScrollPane:ObjectComponent{}Canvas:ObjectComponent{align^right^}";
 @cameraPosText="pos{175;506}size{144;18}priority{100}TextRenderer:ObjectComponent{color^black^size^12^text^   x: 0, y: 0^}Canvas:ObjectComponent{}";
 @editor="pos{0;0}size{0;0}MenuBar:ObjectComponent{nextMenu^Project^nextMenu^Preferences^nextItem^Collisions in editor    ✓^}Editor:ObjectComponent-C{}ContextMenu:ObjectComponent{nextItem^Create GameObject^}";
 object1="pos{0;0}size{45;45}priority{1}SpriteRenderer:ObjectComponent{spriteSource^sprites/beaver.jpg^}PhysicsBody:ObjectComponent{}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^}BoxCollider:ObjectComponent{visualize^true^sizeX^50^sizeY^-44^}Animator:ObjectComponent{nextFrame^sprites/beaver.jpg^nextDelay^60^nextFrame^sprites/beaver2.png^nextDelay^60^}";
@@ -9,7 +6,6 @@ object2="pos{100;100}size{45;45}priority{1}parent{text}SpriteRenderer:ObjectComp
 collider="pos{300;150}size{100;100}rotation{45}priority{1}PhysicsBody:ObjectComponent{}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^x^0^sizeX^0^}";
 collider2="pos{300;0}size{100;100}priority{1}BoxCollider:ObjectComponent{visualize^true^}";
 sphereCollider="pos{500;0}size{100;100}priority{1}SphereCollider:ObjectComponent{visualize^true^}";
-background="pos{0;0}size{0;0}priority{0}parent{@objectInfo}BackgroundRenderer:ObjectComponent-C{}";
 object3="pos{100;300}BlankRenderer:ObjectComponent{color^rgb(0,125,125)^}PhysicsBody:ObjectComponent{}BoxCollider:ObjectComponent{}";
 wall1="pos{-10;-1000}size{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
 wall2="pos{-45;500}size{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";

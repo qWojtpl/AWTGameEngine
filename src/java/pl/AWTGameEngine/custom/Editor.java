@@ -8,7 +8,6 @@ import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +73,7 @@ public class Editor extends ObjectComponent {
     }
 
     private void mapTree() {
-        Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
+        /*Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
         tree.removeAllElements();
         for(GameObject go : getScene().getGameObjects()) {
             if(go.getIdentifier().startsWith("@")) {
@@ -91,7 +90,7 @@ public class Editor extends ObjectComponent {
                 tree.addElementTo(newElement, tree.getElement(parent.getIdentifier()));
             }
         }
-        tree.reload();
+        tree.reload();*/
     }
 
     @Override
@@ -140,12 +139,12 @@ public class Editor extends ObjectComponent {
         ContextMenu menu = (ContextMenu) getObject().getComponentsByClass(ContextMenu.class).get(0);
         menu.clearMenu();
         menu.setNextItem("Create GameObject");
-        Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
+//        Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
         if(selectedObject != null) {
             removeHighlight(selectedObject);
         }
         if(object == null) {
-            tree.setSelection(null);
+//            tree.setSelection(null);
             selectedObject = null;
             return;
         }
@@ -167,7 +166,7 @@ public class Editor extends ObjectComponent {
         }
         menu.setNextItem("Remove GameObject");
         cancelClick = true;
-        tree.setSelection(object.getIdentifier());
+//        tree.setSelection(object.getIdentifier());
         System.out.println(object.getSerializeString());
         getSceneLoader().loadSceneFile("scenes/error.scene");
     }
