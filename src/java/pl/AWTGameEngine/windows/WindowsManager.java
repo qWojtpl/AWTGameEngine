@@ -30,7 +30,7 @@ public abstract class WindowsManager {
     public static Window createWindow(String scenePath, boolean fullScreen) {
         Window window = new Window();
         window.setSceneLoader(new SceneLoader(window));
-        //window.setResizable(false);
+        window.setResizable(false);
         window.setTitle(AppProperties.getProperty("title"));
         if(fullScreen) {
             window.setFullScreen(true);

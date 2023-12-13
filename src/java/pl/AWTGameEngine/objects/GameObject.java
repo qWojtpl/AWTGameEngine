@@ -329,6 +329,7 @@ public class GameObject {
             component.onParentChange(oldParent);
         }
         if(parent != null) {
+            setPanel(parent.getPanel());
             parent.addChild(this);
         }
     }
@@ -340,11 +341,6 @@ public class GameObject {
         if(!this.equals(object.getParent())) {
             object.setParent(this);
             return;
-        }
-        if(getPanel() != null) {
-            if(!this.getPanel().equals(object.getPanel())) {
-                object.setPanel(getPanel());
-            }
         }
         this.children.add(object);
         for(ObjectComponent component : getComponents()) {
@@ -358,6 +354,10 @@ public class GameObject {
     }
 
     public void removeChild(GameObject object) {
+        if(!this.children.contains(object)) {
+            return;
+        }
+        object.setPanel(getScene().getWindow().getPanel());
         this.children.remove(object);
         for(ObjectComponent component : getComponents()) {
             component.onRemoveChild(object);
@@ -371,6 +371,9 @@ public class GameObject {
 
     public void setPanel(NestedPanel panel) {
         this.panel = panel;
+        for(GameObject object : getAllChildren()) {
+            object.setPanel(panel);
+        }
     }
 
     public int getWidth() {

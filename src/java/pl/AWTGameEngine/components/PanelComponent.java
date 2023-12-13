@@ -34,13 +34,14 @@ public class PanelComponent extends ObjectComponent {
             getCamera().parseY(getObject(), getObject().getY())
         );
         nestedPanel.setSize(
-                getCamera().parseScale(getObject().getSizeX()),
-                getCamera().parseScale(getObject().getSizeY())
-        );
-        nestedPanel.setPreferredSize(new Dimension(
             getCamera().parseScale(getObject().getSizeX()),
             getCamera().parseScale(getObject().getSizeY())
-        ));
+        );
+    }
+
+    @Override
+    public void onAddChild(GameObject object) {
+        object.setPanel(nestedPanel);
     }
 
     public Camera getPanelCamera() {

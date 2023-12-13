@@ -46,6 +46,9 @@ public class Camera {
         if(!panel.equals(object.getPanel())) {
             return 0;
         }
+/*        if(!panel.equals(panel.getWindow().getPanel())) {
+            return -panel.getX();
+        }*/
         return this.x;
     }
 
@@ -60,6 +63,9 @@ public class Camera {
         if(!panel.equals(object.getPanel())) {
             return 0;
         }
+/*        if(!panel.equals(panel.getWindow().getPanel())) {
+            return -panel.getY()
+        }*/
         return this.y;
     }
 
