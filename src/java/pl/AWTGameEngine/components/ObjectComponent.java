@@ -1,9 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.Conflicts;
-import pl.AWTGameEngine.annotations.ConflictsWith;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.PanelRegistry;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
@@ -75,6 +72,7 @@ public abstract class ObjectComponent {
      * Method is called before frame draw.
      * PreUpdate is called first.
      */
+    @EventMethod
     public void onPreUpdate() {
 
     }
@@ -83,6 +81,7 @@ public abstract class ObjectComponent {
      * Method is called before frame draw.
      * Update is called after PreUpdate.
      */
+    @EventMethod
     public void onUpdate() {
 
     }
@@ -91,14 +90,17 @@ public abstract class ObjectComponent {
      * Method is called before frame draw.
      * AfterUpdate is called after Update.
      */
+    @EventMethod
     public void onAfterUpdate() {
 
     }
 
+    @EventMethod
     public void onStaticUpdate() {
 
     }
 
+    @EventMethod
     public void onPreRender(Graphics g) {
 
     }
@@ -106,10 +108,12 @@ public abstract class ObjectComponent {
     /**
      * Method is called while frame is drawing.
      */
+    @EventMethod
     public void onRender(Graphics g) {
 
     }
 
+    @EventMethod
     public void onAfterRender(Graphics g) {
 
     }
@@ -118,10 +122,12 @@ public abstract class ObjectComponent {
      * Method is called when X or Y of object is changed.
      * @return True when position can be updated. Return false to cancel position update.
      */
+    @EventMethod
     public boolean onUpdatePosition(int newX, int newY) {
         return true;
     }
 
+    @EventMethod
     public boolean onUpdateRotation(int newRotation) {
         return true;
     }
@@ -129,6 +135,7 @@ public abstract class ObjectComponent {
     /**
      * Method will be called when component will be added to the object.
      */
+    @EventMethod
     public void onAddComponent() {
 
     }
@@ -136,6 +143,7 @@ public abstract class ObjectComponent {
     /**
      * Method will be called when component will be removed from the object.
      */
+    @EventMethod
     public void onRemoveComponent() {
 
     }
@@ -143,70 +151,87 @@ public abstract class ObjectComponent {
     /**
      * Method will be called when collision will be registered.
      */
+    @EventMethod
     public void onCollide(GameObject object) {
 
     }
 
+    @EventMethod
     public void onButtonClick() {
 
     }
 
+    @EventMethod
     public void onContextMenuOpen(int x, int y) {
 
     }
 
+    @EventMethod
     public void onContextMenuClick(int option, int x, int y) {
 
     }
 
+    @EventMethod
     public void onMenuBarClick(String path) {
 
     }
 
+    @EventMethod
     public void onCreateGameObject(GameObject newObject) {
 
     }
 
+    @EventMethod
     public void onRemoveGameObject(GameObject object) {
 
     }
 
+    @EventMethod
     public void onUpdateGameObject(GameObject updatedObject) {
 
     }
 
+    @EventMethod
     public void onAddChild(GameObject child) {
 
     }
 
+    @EventMethod
     public void onRemoveChild(GameObject child) {
 
     }
 
+    @EventMethod
     public void onParentChange(GameObject oldParent) {
 
     }
 
+    @EventMethod
     public void onMouseClick() {
 
     }
 
+    @EventMethod
     public void onMouseClick(GameObject object) {
 
     }
 
+    @EventMethod
     public void onKeyType(int keyCode) {
 
     }
 
+    @EventMethod
     public void onKeyType(char key) {
 
     }
 
+    @EventMethod
     public void onTreeValueChange(GameObject object, String[] path) {
 
     }
 
+    @EventMethod
     public void onWindowClosing() {
 
     }

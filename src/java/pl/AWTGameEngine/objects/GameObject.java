@@ -51,6 +51,7 @@ public class GameObject {
             }
         }
         this.components.add(component);
+        getScene().getEventHandler().registerComponent(component);
         component.onAddComponent();
     }
 
