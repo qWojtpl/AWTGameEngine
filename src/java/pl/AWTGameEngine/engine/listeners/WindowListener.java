@@ -55,10 +55,8 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
     @Override
     public void windowClosing(WindowEvent e) {
         if(window.getCurrentScene() != null) {
-            for(GameObject go : window.getCurrentScene().getActiveGameObjects()) {
-                for(ObjectComponent component : go.getComponents()) {
-                    component.onWindowClosing();
-                }
+            for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowClosing")) {
+                component.onWindowClosing();
             }
         }
         removeWindow();

@@ -84,7 +84,7 @@ public class Scene {
             if(obj.equals(object)) {
                 continue;
             }
-            for(ObjectComponent component : obj.getComponents()) {
+            for(ObjectComponent component : obj.getEventHandler().getComponents("onCreateGameObject")) {
                 component.onCreateGameObject(object);
             }
         }
@@ -106,7 +106,7 @@ public class Scene {
             if(obj.equals(object)) {
                 continue;
             }
-            for(ObjectComponent component : obj.getComponents()) {
+            for(ObjectComponent component : obj.getEventHandler().getComponents("onRemoveGameObject")) {
                 component.onRemoveGameObject(object);
             }
         }

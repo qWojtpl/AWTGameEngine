@@ -47,7 +47,7 @@ public class ColliderRegistry {
             Area clonedArea = (Area) baseArea.clone();
             clonedArea.intersect(colliderArea);
             if(!clonedArea.isEmpty()) {
-                for(ObjectComponent component : object.getAbsoluteParent().getComponents()) {
+                for(ObjectComponent component : object.getAbsoluteParent().getEventHandler().getComponents("onCollide")) {
                     component.onCollide(c.getObject());
                 }
                 collided.add(c.getObject());

@@ -298,7 +298,7 @@ public class GameObject {
     }
 
     public boolean setRotation(int angle) {
-        for(ObjectComponent component : getComponents()) {
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation")) {
             if(!component.onUpdateRotation(angle)) {
                 return false;
             }

@@ -65,7 +65,7 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onMouseClick() {
-        for(ObjectComponent component : getObject().getComponents()) {
+        for(ObjectComponent component : getObject().getEventHandler().getComponents("onButtonClick")) {
             component.onButtonClick();
         }
         if(Action.CLOSE_WINDOW.equals(action)) {

@@ -38,16 +38,14 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
             }
             if(getMouseX() >= object.getX() && getMouseX() <= object.getX() + object.getSizeX()
             && getMouseY() >= object.getY() && getMouseY() <= object.getY() + object.getSizeY()) {
-                for(ObjectComponent component : object.getComponents()) {
+                for(ObjectComponent component : object.getEventHandler().getComponents("onMouseClick")) {
                     component.onMouseClick();
                 }
                 clickedObject = object;
             }
         }
-        for(GameObject object : getWindow().getCurrentScene().getActiveGameObjects()) {
-            for(ObjectComponent component : object.getComponents()) {
-                component.onMouseClick(clickedObject);
-            }
+        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onMouseClick")) {
+            component.onMouseClick(clickedObject);
         }
     }
 
