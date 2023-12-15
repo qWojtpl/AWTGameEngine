@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.Parentless;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.DialogManager;
+import pl.AWTGameEngine.engine.EventHandler;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.scenes.Scene;
 
@@ -24,6 +25,7 @@ public class GameObject {
     private int priority = 0;
     private GameObject parent;
     private NestedPanel panel;
+    private EventHandler eventHandler = new EventHandler();
     private final List<GameObject> children = new ArrayList<>();
     private final List<ObjectComponent> components = new ArrayList<>();
 
@@ -51,7 +53,8 @@ public class GameObject {
             }
         }
         this.components.add(component);
-        getScene().getEventHandler().registerComponent(component);
+        eventHandler.registerComponent(component);
+        getScene().getSceneEventHandler().registerComponent(component);
         component.onAddComponent();
     }
 
@@ -175,6 +178,10 @@ public class GameObject {
 
     public NestedPanel getPanel() {
         return this.panel;
+    }
+
+    public EventHandler getEventHandler() {
+        return this.eventHandler;
     }
 
     public List<GameObject> getChildren() {
@@ -326,7 +333,7 @@ public class GameObject {
         }
         GameObject oldParent = this.parent;
         this.parent = parent;
-        for(ObjectComponent component : getComponents()) {
+        for(ObjectComponent component : eventHandler.getComponents("onParentChange")) {
             component.onParentChange(oldParent);
         }
         if(parent != null) {
@@ -344,13 +351,11 @@ public class GameObject {
             return;
         }
         this.children.add(object);
-        for(ObjectComponent component : getComponents()) {
+        for(ObjectComponent component : eventHandler.getComponents("onAddChild")) {
             component.onAddChild(object);
         }
-        for(GameObject gameObject : getScene().getActiveGameObjects()) {
-            for(ObjectComponent component : gameObject.getComponents()) {
-                component.onUpdateGameObject(this);
-            }
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject")) {
+            component.onUpdateGameObject(this);
         }
     }
 
@@ -360,13 +365,11 @@ public class GameObject {
         }
         object.setPanel(getScene().getWindow().getPanel());
         this.children.remove(object);
-        for(ObjectComponent component : getComponents()) {
+        for(ObjectComponent component : eventHandler.getComponents("onRemoveChild")) {
             component.onRemoveChild(object);
         }
-        for(GameObject gameObject : getScene().getActiveGameObjects()) {
-            for(ObjectComponent component : gameObject.getComponents()) {
-                component.onUpdateGameObject(this);
-            }
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject")) {
+            component.onUpdateGameObject(this);
         }
     }
 
@@ -375,6 +378,10 @@ public class GameObject {
         for(GameObject object : getAllChildren()) {
             object.setPanel(panel);
         }
+    }
+
+    public void setEventHandler(EventHandler eventHandler) {
+        this.eventHandler = eventHandler;
     }
 
     public int getWidth() {
@@ -405,25 +412,25 @@ public class GameObject {
     }
 
     public void preRender(Graphics g) {
-        for(ObjectComponent component : getComponents()) {
+        for(ObjectComponent component : eventHandler.getComponents("onPreRender")) {
             component.onPreRender(g);
         }
     }
 
     public void render(Graphics g) {
-        for(ObjectComponent component : getComponents()) {
+        for(ObjectComponent component : eventHandler.getComponents("onRender")) {
             component.onRender(g);
         }
     }
 
     public void afterRender(Graphics g) {
-        for(ObjectComponent component : getComponents()) {
+        for(ObjectComponent component : eventHandler.getComponents("onAfterRender")) {
             component.onAfterRender(g);
         }
     }
 
     public boolean updatePosition(int newX, int newY) {
-        for(ObjectComponent component : getComponents()) {
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition")) {
             if(!component.onUpdatePosition(newX, newY)) {
                 return false;
             }

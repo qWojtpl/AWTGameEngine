@@ -4,7 +4,6 @@ import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.EventHandler;
 import pl.AWTGameEngine.engine.PanelRegistry;
-import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -18,14 +17,14 @@ public class Scene {
     private final Window window;
     private ColliderRegistry colliderRegistry;
     private PanelRegistry panelRegistry;
-    private EventHandler eventHandler;
+    private EventHandler sceneEventHandler;
 
     public Scene(String name, Window window) {
         this.name = name;
         this.window = window;
         setColliderRegistry(new ColliderRegistry());
         setPanelRegistry(new PanelRegistry());
-        setEventHandler(new EventHandler());
+        setSceneEventHandler(new EventHandler());
     }
 
     public String getName() {
@@ -44,8 +43,8 @@ public class Scene {
         return this.panelRegistry;
     }
 
-    public EventHandler getEventHandler() {
-        return this.eventHandler;
+    public EventHandler getSceneEventHandler() {
+        return this.sceneEventHandler;
     }
 
     public void setColliderRegistry(ColliderRegistry registry) {
@@ -56,8 +55,8 @@ public class Scene {
         this.panelRegistry = registry;
     }
 
-    public void setEventHandler(EventHandler eventHandler) {
-        this.eventHandler = eventHandler;
+    public void setSceneEventHandler(EventHandler sceneEventHandler) {
+        this.sceneEventHandler = sceneEventHandler;
     }
 
     public GameObject createGameObject(String identifier) {
@@ -171,19 +170,19 @@ public class Scene {
 
     public void update() {
         if(window.isStaticMode()) {
-            for(ObjectComponent component :eventHandler.getComponents("onStaticUpdate")) {
+            for(ObjectComponent component : sceneEventHandler.getComponents("onStaticUpdate")) {
                 component.onStaticUpdate();
             }
             window.getMouseListener().refresh();
             return;
         }
-        for(ObjectComponent component : eventHandler.getComponents("onPreUpdate")) {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate")) {
             component.onPreUpdate();
         }
-        for(ObjectComponent component : eventHandler.getComponents("onUpdate")) {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onUpdate")) {
             component.onUpdate();
         }
-        for(ObjectComponent component : eventHandler.getComponents("onAfterUpdate")) {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
             component.onAfterUpdate();
         }
         window.getMouseListener().refresh();
