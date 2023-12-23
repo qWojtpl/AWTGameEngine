@@ -44,7 +44,7 @@ public class Camera {
             return 0;
         }
         if(!panel.equals(panel.getWindow().getPanel())) {
-            return object.getParent().getX();
+            return object.getParent().getX() + this.x;
         }
         return this.x;
     }
@@ -58,7 +58,7 @@ public class Camera {
             return 0;
         }
         if(!panel.equals(panel.getWindow().getPanel())) {
-            return object.getParent().getY();
+            return object.getParent().getY() + this.y;
         }
         return this.y;
     }

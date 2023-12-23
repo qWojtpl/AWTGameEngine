@@ -27,9 +27,9 @@ public class Editor extends ObjectComponent {
     @Override
     public void onAddComponent() {
         getWindow().setStaticMode(true);
-        getCamera().setX(getCamera().getX() - 175);
-        MenuBar menuBar = (MenuBar) getObject().getComponentsByClass(MenuBar.class).get(0);
-        menuBar.addItemToMenu(menuBar.getMenu("Preferences"), "test");
+        //getCamera().setX(getCamera().getX() - 175);
+/*        MenuBar menuBar = (MenuBar) getObject().getComponentsByClass(MenuBar.class).get(0);
+        menuBar.addItemToMenu(menuBar.getMenu("Preferences"), "test");*/
         cameraPosText = (TextRenderer) getScene()
                 .getGameObjectByName("@cameraPosText")
                 .getComponentsByClass(TextRenderer.class).get(0);
