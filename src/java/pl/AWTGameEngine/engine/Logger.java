@@ -38,6 +38,14 @@ public class Logger {
         System.out.print(message);
     }
 
+    public static void log(String message, String exceptionMessage, StackTraceElement[] stackTraceElements) {
+        message += "\n" + exceptionMessage;
+        for(StackTraceElement element : stackTraceElements) {
+            message += "\n\t" + element.toString();
+        }
+        log(message);
+    }
+
     public static void clearLog() {
         append = false;
         log("");

@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public abstract class ResourceManager {
         if(resources.containsKey(name)) {
             return resources.get(name);
         }
+        Logger.log("Reading file resource: " + name);
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
@@ -34,8 +36,7 @@ public abstract class ResourceManager {
             stream.close();
             return lines;
         } catch(Exception e) {
-            System.out.println("Not found resource: " + name);
-            e.printStackTrace();
+            Logger.log("Cannot get file resource: " + name, e.getMessage(), e.getStackTrace());
         }
         return null;
     }
@@ -44,6 +45,7 @@ public abstract class ResourceManager {
         if(spriteResources.containsKey(name)) {
             return spriteResources.get(name);
         }
+        Logger.log("Reading sprite resource: " + name);
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
@@ -55,8 +57,7 @@ public abstract class ResourceManager {
             stream.close();
             return sprite;
         } catch(Exception e) {
-            System.out.println("Cannot get image from resource: " + name);
-            e.printStackTrace();
+            Logger.log("Cannot get sprite from resource: " + name, e.getMessage(), e.getStackTrace());
         }
         return null;
     }
@@ -65,6 +66,7 @@ public abstract class ResourceManager {
         if(streamResources.containsKey(name)) {
             return streamResources.get(name);
         }
+        Logger.log("Reading stream resource: " + name);
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
@@ -73,8 +75,7 @@ public abstract class ResourceManager {
             streamResources.put(name, stream);
             return stream;
         } catch(Exception e) {
-            System.out.println("Cannot get stream from resource: " + name);
-            e.printStackTrace();
+            Logger.log("Cannot get stream from resource: " + name, e.getMessage(), e.getStackTrace());
         }
         return null;
     }
@@ -85,6 +86,10 @@ public abstract class ResourceManager {
 
     public static HashMap<String, Sprite> getSpriteResources() {
         return new HashMap<>(spriteResources);
+    }
+
+    public static HashMap<String, InputStream> getStreamResources() {
+        return new HashMap<>(streamResources);
     }
 
 }
