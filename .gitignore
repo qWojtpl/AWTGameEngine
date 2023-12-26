@@ -1,5 +1,6 @@
 *.iml
 *.txt
+*.log
 /.idea
 .idea/*
 /META-INF

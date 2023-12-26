@@ -1,6 +1,7 @@
 package pl.AWTGameEngine;
 
 import pl.AWTGameEngine.engine.AppProperties;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.windows.WindowsManager;
 
 public class Main {
@@ -11,6 +12,8 @@ public class Main {
         for(String arg : args) {
             AppProperties.addStartupArgument(arg);
         }
+        Logger.setLogFile(AppProperties.getPropertyAsBoolean("logFile"));
+        Logger.log("Started app.");
         WindowsManager.createDefaultWindow();
     }
 
