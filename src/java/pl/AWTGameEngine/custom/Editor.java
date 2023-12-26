@@ -27,9 +27,6 @@ public class Editor extends ObjectComponent {
     @Override
     public void onAddComponent() {
         getWindow().setStaticMode(true);
-        //getCamera().setX(getCamera().getX() - 175);
-/*        MenuBar menuBar = (MenuBar) getObject().getComponentsByClass(MenuBar.class).get(0);
-        menuBar.addItemToMenu(menuBar.getMenu("Preferences"), "test");*/
         cameraPosText = (TextRenderer) getScene()
                 .getGameObjectByName("@cameraPosText")
                 .getComponentsByClass(TextRenderer.class).get(0);
@@ -55,42 +52,6 @@ public class Editor extends ObjectComponent {
         }
         cameraPosText.align(TextRenderer.HorizontalAlign.LEFT, TextRenderer.VerticalAlign.CENTER);
         cameraPosText.setText("   x: " + getCamera().getX() + ", y: " + getCamera().getY());
-    }
-
-    @Override
-    public void onCreateGameObject(GameObject newObject) {
-        mapTree();
-    }
-
-    @Override
-    public void onRemoveGameObject(GameObject object) {
-        mapTree();
-    }
-
-    @Override
-    public void onUpdateGameObject(GameObject updatedObject) {
-        mapTree();
-    }
-
-    private void mapTree() {
-        /*Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
-        tree.removeAllElements();
-        for(GameObject go : getScene().getGameObjects()) {
-            if(go.getIdentifier().startsWith("@")) {
-                continue;
-            }
-            DefaultMutableTreeNode newElement = tree.addElement(go.getIdentifier());
-            GameObject parent = go.getParent();
-            if(parent == null) {
-                tree.addElementTo(newElement, tree.getElement("root"));
-            } else {
-                if(parent.getIdentifier().startsWith("@")) {
-                    continue;
-                }
-                tree.addElementTo(newElement, tree.getElement(parent.getIdentifier()));
-            }
-        }
-        tree.reload();*/
     }
 
     @Override
@@ -139,12 +100,10 @@ public class Editor extends ObjectComponent {
         ContextMenu menu = (ContextMenu) getObject().getComponentsByClass(ContextMenu.class).get(0);
         menu.clearMenu();
         menu.setNextItem("Create GameObject");
-//        Tree tree = (Tree) getScene().getGameObjectByName("@objectTree").getComponentsByClass(Tree.class).get(0);
         if(selectedObject != null) {
             removeHighlight(selectedObject);
         }
         if(object == null) {
-//            tree.setSelection(null);
             selectedObject = null;
             return;
         }
@@ -166,9 +125,7 @@ public class Editor extends ObjectComponent {
         }
         menu.setNextItem("Remove GameObject");
         cancelClick = true;
-//        tree.setSelection(object.getIdentifier());
         System.out.println(object.getSerializeString());
-        //getSceneLoader().loadSceneFile("scenes/error.scene");
     }
 
     @Override

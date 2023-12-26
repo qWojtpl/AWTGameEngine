@@ -11,16 +11,17 @@ import java.util.List;
 @Unique
 public class PhysicsBody extends ObjectComponent {
 
+/*
     private double forceX = 0;
     private double forceY = 0;
     private double mass = 1;
     private final List<GameObject> lastObjects = new ArrayList<>();
     private int i = 0;
-
+*/
     public PhysicsBody(GameObject object) {
         super(object);
     }
-
+/*
     @Override
     public void onStaticUpdate() {
         onUpdate();
@@ -120,5 +121,6 @@ public class PhysicsBody extends ObjectComponent {
             setMass(Double.parseDouble(mass));
         } catch(NumberFormatException ignored) {}
     }
+*/
 
 }

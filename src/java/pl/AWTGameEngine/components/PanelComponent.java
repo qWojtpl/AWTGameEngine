@@ -44,6 +44,12 @@ public class PanelComponent extends ObjectComponent {
         object.setPanel(nestedPanel);
     }
 
+    @Override
+    public void onParentChange(GameObject newParent) {
+        getObject().getPanel().remove(nestedPanel);
+        newParent.getPanel().add(nestedPanel);
+    }
+
     public Camera getPanelCamera() {
         return nestedPanel.getCamera();
     }

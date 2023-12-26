@@ -43,9 +43,6 @@ public class Camera {
         if(object.getComponentsByClass(Canvas.class).size() > 0) {
             return 0;
         }
-        if(!panel.equals(panel.getWindow().getPanel())) {
-            return object.getParent().getX() + this.x;
-        }
         return this.x;
     }
 
@@ -56,9 +53,6 @@ public class Camera {
     public int getRelativeY(GameObject object) {
         if(object.getComponentsByClass(Canvas.class).size() > 0) {
             return 0;
-        }
-        if(!panel.equals(panel.getWindow().getPanel())) {
-            return object.getParent().getY() + this.y;
         }
         return this.y;
     }

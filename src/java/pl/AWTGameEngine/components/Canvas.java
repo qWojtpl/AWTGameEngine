@@ -13,9 +13,9 @@ public class Canvas extends ObjectComponent {
 
     public void alignObject(CanvasAlign canvasAlign) {
         if(CanvasAlign.LEFT.equals(canvasAlign)) {
-            getObject().setXForced(0);
+            getObject().setX(0);
         } else if(CanvasAlign.RIGHT.equals(canvasAlign)) {
-            getObject().setXForced(960 - getObject().getSizeX());
+            getObject().setX(960 - getObject().getSizeX());
         }
     }
 

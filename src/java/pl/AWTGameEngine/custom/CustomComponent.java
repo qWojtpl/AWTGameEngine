@@ -27,24 +27,13 @@ public class CustomComponent extends ObjectComponent {
         if(getKeyListener().hasPressedKey(68)) {
             getObject().setX(getObject().getX() + 3);
         }
-        if(getKeyListener().hasPressedKey(37)) {
-            getCamera().setX(getCamera().getX() - 8);
-        }
-        if(getKeyListener().hasPressedKey(39)) {
-            getCamera().setX(getCamera().getX() + 8);
-        }
-        if(getKeyListener().hasPressedKey(38)) {
-            getCamera().setY(getCamera().getY() - 8);
-        }
-        if(getKeyListener().hasPressedKey(40)) {
-            getCamera().setY(getCamera().getY() + 8);
-        }
     }
 
     @Override
     public void onStaticUpdate() {
+        onPreUpdate();
         PhysicsBody body = (PhysicsBody) getObject().getComponentsByClass(PhysicsBody.class).get(0);
-        if(getKeyListener().hasPressedKey(102)) {
+        /*if(getKeyListener().hasPressedKey(102)) {
             body.push(10, new Vector(1, 0));
         }
         if(getKeyListener().hasPressedKey(104)) {
@@ -55,7 +44,7 @@ public class CustomComponent extends ObjectComponent {
         }
         if(getKeyListener().hasPressedKey(100)) {
             body.push(10, new Vector(-1, 0));
-        }
+        }*/
         if(getKeyListener().hasPressedKey(75)) {
             getCamera().setZoom(getCamera().getZoom() - 0.25f);
             getKeyListener().releaseKey(75);

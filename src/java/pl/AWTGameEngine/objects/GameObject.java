@@ -26,7 +26,7 @@ public class GameObject {
     private GameObject parent;
     private NestedPanel panel;
     private EventHandler eventHandler = new EventHandler();
-    private final List<GameObject> children = new ArrayList<>();
+    private final Set<GameObject> children = new HashSet<>();
     private final List<ObjectComponent> components = new ArrayList<>();
 
     public GameObject(String identifier, Scene scene) {
@@ -184,8 +184,8 @@ public class GameObject {
         return this.eventHandler;
     }
 
-    public List<GameObject> getChildren() {
-        return new ArrayList<>(children);
+    public Set<GameObject> getChildren() {
+        return new HashSet<>(children);
     }
 
     public List<GameObject> getAllChildren() {
@@ -201,100 +201,23 @@ public class GameObject {
         this.active = active;
     }
 
-    public int updateX(int x) {
-        int x2 = x;
-        int i = 0;
-        while(!updatePosition(x2, getY())) {
-            if(x > this.x) {
-                x2--;
-                if(i > x - this.x) {
-                    break;
-                }
-            } else {
-                x2++;
-                if(i > this.x - x) {
-                    break;
-                }
-            }
-            i++;
-        }
-        return x2;
-    }
-
-    public boolean setX(int x) {
-        int update = updateX(x);
-        int delta = update - this.x;
+    public void setX(int x) {
+        int delta = x - this.x;
         if(delta == 0) {
-            return false;
+            return;
         }
-        List<GameObject> updateList = new ArrayList<>();
-        for(GameObject object : getAllChildren()) {
-            int childUpdate = object.updateX(object.getX() + delta);
-            int childDelta = childUpdate - object.getX();
-            if(Math.abs(childDelta) > Math.abs(delta) || childDelta == 0) {
-                return false;
-            } else if(Math.abs(childDelta) < Math.abs(delta)) {
-                return setX(getX() + childDelta);
-            }
-            updateList.add(object);
-        }
-        for(GameObject object : updateList) {
-            object.setXForced(object.getX() + delta);
-        }
-        this.x = update;
-        return true;
-    }
-
-    public void setXForced(int x) {
         this.x = x;
+        for(GameObject go : getChildren()) {
+            go.setX(go.getX() + delta);
+        }
     }
 
-    public int updateY(int y) {
-        int y2 = y;
-        int i = 0;
-        while(!updatePosition(getX(), y2)) {
-            if(y > this.y) {
-                y2--;
-                if(i > y - this.y) {
-                    break;
-                }
-            } else {
-                y2++;
-                if(i > this.y - y) {
-                    break;
-                }
-            }
-            i++;
-        }
-        return y2;
-    }
-
-    public boolean setY(int y) {
-        int update = updateY(y);
-        int delta = update - this.y;
-        if(delta == 0) {
-            return false;
-        }
-        List<GameObject> updateList = new ArrayList<>();
-        for(GameObject object : getAllChildren()) {
-            int childUpdate = object.updateY(object.getY() + delta);
-            int childDelta = childUpdate - object.getY();
-            if(Math.abs(childDelta) > Math.abs(delta) || childDelta == 0) {
-                return false;
-            } else if(Math.abs(childDelta) < Math.abs(delta)) {
-                return setY(getY() + childDelta);
-            }
-            updateList.add(object);
-        }
-        for(GameObject object : updateList) {
-            object.setYForced(object.getY() + delta);
-        }
-        this.y = update;
-        return true;
-    }
-
-    public void setYForced(int y) {
+    public void setY(int y) {
+        int delta = y - this.y;
         this.y = y;
+        for(GameObject go : getChildren()) {
+            go.setY(go.getY() + delta);
+        }
     }
 
     public boolean setRotation(int angle) {
@@ -375,7 +298,7 @@ public class GameObject {
 
     public void setPanel(NestedPanel panel) {
         this.panel = panel;
-        for(GameObject object : getAllChildren()) {
+        for(GameObject object : getChildren()) {
             object.setPanel(panel);
         }
     }
