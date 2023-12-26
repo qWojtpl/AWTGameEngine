@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.engine.AppProperties;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
@@ -19,6 +20,7 @@ public class SceneLoader {
     }
 
     public void loadSceneFile(String scenePath) {
+        Logger.log("Loading scene: " + scenePath);
         if(window.getCurrentScene() != null) {
             Scene scene = window.getCurrentScene();
             window.setCurrentScene(null);
@@ -76,6 +78,7 @@ public class SceneLoader {
             object.deserialize(data.get(objectName));
         }
         window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        Logger.log("Scene loaded.");
     }
 
     public static String getScenePropertiesPath(String scenePath) {

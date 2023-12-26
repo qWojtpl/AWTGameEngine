@@ -7,10 +7,14 @@ import java.util.Calendar;
 
 public class Logger {
 
+    private static boolean enabled = false;
     private static boolean append = false;
     private static boolean logFile = false;
 
     public static void log(String message) {
+        if(!enabled) {
+            return;
+        }
         Calendar calendar = Calendar.getInstance();
         message = "[" +
                 calendar.get(Calendar.DAY_OF_MONTH) + "-" +
@@ -54,8 +58,16 @@ public class Logger {
         return logFile;
     }
 
+    public static boolean isEnabled() {
+        return enabled;
+    }
+
     public static boolean isLogFile() {
         return logFile;
+    }
+
+    public static void setEnabled(boolean enabled) {
+        Logger.enabled = enabled;
     }
 
     public static void setLogFile(boolean logFile) {
