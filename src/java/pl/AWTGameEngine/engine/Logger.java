@@ -23,7 +23,7 @@ public class Logger {
                 parseNumber(calendar.get(Calendar.HOUR_OF_DAY)) + ":" +
                 parseNumber(calendar.get(Calendar.MINUTE)) + ":" +
                 parseNumber(calendar.get(Calendar.SECOND)) + ":" +
-                parseThreeNumber(calendar.get(Calendar.MILLISECOND)) + "] " + message;
+                parseThreeNumber(calendar.get(Calendar.MILLISECOND)) + "] " + message + "\n";
         if(logFile) {
             try(FileWriter writer = new FileWriter(getLogFile(), append)) {
                 writer.write(message);
@@ -35,7 +35,7 @@ public class Logger {
                 append = true;
             }
         }
-        System.out.println(message);
+        System.out.print(message);
     }
 
     public static void clearLog() {

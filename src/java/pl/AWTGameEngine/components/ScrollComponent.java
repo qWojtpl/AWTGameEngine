@@ -48,6 +48,9 @@ public class ScrollComponent extends ObjectComponent {
 
     @Override
     public void onUpdate() {
+        if(getMouseListener() == null || scroll == null) {
+            return;
+        }
         scrollRenderer.setColor(scrollColor);
         if((getMouseListener().getMouseX() >= scroll.getX() && getMouseListener().getMouseX() <= scroll.getX() + scroll.getSizeX()
         && getMouseListener().getMouseY() >= scroll.getY() && getMouseListener().getMouseY() <= scroll.getY() + scroll.getSizeY())
