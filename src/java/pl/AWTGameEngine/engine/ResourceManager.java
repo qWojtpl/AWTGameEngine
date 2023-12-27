@@ -20,7 +20,7 @@ public abstract class ResourceManager {
         if(resources.containsKey(name)) {
             return resources.get(name);
         }
-        Logger.log("Reading file resource: " + name);
+        Logger.log(2, "Reading file resource: " + name);
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
@@ -45,7 +45,7 @@ public abstract class ResourceManager {
         if(spriteResources.containsKey(name)) {
             return spriteResources.get(name);
         }
-        Logger.log("Reading sprite resource: " + name);
+        Logger.log(2, "Reading sprite resource: " + name);
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
@@ -66,7 +66,7 @@ public abstract class ResourceManager {
         if(streamResources.containsKey(name)) {
             return streamResources.get(name);
         }
-        Logger.log("Reading stream resource: " + name);
+        Logger.log(2, "Reading stream resource: " + name);
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {

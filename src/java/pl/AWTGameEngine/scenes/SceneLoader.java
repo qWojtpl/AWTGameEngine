@@ -20,7 +20,7 @@ public class SceneLoader {
     }
 
     public void loadSceneFile(String scenePath) {
-        Logger.log("Loading scene: " + scenePath);
+        Logger.log(2, "Loading scene: " + scenePath);
         if(window.getCurrentScene() != null) {
             Scene scene = window.getCurrentScene();
             window.setCurrentScene(null);
@@ -46,7 +46,7 @@ public class SceneLoader {
         window.setLocationRelativeTo(null);
         List<String> sceneLines = ResourceManager.getResource(scenePath);
         if(sceneLines == null) {
-            System.out.println("Scene not found.");
+            Logger.log(1, "Scene " + scenePath + " not found.");
             return;
         }
         LinkedHashMap<String, String> data = new LinkedHashMap<>();
@@ -78,7 +78,7 @@ public class SceneLoader {
             object.deserialize(data.get(objectName));
         }
         window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        Logger.log("Scene loaded.");
+        Logger.log(2, "Scene loaded.");
     }
 
     public static String getScenePropertiesPath(String scenePath) {

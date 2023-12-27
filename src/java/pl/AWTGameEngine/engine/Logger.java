@@ -7,12 +7,12 @@ import java.util.Calendar;
 
 public class Logger {
 
-    private static boolean enabled = false;
+    private static int level = 0;
     private static boolean append = false;
     private static boolean logFile = false;
 
-    public static void log(String message) {
-        if(!enabled) {
+    public static void log(int level, String message) {
+        if(Logger.level < level) {
             return;
         }
         Calendar calendar = Calendar.getInstance();
@@ -43,12 +43,12 @@ public class Logger {
         for(StackTraceElement element : stackTraceElements) {
             message += "\n\t" + element.toString();
         }
-        log(message);
+        log(1, message);
     }
 
     public static void clearLog() {
         append = false;
-        log("");
+        log(0, "");
     }
 
     public static File getLogFile() {
@@ -66,16 +66,19 @@ public class Logger {
         return logFile;
     }
 
-    public static boolean isEnabled() {
-        return enabled;
+    public static int getLevel() {
+        return level;
     }
 
     public static boolean isLogFile() {
         return logFile;
     }
 
-    public static void setEnabled(boolean enabled) {
-        Logger.enabled = enabled;
+    public static void setLevel(int level) {
+        if(level < 0 || level > 2) {
+            level = 2;
+        }
+        Logger.level = level;
     }
 
     public static void setLogFile(boolean logFile) {

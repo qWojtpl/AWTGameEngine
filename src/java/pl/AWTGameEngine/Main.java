@@ -12,11 +12,11 @@ public class Main {
         for(String arg : args) {
             AppProperties.addStartupArgument(arg);
         }
-        Logger.setEnabled(AppProperties.getPropertyAsBoolean("enableLogging"));
+        Logger.setLevel(AppProperties.getPropertyAsInteger("logLevel"));
         Logger.setLogFile(AppProperties.getPropertyAsBoolean("logFile"));
-        Logger.log("Requesting default window...");
+        Logger.log(2, "Requesting default window...");
         WindowsManager.createDefaultWindow();
-        Logger.log("Started app.");
+        Logger.log(2, "Started app.");
     }
 
 }
