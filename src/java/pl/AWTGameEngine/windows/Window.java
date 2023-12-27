@@ -19,7 +19,8 @@ public class Window extends JFrame {
     private final int WIDTH = 480;
     private final int HEIGHT = (int) (WIDTH * 0.5625);
     private NestedPanel panel;
-    private GameLoop loop;
+    private GameLoop renderLoop;
+    private GameLoop updateLoop;
     private KeyListener keyListener;
     private MouseListener mouseListener;
     private WindowListener windowListener;
@@ -49,8 +50,12 @@ public class Window extends JFrame {
         return this.panel;
     }
 
-    public GameLoop getLoop() {
-        return this.loop;
+    public GameLoop getRenderLoop() {
+        return this.renderLoop;
+    }
+
+    public GameLoop getUpdateLoop() {
+        return this.updateLoop;
     }
 
     public KeyListener getKeyListener() {
@@ -111,8 +116,12 @@ public class Window extends JFrame {
         setMouseListener(new MouseListener(this));
     }
 
-    public void setLoop(GameLoop loop) {
-        this.loop = loop;
+    public void setRenderLoop(GameLoop loop) {
+        this.renderLoop = loop;
+    }
+
+    public void setUpdateLoop(GameLoop loop) {
+        this.updateLoop = loop;
     }
 
     public void setKeyListener(KeyListener listener) {

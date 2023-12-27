@@ -32,18 +32,27 @@ public abstract class WindowsManager {
         window.setSceneLoader(new SceneLoader(window));
         window.setResizable(false);
         window.setTitle(AppProperties.getProperty("title"));
+
         if(fullScreen) {
             window.setFullScreen(true);
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
             window.setUndecorated(true);
         }
+
         window.setWindowListener(new WindowListener(window));
         window.addComponentListener(window.getWindowListener());
-        GameLoop loop = new GameLoop(window);
-        loop.setFPS(AppProperties.getPropertyAsInteger("fps"));
-        window.setLoop(loop);
+
+        GameLoop loop = new GameLoop(window, true);
+        loop.setFPS(AppProperties.getPropertyAsInteger("renderFps"));
+        window.setRenderLoop(loop);
+        loop.start();
+
+        loop = new GameLoop(window, false);
+        loop.setFPS(AppProperties.getPropertyAsInteger("updateFps"));
+        window.setUpdateLoop(loop);
         window.getSceneLoader().loadSceneFile(scenePath);
         loop.start();
+
         windows.add(window);
         window.setVisible(true);
         return window;

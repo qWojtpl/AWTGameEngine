@@ -29,7 +29,8 @@ public class SceneLoader {
         Properties customProperties = AppProperties.getCustomProperties(getScenePropertiesPath(scenePath));
         if(customProperties != null) {
             window.setTitle(AppProperties.getProperty("title", customProperties));
-            window.getLoop().setFPS(AppProperties.getPropertyAsInteger("fps", customProperties));
+            window.getRenderLoop().setFPS(AppProperties.getPropertyAsInteger("renderFps", customProperties));
+            window.getUpdateLoop().setFPS(AppProperties.getPropertyAsInteger("updateFps", customProperties));
             if(AppProperties.getProperty("multiplier", customProperties) != null) {
                 window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier", customProperties));
             } else {

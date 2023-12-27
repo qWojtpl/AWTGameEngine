@@ -5,10 +5,12 @@ import pl.AWTGameEngine.windows.Window;
 public class GameLoop extends Thread {
 
     private final Window window;
+    private final boolean renderLoop;
     private double FPS = 1;
 
-    public GameLoop(Window window) {
+    public GameLoop(Window window, boolean renderLoop) {
         this.window = window;
+        this.renderLoop = renderLoop;
     }
 
     @Override
@@ -20,9 +22,12 @@ public class GameLoop extends Thread {
                 break;
             }
             if(window.getCurrentScene() != null) {
-                window.getCurrentScene().update();
-                for (NestedPanel panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
-                    panel.repaint();
+                if(renderLoop) {
+                    for (NestedPanel panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
+                        panel.repaint();
+                    }
+                } else {
+                    window.getCurrentScene().update();
                 }
             }
         }
@@ -30,6 +35,10 @@ public class GameLoop extends Thread {
 
     public double getFPS() {
         return FPS;
+    }
+
+    public boolean isRenderLoop() {
+        return this.renderLoop;
     }
 
     public void setFPS(double FPS) {
