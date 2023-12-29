@@ -37,7 +37,7 @@ public abstract class ObjectComponent {
     }
 
     protected final MouseListener getMouseListener() {
-        return getWindow().getMouseListener();
+        return getObject().getPanel().getMouseListener();
     }
 
     protected final ColliderRegistry getColliderRegistry() {

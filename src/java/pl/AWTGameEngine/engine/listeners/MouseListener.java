@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
@@ -9,7 +10,7 @@ import java.awt.event.MouseEvent;
 
 public class MouseListener implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener {
 
-    private final Window window;
+    private final NestedPanel nestedPanel;
     private int mouseX;
     private int mouseY;
     private int mouseWindowX;
@@ -24,14 +25,14 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
     private MouseEvent dragEvent;
     private MouseEvent moveEvent;
 
-    public MouseListener(Window window) {
-        this.window = window;
+    public MouseListener(NestedPanel nestedPanel) {
+        this.nestedPanel = nestedPanel;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         clickEvent = e;
-        GameObject clickedObject = null;
+        /*GameObject clickedObject = null;
         for(GameObject object : getWindow().getCurrentScene().getActiveGameObjects()) {
             if(!object.getPanel().equals(getWindow().getPanel())) {
                 continue;
@@ -46,7 +47,7 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
         }
         for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onMouseClick")) {
             component.onMouseClick(clickedObject);
-        }
+        }*/
     }
 
     @Override
@@ -81,10 +82,7 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
     }
 
     public void updatePosition(MouseEvent e) {
-        if(window.getCurrentScene() == null) {
-            return;
-        }
-        Camera camera = window.getPanel().getCamera();
+        Camera camera = nestedPanel.getCamera();
         mouseX = (int) (e.getX() / camera.getZoom() + camera.getX());
         mouseY = (int) (e.getY() / camera.getZoom() + camera.getY());
         mouseWindowX = e.getX();
@@ -104,8 +102,8 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
         moveEvent = null;
     }
 
-    public Window getWindow() {
-        return this.window;
+    public NestedPanel getNestedPanel() {
+        return this.nestedPanel;
     }
 
     /**

@@ -43,7 +43,7 @@ public class ContextMenu extends ObjectComponent {
         if(!getMouseListener().getReleaseEvent().isPopupTrigger()) {
             return;
         }
-        MouseEvent mouseEvent = getWindow().getMouseListener().getReleaseEvent();
+        MouseEvent mouseEvent = getObject().getPanel().getMouseListener().getReleaseEvent();
         menu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
         for(ObjectComponent component : getObject().getEventHandler().getComponents("onContextMenuOpen")) {
             component.onContextMenuOpen(getMouseListener().getMouseX(), getMouseListener().getMouseY());

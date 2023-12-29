@@ -3,6 +3,7 @@ package pl.AWTGameEngine.scenes;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.EventHandler;
+import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.engine.PanelRegistry;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
@@ -173,7 +174,9 @@ public class Scene {
             for(ObjectComponent component : sceneEventHandler.getComponents("onStaticUpdate")) {
                 component.onStaticUpdate();
             }
-            window.getMouseListener().refresh();
+            for(NestedPanel panel : panelRegistry.getPanels()) {
+                panel.getMouseListener().refresh();
+            }
             return;
         }
         for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate")) {
@@ -185,7 +188,9 @@ public class Scene {
         for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
             component.onAfterUpdate();
         }
-        window.getMouseListener().refresh();
+        for(NestedPanel panel : panelRegistry.getPanels()) {
+            panel.getMouseListener().refresh();
+        }
     }
 
 }

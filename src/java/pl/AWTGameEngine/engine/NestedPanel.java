@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
@@ -14,6 +15,7 @@ public class NestedPanel extends JPanel {
 
     private final Window window;
     private final Camera camera;
+    private MouseListener mouseListener;
     private GameObject parentObject = null;
 
     public NestedPanel(GameObject parentObject) {
@@ -22,6 +24,7 @@ public class NestedPanel extends JPanel {
         setBackground(Color.WHITE);
         this.window = parentObject.getScene().getWindow();
         this.camera = new Camera(this);
+        setMouseListener(new MouseListener(this));
         this.parentObject = parentObject;
     }
 
@@ -31,6 +34,7 @@ public class NestedPanel extends JPanel {
         setBackground(Color.WHITE);
         this.window = window;
         this.camera = new Camera(this);
+        setMouseListener(this.mouseListener = new MouseListener(this));
     }
 
     @Override
@@ -65,8 +69,22 @@ public class NestedPanel extends JPanel {
         return this.camera;
     }
 
+    public MouseListener getMouseListener() {
+        return this.mouseListener;
+    }
+
     public GameObject getParentObject() {
         return this.parentObject;
+    }
+
+    public void setMouseListener(MouseListener mouseListener) {
+        if(this.mouseListener != null) {
+            removeMouseListener(this.mouseListener);
+            removeMouseMotionListener(this.mouseListener);
+        }
+        this.mouseListener = mouseListener;
+        addMouseListener(mouseListener);
+        addMouseMotionListener(mouseListener);
     }
 
 }

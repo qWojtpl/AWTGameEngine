@@ -22,7 +22,6 @@ public class Window extends JFrame {
     private GameLoop renderLoop;
     private GameLoop updateLoop;
     private KeyListener keyListener;
-    private MouseListener mouseListener;
     private WindowListener windowListener;
     private Scene currentScene;
     private SceneLoader sceneLoader;
@@ -60,10 +59,6 @@ public class Window extends JFrame {
 
     public KeyListener getKeyListener() {
         return this.keyListener;
-    }
-
-    public MouseListener getMouseListener() {
-        return this.mouseListener;
     }
 
     public WindowListener getWindowListener() {
@@ -113,7 +108,6 @@ public class Window extends JFrame {
         panel.setPreferredSize(new Dimension((int) (WIDTH * multiplier), (int) (HEIGHT * multiplier)));
         pack();
         setKeyListener(new KeyListener(this));
-        setMouseListener(new MouseListener(this));
     }
 
     public void setRenderLoop(GameLoop loop) {
@@ -130,19 +124,6 @@ public class Window extends JFrame {
         }
         this.keyListener = listener;
         addKeyListener(listener);
-    }
-
-    public void setMouseListener(MouseListener mouseListener) {
-        if(panel == null) {
-            return;
-        }
-        if(this.mouseListener != null) {
-            panel.removeMouseListener(this.mouseListener);
-            panel.removeMouseMotionListener(this.mouseListener);
-        }
-        this.mouseListener = mouseListener;
-        panel.addMouseListener(mouseListener);
-        panel.addMouseMotionListener(mouseListener);
     }
 
     public void setWindowListener(WindowListener windowListener) {
