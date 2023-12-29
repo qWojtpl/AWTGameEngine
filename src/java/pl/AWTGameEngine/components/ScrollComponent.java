@@ -29,6 +29,7 @@ public class ScrollComponent extends ObjectComponent {
         background.setColor(backgroundColor);
         getObject().addComponent(background);
         scroll = getScene().createGameObject("@vo-" + getObject().getIdentifier() + System.nanoTime());
+        scroll.setParent(getObject());
         scrollRenderer = new BlankRenderer(scroll);
         scroll.addComponent(scrollRenderer);
         updatePosition();

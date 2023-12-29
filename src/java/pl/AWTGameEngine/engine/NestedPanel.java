@@ -14,6 +14,7 @@ public class NestedPanel extends JPanel {
 
     private final Window window;
     private final Camera camera;
+    private GameObject parentObject = null;
 
     public NestedPanel(GameObject parentObject) {
         super();
@@ -21,6 +22,7 @@ public class NestedPanel extends JPanel {
         setBackground(Color.WHITE);
         this.window = parentObject.getScene().getWindow();
         this.camera = new Camera(this);
+        this.parentObject = parentObject;
     }
 
     public NestedPanel(Window window) {
@@ -61,6 +63,10 @@ public class NestedPanel extends JPanel {
 
     public Camera getCamera() {
         return this.camera;
+    }
+
+    public GameObject getParentObject() {
+        return this.parentObject;
     }
 
 }

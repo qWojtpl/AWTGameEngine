@@ -23,7 +23,7 @@ public class GameLoop extends Thread {
             }
             if(window.getCurrentScene() != null) {
                 if(renderLoop) {
-                    for (NestedPanel panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
+                    for(NestedPanel panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
                         panel.repaint();
                     }
                 } else {

@@ -16,7 +16,7 @@ public class PanelComponent extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        nestedPanel = new NestedPanel(getWindow());
+        nestedPanel = new NestedPanel(getObject());
         getObject().getPanel().add(nestedPanel);
         getPanelRegistry().addPanel(nestedPanel);
     }
