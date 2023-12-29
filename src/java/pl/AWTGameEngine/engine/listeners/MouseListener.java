@@ -4,7 +4,6 @@ import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.windows.Window;
 
 import java.awt.event.MouseEvent;
 
@@ -32,9 +31,9 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
     @Override
     public void mouseClicked(MouseEvent e) {
         clickEvent = e;
-        /*GameObject clickedObject = null;
-        for(GameObject object : getWindow().getCurrentScene().getActiveGameObjects()) {
-            if(!object.getPanel().equals(getWindow().getPanel())) {
+        GameObject clickedObject = null;
+        for(GameObject object : getNestedPanel().getWindow().getCurrentScene().getActiveGameObjects()) {
+            if(!object.getPanel().equals(getNestedPanel().getWindow().getPanel())) {
                 continue;
             }
             if(getMouseX() >= object.getX() && getMouseX() <= object.getX() + object.getSizeX()
@@ -45,9 +44,9 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
                 clickedObject = object;
             }
         }
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onMouseClick")) {
+        for(ObjectComponent component : getNestedPanel().getWindow().getCurrentScene().getSceneEventHandler().getComponents("onMouseClick")) {
             component.onMouseClick(clickedObject);
-        }*/
+        }
     }
 
     @Override

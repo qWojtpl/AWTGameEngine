@@ -41,13 +41,13 @@ public abstract class Preferences {
                     append = true;
                 }
                 String preference = preferences.get(key);
-                String newKey = "";
-                String newPreference = "";
+                StringBuilder newKey = new StringBuilder();
+                StringBuilder newPreference = new StringBuilder();
                 for(int i = 0; i < key.length(); i++) {
-                    newKey += (char) (key.charAt(i) + AppProperties.getPropertyAsInteger("preferenceShift"));
+                    newKey.append((char) (key.charAt(i) + AppProperties.getPropertyAsInteger("preferenceShift")));
                 }
                 for(int i = 0; i < preference.length(); i++) {
-                    newPreference += (char) (preference.charAt(i) + AppProperties.getPropertyAsInteger("preferenceShift"));
+                    newPreference.append((char) (preference.charAt(i) + AppProperties.getPropertyAsInteger("preferenceShift")));
                 }
                 writer.write(newKey + "\n");
                 writer.write(newPreference + "\n");
@@ -64,14 +64,14 @@ public abstract class Preferences {
             List<String> fileContent = Files.readAllLines(getPreferencesFile().toPath());
             String key = null;
             for(String line : fileContent) {
-                String newLine = "";
+                StringBuilder newLine = new StringBuilder();
                 for(int i = 0; i < line.length(); i++) {
-                    newLine += (char) (line.charAt(i) - AppProperties.getPropertyAsInteger("preferenceShift"));
+                    newLine.append((char) (line.charAt(i) - AppProperties.getPropertyAsInteger("preferenceShift")));
                 }
                 if(key == null) {
-                    key = newLine;
+                    key = newLine.toString();
                 } else {
-                    preferences.put(key, newLine);
+                    preferences.put(key, newLine.toString());
                     key = null;
                 }
             }

@@ -81,21 +81,25 @@ public class GameObject {
     }
 
     public String getSerializeString(HashMap<String, HashMap<String, String>> data) {
-        String serializeString =
+        StringBuilder serializeString = new StringBuilder(
                 "pos{" + getX() + ";" + getY() + "}" +
                 "size{" + getSizeX() + ";" + getSizeY() + "}" +
                 "priority{" + getPriority() + "}" +
                 "active{" + isActive() + "}" +
                 "rotation{" + getRotation() + "}" + (getParent() != null ?
-                "parent{" + getParent().getIdentifier() + "}" : "");
+                "parent{" + getParent().getIdentifier() + "}" : ""));
         for(String componentName : data.keySet()) {
-            String insideComponentData = "";
+            serializeString.append(componentName);
+            serializeString.append("{");
             for(String fieldName : data.get(componentName).keySet()) {
-                insideComponentData += fieldName + "^" + data.get(componentName).get(fieldName) + "^";
+                serializeString.append(fieldName);
+                serializeString.append("^");
+                serializeString.append(data.get(componentName).get(fieldName));
+                serializeString.append("^");
             }
-            serializeString += componentName + "{" + insideComponentData + "}";
+            serializeString.append("}");
         }
-        return serializeString;
+        return serializeString.toString();
     }
 
     public String getIdentifier() {
@@ -363,8 +367,8 @@ public class GameObject {
 
     public void deserialize(String data) {
         LinkedHashMap<String, String> properties = new LinkedHashMap<>();
-        String key = "";
-        String value = "";
+        StringBuilder key = new StringBuilder();
+        StringBuilder value = new StringBuilder();
         boolean valuesOpened = false;
         for(int i = 0; i < data.length(); i++) {
             if(data.charAt(i) == '{') {
@@ -372,18 +376,18 @@ public class GameObject {
                 continue;
             } else if(data.charAt(i) == '}') {
                 valuesOpened = false;
-                while(properties.containsKey(key)) {
-                    key += "~";
+                while(properties.containsKey(key.toString())) {
+                    key.append("~");
                 }
-                properties.put(key, value);
-                key = "";
-                value = "";
+                properties.put(key.toString(), value.toString());
+                key = new StringBuilder();
+                value = new StringBuilder();
                 continue;
             }
             if(!valuesOpened) {
-                key += data.charAt(i);
+                key.append(data.charAt(i));
             } else {
-                value += data.charAt(i);
+                value.append(data.charAt(i));
             }
         }
         for(String propertyName : properties.keySet()) {
@@ -442,19 +446,19 @@ public class GameObject {
                     if(property.charAt(i) == '^') {
                         fieldValueOpened = !fieldValueOpened;
                         if(!fieldValueOpened) {
-                            while(fields.containsKey(key)) {
-                                key += "~";
+                            while(fields.containsKey(key.toString())) {
+                                key.append("~");
                             }
-                            fields.put(key, value);
-                            key = "";
-                            value = "";
+                            fields.put(key.toString(), value.toString());
+                            key = new StringBuilder();
+                            value = new StringBuilder();
                         }
                         continue;
                     }
                     if(!fieldValueOpened) {
-                        key += property.charAt(i);
+                        key.append(property.charAt(i));
                     } else {
-                        value += property.charAt(i);
+                        value.append(property.charAt(i));
                     }
                 }
                 try {

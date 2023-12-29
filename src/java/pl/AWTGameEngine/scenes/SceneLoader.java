@@ -54,8 +54,8 @@ public class SceneLoader {
         for(String line : sceneLines) {
             boolean stringOpened = false;
             boolean valueOpened = false;
-            String key = "";
-            String value = "";
+            StringBuilder key = new StringBuilder();
+            StringBuilder value = new StringBuilder();
             for(int i = 0; i < line.length(); i++) {
                 if(line.charAt(i) == '"') {
                     stringOpened = !stringOpened;
@@ -67,12 +67,12 @@ public class SceneLoader {
                     continue;
                 }
                 if(!valueOpened) {
-                    key += line.charAt(i);
+                    key.append(line.charAt(i));
                 } else {
-                    value += line.charAt(i);
+                    value.append(line.charAt(i));
                 }
             }
-            data.put(key, value);
+            data.put(key.toString(), value.toString());
         }
         for(String objectName : data.keySet()) {
             GameObject object = window.getCurrentScene().createGameObject(objectName);
@@ -83,12 +83,12 @@ public class SceneLoader {
     }
 
     public static String getScenePropertiesPath(String scenePath) {
-        String path = "";
+        StringBuilder path = new StringBuilder();
         for(int i = 0; i < scenePath.length() - 5; i++) {
-            path += scenePath.charAt(i);
+            path.append(scenePath.charAt(i));
         }
-        path += "properties";
-        return path;
+        path.append("properties");
+        return path.toString();
     }
 
 }

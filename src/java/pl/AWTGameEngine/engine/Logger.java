@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
-public class Logger {
+public abstract class Logger {
 
     private static int level = 0;
     private static boolean append = false;
@@ -40,10 +40,11 @@ public class Logger {
 
     public static void log(String message, String exceptionMessage, StackTraceElement[] stackTraceElements) {
         message += "\n" + exceptionMessage;
+        StringBuilder messageBuilder = new StringBuilder(message);
         for(StackTraceElement element : stackTraceElements) {
-            message += "\n\t" + element.toString();
+            messageBuilder.append("\n\t" + element.toString());
         }
-        log(1, message);
+        log(1, messageBuilder.toString());
     }
 
     public static void clearLog() {

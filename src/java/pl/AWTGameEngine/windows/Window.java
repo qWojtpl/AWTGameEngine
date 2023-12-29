@@ -4,7 +4,6 @@ import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
-import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;

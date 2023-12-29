@@ -117,19 +117,19 @@ public class TextArea extends ObjectComponent {
             deleteSelectedText();
             return;
         }
-        String newText = "";
+        StringBuilder newText = new StringBuilder();
         for(int i = 0; i <= text.length(); i++) {
             if(i == pointerLocation) {
-                newText += key;
+                newText.append(key);
             }
             if(i >= selectionStart && i <= selectionEnd) {
                 continue;
             }
             if(i < text.length()) {
-                newText += text.charAt(i);
+                newText.append(text.charAt(i));
             }
         }
-        setText(newText);
+        setText(newText.toString());
         setPointerLocation(getPointerLocation() + 1);
         resetSelection();
     }
@@ -142,14 +142,14 @@ public class TextArea extends ObjectComponent {
             deleteSelectedText();
             return;
         }
-        String newText = "";
+        StringBuilder newText = new StringBuilder();
         for(int i = 0; i < text.length(); i++) {
             if(i == pointerLocation - 1) {
                 continue;
             }
-            newText += text.charAt(i);
+            newText.append(text.charAt(i));
         }
-        setText(newText);
+        setText(newText.toString());
         setPointerLocation(getPointerLocation() - 1);
         resetSelection();
     }
@@ -177,14 +177,14 @@ public class TextArea extends ObjectComponent {
     }
 
     public void deleteSelectedText() {
-        String newText = "";
+        StringBuilder newText = new StringBuilder();
         for(int i = 0; i < text.length(); i++) {
             if(i >= selectionStart && i <= selectionEnd) {
                 continue;
             }
-            newText += text.charAt(i);
+            newText.append(text.charAt(i));
         }
-        setText(newText);
+        setText(newText.toString());
         resetSelection();
         setPointerLocation(text.length());
     }
@@ -200,31 +200,31 @@ public class TextArea extends ObjectComponent {
     }
 
     public String getSelectedText() {
-        String selectedText = "";
+        StringBuilder selectedText = new StringBuilder();
         for(int i = selectionStart; i < selectionEnd; i++) {
-            selectedText += text.charAt(i);
+            selectedText.append(text.charAt(i));
         }
-        return selectedText;
+        return selectedText.toString();
     }
 
     private String getRenderedText() {
         if(!isFocused() || isDisabled()) {
             return text;
         }
-        String rendered = "";
+        StringBuilder rendered = new StringBuilder();
         for(int i = 0; i <= text.length(); i++) {
             if(pointerLocation == i && pointerIterator >= getWindow().getRenderLoop().getFPS() / 2) {
-                rendered += "|";
+                rendered.append("|");
             }
             if(i < text.length()) {
-                rendered += text.charAt(i);
+                rendered.append(text.charAt(i));
             } else if(i != 0) {
                 if(text.charAt(i - 1) == '\n' && rendered.charAt(rendered.length() - 1) != '|') {
-                    rendered += " ";
+                    rendered.append(" ");
                 }
             }
         }
-        return rendered;
+        return rendered.toString();
     }
 
     @SerializationGetter

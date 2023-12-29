@@ -59,10 +59,7 @@ public class EventHandler {
         }
         try {
             Method m = declaringClass.getSuperclass().getMethod(myMethod.getName(), myMethod.getParameterTypes());
-            if(!m.isAnnotationPresent(EventMethod.class)) {
-                return false;
-            }
-            return true;
+            return m.isAnnotationPresent(EventMethod.class);
         } catch(NoSuchMethodException e) {
             return false;
         }

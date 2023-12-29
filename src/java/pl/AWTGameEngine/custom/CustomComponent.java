@@ -3,11 +3,8 @@ package pl.AWTGameEngine.custom;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PhysicsBody;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.Vector;
 
 public class CustomComponent extends ObjectComponent {
-
-    private int r = 0;
 
     public CustomComponent(GameObject object) {
         super(object);
@@ -33,18 +30,6 @@ public class CustomComponent extends ObjectComponent {
     public void onStaticUpdate() {
         onPreUpdate();
         PhysicsBody body = (PhysicsBody) getObject().getComponentsByClass(PhysicsBody.class).get(0);
-        /*if(getKeyListener().hasPressedKey(102)) {
-            body.push(10, new Vector(1, 0));
-        }
-        if(getKeyListener().hasPressedKey(104)) {
-            body.push(10, new Vector(0, -1));
-        }
-        if(getKeyListener().hasPressedKey(98)) {
-            body.push(10, new Vector(0, 1));
-        }
-        if(getKeyListener().hasPressedKey(100)) {
-            body.push(10, new Vector(-1, 0));
-        }*/
         if(getKeyListener().hasPressedKey(75)) {
             getCamera().setZoom(getCamera().getZoom() - 0.25f);
             getKeyListener().releaseKey(75);

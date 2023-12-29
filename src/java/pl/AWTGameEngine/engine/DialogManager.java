@@ -4,7 +4,6 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 import pl.AWTGameEngine.components.TextArea;
-import pl.AWTGameEngine.components.Button;
 
 import javax.swing.*;
 import java.awt.*;
