@@ -33,7 +33,7 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
         clickEvent = e;
         GameObject clickedObject = null;
         for(GameObject object : getNestedPanel().getWindow().getCurrentScene().getActiveGameObjects()) {
-            if(!object.getPanel().equals(getNestedPanel().getWindow().getPanel())) {
+            if(!nestedPanel.equals(object.getPanel())) {
                 continue;
             }
             if(getMouseX() >= object.getX() && getMouseX() <= object.getX() + object.getSizeX()
