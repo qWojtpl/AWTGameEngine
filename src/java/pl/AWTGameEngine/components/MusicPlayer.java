@@ -24,7 +24,7 @@ public class MusicPlayer extends ObjectComponent {
         try {
             clip = AudioSystem.getClip();
         } catch(LineUnavailableException e) {
-            Logger.log("Line is unavailable", e.getMessage(), e.getStackTrace());
+            Logger.log("Line is unavailable", e);
             clip = null;
         }
     }
@@ -56,7 +56,7 @@ public class MusicPlayer extends ObjectComponent {
                 play();
             }
         } catch(LineUnavailableException | IOException e) {
-            Logger.log("Line is unavailable", e.getMessage(), e.getStackTrace());
+            Logger.log("Line is unavailable", e);
         }
     }
 

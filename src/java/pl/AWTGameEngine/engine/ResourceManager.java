@@ -38,7 +38,7 @@ public abstract class ResourceManager {
             stream.close();
             return lines;
         } catch(Exception e) {
-            Logger.log("Cannot get file resource: " + name, e.getMessage(), e.getStackTrace());
+            Logger.log("Cannot get file resource: " + name, e);
         }
         return null;
     }
@@ -59,7 +59,7 @@ public abstract class ResourceManager {
             stream.close();
             return sprite;
         } catch(Exception e) {
-            Logger.log("Cannot get sprite from resource: " + name, e.getMessage(), e.getStackTrace());
+            Logger.log("Cannot get sprite from resource: " + name, e);
         }
         return null;
     }
@@ -78,7 +78,7 @@ public abstract class ResourceManager {
             audioClipResources.put(name, audioClip);
             return audioClip;
         } catch(Exception e) {
-            Logger.log("Cannot get audio from resource: " + name, e.getMessage(), e.getStackTrace());
+            Logger.log("Cannot get audio from resource: " + name, e);
         }
         return null;
     }
@@ -96,7 +96,7 @@ public abstract class ResourceManager {
             streamResources.put(name, stream);
             return stream;
         } catch(Exception e) {
-            Logger.log("Cannot get stream from resource: " + name, e.getMessage(), e.getStackTrace());
+            Logger.log("Cannot get stream from resource: " + name, e);
         }
         return null;
     }

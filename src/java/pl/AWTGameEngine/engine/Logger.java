@@ -38,10 +38,10 @@ public abstract class Logger {
         System.out.print(message);
     }
 
-    public static void log(String message, String exceptionMessage, StackTraceElement[] stackTraceElements) {
-        message += "\n" + exceptionMessage;
+    public static void log(String message, Exception exception) {
+        message += "\n" + exception.getMessage();
         StringBuilder messageBuilder = new StringBuilder(message);
-        for(StackTraceElement element : stackTraceElements) {
+        for(StackTraceElement element : exception.getStackTrace()) {
             messageBuilder.append("\n\t" + element.toString());
         }
         log(1, messageBuilder.toString());
