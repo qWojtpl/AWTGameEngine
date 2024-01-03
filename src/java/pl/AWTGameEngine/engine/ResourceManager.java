@@ -1,8 +1,10 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.Sprite;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioSystem;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ public abstract class ResourceManager {
 
     private final static HashMap<String, List<String>> resources = new HashMap<>();
     private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
+    private final static HashMap<String, AudioClip> audioClipResources = new HashMap<>();
     private final static HashMap<String, InputStream> streamResources = new HashMap<>();
 
     public static List<String> getResource(String name) {
@@ -61,6 +64,25 @@ public abstract class ResourceManager {
         return null;
     }
 
+    public static AudioClip getResourceAsAudioClip(String name) {
+        if(audioClipResources.containsKey(name)) {
+            return audioClipResources.get(name);
+        }
+        Logger.log(2, "Reading audio resource: " + name);
+        try {
+            InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
+            if(stream == null) {
+                throw new Exception("Stream is null.");
+            }
+            AudioClip audioClip = new AudioClip(name, AudioSystem.getAudioInputStream(stream));
+            audioClipResources.put(name, audioClip);
+            return audioClip;
+        } catch(Exception e) {
+            Logger.log("Cannot get audio from resource: " + name, e.getMessage(), e.getStackTrace());
+        }
+        return null;
+    }
+
     public static InputStream getResourceAsStream(String name) {
         if(streamResources.containsKey(name)) {
             return streamResources.get(name);
@@ -85,6 +107,10 @@ public abstract class ResourceManager {
 
     public static HashMap<String, Sprite> getSpriteResources() {
         return new HashMap<>(spriteResources);
+    }
+
+    public static HashMap<String, AudioClip> getAudioClipResources() {
+        return new HashMap<>(audioClipResources);
     }
 
     public static HashMap<String, InputStream> getStreamResources() {
