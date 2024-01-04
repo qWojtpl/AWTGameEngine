@@ -53,7 +53,7 @@ public abstract class Logger {
     }
 
     public static File getLogFile() {
-        File logFile = new File("latest.log");
+        File logFile = new File(AppProperties.getProperty("logFileName"));
         try {
             if(!logFile.exists()) {
                 if(!logFile.createNewFile()) {

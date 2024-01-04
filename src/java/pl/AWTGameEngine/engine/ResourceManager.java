@@ -26,7 +26,7 @@ public abstract class ResourceManager {
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
-                throw new Exception("Stream is null.");
+                throw new Exception("Stream is null. Cannot find this resource.");
             }
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             List<String> lines = new ArrayList<>();
@@ -51,7 +51,7 @@ public abstract class ResourceManager {
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
-                throw new Exception("Stream is null.");
+                throw new Exception("Stream is null. Cannot find this resource.");
             }
             Image img = ImageIO.read(stream);
             Sprite sprite = new Sprite(name, img);
@@ -72,7 +72,7 @@ public abstract class ResourceManager {
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
-                throw new Exception("Stream is null.");
+                throw new Exception("Stream is null. Cannot find this resource.");
             }
             AudioClip audioClip = new AudioClip(name, AudioSystem.getAudioInputStream(stream));
             audioClipResources.put(name, audioClip);
@@ -91,7 +91,7 @@ public abstract class ResourceManager {
         try {
             InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
             if(stream == null) {
-                throw new Exception("Stream is null.");
+                throw new Exception("Stream is null. Cannot find this resource.");
             }
             streamResources.put(name, stream);
             return stream;
