@@ -17,7 +17,7 @@ public abstract class Logger {
         }
         Calendar calendar = Calendar.getInstance();
         message = "[" +
-                calendar.get(Calendar.DAY_OF_MONTH) + "-" +
+                parseNumber(calendar.get(Calendar.DAY_OF_MONTH)) + "-" +
                 parseNumber(calendar.get(Calendar.MONTH) + 1) + "-" +
                 calendar.get(Calendar.YEAR) + " " +
                 parseNumber(calendar.get(Calendar.HOUR_OF_DAY)) + ":" +

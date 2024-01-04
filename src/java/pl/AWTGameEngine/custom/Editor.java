@@ -40,6 +40,11 @@ public class Editor extends ObjectComponent {
         }
         if(getKeyListener().hasPressedKey(37)) {
             screenCamera.setX(screenCamera.getX() - 8);
+            GameObject object = getScene().getGameObjectByName("audio2");
+            MusicPlayer player = new MusicPlayer(object);
+            object.addComponent(player);
+            player.setSourcePath("audio/dominique.wav");
+            player.play();
         }
         if(getKeyListener().hasPressedKey(38)) {
             screenCamera.setY(screenCamera.getY() - 8);

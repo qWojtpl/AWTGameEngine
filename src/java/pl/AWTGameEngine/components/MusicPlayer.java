@@ -65,7 +65,8 @@ public class MusicPlayer extends ObjectComponent {
             logClip();
             return;
         }
-        clip.start();
+        clip.setFramePosition(0);
+        (new Thread(clip::start)).start();
     }
 
     public void stop() {

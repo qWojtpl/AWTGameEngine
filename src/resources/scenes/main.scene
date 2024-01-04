@@ -1,6 +1,7 @@
 background="pos{0;0}size{960;540}BlankRenderer:ObjectComponent{color^rgb(36,36,36)^}";
 panel="pos{0;0}size{640;360}PanelComponent:ObjectComponent{}";
 audio="pos{0;0}size{0;0}MusicPlayer:ObjectComponent{sourcePath^audio/dominique.wav^}";
+audio2="pos{0;0}size{0;0}";
 @cameraPosText="pos{175;506}parent{panel}size{144;18}priority{100}TextRenderer:ObjectComponent{color^black^size^12^text^   x: 0, y: 0^}Canvas:ObjectComponent{}";
 @editor="pos{0;0}size{0;0}parent{panel}Editor:ObjectComponent-C{}";
 object1="pos{0;0}size{45;45}priority{1}parent{panel}SpriteRenderer:ObjectComponent{spriteSource^sprites/beaver.jpg^}PhysicsBody:ObjectComponent{}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^}BoxCollider:ObjectComponent{visualize^true^sizeX^50^sizeY^-44^}Animator:ObjectComponent{nextFrame^sprites/beaver.jpg^nextDelay^60^nextFrame^sprites/beaver2.png^nextDelay^60^}";
