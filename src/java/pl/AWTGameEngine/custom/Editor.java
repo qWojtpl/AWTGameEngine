@@ -4,13 +4,17 @@ import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+
+import java.awt.*;
 
 @Unique
 public class Editor extends ObjectComponent {
 
     private GameObject gameScreen;
     private Camera screenCamera;
+    private Border selectedObjectBorder;
 
     public Editor(GameObject object) {
         super(object);
@@ -43,7 +47,7 @@ public class Editor extends ObjectComponent {
             GameObject object = getScene().getGameObjectByName("audio2");
             MusicPlayer player = new MusicPlayer(object);
             object.addComponent(player);
-            player.setSourcePath("audio/dominique.wav");
+            player.setSourcePath("audio/dominique2.wav");
             player.play();
         }
         if(getKeyListener().hasPressedKey(38)) {
@@ -55,6 +59,30 @@ public class Editor extends ObjectComponent {
         if(getKeyListener().hasPressedKey(40)) {
             screenCamera.setY(screenCamera.getY() + 8);
         }
+    }
+
+    @Override
+    public void onMouseClick(GameObject object) {
+        if(selectedObjectBorder != null) {
+            selectedObjectBorder.getObject().removeComponent(selectedObjectBorder);
+            selectedObjectBorder = null;
+        }
+        if(object == null) {
+            return;
+        }
+        if(object.getIdentifier().startsWith("@")) {
+            return;
+        }
+        selectedObjectBorder = new Border(object);
+        selectedObjectBorder.setColor(new ColorObject(Color.RED));
+        object.addComponent(selectedObjectBorder);
+    }
+
+    public GameObject getSelectedObject() {
+        if(selectedObjectBorder == null) {
+            return null;
+        }
+        return selectedObjectBorder.getObject();
     }
 
 }

@@ -3,7 +3,6 @@ package pl.AWTGameEngine.engine;
 import pl.AWTGameEngine.annotations.EventMethod;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -26,7 +25,12 @@ public class EventHandler {
     }
 
     public void removeComponent(ObjectComponent component) {
-        throw new NotImplementedException();
+        List<String> events = new ArrayList<>(registeredEvents.keySet());
+        for(String event : events) {
+            List<ObjectComponent> components = getComponents(event);
+            components.remove(component);
+            registeredEvents.put(event, components);
+        }
     }
 
     public List<ObjectComponent> getComponents(String event) {

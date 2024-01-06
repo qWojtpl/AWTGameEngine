@@ -60,6 +60,8 @@ public class GameObject {
 
     public void removeComponent(ObjectComponent component) {
         this.components.remove(component);
+        eventHandler.removeComponent(component);
+        getScene().getSceneEventHandler().removeComponent(component);
         component.onRemoveComponent();
     }
 
