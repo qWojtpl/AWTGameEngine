@@ -27,8 +27,15 @@ public abstract class ResourceManager {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
             File newFile = new File(path);
+            String[] dirSplit = path.split("/");
+            String currentDir = "";
+            for(int i = 0; i < dirSplit.length - 1; i++) {
+                currentDir += dirSplit[i] + "/";
+                File directory = new File(currentDir);
+                directory.mkdir();
+            }
             if(!newFile.exists()) {
-                boolean b = newFile.createNewFile();
+                newFile.createNewFile();
             }
             FileOutputStream fileOutputStream = new FileOutputStream(newFile, false);
             int read;
