@@ -59,6 +59,12 @@ public class Editor extends ObjectComponent {
         if(getKeyListener().hasPressedKey(40)) {
             screenCamera.setY(screenCamera.getY() + 8);
         }
+        if(getMouseListener().isMouseDragged()) {
+            if(selectedObjectBorder != null) {
+                selectedObjectBorder.getObject().setX(getMouseListener().getMouseX());
+                selectedObjectBorder.getObject().setY(getMouseListener().getMouseY());
+            }
+        }
     }
 
     @Override

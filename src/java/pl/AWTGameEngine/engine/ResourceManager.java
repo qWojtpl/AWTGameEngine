@@ -17,6 +17,31 @@ public abstract class ResourceManager {
     private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
     private final static HashMap<String, AudioClip> audioClipResources = new HashMap<>();
     private final static HashMap<String, InputStream> streamResources = new HashMap<>();
+    private static String resourcePrefix = "";
+
+    public static void copyResource(String name, String path) {
+        Logger.log(2, "Copying resource: " + name + " to " + path);
+        try {
+            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
+            if(stream == null) {
+                throw new Exception("Stream is null. Cannot find this resource.");
+            }
+            File newFile = new File(path);
+            if(!newFile.exists()) {
+                boolean b = newFile.createNewFile();
+            }
+            FileOutputStream fileOutputStream = new FileOutputStream(newFile, false);
+            int read;
+            byte[] bytes = new byte[8192];
+            while((read = stream.read(bytes)) != -1) {
+                fileOutputStream.write(bytes, 0, read);
+            }
+            stream.close();
+            fileOutputStream.close();
+        } catch(Exception e) {
+            Logger.log("Cannot copy file resource: " + name, e);
+        }
+    }
 
     public static List<String> getResource(String name) {
         if(resources.containsKey(name)) {
@@ -24,7 +49,7 @@ public abstract class ResourceManager {
         }
         Logger.log(2, "Reading file resource: " + name);
         try {
-            InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
+            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
@@ -49,7 +74,7 @@ public abstract class ResourceManager {
         }
         Logger.log(2, "Reading sprite resource: " + name);
         try {
-            InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
+            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
@@ -70,11 +95,12 @@ public abstract class ResourceManager {
         }
         Logger.log(2, "Reading audio resource: " + name);
         try {
-            InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
+            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
-            AudioClip audioClip = new AudioClip(name, AudioSystem.getAudioInputStream(stream));
+            BufferedInputStream bufferedStream = new BufferedInputStream(stream);
+            AudioClip audioClip = new AudioClip(name, AudioSystem.getAudioInputStream(bufferedStream));
             audioClipResources.put(name, audioClip);
             return audioClip;
         } catch(Exception e) {
@@ -89,7 +115,7 @@ public abstract class ResourceManager {
         }
         Logger.log(2, "Reading stream resource: " + name);
         try {
-            InputStream stream = ResourceManager.class.getResourceAsStream("/" + name);
+            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
@@ -115,6 +141,14 @@ public abstract class ResourceManager {
 
     public static HashMap<String, InputStream> getStreamResources() {
         return new HashMap<>(streamResources);
+    }
+
+    public static String getResourcePrefix() {
+        return resourcePrefix;
+    }
+
+    public static void setResourcePrefix(String prefix) {
+        resourcePrefix = prefix;
     }
 
 }

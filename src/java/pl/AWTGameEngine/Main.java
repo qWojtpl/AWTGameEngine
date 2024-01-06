@@ -1,5 +1,6 @@
 package pl.AWTGameEngine;
 
+import pl.AWTGameEngine.engine.ProjectManager;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.windows.WindowsManager;
@@ -17,6 +18,7 @@ public class Main {
         Logger.log(2, "Requesting default window...");
         WindowsManager.createDefaultWindow();
         Logger.log(2, "Started app.");
+        ProjectManager.createProject("test");
     }
 
 }
