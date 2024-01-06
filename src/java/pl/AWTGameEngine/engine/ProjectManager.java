@@ -3,6 +3,7 @@ package pl.AWTGameEngine.engine;
 import java.io.File;
 
 public abstract class ProjectManager {
+
     public static void createProject(String name) {
         createProjectDirectory();
         File projectDir = new File("./projects/" + name + "/");

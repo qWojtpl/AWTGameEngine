@@ -66,6 +66,7 @@ public class MusicPlayer extends ObjectComponent {
             return;
         }
         clip.setFramePosition(0);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
         (new Thread(clip::start)).start();
     }
 

@@ -3,6 +3,7 @@ package pl.AWTGameEngine.objects;
 import pl.AWTGameEngine.annotations.Parentless;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.PanelComponent;
 import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.EventHandler;
 import pl.AWTGameEngine.engine.NestedPanel;
@@ -65,6 +66,10 @@ public class GameObject {
         component.onRemoveComponent();
     }
 
+    public boolean hasComponent(Class<? extends ObjectComponent> component) {
+        return getComponentsByClass(component).size() > 0;
+    }
+
     public HashMap<String, HashMap<String, String>> serializeComponents() {
         HashMap<String, HashMap<String, String>> data = new HashMap<>();
         for(ObjectComponent component : getComponents()) {
@@ -116,7 +121,7 @@ public class GameObject {
         return new ArrayList<>(this.components);
     }
 
-    public List<ObjectComponent> getComponentsByClass(Class<?> clazz) {
+    public List<ObjectComponent> getComponentsByClass(Class<? extends ObjectComponent> clazz) {
         List<ObjectComponent> componentList = new ArrayList<>();
         for(ObjectComponent component : components) {
             if(component.getClass().equals(clazz)) {
@@ -149,11 +154,17 @@ public class GameObject {
         if(this.parent == null) {
             return getX() + getSizeX() / 2;
         }
+        if(this.parent.hasComponent(PanelComponent.class)) {
+            return getX() + getSizeX() / 2;
+        }
         return this.parent.getCenterX();
     }
 
     public int getCenterY() {
         if(this.parent == null) {
+            return getY() + getSizeY() / 2;
+        }
+        if(this.parent.hasComponent(PanelComponent.class)) {
             return getY() + getSizeY() / 2;
         }
         return this.parent.getCenterY();

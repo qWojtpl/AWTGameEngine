@@ -42,6 +42,7 @@ public class CustomComponent extends ObjectComponent {
             getSceneLoader().loadSceneFile("scenes/main.scene");
             getKeyListener().releaseKey(82);
         }
+        getObject().setRotation(getObject().getRotation() + 1);
     }
 
     @Override
