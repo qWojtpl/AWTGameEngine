@@ -7,6 +7,8 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +19,12 @@ public abstract class ResourceManager {
     private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
     private final static HashMap<String, AudioClip> audioClipResources = new HashMap<>();
     private final static HashMap<String, InputStream> streamResources = new HashMap<>();
-    private static String resourcePrefix = "";
 
     public static void copyResource(String name, String path) {
         Logger.log(2, "Copying resource: " + name + " to " + path);
+        name = getResourceName(name);
         try {
-            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
+            InputStream stream = getStream(name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
@@ -51,12 +53,13 @@ public abstract class ResourceManager {
     }
 
     public static List<String> getResource(String name) {
+        name = getResourceName(name);
         if(resources.containsKey(name)) {
             return resources.get(name);
         }
         Logger.log(2, "Reading file resource: " + name);
         try {
-            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
+            InputStream stream = getStream(name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
@@ -76,12 +79,13 @@ public abstract class ResourceManager {
     }
 
     public static Sprite getResourceAsSprite(String name) {
+        name = getResourceName(name);
         if(spriteResources.containsKey(name)) {
             return spriteResources.get(name);
         }
         Logger.log(2, "Reading sprite resource: " + name);
         try {
-            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
+            InputStream stream = getStream(name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
@@ -97,12 +101,13 @@ public abstract class ResourceManager {
     }
 
     public static AudioClip getResourceAsAudioClip(String name) {
+        name = getResourceName(name);
         if(audioClipResources.containsKey(name)) {
             return audioClipResources.get(name);
         }
         Logger.log(2, "Reading audio resource: " + name);
         try {
-            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
+            InputStream stream = getStream(name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
@@ -117,12 +122,13 @@ public abstract class ResourceManager {
     }
 
     public static InputStream getResourceAsStream(String name) {
+        name = getResourceName(name);
         if(streamResources.containsKey(name)) {
             return streamResources.get(name);
         }
         Logger.log(2, "Reading stream resource: " + name);
         try {
-            InputStream stream = ResourceManager.class.getResourceAsStream(resourcePrefix + "/" + name);
+            InputStream stream = getStream(name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
@@ -150,12 +156,18 @@ public abstract class ResourceManager {
         return new HashMap<>(streamResources);
     }
 
-    public static String getResourcePrefix() {
-        return resourcePrefix;
+    private static String getResourceName(String name) {
+        if(name.charAt(1) != ':' && !name.startsWith(".")) {
+            name = "/" + name;
+        }
+        return name;
     }
 
-    public static void setResourcePrefix(String prefix) {
-        resourcePrefix = prefix;
+    private static InputStream getStream(String path) throws IOException {
+        if(path.startsWith("/")) {
+            return ResourceManager.class.getResourceAsStream(path);
+        }
+        return Files.newInputStream(Paths.get(path));
     }
 
 }

@@ -3,6 +3,7 @@ package pl.AWTGameEngine.engine;
 import pl.AWTGameEngine.windows.Window;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 
 public class ProjectManager {
 
@@ -38,7 +39,12 @@ public class ProjectManager {
             Logger.log(1, "Cannot open project " + name + ", project doesn't exists.");
             return;
         }
-        ResourceManager.setResourcePrefix("./projects/" + name + "/");
+        LinkedHashMap<String, String> data = window.getSceneLoader().getSceneData("./projects/test/scenes/main.scene");
+        if(data == null) {
+            Logger.log(1, "Cannot attach scene to existing scene with panel.");
+            return;
+        }
+        window.getSceneLoader().attachSceneData(data, window.getCurrentScene().getGameObjectByName("panel"));
     }
 
     private void copyResource(String name, String path) {
