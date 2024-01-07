@@ -45,10 +45,20 @@ public class SceneLoader {
         window.setCurrentScene(new Scene(scenePath, window));
         window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
         window.setLocationRelativeTo(null);
+        LinkedHashMap<String, String> data = getSceneData(scenePath);
+        if(data == null) {
+            return;
+        }
+        attachSceneData(data);
+        window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        Logger.log(2, "Scene loaded.");
+    }
+
+    public LinkedHashMap<String, String> getSceneData(String scenePath) {
         List<String> sceneLines = ResourceManager.getResource(scenePath);
         if(sceneLines == null) {
             Logger.log(1, "Scene " + scenePath + " not found.");
-            return;
+            return null;
         }
         LinkedHashMap<String, String> data = new LinkedHashMap<>();
         for(String line : sceneLines) {
@@ -74,12 +84,21 @@ public class SceneLoader {
             }
             data.put(key.toString(), value.toString());
         }
-        for(String objectName : data.keySet()) {
+        return data;
+    }
+
+    public void attachSceneData(LinkedHashMap<String, String> sceneData) {
+        attachSceneData(sceneData, null);
+    }
+
+    public void attachSceneData(LinkedHashMap<String, String> sceneData, GameObject defaultParent) {
+        for(String objectName : sceneData.keySet()) {
             GameObject object = window.getCurrentScene().createGameObject(objectName);
-            object.deserialize(data.get(objectName));
+            object.deserialize(sceneData.get(objectName));
+            if(object.getParent() == null) {
+                object.setParent(defaultParent);
+            }
         }
-        window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        Logger.log(2, "Scene loaded.");
     }
 
     public static String getScenePropertiesPath(String scenePath) {

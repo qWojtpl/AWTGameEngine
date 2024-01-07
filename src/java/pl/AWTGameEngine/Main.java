@@ -18,7 +18,6 @@ public class Main {
         Logger.log(2, "Requesting default window...");
         WindowsManager.createDefaultWindow();
         Logger.log(2, "Started app.");
-        ProjectManager.createProject("test");
     }
 
 }

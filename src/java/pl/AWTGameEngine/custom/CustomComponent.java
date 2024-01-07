@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.components.PhysicsBody;
 import pl.AWTGameEngine.objects.GameObject;
 
 public class CustomComponent extends ObjectComponent {
@@ -29,7 +28,6 @@ public class CustomComponent extends ObjectComponent {
     @Override
     public void onStaticUpdate() {
         onPreUpdate();
-        PhysicsBody body = (PhysicsBody) getObject().getComponentsByClass(PhysicsBody.class).get(0);
         if(getKeyListener().hasPressedKey(75)) {
             getCamera().setZoom(getCamera().getZoom() - 0.25f);
             getKeyListener().releaseKey(75);

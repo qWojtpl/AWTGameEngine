@@ -2,6 +2,7 @@ package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.GameLoop;
+import pl.AWTGameEngine.engine.ProjectManager;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
@@ -30,6 +31,7 @@ public abstract class WindowsManager {
     public static Window createWindow(String scenePath, boolean fullScreen) {
         Window window = new Window();
         window.setSceneLoader(new SceneLoader(window));
+        window.setProjectManager(new ProjectManager(window));
         window.setResizable(false);
         window.setTitle(AppProperties.getProperty("title"));
 

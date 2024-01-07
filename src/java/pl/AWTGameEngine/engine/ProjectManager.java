@@ -1,10 +1,18 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.windows.Window;
+
 import java.io.File;
 
-public abstract class ProjectManager {
+public class ProjectManager {
 
-    public static void createProject(String name) {
+    private final Window window;
+
+    public ProjectManager(Window window) {
+        this.window = window;
+    }
+
+    public void createProject(String name) {
         String path = "./projects/" + name + "/";
         File projectDir = new File(path);
         if(!projectDir.mkdirs()) {
@@ -24,7 +32,7 @@ public abstract class ProjectManager {
         Logger.log(2, "Created project: " + name);
     }
 
-    public static void openProject(String name) {
+    public void openProject(String name) {
         File projectDirectory = new File("./projects/" + name + "/");
         if(!projectDirectory.exists()) {
             Logger.log(1, "Cannot open project " + name + ", project doesn't exists.");
@@ -33,8 +41,12 @@ public abstract class ProjectManager {
         ResourceManager.setResourcePrefix("./projects/" + name + "/");
     }
 
-    private static void copyResource(String name, String path) {
+    private void copyResource(String name, String path) {
         ResourceManager.copyResource(name, path + name);
+    }
+
+    public Window getWindow() {
+        return this.window;
     }
 
 }
