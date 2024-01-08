@@ -44,7 +44,7 @@ public class ProjectManager {
             Logger.log(1, "Cannot attach scene to existing scene with panel.");
             return;
         }
-        window.getSceneLoader().attachSceneData(data, window.getCurrentScene().getGameObjectByName("panel"));
+        //window.getSceneLoader().attachSceneData(data, window.getCurrentScene().getGameObjectByName("panel"));
     }
 
     private void copyResource(String name, String path) {

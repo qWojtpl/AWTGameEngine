@@ -64,11 +64,18 @@ public class Editor extends ObjectComponent {
 
     @Override
     public void onMouseClick(GameObject object) {
+        selectObject(object);
+    }
+
+    private void selectObject(GameObject object) {
         if(selectedObjectBorder != null) {
             selectedObjectBorder.getObject().removeComponent(selectedObjectBorder);
             selectedObjectBorder = null;
         }
         if(object == null) {
+            return;
+        }
+        if(!object.getPanel().equals(((PanelComponent)(gameScreen.getComponentsByClass(PanelComponent.class).get(0))).getNestedPanel())) {
             return;
         }
         if(object.getIdentifier().startsWith("@")) {

@@ -53,6 +53,9 @@ public class ScrollComponent extends ObjectComponent {
         if(getMouseListener() == null || scroll == null) {
             return;
         }
+        if(getObject().hasComponent(Canvas.class) && !scroll.hasComponent(Canvas.class)) {
+            scroll.addComponent(new Canvas(scroll));
+        }
         scrollRenderer.setColor(scrollColor);
         if((getMouseListener().getMouseX() >= scroll.getX() && getMouseListener().getMouseX() <= scroll.getX() + scroll.getSizeX()
         && getMouseListener().getMouseY() >= scroll.getY() && getMouseListener().getMouseY() <= scroll.getY() + scroll.getSizeY())
@@ -67,6 +70,13 @@ public class ScrollComponent extends ObjectComponent {
                 shift = getMouseListener().getMouseY() - getObject().getY();
             } else {
                 shift = getMouseListener().getMouseX() - getObject().getX();
+            }
+            if(getObject().hasComponent(ScrollCameraBind.class)) {
+                if(!horizontal) {
+                    shift -= getCamera().getY();
+                } else {
+                    shift -= getCamera().getX();
+                }
             }
         }
         if(getMouseListener().isMouseReleased()) {
