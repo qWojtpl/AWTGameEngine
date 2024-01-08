@@ -54,6 +54,10 @@ public class PanelComponent extends ObjectComponent {
         }
     }
 
+    public NestedPanel getNestedPanel() {
+        return this.nestedPanel;
+    }
+
     public Camera getPanelCamera() {
         return nestedPanel.getCamera();
     }

@@ -1,6 +1,5 @@
 package pl.AWTGameEngine;
 
-import pl.AWTGameEngine.engine.ProjectManager;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.windows.WindowsManager;

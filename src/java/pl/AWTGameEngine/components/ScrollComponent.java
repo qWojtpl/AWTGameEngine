@@ -17,6 +17,7 @@ public class ScrollComponent extends ObjectComponent {
     private ColorObject selectedScrollColor = new ColorObject("rgb(160,160,160)");
     private int shift = 0;
     private double value = 0;
+    private int scrollSize = 28;
     private boolean selected = false;
     private boolean horizontal = false;
 
@@ -78,7 +79,7 @@ public class ScrollComponent extends ObjectComponent {
         if(!horizontal) {
             scroll.setX(getObject().getX());
             scroll.setSizeX(getObject().getSizeX());
-            scroll.setSizeY(getObject().getSizeY() / 4);
+            scroll.setSizeY(getObject().getSizeY() / (32 - scrollSize));
             int y = getObject().getY() + shift;
             value = (double) shift / getObject().getSizeY();
             if(y < getObject().getY()) {
@@ -92,7 +93,7 @@ public class ScrollComponent extends ObjectComponent {
             scroll.setY(y);
         } else {
             scroll.setY(getObject().getY());
-            scroll.setSizeX(getObject().getSizeX() / 4);
+            scroll.setSizeX(getObject().getSizeX() / (32 - scrollSize));
             scroll.setSizeY(getObject().getSizeY());
             int x = getObject().getX() + shift;
             value = (double) shift / getObject().getSizeX();
@@ -114,6 +115,11 @@ public class ScrollComponent extends ObjectComponent {
 
     public boolean isSelected() {
         return this.selected;
+    }
+
+    @SerializationGetter
+    public int getScrollSize() {
+        return this.scrollSize;
     }
 
     public ColorObject getBackgroundColorObject() {
@@ -155,6 +161,15 @@ public class ScrollComponent extends ObjectComponent {
     @SerializationSetter
     public void setHorizontal(String horizontal) {
         setHorizontal(Boolean.parseBoolean(horizontal));
+    }
+
+    public void setScrollSize(int size) {
+        this.scrollSize = size;
+    }
+
+    @SerializationSetter
+    public void setScrollSize(String size) {
+        setScrollSize(Integer.parseInt(size));
     }
 
     public void setBackgroundColor(ColorObject object) {

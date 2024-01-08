@@ -39,7 +39,7 @@ public class ProjectManager {
             Logger.log(1, "Cannot open project " + name + ", project doesn't exists.");
             return;
         }
-        LinkedHashMap<String, String> data = window.getSceneLoader().getSceneData("./projects/test/scenes/main.scene");
+        LinkedHashMap<String, String> data = window.getSceneLoader().getSceneData("./projects/test/scenes/error.scene");
         if(data == null) {
             Logger.log(1, "Cannot attach scene to existing scene with panel.");
             return;
