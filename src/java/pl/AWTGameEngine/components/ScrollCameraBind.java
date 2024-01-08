@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.SerializationGetter;
+import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.GameObject;
 
 public class ScrollCameraBind extends ObjectComponent {
@@ -25,6 +27,20 @@ public class ScrollCameraBind extends ObjectComponent {
                 getCamera().setY((int) (scrollComponent.getValue() * maxValue));
             }
         }
+    }
+
+    @SerializationGetter
+    public int getMaxValue() {
+        return this.maxValue;
+    }
+
+    public void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    @SerializationSetter
+    public void setMaxValue(String maxValue) {
+        setMaxValue(Integer.parseInt(maxValue));
     }
 
 }
