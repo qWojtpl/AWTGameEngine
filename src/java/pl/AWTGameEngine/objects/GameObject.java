@@ -238,7 +238,7 @@ public class GameObject {
     }
 
     public boolean setRotation(int angle) {
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation")) {
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#int")) {
             if(!component.onUpdateRotation(angle)) {
                 return false;
             }
@@ -273,7 +273,7 @@ public class GameObject {
         }
         GameObject oldParent = this.parent;
         this.parent = parent;
-        for(ObjectComponent component : eventHandler.getComponents("onParentChange")) {
+        for(ObjectComponent component : eventHandler.getComponents("onParentChange#GameObject")) {
             component.onParentChange(oldParent);
         }
         if(parent != null) {
@@ -291,10 +291,10 @@ public class GameObject {
             return;
         }
         this.children.add(object);
-        for(ObjectComponent component : eventHandler.getComponents("onAddChild")) {
+        for(ObjectComponent component : eventHandler.getComponents("onAddChild#GameObject")) {
             component.onAddChild(object);
         }
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject")) {
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#boolean")) {
             component.onUpdateGameObject(this);
         }
     }
@@ -305,10 +305,10 @@ public class GameObject {
         }
         object.setPanel(getScene().getWindow().getPanel());
         this.children.remove(object);
-        for(ObjectComponent component : eventHandler.getComponents("onRemoveChild")) {
+        for(ObjectComponent component : eventHandler.getComponents("onRemoveChild#GameObject")) {
             component.onRemoveChild(object);
         }
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject")) {
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#Gameobject")) {
             component.onUpdateGameObject(this);
         }
     }
@@ -352,25 +352,25 @@ public class GameObject {
     }
 
     public void preRender(Graphics g) {
-        for(ObjectComponent component : eventHandler.getComponents("onPreRender")) {
+        for(ObjectComponent component : eventHandler.getComponents("onPreRender#Graphics")) {
             component.onPreRender(g);
         }
     }
 
     public void render(Graphics g) {
-        for(ObjectComponent component : eventHandler.getComponents("onRender")) {
+        for(ObjectComponent component : eventHandler.getComponents("onRender#Graphics")) {
             component.onRender(g);
         }
     }
 
     public void afterRender(Graphics g) {
-        for(ObjectComponent component : eventHandler.getComponents("onAfterRender")) {
+        for(ObjectComponent component : eventHandler.getComponents("onAfterRender#Graphics")) {
             component.onAfterRender(g);
         }
     }
 
     public boolean updatePosition(int newX, int newY) {
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition")) {
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
             if(!component.onUpdatePosition(newX, newY)) {
                 return false;
             }

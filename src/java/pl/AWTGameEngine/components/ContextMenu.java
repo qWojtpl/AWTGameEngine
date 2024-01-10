@@ -45,7 +45,7 @@ public class ContextMenu extends ObjectComponent {
         }
         MouseEvent mouseEvent = getObject().getPanel().getMouseListener().getReleaseEvent();
         menu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-        for(ObjectComponent component : getObject().getEventHandler().getComponents("onContextMenuOpen")) {
+        for(ObjectComponent component : getObject().getEventHandler().getComponents("onContextMenuOpen#int#int")) {
             component.onContextMenuOpen(getMouseListener().getMouseX(), getMouseListener().getMouseY());
         }
     }
@@ -63,7 +63,7 @@ public class ContextMenu extends ObjectComponent {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                for(ObjectComponent component : getObject().getEventHandler().getComponents("onContextMenuClick")) {
+                for(ObjectComponent component : getObject().getEventHandler().getComponents("onContextMenuClick#int#int#int")) {
                     component.onContextMenuClick(c, getMouseListener().getMouseX(), getMouseListener().getMouseY());
                 }
             }

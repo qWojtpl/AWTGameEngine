@@ -6,6 +6,7 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,9 +19,17 @@ public class EventHandler {
             if(!isMethodOverridden(method)) {
                 continue;
             }
-            List<ObjectComponent> components = registeredEvents.getOrDefault(method.getName(), new ArrayList<>());
+            String[] parameters = new String[method.getParameterTypes().length];
+            int i = 0;
+            for(Class<?> parameter : method.getParameterTypes()) {
+                parameters[i] = parameter.getSimpleName();
+                i++;
+            }
+            String methodName = method.getName() + "#" + String.join("#", parameters);
+            Logger.log(2, methodName);
+            List<ObjectComponent> components = registeredEvents.getOrDefault(methodName, new ArrayList<>());
             components.add(component);
-            registeredEvents.put(method.getName(), components);
+            registeredEvents.put(methodName, components);
         }
     }
 

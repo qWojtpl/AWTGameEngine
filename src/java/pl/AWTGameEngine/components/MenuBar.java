@@ -102,7 +102,7 @@ public class MenuBar extends ObjectComponent {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                for(ObjectComponent component : getObject().getEventHandler().getComponents("onMenuBarClick")) {
+                for(ObjectComponent component : getObject().getEventHandler().getComponents("onMenuBarClick#String")) {
                     component.onMenuBarClick(getMenuNameByValue(menu) + "->" + itemName);
                 }
             }

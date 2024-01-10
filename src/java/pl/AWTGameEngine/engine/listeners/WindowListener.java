@@ -54,7 +54,7 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
     @Override
     public void windowClosing(WindowEvent e) {
         if(window.getCurrentScene() != null) {
-            for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowClosing")) {
+            for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowClosing#")) {
                 component.onWindowClosing();
             }
         }

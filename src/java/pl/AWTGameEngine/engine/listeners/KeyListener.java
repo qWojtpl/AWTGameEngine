@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.event.KeyEvent;
@@ -22,7 +23,7 @@ public class KeyListener implements java.awt.event.KeyListener {
         if(window.getCurrentScene() == null) {
             return;
         }
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType")) {
+        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#char")) {
             component.onKeyType(e.getKeyChar());
         }
     }
@@ -31,7 +32,7 @@ public class KeyListener implements java.awt.event.KeyListener {
     public void keyPressed(KeyEvent e) {
         pressedKeys.add(e.getKeyCode());
         pressedKeysChars.add(e.getKeyChar());
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType")) {
+        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#int")) {
             component.onKeyType(e.getKeyCode());
         }
     }
