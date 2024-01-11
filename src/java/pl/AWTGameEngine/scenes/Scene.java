@@ -171,7 +171,7 @@ public class Scene {
 
     public void update() {
         if(window.isStaticMode()) {
-            for(ObjectComponent component : sceneEventHandler.getComponents("onStaticUpdate#")) {
+            for(ObjectComponent component : sceneEventHandler.getComponents("onStaticUpdate")) {
                 component.onStaticUpdate();
             }
             for(NestedPanel panel : panelRegistry.getPanels()) {
@@ -179,13 +179,13 @@ public class Scene {
             }
             return;
         }
-        for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate#")) {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate")) {
             component.onPreUpdate();
         }
-        for(ObjectComponent component : sceneEventHandler.getComponents("onUpdate#")) {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onUpdate")) {
             component.onUpdate();
         }
-        for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate#")) {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
             component.onAfterUpdate();
         }
         for(NestedPanel panel : panelRegistry.getPanels()) {

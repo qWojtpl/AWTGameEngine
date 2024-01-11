@@ -308,7 +308,7 @@ public class GameObject {
         for(ObjectComponent component : eventHandler.getComponents("onRemoveChild#GameObject")) {
             component.onRemoveChild(object);
         }
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#Gameobject")) {
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#GameObject")) {
             component.onUpdateGameObject(this);
         }
     }

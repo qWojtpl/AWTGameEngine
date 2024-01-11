@@ -19,14 +19,12 @@ public class EventHandler {
             if(!isMethodOverridden(method)) {
                 continue;
             }
-            String[] parameters = new String[method.getParameterTypes().length];
-            int i = 0;
+            StringBuilder parameters = new StringBuilder();
             for(Class<?> parameter : method.getParameterTypes()) {
-                parameters[i] = parameter.getSimpleName();
-                i++;
+                parameters.append("#");
+                parameters.append(parameter.getSimpleName());
             }
-            String methodName = method.getName() + "#" + String.join("#", parameters);
-            Logger.log(2, methodName);
+            String methodName = method.getName() + parameters;
             List<ObjectComponent> components = registeredEvents.getOrDefault(methodName, new ArrayList<>());
             components.add(component);
             registeredEvents.put(methodName, components);
