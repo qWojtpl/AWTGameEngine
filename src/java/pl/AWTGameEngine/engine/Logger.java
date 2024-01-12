@@ -10,10 +10,16 @@ public abstract class Logger {
     private static int level = 0;
     private static boolean append = false;
     private static boolean logFile = false;
+    private static boolean callerClass = false;
 
     public static void log(int level, String message) {
         if(Logger.level < level) {
             return;
+        }
+        String className = "";
+        if(callerClass) {
+            String[] split = Thread.currentThread().getStackTrace()[2].getClassName().split("\\.");
+            className = " [" + split[split.length - 1] + "]";
         }
         Calendar calendar = Calendar.getInstance();
         message = "[" +
@@ -23,7 +29,9 @@ public abstract class Logger {
                 parseNumber(calendar.get(Calendar.HOUR_OF_DAY)) + ":" +
                 parseNumber(calendar.get(Calendar.MINUTE)) + ":" +
                 parseNumber(calendar.get(Calendar.SECOND)) + ":" +
-                parseThreeNumber(calendar.get(Calendar.MILLISECOND)) + "] " + message + "\n";
+                parseThreeNumber(calendar.get(Calendar.MILLISECOND)) + "]" +
+                className + " " +
+                message + "\n";
         if(logFile) {
             try(FileWriter writer = new FileWriter(getLogFile(), append)) {
                 writer.write(message);
@@ -75,6 +83,10 @@ public abstract class Logger {
         return logFile;
     }
 
+    public static boolean isCallerClass() {
+        return callerClass;
+    }
+
     public static void setLevel(int level) {
         if(level < 0 || level > 2) {
             level = 2;
@@ -84,6 +96,10 @@ public abstract class Logger {
 
     public static void setLogFile(boolean logFile) {
         Logger.logFile = logFile;
+    }
+
+    public static void setCallerClass(boolean callerClass) {
+        Logger.callerClass = callerClass;
     }
 
     private static String parseNumber(int number) {

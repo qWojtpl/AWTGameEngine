@@ -24,11 +24,11 @@ public class Camera {
     }
 
     private int parse(int value, int relative) {
-        return (int) ((value - relative) * getZoom());
+        return Math.round((value - relative) * getZoom());
     }
 
     public int parseScale(int scale) {
-        return (int) (scale * getZoom());
+        return Math.round(scale * getZoom());
     }
 
     public NestedPanel getPanel() {
