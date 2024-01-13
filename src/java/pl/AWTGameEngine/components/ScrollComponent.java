@@ -56,9 +56,14 @@ public class ScrollComponent extends ObjectComponent {
         if(getObject().hasComponent(Canvas.class) && !scroll.hasComponent(Canvas.class)) {
             scroll.addComponent(new Canvas(scroll));
         }
+        int x = 0, y = 0;
+        if(getObject().hasComponent(Canvas.class)) {
+            x = getCamera().getX();
+            y = getCamera().getY();
+        }
         scrollRenderer.setColor(scrollColor);
-        if((getMouseListener().getMouseX() >= scroll.getX() && getMouseListener().getMouseX() <= scroll.getX() + scroll.getSizeX()
-        && getMouseListener().getMouseY() >= scroll.getY() && getMouseListener().getMouseY() <= scroll.getY() + scroll.getSizeY())
+        if((getMouseListener().getMouseX() - x >= scroll.getX() && getMouseListener().getMouseX() - x <= scroll.getX() + scroll.getSizeX()
+        && getMouseListener().getMouseY() - y >= scroll.getY() && getMouseListener().getMouseY() - y <= scroll.getY() + scroll.getSizeY())
         || selected) {
             scrollRenderer.setColor(selectedScrollColor);
             if(getMouseListener().isMousePressed()) {
