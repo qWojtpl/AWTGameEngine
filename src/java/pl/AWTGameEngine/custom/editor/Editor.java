@@ -15,6 +15,8 @@ public class Editor extends ObjectComponent {
     private GameObject gameScreen;
     private Camera screenCamera;
     private Border selectedObjectBorder;
+    private FlexComponent filesFlex;
+    private ScrollCameraBind scrollCameraBind;
 
     public Editor(GameObject object) {
         super(object);
@@ -35,6 +37,10 @@ public class Editor extends ObjectComponent {
             return;
         }
         screenCamera = ((PanelComponent) gameScreen.getComponentsByClass(PanelComponent.class).get(0)).getPanelCamera();
+        GameObject filesFlexObject = getScene().getGameObjectByName("filesFlex");
+        filesFlex = (FlexComponent) filesFlexObject.getComponentsByClass(FlexComponent.class).get(0);
+        GameObject scrollObject = getScene().getGameObjectByName("filesScroll");
+        scrollCameraBind = (ScrollCameraBind) scrollObject.getComponentsByClass(ScrollCameraBind.class).get(0);
     }
 
     @Override
@@ -60,6 +66,8 @@ public class Editor extends ObjectComponent {
                 selectedObjectBorder.getObject().setY(getMouseListener().getMouseY());
             }
         }
+        System.out.println(filesFlex.getCalculatedHeight());
+        scrollCameraBind.setMaxValue(filesFlex.getCalculatedHeight());
     }
 
     @Override
