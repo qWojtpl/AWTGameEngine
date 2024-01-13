@@ -81,10 +81,12 @@ public class NestedPanel extends JPanel {
         if(this.mouseListener != null) {
             removeMouseListener(this.mouseListener);
             removeMouseMotionListener(this.mouseListener);
+            removeMouseWheelListener(this.mouseListener);
         }
         this.mouseListener = mouseListener;
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
+        addMouseWheelListener(mouseListener);
     }
 
 }

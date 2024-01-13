@@ -6,8 +6,10 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
-public class MouseListener implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener {
+public class MouseListener implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener, java.awt.event.MouseWheelListener {
 
     private final NestedPanel nestedPanel;
     private int mouseX;
@@ -23,6 +25,7 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
     private MouseEvent exitEvent;
     private MouseEvent dragEvent;
     private MouseEvent moveEvent;
+    private MouseWheelEvent mouseWheelEvent;
 
     public MouseListener(NestedPanel nestedPanel) {
         this.nestedPanel = nestedPanel;
@@ -80,6 +83,11 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
         updatePosition(e);
     }
 
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        mouseWheelEvent = e;
+    }
+
     public void updatePosition(MouseEvent e) {
         Camera camera = nestedPanel.getCamera();
         mouseX = (int) (e.getX() / camera.getZoom() + camera.getX());
@@ -99,6 +107,7 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
         exitEvent = null;
         dragEvent = null;
         moveEvent = null;
+        mouseWheelEvent = null;
     }
 
     public NestedPanel getNestedPanel() {
@@ -175,6 +184,10 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
         return this.moveEvent;
     }
 
+    public MouseWheelEvent getMouseWheelEvent() {
+        return this.mouseWheelEvent;
+    }
+
     public boolean isMouseClicked() {
         return getClickEvent() != null;
     }
@@ -201,6 +214,10 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
 
     public boolean isMouseMoved() {
         return getMoveEvent() != null;
+    }
+
+    public boolean isMouseWheeled() {
+        return getMouseWheelEvent() != null;
     }
 
 }

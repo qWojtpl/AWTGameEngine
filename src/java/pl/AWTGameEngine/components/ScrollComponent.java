@@ -15,7 +15,7 @@ public class ScrollComponent extends ObjectComponent {
     private ColorObject backgroundColor = new ColorObject("rgb(175,175,175)");
     private ColorObject scrollColor = new ColorObject("rgb(150,150,150)");
     private ColorObject selectedScrollColor = new ColorObject("rgb(160,160,160)");
-    private int shift = 0;
+    private double shift = 0;
     private double value = 0;
     private int scrollSize = 28;
     private boolean selected = false;
@@ -95,8 +95,8 @@ public class ScrollComponent extends ObjectComponent {
             scroll.setX(getObject().getX());
             scroll.setSizeX(getObject().getSizeX());
             scroll.setSizeY(getObject().getSizeY() / (32 - scrollSize));
-            int y = getObject().getY() + shift;
-            value = (double) shift / getObject().getSizeY();
+            int y = (int) (getObject().getY() + shift);
+            value = shift / getObject().getSizeY();
             if(y < getObject().getY()) {
                 y = getObject().getY();
                 value = 0;
@@ -110,8 +110,8 @@ public class ScrollComponent extends ObjectComponent {
             scroll.setY(getObject().getY());
             scroll.setSizeX(getObject().getSizeX() / (32 - scrollSize));
             scroll.setSizeY(getObject().getSizeY());
-            int x = getObject().getX() + shift;
-            value = (double) shift / getObject().getSizeX();
+            int x = (int) (getObject().getX() + shift);
+            value = shift / getObject().getSizeX();
             if (x < getObject().getX()) {
                 x = getObject().getX();
                 value = 0;
@@ -167,6 +167,22 @@ public class ScrollComponent extends ObjectComponent {
     @SerializationGetter
     public boolean isHorizontal() {
         return this.horizontal;
+    }
+
+    public void setValue(double value) {
+        if(value > 1) {
+            value = 1;
+        } else if(value < 0) {
+            value = 0;
+        }
+        shift += (value - this.value) * getObject().getSizeX() * scrollSize;
+        this.value = value;
+        updatePosition();
+    }
+
+    @SerializationSetter
+    public void setValue(String value) {
+        setValue(Double.parseDouble(value));
     }
 
     public void setHorizontal(boolean horizontal) {
