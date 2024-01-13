@@ -6,6 +6,7 @@ import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PanelComponent;
 import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.EventHandler;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.scenes.Scene;
 
@@ -501,7 +502,7 @@ public class GameObject {
                     }
                     this.addComponent(o);
                 } catch(Exception e) {
-                    e.printStackTrace();
+                    Logger.log("Exception while deserializing GameObject", e);
                 }
             }
         }

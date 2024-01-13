@@ -7,6 +7,7 @@ import pl.AWTGameEngine.objects.GameObject;
 public class ScrollCameraBind extends ObjectComponent {
 
     private int maxValue = 100;
+    private double wheelSpeed = 0.1;
 
     public ScrollCameraBind(GameObject object) {
         super(object);
@@ -24,9 +25,9 @@ public class ScrollCameraBind extends ObjectComponent {
             if(getMouseListener().isMouseWheeled()) {
                 int rotation = getMouseListener().getMouseWheelEvent().getWheelRotation();
                 if(rotation < 0) {
-                    scrollComponent.setValue(scrollComponent.getValue() - 0.1);
+                    scrollComponent.setValue(scrollComponent.getValue() - wheelSpeed);
                 } else {
-                    scrollComponent.setValue(scrollComponent.getValue() + 0.1);
+                    scrollComponent.setValue(scrollComponent.getValue() + wheelSpeed);
                 }
             }
             if(scrollComponent.isHorizontal()) {
@@ -42,6 +43,11 @@ public class ScrollCameraBind extends ObjectComponent {
         return this.maxValue;
     }
 
+    @SerializationGetter
+    public double getWheelSpeed() {
+        return this.wheelSpeed;
+    }
+
     public void setMaxValue(int maxValue) {
         this.maxValue = maxValue;
     }
@@ -49,6 +55,15 @@ public class ScrollCameraBind extends ObjectComponent {
     @SerializationSetter
     public void setMaxValue(String maxValue) {
         setMaxValue(Integer.parseInt(maxValue));
+    }
+
+    public void setWheelSpeed(double wheelSpeed) {
+        this.wheelSpeed = wheelSpeed;
+    }
+
+    @SerializationSetter
+    public void setWheelSpeed(String wheelSpeed) {
+        setWheelSpeed(Double.parseDouble(wheelSpeed));
     }
 
 }
