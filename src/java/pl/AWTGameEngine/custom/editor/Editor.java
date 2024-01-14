@@ -66,7 +66,7 @@ public class Editor extends ObjectComponent {
                 selectedObjectBorder.getObject().setY(getMouseListener().getMouseY());
             }
         }
-        scrollCameraBind.setMaxValue((int) (filesFlex.getCalculatedHeight() / 1.75));
+        scrollCameraBind.setMaxValue(filesFlex.getCalculatedHeight());
     }
 
     @Override

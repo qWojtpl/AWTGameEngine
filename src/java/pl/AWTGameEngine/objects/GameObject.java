@@ -28,7 +28,7 @@ public class GameObject {
     private GameObject parent;
     private NestedPanel panel;
     private EventHandler eventHandler = new EventHandler();
-    private final Set<GameObject> children = new HashSet<>();
+    private final List<GameObject> children = new ArrayList<>();
     private final List<ObjectComponent> components = new ArrayList<>();
 
     public GameObject(String identifier, Scene scene) {
@@ -82,6 +82,37 @@ public class GameObject {
             data.put(className, component.serialize());
         }
         return data;
+    }
+
+    public void addChild(GameObject object) {
+        if(this.children.contains(object)) {
+            return;
+        }
+        if(!this.equals(object.getParent())) {
+            object.setParent(this);
+            return;
+        }
+        this.children.add(object);
+        for(ObjectComponent component : eventHandler.getComponents("onAddChild#GameObject")) {
+            component.onAddChild(object);
+        }
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#boolean")) {
+            component.onUpdateGameObject(this);
+        }
+    }
+
+    public void removeChild(GameObject object) {
+        if(!this.children.contains(object)) {
+            return;
+        }
+        object.setPanel(getScene().getWindow().getPanel());
+        this.children.remove(object);
+        for(ObjectComponent component : eventHandler.getComponents("onRemoveChild#GameObject")) {
+            component.onRemoveChild(object);
+        }
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#GameObject")) {
+            component.onUpdateGameObject(this);
+        }
     }
 
     public String getSerializeString() {
@@ -179,6 +210,33 @@ public class GameObject {
         return this.sizeY;
     }
 
+    public int getWidth() {
+        int width = 0;
+        for(GameObject object : getChildren()) {
+            if(object.getX() + object.getSizeX() > width) {
+                width = object.getX() + object.getSizeX();
+            }
+        }
+        return width;
+    }
+
+    public int getHeight() {
+        int height = 0;
+        for(GameObject object : getChildren()) {
+            if(object.getChildren().size() > 0) {
+                for(GameObject child : object.getChildren()) {
+                    if(child.getY() + child.getSizeY() > height) {
+                        height = child.getY() + child.getSizeY();
+                    }
+                }
+            }
+            if(object.getY() + object.getSizeY() > height) {
+                height = object.getY() + object.getSizeY();
+            }
+        }
+        return height;
+    }
+
     public int getPriority() {
         return this.priority;
     }
@@ -202,8 +260,8 @@ public class GameObject {
         return this.eventHandler;
     }
 
-    public Set<GameObject> getChildren() {
-        return new HashSet<>(children);
+    public List<GameObject> getChildren() {
+        return new ArrayList<>(children);
     }
 
     public List<GameObject> getAllChildren() {
@@ -256,6 +314,11 @@ public class GameObject {
         this.sizeY = y;
     }
 
+    public void setSize(int x, int y) {
+        setSizeX(x);
+        setSizeY(y);
+    }
+
     public void setPriority(int priority) {
         getScene().removeSortedObject(this.priority, this);
         this.priority = priority;
@@ -283,37 +346,6 @@ public class GameObject {
         }
     }
 
-    public void addChild(GameObject object) {
-        if(this.children.contains(object)) {
-            return;
-        }
-        if(!this.equals(object.getParent())) {
-            object.setParent(this);
-            return;
-        }
-        this.children.add(object);
-        for(ObjectComponent component : eventHandler.getComponents("onAddChild#GameObject")) {
-            component.onAddChild(object);
-        }
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#boolean")) {
-            component.onUpdateGameObject(this);
-        }
-    }
-
-    public void removeChild(GameObject object) {
-        if(!this.children.contains(object)) {
-            return;
-        }
-        object.setPanel(getScene().getWindow().getPanel());
-        this.children.remove(object);
-        for(ObjectComponent component : eventHandler.getComponents("onRemoveChild#GameObject")) {
-            component.onRemoveChild(object);
-        }
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#GameObject")) {
-            component.onUpdateGameObject(this);
-        }
-    }
-
     public void setPanel(NestedPanel panel) {
         this.panel = panel;
         for(GameObject object : getChildren()) {
@@ -323,33 +355,6 @@ public class GameObject {
 
     public void setEventHandler(EventHandler eventHandler) {
         this.eventHandler = eventHandler;
-    }
-
-    public int getWidth() {
-        int width = 0;
-        for(GameObject object : getChildren()) {
-            if(object.getX() + object.getSizeX() > width) {
-                width = object.getX() + object.getSizeX();
-            }
-        }
-        return width;
-    }
-
-    public int getHeight() {
-        int height = 0;
-        for(GameObject object : getChildren()) {
-            if(object.getChildren().size() > 0) {
-                for(GameObject child : object.getChildren()) {
-                    if(child.getY() + child.getSizeY() > height) {
-                        height = child.getY() + child.getSizeY();
-                    }
-                }
-            }
-            if(object.getY() + object.getSizeY() > height) {
-                height = object.getY() + object.getSizeY();
-            }
-        }
-        return height;
     }
 
     public void preRender(Graphics g) {
