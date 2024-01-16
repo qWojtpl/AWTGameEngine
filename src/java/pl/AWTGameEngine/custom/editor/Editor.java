@@ -3,6 +3,7 @@ package pl.AWTGameEngine.custom.editor;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -12,11 +13,12 @@ import java.awt.*;
 @Unique
 public class Editor extends ObjectComponent {
 
-    private GameObject gameScreen;
+    private NestedPanel screenPanel;
     private Camera screenCamera;
     private Border selectedObjectBorder;
     private FlexComponent filesFlex;
     private ScrollCameraBind scrollCameraBind;
+    private TextRenderer objectNameText;
 
     public Editor(GameObject object) {
         super(object);
@@ -25,27 +27,34 @@ public class Editor extends ObjectComponent {
     @Override
     public void onAddComponent() {
         getWindow().setStaticMode(true);
-        gameScreen = getScene().getGameObjectByName("panel");
-        if(gameScreen == null) {
-            Logger.log(1, "Can't find panel (game screen) object, editor cannot be initialized!");
+        screenPanel = ((PanelComponent) getComponent("panel", PanelComponent.class)).getNestedPanel();
+        screenCamera = screenPanel.getCamera();
+        filesFlex = (FlexComponent) getComponent("filesFlex", FlexComponent.class);
+        scrollCameraBind = (ScrollCameraBind) getComponent("filesScroll", ScrollCameraBind.class);
+        objectNameText = (TextRenderer) getComponent("objectInfoName", TextRenderer.class);
+        objectNameText.align(TextRenderer.HorizontalAlign.LEFT);
+        objectNameText.align(TextRenderer.VerticalAlign.CENTER);
+    }
+
+    private ObjectComponent getComponent(String identifier, Class<? extends ObjectComponent> component) {
+        GameObject object = getScene().getGameObjectByName(identifier);
+        if(object == null) {
+            Logger.log(1, "Can't find " + identifier + " object, editor cannot be initialized!");
             System.exit(1);
-            return;
+            return null;
         }
-        if(gameScreen.getComponentsByClass(PanelComponent.class).size() == 0) {
-            Logger.log(1, "Panel (game screen) object doesn't contains PanelComponent, editor cannot be initialized!");
+        if(object.getComponentsByClass(component).size() == 0) {
+            Logger.log(1, identifier + " object doesn't contains " + component.getSimpleName() +
+                    ", editor cannot be initialized!");
             System.exit(1);
-            return;
+            return null;
         }
-        screenCamera = ((PanelComponent) gameScreen.getComponentsByClass(PanelComponent.class).get(0)).getPanelCamera();
-        GameObject filesFlexObject = getScene().getGameObjectByName("filesFlex");
-        filesFlex = (FlexComponent) filesFlexObject.getComponentsByClass(FlexComponent.class).get(0);
-        GameObject scrollObject = getScene().getGameObjectByName("filesScroll");
-        scrollCameraBind = (ScrollCameraBind) scrollObject.getComponentsByClass(ScrollCameraBind.class).get(0);
+        return object.getComponentsByClass(component).get(0);
     }
 
     @Override
     public void onStaticUpdate() {
-        if(gameScreen == null || screenCamera == null) {
+        if(screenCamera == null) {
             return;
         }
         if(getKeyListener().hasPressedKey(37)) {
@@ -82,7 +91,7 @@ public class Editor extends ObjectComponent {
         if(object == null) {
             return;
         }
-        if(!object.getPanel().equals(((PanelComponent)(gameScreen.getComponentsByClass(PanelComponent.class).get(0))).getNestedPanel())) {
+        if(!object.getPanel().equals(screenPanel)) {
             return;
         }
         if(object.getIdentifier().startsWith("@")) {
@@ -90,7 +99,9 @@ public class Editor extends ObjectComponent {
         }
         selectedObjectBorder = new Border(object);
         selectedObjectBorder.setColor(new ColorObject(Color.RED));
+        objectNameText.setText(object.getIdentifier());
         object.addComponent(selectedObjectBorder);
+
     }
 
     public GameObject getSelectedObject() {
