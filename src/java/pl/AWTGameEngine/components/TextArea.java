@@ -49,6 +49,11 @@ public class TextArea extends ObjectComponent {
     }
 
     @Override
+    public void onStaticUpdate() {
+        onUpdate();
+    }
+
+    @Override
     public void onUpdate() {
         textRenderer.setText(getRenderedText());
         if(pointerIterator >= getWindow().getRenderLoop().getFPS()) {
@@ -286,7 +291,7 @@ public class TextArea extends ObjectComponent {
 
     @SerializationSetter
     public void setBackgroundColor(String color) {
-        setBackgroundColor(new ColorObject(color));
+        background.setColor(color);
     }
 
     public void setDisabledColor(ColorObject color) {
@@ -295,7 +300,7 @@ public class TextArea extends ObjectComponent {
 
     @SerializationSetter
     public void setDisabledColor(String color) {
-        setDisabledColor(new ColorObject(color));
+        backgroundDisabled.setColor(color);
     }
 
     public void setTextColor(ColorObject color) {
@@ -304,7 +309,7 @@ public class TextArea extends ObjectComponent {
 
     @SerializationSetter
     public void setTextColor(String color) {
-        setDisabledColor(new ColorObject(color));
+        textRenderer.setColor(color);
     }
 
     public void setBorderColor(ColorObject color) {

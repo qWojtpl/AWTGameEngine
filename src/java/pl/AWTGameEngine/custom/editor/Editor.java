@@ -2,6 +2,7 @@ package pl.AWTGameEngine.custom.editor;
 
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
+import pl.AWTGameEngine.components.TextArea;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.Camera;
@@ -18,7 +19,7 @@ public class Editor extends ObjectComponent {
     private Border selectedObjectBorder;
     private FlexComponent filesFlex;
     private ScrollCameraBind scrollCameraBind;
-    private TextRenderer objectNameText;
+    private TextArea objectNameText;
 
     public Editor(GameObject object) {
         super(object);
@@ -31,9 +32,10 @@ public class Editor extends ObjectComponent {
         screenCamera = screenPanel.getCamera();
         filesFlex = (FlexComponent) getComponent("filesFlex", FlexComponent.class);
         scrollCameraBind = (ScrollCameraBind) getComponent("filesScroll", ScrollCameraBind.class);
-        objectNameText = (TextRenderer) getComponent("objectInfoName", TextRenderer.class);
-        objectNameText.align(TextRenderer.HorizontalAlign.LEFT);
-        objectNameText.align(TextRenderer.VerticalAlign.CENTER);
+        objectNameText = (TextArea) getComponent("objectInfoName", TextArea.class);
+        objectNameText.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
+        objectNameText.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
+        objectNameText.getTextRenderer().setSize(18);
     }
 
     private ObjectComponent getComponent(String identifier, Class<? extends ObjectComponent> component) {

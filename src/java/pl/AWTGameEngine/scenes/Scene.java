@@ -174,19 +174,16 @@ public class Scene {
             for(ObjectComponent component : sceneEventHandler.getComponents("onStaticUpdate")) {
                 component.onStaticUpdate();
             }
-            for(NestedPanel panel : panelRegistry.getPanels()) {
-                panel.getMouseListener().refresh();
+        } else {
+            for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate")) {
+                component.onPreUpdate();
             }
-            return;
-        }
-        for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate")) {
-            component.onPreUpdate();
-        }
-        for(ObjectComponent component : sceneEventHandler.getComponents("onUpdate")) {
-            component.onUpdate();
-        }
-        for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
-            component.onAfterUpdate();
+            for(ObjectComponent component : sceneEventHandler.getComponents("onUpdate")) {
+                component.onUpdate();
+            }
+            for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
+                component.onAfterUpdate();
+            }
         }
         for(NestedPanel panel : panelRegistry.getPanels()) {
             panel.getMouseListener().refresh();
