@@ -6,6 +6,7 @@ import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 
 public class TextRenderer extends ObjectComponent {
@@ -28,7 +29,12 @@ public class TextRenderer extends ObjectComponent {
         final int totalHeight = lines.length * height;
         for(int i = 1; i <= lines.length; i++) {
             String line = lines[i - 1];
-            int width = g.getFontMetrics(getWindow().getDefaultFont(size)).stringWidth(line);
+            Font font = getWindow().getDefaultFont(size);
+            int width = Math.round((float)
+                    font.getStringBounds(line, new FontRenderContext(font.getTransform(), true, true))
+                            .getBounds()
+                            .getWidth()
+            );
             int x, y;
             if(TextWrap.WRAP.equals(wrap)) {
                 //todo: implement wrap
