@@ -163,6 +163,14 @@ public class GameObject {
         return componentList;
     }
 
+    public ObjectComponent getComponentByClass(Class<? extends ObjectComponent> clazz) {
+        List<ObjectComponent> componentList = getComponentsByClass(clazz);
+        if(componentList.size() == 0) {
+            return null;
+        }
+        return componentList.get(0);
+    }
+
     public boolean isActive() {
         return this.active;
     }

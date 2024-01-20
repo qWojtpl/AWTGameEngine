@@ -38,20 +38,21 @@ public class Editor extends ObjectComponent {
         objectNameText.getTextRenderer().setSize(18);
     }
 
-    private ObjectComponent getComponent(String identifier, Class<? extends ObjectComponent> component) {
+    private ObjectComponent getComponent(String identifier, Class<? extends ObjectComponent> clazz) {
         GameObject object = getScene().getGameObjectByName(identifier);
         if(object == null) {
             Logger.log(1, "Can't find " + identifier + " object, editor cannot be initialized!");
             System.exit(1);
             return null;
         }
-        if(object.getComponentsByClass(component).size() == 0) {
-            Logger.log(1, identifier + " object doesn't contains " + component.getSimpleName() +
+        ObjectComponent objectComponent = object.getComponentByClass(clazz);
+        if(objectComponent == null) {
+            Logger.log(1, identifier + " object doesn't contains " + clazz.getSimpleName() +
                     ", editor cannot be initialized!");
             System.exit(1);
             return null;
         }
-        return object.getComponentsByClass(component).get(0);
+        return objectComponent;
     }
 
     @Override

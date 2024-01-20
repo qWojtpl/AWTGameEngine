@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 
@@ -22,6 +23,9 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
     private void removeWindow() {
         opened = false;
         WindowsManager.removeWindow(window);
+        if(window.equals(WindowsManager.getDefaultWindow())) {
+            ResourceManager.clearAudioClips();
+        }
     }
 
     public boolean isOpened() {
