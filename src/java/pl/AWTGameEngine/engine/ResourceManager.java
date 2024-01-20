@@ -19,7 +19,6 @@ public abstract class ResourceManager {
     private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
     private final static HashMap<String, InputStream> streamResources = new HashMap<>();
     private final static List<AudioClip> audioClips = new ArrayList<>();
-    private static boolean resourceCaching = false;
 
     public static void copyResource(String name, String path) {
         Logger.log(2, "Copying resource: " + name + " to " + path);
@@ -70,9 +69,7 @@ public abstract class ResourceManager {
             while((line = reader.readLine()) != null) {
                 lines.add(line);
             }
-            if(resourceCaching) {
-                resources.put(name, lines);
-            }
+            resources.put(name, lines);
             stream.close();
             return lines;
         } catch(Exception e) {
@@ -94,9 +91,7 @@ public abstract class ResourceManager {
             }
             Image img = ImageIO.read(stream);
             Sprite sprite = new Sprite(name, img);
-            if(resourceCaching) {
-                spriteResources.put(name, sprite);
-            }
+            spriteResources.put(name, sprite);
             stream.close();
             return sprite;
         } catch(Exception e) {
@@ -134,9 +129,7 @@ public abstract class ResourceManager {
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
-            if(resourceCaching) {
-                streamResources.put(name, stream);
-            }
+            streamResources.put(name, stream);
             return stream;
         } catch(Exception e) {
             Logger.log("Cannot get stream from resource: " + name, e);
@@ -158,10 +151,6 @@ public abstract class ResourceManager {
 
     public static List<AudioClip> getAudioClips() {
         return new ArrayList<>(audioClips);
-    }
-
-    public static boolean isCachingResources() {
-        return ResourceManager.resourceCaching;
     }
 
     private static String getResourceName(String name) {
@@ -199,10 +188,6 @@ public abstract class ResourceManager {
             }
         }
         audioClips.clear();
-    }
-
-    public static void setResourceCaching(boolean caching) {
-        ResourceManager.resourceCaching = caching;
     }
 
 }

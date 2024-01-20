@@ -16,7 +16,6 @@ public class Main {
         Logger.setLevel(AppProperties.getPropertyAsInteger("logLevel"));
         Logger.setLogFile(AppProperties.getPropertyAsBoolean("logFile"));
         Logger.setCallerClass(AppProperties.getPropertyAsBoolean("logCallerClass"));
-        ResourceManager.setResourceCaching(AppProperties.getPropertyAsBoolean("resourceCaching"));
         Logger.log(2, "Requesting default window...");
         WindowsManager.createDefaultWindow();
         Logger.log(2, "Started app.");
