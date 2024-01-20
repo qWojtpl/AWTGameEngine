@@ -7,6 +7,8 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
@@ -109,6 +111,10 @@ public class SceneLoader {
         }
         path.append("properties");
         return path.toString();
+    }
+
+    public Window getWindow() {
+        return this.window;
     }
 
 }

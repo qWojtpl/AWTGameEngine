@@ -1,13 +1,12 @@
 package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.engine.ColliderRegistry;
-import pl.AWTGameEngine.engine.EventHandler;
-import pl.AWTGameEngine.engine.NestedPanel;
-import pl.AWTGameEngine.engine.PanelRegistry;
+import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 
 public class Scene {
@@ -137,12 +136,12 @@ public class Scene {
         return gameObjects.getOrDefault(identifier, null);
     }
 
-    public Collection<GameObject> getGameObjects() {
-        return gameObjects.values();
+    public List<GameObject> getGameObjects() {
+        return new ArrayList<>(gameObjects.values());
     }
 
-    public Collection<GameObject> getActiveGameObjects() {
-        Collection<GameObject> objects = new ArrayList<>();
+    public List<GameObject> getActiveGameObjects() {
+        List<GameObject> objects = new ArrayList<>();
         List<GameObject> gameObjects = new ArrayList<>(getGameObjects());
         for(GameObject object : gameObjects) {
             if(object.isActive()) {
@@ -188,6 +187,36 @@ public class Scene {
         for(NestedPanel panel : panelRegistry.getPanels()) {
             panel.getMouseListener().refresh();
         }
+    }
+
+    public void saveSceneState(String path) {
+        saveSceneState(path, getGameObjects());
+    }
+
+    public void saveSceneState(String path, List<GameObject> objects) {
+        StringBuilder serializationString = new StringBuilder();
+        for(GameObject object : objects) {
+            if(object.getIdentifier().startsWith("@")) {
+                continue;
+            }
+            serializationString.append(object.getIdentifier());
+            serializationString.append("=\"");
+            serializationString.append(object.getSerializeString());
+            serializationString.append("\"");
+            serializationString.append("\n");
+        }
+        try {
+            File file = new File(path);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter writer = new FileWriter(file, false);
+            writer.write(serializationString.toString());
+            writer.close();
+        } catch(Exception e) {
+            Logger.log("Cannot save current scene state", e);
+        }
+        Logger.log(2, "Saved " + getName() + " scene state to file " + path);
     }
 
 }

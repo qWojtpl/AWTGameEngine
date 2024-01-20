@@ -37,7 +37,8 @@ public class CustomComponent extends ObjectComponent {
             getKeyListener().releaseKey(76);
         }
         if(getKeyListener().hasPressedKey(82)) {
-            getSceneLoader().loadSceneFile("scenes/main.scene");
+            //getSceneLoader().loadSceneFile("scenes/main.scene");
+            getScene().saveSceneState("./savedscene.scene");
             getKeyListener().releaseKey(82);
         }
         getObject().setRotation(getObject().getRotation() + 1);
