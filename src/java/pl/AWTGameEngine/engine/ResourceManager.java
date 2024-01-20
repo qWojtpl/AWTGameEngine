@@ -17,8 +17,9 @@ public abstract class ResourceManager {
 
     private final static HashMap<String, List<String>> resources = new HashMap<>();
     private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
-    private final static HashMap<String, AudioClip> audioClipResources = new HashMap<>();
     private final static HashMap<String, InputStream> streamResources = new HashMap<>();
+    private final static List<AudioClip> audioClips = new ArrayList<>();
+    private static boolean resourceCaching = false;
 
     public static void copyResource(String name, String path) {
         Logger.log(2, "Copying resource: " + name + " to " + path);
@@ -69,7 +70,9 @@ public abstract class ResourceManager {
             while((line = reader.readLine()) != null) {
                 lines.add(line);
             }
-            resources.put(name, lines);
+            if(resourceCaching) {
+                resources.put(name, lines);
+            }
             stream.close();
             return lines;
         } catch(Exception e) {
@@ -91,7 +94,9 @@ public abstract class ResourceManager {
             }
             Image img = ImageIO.read(stream);
             Sprite sprite = new Sprite(name, img);
-            spriteResources.put(name, sprite);
+            if(resourceCaching) {
+                spriteResources.put(name, sprite);
+            }
             stream.close();
             return sprite;
         } catch(Exception e) {
@@ -102,9 +107,6 @@ public abstract class ResourceManager {
 
     public static AudioClip getResourceAsAudioClip(String name) {
         name = getResourceName(name);
-        if(audioClipResources.containsKey(name)) {
-            return audioClipResources.get(name);
-        }
         Logger.log(2, "Reading audio resource: " + name);
         try {
             InputStream stream = getStream(name);
@@ -113,7 +115,7 @@ public abstract class ResourceManager {
             }
             BufferedInputStream bufferedStream = new BufferedInputStream(stream);
             AudioClip audioClip = new AudioClip(name, AudioSystem.getAudioInputStream(bufferedStream));
-            audioClipResources.put(name, audioClip);
+            audioClips.add(audioClip);
             return audioClip;
         } catch(Exception e) {
             Logger.log("Cannot get audio from resource: " + name, e);
@@ -132,7 +134,9 @@ public abstract class ResourceManager {
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
-            streamResources.put(name, stream);
+            if(resourceCaching) {
+                streamResources.put(name, stream);
+            }
             return stream;
         } catch(Exception e) {
             Logger.log("Cannot get stream from resource: " + name, e);
@@ -148,12 +152,16 @@ public abstract class ResourceManager {
         return new HashMap<>(spriteResources);
     }
 
-    public static HashMap<String, AudioClip> getAudioClipResources() {
-        return new HashMap<>(audioClipResources);
-    }
-
     public static HashMap<String, InputStream> getStreamResources() {
         return new HashMap<>(streamResources);
+    }
+
+    public static List<AudioClip> getAudioClips() {
+        return new ArrayList<>(audioClips);
+    }
+
+    public static boolean isCachingResources() {
+        return ResourceManager.resourceCaching;
     }
 
     private static String getResourceName(String name) {
@@ -168,6 +176,33 @@ public abstract class ResourceManager {
             return ResourceManager.class.getResourceAsStream(path);
         }
         return Files.newInputStream(Paths.get(path));
+    }
+
+    public static void clearResources() {
+        resources.clear();
+    }
+
+    public static void clearSpriteResources() {
+        spriteResources.clear();
+    }
+
+    public static void clearStreamResources() {
+        streamResources.clear();
+    }
+
+    public static void clearAudioClips() {
+        for(AudioClip audioClip : audioClips) {
+            try {
+                audioClip.getAudioStream().close();
+            } catch(IOException e) {
+                Logger.log("Cannot close audio stream: ", e);
+            }
+        }
+        audioClips.clear();
+    }
+
+    public static void setResourceCaching(boolean caching) {
+        ResourceManager.resourceCaching = caching;
     }
 
 }

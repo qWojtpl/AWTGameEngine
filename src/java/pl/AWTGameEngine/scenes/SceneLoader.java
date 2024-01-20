@@ -27,6 +27,7 @@ public class SceneLoader {
             Scene scene = window.getCurrentScene();
             window.setCurrentScene(null);
             scene.removeAllObjects();
+            ResourceManager.clearAudioClips();
         }
         Properties customProperties = AppProperties.getCustomProperties(getScenePropertiesPath(scenePath));
         if(customProperties != null) {

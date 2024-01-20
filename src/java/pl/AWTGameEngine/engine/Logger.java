@@ -50,7 +50,8 @@ public abstract class Logger {
         message += "\n" + exception.getMessage();
         StringBuilder messageBuilder = new StringBuilder(message);
         for(StackTraceElement element : exception.getStackTrace()) {
-            messageBuilder.append("\n\t" + element.toString());
+            messageBuilder.append("\n\t");
+            messageBuilder.append(element.toString());
         }
         log(1, messageBuilder.toString());
     }

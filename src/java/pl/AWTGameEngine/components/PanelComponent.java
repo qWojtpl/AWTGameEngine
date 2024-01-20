@@ -29,6 +29,9 @@ public class PanelComponent extends ObjectComponent {
 
     @Override
     public void onRender(Graphics g) {
+        if(nestedPanel == null) {
+            return;
+        }
         nestedPanel.setLocation(
             getCamera().parseX(getObject(), getObject().getX()),
             getCamera().parseY(getObject(), getObject().getY())

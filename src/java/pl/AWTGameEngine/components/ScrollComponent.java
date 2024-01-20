@@ -150,18 +150,18 @@ public class ScrollComponent extends ObjectComponent {
     }
 
     @SerializationGetter
-    public ColorObject getBackgroundColor() {
-        return this.background.getColorObject();
+    public String getBackgroundColor() {
+        return this.background.getColorObject().serialize();
     }
 
     @SerializationGetter
-    public ColorObject getScrollColor() {
-        return this.scrollColor;
+    public String getScrollColor() {
+        return this.scrollColor.serialize();
     }
 
     @SerializationGetter
-    public ColorObject getSelectedScrollColor() {
-        return this.selectedScrollColor;
+    public String getSelectedScrollColor() {
+        return this.selectedScrollColor.serialize();
     }
 
     @SerializationGetter
