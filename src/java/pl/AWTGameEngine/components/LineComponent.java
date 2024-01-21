@@ -10,6 +10,7 @@ import java.awt.*;
 public class LineComponent extends ObjectComponent {
 
     private ColorObject color = new ColorObject(Color.BLACK);
+    private float thickness = 3;
 
     public LineComponent(GameObject object) {
         super(object);
@@ -18,7 +19,7 @@ public class LineComponent extends ObjectComponent {
     @Override
     public void onRender(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setStroke(new BasicStroke(3));
+        g2d.setStroke(new BasicStroke(thickness));
         g2d.setColor(color.getColor());
         g2d.drawLine(
                 getCamera().parseX(getObject(), getObject().getX()),
@@ -38,6 +39,11 @@ public class LineComponent extends ObjectComponent {
         return this.color.serialize();
     }
 
+    @SerializationGetter
+    public float getThickness() {
+        return this.thickness;
+    }
+
     public void setColorObject(ColorObject color) {
         this.color = color;
     }
@@ -45,6 +51,15 @@ public class LineComponent extends ObjectComponent {
     @SerializationSetter
     public void setColor(String color) {
         setColorObject(new ColorObject(color));
+    }
+
+    public void setThickness(float thickness) {
+        this.thickness = thickness;
+    }
+
+    @SerializationSetter
+    public void setThickness(String thickness) {
+        setThickness(Float.parseFloat(thickness));
     }
 
 }
