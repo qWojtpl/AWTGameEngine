@@ -77,7 +77,24 @@ public class Editor extends ObjectComponent {
 
     @Override
     public void onStaticUpdate() {
-        if(screenCamera == null) {
+        updateCameraPosition();
+        moveObjectToMouse();
+        loadInfoFields();
+        scrollCameraBind.setMaxValue(filesFlex.getCalculatedHeight());
+    }
+
+    @Override
+    public void onMouseClick(GameObject object) {
+        if(object != null) {
+            if(!screenPanel.equals(object.getPanel())) {
+                return;
+            }
+        }
+        selectObject(object);
+    }
+
+    private void updateCameraPosition() {
+        if(screenCamera == null || isAnyTextAreaFocused()) {
             return;
         }
         if(getKeyListener().hasPressedKey(37)) {
@@ -92,12 +109,20 @@ public class Editor extends ObjectComponent {
         if(getKeyListener().hasPressedKey(40)) {
             screenCamera.setY(screenCamera.getY() + 8);
         }
-        if(getMouseListener().isMouseDragged()) {
-            if(selectedObjectBorder != null) {
-                selectedObjectBorder.getObject().setX(getMouseListener().getMouseX());
-                selectedObjectBorder.getObject().setY(getMouseListener().getMouseY());
-            }
+    }
+
+    private void moveObjectToMouse() {
+        if(selectedObjectBorder == null) {
+            return;
         }
+        if(!getMouseListener().isMouseDragged()) {
+            return;
+        }
+        selectedObjectBorder.getObject().setX(getMouseListener().getMouseX());
+        selectedObjectBorder.getObject().setY(getMouseListener().getMouseY());
+    }
+
+    private void loadInfoFields() {
         if(selectedObjectBorder != null) {
             if(!objectPosX.isFocused()) {
                 objectPosX.setText(selectedObjectBorder.getObject().getX() + "");
@@ -109,18 +134,44 @@ public class Editor extends ObjectComponent {
                     selectedObjectBorder.getObject().setX(0);
                 }
             }
-        }
-        scrollCameraBind.setMaxValue(filesFlex.getCalculatedHeight());
-    }
-
-    @Override
-    public void onMouseClick(GameObject object) {
-        if(object != null) {
-            if (!screenPanel.equals(object.getPanel())) {
-                return;
+            if(!objectPosY.isFocused()) {
+                objectPosY.setText(selectedObjectBorder.getObject().getY() + "");
+            } else {
+                try {
+                    selectedObjectBorder.getObject().setY(Integer.parseInt(objectPosY.getText()));
+                } catch(Exception e) {
+                    objectPosY.setText("0");
+                    selectedObjectBorder.getObject().setY(0);
+                }
+            }
+            if(!objectSizeX.isFocused()) {
+                objectSizeX.setText(selectedObjectBorder.getObject().getSizeX() + "");
+            } else {
+                try {
+                    selectedObjectBorder.getObject().setSizeX(Integer.parseInt(objectSizeX.getText()));
+                } catch(Exception e) {
+                    objectSizeX.setText("0");
+                    selectedObjectBorder.getObject().setSizeX(0);
+                }
+            }
+            if(!objectSizeY.isFocused()) {
+                objectSizeY.setText(selectedObjectBorder.getObject().getSizeY() + "");
+            } else {
+                try {
+                    selectedObjectBorder.getObject().setSizeX(Integer.parseInt(objectSizeY.getText()));
+                } catch(Exception e) {
+                    objectSizeY.setText("0");
+                    selectedObjectBorder.getObject().setSizeY(0);
+                }
             }
         }
-        selectObject(object);
+    }
+
+    private boolean isAnyTextAreaFocused() {
+        return  objectPosX.isFocused() ||
+                objectPosY.isFocused() ||
+                objectSizeX.isFocused() ||
+                objectSizeY.isFocused();
     }
 
     private void selectObject(GameObject object) {

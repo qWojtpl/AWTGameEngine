@@ -5,8 +5,6 @@ objectInfoBackground="pos{0;0}size{320;360}parent{objectInfoPanel}BlankRenderer:
 objectInfoScroll="pos{310;0}size{10;360}parent{objectInfoPanel}ScrollComponent:ObjectComponent{}Canvas:ObjectComponent{}ScrollCameraBind:ObjectComponent{}";
 objectInfoName="pos{40;0}size{269;30}parent{objectInfoPanel}TextArea:ObjectComponent{text^Object^textColor^white^backgroundColor^rgb(40,40,40)^}Border:ObjectComponent{color^rgb(75,75,75)^}";
 
-line="pos{30;300}size{320;370}parent{objectInfoPanel}LineComponent:ObjectComponent{color^white^}";
-
 objectInfoPos="pos{10;50}size{10;10}parent{objectInfoPanel}TextRenderer:ObjectComponent{text^Position^vertical^center^horizontal^left^color^white^size^20^}";
 objectInfoPosXLabel="pos{10;70}size{10;20}parent{objectInfoPanel}TextRenderer:ObjectComponent{text^X:^vertical^center^horizontal^left^color^white^size^14^}";
 objectInfoPosX="pos{30;70}size{120;20}parent{objectInfoPanel}TextArea:ObjectComponent{text^30^textColor^white^backgroundColor^rgb(40,40,40)^}Border:ObjectComponent{color^rgb(75,75,75)^}";
