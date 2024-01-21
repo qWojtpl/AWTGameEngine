@@ -202,7 +202,7 @@ public class Scene {
             serializationString.append(object.getIdentifier());
             serializationString.append("=\"");
             serializationString.append(object.getSerializeString());
-            serializationString.append("\"");
+            serializationString.append("\";");
             serializationString.append("\n");
         }
         try {

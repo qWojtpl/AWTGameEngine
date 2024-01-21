@@ -20,6 +20,10 @@ public class Editor extends ObjectComponent {
     private FlexComponent filesFlex;
     private ScrollCameraBind scrollCameraBind;
     private TextArea objectNameText;
+    private TextArea objectPosX;
+    private TextArea objectPosY;
+    private TextArea objectSizeX;
+    private TextArea objectSizeY;
 
     public Editor(GameObject object) {
         super(object);
@@ -36,6 +40,22 @@ public class Editor extends ObjectComponent {
         objectNameText.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
         objectNameText.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
         objectNameText.getTextRenderer().setSize(18);
+        objectPosX = (TextArea) getComponent("objectInfoPosX", TextArea.class);
+        objectPosX.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
+        objectPosX.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
+        objectPosX.getTextRenderer().setSize(14);
+        objectPosY = (TextArea) getComponent("objectInfoPosY", TextArea.class);
+        objectPosY.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
+        objectPosY.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
+        objectPosY.getTextRenderer().setSize(14);
+        objectSizeX = (TextArea) getComponent("objectInfoSizeX", TextArea.class);
+        objectSizeX.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
+        objectSizeX.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
+        objectSizeX.getTextRenderer().setSize(14);
+        objectSizeY = (TextArea) getComponent("objectInfoSizeY", TextArea.class);
+        objectSizeY.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
+        objectSizeY.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
+        objectSizeY.getTextRenderer().setSize(14);
     }
 
     private ObjectComponent getComponent(String identifier, Class<? extends ObjectComponent> clazz) {
@@ -78,11 +98,28 @@ public class Editor extends ObjectComponent {
                 selectedObjectBorder.getObject().setY(getMouseListener().getMouseY());
             }
         }
+        if(selectedObjectBorder != null) {
+            if(!objectPosX.isFocused()) {
+                objectPosX.setText(selectedObjectBorder.getObject().getX() + "");
+            } else {
+                try {
+                    selectedObjectBorder.getObject().setX(Integer.parseInt(objectPosX.getText()));
+                } catch(Exception e) {
+                    objectPosX.setText("0");
+                    selectedObjectBorder.getObject().setX(0);
+                }
+            }
+        }
         scrollCameraBind.setMaxValue(filesFlex.getCalculatedHeight());
     }
 
     @Override
     public void onMouseClick(GameObject object) {
+        if(object != null) {
+            if (!screenPanel.equals(object.getPanel())) {
+                return;
+            }
+        }
         selectObject(object);
     }
 
