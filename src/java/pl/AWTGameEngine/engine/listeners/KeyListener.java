@@ -30,6 +30,9 @@ public class KeyListener implements java.awt.event.KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if(window.getCurrentScene() == null) {
+            return;
+        }
         pressedKeys.add(e.getKeyCode());
         pressedKeysChars.add(e.getKeyChar());
         for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#int")) {
