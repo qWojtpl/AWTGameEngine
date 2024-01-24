@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -30,11 +31,11 @@ public class BoxCollider extends Collider {
     }
 
     @Override
-    public void onRender(Graphics g) {
+    public void onRender(GraphicsManager g) {
         if(!isVisualize()) {
             return;
         }
-        Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g.getGraphics();
         AffineTransform oldTransform = g2d.getTransform();
         if(getObject().getRotation() != 0) {
             AffineTransform transform = new AffineTransform();

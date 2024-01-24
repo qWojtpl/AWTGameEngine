@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -17,11 +18,11 @@ public class LineComponent extends ObjectComponent {
     }
 
     @Override
-    public void onRender(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
+    public void onRender(GraphicsManager g) {
+        Graphics2D g2d = (Graphics2D) g.getGraphics();
         g2d.setStroke(new BasicStroke(thickness));
         g2d.setColor(color.getColor());
-        g2d.drawLine(
+        g.drawLine(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseX(getObject(), getObject().getX() + getObject().getSizeX()),

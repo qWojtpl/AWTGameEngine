@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -26,7 +27,7 @@ public class SphereCollider extends Collider {
     }
 
     @Override
-    public void onRender(Graphics g) {
+    public void onRender(GraphicsManager g) {
         if(!isVisualize()) {
             return;
         }

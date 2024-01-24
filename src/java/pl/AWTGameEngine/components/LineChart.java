@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
@@ -26,7 +27,7 @@ public class LineChart extends ObjectComponent {
     }
 
     @Override
-    public void onRender(Graphics g) {
+    public void onRender(GraphicsManager g) {
         g.setColor(Color.BLACK);
         g.drawLine(
                 getCamera().parseX(getObject(), getObject().getX()),
@@ -53,7 +54,7 @@ public class LineChart extends ObjectComponent {
             int y = values.get(x);
             x += stepX * x * i;
             y += 0;
-            g.fillOval(getCamera().parseX(getObject(), getRelativeChartX(x)), getCamera().parseY(getObject(), getRelativeChartY(y)), 10, 10);
+            //g.fillOval(getCamera().parseX(getObject(), getRelativeChartX(x)), getCamera().parseY(getObject(), getRelativeChartY(y)), 10, 10);
         }
     }
 

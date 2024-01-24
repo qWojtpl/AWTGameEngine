@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.engine.ColliderRegistry;
+import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.engine.PanelRegistry;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
@@ -101,7 +102,7 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
-    public void onPreRender(Graphics g) {
+    public void onPreRender(GraphicsManager g) {
 
     }
 
@@ -109,12 +110,12 @@ public abstract class ObjectComponent {
      * Method is called while frame is drawing.
      */
     @EventMethod
-    public void onRender(Graphics g) {
+    public void onRender(GraphicsManager g) {
 
     }
 
     @EventMethod
-    public void onAfterRender(Graphics g) {
+    public void onAfterRender(GraphicsManager g) {
 
     }
 

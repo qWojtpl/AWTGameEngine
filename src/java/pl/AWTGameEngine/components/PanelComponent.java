@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
@@ -28,7 +29,7 @@ public class PanelComponent extends ObjectComponent {
     }
 
     @Override
-    public void onRender(Graphics g) {
+    public void onRender(GraphicsManager g) {
         if(nestedPanel == null) {
             return;
         }

@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -17,8 +18,8 @@ public class BlankRenderer extends ObjectComponent {
     }
 
     @Override
-    public void onRender(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
+    public void onRender(GraphicsManager g) {
+        Graphics2D g2d = (Graphics2D) g.getGraphics();
         AffineTransform oldTransform = g2d.getTransform();
         if(getObject().getRotation() != 0) {
             AffineTransform transform = new AffineTransform();
@@ -28,7 +29,7 @@ public class BlankRenderer extends ObjectComponent {
             g2d.transform(transform);
         }
         g2d.setColor(color.getColor());
-        g2d.fillRect(
+        g.fillRect(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseScale(getObject().getSizeX()),

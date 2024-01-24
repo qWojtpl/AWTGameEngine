@@ -4,10 +4,7 @@ import pl.AWTGameEngine.annotations.Parentless;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PanelComponent;
-import pl.AWTGameEngine.engine.DialogManager;
-import pl.AWTGameEngine.engine.EventHandler;
-import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.NestedPanel;
+import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.scenes.Scene;
 
 import java.awt.*;
@@ -365,20 +362,20 @@ public class GameObject {
         this.eventHandler = eventHandler;
     }
 
-    public void preRender(Graphics g) {
-        for(ObjectComponent component : eventHandler.getComponents("onPreRender#Graphics")) {
+    public void preRender(GraphicsManager g) {
+        for(ObjectComponent component : eventHandler.getComponents("onPreRender#GraphicsManager")) {
             component.onPreRender(g);
         }
     }
 
-    public void render(Graphics g) {
-        for(ObjectComponent component : eventHandler.getComponents("onRender#Graphics")) {
+    public void render(GraphicsManager g) {
+        for(ObjectComponent component : eventHandler.getComponents("onRender#GraphicsManager")) {
             component.onRender(g);
         }
     }
 
-    public void afterRender(Graphics g) {
-        for(ObjectComponent component : eventHandler.getComponents("onAfterRender#Graphics")) {
+    public void afterRender(GraphicsManager g) {
+        for(ObjectComponent component : eventHandler.getComponents("onAfterRender#GraphicsManager")) {
             component.onAfterRender(g);
         }
     }

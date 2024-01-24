@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -18,11 +19,11 @@ public class Border extends ObjectComponent {
     }
 
     @Override
-    public void onAfterRender(Graphics g) {
+    public void onAfterRender(GraphicsManager g) {
         if(!isEnabled()) {
             return;
         }
-        Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g.getGraphics();
         AffineTransform oldTransform = g2d.getTransform();
         if(getObject().getRotation() != 0) {
             AffineTransform transform = new AffineTransform();
@@ -32,7 +33,7 @@ public class Border extends ObjectComponent {
             g2d.transform(transform);
         }
         g2d.setColor(color.getColor());
-        g2d.drawRect(
+        g.drawRect(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseScale(getObject().getSizeX()),

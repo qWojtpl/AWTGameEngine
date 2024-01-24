@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -23,9 +24,9 @@ public class TextRenderer extends ObjectComponent {
     }
 
     @Override
-    public void onRender(Graphics g) {
+    public void onRender(GraphicsManager g) {
         final String[] lines = text.split("\n");
-        final int height = g.getFontMetrics(getWindow().getDefaultFont(size)).getHeight();
+        final int height = g.getGraphics().getFontMetrics(getWindow().getDefaultFont(size)).getHeight();
         final int totalHeight = lines.length * height;
         for(int i = 1; i <= lines.length; i++) {
             String line = lines[i - 1];
@@ -53,7 +54,7 @@ public class TextRenderer extends ObjectComponent {
             } else {
                 y = (getObject().getSizeY() - totalHeight) / 2 - height / 4;
             }
-            Graphics2D g2d = (Graphics2D) g;
+            Graphics2D g2d = (Graphics2D) g.getGraphics();
             AffineTransform oldTransform = g2d.getTransform();
             if (getObject().getRotation() != 0) {
                 AffineTransform transform = new AffineTransform();
@@ -64,7 +65,7 @@ public class TextRenderer extends ObjectComponent {
             }
             g2d.setColor(color.getColor());
             g2d.setFont(getWindow().getDefaultFont((getSize() * getCamera().getZoom())));
-            g2d.drawString(line,
+            g.drawString(line,
                     getCamera().parseX(getObject(), getObject().getX() + x),
                     getCamera().parseY(getObject(), getObject().getY() + y + height * i));
             g2d.setTransform(oldTransform);
