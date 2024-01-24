@@ -5,7 +5,13 @@ import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 import pl.AWTGameEngine.components.TextArea;
 
-public abstract class DialogManager {
+import java.awt.*;
+
+public class DialogManager {
+
+    DialogManager() {
+
+    }
 
     public static void createError(String message) {
         Window w = WindowsManager.createWindow(AppProperties.getProperty("error"));

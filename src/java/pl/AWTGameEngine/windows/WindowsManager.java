@@ -11,10 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public abstract class WindowsManager {
+public class WindowsManager {
 
     private static final List<Window> windows = new ArrayList<>();
     private static Window defaultWindow;
+
+    WindowsManager() {
+        
+    }
 
     public static Window createWindow(String scenePath) {
         Properties customProperties = AppProperties.getCustomProperties(SceneLoader.getScenePropertiesPath(scenePath));

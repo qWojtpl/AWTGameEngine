@@ -5,12 +5,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
-public abstract class Logger {
+public class Logger {
 
     private static int level = 0;
     private static boolean append = false;
     private static boolean logFile = false;
     private static boolean callerClass = false;
+
+    Logger() {
+
+    }
 
     public static void log(int level, String message) {
         if(Logger.level < level) {

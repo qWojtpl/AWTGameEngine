@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public abstract class AppProperties {
+public class AppProperties {
 
     private final static Properties properties;
     private final static HashMap<String, Properties> customProperties = new HashMap<>();
     private final static List<String> startupArgs = new ArrayList<>();
+
+    AppProperties() {
+
+    }
 
     static {
         properties = getCustomProperties("app.properties");

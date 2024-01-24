@@ -13,12 +13,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class ResourceManager {
+public class ResourceManager {
 
     private final static HashMap<String, List<String>> resources = new HashMap<>();
     private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
     private final static HashMap<String, InputStream> streamResources = new HashMap<>();
     private final static List<AudioClip> audioClips = new ArrayList<>();
+
+    ResourceManager() {
+
+    }
 
     public static void copyResource(String name, String path) {
         Logger.log(2, "Copying resource: " + name + " to " + path);

@@ -5,9 +5,13 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class Preferences {
+public class Preferences {
 
     private static final HashMap<String, String> preferences = new HashMap<>();
+
+    Preferences() {
+
+    }
 
     static {
         loadPreferences();
