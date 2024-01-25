@@ -19,15 +19,6 @@ public class BlankRenderer extends ObjectComponent {
 
     @Override
     public void onRender(GraphicsManager g) {
-        Graphics2D g2d = (Graphics2D) g.getGraphics();
-        AffineTransform oldTransform = g2d.getTransform();
-        if(getObject().getRotation() != 0) {
-            AffineTransform transform = new AffineTransform();
-            transform.rotate(Math.toRadians(getObject().getRotation()),
-                    getCamera().parseX(getObject(), getObject().getCenterX()),
-                    getCamera().parseY(getObject(), getObject().getCenterY()));
-            g2d.transform(transform);
-        }
         g.fillRect(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
@@ -35,8 +26,10 @@ public class BlankRenderer extends ObjectComponent {
                 getCamera().parseScale(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
                         .setColor(color.getColor())
+                        .setRotation(getObject().getRotation())
+                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
         );
-        g2d.setTransform(oldTransform);
     }
 
     public ColorObject getColorObject() {

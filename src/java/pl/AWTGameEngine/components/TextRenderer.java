@@ -54,24 +54,17 @@ public class TextRenderer extends ObjectComponent {
             } else {
                 y = (getObject().getSizeY() - totalHeight) / 2 - height / 4;
             }
-            Graphics2D g2d = (Graphics2D) g.getGraphics();
-            AffineTransform oldTransform = g2d.getTransform();
-            if (getObject().getRotation() != 0) {
-                AffineTransform transform = new AffineTransform();
-                transform.rotate(Math.toRadians(getObject().getRotation()),
-                        getCamera().parseX(getObject(), getObject().getCenterX()),
-                        getCamera().parseY(getObject(), getObject().getCenterY()));
-                g2d.transform(transform);
-            }
-            g2d.setFont(getWindow().getDefaultFont((getSize() * getCamera().getZoom())));
             g.drawString(
                     line,
                     getCamera().parseX(getObject(), getObject().getX() + x),
                     getCamera().parseY(getObject(), getObject().getY() + y + height * i),
                     new GraphicsManager.RenderOptions()
                             .setColor(color.getColor())
+                            .setFont(getWindow().getDefaultFont(getSize() * getCamera().getZoom()))
+                            .setRotation(getObject().getRotation())
+                            .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
+                            .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
             );
-            g2d.setTransform(oldTransform);
         }
     }
 

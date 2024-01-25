@@ -1,12 +1,16 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.windows.WindowsManager;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class GraphicsManager {
 
     private Graphics graphics;
+    private Graphics2D graphics2D;
+    private AffineTransform oldTransform;
 
     public void drawLine(int x1, int y1, int x2, int y2, RenderOptions renderOptions) {
         if(graphics == null) {
@@ -63,7 +67,23 @@ public class GraphicsManager {
     }
 
     public void readOptions(RenderOptions options) {
-        graphics.setColor(RenderOptionsReader.getColor(options));
+        if(options == null) {
+            options = new RenderOptions();
+        }
+        graphics.setColor(options.getColor());
+        graphics.setFont(options.getFont());
+        if(oldTransform == null) {
+            int rotation = options.getRotation();
+            if(rotation != 0) {
+                oldTransform = graphics2D.getTransform();
+                AffineTransform transform = new AffineTransform();
+                transform.rotate(Math.toRadians(rotation), options.getRotationCenterX(), options.getRotationCenterY());
+                graphics2D.transform(transform);
+            }
+        } else {
+            graphics2D.setTransform(oldTransform);
+            oldTransform = null;
+        }
     }
 
     public void rollBackOptions() {
@@ -76,14 +96,35 @@ public class GraphicsManager {
 
     public void setGraphics(Graphics g) {
         this.graphics = g;
+        this.graphics2D = (Graphics2D) g;
     }
 
     public static class RenderOptions {
 
         private Color color = Color.BLACK;
+        private Font font = WindowsManager.getDefaultWindow().getDefaultFont();
+        private int rotation = 0;
+        private int rotationCenterX = 0;
+        private int rotationCenterY = 0;
 
         public Color getColor() {
             return this.color;
+        }
+
+        public Font getFont() {
+            return this.font;
+        }
+
+        public int getRotation() {
+            return this.rotation;
+        }
+
+        public int getRotationCenterX() {
+            return this.rotationCenterX;
+        }
+
+        public int getRotationCenterY() {
+            return this.rotationCenterY;
         }
 
         public RenderOptions setColor(Color color) {
@@ -92,18 +133,27 @@ public class GraphicsManager {
         }
 
         public RenderOptions setColor(ColorObject color) {
-            return setColor(color);
+            return setColor(color.getColor());
         }
 
-    }
+        public RenderOptions setFont(Font font) {
+            this.font = font;
+            return this;
+        }
 
-    private static class RenderOptionsReader {
+        public RenderOptions setRotation(int rotation) {
+            this.rotation = rotation;
+            return this;
+        }
 
-        public static Color getColor(RenderOptions renderOptions) {
-            if(renderOptions == null) {
-                return Color.BLACK;
-            }
-            return renderOptions.getColor();
+        public RenderOptions setRotationCenterX(int x) {
+            this.rotationCenterX = x;
+            return this;
+        }
+
+        public RenderOptions setRotationCenterY(int y) {
+            this.rotationCenterY = y;
+            return this;
         }
 
     }
