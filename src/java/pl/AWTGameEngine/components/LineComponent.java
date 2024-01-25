@@ -19,8 +19,6 @@ public class LineComponent extends ObjectComponent {
 
     @Override
     public void onRender(GraphicsManager g) {
-        Graphics2D g2d = (Graphics2D) g.getGraphics();
-        g2d.setStroke(new BasicStroke(thickness));
         g.drawLine(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
@@ -28,8 +26,8 @@ public class LineComponent extends ObjectComponent {
                 getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
                         .setColor(color.getColor())
+                        .setStroke(thickness)
         );
-        g2d.setStroke(new BasicStroke(1));
     }
 
     public ColorObject getColorObject() {

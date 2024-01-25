@@ -72,6 +72,7 @@ public class GraphicsManager {
         }
         graphics.setColor(options.getColor());
         graphics.setFont(options.getFont());
+        graphics2D.setStroke(new BasicStroke(options.getStroke()));
         if(oldTransform == null) {
             int rotation = options.getRotation();
             if(rotation != 0) {
@@ -106,6 +107,7 @@ public class GraphicsManager {
         private int rotation = 0;
         private int rotationCenterX = 0;
         private int rotationCenterY = 0;
+        private float stroke = 1;
 
         public Color getColor() {
             return this.color;
@@ -128,6 +130,10 @@ public class GraphicsManager {
 
         public int getRotationCenterY() {
             return this.rotationCenterY;
+        }
+
+        public float getStroke() {
+            return this.stroke;
         }
 
         public RenderOptions setColor(Color color) {
@@ -156,6 +162,11 @@ public class GraphicsManager {
 
         public RenderOptions setRotationCenterY(int y) {
             this.rotationCenterY = y;
+            return this;
+        }
+
+        public RenderOptions setStroke(float stroke) {
+            this.stroke = stroke;
             return this;
         }
 
