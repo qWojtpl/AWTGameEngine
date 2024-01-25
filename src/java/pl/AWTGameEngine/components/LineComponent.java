@@ -21,12 +21,13 @@ public class LineComponent extends ObjectComponent {
     public void onRender(GraphicsManager g) {
         Graphics2D g2d = (Graphics2D) g.getGraphics();
         g2d.setStroke(new BasicStroke(thickness));
-        g2d.setColor(color.getColor());
         g.drawLine(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseX(getObject(), getObject().getX() + getObject().getSizeX()),
-                getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY())
+                getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY()),
+                new GraphicsManager.RenderOptions()
+                        .setColor(color.getColor())
         );
         g2d.setStroke(new BasicStroke(1));
     }

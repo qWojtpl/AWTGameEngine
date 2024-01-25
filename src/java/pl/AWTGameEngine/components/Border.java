@@ -32,12 +32,13 @@ public class Border extends ObjectComponent {
                     getCamera().parseY(getObject(), getObject().getCenterY()));
             g2d.transform(transform);
         }
-        g2d.setColor(color.getColor());
         g.drawRect(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseScale(getObject().getSizeX()),
-                getCamera().parseScale(getObject().getSizeY())
+                getCamera().parseScale(getObject().getSizeY()),
+                new GraphicsManager.RenderOptions()
+                        .setColor(color.getColor())
         );
         g2d.setTransform(oldTransform);
     }

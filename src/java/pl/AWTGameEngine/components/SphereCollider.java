@@ -31,12 +31,13 @@ public class SphereCollider extends Collider {
         if(!isVisualize()) {
             return;
         }
-        g.setColor(visualizeColor.getColor());
         g.drawOval(
                 getCamera().parseX(getObject(), getObject().getX() + x),
                 getCamera().parseY(getObject(), getObject().getY() + y),
                 getCamera().parseScale(getObject().getSizeX() + sizeX),
-                getCamera().parseScale(getObject().getSizeY() + sizeY)
+                getCamera().parseScale(getObject().getSizeY() + sizeY),
+                new GraphicsManager.RenderOptions()
+                        .setColor(visualizeColor.getColor())
         );
     }
 

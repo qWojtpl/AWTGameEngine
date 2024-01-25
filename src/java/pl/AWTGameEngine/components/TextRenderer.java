@@ -63,11 +63,14 @@ public class TextRenderer extends ObjectComponent {
                         getCamera().parseY(getObject(), getObject().getCenterY()));
                 g2d.transform(transform);
             }
-            g2d.setColor(color.getColor());
             g2d.setFont(getWindow().getDefaultFont((getSize() * getCamera().getZoom())));
-            g.drawString(line,
+            g.drawString(
+                    line,
                     getCamera().parseX(getObject(), getObject().getX() + x),
-                    getCamera().parseY(getObject(), getObject().getY() + y + height * i));
+                    getCamera().parseY(getObject(), getObject().getY() + y + height * i),
+                    new GraphicsManager.RenderOptions()
+                            .setColor(color.getColor())
+            );
             g2d.setTransform(oldTransform);
         }
     }

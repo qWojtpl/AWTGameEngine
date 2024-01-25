@@ -28,18 +28,21 @@ public class LineChart extends ObjectComponent {
 
     @Override
     public void onRender(GraphicsManager g) {
-        g.setColor(Color.BLACK);
         g.drawLine(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseX(getObject(), getObject().getX()),
-                getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY())
+                getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY()),
+                new GraphicsManager.RenderOptions()
+                        .setColor(Color.BLACK)
         );
         g.drawLine(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY()),
                 getCamera().parseX(getObject(), getObject().getX() + getObject().getSizeX()),
-                getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY())
+                getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY()),
+                new GraphicsManager.RenderOptions()
+                        .setColor(Color.BLACK)
         );
         int i = 0;
         int[] keys = new int[values.size()];
