@@ -38,6 +38,9 @@ public class SphereCollider extends Collider {
                 getCamera().parseScale(getObject().getSizeY() + sizeY),
                 new GraphicsManager.RenderOptions()
                         .setColor(visualizeColor.getColor())
+                        .setRotation(getObject().getRotation())
+                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
         );
     }
 

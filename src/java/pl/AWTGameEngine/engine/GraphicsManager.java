@@ -102,7 +102,7 @@ public class GraphicsManager {
     public static class RenderOptions {
 
         private Color color = Color.BLACK;
-        private Font font = WindowsManager.getDefaultWindow().getDefaultFont();
+        private Font font = null;
         private int rotation = 0;
         private int rotationCenterX = 0;
         private int rotationCenterY = 0;
@@ -112,6 +112,9 @@ public class GraphicsManager {
         }
 
         public Font getFont() {
+            if(this.font == null) {
+                setFont(WindowsManager.getDefaultWindow().getDefaultFont());
+            }
             return this.font;
         }
 

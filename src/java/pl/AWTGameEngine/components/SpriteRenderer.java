@@ -25,24 +25,17 @@ public class SpriteRenderer extends ObjectComponent {
         if(sprite == null) {
             return;
         }
-        Graphics2D g2d = (Graphics2D) g.getGraphics();
-        AffineTransform oldTransform = g2d.getTransform();
-        if(getObject().getRotation() != 0) {
-            AffineTransform transform = new AffineTransform();
-            transform.rotate(Math.toRadians(getObject().getRotation()),
-                    getCamera().parseX(getObject(), getObject().getCenterX()),
-                    getCamera().parseY(getObject(), getObject().getCenterY()));
-            g2d.transform(transform);
-        }
         g.drawImage(
                 sprite.getImage(),
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseScale(getObject().getSizeX()),
                 getCamera().parseScale(getObject().getSizeY()),
-                null
+                new GraphicsManager.RenderOptions()
+                        .setRotation(getObject().getRotation())
+                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
         );
-        g2d.setTransform(oldTransform);
     }
 
     public Sprite getSprite() {

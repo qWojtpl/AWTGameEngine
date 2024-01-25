@@ -35,23 +35,17 @@ public class BoxCollider extends Collider {
         if(!isVisualize()) {
             return;
         }
-        Graphics2D g2d = (Graphics2D) g.getGraphics();
-        AffineTransform oldTransform = g2d.getTransform();
-        if(getObject().getRotation() != 0) {
-            AffineTransform transform = new AffineTransform();
-            transform.rotate(Math.toRadians(getObject().getRotation()),
-                    getCamera().parseX(getObject(), getObject().getCenterX()),
-                    getCamera().parseY(getObject(), getObject().getCenterY()));
-            g2d.transform(transform);
-        }
-        g2d.setColor(visualizeColor.getColor());
-        g2d.drawRect(
+        g.drawRect(
                 getCamera().parseX(getObject(), getObject().getX() + x),
                 getCamera().parseY(getObject(), getObject().getY() + y),
                 getCamera().parseScale(getObject().getSizeX() + sizeX),
-                getCamera().parseScale(getObject().getSizeY() + sizeY)
+                getCamera().parseScale(getObject().getSizeY() + sizeY),
+                new GraphicsManager.RenderOptions()
+                        .setColor(visualizeColor.getColor())
+                        .setRotation(getObject().getRotation())
+                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
         );
-        g2d.setTransform(oldTransform);
     }
 
     @Override
