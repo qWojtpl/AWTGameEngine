@@ -55,7 +55,6 @@ public class SceneLoader {
         attachSceneData(data);
         window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         Logger.log(2, "Scene loaded.");
-        window.getProjectManager().openProject("test");
     }
 
     public LinkedHashMap<String, String> getSceneData(String scenePath) {

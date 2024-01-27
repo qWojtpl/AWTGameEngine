@@ -28,10 +28,10 @@ public class Window extends JFrame {
     private ProjectManager projectManager;
     private boolean staticMode;
     private boolean fullScreen;
-    private final Font defaultFont;
+    private final Font font;
 
     public Window() {
-        defaultFont = new Font(
+        font = new Font(
             AppProperties.getProperty("font"),
             Font.PLAIN,
             AppProperties.getPropertyAsInteger("fontSize")
@@ -78,12 +78,12 @@ public class Window extends JFrame {
         return this.projectManager;
     }
 
-    public Font getDefaultFont() {
-        return this.defaultFont;
+    public Font getFont() {
+        return this.font;
     }
 
-    public Font getDefaultFont(float size) {
-        return getDefaultFont().deriveFont(size);
+    public Font getFont(float size) {
+        return getFont().deriveFont(size);
     }
 
     public boolean isStaticMode() {

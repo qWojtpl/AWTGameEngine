@@ -5,11 +5,15 @@ import pl.AWTGameEngine.components.*;
 import pl.AWTGameEngine.components.TextArea;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.NestedPanel;
+import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.Sprite;
 
 import java.awt.*;
+import java.util.List;
+import java.io.File;
 
 @Unique
 public class Editor extends ObjectComponent {
@@ -56,6 +60,8 @@ public class Editor extends ObjectComponent {
         objectSizeY.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
         objectSizeY.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
         objectSizeY.getTextRenderer().setSize(14);
+        getWindow().getProjectManager().openProject(screenPanel.getParentObject(), "test");
+        listFiles();
     }
 
     private ObjectComponent getComponent(String identifier, Class<? extends ObjectComponent> clazz) {
@@ -192,7 +198,31 @@ public class Editor extends ObjectComponent {
         selectedObjectBorder.setColor(new ColorObject(Color.RED));
         objectNameText.setText(object.getIdentifier());
         object.addComponent(selectedObjectBorder);
+    }
 
+    private void listFiles() {
+        GameObject filesFlex = getScene().getGameObjectByName("filesFlex");
+        List<File> files = getWindow().getProjectManager().getProjectFiles(null);
+        for(File file : files) {
+            GameObject fileObject = getScene().createGameObject("@file-" + file.getName() + "-" + System.nanoTime());
+            fileObject.setSize(96, 96);
+            SpriteRenderer spriteRenderer = new SpriteRenderer(fileObject);
+            TextRenderer textRenderer = new TextRenderer(fileObject);
+            textRenderer.setText(file.getName());
+            textRenderer.setColor(new ColorObject(Color.WHITE));
+            textRenderer.setSize(12);
+            textRenderer.align(TextRenderer.HorizontalAlign.CENTER, TextRenderer.VerticalAlign.BOTTOM);
+            Sprite sprite;
+            if(file.isDirectory()) {
+                sprite = ResourceManager.getResourceAsSprite("sprites/base/files/directory.png");
+            } else {
+                sprite = ResourceManager.getResourceAsSprite("sprites/base/files/file.png");
+            }
+            spriteRenderer.setSprite(sprite);
+            fileObject.addComponent(spriteRenderer);
+            fileObject.addComponent(textRenderer);
+            fileObject.setParent(filesFlex);
+        }
     }
 
     public GameObject getSelectedObject() {

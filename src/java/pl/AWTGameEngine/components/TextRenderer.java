@@ -26,11 +26,11 @@ public class TextRenderer extends ObjectComponent {
     @Override
     public void onRender(GraphicsManager g) {
         final String[] lines = text.split("\n");
-        final int height = g.getGraphics().getFontMetrics(getWindow().getDefaultFont(size)).getHeight();
+        final int height = g.getGraphics().getFontMetrics(getWindow().getFont(size)).getHeight();
         final int totalHeight = lines.length * height;
         for(int i = 1; i <= lines.length; i++) {
             String line = lines[i - 1];
-            Font font = getWindow().getDefaultFont(size);
+            Font font = getWindow().getFont(size);
             int width = Math.round((float)
                     font.getStringBounds(line, new FontRenderContext(font.getTransform(), true, true))
                             .getBounds()
@@ -60,7 +60,7 @@ public class TextRenderer extends ObjectComponent {
                     getCamera().parseY(getObject(), getObject().getY() + y + height * i),
                     new GraphicsManager.RenderOptions()
                             .setColor(color.getColor())
-                            .setFont(getWindow().getDefaultFont(getSize() * getCamera().getZoom()))
+                            .setFont(getWindow().getFont(getSize() * getCamera().getZoom()))
                             .setRotation(getObject().getRotation())
                             .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
                             .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))

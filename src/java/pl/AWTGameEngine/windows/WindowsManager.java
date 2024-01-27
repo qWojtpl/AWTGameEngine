@@ -7,6 +7,7 @@ import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -15,6 +16,7 @@ public class WindowsManager {
 
     private static final List<Window> windows = new ArrayList<>();
     private static Window defaultWindow;
+    private static Font defaultFont;
 
     WindowsManager() {
         
@@ -34,6 +36,9 @@ public class WindowsManager {
 
     public static Window createWindow(String scenePath, boolean fullScreen) {
         Window window = new Window();
+        if(windows.size() == 0) {
+            defaultFont = window.getFont();
+        }
         window.setSceneLoader(new SceneLoader(window));
         window.setProjectManager(new ProjectManager(window));
         window.setResizable(false);
@@ -71,6 +76,10 @@ public class WindowsManager {
 
     public static Window getDefaultWindow() {
         return defaultWindow;
+    }
+
+    public static Font getDefaultFont() {
+        return defaultFont;
     }
 
     public static List<Window> getWindows() {
