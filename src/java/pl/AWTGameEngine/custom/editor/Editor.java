@@ -171,7 +171,7 @@ public class Editor extends ObjectComponent {
                 objectSizeY.setText(selectedObjectBorder.getObject().getSizeY() + "");
             } else {
                 try {
-                    selectedObjectBorder.getObject().setSizeX(Integer.parseInt(objectSizeY.getText()));
+                    selectedObjectBorder.getObject().setSizeY(Integer.parseInt(objectSizeY.getText()));
                 } catch(Exception e) {
                     objectSizeY.setText("0");
                     selectedObjectBorder.getObject().setSizeY(0);

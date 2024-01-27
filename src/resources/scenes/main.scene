@@ -1,5 +1,6 @@
 background="pos{0;0}size{960;540}BlankRenderer:ObjectComponent{color^rgb(36,36,36)^}";
 panel="pos{0;0}size{640;360}PanelComponent:ObjectComponent{}";
+
 objectInfoPanel="pos{640;0}size{320;360}PanelComponent:ObjectComponent{}";
 objectInfoBackground="pos{0;0}size{320;360}parent{objectInfoPanel}BlankRenderer:ObjectComponent{color^rgb(37,37,37)^}Canvas:ObjectComponent{}";
 objectInfoScroll="pos{310;0}size{10;360}parent{objectInfoPanel}ScrollComponent:ObjectComponent{}Canvas:ObjectComponent{}ScrollCameraBind:ObjectComponent{}";
