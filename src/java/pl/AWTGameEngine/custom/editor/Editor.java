@@ -66,7 +66,8 @@ public class Editor extends ObjectComponent {
         objectSizeY.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
         objectSizeY.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
         objectSizeY.getTextRenderer().setSize(14);
-        getWindow().getProjectManager().openProject(screenPanel.getParentObject(), "test");
+        getWindow().getProjectManager().createProject("project");
+        getWindow().getProjectManager().openProject(screenPanel.getParentObject(), "project");
         listFiles(null);
     }
 

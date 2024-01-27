@@ -22,16 +22,12 @@ public class ProjectManager {
             Logger.log(1, "Project " + name + " already exists.");
             return;
         }
-        String[] resources = new String[] {
-                "app.properties",
-                "sprites/base/error.png",
-                "sprites/base/success.png",
-                "scenes/main.scene",
-                "scenes/main.properties"
-        };
-        for(String resource : resources) {
-            copyResource(resource, path);
-        }
+        copyResource("defaultTemplate/app.properties", path + "app.properties");
+        copyResource("defaultTemplate/main.scene", path + "scenes/main.scene");
+        copyResource("defaultTemplate/main.properties", path + "scenes/main.properties");
+        copyResource("defaultTemplate/beaver.jpg", path + "sprites/beaver.jpg");
+        copyResource("defaultTemplate/error.png", path + "sprites/base/error.jpg");
+        copyResource("defaultTemplate/success.png", path + "sprites/base/success.jpg");
         Logger.log(2, "Created project: " + name);
     }
 
@@ -57,7 +53,7 @@ public class ProjectManager {
     }
 
     private void copyResource(String name, String path) {
-        ResourceManager.copyResource(name, path + name);
+        ResourceManager.copyResource(name, path);
     }
 
     public Window getWindow() {

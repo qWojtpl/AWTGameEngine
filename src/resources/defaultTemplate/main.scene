@@ -1,0 +1,15 @@
+audio="pos{0;0}size{0;0}MusicPlayer:ObjectComponent{sourcePath^audio/dominique.wav^}";
+audio2="pos{0;0}size{0;0}";
+object1="pos{0;0}size{45;45}priority{1}SpriteRenderer:ObjectComponent{spriteSource^sprites/beaver.jpg^}PhysicsBody:ObjectComponent{}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^}BoxCollider:ObjectComponent{visualize^true^sizeX^50^sizeY^-44^}Animator:ObjectComponent{nextFrame^sprites/beaver.jpg^nextDelay^60^nextFrame^sprites/beaver2.png^nextDelay^60^}";
+text="pos{200;100}size{50;50}parent{object1}priority{2}TextRenderer:ObjectComponent{text^test^color^BLACK^size^30^}BoxCollider:ObjectComponent{visualize^true^}";
+object2="pos{100;100}size{45;45}priority{1}parent{text}SpriteRenderer:ObjectComponent{spriteSource^sprites/beaver2.png^}BoxCollider:ObjectComponent{visualize^true^}";
+collider="pos{300;150}size{100;100}rotation{45}priority{1}PhysicsBody:ObjectComponent{}CustomComponent:ObjectComponent-C{}BoxCollider:ObjectComponent{visualize^true^x^0^sizeX^0^}";
+collider2="pos{300;0}size{100;100}priority{1}BoxCollider:ObjectComponent{visualize^true^}";
+sphereCollider="pos{500;0}size{100;100}priority{1}SphereCollider:ObjectComponent{visualize^true^}";
+object3="pos{100;300}BlankRenderer:ObjectComponent{color^rgb(0,125,125)^}PhysicsBody:ObjectComponent{}BoxCollider:ObjectComponent{}";
+wall1="pos{-10;-1000}size{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
+wall2="pos{-45;500}size{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
+wall3="pos{-1000;0}size{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
+wall4="pos{500;0}size{1000;1000}BoxCollider:ObjectComponent{visualize^true^}";
+button="pos{200;200}size{100;100}Button:ObjectComponent{size^20^text^Button ;)^}";
+@scroll="pos{300;200}size{10;200}ScrollComponent:ObjectComponent{}";
