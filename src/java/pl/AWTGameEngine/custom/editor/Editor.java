@@ -12,6 +12,7 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 
@@ -114,6 +115,7 @@ public class Editor extends ObjectComponent {
         }
         if(getKeyListener().hasPressedKey(40)) {
             screenCamera.setY(screenCamera.getY() + 8);
+            listFiles();
         }
     }
 
@@ -202,27 +204,33 @@ public class Editor extends ObjectComponent {
 
     private void listFiles() {
         GameObject filesFlex = getScene().getGameObjectByName("filesFlex");
+        List<GameObject> children = new ArrayList<>(filesFlex.getAllChildren());
+        for(GameObject child : children) {
+            getScene().removeGameObject(child);
+        }
         List<File> files = getWindow().getProjectManager().getProjectFiles(null);
         for(File file : files) {
             GameObject fileObject = getScene().createGameObject("@file-" + file.getName() + "-" + System.nanoTime());
             fileObject.setSize(96, 96);
-            SpriteRenderer spriteRenderer = new SpriteRenderer(fileObject);
-            TextRenderer textRenderer = new TextRenderer(fileObject);
-            textRenderer.setText(file.getName());
-            textRenderer.setColor(new ColorObject(Color.WHITE));
-            textRenderer.setSize(12);
-            textRenderer.align(TextRenderer.HorizontalAlign.CENTER, TextRenderer.VerticalAlign.BOTTOM);
+            FileComponent fileComponent = new FileComponent(fileObject, file);
+            fileComponent.setText(getFileName(file.getName()));
             Sprite sprite;
             if(file.isDirectory()) {
                 sprite = ResourceManager.getResourceAsSprite("sprites/base/files/directory.png");
             } else {
                 sprite = ResourceManager.getResourceAsSprite("sprites/base/files/file.png");
             }
-            spriteRenderer.setSprite(sprite);
-            fileObject.addComponent(spriteRenderer);
-            fileObject.addComponent(textRenderer);
+            fileComponent.setSprite(sprite);
+            fileObject.addComponent(fileComponent);
             fileObject.setParent(filesFlex);
         }
+    }
+
+    private String getFileName(String fileName) {
+        if(fileName.length() <= 16) {
+            return fileName;
+        }
+        return fileName.substring(0, 13) + "...";
     }
 
     public GameObject getSelectedObject() {

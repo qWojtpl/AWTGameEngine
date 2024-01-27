@@ -95,11 +95,12 @@ public class Scene {
             return;
         }
         for(ObjectComponent component : object.getComponents()) {
-            component.onRemoveComponent();
+            object.removeComponent(component);
         }
         for(GameObject child : object.getChildren()) {
             child.setParent(object.getParent());
         }
+        object.setParent(null);
         gameObjects.remove(object.getIdentifier());
         removeSortedObject(object.getPriority(), object);
         for(GameObject obj : getActiveGameObjects()) {
