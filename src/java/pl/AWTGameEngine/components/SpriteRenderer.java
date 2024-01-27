@@ -8,9 +8,6 @@ import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-
 @Unique
 public class SpriteRenderer extends ObjectComponent {
 

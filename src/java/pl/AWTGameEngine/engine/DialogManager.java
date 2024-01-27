@@ -5,8 +5,6 @@ import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 import pl.AWTGameEngine.components.TextArea;
 
-import java.awt.*;
-
 public class DialogManager {
 
     DialogManager() {

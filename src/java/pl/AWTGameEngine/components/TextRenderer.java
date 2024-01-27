@@ -8,7 +8,6 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 
 public class TextRenderer extends ObjectComponent {
 

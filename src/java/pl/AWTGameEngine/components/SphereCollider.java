@@ -3,7 +3,6 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
 
-import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 

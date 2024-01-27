@@ -6,9 +6,6 @@ import pl.AWTGameEngine.engine.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-
 public class BlankRenderer extends ObjectComponent {
 
     private ColorObject color = new ColorObject();

@@ -3,7 +3,8 @@ package pl.AWTGameEngine.engine;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
-import java.io.File;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 public class ProjectManager {
@@ -28,6 +29,7 @@ public class ProjectManager {
         copyResource("defaultTemplate/beaver.jpg", path + "sprites/beaver.jpg");
         copyResource("defaultTemplate/error.png", path + "sprites/base/error.jpg");
         copyResource("defaultTemplate/success.png", path + "sprites/base/success.jpg");
+        new File(path + "java/").mkdir();
         Logger.log(2, "Created project: " + name);
     }
 
@@ -45,7 +47,7 @@ public class ProjectManager {
         LinkedHashMap<String, String> data = window.getSceneLoader().getSceneData("./projects/" + name + "/" +
                 AppProperties.getProperty("main", customProperties));
         if(data == null) {
-            Logger.log(1, "Cannot attach scene to existing scene with panel.");
+            Logger.log(1, "Cannot attach scene to existing scene.");
             return;
         }
         window.getSceneLoader().attachSceneData(data, parent);
@@ -54,6 +56,78 @@ public class ProjectManager {
 
     private void copyResource(String name, String path) {
         ResourceManager.copyResource(name, path);
+    }
+
+    public void compileProject() {
+        if(openedProjectName == null) {
+            return;
+        }
+        File jarFile = new File("./AWTGameEngine.jar");
+        if(!jarFile.exists()) {
+            Logger.log(2, "You can't compile project from non-archive reference.");
+            return;
+        }
+        String path = "./projects/" + openedProjectName + "/";
+        File projectDirectory = new File(path);
+        File binDirectory = new File(path + "_bin/");
+        binDirectory.mkdir();
+        new File(path + "_builds/").mkdir();
+        Calendar calendar = Calendar.getInstance();
+        int index = 0;
+        String buildName;
+        do {
+            index++;
+            buildName =
+                    calendar.get(Calendar.DAY_OF_MONTH) + "-" +
+                            (calendar.get(Calendar.MONTH) + 1) + "-" +
+                            calendar.get(Calendar.YEAR) + "-" + index;
+        } while(new File(path + "_builds/" + buildName + "/").exists());
+        File buildDirectory = new File(path + "_builds/" + buildName + "/");
+        buildDirectory.mkdir();
+        File outputJar = new File(buildDirectory.getAbsolutePath() + "/output.jar");
+        executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar xf " + jarFile.getAbsolutePath());
+        executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar cvf " + outputJar.getAbsolutePath()
+                + " pl");
+        StringBuilder resources = new StringBuilder();
+        File[] directories = projectDirectory.listFiles(File::isDirectory);
+        if(directories != null) {
+            for (File file : directories) {
+                if (!file.getName().startsWith("_")) {
+                    resources.append(file.getName());
+                    resources.append(" ");
+                }
+            }
+        }
+        executeCommand("cmd.exe", "cd " + projectDirectory.getAbsolutePath() + " & jar -uf " + outputJar.getAbsolutePath()
+                + " " + resources);
+    }
+
+    private String executeCommand(String source, String command) {
+        try {
+            ProcessBuilder processBuilder;
+            if(source.equals("cmd.exe")) {
+                processBuilder = new ProcessBuilder(source, "/c", command);
+            } else {
+                processBuilder = new ProcessBuilder(source, command);
+            }
+            Process process = processBuilder.start();
+            StringBuilder output = new StringBuilder();
+            readStream(process.getInputStream(), output);
+            readStream(process.getErrorStream(), output);
+            return output.toString();
+        } catch(Exception e) {
+            Logger.log("Cannot execute command " + command, e);
+        }
+        return "";
+    }
+
+    private void readStream(InputStream inputStream, StringBuilder output) throws IOException {
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+        }
     }
 
     public Window getWindow() {
