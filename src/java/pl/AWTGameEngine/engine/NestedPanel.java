@@ -35,7 +35,7 @@ public class NestedPanel extends JPanel {
         setBackground(Color.WHITE);
         this.window = window;
         this.camera = new Camera(this);
-        setMouseListener(this.mouseListener = new MouseListener(this));
+        setMouseListener(new MouseListener(this));
     }
 
     @Override

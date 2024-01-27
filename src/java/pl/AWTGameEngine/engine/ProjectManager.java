@@ -41,12 +41,18 @@ public class ProjectManager {
             Logger.log(1, "Cannot open project " + name + ", project doesn't exists.");
             return;
         }
-        LinkedHashMap<String, String> data = window.getSceneLoader().getSceneData("./projects/test/scenes/error.scene");
+        Properties customProperties = AppProperties.getCustomProperties("./projects/" + name + "/app.properties");
+        if(customProperties == null) {
+            Logger.log(1, "Cannot open project " + name + ", app.properties doesn't exists.");
+            return;
+        }
+        LinkedHashMap<String, String> data = window.getSceneLoader().getSceneData("./projects/" + name + "/" +
+                AppProperties.getProperty("main", customProperties));
         if(data == null) {
             Logger.log(1, "Cannot attach scene to existing scene with panel.");
             return;
         }
-        //window.getSceneLoader().attachSceneData(data, parent);
+        window.getSceneLoader().attachSceneData(data, parent);
         openedProjectName = name;
     }
 

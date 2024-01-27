@@ -7,6 +7,7 @@ import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -15,6 +16,7 @@ import pl.AWTGameEngine.objects.Sprite;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.io.File;
 
@@ -125,11 +127,12 @@ public class Editor extends ObjectComponent {
         if(selectedObjectBorder == null) {
             return;
         }
-        if(!getMouseListener().isMouseDragged()) {
+        MouseListener mouseListener = selectedObjectBorder.getObject().getPanel().getMouseListener();
+        if(!mouseListener.isMouseDragged()) {
             return;
         }
-        selectedObjectBorder.getObject().setX(getMouseListener().getMouseX());
-        selectedObjectBorder.getObject().setY(getMouseListener().getMouseY());
+        selectedObjectBorder.getObject().setX(mouseListener.getMouseX());
+        selectedObjectBorder.getObject().setY(mouseListener.getMouseY());
     }
 
     private void loadInfoFields() {
@@ -228,7 +231,16 @@ public class Editor extends ObjectComponent {
         if(file.isDirectory()) {
             sprite = ResourceManager.getResourceAsSprite("sprites/base/files/directory.png");
         } else {
-            sprite = ResourceManager.getResourceAsSprite("sprites/base/files/file.png");
+            String after = "";
+            switch(getFileExtension(file.getName())) {
+                case "scene":
+                    after = "_scene";
+                    break;
+                case "png":
+                case "jpg":
+                    after = "_img";
+            }
+            sprite = ResourceManager.getResourceAsSprite("sprites/base/files/file" + after + ".png");
         }
         fileComponent.setSprite(sprite);
         fileObject.addComponent(fileComponent);
@@ -238,6 +250,10 @@ public class Editor extends ObjectComponent {
     public void openFile(FileComponent component) {
         if(component.getFile().isDirectory()) {
             listFiles(currentDirectory + component.getFile().getName());
+            return;
+        }
+        if(getFileExtension(component.getFile().getName()).equals("scene")) {
+            loadScene(component.getFile().getPath());
             return;
         }
         new Thread(() -> {
@@ -250,11 +266,36 @@ public class Editor extends ObjectComponent {
         }).start();
     }
 
+    private void loadScene(String path) {
+        path = path.replace("\\", "/");
+        List<GameObject> objectsToRemove = new ArrayList<>();
+        for(GameObject object : getScene().getGameObjects()) {
+            if(object.getIdentifier().equals("@editor")) {
+                continue;
+            }
+            if(screenPanel.equals(object.getPanel())) {
+                objectsToRemove.add(object);
+            }
+        }
+        for(GameObject object : new ArrayList<>(objectsToRemove)) {
+            getScene().removeGameObject(object);
+        }
+        getSceneLoader().attachSceneData(getSceneLoader().getSceneData(path), screenPanel.getParentObject());
+    }
+
     private String getFileName(String fileName) {
         if(fileName.length() <= 16) {
             return fileName;
         }
         return fileName.substring(0, 13) + "...";
+    }
+
+    private String getFileExtension(String fileName) {
+        String[] split = fileName.split("\\.");
+        if(split.length == 0) {
+            return fileName;
+        }
+        return split[split.length - 1];
     }
 
     public GameObject getSelectedObject() {
