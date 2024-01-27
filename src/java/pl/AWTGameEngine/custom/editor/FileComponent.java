@@ -16,6 +16,7 @@ import java.io.IOException;
 public class FileComponent extends ObjectComponent {
 
     private final File file;
+    private final Editor editor;
     private final BlankRenderer selectRenderer = new BlankRenderer(getObject());
     private final TextRenderer textRenderer = new TextRenderer(getObject());
     private final SpriteRenderer spriteRenderer = new SpriteRenderer(getObject());
@@ -23,9 +24,10 @@ public class FileComponent extends ObjectComponent {
     private final ColorObject normalColor = new ColorObject("rgba(50,50,50,0)");
     private long lastClick = System.nanoTime();
 
-    public FileComponent(GameObject object, File file) {
+    public FileComponent(GameObject object, File file, Editor editor) {
         super(object);
         this.file = file;
+        this.editor = editor;
     }
 
     @Override
@@ -51,7 +53,7 @@ public class FileComponent extends ObjectComponent {
         if(highlightColor.equals(selectRenderer.getColorObject())) {
             selectRenderer.setColor(normalColor);
             if(System.nanoTime() - lastClick < Math.pow(10, 9) * 0.25) {
-                openFile();
+                editor.openFile(this);
             }
         } else {
             selectRenderer.setColor(highlightColor);
@@ -66,23 +68,16 @@ public class FileComponent extends ObjectComponent {
         }
     }
 
-    private void openFile() {
-        if(file.isDirectory()) {
-            return;
-        }
-        try {
-            Desktop.getDesktop().open(file);
-        } catch (IOException e) {
-            Logger.log("Cannot open file: " + file.getName(), e);
-        }
-    }
-
     public String getText() {
-        return textRenderer.getText();
+        return this.textRenderer.getText();
     }
 
     public Sprite getSprite() {
-        return spriteRenderer.getSprite();
+        return this.spriteRenderer.getSprite();
+    }
+
+    public File getFile() {
+        return this.file;
     }
 
     public void setText(String text) {

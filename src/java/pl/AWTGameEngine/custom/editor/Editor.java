@@ -3,6 +3,7 @@ package pl.AWTGameEngine.custom.editor;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
 import pl.AWTGameEngine.components.TextArea;
+import pl.AWTGameEngine.engine.DialogManager;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.engine.ResourceManager;
@@ -12,6 +13,7 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
@@ -29,6 +31,7 @@ public class Editor extends ObjectComponent {
     private TextArea objectPosY;
     private TextArea objectSizeX;
     private TextArea objectSizeY;
+    private String currentDirectory = "";
 
     public Editor(GameObject object) {
         super(object);
@@ -62,7 +65,7 @@ public class Editor extends ObjectComponent {
         objectSizeY.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
         objectSizeY.getTextRenderer().setSize(14);
         getWindow().getProjectManager().openProject(screenPanel.getParentObject(), "test");
-        listFiles();
+        listFiles(null);
     }
 
     private ObjectComponent getComponent(String identifier, Class<? extends ObjectComponent> clazz) {
@@ -115,7 +118,6 @@ public class Editor extends ObjectComponent {
         }
         if(getKeyListener().hasPressedKey(40)) {
             screenCamera.setY(screenCamera.getY() + 8);
-            listFiles();
         }
     }
 
@@ -202,28 +204,50 @@ public class Editor extends ObjectComponent {
         object.addComponent(selectedObjectBorder);
     }
 
-    private void listFiles() {
+    public void listFiles(String subDirectory) {
+        if(subDirectory != null) {
+            currentDirectory = subDirectory + "/";
+        }
         GameObject filesFlex = getScene().getGameObjectByName("filesFlex");
         List<GameObject> children = new ArrayList<>(filesFlex.getAllChildren());
         for(GameObject child : children) {
             getScene().removeGameObject(child);
         }
-        List<File> files = getWindow().getProjectManager().getProjectFiles(null);
+        List<File> files = getWindow().getProjectManager().getProjectFiles(currentDirectory);
         for(File file : files) {
-            GameObject fileObject = getScene().createGameObject("@file-" + file.getName() + "-" + System.nanoTime());
-            fileObject.setSize(96, 96);
-            FileComponent fileComponent = new FileComponent(fileObject, file);
-            fileComponent.setText(getFileName(file.getName()));
-            Sprite sprite;
-            if(file.isDirectory()) {
-                sprite = ResourceManager.getResourceAsSprite("sprites/base/files/directory.png");
-            } else {
-                sprite = ResourceManager.getResourceAsSprite("sprites/base/files/file.png");
-            }
-            fileComponent.setSprite(sprite);
-            fileObject.addComponent(fileComponent);
-            fileObject.setParent(filesFlex);
+            createFileObject(filesFlex, file);
         }
+    }
+
+    private void createFileObject(GameObject parent, File file) {
+        GameObject fileObject = getScene().createGameObject("@file-" + file.getName() + "-" + System.nanoTime());
+        fileObject.setSize(96, 96);
+        FileComponent fileComponent = new FileComponent(fileObject, file, this);
+        fileComponent.setText(getFileName(file.getName()));
+        Sprite sprite;
+        if(file.isDirectory()) {
+            sprite = ResourceManager.getResourceAsSprite("sprites/base/files/directory.png");
+        } else {
+            sprite = ResourceManager.getResourceAsSprite("sprites/base/files/file.png");
+        }
+        fileComponent.setSprite(sprite);
+        fileObject.addComponent(fileComponent);
+        fileObject.setParent(parent);
+    }
+
+    public void openFile(FileComponent component) {
+        if(component.getFile().isDirectory()) {
+            listFiles(currentDirectory + component.getFile().getName());
+            return;
+        }
+        new Thread(() -> {
+            try {
+                Desktop.getDesktop().open(component.getFile());
+            } catch(IOException e) {
+                Logger.log("Cannot open file: " + component.getFile().getName(), e);
+                DialogManager.createError("Cannot open this file!");
+            }
+        }).start();
     }
 
     private String getFileName(String fileName) {
