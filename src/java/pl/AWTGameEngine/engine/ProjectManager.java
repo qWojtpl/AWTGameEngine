@@ -87,12 +87,12 @@ public class ProjectManager {
         File outputJar = new File(buildDirectory.getAbsolutePath() + "/output.jar");
         executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar xf " + jarFile.getAbsolutePath());
         executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar cvf " + outputJar.getAbsolutePath()
-                + " pl");
+                + " META-INF pl");
         StringBuilder resources = new StringBuilder();
-        File[] directories = projectDirectory.listFiles(File::isDirectory);
+        File[] directories = projectDirectory.listFiles();
         if(directories != null) {
             for (File file : directories) {
-                if (!file.getName().startsWith("_")) {
+                if(!file.getName().startsWith("_")) {
                     resources.append(file.getName());
                     resources.append(" ");
                 }
