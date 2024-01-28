@@ -68,7 +68,7 @@ public class Editor extends ObjectComponent {
         objectSizeY.getTextRenderer().setSize(14);
         getWindow().getProjectManager().createProject("project");
         getWindow().getProjectManager().openProject(screenPanel.getParentObject(), "project");
-        getWindow().getProjectManager().compileProject();
+/*        getWindow().getProjectManager().compileProject();*/
         listFiles(null);
     }
 
@@ -220,6 +220,9 @@ public class Editor extends ObjectComponent {
         }
         List<File> files = getWindow().getProjectManager().getProjectFiles(currentDirectory);
         for(File file : files) {
+            if(file.getName().startsWith("_")) {
+                continue;
+            }
             createFileObject(filesFlex, file);
         }
     }

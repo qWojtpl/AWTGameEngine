@@ -17,7 +17,7 @@ public class ScrollComponent extends ObjectComponent {
     private ColorObject selectedScrollColor = new ColorObject("rgb(160,160,160)");
     private double shift = 0;
     private double value = 0;
-    private int scrollSize = 28;
+    private int scrollSize = 2;
     private boolean selected = false;
     private boolean horizontal = false;
 
@@ -94,7 +94,11 @@ public class ScrollComponent extends ObjectComponent {
         if(!horizontal) {
             scroll.setX(getObject().getX());
             scroll.setSizeX(getObject().getSizeX());
-            scroll.setSizeY(getObject().getSizeY() / (32 - scrollSize));
+            if(scrollSize == 0) {
+                scroll.setSizeY(0);
+            } else {
+                scroll.setSizeY(getObject().getSizeY() / scrollSize);
+            }
             int y = (int) (getObject().getY() + shift);
             value = shift / getObject().getSizeY();
             if(y < getObject().getY()) {
@@ -108,7 +112,11 @@ public class ScrollComponent extends ObjectComponent {
             scroll.setY(y);
         } else {
             scroll.setY(getObject().getY());
-            scroll.setSizeX(getObject().getSizeX() / (32 - scrollSize));
+            if(scrollSize == 0) {
+                scroll.setSizeX(0);
+            } else {
+                scroll.setSizeX(getObject().getSizeX() / scrollSize);
+            }
             scroll.setSizeY(getObject().getSizeY());
             int x = (int) (getObject().getX() + shift);
             value = shift / getObject().getSizeX();
@@ -175,7 +183,7 @@ public class ScrollComponent extends ObjectComponent {
         } else if(value < 0) {
             value = 0;
         }
-        shift += (value - this.value) * getObject().getSizeX() * scrollSize;
+        shift += (value - this.value) * getObject().getSizeX() * (100 - scrollSize);
         this.value = value;
         updatePosition();
     }

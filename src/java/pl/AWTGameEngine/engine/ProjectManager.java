@@ -79,15 +79,17 @@ public class ProjectManager {
             index++;
             buildName =
                     calendar.get(Calendar.DAY_OF_MONTH) + "-" +
-                            (calendar.get(Calendar.MONTH) + 1) + "-" +
-                            calendar.get(Calendar.YEAR) + "-" + index;
+                    (calendar.get(Calendar.MONTH) + 1) + "-" +
+                    calendar.get(Calendar.YEAR) + "-" + index;
         } while(new File(path + "_builds/" + buildName + "/").exists());
         File buildDirectory = new File(path + "_builds/" + buildName + "/");
         buildDirectory.mkdir();
         File outputJar = new File(buildDirectory.getAbsolutePath() + "/output.jar");
-        executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar xf " + jarFile.getAbsolutePath());
-        executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar cmvf META-INF/MANIFEST.MF "
-                + outputJar.getAbsolutePath() + " pl");
+        Logger.log(2, "Unpacking archive...\n" +
+                executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar xf " + jarFile.getAbsolutePath()));
+        Logger.log(2, "Creating output archive...\n" +
+                executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar cmvf META-INF/MANIFEST.MF "
+                + outputJar.getAbsolutePath() + " pl"));
         StringBuilder resources = new StringBuilder();
         File[] directories = projectDirectory.listFiles();
         if(directories != null) {
@@ -98,8 +100,8 @@ public class ProjectManager {
                 }
             }
         }
-        executeCommand("cmd.exe", "cd " + projectDirectory.getAbsolutePath() + " & jar uf " + outputJar.getAbsolutePath()
-                + " " + resources);
+        Logger.log(2, "Copying resources...\n" + executeCommand("cmd.exe", "cd " + projectDirectory.getAbsolutePath() + " & jar uf " + outputJar.getAbsolutePath()
+                + " " + resources));
     }
 
     private String executeCommand(String source, String command) {
