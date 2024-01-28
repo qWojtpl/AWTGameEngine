@@ -27,7 +27,9 @@ public class Editor extends ObjectComponent {
     private Camera screenCamera;
     private Border selectedObjectBorder;
     private FlexComponent filesFlex;
+    private FlexComponent componentsFlex;
     private ScrollCameraBind scrollCameraBind;
+    private ScrollCameraBind objectInfoScroll;
     private TextArea objectNameText;
     private TextArea objectPosX;
     private TextArea objectPosY;
@@ -45,7 +47,9 @@ public class Editor extends ObjectComponent {
         screenPanel = ((PanelComponent) getComponent("panel", PanelComponent.class)).getNestedPanel();
         screenCamera = screenPanel.getCamera();
         filesFlex = (FlexComponent) getComponent("filesFlex", FlexComponent.class);
+        componentsFlex = (FlexComponent) getComponent("componentsFlex", FlexComponent.class);
         scrollCameraBind = (ScrollCameraBind) getComponent("filesScroll", ScrollCameraBind.class);
+        objectInfoScroll = (ScrollCameraBind) getComponent("objectInfoScroll", ScrollCameraBind.class);
         objectNameText = (TextArea) getComponent("objectInfoName", TextArea.class);
         objectNameText.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
         objectNameText.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
@@ -68,7 +72,7 @@ public class Editor extends ObjectComponent {
         objectSizeY.getTextRenderer().setSize(14);
         getWindow().getProjectManager().createProject("project");
         getWindow().getProjectManager().openProject(screenPanel.getParentObject(), "project");
-/*        getWindow().getProjectManager().compileProject();*/
+        getWindow().getProjectManager().compileProject();
         listFiles(null);
     }
 
@@ -95,6 +99,8 @@ public class Editor extends ObjectComponent {
         moveObjectToMouse();
         loadInfoFields();
         scrollCameraBind.setMaxValue(filesFlex.getCalculatedHeight());
+        objectInfoScroll.setMaxValue(componentsFlex.getCalculatedHeight());
+        objectInfoScroll.setWheelSpeed(0.1 / componentsFlex.getObject().getChildren().size());
     }
 
     @Override

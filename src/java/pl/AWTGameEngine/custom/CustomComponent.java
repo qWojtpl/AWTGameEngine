@@ -23,11 +23,11 @@ public class CustomComponent extends ObjectComponent {
         if(getKeyListener().hasPressedKey(68)) {
             getObject().setX(getObject().getX() + 3);
         }
+        onStaticUpdate();
     }
 
     @Override
     public void onStaticUpdate() {
-        onPreUpdate();
         if(getKeyListener().hasPressedKey(75)) {
             getCamera().setZoom(getCamera().getZoom() - 0.25f);
             getKeyListener().releaseKey(75);
