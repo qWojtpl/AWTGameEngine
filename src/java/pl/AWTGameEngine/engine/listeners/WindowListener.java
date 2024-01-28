@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
@@ -25,6 +26,7 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
         WindowsManager.removeWindow(window);
         if(window.equals(WindowsManager.getDefaultWindow())) {
             ResourceManager.clearAudioClips();
+            Logger.log(2, "Stopped app.");
         }
     }
 

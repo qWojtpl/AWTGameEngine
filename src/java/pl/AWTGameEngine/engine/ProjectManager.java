@@ -86,8 +86,8 @@ public class ProjectManager {
         buildDirectory.mkdir();
         File outputJar = new File(buildDirectory.getAbsolutePath() + "/output.jar");
         executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar xf " + jarFile.getAbsolutePath());
-        executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar cvf " + outputJar.getAbsolutePath()
-                + " META-INF pl");
+        executeCommand("cmd.exe", "cd " + binDirectory.getAbsolutePath() + " & jar cmvf META-INF/MANIFEST.MF "
+                + outputJar.getAbsolutePath() + " pl");
         StringBuilder resources = new StringBuilder();
         File[] directories = projectDirectory.listFiles();
         if(directories != null) {
@@ -98,7 +98,7 @@ public class ProjectManager {
                 }
             }
         }
-        executeCommand("cmd.exe", "cd " + projectDirectory.getAbsolutePath() + " & jar -uf " + outputJar.getAbsolutePath()
+        executeCommand("cmd.exe", "cd " + projectDirectory.getAbsolutePath() + " & jar uf " + outputJar.getAbsolutePath()
                 + " " + resources);
     }
 
