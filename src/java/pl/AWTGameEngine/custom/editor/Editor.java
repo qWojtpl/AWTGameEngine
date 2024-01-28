@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.File;
+import java.util.Random;
 
 @Unique
 public class Editor extends ObjectComponent {
@@ -36,6 +37,7 @@ public class Editor extends ObjectComponent {
     private TextArea objectSizeX;
     private TextArea objectSizeY;
     private String currentDirectory = "";
+    private final List<GameObject> componentInfoList = new ArrayList<>();
 
     public Editor(GameObject object) {
         super(object);
@@ -200,6 +202,10 @@ public class Editor extends ObjectComponent {
             selectedObjectBorder.getObject().removeComponent(selectedObjectBorder);
             selectedObjectBorder = null;
         }
+        for(GameObject componentObject : componentInfoList) {
+            getScene().removeGameObject(componentObject);
+        }
+        componentInfoList.clear();
         if(object == null) {
             return;
         }
@@ -212,6 +218,16 @@ public class Editor extends ObjectComponent {
         selectedObjectBorder = new Border(object);
         selectedObjectBorder.setColor(new ColorObject(Color.RED));
         objectNameText.setText(object.getIdentifier());
+        for(ObjectComponent component : object.getComponents()) {
+            GameObject componentGameObject = getScene().createGameObject("@componentObject-" + System.nanoTime());
+            componentGameObject.setX(10);
+            componentGameObject.setY(210);
+            componentGameObject.setSize(290, 100);
+            InfoComponent infoComponent = new InfoComponent(componentGameObject, component);
+            componentGameObject.addComponent(infoComponent);
+            componentInfoList.add(componentGameObject);
+            componentGameObject.setParent(componentsFlex.getObject());
+        }
         object.addComponent(selectedObjectBorder);
     }
 

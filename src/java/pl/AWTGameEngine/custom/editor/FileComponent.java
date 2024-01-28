@@ -52,7 +52,7 @@ public class FileComponent extends ObjectComponent {
     public void onMouseClick() {
         if(highlightColor.equals(selectRenderer.getColorObject())) {
             selectRenderer.setColor(normalColor);
-            if(System.nanoTime() - lastClick < Math.pow(10, 9) * 0.25) {
+            if(System.nanoTime() - lastClick < Math.pow(10, 9) * 0.4) {
                 editor.openFile(this);
             }
         } else {
