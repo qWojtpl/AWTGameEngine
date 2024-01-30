@@ -242,6 +242,14 @@ public class GameObject {
         return height;
     }
 
+    public int getChildrenHeight() {
+        int height = 0;
+        for(GameObject child : getChildren()) {
+            height += child.getSizeY();
+        }
+        return height;
+    }
+
     public int getPriority() {
         return this.priority;
     }

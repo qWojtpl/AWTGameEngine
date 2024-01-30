@@ -222,7 +222,7 @@ public class Editor extends ObjectComponent {
             GameObject componentGameObject = getScene().createGameObject("@componentObject-" + System.nanoTime());
             componentGameObject.setX(10);
             componentGameObject.setY(210);
-            componentGameObject.setSize(290, 100);
+            componentGameObject.setSize(290, new Random().nextInt(400) + 100);
             InfoComponent infoComponent = new InfoComponent(componentGameObject, component);
             componentGameObject.addComponent(infoComponent);
             componentInfoList.add(componentGameObject);

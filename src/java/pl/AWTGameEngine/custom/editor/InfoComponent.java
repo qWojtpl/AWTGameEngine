@@ -5,7 +5,7 @@ import pl.AWTGameEngine.objects.GameObject;
 
 public class InfoComponent extends ObjectComponent {
 
-    private ObjectComponent component;
+    private final ObjectComponent component;
     private GameObject componentLine;
     private GameObject iconObject;
     private GameObject textObject;
@@ -52,6 +52,7 @@ public class InfoComponent extends ObjectComponent {
         textRenderer.setText(component.getClass().getSimpleName());
         textObject.addComponent(textRenderer);
         textObject.setParent(getObject());
+
     }
 
     @Override

@@ -4,6 +4,8 @@ import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.GameObject;
 
+import java.util.List;
+
 public class FlexComponent extends ObjectComponent {
 
     private int gapX = 7;
@@ -22,24 +24,41 @@ public class FlexComponent extends ObjectComponent {
             if(object.getSizeX() > maxWidth) {
                 maxWidth = object.getSizeX();
             }
-            if(object.getSizeY() > maxHeight) {
-                maxHeight = object.getSizeY();
-            }
+        }
+        List<GameObject> gameObjects = getObject().getChildren();
+        if(gameObjects.size() == 0) {
+            return;
         }
         maxWidth += gapX;
-        maxHeight += gapY;
         int x = gapX;
         int y = gapY;
-        for(GameObject object : getObject().getChildren()) {
-            if(x > getObject().getSizeX() - maxHeight) {
+        int itemsPerLine = 0;
+        boolean checkItemsPerLine = true;
+        int i = 0;
+        for(GameObject object : gameObjects) {
+            if(x > getObject().getSizeX() - maxWidth) {
                 x = gapX;
-                y += maxHeight;
+                for(int j = i - 1; j < itemsPerLine + i - 1; j++) {
+                    if(gameObjects.size() - 1 < j) {
+                        break;
+                    }
+                    if(gameObjects.get(j).getSizeY() > maxHeight) {
+                        maxHeight = gameObjects.get(j).getSizeY();
+                    }
+                }
+                y += maxHeight + gapY;
+                maxHeight = 0;
+                checkItemsPerLine = false;
             }
             object.setX(getObject().getX() + x);
             object.setY(getObject().getY() + y);
             x += maxWidth;
+            if(checkItemsPerLine) {
+                itemsPerLine++;
+            }
+            i++;
         }
-        calculatedHeight = y;
+        calculatedHeight = getObject().getChildrenHeight() / itemsPerLine;
     }
 
     @Override
