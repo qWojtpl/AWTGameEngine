@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 
+//todo: binding fields
 public class TextArea extends ObjectComponent {
 
     private String text = "Text";
@@ -22,6 +23,7 @@ public class TextArea extends ObjectComponent {
     private int pointerLocation = 0;
     private int selectionStart = -1;
     private int selectionEnd = -1;
+    private String regex = "";
 
     public TextArea(GameObject object) {
         super(object);
@@ -132,6 +134,11 @@ public class TextArea extends ObjectComponent {
             }
             if(i < text.length()) {
                 newText.append(text.charAt(i));
+            }
+        }
+        if(!regex.equals("")) {
+            if(!newText.toString().matches(regex)) {
+                return;
             }
         }
         setText(newText.toString());
@@ -255,6 +262,20 @@ public class TextArea extends ObjectComponent {
         return this.pointerLocation;
     }
 
+    public String getRegex() {
+        return this.regex;
+    }
+
+    @SerializationGetter
+    public String getRegexPattern() {
+        for(RegexPattern pattern : RegexPattern.values()) {
+            if(pattern.getPattern().equals(regex)) {
+                return pattern.name();
+            }
+        }
+        return "NOT_SET";
+    }
+
     @SerializationSetter
     public void setText(String text) {
         this.text = text;
@@ -319,6 +340,37 @@ public class TextArea extends ObjectComponent {
     @SerializationSetter
     public void setBorderColor(String color) {
         setBorderColor(new ColorObject(color));
+    }
+
+    @SerializationSetter
+    public void setRegexPattern(RegexPattern regex) {
+        if(regex == null) {
+            setRegex("");
+            return;
+        }
+        setRegex(regex.getPattern());
+    }
+
+    public void setRegex(String regex) {
+        this.regex = regex;
+    }
+
+    public enum RegexPattern {
+
+        ONLY_NUMBERS("[0-9]*"),
+        ONLY_TEXT("[a-z]*"),
+        NOT_SET("");
+
+        private final String pattern;
+
+        RegexPattern(String pattern) {
+            this.pattern = pattern;
+        }
+
+        public String getPattern() {
+            return this.pattern;
+        }
+
     }
 
 }
