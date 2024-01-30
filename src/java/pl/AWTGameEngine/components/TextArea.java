@@ -342,13 +342,17 @@ public class TextArea extends ObjectComponent {
         setBorderColor(new ColorObject(color));
     }
 
-    @SerializationSetter
     public void setRegexPattern(RegexPattern regex) {
         if(regex == null) {
             setRegex("");
             return;
         }
         setRegex(regex.getPattern());
+    }
+
+    @SerializationSetter
+    public void setRegexPattern(String pattern) {
+        setRegexPattern(RegexPattern.valueOf(pattern));
     }
 
     public void setRegex(String regex) {
