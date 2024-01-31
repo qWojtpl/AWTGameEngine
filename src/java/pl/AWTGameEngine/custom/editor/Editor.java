@@ -69,7 +69,7 @@ public class Editor extends ObjectComponent {
         objectSizeY.getTextRenderer().setSize(14);
         getWindow().getProjectManager().createProject("project");
         getWindow().getProjectManager().openProject(screenPanel.getParentObject(), "project");
-        getWindow().getProjectManager().compileProject();
+        //getWindow().getProjectManager().compileProject();
         listFiles(null);
         new BindableProperty(filesFlex, "calculatedHeight", scrollCameraBind, "maxValue");
         new BindableProperty(componentsFlex, "calculatedHeight", objectInfoScroll, "maxValue");

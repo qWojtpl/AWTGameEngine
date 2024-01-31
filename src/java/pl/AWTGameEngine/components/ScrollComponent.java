@@ -183,6 +183,9 @@ public class ScrollComponent extends ObjectComponent {
         } else if(value < 0) {
             value = 0;
         }
+        if(scrollSize == 0) {
+            return;
+        }
         shift += (value - this.value) * getObject().getSizeX() * (100 - scrollSize);
         this.value = value;
         updatePosition();

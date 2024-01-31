@@ -22,7 +22,7 @@ public class ScrollCameraBind extends ObjectComponent {
     public void onStaticUpdate() {
         for(ObjectComponent component : getObject().getComponentsByClass(ScrollComponent.class)) {
             ScrollComponent scrollComponent = (ScrollComponent) component;
-            scrollComponent.setScrollSize(maxValue / 50);
+            scrollComponent.setScrollSize(maxValue / 100);
             if(getMouseListener().isMouseWheeled()) {
                 int rotation = getMouseListener().getMouseWheelEvent().getWheelRotation();
                 if(rotation < 0) {
