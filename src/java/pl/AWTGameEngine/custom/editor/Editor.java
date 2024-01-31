@@ -230,6 +230,9 @@ public class Editor extends ObjectComponent {
         bindableProperties.clear();
         bindableProperties.add(new BindableProperty(selectedObjectBorder.getObject(), objectPosX, "x", "text"));
         bindableProperties.add(new BindableProperty(objectPosX, selectedObjectBorder.getObject(), "text", "x"));
+        bindableProperties.add(new BindableProperty(selectedObjectBorder.getObject(), objectPosY, "y", "text"));
+        bindableProperties.add(new BindableProperty(objectPosY, selectedObjectBorder.getObject(), "text", "y"));
+        
     }
 
     public void listFiles(String subDirectory) {

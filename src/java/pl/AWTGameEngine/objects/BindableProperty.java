@@ -1,10 +1,13 @@
 package pl.AWTGameEngine.objects;
 
+import pl.AWTGameEngine.annotations.BindingGetter;
+import pl.AWTGameEngine.annotations.BindingSetter;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.engine.BindingsManager;
 import pl.AWTGameEngine.engine.Logger;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 public class BindableProperty {
@@ -29,22 +32,29 @@ public class BindableProperty {
         Method method;
         if(isGetter) {
             method = object.getClass().getMethod("get" + fieldName);
-            if(!method.isAnnotationPresent(SerializationGetter.class)) {
-                throw new Exception("Method doesn't have SerializationGetter annotation.");
+            if(!hasBindingAnnotation(method, true)) {
+                throw new Exception("Method doesn't have BindingGetter or SerializationGetter annotation.");
             }
         } else {
             method = object.getClass().getMethod("set" + fieldName, String.class);
-            if(!method.isAnnotationPresent(SerializationSetter.class)) {
-                throw new Exception("Method doesn't have SerializationSetter annotation.");
+            if(!hasBindingAnnotation(method, false)) {
+                throw new Exception("Method doesn't have BindingSetter or SerializationSetter annotation.");
             }
         }
         return method;
     }
 
+    private boolean hasBindingAnnotation(Method method, boolean getterAnnotation) {
+        if(getterAnnotation) {
+            return method.isAnnotationPresent(BindingGetter.class) || method.isAnnotationPresent(SerializationGetter.class);
+        }
+        return method.isAnnotationPresent(BindingSetter.class) || method.isAnnotationPresent(SerializationSetter.class);
+    }
+
     public String getConnectionString() {
-        return objects[0] + ":" + methods[0] +
+        return objects[0] + ":" + methods[0].getName() +
                 " <-> " +
-                objects[1] + ":" + methods[1];
+                objects[1] + ":" + methods[1].getName();
     }
 
     public Object[] getObjects() {

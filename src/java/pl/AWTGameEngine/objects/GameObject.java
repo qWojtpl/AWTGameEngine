@@ -1,14 +1,11 @@
 package pl.AWTGameEngine.objects;
 
-import pl.AWTGameEngine.annotations.Parentless;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PanelComponent;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.scenes.Scene;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -173,16 +170,17 @@ public class GameObject {
         return this.active;
     }
 
-    @SerializationGetter
+    @BindingGetter
     public int getX() {
         return this.x;
     }
 
-    @SerializationGetter
+    @BindingGetter
     public int getY() {
         return this.y;
     }
 
+    @BindingGetter
     public int getRotation() {
         if(this.parent == null) {
             return this.rotation;
@@ -190,6 +188,7 @@ public class GameObject {
         return this.rotation + this.parent.getRotation();
     }
 
+    @BindingGetter
     public int getCenterX() {
         if(this.parent == null) {
             return getX() + getSizeX() / 2;
@@ -200,6 +199,7 @@ public class GameObject {
         return this.parent.getCenterX();
     }
 
+    @BindingGetter
     public int getCenterY() {
         if(this.parent == null) {
             return getY() + getSizeY() / 2;
@@ -210,14 +210,17 @@ public class GameObject {
         return this.parent.getCenterY();
     }
 
+    @BindingGetter
     public int getSizeX() {
         return this.sizeX;
     }
 
+    @BindingGetter
     public int getSizeY() {
         return this.sizeY;
     }
 
+    @BindingGetter
     public int getWidth() {
         int width = 0;
         for(GameObject object : getChildren()) {
@@ -228,6 +231,7 @@ public class GameObject {
         return width;
     }
 
+    @BindingGetter
     public int getHeight() {
         int height = 0;
         for(GameObject object : getChildren()) {
@@ -245,6 +249,7 @@ public class GameObject {
         return height;
     }
 
+    @BindingGetter
     public int getChildrenHeight() {
         int height = 0;
         for(GameObject child : getChildren()) {
@@ -253,6 +258,7 @@ public class GameObject {
         return height;
     }
 
+    @BindingGetter
     public int getPriority() {
         return this.priority;
     }
@@ -304,7 +310,7 @@ public class GameObject {
         }
     }
 
-    @SerializationSetter
+    @BindingSetter
     public void setX(String x) {
         setX(Integer.parseInt(x));
     }
@@ -317,27 +323,36 @@ public class GameObject {
         }
     }
 
-    @SerializationSetter
+    @BindingSetter
     public void setY(String y) {
         setY(Integer.parseInt(y));
     }
 
-    public boolean setRotation(int angle) {
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#int")) {
-            if(!component.onUpdateRotation(angle)) {
-                return false;
-            }
-        }
+    public void setRotation(int angle) {
         this.rotation = angle;
-        return true;
+    }
+
+    @BindingSetter
+    public void setRotation(String angle) {
+        setRotation(Integer.parseInt(angle));
     }
 
     public void setSizeX(int x) {
         this.sizeX = x;
     }
 
+    @BindingSetter
+    public void setSizeX(String x) {
+        setSizeX(Integer.parseInt(x));
+    }
+
     public void setSizeY(int y) {
         this.sizeY = y;
+    }
+
+    @BindingSetter
+    public void setSizeY(String y) {
+        setSizeY(Integer.parseInt(y));
     }
 
     public void setSize(int x, int y) {
@@ -349,6 +364,11 @@ public class GameObject {
         getScene().removeSortedObject(this.priority, this);
         this.priority = priority;
         getScene().addSortedObject(priority, this);
+    }
+
+    @BindingSetter
+    public void setPriority(String priority) {
+        setPriority(Integer.parseInt(priority));
     }
 
     public void setParent(GameObject parent) {
@@ -441,25 +461,16 @@ public class GameObject {
                 if(split.length < 2) {
                     continue;
                 }
-                try {
-                    this.setX(Integer.parseInt(split[0]));
-                    this.setY(Integer.parseInt(split[1]));
-                } catch(NumberFormatException ignored) {
-                }
+                this.setX(split[0]);
+                this.setY(split[1]);
             } else if(propertyName.equalsIgnoreCase("active")) {
                 if(!Boolean.parseBoolean(properties.get(propertyName))) {
                     this.setActive(false);
                 }
             } else if(propertyName.equalsIgnoreCase("priority")) {
-                try {
-                    this.setPriority(Integer.parseInt(properties.get(propertyName)));
-                } catch(NumberFormatException ignored) {
-                }
+                this.setPriority(properties.get(propertyName));
             } else if(propertyName.equalsIgnoreCase("rotation")) {
-                try {
-                    this.setRotation(Integer.parseInt(properties.get(propertyName)));
-                } catch(NumberFormatException ignored) {
-                }
+                this.setRotation(properties.get(propertyName));
             } else if(propertyName.equalsIgnoreCase("parent")) {
                 GameObject go = scene.getGameObjectByName(properties.get(propertyName));
                 if(go != null) {
@@ -472,11 +483,8 @@ public class GameObject {
                 if(split.length < 2) {
                     continue;
                 }
-                try {
-                    this.setSizeX(Integer.parseInt(split[0]));
-                    this.setSizeY(Integer.parseInt(split[1]));
-                } catch(NumberFormatException ignored) {
-                }
+                this.setSizeX(split[0]);
+                this.setSizeY(split[1]);
             } else if(propertyName.contains(":ObjectComponent")) {
                 String className;
                 if(propertyName.contains(":ObjectComponent-C")) {
