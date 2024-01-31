@@ -3,15 +3,9 @@ package pl.AWTGameEngine.custom.editor;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
 import pl.AWTGameEngine.components.TextArea;
-import pl.AWTGameEngine.engine.DialogManager;
-import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.NestedPanel;
-import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
-import pl.AWTGameEngine.objects.Camera;
-import pl.AWTGameEngine.objects.ColorObject;
-import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.*;
 
 import java.awt.*;
 import java.io.IOException;
@@ -38,6 +32,7 @@ public class Editor extends ObjectComponent {
     private TextArea objectSizeY;
     private String currentDirectory = "";
     private final List<GameObject> componentInfoList = new ArrayList<>();
+    private final List<BindableProperty> bindableProperties = new ArrayList<>();
 
     public Editor(GameObject object) {
         super(object);
@@ -146,7 +141,7 @@ public class Editor extends ObjectComponent {
     }
 
     private void loadInfoFields() {
-        if(selectedObjectBorder != null) {
+        /*if(selectedObjectBorder != null) {
             if(!objectPosX.isFocused()) {
                 objectPosX.setText(selectedObjectBorder.getObject().getX() + "");
             } else {
@@ -187,7 +182,7 @@ public class Editor extends ObjectComponent {
                     selectedObjectBorder.getObject().setSizeY(0);
                 }
             }
-        }
+        }*/
     }
 
     private boolean isAnyTextAreaFocused() {
@@ -229,6 +224,12 @@ public class Editor extends ObjectComponent {
             componentGameObject.setParent(componentsFlex.getObject());
         }
         object.addComponent(selectedObjectBorder);
+        for(BindableProperty bindableProperty : bindableProperties) {
+            BindingsManager.removeBindableProperty(bindableProperty);
+        }
+        bindableProperties.clear();
+        bindableProperties.add(new BindableProperty(selectedObjectBorder.getObject(), objectPosX, "x", "text"));
+        bindableProperties.add(new BindableProperty(objectPosX, selectedObjectBorder.getObject(), "text", "x"));
     }
 
     public void listFiles(String subDirectory) {

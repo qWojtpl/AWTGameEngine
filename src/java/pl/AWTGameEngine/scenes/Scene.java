@@ -185,6 +185,7 @@ public class Scene {
                 component.onAfterUpdate();
             }
         }
+        BindingsManager.updateBindings();
         for(NestedPanel panel : panelRegistry.getPanels()) {
             panel.getMouseListener().refresh();
         }

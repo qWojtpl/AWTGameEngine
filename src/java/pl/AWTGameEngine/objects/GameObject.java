@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.annotations.Parentless;
+import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PanelComponent;
@@ -172,10 +173,12 @@ public class GameObject {
         return this.active;
     }
 
+    @SerializationGetter
     public int getX() {
         return this.x;
     }
 
+    @SerializationGetter
     public int getY() {
         return this.y;
     }
@@ -301,12 +304,22 @@ public class GameObject {
         }
     }
 
+    @SerializationSetter
+    public void setX(String x) {
+        setX(Integer.parseInt(x));
+    }
+
     public void setY(int y) {
         int delta = y - this.y;
         this.y = y;
         for(GameObject go : getChildren()) {
             go.setY(go.getY() + delta);
         }
+    }
+
+    @SerializationSetter
+    public void setY(String y) {
+        setY(Integer.parseInt(y));
     }
 
     public boolean setRotation(int angle) {
