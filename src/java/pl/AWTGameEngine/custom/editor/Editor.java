@@ -71,6 +71,8 @@ public class Editor extends ObjectComponent {
         getWindow().getProjectManager().openProject(screenPanel.getParentObject(), "project");
         getWindow().getProjectManager().compileProject();
         listFiles(null);
+        new BindableProperty(filesFlex, "calculatedHeight", scrollCameraBind, "maxValue");
+        new BindableProperty(componentsFlex, "calculatedHeight", objectInfoScroll, "maxValue");
     }
 
     private ObjectComponent getComponent(String identifier, Class<? extends ObjectComponent> clazz) {
@@ -94,9 +96,6 @@ public class Editor extends ObjectComponent {
     public void onStaticUpdate() {
         updateCameraPosition();
         moveObjectToMouse();
-        loadInfoFields();
-        scrollCameraBind.setMaxValue(filesFlex.getCalculatedHeight());
-        objectInfoScroll.setMaxValue(componentsFlex.getCalculatedHeight());
         objectInfoScroll.setWheelSpeed(0.1 / componentsFlex.getObject().getChildren().size());
     }
 
@@ -140,51 +139,6 @@ public class Editor extends ObjectComponent {
         selectedObjectBorder.getObject().setY(mouseListener.getMouseY());
     }
 
-    private void loadInfoFields() {
-        /*if(selectedObjectBorder != null) {
-            if(!objectPosX.isFocused()) {
-                objectPosX.setText(selectedObjectBorder.getObject().getX() + "");
-            } else {
-                try {
-                    selectedObjectBorder.getObject().setX(Integer.parseInt(objectPosX.getText()));
-                } catch(Exception e) {
-                    objectPosX.setText("0");
-                    selectedObjectBorder.getObject().setX(0);
-                }
-            }
-            if(!objectPosY.isFocused()) {
-                objectPosY.setText(selectedObjectBorder.getObject().getY() + "");
-            } else {
-                try {
-                    selectedObjectBorder.getObject().setY(Integer.parseInt(objectPosY.getText()));
-                } catch(Exception e) {
-                    objectPosY.setText("0");
-                    selectedObjectBorder.getObject().setY(0);
-                }
-            }
-            if(!objectSizeX.isFocused()) {
-                objectSizeX.setText(selectedObjectBorder.getObject().getSizeX() + "");
-            } else {
-                try {
-                    selectedObjectBorder.getObject().setSizeX(Integer.parseInt(objectSizeX.getText()));
-                } catch(Exception e) {
-                    objectSizeX.setText("0");
-                    selectedObjectBorder.getObject().setSizeX(0);
-                }
-            }
-            if(!objectSizeY.isFocused()) {
-                objectSizeY.setText(selectedObjectBorder.getObject().getSizeY() + "");
-            } else {
-                try {
-                    selectedObjectBorder.getObject().setSizeY(Integer.parseInt(objectSizeY.getText()));
-                } catch(Exception e) {
-                    objectSizeY.setText("0");
-                    selectedObjectBorder.getObject().setSizeY(0);
-                }
-            }
-        }*/
-    }
-
     private boolean isAnyTextAreaFocused() {
         return  objectPosX.isFocused() ||
                 objectPosY.isFocused() ||
@@ -224,15 +178,29 @@ public class Editor extends ObjectComponent {
             componentGameObject.setParent(componentsFlex.getObject());
         }
         object.addComponent(selectedObjectBorder);
+        registerBindings();
+    }
+
+    public void registerBindings() {
         for(BindableProperty bindableProperty : bindableProperties) {
             BindingsManager.removeBindableProperty(bindableProperty);
         }
+        GameObject selectedObject = getSelectedObject();
+        if(selectedObject == null) {
+            return;
+        }
         bindableProperties.clear();
-        bindableProperties.add(new BindableProperty(selectedObjectBorder.getObject(), objectPosX, "x", "text"));
-        bindableProperties.add(new BindableProperty(objectPosX, selectedObjectBorder.getObject(), "text", "x"));
-        bindableProperties.add(new BindableProperty(selectedObjectBorder.getObject(), objectPosY, "y", "text"));
-        bindableProperties.add(new BindableProperty(objectPosY, selectedObjectBorder.getObject(), "text", "y"));
-        
+        // Firstly you need to put position to TextArea
+        // when TextArea is focused, then bindings locks,
+        // so putting text to method should be at second position
+        bindableProperties.add(new BindableProperty(selectedObject, "x", objectPosX, "text"));
+        bindableProperties.add(new BindableProperty(objectPosX, "text", selectedObject, "x"));
+        bindableProperties.add(new BindableProperty(selectedObject, "y", objectPosY, "text"));
+        bindableProperties.add(new BindableProperty(objectPosY, "text", selectedObject, "y"));
+        bindableProperties.add(new BindableProperty(selectedObject, "sizeX", objectSizeX, "text"));
+        bindableProperties.add(new BindableProperty(objectSizeX, "text", selectedObject, "sizeX"));
+        bindableProperties.add(new BindableProperty(selectedObject, "sizeY", objectSizeY, "text"));
+        bindableProperties.add(new BindableProperty(objectSizeY, "text", selectedObject, "sizeY"));
     }
 
     public void listFiles(String subDirectory) {

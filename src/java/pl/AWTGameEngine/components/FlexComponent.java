@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.BindingGetter;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.objects.GameObject;
@@ -76,6 +77,7 @@ public class FlexComponent extends ObjectComponent {
         return this.gapY;
     }
 
+    @BindingGetter
     public int getCalculatedHeight() {
         return this.calculatedHeight;
     }

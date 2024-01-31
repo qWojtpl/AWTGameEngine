@@ -15,12 +15,12 @@ public class BindableProperty {
     private final Object[] objects = new Object[2];
     private final Method[] methods = new Method[2];
 
-    public BindableProperty(Object object1, Object object2, String serializationField1, String serializationField2) {
-        objects[0] = object1;
-        objects[1] = object2;
+    public BindableProperty(Object from, String fromField, Object to, String toField) {
+        objects[0] = from;
+        objects[1] = to;
         try {
-            methods[0] = getMethodClass(object1, serializationField1, true);
-            methods[1] = getMethodClass(object2, serializationField2, false);
+            methods[0] = getMethodClass(from, fromField, true);
+            methods[1] = getMethodClass(to, toField, false);
             BindingsManager.addBindableProperty(this);
         } catch(Exception e) {
             Logger.log("Cannot bind properties: " + getConnectionString(), e);
@@ -31,7 +31,7 @@ public class BindableProperty {
         String fieldName = field.substring(0, 1).toUpperCase() + field.substring(1);
         Method method;
         if(isGetter) {
-            method = object.getClass().getMethod("get" + fieldName);
+            method = object.getClass().getDeclaredMethod("get" + fieldName);
             if(!hasBindingAnnotation(method, true)) {
                 throw new Exception("Method doesn't have BindingGetter or SerializationGetter annotation.");
             }
