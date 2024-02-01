@@ -103,6 +103,7 @@ public class Scene {
         object.setParent(null);
         gameObjects.remove(object.getIdentifier());
         removeSortedObject(object.getPriority(), object);
+        BindingsManager.removeBindingsByOwner(object);
         for(GameObject obj : getActiveGameObjects()) {
             if(obj.equals(object)) {
                 continue;

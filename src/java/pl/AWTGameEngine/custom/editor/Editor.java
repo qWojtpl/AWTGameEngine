@@ -47,32 +47,17 @@ public class Editor extends ObjectComponent {
         componentsFlex = (FlexComponent) getComponent("componentsFlex", FlexComponent.class);
         scrollCameraBind = (ScrollCameraBind) getComponent("filesScroll", ScrollCameraBind.class);
         objectInfoScroll = (ScrollCameraBind) getComponent("objectInfoScroll", ScrollCameraBind.class);
-        objectNameText = (TextArea) getComponent("objectInfoName", TextArea.class);
-        objectNameText.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
-        objectNameText.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
-        objectNameText.getTextRenderer().setSize(18);
-        objectPosX = (TextArea) getComponent("objectInfoPosX", TextArea.class);
-        objectPosX.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
-        objectPosX.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
-        objectPosX.getTextRenderer().setSize(14);
-        objectPosY = (TextArea) getComponent("objectInfoPosY", TextArea.class);
-        objectPosY.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
-        objectPosY.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
-        objectPosY.getTextRenderer().setSize(14);
-        objectSizeX = (TextArea) getComponent("objectInfoSizeX", TextArea.class);
-        objectSizeX.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
-        objectSizeX.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
-        objectSizeX.getTextRenderer().setSize(14);
-        objectSizeY = (TextArea) getComponent("objectInfoSizeY", TextArea.class);
-        objectSizeY.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
-        objectSizeY.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
-        objectSizeY.getTextRenderer().setSize(14);
+        objectNameText = initTextArea("objectInfoName", 18);
+        objectPosX = initTextArea("objectInfoPosX", 14);
+        objectPosY = initTextArea("objectInfoPosY", 14);
+        objectSizeX = initTextArea("objectInfoSizeX", 14);
+        objectSizeY = initTextArea("objectInfoSizeY", 14);
         getWindow().getProjectManager().createProject("project");
         getWindow().getProjectManager().openProject(screenPanel.getParentObject(), "project");
         //getWindow().getProjectManager().compileProject();
         listFiles(null);
-        new BindableProperty(filesFlex, "calculatedHeight", scrollCameraBind, "maxValue");
-        new BindableProperty(componentsFlex, "calculatedHeight", objectInfoScroll, "maxValue");
+        new BindableProperty(this, filesFlex, "calculatedHeight", scrollCameraBind, "maxValue");
+        new BindableProperty(this, componentsFlex, "calculatedHeight", objectInfoScroll, "maxValue");
     }
 
     private ObjectComponent getComponent(String identifier, Class<? extends ObjectComponent> clazz) {
@@ -107,6 +92,14 @@ public class Editor extends ObjectComponent {
             }
         }
         selectObject(object);
+    }
+
+    private TextArea initTextArea(String identifier, int size) {
+        TextArea textArea = (TextArea) getComponent(identifier, TextArea.class);
+        textArea.getTextRenderer().align(TextRenderer.HorizontalAlign.RIGHT);
+        textArea.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
+        textArea.getTextRenderer().setSize(size);
+        return textArea;
     }
 
     private void updateCameraPosition() {
@@ -193,14 +186,14 @@ public class Editor extends ObjectComponent {
         // Firstly you need to put position to TextArea
         // when TextArea is focused, then bindings locks,
         // so putting text to method should be at second position
-        bindableProperties.add(new BindableProperty(selectedObject, "x", objectPosX, "text"));
-        bindableProperties.add(new BindableProperty(objectPosX, "text", selectedObject, "x"));
-        bindableProperties.add(new BindableProperty(selectedObject, "y", objectPosY, "text"));
-        bindableProperties.add(new BindableProperty(objectPosY, "text", selectedObject, "y"));
-        bindableProperties.add(new BindableProperty(selectedObject, "sizeX", objectSizeX, "text"));
-        bindableProperties.add(new BindableProperty(objectSizeX, "text", selectedObject, "sizeX"));
-        bindableProperties.add(new BindableProperty(selectedObject, "sizeY", objectSizeY, "text"));
-        bindableProperties.add(new BindableProperty(objectSizeY, "text", selectedObject, "sizeY"));
+        bindableProperties.add(new BindableProperty(this, selectedObject, "x", objectPosX, "text"));
+        bindableProperties.add(new BindableProperty(this, objectPosX, "text", selectedObject, "x"));
+        bindableProperties.add(new BindableProperty(this, selectedObject, "y", objectPosY, "text"));
+        bindableProperties.add(new BindableProperty(this, objectPosY, "text", selectedObject, "y"));
+        bindableProperties.add(new BindableProperty(this, selectedObject, "sizeX", objectSizeX, "text"));
+        bindableProperties.add(new BindableProperty(this, objectSizeX, "text", selectedObject, "sizeX"));
+        bindableProperties.add(new BindableProperty(this, selectedObject, "sizeY", objectSizeY, "text"));
+        bindableProperties.add(new BindableProperty(this, objectSizeY, "text", selectedObject, "sizeY"));
     }
 
     public void listFiles(String subDirectory) {

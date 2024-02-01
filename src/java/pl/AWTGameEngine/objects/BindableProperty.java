@@ -12,10 +12,12 @@ import java.lang.reflect.Method;
 
 public class BindableProperty {
 
+    private final Object owner;
     private final Object[] objects = new Object[2];
     private final Method[] methods = new Method[2];
 
-    public BindableProperty(Object from, String fromField, Object to, String toField) {
+    public BindableProperty(Object owner, Object from, String fromField, Object to, String toField) {
+        this.owner = owner;
         objects[0] = from;
         objects[1] = to;
         try {
@@ -55,6 +57,10 @@ public class BindableProperty {
         return objects[0] + ":" + methods[0].getName() +
                 " <-> " +
                 objects[1] + ":" + methods[1].getName();
+    }
+
+    public Object getOwner() {
+        return this.owner;
     }
 
     public Object[] getObjects() {

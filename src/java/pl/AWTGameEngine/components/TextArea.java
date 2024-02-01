@@ -289,6 +289,9 @@ public class TextArea extends ObjectComponent {
             backgroundDisabled.getColorObject().transientAlpha(0, 100);
         }
         this.disabled = disabled;
+        if(disabled) {
+            focused = false;
+        }
     }
 
     @SerializationSetter

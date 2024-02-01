@@ -22,6 +22,14 @@ public class BindingsManager {
         bindableProperties.remove(bindableProperty);
     }
 
+    public static void removeBindingsByOwner(Object owner) {
+        for(BindableProperty property : getBindableProperties()) {
+            if(property.getOwner().equals(owner)) {
+                removeBindableProperty(property);
+            }
+        }
+    }
+
     public static List<BindableProperty> getBindableProperties() {
         return new ArrayList<>(bindableProperties);
     }
