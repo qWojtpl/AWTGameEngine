@@ -140,6 +140,7 @@ public class Editor extends ObjectComponent {
     }
 
     private void selectObject(GameObject object) {
+        removeBindings();
         if(selectedObjectBorder != null) {
             selectedObjectBorder.getObject().removeComponent(selectedObjectBorder);
             selectedObjectBorder = null;
@@ -174,10 +175,7 @@ public class Editor extends ObjectComponent {
         registerBindings();
     }
 
-    public void registerBindings() {
-        for(BindableProperty bindableProperty : bindableProperties) {
-            BindingsManager.removeBindableProperty(bindableProperty);
-        }
+    private void registerBindings() {
         GameObject selectedObject = getSelectedObject();
         if(selectedObject == null) {
             return;
@@ -194,6 +192,12 @@ public class Editor extends ObjectComponent {
         bindableProperties.add(new BindableProperty(this, objectSizeX, "text", selectedObject, "sizeX"));
         bindableProperties.add(new BindableProperty(this, selectedObject, "sizeY", objectSizeY, "text"));
         bindableProperties.add(new BindableProperty(this, objectSizeY, "text", selectedObject, "sizeY"));
+    }
+
+    private void removeBindings() {
+        for(BindableProperty bindableProperty : bindableProperties) {
+            BindingsManager.removeBindableProperty(bindableProperty);
+        }
     }
 
     public void listFiles(String subDirectory) {

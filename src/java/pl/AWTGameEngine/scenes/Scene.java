@@ -94,8 +94,10 @@ public class Scene {
         if(object == null) {
             return;
         }
-        for(ObjectComponent component : object.getComponents()) {
-            object.removeComponent(component);
+        if(object.isActive()) {
+            for(ObjectComponent component : object.getComponents()) {
+                object.removeComponent(component);
+            }
         }
         for(GameObject child : object.getChildren()) {
             child.setParent(object.getParent());
@@ -162,12 +164,9 @@ public class Scene {
     }
 
     public void removeAllObjects() {
-        for(GameObject object : getActiveGameObjects()) {
-            for(ObjectComponent component : object.getComponents()) {
-                component.onRemoveComponent();
-            }
+        for(GameObject object : getGameObjects()) {
+            removeGameObject(object);
         }
-        gameObjects.clear();
     }
 
     public void update() {

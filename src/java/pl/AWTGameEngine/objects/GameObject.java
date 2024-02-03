@@ -120,9 +120,9 @@ public class GameObject {
                 "pos{" + getX() + ";" + getY() + "}" +
                 "size{" + getSizeX() + ";" + getSizeY() + "}" +
                 "priority{" + getPriority() + "}" +
-                "active{" + isActive() + "}" +
-                "rotation{" + getRotation() + "}" + (getParent() != null ?
-                "parent{" + getParent().getIdentifier() + "}" : ""));
+                (isActive() ? "" : "active{false}") +
+                (getRotation() == 0 ? "" : "rotation{" + getRotation() + "}") +
+                (getParent() != null ? "parent{" + getParent().getIdentifier() + "}" : ""));
         for(String componentName : data.keySet()) {
             serializeString.append(componentName);
             serializeString.append("{");
