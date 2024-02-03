@@ -111,6 +111,54 @@ public class GameObject {
         }
     }
 
+    public void moveX(int x) {
+        int delta = x - this.x;
+        if(delta == 0) {
+            return;
+        }
+        int direction = delta < 0 ? -1 : 1;
+        for(int i = 0; i < Math.abs(delta); i++) {
+            if(tryMoveX(direction * 2)) {
+                setX(x + direction);
+                continue;
+            }
+            return;
+        }
+    }
+
+    private boolean tryMoveX(int direction) {
+        for(ObjectComponent component : getComponents()) {
+            if(!component.onUpdatePosition(this.x + direction, this.y)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void moveY(int y) {
+        int delta = y - this.y;
+        if(delta == 0) {
+            return;
+        }
+        int direction = delta < 0 ? -1 : 1;
+        for(int i = 0; i < Math.abs(delta); i++) {
+            if(tryMoveY(direction * 2)) {
+                setY(y + direction);
+                continue;
+            }
+            return;
+        }
+    }
+
+    private boolean tryMoveY(int direction) {
+        for(ObjectComponent component : getComponents()) {
+            if(!component.onUpdatePosition(this.x, this.y + direction)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public String getSerializeString() {
         return getSerializeString(serializeComponents());
     }

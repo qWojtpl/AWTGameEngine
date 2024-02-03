@@ -1,7 +1,5 @@
 package pl.AWTGameEngine.objects;
 
-import sun.audio.AudioStream;
-
 import javax.sound.sampled.AudioInputStream;
 
 public class AudioClip {

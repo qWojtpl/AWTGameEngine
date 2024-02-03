@@ -11,18 +11,6 @@ public class CustomComponent extends ObjectComponent {
 
     @Override
     public void onPreUpdate() {
-        if(getKeyListener().hasPressedKey(87)) {
-            getObject().setY(getObject().getY() - 3);
-        }
-        if(getKeyListener().hasPressedKey(83)) {
-            getObject().setY(getObject().getY() + 3);
-        }
-        if(getKeyListener().hasPressedKey(65)) {
-            getObject().setX(getObject().getX() - 3);
-        }
-        if(getKeyListener().hasPressedKey(68)) {
-            getObject().setX(getObject().getX() + 3);
-        }
         onStaticUpdate();
     }
 
@@ -40,6 +28,18 @@ public class CustomComponent extends ObjectComponent {
             getSceneLoader().loadSceneFile("scenes/main.scene");
             //getScene().saveSceneState("./savedscene.scene");
             getKeyListener().releaseKey(82);
+        }
+        if(getKeyListener().hasPressedKey(87)) {
+            getObject().moveY(getObject().getY() - 3);
+        }
+        if(getKeyListener().hasPressedKey(83)) {
+            getObject().moveY(getObject().getY() + 3);
+        }
+        if(getKeyListener().hasPressedKey(65)) {
+            getObject().moveX(getObject().getX() - 3);
+        }
+        if(getKeyListener().hasPressedKey(68)) {
+            getObject().moveX(getObject().getX() + 3);
         }
         getObject().setRotation(getObject().getRotation() + 1);
     }

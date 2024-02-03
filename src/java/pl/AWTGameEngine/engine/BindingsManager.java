@@ -35,7 +35,7 @@ public class BindingsManager {
     }
 
     public static void updateBindings() {
-        for(BindableProperty property : bindableProperties) {
+        for(BindableProperty property : getBindableProperties()) {
             try {
                 String result = String.valueOf(property.getMethods()[0].invoke(property.getObjects()[0]));
                 if(property.getObjects()[1] instanceof TextArea) {

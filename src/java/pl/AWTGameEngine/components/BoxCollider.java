@@ -19,7 +19,7 @@ public class BoxCollider extends Collider {
 
     @Override
     public void onAddComponent() {
-        calculatePoints(getObject().getRotation());
+        calculatePoints(getObject().getX(), getObject().getY(), getObject().getRotation());
         getColliderRegistry().registerCollider(this);
     }
 
@@ -34,10 +34,10 @@ public class BoxCollider extends Collider {
             return;
         }
         g.drawRect(
-                getCamera().parseX(getObject(), getObject().getX() + x),
-                getCamera().parseY(getObject(), getObject().getY() + y),
-                getCamera().parseScale(getObject().getSizeX() + sizeX),
-                getCamera().parseScale(getObject().getSizeY() + sizeY),
+                getCamera().parseX(getObject(), getObject().getX() + x - 1),
+                getCamera().parseY(getObject(), getObject().getY() + y - 1),
+                getCamera().parseScale(getObject().getSizeX() + sizeX + 1),
+                getCamera().parseScale(getObject().getSizeY() + sizeY + 1),
                 new GraphicsManager.RenderOptions()
                         .setColor(visualizeColor.getColor())
                         .setRotation(getObject().getRotation())
@@ -48,13 +48,13 @@ public class BoxCollider extends Collider {
 
     @Override
     public boolean onUpdatePosition(int newX, int newY) {
-        calculatePoints(getObject().getRotation());
+        calculatePoints(newX, newY, getObject().getRotation());
         return !getColliderRegistry().isColliding(getObject(), this, newX, newY);
     }
 
     @Override
     public boolean onUpdateRotation(int newRotation) {
-        calculatePoints(newRotation);
+        calculatePoints(getObject().getX(), getObject().getY(), newRotation);
         return true;
     }
 
@@ -62,20 +62,20 @@ public class BoxCollider extends Collider {
      Method source:
      <a href="https://gamedev.stackexchange.com/questions/86755/how-to-calculate-corner-positions-marks-of-a-rotated-tilted-rectangle">StackExchange</a>
      */
-    public void calculatePoints(int rotation) {
+    public void calculatePoints(int objX, int objY, int rotation) {
         int[] fixedX = new int[]{0, getObject().getSizeX() + sizeX, getObject().getSizeX() + sizeX, 0};
         int[] fixedY = new int[]{0, 0, getObject().getSizeY() + sizeY, getObject().getSizeY() + sizeY};
         pointsX = new ArrayList<>();
         pointsY = new ArrayList<>();
         path = new Path2D.Double();
         for(int i = 0; i < 4; i++) {
-            int tempX = getObject().getX() + x + fixedX[i] - getObject().getCenterX() - x - sizeX / 2;
-            int tempY = getObject().getY() + y + fixedY[i] - getObject().getCenterY() - y - sizeY / 2;
+            int tempX = objX + x + fixedX[i] - (objX + getObject().getSizeX() / 2) - x - sizeX / 2;
+            int tempY = objY + y + fixedY[i] - (objY + getObject().getSizeY() / 2) - y - sizeY / 2;
             double theta = Math.toRadians(rotation);
-            int rotatedX = (int) (tempX * Math.cos(theta) - tempY * Math.sin(theta));
-            int rotatedY = (int) (tempX * Math.sin(theta) + tempY * Math.cos(theta));
-            int xP = rotatedX + getObject().getCenterX() + x + sizeX / 2;
-            int yP = rotatedY + getObject().getCenterY() + y + sizeY / 2;
+            int rotatedX = (int) Math.round(tempX * Math.cos(theta) - tempY * Math.sin(theta));
+            int rotatedY = (int) Math.round(tempX * Math.sin(theta) + tempY * Math.cos(theta));
+            int xP = rotatedX + (objX + getObject().getSizeX() / 2) + x + sizeX / 2;
+            int yP = rotatedY + (objY + getObject().getSizeY() / 2) + y + sizeY / 2;
             pointsX.add(xP);
             pointsY.add(yP);
             if(i == 0) {
