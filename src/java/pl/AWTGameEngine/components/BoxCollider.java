@@ -34,10 +34,10 @@ public class BoxCollider extends Collider {
             return;
         }
         g.drawRect(
-                getCamera().parseX(getObject(), getObject().getX() + x - 1),
-                getCamera().parseY(getObject(), getObject().getY() + y - 1),
-                getCamera().parseScale(getObject().getSizeX() + sizeX + 1),
-                getCamera().parseScale(getObject().getSizeY() + sizeY + 1),
+                getCamera().parseX(getObject(), getObject().getX() + x),
+                getCamera().parseY(getObject(), getObject().getY() + y),
+                getCamera().parseScale(getObject().getSizeX() + sizeX),
+                getCamera().parseScale(getObject().getSizeY() + sizeY),
                 new GraphicsManager.RenderOptions()
                         .setColor(visualizeColor.getColor())
                         .setRotation(getObject().getRotation())
@@ -55,7 +55,7 @@ public class BoxCollider extends Collider {
     @Override
     public boolean onUpdateRotation(int newRotation) {
         calculatePoints(getObject().getX(), getObject().getY(), newRotation);
-        return true;
+        return !getColliderRegistry().isColliding(getObject(), this, getObject().getX(), getObject().getY());
     }
 
     /**

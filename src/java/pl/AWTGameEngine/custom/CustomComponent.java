@@ -41,7 +41,7 @@ public class CustomComponent extends ObjectComponent {
         if(getKeyListener().hasPressedKey(68)) {
             getObject().moveX(getObject().getX() + 3);
         }
-        getObject().setRotation(getObject().getRotation() + 1);
+        getObject().rotate(getObject().getRotation() + 1);
     }
 
     @Override

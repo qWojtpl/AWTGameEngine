@@ -49,6 +49,9 @@ public class NestedPanel extends JPanel {
         List<GameObject> renderList = new ArrayList<>();
         for(int i : sortedObjects.keySet()) {
             for(GameObject go : sortedObjects.get(i)) {
+                if(!go.isActive()) {
+                    continue;
+                }
                 if(this.equals(go.getPanel())) {
                     renderList.add(go);
                     go.preRender(graphicsManager);

@@ -37,6 +37,9 @@ public class ColliderRegistry {
             if(!c.getObject().getPanel().equals(object.getPanel())) {
                 continue;
             }
+            if(!c.getObject().isActive()) {
+                continue;
+            }
             if(colliderComponents.contains(c)) {
                 continue;
             }

@@ -118,8 +118,8 @@ public class GameObject {
         }
         int direction = delta < 0 ? -1 : 1;
         for(int i = 0; i < Math.abs(delta); i++) {
-            if(tryMoveX(direction * 2)) {
-                setX(x + direction);
+            if(tryMoveX(direction)) {
+                setX(this.x + direction);
                 continue;
             }
             return;
@@ -142,8 +142,8 @@ public class GameObject {
         }
         int direction = delta < 0 ? -1 : 1;
         for(int i = 0; i < Math.abs(delta); i++) {
-            if(tryMoveY(direction * 2)) {
-                setY(y + direction);
+            if(tryMoveY(direction)) {
+                setY(this.y + direction);
                 continue;
             }
             return;
@@ -153,6 +153,30 @@ public class GameObject {
     private boolean tryMoveY(int direction) {
         for(ObjectComponent component : getComponents()) {
             if(!component.onUpdatePosition(this.x, this.y + direction)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void rotate(int angle) {
+        int delta = angle - this.rotation;
+        if(delta == 0) {
+            return;
+        }
+        int direction = delta < 0 ? -1 : 1;
+        for(int i = 0; i < Math.abs(delta); i++) {
+            if(tryRotate(direction)) {
+                setRotation(this.rotation + direction);
+                continue;
+            }
+            return;
+        }
+    }
+
+    private boolean tryRotate(int direction) {
+        for(ObjectComponent component : getComponents()) {
+            if(!component.onUpdateRotation(this.rotation + direction)) {
                 return false;
             }
         }
