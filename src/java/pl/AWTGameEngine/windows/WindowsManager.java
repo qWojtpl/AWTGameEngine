@@ -26,14 +26,13 @@ public class WindowsManager {
 
     public static Window createWindow(String scenePath) {
         Properties customProperties = AppProperties.getCustomProperties(SceneLoader.getScenePropertiesPath(scenePath));
+        boolean fullScreen;
         if(customProperties != null) {
-            if(Boolean.parseBoolean(AppProperties.getProperty("fullscreen", customProperties))) {
-                return createWindow(scenePath, true);
-            } else {
-                return createWindow(scenePath, false);
-            }
+            fullScreen = AppProperties.getPropertyAsBoolean("fullscreen", customProperties);
+        } else {
+            fullScreen = AppProperties.getPropertyAsBoolean("fullscreen");
         }
-        return createWindow(scenePath, Boolean.parseBoolean(AppProperties.getProperty("fullscreen")));
+        return createWindow(scenePath, fullScreen);
     }
 
     public static Window createWindow(String scenePath, boolean fullScreen) {
@@ -53,8 +52,9 @@ public class WindowsManager {
 
         if(fullScreen) {
             window.setFullScreen(true);
-            window.setExtendedState(JFrame.MAXIMIZED_BOTH);
             window.setUndecorated(true);
+            GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            device.setFullScreenWindow(window);
         }
 
         window.setWindowListener(new WindowListener(window));

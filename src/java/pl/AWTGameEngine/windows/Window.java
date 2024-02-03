@@ -110,7 +110,7 @@ public class Window extends JFrame {
         }
         this.panel = new NestedPanel(this);
         add(panel);
-        panel.setPreferredSize(new Dimension((int) (WIDTH * multiplier), (int) (HEIGHT * multiplier)));
+        panel.setPreferredSize(new Dimension((int) (WIDTH * multiplier) - 1, (int) (HEIGHT * multiplier)));
         pack();
         setKeyListener(new KeyListener(this));
     }
