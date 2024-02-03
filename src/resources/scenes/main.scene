@@ -31,4 +31,4 @@ filesFlex="pos{10;0}size{630;180}parent{filesPanel}FlexComponent:ObjectComponent
 filesBackground="pos{0;0}size{640;180}parent{filesPanel}BlankRenderer:ObjectComponent{color^rgb(37,37,37)^}Canvas:ObjectComponent{}";
 filesScroll="pos{0;0}size{10;180}parent{filesPanel}ScrollComponent:ObjectComponent{}Canvas:ObjectComponent{}ScrollCameraBind:ObjectComponent{}";
 
-@editor="pos{0;0}size{0;0}editor.Editor:ObjectComponent-C{}";
+@editor="pos{0;0}size{0;0}pl.AWTGameEngine.custom.editor.Editor:ObjectComponent-C{}";

@@ -489,9 +489,9 @@ public class GameObject {
             } else if(propertyName.contains(":ObjectComponent")) {
                 String className;
                 if(propertyName.contains(":ObjectComponent-C")) {
-                    className = "custom." + propertyName.replace(":ObjectComponent-C", "");
+                    className = propertyName.replace(":ObjectComponent-C", "");
                 } else {
-                    className = "components." + propertyName.replace(":ObjectComponent", "");
+                    className = "pl.AWTGameEngine.components." + propertyName.replace(":ObjectComponent", "");
                 }
                 LinkedHashMap<String, String> fields = new LinkedHashMap<>();
                 String property = properties.get(propertyName);
@@ -517,7 +517,7 @@ public class GameObject {
                 }
                 try {
                     className = className.replace("~", "");
-                    Class<? extends ObjectComponent> clazz = Class.forName("pl.AWTGameEngine." + className)
+                    Class<? extends ObjectComponent> clazz = Class.forName(className)
                             .asSubclass(ObjectComponent.class);
                     ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(this);
                     for(String fieldName : fields.keySet()) {
