@@ -1,126 +1,72 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Unique
 public class PhysicsBody extends ObjectComponent {
 
-/*
-    private double forceX = 0;
-    private double forceY = 0;
-    private double mass = 1;
-    private final List<GameObject> lastObjects = new ArrayList<>();
-    private int i = 0;
-*/
+    private Vector vector = new Vector(0, 0);
+    private double mass = 20;
+
     public PhysicsBody(GameObject object) {
         super(object);
     }
-/*
+
     @Override
-    public void onStaticUpdate() {
-        onUpdate();
-        //push(0, 16);
+    public void onAddComponent() {
+
     }
 
     @Override
-    public void onCollide(GameObject object) {
-        if(lastObjects.contains(object)) {
-            return;
+    public void onPreUpdate() {
+        push(new Vector(0, 1));
+        if(vector.getX() != 0) {
+            getObject().moveX(getObject().getX() + subtractVectorX());
         }
-        List<ObjectComponent> components = object.getComponentsByClass(PhysicsBody.class);
-        if(components.size() == 0) {
-            return;
+        if(vector.getY() != 0) {
+            getObject().moveY(getObject().getY() + subtractVectorY());
         }
-        lastObjects.add(object);
-        PhysicsBody body = (PhysicsBody) components.get(0);
-        body.push(forceX / 8, forceY / 8);
     }
 
     @Override
-    public void onUpdate() {
-        updateX();
-        updateY();
-        i++;
-        if(i == 2) {
-            i = 0;
-            lastObjects.clear();
-        }
+    public void onStaticUpdate() {
+        onPreUpdate();
     }
 
-    private void updateX() {
-        if(forceX == 0) {
-            return;
-        }
-        int move = (int) Math.floor(forceX / 8 / mass);
-        if(forceX > 0) {
-            if(!getObject().setX(getObject().getX() + move)) {
-                forceX = (int) (forceX / 2);
-                forceX = -forceX;
-            } else {
-                forceX -= 1;
-            }
-        } else if(forceX < 0) {
-            if(!getObject().setX(getObject().getX() + move)) {
-                forceX = (int) (forceX / 2);
-                forceX = -forceX;
-            } else {
-                forceX += 1;
+    @Override
+    public void onCollide(GameObject collider) {
+        if(collider.hasComponent(PhysicsBody.class)) {
+            for(ObjectComponent component : collider.getComponentsByClass(PhysicsBody.class)) {
+                PhysicsBody physicsBody = (PhysicsBody) component;
+                physicsBody.push(new Vector(vector.getX() / 2, vector.getY() / 2));
             }
         }
+        vector = new Vector(-vector.getX() / 2, -vector.getY() / 2);
     }
 
-    private void updateY() {
-        if(forceY == 0) {
-            return;
+    public void push(Vector vector) {
+        this.vector.setX(this.vector.getX() + vector.getX());
+        this.vector.setY(this.vector.getY() + vector.getY());
+    }
+
+    private int subtractVectorX() {
+        if(vector.getX() < 0) {
+            vector.setX((int) Math.ceil(vector.getX() + 1 / mass));
+        } else {
+            vector.setX((int) Math.ceil(vector.getX() - 1 / mass));
         }
-        int move = (int) Math.floor(forceY / 8 / mass);
-        if(forceY > 0) {
-            if(!getObject().setY(getObject().getY() + move)) {
-                forceY = (int) (forceY / 2);
-                forceY = -forceY;
-            } else {
-                forceY -= 1;
-            }
-        } else if(forceY < 0) {
-            if(!getObject().setY(getObject().getY() + move)) {
-                forceY = (int) (forceY / 2);
-                forceY = -forceY;
-            } else {
-                forceY += 1;
-            }
+        return vector.getX();
+    }
+
+    private int subtractVectorY() {
+        if(vector.getY() < 0) {
+            vector.setY((int) Math.ceil(vector.getY() + 1 / mass));
+        } else {
+            vector.setY((int) Math.ceil(vector.getY() - 1 / mass));
         }
+        return vector.getY();
     }
-
-    public void push(double force, Vector vector) {
-        forceX += vector.getX() * force;
-        forceY += vector.getY() * force;
-    }
-
-    public void push(double forceX, double forceY) {
-        this.forceX += forceX;
-        this.forceY += forceY;
-    }
-
-    public double getMass() {
-        return this.mass;
-    }
-
-    public void setMass(double mass) {
-        this.mass = mass;
-    }
-
-    @SerializationSetter
-    public void setMass(String mass) {
-        try {
-            setMass(Double.parseDouble(mass));
-        } catch(NumberFormatException ignored) {}
-    }
-*/
 
 }

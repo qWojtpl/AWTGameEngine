@@ -126,7 +126,7 @@ public class GameObject {
         }
     }
 
-    private boolean tryMoveX(int direction) {
+    public boolean tryMoveX(int direction) {
         for(ObjectComponent component : getComponents()) {
             if(!component.onUpdatePosition(this.x + direction, this.y)) {
                 return false;
@@ -150,7 +150,7 @@ public class GameObject {
         }
     }
 
-    private boolean tryMoveY(int direction) {
+    public boolean tryMoveY(int direction) {
         for(ObjectComponent component : getComponents()) {
             if(!component.onUpdatePosition(this.x, this.y + direction)) {
                 return false;
@@ -174,7 +174,7 @@ public class GameObject {
         }
     }
 
-    private boolean tryRotate(int direction) {
+    public boolean tryRotate(int direction) {
         for(ObjectComponent component : getComponents()) {
             if(!component.onUpdateRotation(this.rotation + direction)) {
                 return false;
@@ -344,6 +344,9 @@ public class GameObject {
         if(getParent() == null) {
             return this;
         }
+        if(getParent().hasComponent(PanelComponent.class)) {
+            return this;
+        }
         return getParent().getAbsoluteParent();
     }
 
@@ -381,6 +384,9 @@ public class GameObject {
         for(GameObject go : getChildren()) {
             go.setX(go.getX() + delta);
         }
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
+            component.onUpdatePosition(x, this.y);
+        }
     }
 
     @BindingSetter
@@ -393,6 +399,9 @@ public class GameObject {
         this.y = y;
         for(GameObject go : getChildren()) {
             go.setY(go.getY() + delta);
+        }
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
+            component.onUpdatePosition(this.x, y);
         }
     }
 
@@ -492,15 +501,6 @@ public class GameObject {
         for(ObjectComponent component : eventHandler.getComponents("onAfterRender#GraphicsManager")) {
             component.onAfterRender(g);
         }
-    }
-
-    public boolean updatePosition(int newX, int newY) {
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
-            if(!component.onUpdatePosition(newX, newY)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public void deserialize(String data) {

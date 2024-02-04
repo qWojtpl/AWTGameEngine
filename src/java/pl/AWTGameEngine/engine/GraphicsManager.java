@@ -30,6 +30,15 @@ public class GraphicsManager {
         rollBackOptions();
     }
 
+    public void fillOval(int x, int y, int width, int height, RenderOptions renderOptions) {
+        if(graphics == null) {
+            return;
+        }
+        readOptions(renderOptions);
+        graphics.fillOval(x, y, width, height);
+        rollBackOptions();
+    }
+
     public void drawRect(int x, int y, int width, int height, RenderOptions renderOptions) {
         if(graphics == null) {
             return;
