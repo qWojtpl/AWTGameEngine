@@ -30,19 +30,23 @@ public class SceneLoader {
             ResourceManager.clearAudioClips();
         }
         Properties customProperties = AppProperties.getCustomProperties(getScenePropertiesPath(scenePath));
+        String title;
+        double multiplier;
         if(customProperties != null) {
-            window.setTitle(AppProperties.getProperty("title", customProperties));
+            title = AppProperties.getProperty("title", customProperties));
             window.getRenderLoop().setFPS(AppProperties.getPropertyAsInteger("renderFps", customProperties));
             window.getUpdateLoop().setFPS(AppProperties.getPropertyAsInteger("updateFps", customProperties));
             if(AppProperties.getProperty("multiplier", customProperties) != null) {
-                window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier", customProperties));
+                multiplier = AppProperties.getPropertyAsDouble("multiplier", customProperties);
             } else {
-                window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier"));
+                multiplier = AppProperties.getPropertyAsDouble("multiplier");
             }
         } else {
-            window.setTitle(AppProperties.getProperty("title"));
-            window.setMultiplier(AppProperties.getPropertyAsDouble("multiplier"));
+            title = AppProperties.getProperty("title");
+            multiplier = AppProperties.getPropertyAsDouble("multiplier");
         }
+        window.setTitle(title);
+        window.setMultiplier(multiplier);
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         window.getPanel().removeAll();
         window.setCurrentScene(new Scene(scenePath, window));

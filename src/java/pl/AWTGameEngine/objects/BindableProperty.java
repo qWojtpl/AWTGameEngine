@@ -38,7 +38,7 @@ public class BindableProperty {
                 throw new Exception("Method doesn't have BindingGetter or SerializationGetter annotation.");
             }
         } else {
-            method = object.getClass().getMethod("set" + fieldName, String.class);
+            method = object.getClass().getDeclaredMethod("set" + fieldName, String.class);
             if(!hasBindingAnnotation(method, false)) {
                 throw new Exception("Method doesn't have BindingSetter or SerializationSetter annotation.");
             }
