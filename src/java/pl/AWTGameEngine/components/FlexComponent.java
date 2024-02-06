@@ -37,6 +37,8 @@ public class FlexComponent extends ObjectComponent {
         int itemsPerLine = 0;
         boolean checkItemsPerLine = true;
         int i = 0;
+        int lastMaxHeight = 0;
+        calculatedHeight = 0;
         for(GameObject object : gameObjects) {
             if(x > getObject().getSizeX() - maxWidth) {
                 x = gapX;
@@ -49,18 +51,23 @@ public class FlexComponent extends ObjectComponent {
                     }
                 }
                 y += maxHeight + gapY;
+                calculatedHeight += maxHeight + gapY;
                 maxHeight = 0;
                 checkItemsPerLine = false;
+                lastMaxHeight = 0;
             }
             object.setX(getObject().getX() + x);
             object.setY(getObject().getY() + y);
+            if(object.getSizeY() > lastMaxHeight) {
+                lastMaxHeight = object.getSizeY();
+            }
             x += maxWidth;
             if(checkItemsPerLine) {
                 itemsPerLine++;
             }
             i++;
         }
-        calculatedHeight = getObject().getChildrenHeight() / itemsPerLine + itemsPerLine * gapY;
+        calculatedHeight += lastMaxHeight + gapY * 2;
     }
 
     @Override

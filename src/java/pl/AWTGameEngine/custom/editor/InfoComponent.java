@@ -92,7 +92,9 @@ public class InfoComponent extends ObjectComponent {
         flexObject.setY(231);
         flexObject.setSize(290, 279);
         FlexComponent flexComponent = new FlexComponent(flexObject);
-        flexComponent.setMinimumHeight(75);
+        flexComponent.setGapX(15);
+        flexComponent.setGapY(5);
+        flexComponent.setMinimumHeight(0);
         flexObject.addComponent(flexComponent);
         BindableProperty bp = new BindableProperty(this, flexComponent, "calculatedHeight", getObject(), "sizeY");
         BindingsManager.addOperation(bp, BindingsManager.OperationType.ADD, 21);
@@ -107,6 +109,13 @@ public class InfoComponent extends ObjectComponent {
             }
             fieldNames.add(method.getName().substring(3));
         }
+        for(String fieldName : new ArrayList<>(fieldNames)) {
+            try {
+                component.getClass().getDeclaredMethod("get" + fieldName);
+            } catch (NoSuchMethodException e) {
+                return;
+            }
+        }
         for(String fieldName : fieldNames) {
             GameObject label = getScene().createGameObject("@vo-" + getObject().getIdentifier() + "-field" + System.nanoTime());
             TextRenderer textRenderer = new TextRenderer(label);
@@ -115,10 +124,25 @@ public class InfoComponent extends ObjectComponent {
             textRenderer.setSize(16);
             textRenderer.setColor("WHITE");
             label.addComponent(textRenderer);
-            label.setSize(150, 32);
+            label.setSize(120, 32);
             label.setParent(flexObject);
             bindObjects.add(label);
-            //bindObjects.add(textArea);
+            GameObject textAreaObject = getScene().createGameObject("@vo-" + getObject().getIdentifier() + "-textarea" + System.nanoTime());
+            TextArea textArea = new TextArea(textAreaObject);
+            textArea.getTextRenderer().setSize(12);
+            textArea.getTextRenderer().align(TextRenderer.HorizontalAlign.LEFT);
+            textArea.getTextRenderer().align(TextRenderer.VerticalAlign.CENTER);
+            textArea.setBackgroundColor("rgb(40,40,40)");
+            textArea.setTextColor("WHITE");
+            Border border = new Border(textAreaObject);
+            border.setColor("rgb(75,75,75)");
+            textAreaObject.addComponent(textArea);
+            textAreaObject.addComponent(border);
+            textAreaObject.setSize(120, 32);
+            textAreaObject.setParent(flexObject);
+            bindObjects.add(textAreaObject);
+            new BindableProperty(this, component, fieldName, textArea, "text");
+            new BindableProperty(this, textArea, "text", component, fieldName);
         }
     }
 
