@@ -7,8 +7,6 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileWriter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
@@ -33,7 +31,7 @@ public class SceneLoader {
         String title;
         double multiplier;
         if(customProperties != null) {
-            title = AppProperties.getProperty("title", customProperties));
+            title = AppProperties.getProperty("title", customProperties);
             window.getRenderLoop().setFPS(AppProperties.getPropertyAsInteger("renderFps", customProperties));
             window.getUpdateLoop().setFPS(AppProperties.getPropertyAsInteger("updateFps", customProperties));
             if(AppProperties.getProperty("multiplier", customProperties) != null) {

@@ -12,6 +12,7 @@ public class FlexComponent extends ObjectComponent {
     private int gapX = 7;
     private int gapY = 0;
     private int calculatedHeight = 0;
+    private int minimumHeight = 100;
 
     public FlexComponent(GameObject object) {
         super(object);
@@ -59,7 +60,7 @@ public class FlexComponent extends ObjectComponent {
             }
             i++;
         }
-        calculatedHeight = getObject().getChildrenHeight() / itemsPerLine;
+        calculatedHeight = getObject().getChildrenHeight() / itemsPerLine + itemsPerLine * gapY;
     }
 
     @Override
@@ -79,7 +80,12 @@ public class FlexComponent extends ObjectComponent {
 
     @BindingGetter
     public int getCalculatedHeight() {
-        return this.calculatedHeight;
+        return Math.max(this.calculatedHeight, minimumHeight);
+    }
+
+    @SerializationGetter
+    public int getMinimumHeight() {
+        return this.minimumHeight;
     }
 
     public void setGapX(int gapX) {
@@ -98,6 +104,15 @@ public class FlexComponent extends ObjectComponent {
     @SerializationSetter
     public void setGapY(String gapY) {
         setGapY(Integer.parseInt(gapY));
+    }
+
+    public void setMinimumHeight(int height) {
+        this.minimumHeight = height;
+    }
+
+    @SerializationSetter
+    public void setMinimumHeight(String height) {
+        setMinimumHeight(Integer.parseInt(height));
     }
 
 }

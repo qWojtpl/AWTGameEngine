@@ -22,6 +22,7 @@ addComponentButton="pos{30;180}size{250;20}parent{objectInfoPanel}Button:ObjectC
 componentsFlex="pos{10;210}size{290;10}parent{objectInfoPanel}FlexComponent:ObjectComponent{gapX^0^gapY^10^}";
 
 component="pos{10;210}size{290;300}parent{componentsFlex}BlankRenderer:ObjectComponent{color^rgb(40,40,40)^}Border:ObjectComponent{color^rgb(75,75,75)^}";
+componentFlex="pos{10;231}size{290;279}parent{component}BlankRenderer:ObjectComponent{color^WHITE^}";
 componentLine="pos{10;230}size{290;0}parent{component}LineComponent:ObjectComponent{color^rgb(75,75,75)^thickness^1^}";
 componentIcon="pos{10;210}size{20;20}parent{component}SpriteRenderer:ObjectComponent{spriteSource^sprites/base/success.png^}";
 componentText="pos{35;200}size{290;10}parent{component}TextRenderer:ObjectComponent{text^BlankRenderer^color^white^size^16^}";
