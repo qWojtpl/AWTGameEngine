@@ -9,6 +9,7 @@ import java.util.List;
 public class BindingsManager {
 
     private static final List<BindableProperty> bindableProperties = new ArrayList<>();
+    private static final List<BindingOperation> bindingsOperations = new ArrayList<>();
 
     BindingsManager() {
 
@@ -30,8 +31,30 @@ public class BindingsManager {
         }
     }
 
+    public static void addOperation(BindableProperty property, OperationType operation, int value) {
+        bindingsOperations.add(new BindingOperation(property, operation, value));
+    }
+
+    public static void addOperation(BindingOperation operation) {
+        bindingsOperations.add(operation);
+    }
+
     public static List<BindableProperty> getBindableProperties() {
         return new ArrayList<>(bindableProperties);
+    }
+
+    public static List<BindingOperation> getBindingsOperations() {
+        return new ArrayList<>(bindingsOperations);
+    }
+
+    public static List<BindingOperation> getBindingsOperations(BindableProperty property) {
+        List<BindingOperation> operations = new ArrayList<>();
+        for(BindingOperation operation : getBindingsOperations()) {
+            if(operation.getProperty().equals(property)) {
+                operations.add(operation);
+            }
+        }
+        return operations;
     }
 
     public static void updateBindings() {
@@ -43,11 +66,52 @@ public class BindingsManager {
                         continue;
                     }
                 }
+                try {
+                    int intResult = Integer.parseInt(result);
+                    for(BindingOperation operation : getBindingsOperations(property)) {
+                        if(OperationType.ADD.equals(operation.getOperation())) {
+                            intResult += operation.getValue();
+                        }
+                    }
+                    result = String.valueOf(intResult);
+                } catch(NumberFormatException ignored) {
+
+                }
                 property.getMethods()[1].invoke(property.getObjects()[1], result);
             } catch(Exception e) {
                 Logger.log("Cannot update binding: " + property.getConnectionString(), e);
             }
         }
+    }
+
+    public enum OperationType {
+        ADD
+    }
+
+    public static class BindingOperation {
+
+        private final BindableProperty property;
+        private final OperationType operation;
+        private final int value;
+
+        public BindingOperation(BindableProperty property, OperationType operation, int value) {
+            this.property = property;
+            this.operation = operation;
+            this.value = value;
+        }
+
+        public BindableProperty getProperty() {
+            return this.property;
+        }
+
+        public OperationType getOperation() {
+            return this.operation;
+        }
+
+        public int getValue() {
+            return this.value;
+        }
+
     }
 
 }
