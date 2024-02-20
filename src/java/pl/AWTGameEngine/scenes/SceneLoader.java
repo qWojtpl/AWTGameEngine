@@ -2,7 +2,9 @@ package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.panels.NestedPanel;
 import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -46,10 +48,8 @@ public class SceneLoader {
         window.setTitle(title);
         window.setMultiplier(multiplier);
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        if(window.getPanel() != null) {
-            window.getPanel().removeAll();
-        }
         window.setCurrentScene(new Scene(scenePath, window));
+        window.getPanel().removeAll();
         window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
         window.setLocationRelativeTo(null);
         LinkedHashMap<String, String> data = getSceneData(scenePath);

@@ -1,9 +1,11 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
-import pl.AWTGameEngine.engine.NestedPanel;
+import pl.AWTGameEngine.engine.panels.NestedPanel;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.windows.Window;
 
 public class PanelComponent extends ObjectComponent {
 
@@ -18,6 +20,10 @@ public class PanelComponent extends ObjectComponent {
         nestedPanel = new NestedPanel(getObject());
         getObject().getPanel().add(nestedPanel);
         getPanelRegistry().addPanel(nestedPanel);
+        if(Window.RenderEngine.WEB.equals(getWindow().getRenderEngine())) {
+            Logger.log(1, "WARNING: Using PanelComponent will cause using DEFAULT render engine too and will cause errors! " +
+                    "Avoid using PanelComponent with Web rendering engine");
+        }
     }
 
     @Override

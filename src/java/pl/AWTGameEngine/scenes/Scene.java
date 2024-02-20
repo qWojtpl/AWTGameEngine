@@ -2,6 +2,8 @@ package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
+import pl.AWTGameEngine.engine.panels.NestedPanel;
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -186,7 +188,7 @@ public class Scene {
             }
         }
         BindingsManager.updateBindings();
-        for(NestedPanel panel : panelRegistry.getPanels()) {
+        for(PanelObject panel : panelRegistry.getPanels()) {
             panel.getMouseListener().refresh();
         }
     }

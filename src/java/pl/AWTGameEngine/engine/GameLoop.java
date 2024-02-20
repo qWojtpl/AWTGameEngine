@@ -1,5 +1,8 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.engine.panels.NestedPanel;
+import pl.AWTGameEngine.engine.panels.PanelObject;
+import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.windows.Window;
 
 public class GameLoop extends Thread {
@@ -23,8 +26,10 @@ public class GameLoop extends Thread {
             }
             if(window.getCurrentScene() != null) {
                 if(renderLoop) {
-                    for(NestedPanel panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
-                        panel.repaint();
+                    for(PanelObject panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
+                        if(!(panel instanceof WebPanel)) {
+                            panel.repaint();
+                        }
                     }
                 } else {
                     window.getCurrentScene().update();

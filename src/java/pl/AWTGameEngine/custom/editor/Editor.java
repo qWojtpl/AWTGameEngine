@@ -5,12 +5,12 @@ import pl.AWTGameEngine.components.*;
 import pl.AWTGameEngine.components.TextArea;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
+import pl.AWTGameEngine.engine.panels.NestedPanel;
 import pl.AWTGameEngine.objects.*;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.io.File;
 import java.util.Random;

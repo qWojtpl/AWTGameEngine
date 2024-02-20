@@ -3,6 +3,9 @@ package pl.AWTGameEngine.windows;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
+import pl.AWTGameEngine.engine.panels.NestedPanel;
+import pl.AWTGameEngine.engine.panels.PanelObject;
+import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
@@ -50,7 +53,10 @@ public class Window extends JFrame {
         return this.multiplier;
     }
 
-    public NestedPanel getPanel() {
+    public PanelObject getPanel() {
+        if(this.webPanel != null) {
+            return this.webPanel;
+        }
         return this.panel;
     }
 

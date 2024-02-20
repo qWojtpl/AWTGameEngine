@@ -1,17 +1,17 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.engine.NestedPanel;
+import pl.AWTGameEngine.engine.panels.NestedPanel;
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
 public class MouseListener implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener, java.awt.event.MouseWheelListener {
 
-    private final NestedPanel nestedPanel;
+    private final PanelObject panel;
     private int mouseX;
     private int mouseY;
     private int mouseWindowX;
@@ -27,16 +27,16 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
     private MouseEvent moveEvent;
     private MouseWheelEvent mouseWheelEvent;
 
-    public MouseListener(NestedPanel nestedPanel) {
-        this.nestedPanel = nestedPanel;
+    public MouseListener(PanelObject panel) {
+        this.panel = panel;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         clickEvent = e;
         GameObject clickedObject = null;
-        for(GameObject object : getNestedPanel().getWindow().getCurrentScene().getActiveGameObjects()) {
-            if(!nestedPanel.equals(object.getPanel())) {
+        for(GameObject object : getPanel().getWindow().getCurrentScene().getActiveGameObjects()) {
+            if(!panel.equals(object.getPanel())) {
                 continue;
             }
             if(getMouseX() >= object.getX() && getMouseX() <= object.getX() + object.getSizeX()
@@ -47,7 +47,7 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
                 clickedObject = object;
             }
         }
-        for(ObjectComponent component : nestedPanel.getWindow().getCurrentScene().getSceneEventHandler().getComponents("onMouseClick#GameObject")) {
+        for(ObjectComponent component : panel.getWindow().getCurrentScene().getSceneEventHandler().getComponents("onMouseClick#GameObject")) {
             component.onMouseClick(clickedObject);
         }
     }
@@ -89,7 +89,7 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
     }
 
     public void updatePosition(MouseEvent e) {
-        Camera camera = nestedPanel.getCamera();
+        Camera camera = panel.getCamera();
         mouseX = (int) (e.getX() / camera.getZoom() + camera.getX());
         mouseY = (int) (e.getY() / camera.getZoom() + camera.getY());
         mouseWindowX = e.getX();
@@ -110,8 +110,8 @@ public class MouseListener implements java.awt.event.MouseListener, java.awt.eve
         mouseWheelEvent = null;
     }
 
-    public NestedPanel getNestedPanel() {
-        return this.nestedPanel;
+    public PanelObject getPanel() {
+        return this.panel;
     }
 
     /**

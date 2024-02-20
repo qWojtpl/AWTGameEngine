@@ -1,2 +1,0 @@
-background="pos{0;0}size{960;540}BlankRenderer:ObjectComponent{color^rgb(36,36,36)^}";
-buttonAdd="pos{96;54}size{100;100}Button:ObjectComponent{text^Create project^}"

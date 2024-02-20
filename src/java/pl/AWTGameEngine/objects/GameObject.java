@@ -5,6 +5,7 @@ import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PanelComponent;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
 
 import java.util.*;
@@ -22,7 +23,7 @@ public class GameObject {
     private int sizeY = 100;
     private int priority = 0;
     private GameObject parent;
-    private NestedPanel panel;
+    private PanelObject panel;
     private EventHandler eventHandler = new EventHandler();
     private final List<GameObject> children = new ArrayList<>();
     private final List<ObjectComponent> components = new ArrayList<>();
@@ -351,7 +352,7 @@ public class GameObject {
         return getParent().getAbsoluteParent();
     }
 
-    public NestedPanel getPanel() {
+    public PanelObject getPanel() {
         return this.panel;
     }
 
@@ -475,7 +476,7 @@ public class GameObject {
         }
     }
 
-    public void setPanel(NestedPanel panel) {
+    public void setPanel(PanelObject panel) {
         this.panel = panel;
         for(GameObject object : getChildren()) {
             object.setPanel(panel);

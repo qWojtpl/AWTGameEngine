@@ -1,16 +1,16 @@
 package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.components.Canvas;
-import pl.AWTGameEngine.engine.NestedPanel;
+import pl.AWTGameEngine.engine.panels.PanelObject;
 
 public class Camera {
 
-    private final NestedPanel panel;
+    private final PanelObject panel;
     private int x = 0;
     private int y = 0;
     private float zoom = 1;
 
-    public Camera(NestedPanel panel) {
+    public Camera(PanelObject panel) {
         this.panel = panel;
         setZoom((float) (panel.getWindow().getMultiplier() / 2f));
     }
@@ -31,7 +31,7 @@ public class Camera {
         return Math.round(scale * getZoom());
     }
 
-    public NestedPanel getPanel() {
+    public PanelObject getPanel() {
         return this.panel;
     }
 
