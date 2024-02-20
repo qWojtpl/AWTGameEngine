@@ -1,11 +1,9 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.engine.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.NestedPanel;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
-
-import java.awt.*;
 
 public class PanelComponent extends ObjectComponent {
 

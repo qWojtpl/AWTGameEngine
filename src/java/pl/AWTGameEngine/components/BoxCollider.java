@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.engine.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.geom.Path2D;

@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.engine;
+package pl.AWTGameEngine.engine.graphics;
 
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.windows.WindowsManager;

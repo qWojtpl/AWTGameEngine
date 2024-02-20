@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PanelComponent;
 import pl.AWTGameEngine.engine.*;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.scenes.Scene;
 
 import java.util.*;

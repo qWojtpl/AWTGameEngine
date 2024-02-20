@@ -1,9 +1,6 @@
 package pl.AWTGameEngine.windows;
 
-import pl.AWTGameEngine.engine.AppProperties;
-import pl.AWTGameEngine.engine.GameLoop;
-import pl.AWTGameEngine.engine.NestedPanel;
-import pl.AWTGameEngine.engine.ProjectManager;
+import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.scenes.Scene;
@@ -15,10 +12,12 @@ import java.awt.event.WindowEvent;
 
 public class Window extends JFrame {
 
+    private final RenderEngine renderEngine;
     private double multiplier = 3;
     private final int WIDTH = 480;
     private final int HEIGHT = (int) (WIDTH * 0.5625);
     private NestedPanel panel;
+    private WebPanel webPanel;
     private GameLoop renderLoop;
     private GameLoop updateLoop;
     private KeyListener keyListener;
@@ -30,7 +29,8 @@ public class Window extends JFrame {
     private boolean fullScreen;
     private final Font font;
 
-    public Window() {
+    public Window(RenderEngine renderEngine) {
+        this.renderEngine = renderEngine;
         font = new Font(
             AppProperties.getProperty("font"),
             Font.PLAIN,
@@ -40,6 +40,10 @@ public class Window extends JFrame {
 
     public void close() {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+
+    public RenderEngine getRenderEngine() {
+        return this.renderEngine;
     }
 
     public double getMultiplier() {
@@ -108,9 +112,15 @@ public class Window extends JFrame {
             }
             remove(panel);
         }
-        this.panel = new NestedPanel(this);
-        add(panel);
-        panel.setPreferredSize(new Dimension((int) (WIDTH * multiplier) - 1, (int) (HEIGHT * multiplier)));
+        if(RenderEngine.DEFAULT.equals(renderEngine)) {
+            this.panel = new NestedPanel(this);
+            add(panel);
+            panel.setPreferredSize(new Dimension((int) (WIDTH * multiplier) - 1, (int) (HEIGHT * multiplier)));
+        } else {
+            this.webPanel = new WebPanel(this);
+            add(webPanel);
+            webPanel.setPreferredSize(new Dimension((int) (WIDTH * multiplier) - 1, (int) (HEIGHT * multiplier)));
+        }
         pack();
         setKeyListener(new KeyListener(this));
     }
@@ -157,6 +167,13 @@ public class Window extends JFrame {
 
     public void setFullScreen(boolean fullScreen) {
         this.fullScreen = fullScreen;
+    }
+
+    public enum RenderEngine {
+
+        DEFAULT,
+        WEB
+
     }
 
 }

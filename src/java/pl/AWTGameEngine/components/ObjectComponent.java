@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.engine.ColliderRegistry;
-import pl.AWTGameEngine.engine.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.PanelRegistry;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
@@ -12,7 +12,6 @@ import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
 
-import java.awt.*;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 

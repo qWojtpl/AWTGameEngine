@@ -36,7 +36,7 @@ public class WindowsManager {
     }
 
     public static Window createWindow(String scenePath, boolean fullScreen) {
-        Window window = new Window();
+        Window window = new Window(Window.RenderEngine.valueOf(AppProperties.getProperty("renderEngine").toUpperCase()));
         if(windows.size() == 0) {
             defaultFont = window.getFont();
         }

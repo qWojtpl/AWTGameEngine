@@ -46,7 +46,9 @@ public class SceneLoader {
         window.setTitle(title);
         window.setMultiplier(multiplier);
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        window.getPanel().removeAll();
+        if(window.getPanel() != null) {
+            window.getPanel().removeAll();
+        }
         window.setCurrentScene(new Scene(scenePath, window));
         window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
         window.setLocationRelativeTo(null);
