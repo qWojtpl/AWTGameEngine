@@ -1,5 +1,8 @@
 package pl.AWTGameEngine.objects;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PanelComponent;
@@ -8,6 +11,7 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
 
@@ -505,121 +509,77 @@ public class GameObject {
         }
     }
 
-    public void deserialize(String data) {
-        LinkedHashMap<String, String> properties = new LinkedHashMap<>();
-        StringBuilder key = new StringBuilder();
-        StringBuilder value = new StringBuilder();
-        boolean valuesOpened = false;
-        for(int i = 0; i < data.length(); i++) {
-            if(data.charAt(i) == '{') {
-                valuesOpened = true;
-                continue;
-            } else if(data.charAt(i) == '}') {
-                valuesOpened = false;
-                while(properties.containsKey(key.toString())) {
-                    key.append("~");
-                }
-                properties.put(key.toString(), value.toString());
-                key = new StringBuilder();
-                value = new StringBuilder();
-                continue;
-            }
-            if(!valuesOpened) {
-                key.append(data.charAt(i));
+    public void deserialize(Node data) {
+        try {
+            setX(Integer.parseInt(getValue(data, "x")));
+            setY(Integer.parseInt(getValue(data, "y")));
+            setSizeX(Integer.parseInt(getValue(data, "sizeX")));
+            setSizeY(Integer.parseInt(getValue(data, "sizeY")));
+            setPriority(Integer.parseInt(getValue(data, "priority")));
+            setParent(getScene().getGameObjectByName(getValue(data, "parent")));
+            if(getValue(data, "active").equals("0")) {
+                setActive(true);
             } else {
-                value.append(data.charAt(i));
+                setActive(Boolean.parseBoolean(getValue(data, "active")));
             }
-        }
-        for(String propertyName : properties.keySet()) {
-            if(propertyName.equalsIgnoreCase("pos")) {
-                String[] split = properties.get(propertyName).split(";");
-                if(split.length < 2) {
+            for (int i = 0; i < data.getChildNodes().getLength(); i++) {
+                Node childNode = data.getChildNodes().item(i);
+                if(childNode.getNodeType() != Node.ELEMENT_NODE) {
                     continue;
                 }
-                this.setX(split[0]);
-                this.setY(split[1]);
-            } else if(propertyName.equalsIgnoreCase("active")) {
-                if(!Boolean.parseBoolean(properties.get(propertyName))) {
-                    this.setActive(false);
-                }
-            } else if(propertyName.equalsIgnoreCase("priority")) {
-                this.setPriority(properties.get(propertyName));
-            } else if(propertyName.equalsIgnoreCase("rotation")) {
-                this.setRotation(properties.get(propertyName));
-            } else if(propertyName.equalsIgnoreCase("parent")) {
-                GameObject go = scene.getGameObjectByName(properties.get(propertyName));
-                if(go != null) {
-                    this.setParent(go);
+                String className = ((Element) childNode).getTagName();
+                String pckg = getValue(childNode, "_package");
+                if(!pckg.equals("0")) {
+                    className = pckg + "." + className;
                 } else {
-                    System.out.println("Can't find object: " + properties.get(propertyName));
+                    className = "pl.AWTGameEngine.components." + className;
                 }
-            } else if(propertyName.equalsIgnoreCase("size")) {
-                String[] split = properties.get(propertyName).split(";");
-                if(split.length < 2) {
+                Class<? extends ObjectComponent> clazz = Class.forName(className)
+                        .asSubclass(ObjectComponent.class);
+                ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(this);
+                if(childNode.getAttributes() == null) {
                     continue;
                 }
-                this.setSizeX(split[0]);
-                this.setSizeY(split[1]);
-            } else if(propertyName.contains(":ObjectComponent")) {
-                String className;
-                if(propertyName.contains(":ObjectComponent-C")) {
-                    className = propertyName.replace(":ObjectComponent-C", "");
-                } else {
-                    className = "pl.AWTGameEngine.components." + propertyName.replace(":ObjectComponent", "");
-                }
-                LinkedHashMap<String, String> fields = new LinkedHashMap<>();
-                String property = properties.get(propertyName);
-                boolean fieldValueOpened = false;
-                for(int i = 0; i < property.length(); i++) {
-                    if(property.charAt(i) == '^') {
-                        fieldValueOpened = !fieldValueOpened;
-                        if(!fieldValueOpened) {
-                            while(fields.containsKey(key.toString())) {
-                                key.append("~");
-                            }
-                            fields.put(key.toString(), value.toString());
-                            key = new StringBuilder();
-                            value = new StringBuilder();
-                        }
+                for(int j = 0; j < childNode.getAttributes().getLength(); j++) {
+                    String fieldName = childNode.getAttributes().item(j).getNodeName();
+                    if(fieldName.equals("_package")) {
                         continue;
                     }
-                    if(!fieldValueOpened) {
-                        key.append(property.charAt(i));
-                    } else {
-                        value.append(property.charAt(i));
-                    }
-                }
-                try {
-                    className = className.replace("~", "");
-                    Class<? extends ObjectComponent> clazz = Class.forName(className)
-                            .asSubclass(ObjectComponent.class);
-                    ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(this);
-                    for(String fieldName : fields.keySet()) {
-                        String v = fields.get(fieldName);
-                        fieldName = fieldName.replace("~", "");
-                        String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                        if(clazz.getSuperclass().equals(ObjectComponent.class)) {
-                            if(clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
-                                clazz.getDeclaredMethod(methodName, String.class).invoke(o, v);
-                            } else {
-                                System.out.println("Tried to invoke " + methodName
-                                        + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
-                            }
+                    String value = childNode.getAttributes().item(j).getNodeValue();
+                    String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                    if (clazz.getSuperclass().equals(ObjectComponent.class)) {
+                        if (clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
+                            clazz.getDeclaredMethod(methodName, String.class).invoke(o, value);
                         } else {
-                            if(clazz.getSuperclass().getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
-                                clazz.getSuperclass().getDeclaredMethod(methodName, String.class).invoke(o, v);
-                            } else {
-                                System.out.println("Tried to invoke " + methodName
-                                        + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
-                            }
+                            Logger.log(2, "Tried to invoke " + methodName
+                                    + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
+                        }
+                    } else {
+                        if (clazz.getSuperclass().getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
+                            clazz.getSuperclass().getDeclaredMethod(methodName, String.class).invoke(o, value);
+                        } else {
+                            Logger.log(2, "Tried to invoke " + methodName
+                                    + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
                         }
                     }
-                    this.addComponent(o);
-                } catch(Exception e) {
-                    Logger.log("Exception while deserializing GameObject", e);
                 }
+                this.addComponent(o);
             }
+        } catch(NumberFormatException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                InvocationTargetException | ClassNotFoundException e) {
+            Logger.log("Error while deserializing GameObject: " + getIdentifier(), e);
         }
+    }
+
+    private String getValue(Node node, String name) {
+        if(node.getAttributes() == null) {
+            return "0";
+        }
+        Node namedItem = node.getAttributes().getNamedItem(name);
+        if(namedItem == null) {
+            return "0";
+        }
+        return namedItem.getNodeValue();
     }
 
 }

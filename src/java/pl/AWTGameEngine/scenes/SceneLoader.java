@@ -1,16 +1,17 @@
 package pl.AWTGameEngine.scenes;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.panels.NestedPanel;
 import pl.AWTGameEngine.engine.ResourceManager;
-import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class SceneLoader {
@@ -52,7 +53,7 @@ public class SceneLoader {
         window.getPanel().removeAll();
         window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
         window.setLocationRelativeTo(null);
-        LinkedHashMap<String, String> data = getSceneData(scenePath);
+        NodeList data = getSceneData(scenePath);
         if(data == null) {
             return;
         }
@@ -61,47 +62,31 @@ public class SceneLoader {
         Logger.log(2, "Scene loaded.");
     }
 
-    public LinkedHashMap<String, String> getSceneData(String scenePath) {
-        List<String> sceneLines = ResourceManager.getResource(scenePath);
-        if(sceneLines == null) {
-            Logger.log(1, "Scene " + scenePath + " not found.");
-            return null;
-        }
-        LinkedHashMap<String, String> data = new LinkedHashMap<>();
-        for(String line : sceneLines) {
-            boolean stringOpened = false;
-            boolean valueOpened = false;
-            StringBuilder key = new StringBuilder();
-            StringBuilder value = new StringBuilder();
-            for(int i = 0; i < line.length(); i++) {
-                if(line.charAt(i) == '"') {
-                    stringOpened = !stringOpened;
-                    continue;
-                } else if(line.charAt(i) == ';' && !stringOpened) {
-                    break;
-                } else if(line.charAt(i) == '=' && !valueOpened) {
-                    valueOpened = true;
-                    continue;
-                }
-                if(!valueOpened) {
-                    key.append(line.charAt(i));
-                } else {
-                    value.append(line.charAt(i));
-                }
+    public NodeList getSceneData(String scenePath) {
+        try(InputStream stream = ResourceManager.getResourceAsStream(scenePath)) {
+            if(stream == null) {
+                Logger.log(1, "Scene " + scenePath + " not found.");
+                return null;
             }
-            data.put(key.toString(), value.toString());
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = builder.parse(stream);
+            document.normalizeDocument();
+            return document.getElementsByTagName("Object");
+        } catch(Exception e) {
+            Logger.log("Cannot load scene " + scenePath, e);
         }
-        return data;
+        return null;
     }
 
-    public void attachSceneData(LinkedHashMap<String, String> sceneData) {
+    public void attachSceneData(NodeList sceneData) {
         attachSceneData(sceneData, null);
     }
 
-    public void attachSceneData(LinkedHashMap<String, String> sceneData, GameObject defaultParent) {
-        for(String objectName : sceneData.keySet()) {
-            GameObject object = window.getCurrentScene().createGameObject(objectName);
-            object.deserialize(sceneData.get(objectName));
+    public void attachSceneData(NodeList sceneData, GameObject defaultParent) {
+        for(int i = 0; i < sceneData.getLength(); i++) {
+            GameObject object = window.getCurrentScene().createGameObject(
+                    sceneData.item(i).getAttributes().getNamedItem("id").getNodeValue());
+            object.deserialize(sceneData.item(i));
             if(object.getParent() == null) {
                 object.setParent(defaultParent);
             }
@@ -110,7 +95,7 @@ public class SceneLoader {
 
     public static String getScenePropertiesPath(String scenePath) {
         StringBuilder path = new StringBuilder();
-        for(int i = 0; i < scenePath.length() - 5; i++) {
+        for(int i = 0; i < scenePath.length() - 3; i++) {
             path.append(scenePath.charAt(i));
         }
         path.append("properties");

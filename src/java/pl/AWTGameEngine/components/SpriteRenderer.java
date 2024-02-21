@@ -23,7 +23,7 @@ public class SpriteRenderer extends ObjectComponent {
             return;
         }
         g.drawImage(
-                sprite.getImage(),
+                sprite,
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseScale(getObject().getSizeX()),
@@ -32,6 +32,7 @@ public class SpriteRenderer extends ObjectComponent {
                         .setRotation(getObject().getRotation())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
                         .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
+                        .setContext(getObject())
         );
     }
 

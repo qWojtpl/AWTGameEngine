@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.engine;
 
+import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -24,7 +25,7 @@ public class ProjectManager {
             return;
         }
         copyResource("defaultTemplate/app.properties", path + "app.properties");
-        copyResource("defaultTemplate/main.scene", path + "scenes/main.scene");
+        copyResource("defaultTemplate/main.xml", path + "scenes/main.xml");
         copyResource("defaultTemplate/main.properties", path + "scenes/main.properties");
         copyResource("defaultTemplate/beaver.jpg", path + "sprites/beaver.jpg");
         copyResource("defaultTemplate/error.png", path + "sprites/base/error.jpg");
@@ -44,7 +45,7 @@ public class ProjectManager {
             Logger.log(1, "Cannot open project " + name + ", app.properties doesn't exists.");
             return;
         }
-        LinkedHashMap<String, String> data = window.getSceneLoader().getSceneData("./projects/" + name + "/" +
+        NodeList data = window.getSceneLoader().getSceneData("./projects/" + name + "/" +
                 AppProperties.getProperty("main", customProperties));
         if(data == null) {
             Logger.log(1, "Cannot attach scene to existing scene.");

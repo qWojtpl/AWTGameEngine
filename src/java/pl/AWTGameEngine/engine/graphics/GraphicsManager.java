@@ -1,6 +1,8 @@
 package pl.AWTGameEngine.engine.graphics;
 
 import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.windows.WindowsManager;
 
 import java.awt.*;
@@ -57,12 +59,12 @@ public class GraphicsManager {
         rollBackOptions();
     }
 
-    public void drawImage(Image image, int x, int y, int width, int height, RenderOptions renderOptions) {
+    public void drawImage(Sprite image, int x, int y, int width, int height, RenderOptions renderOptions) {
         if(graphics == null) {
             return;
         }
         readOptions(renderOptions);
-        graphics.drawImage(image, x, y, width, height, null);
+        graphics.drawImage(image.getImage(), x, y, width, height, null);
         rollBackOptions();
     }
 
@@ -117,6 +119,7 @@ public class GraphicsManager {
         private int rotationCenterX = 0;
         private int rotationCenterY = 0;
         private float stroke = 1;
+        private GameObject context;
 
         public Color getColor() {
             return this.color;
@@ -140,6 +143,10 @@ public class GraphicsManager {
 
         public float getStroke() {
             return this.stroke;
+        }
+
+        public GameObject getContext() {
+            return this.context;
         }
 
         public RenderOptions setColor(Color color) {
@@ -173,6 +180,11 @@ public class GraphicsManager {
 
         public RenderOptions setStroke(float stroke) {
             this.stroke = stroke;
+            return this;
+        }
+
+        public RenderOptions setContext(GameObject context) {
+            this.context = context;
             return this;
         }
 

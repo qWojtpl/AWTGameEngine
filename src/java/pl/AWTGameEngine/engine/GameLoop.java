@@ -27,9 +27,7 @@ public class GameLoop extends Thread {
             if(window.getCurrentScene() != null) {
                 if(renderLoop) {
                     for(PanelObject panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
-                        if(!(panel instanceof WebPanel)) {
-                            panel.repaint();
-                        }
+                        panel.repaint();
                     }
                 } else {
                     window.getCurrentScene().update();

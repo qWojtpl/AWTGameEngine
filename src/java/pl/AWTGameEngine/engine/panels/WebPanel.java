@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebView;
+import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
@@ -20,7 +21,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
     private final Window window;
     private WebView webView;
     private final Camera camera;
-    private final WebGraphicsManager graphicsManager = new WebGraphicsManager();
+    private WebGraphicsManager graphicsManager;
     private MouseListener mouseListener;
 
     public WebPanel(Window window) {
@@ -32,14 +33,19 @@ public class WebPanel extends JFXPanel implements PanelObject {
         Platform.runLater(() -> {
             this.webView = new WebView();
             setScene(new Scene(webView));
-            webView.getEngine().load("https://google.com");
+            webView.getEngine().loadContent("<html><body><p>Loaded.</p></body></html>");
+            webView.contextMenuEnabledProperty().setValue(false);
+            graphicsManager = new WebGraphicsManager(webView);
         });
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (g == null || window.getCurrentScene() == null) {
+        if(g == null || window.getCurrentScene() == null) {
+            return;
+        }
+        if(graphicsManager == null) {
             return;
         }
         graphicsManager.setGraphics(g);

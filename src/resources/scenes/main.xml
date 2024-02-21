@@ -1,0 +1,98 @@
+<Objects>
+    <Object id="background" x="0" y="0" sizeX="960" sizeY="540">
+        <BlankRenderer color="rgb(36,36,36)" />
+    </Object>
+    <Object id="panel" x="0" y="0" sizeX="640" sizeY="360">
+        <PanelComponent />
+    </Object>
+    <Object id="objectInfoPanel" x="640" y="0" sizeX="320" sizeY="360">
+        <PanelComponent />
+    </Object>
+    <Object id="objectInfoBackground" x="0" y="0" sizeX="320" sizeY="360" parent="objectInfoPanel">
+        <BlankRenderer color="rgb(37,37,37)" />
+        <Canvas />
+    </Object>
+    <Object id="objectInfoScroll" x="310" y="0" sizeX="10" sizeY="360" parent="objectInfoPanel">
+        <ScrollComponent />
+        <Canvas />
+        <ScrollCameraBind />
+    </Object>
+    <Object id="objectInfoName" x="40" y="0" sizeX="269" sizeY="30" parent="objectInfoPanel">
+        <TextArea text="Object" textColor="white" backgroundColor="rgb(40,40,40)" />
+        <Border color="rgb(75,75,75)" />
+    </Object>
+    <Object id="objectInfoPos" x="10" y="50" sizeX="10" sizeY="10" parent="objectInfoPanel">
+        <TextRenderer text="Position" vertical="center" horizontal="left" color="white" size="20" />
+    </Object>
+    <Object id="objectInfoPosXLabel" x="10" y="70" sizeX="10" sizeY="20" parent="objectInfoPanel">
+        <TextRenderer text="X:" vertical="center" horizontal="left" color="white" size="14" />
+    </Object>
+    <Object id="objectInfoPosX" x="30" y="70" sizeX="120" sizeY="20" parent="objectInfoPanel">
+        <TextArea text="30" textColor="white" backgroundColor="rgb(40,40,40)" regexPattern="ONLY_NUMBERS" />
+        <Border color="rgb(75,75,75)" />
+    </Object>
+    <Object id="objectInfoPosYLabel" x="160" y="70" sizeX="10" sizeY="20" parent="objectInfoPanel">
+        <TextRenderer text="Y:" vertical="center" horizontal="left" color="white" size="14" />
+    </Object>
+    <Object id="objectInfoPosY" x="180" y="70" sizeX="120" sizeY="20" parent="objectInfoPanel">
+        <TextArea text="10" textColor="white" backgroundColor="rgb(40,40,40)" regexPattern="ONLY_NUMBERS" />
+        <Border color="rgb(75,75,75)" />
+    </Object>
+    <Object id="objectInfoSize" x="10" y="120" sizeX="10" sizeY="10" parent="objectInfoPanel">
+        <TextRenderer text="Size" vertical="center" horizontal="left" color="white" size="20" />
+    </Object>
+    <Object id="objectInfoSizeXLabel" x="10" y="140" sizeX="10" sizeY="20" parent="objectInfoPanel">
+        <TextRenderer text="W:" vertical="center" horizontal="left" color="white" size="14" />
+    </Object>
+    <Object id="objectInfoSizeX" x="30" y="140" sizeX="120" sizeY="20" parent="objectInfoPanel">
+        <TextArea text="10" textColor="white" backgroundColor="rgb(40,40,40)" regexPattern="ONLY_NUMBERS" />
+        <Border color="rgb(75,75,75)" />
+    </Object>
+    <Object id="objectInfoPosY" x="30" y="140" sizeX="120" sizeY="20" parent="objectInfoPanel">
+        <TextArea text="30" textColor="white" backgroundColor="rgb(40,40,40)" regexPattern="ONLY_NUMBERS" />
+        <Border color="rgb(75,75,75)" />
+    </Object>
+    <Object id="objectInfoSizeYLabel" x="160" y="140" sizeX="10" sizeY="20" parent="objectInfoPanel">
+        <TextRenderer text="H:" vertical="center" horizontal="left" color="white" size="14" />
+    </Object>
+    <Object id="objectInfoSizeY" x="180" y="140" sizeX="120" sizeY="20" parent="objectInfoPanel">
+        <TextArea text="10" textColor="white" backgroundColor="rgb(40,40,40)" regexPattern="ONLY_NUMBERS" />
+        <Border color="rgb(75,75,75)" />
+    </Object>
+    <Object id="addComponentButton" x="30" y="180" sizeX="250" sizeY="20" parent="objectInfoPanel">
+        <Button text="+ Add component" size="16" />
+    </Object>
+    <Object id="componentsFlex" x="10" y="210" sizeX="290" sizeY="10" parent="objectInfoPanel">
+        <FlexComponent gapX="0" gapY="10" />
+    </Object>
+    <Object id="filesPanel" x="0" y="360" sizeX="640" sizeY="180">
+        <PanelComponent />
+    </Object>
+    <Object id="filesFlex" x="10" y="0" sizeX="630" sizeY="180" parent="filesPanel">
+        <FlexComponent />
+    </Object>
+    <Object id="filesBackground" x="0" y="0" sizeX="640" sizeY="180" parent="filesPanel">
+        <BlankRenderer color="rgb(37,37,37)" />
+        <Canvas />
+    </Object>
+    <Object id="filesScroll" x="0" y="0" sizeX="10" sizeY="180" parent="filesPanel">
+        <ScrollComponent />
+        <Canvas />
+        <ScrollCameraBind />
+    </Object>
+    <Object id="@editor">
+        <Editor _package="pl.AWTGameEngine.custom.editor" />
+    </Object>
+</Objects>
+
+
+<!--
+
+filesPanel="pos{0;360}size{640;180}PanelComponent:ObjectComponent{}";
+filesFlex="pos{10;0}size{630;180}parent{filesPanel}FlexComponent:ObjectComponent{}";
+filesBackground="pos{0;0}size{640;180}parent{filesPanel}BlankRenderer:ObjectComponent{color^rgb(37,37,37)^}Canvas:ObjectComponent{}";
+filesScroll="pos{0;0}size{10;180}parent{filesPanel}ScrollComponent:ObjectComponent{}Canvas:ObjectComponent{}ScrollCameraBind:ObjectComponent{}";
+
+@editor="pos{0;0}size{0;0}pl.AWTGameEngine.custom.editor.Editor:ObjectComponent-C{}";
+
+!-->

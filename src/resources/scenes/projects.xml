@@ -1,0 +1,5 @@
+<Objects>
+    <Object id="image" x="0" y="0">
+        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+    </Object>
+</Objects>
