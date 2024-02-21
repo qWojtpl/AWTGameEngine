@@ -515,6 +515,7 @@ public class GameObject {
             setY(Integer.parseInt(getValue(data, "y")));
             setSizeX(Integer.parseInt(getValue(data, "sizeX")));
             setSizeY(Integer.parseInt(getValue(data, "sizeY")));
+            setRotation(Integer.parseInt(getValue(data, "rotation")));
             setPriority(Integer.parseInt(getValue(data, "priority")));
             setParent(getScene().getGameObjectByName(getValue(data, "parent")));
             if(getValue(data, "active").equals("0")) {

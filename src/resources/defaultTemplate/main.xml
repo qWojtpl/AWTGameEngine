@@ -1,0 +1,39 @@
+<Objects>
+    <Object id="audio" x="0" y="0" sizeX="0" sizeY="0">
+        <MusicPlayer sourcePath="audio/dominique.wav" />
+    </Object>
+    <Object id="object1" x="0" y="0" sizeX="45" sizeY="45" priority="1">
+        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <PhysicsBody />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
+        <BoxCollider visualize="true" />
+        <BoxCollider visualize="true" sizeX="50" sizeY="-44" />
+    </Object>
+    <Object id="text" x="200" y="100" sizeX="50" sizeY="50" parent="object1" priority="2">
+        <TextRenderer text="test" color="BLACK" size="30" />
+        <BoxCollider visualize="true" />
+    </Object>
+    <Object id="object2" x="100" y="100" sizeX="45" sizeY="45" priority="1" parent="text">
+        <SpriteRenderer spriteSource="sprites/beaver2.png" />
+        <BoxCollider visualize="true" />
+    </Object>
+    <Object id="collider" x="300" y="150" sizeX="100" sizeY="100" rotation="45" priority="1">
+        <PhysicsBody />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
+        <BoxCollider visualize="true" />
+    </Object>
+    <Object id="collider2" x="300" y="0" sizeX="100" sizeY="100" priority="1">
+        <BoxCollider visualize="true" />
+    </Object>
+    <Object id="sphereCollider" x="500" y="0" sizeX="100" sizeY="100" priority="1">
+        <SphereCollider visualize="true" />
+    </Object>
+    <Object id="object3" x="100" y="300">
+        <BlankRenderer color="rgb(0,125,125)" />
+        <PhysicsBody />
+        <BoxCollider />
+    </Object>
+    <Object id="button" x="200" y="200" sizeX="100" sizeY="100">
+        <Button size="20" text="Button ;)" />
+    </Object>
+</Objects>

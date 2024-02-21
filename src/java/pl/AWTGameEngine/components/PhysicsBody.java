@@ -21,7 +21,6 @@ public class PhysicsBody extends ObjectComponent {
 
     @Override
     public void onPreUpdate() {
-        push(new Vector(0, 1));
         if(vector.getX() != 0) {
             getObject().moveX(getObject().getX() + subtractVectorX());
         }

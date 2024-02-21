@@ -48,10 +48,6 @@
         <TextArea text="10" textColor="white" backgroundColor="rgb(40,40,40)" regexPattern="ONLY_NUMBERS" />
         <Border color="rgb(75,75,75)" />
     </Object>
-    <Object id="objectInfoPosY" x="30" y="140" sizeX="120" sizeY="20" parent="objectInfoPanel">
-        <TextArea text="30" textColor="white" backgroundColor="rgb(40,40,40)" regexPattern="ONLY_NUMBERS" />
-        <Border color="rgb(75,75,75)" />
-    </Object>
     <Object id="objectInfoSizeYLabel" x="160" y="140" sizeX="10" sizeY="20" parent="objectInfoPanel">
         <TextRenderer text="H:" vertical="center" horizontal="left" color="white" size="14" />
     </Object>
@@ -84,15 +80,3 @@
         <Editor _package="pl.AWTGameEngine.custom.editor" />
     </Object>
 </Objects>
-
-
-<!--
-
-filesPanel="pos{0;360}size{640;180}PanelComponent:ObjectComponent{}";
-filesFlex="pos{10;0}size{630;180}parent{filesPanel}FlexComponent:ObjectComponent{}";
-filesBackground="pos{0;0}size{640;180}parent{filesPanel}BlankRenderer:ObjectComponent{color^rgb(37,37,37)^}Canvas:ObjectComponent{}";
-filesScroll="pos{0;0}size{10;180}parent{filesPanel}ScrollComponent:ObjectComponent{}Canvas:ObjectComponent{}ScrollCameraBind:ObjectComponent{}";
-
-@editor="pos{0;0}size{0;0}pl.AWTGameEngine.custom.editor.Editor:ObjectComponent-C{}";
-
-!-->
