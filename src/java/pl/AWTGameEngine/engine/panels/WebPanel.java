@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebView;
+import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
@@ -15,6 +16,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class WebPanel extends JFXPanel implements PanelObject {
 
@@ -33,7 +35,15 @@ public class WebPanel extends JFXPanel implements PanelObject {
         Platform.runLater(() -> {
             this.webView = new WebView();
             setScene(new Scene(webView));
-            webView.getEngine().loadContent("<html><body><p>Loaded.</p></body></html>");
+            StringBuilder sceneString = new StringBuilder();
+            for(String line : Objects.requireNonNull(ResourceManager.getResource(window.getCurrentScene().getName()))) {
+                sceneString.append(line);
+            }
+            System.out.println(sceneString);
+            webView.getEngine().loadContent(
+                    "<html><body>" + sceneString + "<script src='" +
+                            ResourceManager.getResourceAsUri(AppProperties.getProperty("webViewPath") + "webview.js")
+                            + "'></script></body></html>");
             webView.contextMenuEnabledProperty().setValue(false);
             graphicsManager = new WebGraphicsManager(webView);
         });

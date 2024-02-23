@@ -19,8 +19,16 @@ public class WebGraphicsManager extends GraphicsManager {
         readOptions(renderOptions);
         Platform.runLater(() -> {
             GameObject go = renderOptions.getContext();
-            webView.getEngine().executeScript("" +
-                    "setPosition(" + go.getIdentifier() + ", " + x + ", " + y + ");");
+            if(webView.getEngine().executeScript("typeof setPosition").equals("undefined")) {
+                return;
+            }
+            webView.getEngine().executeScript(
+                    "setPosition('" + go.getIdentifier() + "', " + x + ", " + y + ");");
+            webView.getEngine().executeScript(
+                    "setSize('" + go.getIdentifier() + "', " + width + ", " + height + ");");
+            webView.getEngine().executeScript(
+                    "drawImage('" + go.getIdentifier() + "', '" + image.getImagePath() + "');");
+
         });
         rollBackOptions();
     }

@@ -7,6 +7,8 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import java.awt.*;
 import java.io.*;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class ResourceManager {
     private final static HashMap<String, List<String>> resources = new HashMap<>();
     private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
     private final static HashMap<String, InputStream> streamResources = new HashMap<>();
+    private final static HashMap<String, URI> uriResources = new HashMap<>();
     private final static List<AudioClip> audioClips = new ArrayList<>();
 
     ResourceManager() {
@@ -137,6 +140,25 @@ public class ResourceManager {
             return stream;
         } catch(Exception e) {
             Logger.log("Cannot get stream from resource: " + name, e);
+        }
+        return null;
+    }
+
+    public static URI getResourceAsUri(String name) {
+        name = getResourceName(name);
+        if(uriResources.containsKey(name)) {
+            return uriResources.get(name);
+        }
+        try {
+            URL url = ResourceManager.class.getResource(name);
+            if(url == null) {
+                throw new Exception("URL is null. Cannot find this resource.");
+            }
+            URI uri = url.toURI();
+            uriResources.put(name, uri);
+            return uri;
+        } catch(Exception e) {
+            Logger.log("Cannot get URI from resource: " + name, e);
         }
         return null;
     }
