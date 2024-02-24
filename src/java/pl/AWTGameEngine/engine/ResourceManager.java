@@ -20,7 +20,7 @@ public class ResourceManager {
     private final static HashMap<String, List<String>> resources = new HashMap<>();
     private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
     private final static HashMap<String, InputStream> streamResources = new HashMap<>();
-    private final static HashMap<String, URI> uriResources = new HashMap<>();
+    private final static HashMap<String, URL> urlResources = new HashMap<>();
     private final static List<AudioClip> audioClips = new ArrayList<>();
 
     ResourceManager() {
@@ -144,21 +144,20 @@ public class ResourceManager {
         return null;
     }
 
-    public static URI getResourceAsUri(String name) {
+    public static URL getResourceAsUrl(String name) {
         name = getResourceName(name);
-        if(uriResources.containsKey(name)) {
-            return uriResources.get(name);
+        if(urlResources.containsKey(name)) {
+            return urlResources.get(name);
         }
         try {
             URL url = ResourceManager.class.getResource(name);
             if(url == null) {
                 throw new Exception("URL is null. Cannot find this resource.");
             }
-            URI uri = url.toURI();
-            uriResources.put(name, uri);
-            return uri;
+            urlResources.put(name, url);
+            return url;
         } catch(Exception e) {
-            Logger.log("Cannot get URI from resource: " + name, e);
+            Logger.log("Cannot get URL from resource: " + name, e);
         }
         return null;
     }
@@ -173,6 +172,10 @@ public class ResourceManager {
 
     public static HashMap<String, InputStream> getStreamResources() {
         return new HashMap<>(streamResources);
+    }
+
+    public static HashMap<String, URL> getUrlResources() {
+        return new HashMap<>(urlResources);
     }
 
     public static List<AudioClip> getAudioClips() {
