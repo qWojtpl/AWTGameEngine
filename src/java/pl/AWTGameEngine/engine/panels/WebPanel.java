@@ -31,6 +31,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
         this.window = window;
         setLayout(null);
         setBackground(Color.WHITE);
+        setFocusable(false);
         this.camera = new Camera(this);
         setMouseListener(new MouseListener(this));
         Platform.runLater(() -> {
@@ -77,12 +78,13 @@ public class WebPanel extends JFXPanel implements PanelObject {
                 }
             }
         }
-        for (GameObject go : renderList) {
+        for(GameObject go : renderList) {
             go.render(graphicsManager);
         }
-        for (GameObject go : renderList) {
+        for(GameObject go : renderList) {
             go.afterRender(graphicsManager);
         }
+        graphicsManager.endFrame();
     }
 
     public Window getWindow() {

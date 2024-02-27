@@ -1,42 +1,55 @@
 <Objects>
     <Object id="image" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image1" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image2" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image3" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image4" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image5" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image6" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image7" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image8" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image9" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image10" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image11" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image12" x="0" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
     <Object id="image13" x="300" y="0" sizeX="200" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
