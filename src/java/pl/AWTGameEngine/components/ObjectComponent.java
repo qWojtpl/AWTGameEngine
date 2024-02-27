@@ -8,6 +8,7 @@ import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.ObjectCache;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
@@ -23,13 +24,19 @@ import java.util.HashMap;
 public abstract class ObjectComponent {
 
     private final GameObject object;
+    private final ObjectCache cache;
 
     public ObjectComponent(GameObject object) {
         this.object = object;
+        this.cache = new ObjectCache(object);
     }
 
     public final GameObject getObject() {
         return this.object;
+    }
+
+    public final ObjectCache getCache() {
+        return this.cache;
     }
 
     protected final KeyListener getKeyListener() {

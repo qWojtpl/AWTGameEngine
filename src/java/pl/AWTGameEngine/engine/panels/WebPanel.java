@@ -13,6 +13,7 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,16 +35,20 @@ public class WebPanel extends JFXPanel implements PanelObject {
         setMouseListener(new MouseListener(this));
         Platform.runLater(() -> {
             this.webView = new WebView();
-            setScene(new Scene(webView));
             StringBuilder sceneString = new StringBuilder();
             for(String line : Objects.requireNonNull(ResourceManager.getResource(window.getCurrentScene().getName()))) {
                 sceneString.append(line);
             }
-            System.out.println(sceneString);
-            webView.getEngine().loadContent(
-                    "<html><body>" + sceneString + "<script src='" +
-                            ResourceManager.getResourceAsUri(AppProperties.getProperty("webViewPath") + "webview.js")
-                            + "'></script></body></html>");
+            StringBuilder htmlString = new StringBuilder();
+            for(String line : Objects.requireNonNull(ResourceManager.getResource("webview/webview.html"))) {
+                if(line.contains("**SYS.OBJECTS**")) {
+                    htmlString.append(sceneString);
+                    continue;
+                }
+                htmlString.append(line);
+            }
+            webView.getEngine().loadContent(htmlString.toString());
+            setScene(new Scene(webView));
             webView.contextMenuEnabledProperty().setValue(false);
             graphicsManager = new WebGraphicsManager(webView);
         });

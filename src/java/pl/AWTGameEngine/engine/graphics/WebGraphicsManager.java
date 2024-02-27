@@ -6,6 +6,8 @@ import org.w3c.dom.Element;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
+import java.text.MessageFormat;
+
 public class WebGraphicsManager extends GraphicsManager {
 
     private WebView webView;
@@ -16,21 +18,13 @@ public class WebGraphicsManager extends GraphicsManager {
 
     @Override
     public void drawImage(Sprite image, int x, int y, int width, int height, RenderOptions renderOptions) {
-        readOptions(renderOptions);
         Platform.runLater(() -> {
-            GameObject go = renderOptions.getContext();
-            if(webView.getEngine().executeScript("typeof setPosition").equals("undefined")) {
-                return;
-            }
+            GameObject object = renderOptions.getContext();
             webView.getEngine().executeScript(
-                    "setPosition('" + go.getIdentifier() + "', " + x + ", " + y + ");");
-            webView.getEngine().executeScript(
-                    "setSize('" + go.getIdentifier() + "', " + width + ", " + height + ");");
-            webView.getEngine().executeScript(
-                    "drawImage('" + go.getIdentifier() + "', '" + image.getImagePath() + "');");
-
+                    MessageFormat.format("setPosition(\"{0}\", {1}, {2}); ", object.getIdentifier(), x, y) +
+                            MessageFormat.format("setSize(\"{0}\", {1}, {2});", object.getIdentifier(), width, height));
         });
-        rollBackOptions();
+
     }
 
     public WebView getWebView() {

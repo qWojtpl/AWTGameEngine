@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web renderer</title>
+    <style>
+        body {
+            margin: 0px;
+            background-color: #676767;
+        }
+
+        Object {
+            background-color: red;
+        }
+
+    </style>
+</head>
+<body>
+    <noscript>Error (JS not enabled)</noscript>
+    **SYS.OBJECTS**
+    <script type="text/javascript" defer>
+        function setPosition(identifier, x, y) {
+            let object = getObject(identifier);
+            object.setAttribute("x", x);
+            object.setAttribute("y", y);
+            object.style.left = x + "px";
+            object.style.top = y + "px";
+            object.style.position = "absolute";
+        }
+
+        function setSize(identifier, width, height) {
+            let object = getObject(identifier);
+            object.setAttribute("sizeX", width);
+            object.setAttribute("sizeY", height);
+            object.style.width = width + "px";
+            object.style.height = height + "px";
+        }
+
+        function getObject(identifier) {
+            return document.getElementById(identifier);
+        }
+    </script>
+</body>
+</html>

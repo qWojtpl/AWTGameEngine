@@ -22,6 +22,9 @@ public class SpriteRenderer extends ObjectComponent {
         if(sprite == null) {
             return;
         }
+        if(!getCache().isChanged()) {
+            return;
+        }
         g.drawImage(
                 sprite,
                 getCamera().parseX(getObject(), getObject().getX()),
@@ -34,6 +37,7 @@ public class SpriteRenderer extends ObjectComponent {
                         .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
                         .setContext(getObject())
         );
+        getCache().save();
     }
 
     public Sprite getSprite() {
