@@ -20,6 +20,7 @@ public class Scene {
     private ColliderRegistry colliderRegistry;
     private PanelRegistry panelRegistry;
     private EventHandler sceneEventHandler;
+    private BindingsManager bindingsManager;
 
     public Scene(String name, Window window) {
         this.name = name;
@@ -27,6 +28,7 @@ public class Scene {
         setColliderRegistry(new ColliderRegistry());
         setPanelRegistry(new PanelRegistry());
         setSceneEventHandler(new EventHandler());
+        setBindingsManager(new BindingsManager());
     }
 
     public String getName() {
@@ -49,6 +51,10 @@ public class Scene {
         return this.sceneEventHandler;
     }
 
+    public BindingsManager getBindingsManager() {
+        return this.bindingsManager;
+    }
+
     public void setColliderRegistry(ColliderRegistry registry) {
         this.colliderRegistry = registry;
     }
@@ -59,6 +65,10 @@ public class Scene {
 
     public void setSceneEventHandler(EventHandler sceneEventHandler) {
         this.sceneEventHandler = sceneEventHandler;
+    }
+
+    public void setBindingsManager(BindingsManager bindingsManager) {
+        this.bindingsManager = bindingsManager;
     }
 
     public GameObject createGameObject(String identifier) {
@@ -107,7 +117,7 @@ public class Scene {
         object.setParent(null);
         gameObjects.remove(object.getIdentifier());
         removeSortedObject(object.getPriority(), object);
-        BindingsManager.removeBindingsByOwner(object);
+        bindingsManager.removeBindingsByOwner(object);
         for(GameObject obj : getActiveGameObjects()) {
             if(obj.equals(object)) {
                 continue;
@@ -187,7 +197,7 @@ public class Scene {
                 component.onAfterUpdate();
             }
         }
-        BindingsManager.updateBindings();
+        bindingsManager.updateBindings();
         for(PanelObject panel : panelRegistry.getPanels()) {
             panel.getMouseListener().refresh();
         }

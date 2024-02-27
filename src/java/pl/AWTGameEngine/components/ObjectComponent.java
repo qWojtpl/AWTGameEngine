@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.*;
+import pl.AWTGameEngine.engine.BindingsManager;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.PanelRegistry;
@@ -53,6 +54,10 @@ public abstract class ObjectComponent {
 
     protected final PanelRegistry getPanelRegistry() {
         return getScene().getPanelRegistry();
+    }
+
+    public final BindingsManager getBindingsManager() {
+        return getScene().getBindingsManager();
     }
 
     protected final Camera getCamera() {

@@ -196,7 +196,7 @@ public class Editor extends ObjectComponent {
 
     private void removeBindings() {
         for(BindableProperty bindableProperty : bindableProperties) {
-            BindingsManager.removeBindableProperty(bindableProperty);
+            getBindingsManager().removeBindableProperty(bindableProperty);
         }
     }
 

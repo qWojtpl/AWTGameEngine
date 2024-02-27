@@ -97,7 +97,7 @@ public class InfoComponent extends ObjectComponent {
         flexComponent.setMinimumHeight(0);
         flexObject.addComponent(flexComponent);
         BindableProperty bp = new BindableProperty(this, flexComponent, "calculatedHeight", getObject(), "sizeY");
-        BindingsManager.addOperation(bp, BindingsManager.OperationType.ADD, 21);
+        getBindingsManager().addOperation(bp, BindingsManager.OperationType.ADD, 21);
         flexObject.setParent(getObject());
     }
 

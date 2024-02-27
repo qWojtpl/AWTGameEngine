@@ -8,22 +8,18 @@ import java.util.List;
 
 public class BindingsManager {
 
-    private static final List<BindableProperty> bindableProperties = new ArrayList<>();
-    private static final List<BindingOperation> bindingsOperations = new ArrayList<>();
+    private final List<BindableProperty> bindableProperties = new ArrayList<>();
+    private final List<BindingOperation> bindingsOperations = new ArrayList<>();
 
-    BindingsManager() {
-
-    }
-
-    public static void addBindableProperty(BindableProperty bindableProperty) {
+    public void addBindableProperty(BindableProperty bindableProperty) {
         bindableProperties.add(bindableProperty);
     }
 
-    public static void removeBindableProperty(BindableProperty bindableProperty) {
+    public void removeBindableProperty(BindableProperty bindableProperty) {
         bindableProperties.remove(bindableProperty);
     }
 
-    public static void removeBindingsByOwner(Object owner) {
+    public void removeBindingsByOwner(Object owner) {
         for(BindableProperty property : getBindableProperties()) {
             if(property.getOwner().equals(owner)) {
                 removeBindableProperty(property);
@@ -31,23 +27,23 @@ public class BindingsManager {
         }
     }
 
-    public static void addOperation(BindableProperty property, OperationType operation, int value) {
+    public void addOperation(BindableProperty property, OperationType operation, int value) {
         bindingsOperations.add(new BindingOperation(property, operation, value));
     }
 
-    public static void addOperation(BindingOperation operation) {
+    public void addOperation(BindingOperation operation) {
         bindingsOperations.add(operation);
     }
 
-    public static List<BindableProperty> getBindableProperties() {
+    public List<BindableProperty> getBindableProperties() {
         return new ArrayList<>(bindableProperties);
     }
 
-    public static List<BindingOperation> getBindingsOperations() {
+    public List<BindingOperation> getBindingsOperations() {
         return new ArrayList<>(bindingsOperations);
     }
 
-    public static List<BindingOperation> getBindingsOperations(BindableProperty property) {
+    public List<BindingOperation> getBindingsOperations(BindableProperty property) {
         List<BindingOperation> operations = new ArrayList<>();
         for(BindingOperation operation : getBindingsOperations()) {
             if(operation.getProperty().equals(property)) {
@@ -57,7 +53,7 @@ public class BindingsManager {
         return operations;
     }
 
-    public static void updateBindings() {
+    public void updateBindings() {
         for(BindableProperty property : getBindableProperties()) {
             try {
                 String result = String.valueOf(property.getMethods()[0].invoke(property.getObjects()[0]));

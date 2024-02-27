@@ -17,7 +17,7 @@ public class ObjectCache {
     }
 
     public boolean isChanged() {
-        if(gameObject.getScene().getWindow().getRenderEngine().equals(Window.RenderEngine.DEFAULT)) {
+        if(Window.RenderEngine.DEFAULT.equals(gameObject.getScene().getWindow().getRenderEngine())) {
             return true;
         }
         if(gameObject.getX() != x) {
@@ -29,10 +29,7 @@ public class ObjectCache {
         if(gameObject.getSizeX() != sizeX) {
             return true;
         }
-        if(gameObject.getSizeY() != sizeY) {
-            return true;
-        }
-        return false;
+        return gameObject.getSizeY() != sizeY;
     }
 
     public void save() {

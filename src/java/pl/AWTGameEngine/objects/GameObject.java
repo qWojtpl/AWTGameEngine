@@ -65,7 +65,7 @@ public class GameObject {
         this.components.remove(component);
         eventHandler.removeComponent(component);
         getScene().getSceneEventHandler().removeComponent(component);
-        BindingsManager.removeBindingsByOwner(component);
+        getScene().getBindingsManager().removeBindingsByOwner(component);
         component.onRemoveComponent();
     }
 
