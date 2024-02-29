@@ -22,7 +22,8 @@ public class WebGraphicsManager extends GraphicsManager {
         GameObject object = renderOptions.getContext();
         scripts
                 .append(MessageFormat.format("setPosition(\"{0}\", \"{1}\", \"{2}\"); ", object.getIdentifier(), x, y))
-                .append(MessageFormat.format("setSize(\"{0}\", \"{1}\", \"{2}\"); ", object.getIdentifier(), width, height));
+                .append(MessageFormat.format("setSize(\"{0}\", \"{1}\", \"{2}\"); ", object.getIdentifier(), width, height))
+                .append(MessageFormat.format("drawImage(\"{0}\", \"{1}\"); ", object.getIdentifier(), image.getImageBase64(true)));
     }
 
     public void endFrame() {

@@ -44,7 +44,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
             for(String line : Objects.requireNonNull(ResourceManager.getResource("webview/webview.html"))) {
                 if(line.contains("**SYS.OBJECTS**")) {
                     htmlString.append(sceneString);
-                    htmlString.append("<img src=\"data:image/png;base64," + ResourceManager.getResourceAsSprite("sprites/beaver.jpg").getImageBase64() + "\">");
                     continue;
                 }
                 htmlString.append(line);

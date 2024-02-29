@@ -39,7 +39,7 @@
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
         <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
-    <Object id="image10" x="0" y="0" sizeX="200" sizeY="200">
+    <Object id="image10" x="100" y="100" sizeX="500" sizeY="200">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
         <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>

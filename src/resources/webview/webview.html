@@ -13,10 +13,8 @@
             background-color: #676767;
         }
 
-        img {
-            border: 2px solid red;
-            width: 300px;
-            height: 300px;
+        Object {
+            border: 1px solid red;
         }
 
     </style>
@@ -24,7 +22,8 @@
 <body>
     <noscript>Error (JS not enabled)</noscript>
     **SYS.OBJECTS**
-    <script type="text/javascript" defer>
+    <script type="text/javascript">
+
         function setPosition(identifier, x, y) {
             let object = getObject(identifier);
             object.setAttribute("x", x);
@@ -42,9 +41,16 @@
             object.style.height = height + "px";
         }
 
+        function drawImage(identifier, base64) {
+            let object = getObject(identifier);
+            object.style.backgroundImage = `url("data:image/png;base64,${base64}")`;
+            object.style.backgroundSize = "100% 100%";
+        }
+
         function getObject(identifier) {
             return document.getElementById(identifier);
         }
+
     </script>
 </body>
 </html>
