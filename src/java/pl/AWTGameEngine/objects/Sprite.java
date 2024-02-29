@@ -37,7 +37,7 @@ public class Sprite {
     }
 
     public String getImageBase64(boolean cacheResult) {
-        if(base64 != null) {
+        if(base64 != null && cacheResult) {
             return base64;
         }
         String returnable;

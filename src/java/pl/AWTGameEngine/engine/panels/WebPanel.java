@@ -55,17 +55,14 @@ public class WebPanel extends JFXPanel implements PanelObject {
         });
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if(g == null || window.getCurrentScene() == null) {
+    public void update() {
+        if(window.getCurrentScene() == null) {
             return;
         }
         if(graphicsManager == null) {
             return;
         }
-        graphicsManager.setGraphics(g);
-        LinkedHashMap<Integer, java.util.List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
+        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
         List<GameObject> renderList = new ArrayList<>();
         for (int i : sortedObjects.keySet()) {
             for (GameObject go : sortedObjects.get(i)) {

@@ -14,6 +14,6 @@ public interface PanelObject {
     Component add(Component comp);
     void remove(Component comp);
     void removeAll();
-    void repaint();
+    void update();
 
 }

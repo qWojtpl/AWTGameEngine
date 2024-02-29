@@ -67,6 +67,10 @@ public class NestedPanel extends JPanel implements PanelObject {
         }
     }
 
+    public void update() {
+        repaint();
+    }
+
     public Window getWindow() {
         return this.window;
     }
