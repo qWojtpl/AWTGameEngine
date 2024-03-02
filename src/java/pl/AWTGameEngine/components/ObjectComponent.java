@@ -271,6 +271,10 @@ public abstract class ObjectComponent {
         return false;
     }
 
+    public final boolean isNotOnWeb() {
+        return this.getClass().isAnnotationPresent(NotOnWeb.class);
+    }
+
     public final HashMap<String, String> serialize() {
         HashMap<String, String> data = new HashMap<>();
         for(Method method : this.getClass().getMethods()) {

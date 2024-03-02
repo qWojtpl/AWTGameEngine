@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.objects;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.ObjectComponent;
@@ -10,6 +9,7 @@ import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
+import pl.AWTGameEngine.windows.Window;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -38,17 +38,24 @@ public class GameObject {
     }
 
     public void addComponent(ObjectComponent component) {
+        if(component.isNotOnWeb()) {
+            if(Window.RenderEngine.WEB.equals(scene.getWindow().getRenderEngine())) {
+                Logger.log(2, "Component " + component.getClass().getName() + " is marked as NotOnWeb component, " +
+                        "but render engine is set to Web. Find component dedicated for web rendering instead.");
+                return;
+            }
+        }
         if(component.isUnique() && getComponentsByClass(component.getClass()).size() > 0) {
-            System.out.println("Component " + component.getClass().getName() + " is unique, cannot add another...");
+            Logger.log(2, "Component " + component.getClass().getName() + " is unique, cannot add another...");
             return;
         }
         if(!component.getObject().equals(this)) {
-            System.out.println("Component's object is wrong!");
+            Logger.log(2, "Component " + component.getClass().getName() + " object is wrong!");
             return;
         }
         for(ObjectComponent c : getComponents()) {
             if(c.conflictsWith(component.getClass()) || component.conflictsWith(c.getClass())) {
-                DialogManager.createError(
+                Logger.log(2,
                         "GameObject: " + getIdentifier() + "\nObject components: " + getComponents() + "\n" +
                                 "Component " + c.getClass().getName() + " has conflict with "
                                 + component.getClass().getName() + "; cannot add component " + component.getClass().getName());
@@ -462,12 +469,6 @@ public class GameObject {
     public void setParent(GameObject parent) {
         if(this.parent != null) {
             this.parent.removeChild(this);
-        }
-        for(ObjectComponent component : getComponents()) {
-            if(component.getClass().isAnnotationPresent(Parentless.class)) {
-                System.out.println("Can't add parent to object " + identifier + ", object is parentless!");
-                return;
-            }
         }
         GameObject oldParent = this.parent;
         this.parent = parent;

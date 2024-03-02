@@ -2,7 +2,9 @@ package pl.AWTGameEngine.engine.graphics;
 
 import javafx.application.Platform;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSException;
 import org.w3c.dom.Element;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
@@ -31,8 +33,12 @@ public class WebGraphicsManager extends GraphicsManager {
             return;
         }
         Platform.runLater(() -> {
-            webView.getEngine().executeScript(scripts.toString());
-            scripts = new StringBuilder();
+            try {
+                webView.getEngine().executeScript(scripts.toString());
+                scripts = new StringBuilder();
+            } catch(JSException e) {
+                Logger.log("Exception while executing scripts: " + scripts.toString(), e);
+            }
         });
     }
 

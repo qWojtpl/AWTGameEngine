@@ -11,4 +11,7 @@
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
         <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
+    <Object id="textareaobj" x="105" y="105" sizeX="100" sizeY="100">
+        <TextArea text="123"> </TextArea>
+    </Object>
 </Objects>
