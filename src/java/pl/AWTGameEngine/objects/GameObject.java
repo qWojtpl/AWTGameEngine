@@ -40,22 +40,22 @@ public class GameObject {
     public void addComponent(ObjectComponent component) {
         if(component.isNotOnWeb()) {
             if(Window.RenderEngine.WEB.equals(scene.getWindow().getRenderEngine())) {
-                Logger.log(2, "Component " + component.getClass().getName() + " is marked as NotOnWeb component, " +
+                Logger.log(1, "Component " + component.getClass().getName() + " is marked as NotOnWeb component, " +
                         "but render engine is set to Web. Find component dedicated for web rendering instead.");
                 return;
             }
         }
         if(component.isUnique() && getComponentsByClass(component.getClass()).size() > 0) {
-            Logger.log(2, "Component " + component.getClass().getName() + " is unique, cannot add another...");
+            Logger.log(1, "Component " + component.getClass().getName() + " is unique, cannot add another...");
             return;
         }
         if(!component.getObject().equals(this)) {
-            Logger.log(2, "Component " + component.getClass().getName() + " object is wrong!");
+            Logger.log(1, "Component " + component.getClass().getName() + " object is wrong!");
             return;
         }
         for(ObjectComponent c : getComponents()) {
             if(c.conflictsWith(component.getClass()) || component.conflictsWith(c.getClass())) {
-                Logger.log(2,
+                Logger.log(1,
                         "GameObject: " + getIdentifier() + "\nObject components: " + getComponents() + "\n" +
                                 "Component " + c.getClass().getName() + " has conflict with "
                                 + component.getClass().getName() + "; cannot add component " + component.getClass().getName());
@@ -553,14 +553,14 @@ public class GameObject {
                         if (clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
                             clazz.getDeclaredMethod(methodName, String.class).invoke(o, value);
                         } else {
-                            Logger.log(2, "Tried to invoke " + methodName
+                            Logger.log(1, "Tried to invoke " + methodName
                                     + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
                         }
                     } else {
                         if (clazz.getSuperclass().getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
                             clazz.getSuperclass().getDeclaredMethod(methodName, String.class).invoke(o, value);
                         } else {
-                            Logger.log(2, "Tried to invoke " + methodName
+                            Logger.log(1, "Tried to invoke " + methodName
                                     + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
                         }
                     }

@@ -17,6 +17,10 @@ public class Logger {
     }
 
     public static void log(int level, String message) {
+        log(level, message, null);
+    }
+
+    public static void log(int level, String message, ConsoleColor color) {
         if(Logger.level < level) {
             return;
         }
@@ -47,7 +51,13 @@ public class Logger {
                 append = true;
             }
         }
-        System.out.print(message);
+        if(color == null) {
+            color = ConsoleColor.RESET;
+            if(level == 1) {
+                color = ConsoleColor.RED;
+            }
+        }
+        System.out.print(color.value + message + ConsoleColor.RESET.value);
     }
 
     public static void log(String message, Exception exception) {
@@ -122,6 +132,26 @@ public class Logger {
             return "0" + number;
         }
         return number + "";
+    }
+
+    public enum ConsoleColor {
+
+        RESET("\u001B[0m"),
+        BLACK("\u001B[30m"),
+        RED("\u001B[31m"),
+        GREEN("\u001B[32m"),
+        YELLOW("\u001B[33m"),
+        BLUE("\u001B[34m"),
+        PURPLE("\u001B[35m"),
+        CYAN("\u001B[36m"),
+        WHITE("\u001B[37m");
+
+        private final String value;
+
+        ConsoleColor(String value) {
+            this.value = value;
+        }
+
     }
 
 }
