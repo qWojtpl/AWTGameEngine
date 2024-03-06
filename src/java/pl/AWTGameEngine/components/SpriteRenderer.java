@@ -5,13 +5,20 @@ import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
+import java.text.MessageFormat;
+
 @Unique
-public class SpriteRenderer extends ObjectComponent {
+public class SpriteRenderer extends ObjectComponent implements WebRenderable {
 
     private Sprite sprite;
+    private boolean updatePosition = true;
+    private boolean updateSize = true;
+    private boolean updateSprite = false;
 
     public SpriteRenderer(GameObject object) {
         super(object);
@@ -20,9 +27,6 @@ public class SpriteRenderer extends ObjectComponent {
     @Override
     public void onRender(GraphicsManager g) {
         if(sprite == null) {
-            return;
-        }
-        if(!getCache().isChanged()) {
             return;
         }
         g.drawImage(
@@ -37,7 +41,23 @@ public class SpriteRenderer extends ObjectComponent {
                         .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
                         .setContext(getObject())
         );
-        getCache().save();
+    }
+
+    @Override
+    public void onWebRenderRequest(WebGraphicsManager g) {
+        if(updatePosition) {
+            g.updatePosition(getObject());
+        }
+        if(updateSize) {
+            g.updateSize(getObject());
+        }
+        if(updateSprite) {
+            g.execute(MessageFormat.format("drawImage(\"{0}\", \"{1}\");",
+                    getObject().getIdentifier(), sprite.getImageBase64()));
+        }
+        updatePosition = false;
+        updateSize = false;
+        updateSprite = false;
     }
 
     public Sprite getSprite() {
@@ -51,11 +71,25 @@ public class SpriteRenderer extends ObjectComponent {
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
+        updateSprite = true;
     }
 
     @SerializationSetter
     public void setSpriteSource(String spriteSource) {
         setSprite(ResourceManager.getResourceAsSprite(spriteSource));
     }
+
+    @Override
+    public boolean onUpdatePosition(int newX, int newY) {
+        updatePosition = true;
+        return true;
+    }
+
+    @Override
+    public boolean onUpdateSize(int newX, int newY) {
+        updateSize = true;
+        return true;
+    }
+
 
 }

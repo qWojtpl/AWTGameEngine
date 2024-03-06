@@ -94,7 +94,7 @@ public class ProjectManager {
         StringBuilder resources = new StringBuilder();
         File[] directories = projectDirectory.listFiles();
         if(directories != null) {
-            for (File file : directories) {
+            for(File file : directories) {
                 if(!file.getName().startsWith("_")) {
                     resources.append(file.getName());
                     resources.append(" ");

@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebView;
-import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
@@ -13,7 +12,6 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -63,25 +61,16 @@ public class WebPanel extends JFXPanel implements PanelObject {
             return;
         }
         LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
-        List<GameObject> renderList = new ArrayList<>();
         for (int i : sortedObjects.keySet()) {
-            for (GameObject go : sortedObjects.get(i)) {
+            for(GameObject go : sortedObjects.get(i)) {
                 if (!go.isActive()) {
                     continue;
                 }
                 if(this.equals(go.getPanel())) {
-                    renderList.add(go);
-                    go.preRender(graphicsManager);
+                    go.webRender(graphicsManager);
                 }
             }
         }
-        for(GameObject go : renderList) {
-            go.render(graphicsManager);
-        }
-        for(GameObject go : renderList) {
-            go.afterRender(graphicsManager);
-        }
-        graphicsManager.endFrame();
     }
 
     public Window getWindow() {

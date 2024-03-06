@@ -7,6 +7,8 @@ import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PanelComponent;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
@@ -434,6 +436,9 @@ public class GameObject {
 
     public void setSizeX(int x) {
         this.sizeX = x;
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#int#int")) {
+            component.onUpdateSize(x, this.sizeY);
+        }
     }
 
     @BindingSetter
@@ -443,6 +448,9 @@ public class GameObject {
 
     public void setSizeY(int y) {
         this.sizeY = y;
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#int#int")) {
+            component.onUpdateSize(this.x, y);
+        }
     }
 
     @BindingSetter
@@ -507,6 +515,14 @@ public class GameObject {
     public void afterRender(GraphicsManager g) {
         for(ObjectComponent component : eventHandler.getComponents("onAfterRender#GraphicsManager")) {
             component.onAfterRender(g);
+        }
+    }
+
+    public void webRender(WebGraphicsManager g) {
+        for(ObjectComponent component : getComponents()) {
+            if(component instanceof WebRenderable) {
+                ((WebRenderable) component).onWebRenderRequest(g);
+            }
         }
     }
 

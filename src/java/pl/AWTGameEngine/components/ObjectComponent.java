@@ -9,7 +9,6 @@ import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.ObjectCache;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
@@ -17,27 +16,16 @@ import pl.AWTGameEngine.windows.Window;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-/**
- * Every component field should have dedicated method to set the value of this field.
- * This is used for deserialization.
- * Name schema: setFieldname(String)
- */
 public abstract class ObjectComponent {
 
     private final GameObject object;
-    private final ObjectCache cache;
 
     public ObjectComponent(GameObject object) {
         this.object = object;
-        this.cache = new ObjectCache(object);
     }
 
     public final GameObject getObject() {
         return this.object;
-    }
-
-    public final ObjectCache getCache() {
-        return this.cache;
     }
 
     protected final KeyListener getKeyListener() {
@@ -136,6 +124,11 @@ public abstract class ObjectComponent {
      */
     @EventMethod
     public boolean onUpdatePosition(int newX, int newY) {
+        return true;
+    }
+
+    @EventMethod
+    public boolean onUpdateSize(int newX, int newY) {
         return true;
     }
 
