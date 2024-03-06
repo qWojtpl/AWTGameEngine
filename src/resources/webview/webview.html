@@ -22,8 +22,8 @@
     </style>
 </head>
 <body>
-    <noscript>Error (JS not enabled)</noscript>
-    **SYS.OBJECTS**
+    <noscript>Error (JS not available)</noscript>
+
     <script type="text/javascript">
 
         function setPosition(identifier, x, y) {
@@ -43,6 +43,11 @@
             object.style.height = height + "px";
         }
 
+        function setRotation(identifier, rotation) {
+            let object = getObject(identifier);
+            object.style.transform = "rotate(" + rotation + "deg)";
+        }
+
         function drawImage(identifier, base64) {
             let object = getObject(identifier);
             object.style.backgroundImage = `url("data:image/png;base64,${base64}")`;
@@ -50,7 +55,13 @@
         }
 
         function getObject(identifier) {
-            return document.getElementById(identifier);
+            let object = document.getElementById(identifier);
+            if(object == null) {
+                object = document.createElement("Object");
+                object.setAttribute("id", identifier);
+                document.querySelector("body").appendChild(object);
+            }
+            return object;
         }
 
     </script>

@@ -18,6 +18,7 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
     private Sprite sprite;
     private boolean updatePosition = true;
     private boolean updateSize = true;
+    private boolean updateRotation = true;
     private boolean updateSprite = false;
 
     public SpriteRenderer(GameObject object) {
@@ -51,7 +52,10 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
         if(updateSize) {
             g.updateSize(getObject());
         }
-        if(updateSprite) {
+        if(updateRotation) {
+            g.updateRotation(getObject());
+        }
+        if(updateSprite && sprite != null) {
             g.execute(MessageFormat.format("drawImage(\"{0}\", \"{1}\");",
                     getObject().getIdentifier(), sprite.getImageBase64()));
         }
@@ -91,5 +95,10 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
         return true;
     }
 
+    @Override
+    public boolean onUpdateRotation(int newRotation) {
+        updateRotation = true;
+        return true;
+    }
 
 }

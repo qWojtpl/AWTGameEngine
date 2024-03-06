@@ -24,6 +24,11 @@ public class WebGraphicsManager {
                 object.getIdentifier(), object.getSizeX(), object.getSizeY()));
     }
 
+    public void updateRotation(GameObject object) {
+        execute(MessageFormat.format("setRotation(\"{0}\", \"{1}\");",
+                object.getIdentifier(), object.getRotation()));
+    }
+
     public void execute(String script) {
         Platform.runLater(() -> {
             webView.getEngine().executeScript(script);
