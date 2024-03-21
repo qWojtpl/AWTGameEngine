@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PanelComponent;
+import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -37,6 +38,9 @@ public class GameObject {
     public GameObject(String identifier, Scene scene) {
         this.identifier = identifier;
         this.scene = scene;
+        if(Window.RenderEngine.WEB.equals(getScene().getWindow().getRenderEngine())) {
+            this.addComponent(new WebHandler(this));
+        }
     }
 
     public void addComponent(ObjectComponent component) {
@@ -540,7 +544,7 @@ public class GameObject {
             } else {
                 setActive(Boolean.parseBoolean(getValue(data, "active")));
             }
-            for (int i = 0; i < data.getChildNodes().getLength(); i++) {
+            for(int i = 0; i < data.getChildNodes().getLength(); i++) {
                 Node childNode = data.getChildNodes().item(i);
                 if(childNode.getNodeType() != Node.ELEMENT_NODE) {
                     continue;

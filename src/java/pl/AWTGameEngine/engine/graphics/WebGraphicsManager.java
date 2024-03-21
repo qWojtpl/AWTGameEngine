@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine.graphics;
 
 import javafx.application.Platform;
 import javafx.scene.web.WebView;
+import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.text.MessageFormat;
@@ -15,13 +16,19 @@ public class WebGraphicsManager {
     }
 
     public void updatePosition(GameObject object) {
+        Camera camera = object.getPanel().getCamera();
         execute(MessageFormat.format("setPosition(\"{0}\", \"{1}\", \"{2}\");",
-                object.getIdentifier(), object.getX(), object.getY()));
+                object.getIdentifier(),
+                camera.parseX(object, object.getX()),
+                camera.parseY(object, object.getY())));
     }
 
     public void updateSize(GameObject object) {
+        Camera camera = object.getPanel().getCamera();
         execute(MessageFormat.format("setSize(\"{0}\", \"{1}\", \"{2}\");",
-                object.getIdentifier(), object.getSizeX(), object.getSizeY()));
+                object.getIdentifier(),
+                camera.parseScale(object.getSizeX()),
+                camera.parseScale(object.getSizeY())));
     }
 
     public void updateRotation(GameObject object) {

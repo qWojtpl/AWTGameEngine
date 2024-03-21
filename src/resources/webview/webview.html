@@ -8,15 +8,11 @@
     <title>Web renderer</title>
     <style>
 
-        body {
+        * {
             margin: 0px;
-            background-color: #676767;
             overflow-x: hidden;
             overflow-y: hidden;
-        }
-
-        Object {
-            border: 1px solid red;
+            user-select: none;
         }
 
     </style>
@@ -28,8 +24,6 @@
 
         function setPosition(identifier, x, y) {
             let object = getObject(identifier);
-            object.setAttribute("x", x);
-            object.setAttribute("y", y);
             object.style.left = x + "px";
             object.style.top = y + "px";
             object.style.position = "absolute";
@@ -37,8 +31,6 @@
 
         function setSize(identifier, width, height) {
             let object = getObject(identifier);
-            object.setAttribute("sizeX", width);
-            object.setAttribute("sizeY", height);
             object.style.width = width + "px";
             object.style.height = height + "px";
         }
@@ -52,6 +44,11 @@
             let object = getObject(identifier);
             object.style.backgroundImage = `url("data:image/png;base64,${base64}")`;
             object.style.backgroundSize = "100% 100%";
+        }
+
+        function setColor(identifier, color) {
+            let object = getObject(identifier);
+            object.style.backgroundColor = color;
         }
 
         function getObject(identifier) {

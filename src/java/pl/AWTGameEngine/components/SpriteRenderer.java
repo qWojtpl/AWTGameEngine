@@ -16,9 +16,6 @@ import java.text.MessageFormat;
 public class SpriteRenderer extends ObjectComponent implements WebRenderable {
 
     private Sprite sprite;
-    private boolean updatePosition = true;
-    private boolean updateSize = true;
-    private boolean updateRotation = true;
     private boolean updateSprite = false;
 
     public SpriteRenderer(GameObject object) {
@@ -46,21 +43,10 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
 
     @Override
     public void onWebRenderRequest(WebGraphicsManager g) {
-        if(updatePosition) {
-            g.updatePosition(getObject());
-        }
-        if(updateSize) {
-            g.updateSize(getObject());
-        }
-        if(updateRotation) {
-            g.updateRotation(getObject());
-        }
         if(updateSprite && sprite != null) {
             g.execute(MessageFormat.format("drawImage(\"{0}\", \"{1}\");",
                     getObject().getIdentifier(), sprite.getImageBase64()));
         }
-        updatePosition = false;
-        updateSize = false;
         updateSprite = false;
     }
 
@@ -81,24 +67,6 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
     @SerializationSetter
     public void setSpriteSource(String spriteSource) {
         setSprite(ResourceManager.getResourceAsSprite(spriteSource));
-    }
-
-    @Override
-    public boolean onUpdatePosition(int newX, int newY) {
-        updatePosition = true;
-        return true;
-    }
-
-    @Override
-    public boolean onUpdateSize(int newX, int newY) {
-        updateSize = true;
-        return true;
-    }
-
-    @Override
-    public boolean onUpdateRotation(int newRotation) {
-        updateRotation = true;
-        return true;
     }
 
 }
