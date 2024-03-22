@@ -3,13 +3,15 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 
-public class TextRenderer extends ObjectComponent {
+public class TextRenderer extends ObjectComponent implements WebRenderable {
 
     private String text = "Text";
     private ColorObject color = new ColorObject();
@@ -17,6 +19,7 @@ public class TextRenderer extends ObjectComponent {
     private HorizontalAlign horizontal = HorizontalAlign.LEFT;
     private VerticalAlign vertical = VerticalAlign.TOP;
     private TextWrap wrap = TextWrap.NO_WRAP;
+    private boolean propertyChanged = false;
 
     public TextRenderer(GameObject object) {
         super(object);
@@ -103,6 +106,7 @@ public class TextRenderer extends ObjectComponent {
     @SerializationSetter
     public void setText(String text) {
         this.text = text;
+        propertyChanged = true;
     }
 
     public void setColor(ColorObject color) {
@@ -110,6 +114,7 @@ public class TextRenderer extends ObjectComponent {
             return;
         }
         this.color = color;
+        propertyChanged = true;
     }
 
     @SerializationSetter
@@ -119,6 +124,7 @@ public class TextRenderer extends ObjectComponent {
 
     public void setSize(float size) {
         this.size = size;
+        propertyChanged = true;
     }
 
     @SerializationSetter
@@ -172,6 +178,19 @@ public class TextRenderer extends ObjectComponent {
         } catch(IllegalArgumentException e) {
             setWrap(TextWrap.NO_WRAP);
         }
+    }
+
+    @Override
+    public void onWebRenderRequest(WebGraphicsManager g) {
+        if(!propertyChanged) {
+            return;
+        }
+        g.execute(String.format("setText(\"%s\", \"%s\", \"%s\", \"%s\")",
+                getObject().getIdentifier(),
+                text,
+                color.serialize(),
+                size));
+        propertyChanged = false;
     }
 
     public enum HorizontalAlign {

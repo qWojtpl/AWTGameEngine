@@ -56,6 +56,13 @@
             object.style.backgroundColor = color;
         }
 
+        function setText(identifier, text, color, size) {
+            let object = getObject(identifier);
+            object.innerText = text;
+            object.style.color = color;
+            object.style.fontSize = size;
+        }
+
         function getObject(identifier) {
             if(elements[identifier] != null) {
                 return elements[identifier];

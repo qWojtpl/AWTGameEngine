@@ -3,4 +3,7 @@
         <BlankRenderer color="rgb(18,18,18)" />
         <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
+    <Object id="text" x="100" y="100" sizeX="100" sizeY="100">
+        <TextRenderer color="rgb(255,255,255)" text="brbr drewno tama test" size="48" />
+    </Object>
 </Objects>
