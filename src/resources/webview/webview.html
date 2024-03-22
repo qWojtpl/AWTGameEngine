@@ -26,6 +26,8 @@
 
     <script type="text/javascript">
 
+        const elements = new Object();
+
         function setPosition(identifier, x, y) {
             let object = getObject(identifier);
             object.style.left = x + "px";
@@ -55,12 +57,16 @@
         }
 
         function getObject(identifier) {
+            if(elements[identifier] != null) {
+                return elements[identifier];
+            }
             let object = document.getElementById(identifier);
             if(object == null) {
                 object = document.createElement("Object");
                 object.setAttribute("id", identifier);
                 document.querySelector("body").appendChild(object);
             }
+            elements[identifier] = object;
             return object;
         }
 

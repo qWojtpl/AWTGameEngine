@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine.panels;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.web.WebView;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -36,9 +37,10 @@ public class WebPanel extends JFXPanel implements PanelObject {
             for(String line : Objects.requireNonNull(ResourceManager.getResource("webview/webview.html"))) {
                 htmlString.append(line);
             }
+            webView.getEngine().setJavaScriptEnabled(true);
+            webView.contextMenuEnabledProperty().setValue(false);
             webView.getEngine().loadContent(htmlString.toString());
             setScene(new javafx.scene.Scene(webView));
-            webView.contextMenuEnabledProperty().setValue(false);
             graphicsManager = new WebGraphicsManager(webView);
         });
     }

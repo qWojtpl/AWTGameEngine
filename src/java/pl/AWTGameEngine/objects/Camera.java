@@ -1,7 +1,10 @@
 package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.components.Canvas;
+import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.engine.panels.PanelObject;
+
+import java.util.List;
 
 public class Camera {
 
@@ -63,19 +66,31 @@ public class Camera {
 
     public void setX(int x) {
         this.x = x;
+        updatedPosition();
+
     }
 
     public void setY(int y) {
         this.y = y;
+        updatedPosition();
     }
 
     public void setBounds(int x, int y) {
         this.x = x;
         this.y = y;
+        updatedPosition();
     }
 
     public void setZoom(float zoom) {
         this.zoom = zoom;
+    }
+
+    private void updatedPosition() {
+        List<ObjectComponent> components = panel.getWindow().getCurrentScene()
+                .getSceneEventHandler().getComponents("onUpdateCameraPosition#int#int");
+        for(ObjectComponent component : components) {
+            component.onUpdateCameraPosition(this.x, this.y);
+        }
     }
 
 }

@@ -49,4 +49,9 @@ public class WebHandler extends ObjectComponent implements WebRenderable {
         return true;
     }
 
+    @Override
+    public void onUpdateCameraPosition(int newX, int newY) {
+        updatePosition = true;
+    }
+
 }

@@ -2,10 +2,13 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.PhysicsBody;
+import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Vector;
 
 public class CustomComponent extends ObjectComponent {
+
+    private int dir = 1;
 
     public CustomComponent(GameObject object) {
         super(object);
@@ -18,7 +21,6 @@ public class CustomComponent extends ObjectComponent {
 
     @Override
     public void onStaticUpdate() {
-        //PhysicsBody physicsBody = (PhysicsBody) getObject().getComponentByClass(PhysicsBody.class);
         if(getKeyListener().hasPressedKey(75)) {
             getCamera().setZoom(getCamera().getZoom() - 0.25f);
             getKeyListener().releaseKey(75);
@@ -33,21 +35,37 @@ public class CustomComponent extends ObjectComponent {
         }
         if(getKeyListener().hasPressedKey(87)) {
             getObject().moveY(getObject().getY() - 3);
-            //physicsBody.push(new Vector(0, -3));
         }
         if(getKeyListener().hasPressedKey(83)) {
             getObject().moveY(getObject().getY() + 3);
-            //physicsBody.push(new Vector(0, 3));
         }
         if(getKeyListener().hasPressedKey(65)) {
             getObject().moveX(getObject().getX() - 3);
-            //physicsBody.push(new Vector(-3, 0));
         }
         if(getKeyListener().hasPressedKey(68)) {
             getObject().moveX(getObject().getX() + 3);
-            //physicsBody.push(new Vector(3, 0));
         }
-        //getObject().rotate(getObject().getRotation() + 8);
+        if(getObject().getX() > 960 || getObject().getX() < 0) {
+            dir *= -1;
+        }
+        getObject().setX(getObject().getX() + dir);
+        updateCameraPosition();
+    }
+
+    private void updateCameraPosition() {
+        Camera screenCamera = getCamera();
+        if(getKeyListener().hasPressedKey(37)) {
+            screenCamera.setX(screenCamera.getX() - 8);
+        }
+        if(getKeyListener().hasPressedKey(38)) {
+            screenCamera.setY(screenCamera.getY() - 8);
+        }
+        if(getKeyListener().hasPressedKey(39)) {
+            screenCamera.setX(screenCamera.getX() + 8);
+        }
+        if(getKeyListener().hasPressedKey(40)) {
+            screenCamera.setY(screenCamera.getY() + 8);
+        }
     }
 
     @Override
