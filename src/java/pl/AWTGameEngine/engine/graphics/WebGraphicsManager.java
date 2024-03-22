@@ -17,7 +17,7 @@ public class WebGraphicsManager {
 
     public void updatePosition(GameObject object) {
         Camera camera = object.getPanel().getCamera();
-        execute(MessageFormat.format("setPosition(\"{0}\", \"{1}\", \"{2}\");",
+        execute(String.format("setPosition(\"%s\", \"%s\", \"%s\");",
                 object.getIdentifier(),
                 camera.parseX(object, object.getX()),
                 camera.parseY(object, object.getY())));
@@ -25,14 +25,14 @@ public class WebGraphicsManager {
 
     public void updateSize(GameObject object) {
         Camera camera = object.getPanel().getCamera();
-        execute(MessageFormat.format("setSize(\"{0}\", \"{1}\", \"{2}\");",
+        execute(String.format("setSize(\"%s\", \"%s\", \"%s\");",
                 object.getIdentifier(),
                 camera.parseScale(object.getSizeX()),
                 camera.parseScale(object.getSizeY())));
     }
 
     public void updateRotation(GameObject object) {
-        execute(MessageFormat.format("setRotation(\"{0}\", \"{1}\");",
+        execute(String.format("setRotation(\"%s\", \"%s\");",
                 object.getIdentifier(), object.getRotation()));
     }
 
