@@ -13,6 +13,11 @@
             user-select: none;
         }
 
+        body {
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
         Object {
             position: absolute;
         }
@@ -59,6 +64,27 @@
             object.innerText = text;
             object.style.color = color;
             object.style.fontSize = size;
+        }
+
+        function initInput(identifier) {
+            let object = getObject(identifier);
+            if(object.children.length > 0) {
+                return;
+            }
+            let inputChild = document.createElement("input");
+            inputChild.style.width = "100%";
+            inputChild.style.height = "100%";
+            object.appendChild(inputChild);
+        }
+
+        function getInputValue(identifier) {
+            initInput(identifier);
+            return getObject(identifier).children[0].value;
+        }
+
+        function setInputValue(identifier, value) {
+            initInput(identifier);
+            getObject(identifier).children[0].value = value;
         }
 
         function getObject(identifier) {

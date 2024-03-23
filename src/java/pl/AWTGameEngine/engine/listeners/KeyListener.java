@@ -45,6 +45,21 @@ public class KeyListener implements java.awt.event.KeyListener {
         pressedKeysChars.remove(e.getKeyChar());
     }
 
+    //todo: better implementation
+    public void asKeyPress(int key) {
+        pressedKeys.add(key);
+    }
+
+    public void asKeyType(int key) {
+        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#int")) {
+            component.onKeyType(key);
+        }
+    }
+
+    public void asKeyRelease(int key) {
+        releaseKey(key);
+    }
+
     public boolean hasPressedKey(int key) {
         return pressedKeys.contains(key);
     }

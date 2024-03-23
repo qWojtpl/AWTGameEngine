@@ -2,6 +2,9 @@ package pl.AWTGameEngine.engine.panels;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebView;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -27,7 +30,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
         this.window = window;
         setLayout(null);
         setBackground(Color.WHITE);
-        setFocusable(false);
         this.camera = new Camera(this);
         setMouseListener(new MouseListener(this));
         Platform.runLater(() -> {
@@ -36,6 +38,15 @@ public class WebPanel extends JFXPanel implements PanelObject {
             for(String line : Objects.requireNonNull(ResourceManager.getResource("webview/webview.html"))) {
                 htmlString.append(line);
             }
+            webView.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
+                getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
+            });
+            webView.addEventHandler(KeyEvent.KEY_TYPED, (event) -> {
+                getWindow().getKeyListener().asKeyType(event.getCode().getCode());
+            });
+            webView.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
+                getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
+            });
             webView.getEngine().setJavaScriptEnabled(true);
             webView.contextMenuEnabledProperty().setValue(false);
             webView.getEngine().loadContent(htmlString.toString());

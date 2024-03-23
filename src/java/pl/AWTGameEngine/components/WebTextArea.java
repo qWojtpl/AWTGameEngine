@@ -1,15 +1,43 @@
 package pl.AWTGameEngine.components;
 
+import javafx.application.Platform;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebRenderable;
+import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
 
-public class WebTextArea extends ObjectComponent {
+public class WebTextArea extends ObjectComponent implements WebRenderable {
 
     private String text = "Text";
+    private boolean propertyChanged = true;
 
     public WebTextArea(GameObject object) {
         super(object);
+    }
+
+    @Override
+    public void onUpdate() {
+        if(getKeyListener().getPressedKeys().isEmpty()) {
+            return;
+        }
+        WebGraphicsManager manager = ((WebPanel) getObject().getPanel()).getGraphicsManager();
+        Platform.runLater(() -> {
+            text = (String) manager.getWebView().getEngine().executeScript(
+                    String.format("getInputValue(\"%s\");", getObject().getIdentifier()));
+        });
+    }
+
+    @Override
+    public void onWebRenderRequest(WebGraphicsManager g) {
+        if(!propertyChanged) {
+            return;
+        }
+        g.execute(String.format("setInputValue(\"%s\", \"%s\");",
+                getObject().getIdentifier(),
+                getText()));
+        propertyChanged = false;
     }
 
     @SerializationGetter
@@ -20,6 +48,7 @@ public class WebTextArea extends ObjectComponent {
     @SerializationSetter
     public void setText(String text) {
         this.text = text;
+        propertyChanged = true;
     }
 
 }
