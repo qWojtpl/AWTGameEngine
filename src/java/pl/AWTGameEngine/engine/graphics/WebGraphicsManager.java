@@ -5,8 +5,6 @@ import javafx.scene.web.WebView;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
-import java.text.MessageFormat;
-
 public class WebGraphicsManager {
 
     private WebView webView;

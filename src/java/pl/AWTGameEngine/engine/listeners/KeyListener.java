@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.event.KeyEvent;

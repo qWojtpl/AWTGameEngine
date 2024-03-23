@@ -2,7 +2,6 @@ package pl.AWTGameEngine.engine.panels;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.web.WebView;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;

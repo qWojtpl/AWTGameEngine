@@ -1,5 +1,5 @@
 <Objects>
-    <Object id="background" x="0" y="0" sizeX="960" sizeY="640">
+    <Object id="background" x="0" y="0" sizeX="960" sizeY="540">
         <BlankRenderer color="rgb(18,18,18)" />
         <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>

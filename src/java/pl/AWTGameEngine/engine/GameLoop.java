@@ -1,8 +1,6 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.engine.panels.NestedPanel;
 import pl.AWTGameEngine.engine.panels.PanelObject;
-import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.windows.Window;
 
 public class GameLoop extends Thread {

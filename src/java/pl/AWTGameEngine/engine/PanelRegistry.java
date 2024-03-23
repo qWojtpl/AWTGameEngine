@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.engine.panels.NestedPanel;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 
 import java.util.ArrayList;

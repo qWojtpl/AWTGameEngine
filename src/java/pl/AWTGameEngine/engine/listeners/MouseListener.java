@@ -9,7 +9,10 @@ import pl.AWTGameEngine.objects.GameObject;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-public class MouseListener implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener, java.awt.event.MouseWheelListener {
+public class MouseListener implements
+        java.awt.event.MouseListener,
+        java.awt.event.MouseMotionListener,
+        java.awt.event.MouseWheelListener {
 
     private final PanelObject panel;
     private int mouseX;
