@@ -1,10 +1,14 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.OnlyOnWeb;
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.GameObject;
 
 // Component is automatically added to every GameObject if render engine is set to web
+@OnlyOnWeb
+@Unique
 public class WebHandler extends ObjectComponent implements WebRenderable {
 
     private boolean updatePosition = true;
