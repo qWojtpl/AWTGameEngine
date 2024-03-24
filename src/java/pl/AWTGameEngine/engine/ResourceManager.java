@@ -19,7 +19,6 @@ public class ResourceManager {
 
     private final static HashMap<String, List<String>> resources = new HashMap<>();
     private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
-    private final static HashMap<String, InputStream> streamResources = new HashMap<>();
     private final static HashMap<String, URL> urlResources = new HashMap<>();
     private final static List<AudioClip> audioClips = new ArrayList<>();
 
@@ -127,16 +126,12 @@ public class ResourceManager {
 
     public static InputStream getResourceAsStream(String name) {
         name = getResourceName(name);
-        if(streamResources.containsKey(name)) {
-            return streamResources.get(name);
-        }
         Logger.log(2, "Reading stream resource: " + name);
         try {
             InputStream stream = getStream(name);
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
-            streamResources.put(name, stream);
             return stream;
         } catch(Exception e) {
             Logger.log("Cannot get stream from resource: " + name, e);
@@ -170,10 +165,6 @@ public class ResourceManager {
         return new HashMap<>(spriteResources);
     }
 
-    public static HashMap<String, InputStream> getStreamResources() {
-        return new HashMap<>(streamResources);
-    }
-
     public static HashMap<String, URL> getUrlResources() {
         return new HashMap<>(urlResources);
     }
@@ -202,10 +193,6 @@ public class ResourceManager {
 
     public static void clearSpriteResources() {
         spriteResources.clear();
-    }
-
-    public static void clearStreamResources() {
-        streamResources.clear();
     }
 
     public static void clearAudioClips() {

@@ -30,7 +30,7 @@ public class CustomComponent extends ObjectComponent {
             getKeyListener().releaseKey(76);
         }
         if(getKeyListener().hasPressedKey(82)) {
-            getSceneLoader().loadSceneFile("scenes/main.xml");
+            getSceneLoader().loadSceneFile("scenes/editor.xml");
             getKeyListener().releaseKey(82);
         }
         if(getKeyListener().hasPressedKey(87)) {
