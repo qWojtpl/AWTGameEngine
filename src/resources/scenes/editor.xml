@@ -6,7 +6,7 @@
     <Object id="text" x="100" y="100" sizeX="100" sizeY="100">
         <TextRenderer color="rgb(255,255,255)" text="brbr drewno tama test" size="48" />
     </Object>
-    <Object id="textarea" x="300" y="300" sizeX="100" sizeY="100">
+    <Object id="textarea" x="300" y="300" sizeX="100" sizeY="100" rotation="45">
         <WebTextArea />
         <BlankRenderer color="red" />
     </Object>

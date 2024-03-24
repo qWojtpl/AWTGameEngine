@@ -20,6 +20,7 @@
 
         Object {
             position: absolute;
+            white-space: nowrap;
         }
 
     </style>
@@ -63,7 +64,7 @@
             let object = getObject(identifier);
             object.innerText = text;
             object.style.color = color;
-            object.style.fontSize = size;
+            object.style.fontSize = size + "px";
         }
 
         function initInput(identifier) {

@@ -189,7 +189,7 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
                 getObject().getIdentifier(),
                 text,
                 color.serialize(),
-                size));
+                size * getCamera().getZoom()));
         propertyChanged = false;
     }
 
