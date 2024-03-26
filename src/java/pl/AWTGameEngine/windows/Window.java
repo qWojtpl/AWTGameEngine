@@ -12,6 +12,7 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
 
 public class Window extends JFrame {
 
@@ -112,21 +113,24 @@ public class Window extends JFrame {
             multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
         }
         this.multiplier = multiplier;
-        if(panel != null) {
+        if(getPanel() != null) {
             if(getCurrentScene() != null) {
-                getCurrentScene().getPanelRegistry().removePanel(panel);
+                getCurrentScene().getPanelRegistry().removePanel(getPanel());
             }
-            remove(panel);
         }
         if(RenderEngine.DEFAULT.equals(renderEngine)) {
-            this.panel = new NestedPanel(this);
-            add(panel);
-            panel.setPreferredSize(new Dimension((int) (WIDTH * multiplier) - 1, (int) (HEIGHT * multiplier)));
+            if(this.panel == null) {
+                this.panel = new NestedPanel(this);
+                add(panel);
+            }
         } else {
-            this.webPanel = new WebPanel(this);
-            add(webPanel);
-            webPanel.setPreferredSize(new Dimension((int) (WIDTH * multiplier) - 1, (int) (HEIGHT * multiplier)));
+            if(this.webPanel == null) {
+                this.webPanel = new WebPanel(this);
+                add(webPanel);
+            }
+            webPanel.loadWebView();
         }
+        getPanel().setPreferredSize(new Dimension((int) (WIDTH * multiplier) - 1, (int) (HEIGHT * multiplier)));
         pack();
         setKeyListener(new KeyListener(this));
     }

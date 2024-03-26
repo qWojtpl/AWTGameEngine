@@ -15,5 +15,6 @@ public interface PanelObject {
     void remove(Component comp);
     void removeAll();
     void update();
+    void setPreferredSize(Dimension dimension);
 
 }

@@ -51,6 +51,9 @@ public class KeyListener implements java.awt.event.KeyListener {
     }
 
     public void asKeyType(int key) {
+        if(window.getCurrentScene() == null) {
+            return;
+        }
         for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#int")) {
             component.onKeyType(key);
         }

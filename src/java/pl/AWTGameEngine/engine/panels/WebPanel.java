@@ -14,9 +14,8 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 public class WebPanel extends JFXPanel implements PanelObject {
 
@@ -31,9 +30,15 @@ public class WebPanel extends JFXPanel implements PanelObject {
         setLayout(null);
         setBackground(Color.WHITE);
         this.camera = new Camera(this);
-        setMouseListener(new MouseListener(this));
         Platform.runLater(() -> {
             this.webView = new WebView();
+            setScene(new javafx.scene.Scene(webView));
+        });
+        setMouseListener(new MouseListener(this));
+    }
+
+    public void loadWebView() {
+        Platform.runLater(() -> {
             StringBuilder htmlString = new StringBuilder();
             for(String line : Objects.requireNonNull(ResourceManager.getResource("webview/webview.html"))) {
                 htmlString.append(line);
@@ -50,7 +55,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
             webView.getEngine().setJavaScriptEnabled(true);
             webView.contextMenuEnabledProperty().setValue(false);
             webView.getEngine().loadContent(htmlString.toString());
-            setScene(new javafx.scene.Scene(webView));
             graphicsManager = new WebGraphicsManager(webView);
         });
     }
@@ -65,7 +69,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
         LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
         for (int i : sortedObjects.keySet()) {
             for(GameObject go : sortedObjects.get(i)) {
-                if (!go.isActive()) {
+                if(!go.isActive()) {
                     continue;
                 }
                 if(this.equals(go.getPanel())) {
