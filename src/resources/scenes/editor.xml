@@ -17,6 +17,10 @@
     <Object id="objectName" x="759" y="8" sizeX="185" sizeY="23">
         <WebTextArea />
     </Object>
+    <Object id="test" x="500" y="200" sizeX="100" sizeY="100">
+        <BlankRenderer color="green" />
+        <Border color="red" />
+    </Object>
     <SceneStyles>
 
         #leftPanel, #topPanel, #rightPanel {

@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.NotOnWeb;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
@@ -7,6 +8,7 @@ import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 @Unique
+@NotOnWeb
 public class ScrollComponent extends ObjectComponent {
 
     private final BlankRenderer background = new BlankRenderer(getObject());

@@ -3,13 +3,16 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
-public class Border extends ObjectComponent {
+public class Border extends ObjectComponent implements WebRenderable {
 
     private boolean enabled = true;
     private ColorObject color = new ColorObject();
+    private boolean propertyChanged = true;
 
     public Border(GameObject object) {
         super(object);
@@ -33,6 +36,17 @@ public class Border extends ObjectComponent {
         );
     }
 
+    @Override
+    public void onWebRenderRequest(WebGraphicsManager g) {
+        if(!propertyChanged || !enabled) {
+            return;
+        }
+        g.execute(String.format("setBorder(\"%s\", \"%s\")",
+                getObject().getIdentifier(),
+                color.serialize()));
+    }
+
+
     @SerializationGetter
     public boolean isEnabled() {
         return this.enabled;
@@ -49,6 +63,7 @@ public class Border extends ObjectComponent {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        propertyChanged = true;
     }
 
     @SerializationSetter
@@ -61,6 +76,7 @@ public class Border extends ObjectComponent {
             return;
         }
         this.color = color;
+        propertyChanged = true;
     }
 
     @SerializationSetter

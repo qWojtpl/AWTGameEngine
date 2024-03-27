@@ -63,6 +63,11 @@
             object.style.backgroundColor = color;
         }
 
+        function setBorder(identifier, color) {
+            let object = getObject(identifier);
+            object.style.border = "1px solid " + color;
+        }
+
         function setText(identifier, text, color, size) {
             let object = getObject(identifier);
             object.innerText = text;
