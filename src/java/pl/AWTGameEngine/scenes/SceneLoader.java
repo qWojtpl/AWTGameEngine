@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.scenes;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
@@ -48,9 +49,9 @@ public class SceneLoader {
             multiplier = AppProperties.getPropertyAsDouble("multiplier");
         }
         window.setTitle(title);
+        window.setCurrentScene(new Scene(scenePath, window));
         window.setMultiplier(multiplier);
         window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        window.setCurrentScene(new Scene(scenePath, window));
         window.getPanel().removeAll();
         window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
         window.setLocationRelativeTo(null);
@@ -76,7 +77,11 @@ public class SceneLoader {
     }
 
     public String getCustomStyles(Document document) {
-        return document.getElementsByTagName("SceneStyles").item(0).getTextContent();
+        Node node = document.getElementsByTagName("SceneStyles").item(0);
+        if(node == null) {
+            return "";
+        }
+        return node.getTextContent();
     }
 
     public Document getDocument(InputStream stream) throws Exception {

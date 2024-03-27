@@ -1,18 +1,41 @@
 <Objects>
     <Object id="background" x="0" y="0" sizeX="960" sizeY="540">
+        <BlankRenderer color="rgb(26,26,26)" />
+    </Object>
+    <Object id="leftPanel" x="0" y="0" sizeX="217" sizeY="540">
         <BlankRenderer color="rgb(18,18,18)" />
-        <CustomComponent _package="pl.AWTGameEngine.custom" />
     </Object>
-    <Object id="text" x="100" y="100" sizeX="100" sizeY="100">
-        <TextRenderer color="rgb(255,255,255)" text="brbr drewno tama test" size="48" />
+    <Object id="filesPanel" x="0" y="0" sizeX="217" sizeY="270">
+
     </Object>
-    <Object id="textarea" x="300" y="300" sizeX="100" sizeY="100" rotation="45">
+    <Object id="topPanel" x="218" y="0" sizeX="523" sizeY="38">
+        <BlankRenderer color="rgb(18,18,18)" />
+    </Object>
+    <Object id="rightPanel" x="742" y="0" sizeX="218" sizeY="540">
+        <BlankRenderer color="rgb(18,18,18)" />
+    </Object>
+    <Object id="objectName" x="759" y="8" sizeX="185" sizeY="23">
         <WebTextArea />
-        <BlankRenderer color="red" />
     </Object>
     <SceneStyles>
-        Object {
-            border: 10px solid red;
+
+        #leftPanel, #topPanel, #rightPanel {
+            border: 1px solid #343434;
         }
+
+        #filesPanel {
+            border-bottom: 1px solid #343434;
+        }
+
+        input {
+            border: 1px solid #343434;
+            border-radius: 5px;
+            background-color: #1A1A1A;
+            text-align: right;
+            font-weight: 700;
+            color: white;
+            padding-right: 5px;
+        }
+
     </SceneStyles>
 </Objects>
