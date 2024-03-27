@@ -10,4 +10,9 @@
         <WebTextArea />
         <BlankRenderer color="red" />
     </Object>
+    <SceneStyles>
+        Object {
+            border: 10px solid red;
+        }
+    </SceneStyles>
 </Objects>

@@ -21,6 +21,7 @@ public class Scene {
     private PanelRegistry panelRegistry;
     private EventHandler sceneEventHandler;
     private BindingsManager bindingsManager;
+    private String customStyles;
 
     public Scene(String name, Window window) {
         this.name = name;
@@ -55,6 +56,10 @@ public class Scene {
         return this.bindingsManager;
     }
 
+    public String getCustomStyles() {
+        return this.customStyles;
+    }
+
     public void setColliderRegistry(ColliderRegistry registry) {
         this.colliderRegistry = registry;
     }
@@ -69,6 +74,10 @@ public class Scene {
 
     public void setBindingsManager(BindingsManager bindingsManager) {
         this.bindingsManager = bindingsManager;
+    }
+
+    public void setCustomStyles(String styles) {
+        this.customStyles = styles;
     }
 
     public GameObject createGameObject(String identifier) {

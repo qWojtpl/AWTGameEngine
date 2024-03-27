@@ -6,6 +6,8 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebView;
+import org.w3c.dom.Document;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
@@ -13,7 +15,10 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
+import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 
@@ -41,6 +46,10 @@ public class WebPanel extends JFXPanel implements PanelObject {
         Platform.runLater(() -> {
             StringBuilder htmlString = new StringBuilder();
             for(String line : Objects.requireNonNull(ResourceManager.getResource("webview/webview.html"))) {
+                if(line.contains("@{CUSTOM-USER-STYLES}")) {
+                    htmlString.append(window.getCurrentScene().getCustomStyles());
+                    continue;
+                }
                 htmlString.append(line);
             }
             webView.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {

@@ -276,7 +276,7 @@ public class Editor extends ObjectComponent {
         for(GameObject object : new ArrayList<>(objectsToRemove)) {
             getScene().removeGameObject(object);
         }
-        getSceneLoader().attachSceneData(getSceneLoader().getSceneData(path), screenPanel.getParentObject());
+        //getSceneLoader().attachSceneData(getSceneLoader().getSceneData(path), screenPanel.getParentObject());
     }
 
     private String getFileName(String fileName) {

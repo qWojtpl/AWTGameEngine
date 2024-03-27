@@ -113,11 +113,6 @@ public class Window extends JFrame {
             multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
         }
         this.multiplier = multiplier;
-        if(getPanel() != null) {
-            if(getCurrentScene() != null) {
-                getCurrentScene().getPanelRegistry().removePanel(getPanel());
-            }
-        }
         if(RenderEngine.DEFAULT.equals(renderEngine)) {
             if(this.panel == null) {
                 this.panel = new NestedPanel(this);

@@ -45,13 +45,13 @@ public class ProjectManager {
             Logger.log(1, "Cannot open project " + name + ", app.properties doesn't exists.");
             return;
         }
-        NodeList data = window.getSceneLoader().getSceneData("./projects/" + name + "/" +
+/*        NodeList data = window.getSceneLoader().getSceneData("./projects/" + name + "/" +
                 AppProperties.getProperty("main", customProperties));
         if(data == null) {
             Logger.log(1, "Cannot attach scene to existing scene.");
             return;
         }
-        window.getSceneLoader().attachSceneData(data, parent);
+        window.getSceneLoader().attachSceneData(data, parent);*/
         openedProjectName = name;
     }
 

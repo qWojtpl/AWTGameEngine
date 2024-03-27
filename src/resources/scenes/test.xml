@@ -1,0 +1,5 @@
+<Objects>
+    <Object id="test" x="0" y="0" sizeX="100" sizeY="100">
+        <BlankRenderer color="rgb(0,0,0)" />
+    </Object>
+</Objects>

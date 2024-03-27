@@ -11,6 +11,7 @@ import pl.AWTGameEngine.windows.Window;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -53,8 +54,16 @@ public class SceneLoader {
         window.getPanel().removeAll();
         window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
         window.setLocationRelativeTo(null);
-        NodeList data = getSceneData(scenePath);
-        if(data == null) {
+        NodeList data;
+        try(InputStream sceneStream = ResourceManager.getResourceAsStream(scenePath)) {
+            Document document = getDocument(sceneStream);
+            data = getSceneData(document);
+            if(data == null) {
+                return;
+            }
+            window.getCurrentScene().setCustomStyles(getCustomStyles(document));
+        } catch(Exception e) {
+            Logger.log("Cannot load scene " + scenePath, e);
             return;
         }
         attachSceneData(data);
@@ -62,20 +71,19 @@ public class SceneLoader {
         Logger.log(2, "Scene loaded.");
     }
 
-    public NodeList getSceneData(String scenePath) {
-        try(InputStream stream = ResourceManager.getResourceAsStream(scenePath)) {
-            if(stream == null) {
-                Logger.log(1, "Scene " + scenePath + " not found.");
-                return null;
-            }
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = builder.parse(stream);
-            document.normalizeDocument();
-            return document.getElementsByTagName("Object");
-        } catch(Exception e) {
-            Logger.log("Cannot load scene " + scenePath, e);
-        }
-        return null;
+    public NodeList getSceneData(Document document) {
+        return document.getElementsByTagName("Object");
+    }
+
+    public String getCustomStyles(Document document) {
+        return document.getElementsByTagName("SceneStyles").item(0).getTextContent();
+    }
+
+    public Document getDocument(InputStream stream) throws Exception {
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = builder.parse(stream);
+        document.normalizeDocument();
+        return document;
     }
 
     public void attachSceneData(NodeList sceneData) {

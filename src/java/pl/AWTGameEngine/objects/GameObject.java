@@ -594,7 +594,7 @@ public class GameObject {
                 this.addComponent(o);
             }
         } catch(NumberFormatException | NoSuchMethodException | InstantiationException | IllegalAccessException |
-                InvocationTargetException | ClassNotFoundException e) {
+                InvocationTargetException | ClassNotFoundException | ClassCastException e) {
             Logger.log("Error while deserializing GameObject: " + getIdentifier(), e);
         }
     }
