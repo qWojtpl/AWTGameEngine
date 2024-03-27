@@ -257,7 +257,6 @@ public class Editor extends ObjectComponent {
                 Desktop.getDesktop().open(component.getFile());
             } catch(IOException e) {
                 Logger.log("Cannot open file: " + component.getFile().getName(), e);
-                DialogManager.createError("Cannot open this file!");
             }
         }).start();
     }
