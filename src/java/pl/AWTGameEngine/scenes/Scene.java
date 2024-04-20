@@ -212,34 +212,4 @@ public class Scene {
         }
     }
 
-    public void saveSceneState(String path) {
-        saveSceneState(path, getGameObjects());
-    }
-
-    public void saveSceneState(String path, List<GameObject> objects) {
-        StringBuilder serializationString = new StringBuilder();
-        for(GameObject object : objects) {
-            if(object.getIdentifier().startsWith("@")) {
-                continue;
-            }
-            serializationString.append(object.getIdentifier());
-            serializationString.append("=\"");
-            serializationString.append(object.getSerializeString());
-            serializationString.append("\";");
-            serializationString.append("\n");
-        }
-        try {
-            File file = new File(path);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter writer = new FileWriter(file, false);
-            writer.write(serializationString.toString());
-            writer.close();
-        } catch(Exception e) {
-            Logger.log("Cannot save current scene state", e);
-        }
-        Logger.log(2, "Saved " + getName() + " scene state to file " + path);
-    }
-
 }

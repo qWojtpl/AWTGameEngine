@@ -92,19 +92,6 @@ public class GameObject {
         return getComponentsByClass(component).size() > 0;
     }
 
-    public HashMap<String, HashMap<String, String>> serializeComponents() {
-        HashMap<String, HashMap<String, String>> data = new HashMap<>();
-        for(ObjectComponent component : getComponents()) {
-            String className = component.getClass().getName().replace("pl.AWTGameEngine.components.", "")
-                    + ":ObjectComponent";
-            if(!component.getClass().getName().startsWith("pl.AWTGameEngine.components")) {
-                className = component.getClass().getName().replace("pl.AWTGameEngine.custom.", "") + ":ObjectComponent-C";
-            }
-            data.put(className, component.serialize());
-        }
-        return data;
-    }
-
     public void addChild(GameObject object) {
         if(this.children.contains(object)) {
             return;
@@ -206,32 +193,6 @@ public class GameObject {
             }
         }
         return true;
-    }
-
-    public String getSerializeString() {
-        return getSerializeString(serializeComponents());
-    }
-
-    public String getSerializeString(HashMap<String, HashMap<String, String>> data) {
-        StringBuilder serializeString = new StringBuilder(
-                "pos{" + getX() + ";" + getY() + "}" +
-                "size{" + getSizeX() + ";" + getSizeY() + "}" +
-                "priority{" + getPriority() + "}" +
-                (isActive() ? "" : "active{false}") +
-                (getRotation() == 0 ? "" : "rotation{" + getRotation() + "}") +
-                (getParent() != null ? "parent{" + getParent().getIdentifier() + "}" : ""));
-        for(String componentName : data.keySet()) {
-            serializeString.append(componentName);
-            serializeString.append("{");
-            for(String fieldName : data.get(componentName).keySet()) {
-                serializeString.append(fieldName);
-                serializeString.append("^");
-                serializeString.append(data.get(componentName).get(fieldName));
-                serializeString.append("^");
-            }
-            serializeString.append("}");
-        }
-        return serializeString.toString();
     }
 
     public String getIdentifier() {

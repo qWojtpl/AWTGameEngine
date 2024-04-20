@@ -277,27 +277,4 @@ public abstract class ObjectComponent {
         return this.getClass().isAnnotationPresent(OnlyOnWeb.class);
     }
 
-    public final HashMap<String, String> serialize() {
-        HashMap<String, String> data = new HashMap<>();
-        for(Method method : this.getClass().getMethods()) {
-            if(!method.isAnnotationPresent(SerializationGetter.class)) {
-                continue;
-            }
-            String methodName = method.getName();
-            if(methodName.startsWith("is")) {
-                methodName = methodName.replaceFirst("is", "");
-            } else {
-                methodName = methodName.replaceFirst("get", "");
-            }
-            methodName = methodName.substring(0, 1).toLowerCase() + methodName.substring(1);
-            try {
-                data.put(methodName, method.invoke(this).toString());
-            } catch(Exception e) {
-                System.out.println("Exception while serializing " + this.getClass().getName());
-                e.printStackTrace();
-            }
-        }
-        return data;
-    }
-
 }
