@@ -110,6 +110,9 @@ public class Window extends JFrame {
             multiplier = 1;
         }
         if(isFullScreen()) {
+            setUndecorated(true);
+            GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            device.setFullScreenWindow(this);
             multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
         }
         this.multiplier = multiplier;

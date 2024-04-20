@@ -12,9 +12,7 @@ import pl.AWTGameEngine.windows.Window;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
 
 public class SceneLoader {
 
@@ -32,44 +30,80 @@ public class SceneLoader {
             scene.removeAllObjects();
             ResourceManager.clearAudioClips();
         }
-        Properties customProperties = AppProperties.getCustomProperties(getScenePropertiesPath(scenePath));
-        String title;
-        double multiplier;
-        if(customProperties != null) {
-            title = AppProperties.getProperty("title", customProperties);
-            window.getRenderLoop().setFPS(AppProperties.getPropertyAsInteger("renderFps", customProperties));
-            window.getUpdateLoop().setFPS(AppProperties.getPropertyAsInteger("updateFps", customProperties));
-            if(AppProperties.getProperty("multiplier", customProperties) != null) {
-                multiplier = AppProperties.getPropertyAsDouble("multiplier", customProperties);
-            } else {
-                multiplier = AppProperties.getPropertyAsDouble("multiplier");
-            }
-        } else {
-            title = AppProperties.getProperty("title");
-            multiplier = AppProperties.getPropertyAsDouble("multiplier");
-        }
-        window.setTitle(title);
-        window.setCurrentScene(new Scene(scenePath, window));
-        window.setMultiplier(multiplier);
-        window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        window.getPanel().removeAll();
-        window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
-        window.setLocationRelativeTo(null);
-        NodeList data;
         try(InputStream sceneStream = ResourceManager.getResourceAsStream(scenePath)) {
             Document document = getDocument(sceneStream);
-            data = getSceneData(document);
+            SceneOptions sceneOptions = getSceneOptions(document);
+            String title;
+            double multiplier;
+            if(sceneOptions != null) {
+                title = sceneOptions.getTitle();
+                window.getRenderLoop().setFPS(sceneOptions.getRenderFPS());
+                window.getUpdateLoop().setFPS(sceneOptions.getUpdateFPS());
+                multiplier = sceneOptions.getMultiplier();
+                if(sceneOptions.isFullscreen()) {
+                    window.setFullScreen(true);
+                }
+            } else {
+                title = AppProperties.getProperty("title");
+                multiplier = AppProperties.getPropertyAsDouble("multiplier");
+                window.setFullScreen(AppProperties.getPropertyAsBoolean("fullscreen"));
+            }
+            window.setTitle(title);
+            window.setCurrentScene(new Scene(scenePath, window));
+            window.setMultiplier(multiplier);
+            window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            window.getPanel().removeAll();
+            window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
+            window.setLocationRelativeTo(null);
+            NodeList data = getSceneData(document);
             if(data == null) {
                 return;
             }
             window.getCurrentScene().setCustomStyles(getCustomStyles(document));
+            attachSceneData(data);
         } catch(Exception e) {
             Logger.log("Cannot load scene " + scenePath, e);
             return;
         }
-        attachSceneData(data);
         window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         Logger.log(2, "Scene loaded.");
+    }
+
+    public SceneOptions getSceneOptions(Document document) {
+        Node node = document.getElementsByTagName("Scene").item(0);
+        if(node == null) {
+            return null;
+        }
+        String title = "Default window title";
+        boolean fullScreen = false;
+        int renderFPS = 60, updateFPS = 60, multiplier = 3;
+        for(int i = 0; i < node.getAttributes().getLength(); i++) {
+            Node item = node.getAttributes().item(i);
+            switch(item.getNodeName().toUpperCase()) {
+                case "TITLE":
+                    title = item.getNodeValue();
+                    break;
+                case "FULLSCREEN":
+                    fullScreen = Boolean.parseBoolean(item.getNodeValue());
+                    break;
+                case "RENDERFPS":
+                    renderFPS = Integer.parseInt(item.getNodeValue());
+                    break;
+                case "UPDATEFPS":
+                    updateFPS = Integer.parseInt(item.getNodeValue());
+                    break;
+                case "MULTIPLIER":
+                    multiplier = Integer.parseInt(item.getNodeValue());
+                    break;
+            }
+        }
+        return new SceneOptions(
+                title,
+                fullScreen,
+                renderFPS,
+                updateFPS,
+                multiplier
+        );
     }
 
     public NodeList getSceneData(Document document) {
@@ -77,7 +111,7 @@ public class SceneLoader {
     }
 
     public String getCustomStyles(Document document) {
-        Node node = document.getElementsByTagName("SceneStyles").item(0);
+        Node node = document.getElementsByTagName("Styles").item(0);
         if(node == null) {
             return "";
         }
@@ -104,15 +138,6 @@ public class SceneLoader {
                 object.setParent(defaultParent);
             }
         }
-    }
-
-    public static String getScenePropertiesPath(String scenePath) {
-        StringBuilder path = new StringBuilder();
-        for(int i = 0; i < scenePath.length() - 3; i++) {
-            path.append(scenePath.charAt(i));
-        }
-        path.append("properties");
-        return path.toString();
     }
 
     public Window getWindow() {

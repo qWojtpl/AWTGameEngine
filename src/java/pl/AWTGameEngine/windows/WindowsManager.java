@@ -25,17 +25,6 @@ public class WindowsManager {
     }
 
     public static Window createWindow(String scenePath) {
-        Properties customProperties = AppProperties.getCustomProperties(SceneLoader.getScenePropertiesPath(scenePath));
-        boolean fullScreen;
-        if(customProperties != null) {
-            fullScreen = AppProperties.getPropertyAsBoolean("fullscreen", customProperties);
-        } else {
-            fullScreen = AppProperties.getPropertyAsBoolean("fullscreen");
-        }
-        return createWindow(scenePath, fullScreen);
-    }
-
-    public static Window createWindow(String scenePath, boolean fullScreen) {
         Window window = new Window(Window.RenderEngine.valueOf(AppProperties.getProperty("renderEngine").toUpperCase()));
         if(windows.size() == 0) {
             defaultFont = window.getFont();
@@ -48,13 +37,6 @@ public class WindowsManager {
         Sprite icon = ResourceManager.getResourceAsSprite(AppProperties.getProperty("icon"));
         if(icon != null) {
             window.setIconImage(icon.getImage());
-        }
-
-        if(fullScreen) {
-            window.setFullScreen(true);
-            window.setUndecorated(true);
-            GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-            device.setFullScreenWindow(window);
         }
 
         window.setWindowListener(new WindowListener(window));

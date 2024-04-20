@@ -1,4 +1,4 @@
-<Objects>
+<Scene title="AWTGameEngine - Editor" fullscreen="true" renderFPS="60" updateFPS="60" multiplier="3">
     <Object id="background" x="0" y="0" sizeX="960" sizeY="540">
         <BlankRenderer color="rgb(26,26,26)" />
     </Object>
@@ -21,7 +21,7 @@
         <BlankRenderer color="green" />
         <Border color="red" />
     </Object>
-    <SceneStyles>
+    <Styles>
 
         #leftPanel, #topPanel, #rightPanel {
             border: 1px solid #343434;
@@ -41,5 +41,5 @@
             padding-right: 5px;
         }
 
-    </SceneStyles>
-</Objects>
+    </Styles>
+</Scene>
