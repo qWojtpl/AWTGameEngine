@@ -3,6 +3,7 @@ package pl.AWTGameEngine.engine;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class Logger {
@@ -26,7 +27,11 @@ public class Logger {
         }
         String className = "";
         if(callerClass) {
-            String[] split = Thread.currentThread().getStackTrace()[2].getClassName().split("\\.");
+            int stackTraceIndex = 2;
+            if(Thread.currentThread().getStackTrace()[stackTraceIndex].getClassName().equals(Logger.class.getName())) {
+                stackTraceIndex++;
+            }
+            String[] split = Thread.currentThread().getStackTrace()[stackTraceIndex].getClassName().split("\\.");
             className = " [" + split[split.length - 1] + "]";
         }
         Calendar calendar = Calendar.getInstance();
