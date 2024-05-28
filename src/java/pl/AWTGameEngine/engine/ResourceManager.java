@@ -17,16 +17,12 @@ import java.util.List;
 
 public class ResourceManager {
 
-    private final static HashMap<String, List<String>> resources = new HashMap<>();
-    private final static HashMap<String, Sprite> spriteResources = new HashMap<>();
-    private final static HashMap<String, URL> urlResources = new HashMap<>();
-    private final static List<AudioClip> audioClips = new ArrayList<>();
+    private final HashMap<String, List<String>> resources = new HashMap<>();
+    private final HashMap<String, Sprite> spriteResources = new HashMap<>();
+    private final HashMap<String, URL> urlResources = new HashMap<>();
+    private final List<AudioClip> audioClips = new ArrayList<>();
 
-    ResourceManager() {
-
-    }
-
-    public static void copyResource(String name, String path) {
+    public void copyResource(String name, String path) {
         Logger.log(2, "Copying resource: " + name + " to " + path);
         name = getResourceName(name);
         try {
@@ -58,7 +54,7 @@ public class ResourceManager {
         }
     }
 
-    public static List<String> getResource(String name) {
+    public List<String> getResource(String name) {
         name = getResourceName(name);
         if(resources.containsKey(name)) {
             return resources.get(name);
@@ -84,7 +80,7 @@ public class ResourceManager {
         return null;
     }
 
-    public static Sprite getResourceAsSprite(String name) {
+    public Sprite getResourceAsSprite(String name) {
         name = getResourceName(name);
         if(spriteResources.containsKey(name)) {
             return spriteResources.get(name);
@@ -106,7 +102,7 @@ public class ResourceManager {
         return null;
     }
 
-    public static AudioClip getResourceAsAudioClip(String name) {
+    public AudioClip getResourceAsAudioClip(String name) {
         name = getResourceName(name);
         Logger.log(2, "Reading audio resource: " + name);
         try {
@@ -124,7 +120,7 @@ public class ResourceManager {
         return null;
     }
 
-    public static InputStream getResourceAsStream(String name) {
+    public InputStream getResourceAsStream(String name) {
         name = getResourceName(name);
         Logger.log(2, "Reading stream resource: " + name);
         try {
@@ -139,7 +135,7 @@ public class ResourceManager {
         return null;
     }
 
-    public static URL getResourceAsUrl(String name) {
+    public URL getResourceAsUrl(String name) {
         name = getResourceName(name);
         if(urlResources.containsKey(name)) {
             return urlResources.get(name);
@@ -157,45 +153,45 @@ public class ResourceManager {
         return null;
     }
 
-    public static HashMap<String, List<String>> getResources() {
+    public HashMap<String, List<String>> getResources() {
         return new HashMap<>(resources);
     }
 
-    public static HashMap<String, Sprite> getSpriteResources() {
+    public HashMap<String, Sprite> getSpriteResources() {
         return new HashMap<>(spriteResources);
     }
 
-    public static HashMap<String, URL> getUrlResources() {
+    public HashMap<String, URL> getUrlResources() {
         return new HashMap<>(urlResources);
     }
 
-    public static List<AudioClip> getAudioClips() {
+    public List<AudioClip> getAudioClips() {
         return new ArrayList<>(audioClips);
     }
 
-    private static String getResourceName(String name) {
+    private String getResourceName(String name) {
         if(name.charAt(1) != ':' && !name.startsWith(".")) {
             name = "/" + name;
         }
         return name;
     }
 
-    private static InputStream getStream(String path) throws IOException {
+    private InputStream getStream(String path) throws IOException {
         if(path.startsWith("/")) {
             return ResourceManager.class.getResourceAsStream(path);
         }
         return Files.newInputStream(Paths.get(path));
     }
 
-    public static void clearResources() {
+    public void clearResources() {
         resources.clear();
     }
 
-    public static void clearSpriteResources() {
+    public void clearSpriteResources() {
         spriteResources.clear();
     }
 
-    public static void clearAudioClips() {
+    public void clearAudioClips() {
         for(AudioClip audioClip : audioClips) {
             try {
                 audioClip.getAudioStream().close();

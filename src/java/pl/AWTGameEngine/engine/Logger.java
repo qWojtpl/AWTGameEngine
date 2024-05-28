@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.Dependencies;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -81,7 +83,7 @@ public class Logger {
     }
 
     public static File getLogFile() {
-        File logFile = new File(AppProperties.getProperty("logFileName"));
+        File logFile = new File(Dependencies.getAppProperties().getProperty("logFileName"));
         try {
             if(!logFile.exists()) {
                 if(!logFile.createNewFile()) {

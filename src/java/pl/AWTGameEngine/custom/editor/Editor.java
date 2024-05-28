@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.custom.editor;
 
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.*;
 import pl.AWTGameEngine.components.TextArea;
@@ -225,7 +226,7 @@ public class Editor extends ObjectComponent {
         fileComponent.setText(getFileName(file.getName()));
         Sprite sprite;
         if(file.isDirectory()) {
-            sprite = ResourceManager.getResourceAsSprite("sprites/base/files/directory.png");
+            sprite = Dependencies.getResourceManager().getResourceAsSprite("sprites/base/files/directory.png");
         } else {
             String after = "";
             switch(getFileExtension(file.getName())) {
@@ -236,7 +237,7 @@ public class Editor extends ObjectComponent {
                 case "jpg":
                     after = "_img";
             }
-            sprite = ResourceManager.getResourceAsSprite("sprites/base/files/file" + after + ".png");
+            sprite = Dependencies.getResourceManager().getResourceAsSprite("sprites/base/files/file" + after + ".png");
         }
         fileComponent.setSprite(sprite);
         fileObject.addComponent(fileComponent);

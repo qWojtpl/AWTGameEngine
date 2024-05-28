@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
@@ -66,7 +67,7 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
 
     @SerializationSetter
     public void setSpriteSource(String spriteSource) {
-        setSprite(ResourceManager.getResourceAsSprite(spriteSource));
+        setSprite(Dependencies.getResourceManager().getResourceAsSprite(spriteSource));
     }
 
 }

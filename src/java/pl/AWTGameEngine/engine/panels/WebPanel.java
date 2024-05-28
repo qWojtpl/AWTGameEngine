@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
@@ -38,7 +39,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
     public void loadWebView() {
         Platform.runLater(() -> {
             StringBuilder htmlString = new StringBuilder();
-            for(String line : Objects.requireNonNull(ResourceManager.getResource("webview/webview.html"))) {
+            for(String line : Objects.requireNonNull(Dependencies.getResourceManager().getResource("webview/webview.html"))) {
                 if(line.contains("@{CUSTOM-USER-STYLES}")) {
                     htmlString.append(window.getCurrentScene().getCustomStyles());
                     continue;

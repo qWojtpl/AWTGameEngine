@@ -1,48 +1,46 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.Dependencies;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 public class AppProperties {
 
-    private final static Properties properties;
-    private final static HashMap<String, Properties> customProperties = new HashMap<>();
-    private final static List<String> startupArgs = new ArrayList<>();
+    private final Properties properties;
+    private final HashMap<String, Properties> customProperties = new HashMap<>();
+    private final List<String> startupArgs = new ArrayList<>();
 
-    AppProperties() {
-
-    }
-
-    static {
+    public AppProperties() {
         properties = getCustomProperties("app.properties");
     }
 
-    public static void addStartupArgument(String argument) {
+    public void addStartupArgument(String argument) {
         startupArgs.add(argument);
     }
 
-    public static List<String> getStartupArguments() {
+    public List<String> getStartupArguments() {
         return new ArrayList<>(startupArgs);
     }
 
-    public static boolean isStartupArgumentPresent(String argument) {
+    public boolean isStartupArgumentPresent(String argument) {
         return getStartupArguments().contains(argument);
     }
 
-    public static String getProperty(String key) {
+    public String getProperty(String key) {
         return getProperty(key, properties);
     }
 
-    public static String getProperty(String key, Properties properties) {
+    public String getProperty(String key, Properties properties) {
         return properties.getProperty(key);
     }
 
-    public static int getPropertyAsInteger(String key) {
+    public int getPropertyAsInteger(String key) {
         return getPropertyAsInteger(key, properties);
     }
 
-    public static int getPropertyAsInteger(String key, Properties properties) {
+    public int getPropertyAsInteger(String key, Properties properties) {
         try {
             return Integer.parseInt(getProperty(key, properties));
         } catch(Exception e) {
@@ -50,11 +48,11 @@ public class AppProperties {
         }
     }
 
-    public static double getPropertyAsDouble(String key) {
+    public double getPropertyAsDouble(String key) {
         return getPropertyAsDouble(key, properties);
     }
 
-    public static double getPropertyAsDouble(String key, Properties properties) {
+    public double getPropertyAsDouble(String key, Properties properties) {
         try {
             return Double.parseDouble(getProperty(key, properties));
         } catch(Exception e) {
@@ -62,11 +60,11 @@ public class AppProperties {
         }
     }
 
-    public static boolean getPropertyAsBoolean(String key) {
+    public boolean getPropertyAsBoolean(String key) {
         return getPropertyAsBoolean(key, properties);
     }
 
-    public static boolean getPropertyAsBoolean(String key, Properties properties) {
+    public boolean getPropertyAsBoolean(String key, Properties properties) {
         try {
             return Boolean.parseBoolean(getProperty(key, properties));
         } catch(Exception e) {
@@ -74,13 +72,13 @@ public class AppProperties {
         }
     }
 
-    public static Properties getCustomProperties(String propertiesPath) {
+    public Properties getCustomProperties(String propertiesPath) {
         if(customProperties.containsKey(propertiesPath)) {
             return customProperties.get(propertiesPath);
         }
         Properties properties = new Properties();
         try {
-            InputStream stream = ResourceManager.getResourceAsStream(propertiesPath);
+            InputStream stream = Dependencies.getResourceManager().getResourceAsStream(propertiesPath);
             if(stream == null) {
                 return null;
             }

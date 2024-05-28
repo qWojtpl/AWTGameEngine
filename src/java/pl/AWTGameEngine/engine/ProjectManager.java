@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine;
 
 import org.w3c.dom.NodeList;
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -40,7 +41,7 @@ public class ProjectManager {
             Logger.log(1, "Cannot open project " + name + ", project doesn't exists.");
             return;
         }
-        Properties customProperties = AppProperties.getCustomProperties("./projects/" + name + "/app.properties");
+        Properties customProperties = Dependencies.getAppProperties().getCustomProperties("./projects/" + name + "/app.properties");
         if(customProperties == null) {
             Logger.log(1, "Cannot open project " + name + ", app.properties doesn't exists.");
             return;
@@ -56,7 +57,7 @@ public class ProjectManager {
     }
 
     private void copyResource(String name, String path) {
-        ResourceManager.copyResource(name, path);
+        Dependencies.getResourceManager().copyResource(name, path);
     }
 
     public void compileProject() {

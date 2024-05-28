@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.engine.graphics;
 
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
@@ -114,7 +115,7 @@ public class GraphicsManager {
     public static class RenderOptions {
 
         private Color color = Color.BLACK;
-        private Font font = WindowsManager.getDefaultFont();
+        private Font font = Dependencies.getWindowsManager().getDefaultFont();
         private int rotation = 0;
         private int rotationCenterX = 0;
         private int rotationCenterY = 0;

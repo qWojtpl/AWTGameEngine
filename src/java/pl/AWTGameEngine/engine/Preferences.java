@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.Dependencies;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -7,17 +9,13 @@ import java.util.List;
 
 public class Preferences {
 
-    private static final HashMap<String, String> preferences = new HashMap<>();
+    private final HashMap<String, String> preferences = new HashMap<>();
 
-    Preferences() {
-
-    }
-
-    static {
+    public Preferences() {
         loadPreferences();
     }
 
-    public static void savePreference(String key, String preference) {
+    public void savePreference(String key, String preference) {
         if(key == null) {
             key = "";
         }
@@ -28,15 +26,16 @@ public class Preferences {
         writeToFile();
     }
 
-    public static String getPreference(String key) {
+    public String getPreference(String key) {
         return preferences.getOrDefault(key, null);
     }
 
-    public static String getPreference(String key, String defaultValue) {
+    public String getPreference(String key, String defaultValue) {
         return preferences.getOrDefault(key, defaultValue);
     }
 
-    public static void writeToFile() {
+    public void writeToFile() {
+        AppProperties appProperties = Dependencies.getAppProperties();
         try {
             boolean append = false;
             for(String key : preferences.keySet()) {
@@ -48,10 +47,10 @@ public class Preferences {
                 StringBuilder newKey = new StringBuilder();
                 StringBuilder newPreference = new StringBuilder();
                 for(int i = 0; i < key.length(); i++) {
-                    newKey.append((char) (key.charAt(i) + AppProperties.getPropertyAsInteger("preferenceShift")));
+                    newKey.append((char) (key.charAt(i) + appProperties.getPropertyAsInteger("preferenceShift")));
                 }
                 for(int i = 0; i < preference.length(); i++) {
-                    newPreference.append((char) (preference.charAt(i) + AppProperties.getPropertyAsInteger("preferenceShift")));
+                    newPreference.append((char) (preference.charAt(i) + appProperties.getPropertyAsInteger("preferenceShift")));
                 }
                 writer.write(newKey + "\n");
                 writer.write(newPreference + "\n");
@@ -62,7 +61,7 @@ public class Preferences {
         }
     }
 
-    public static void loadPreferences() {
+    public void loadPreferences() {
         preferences.clear();
         try {
             List<String> fileContent = Files.readAllLines(getPreferencesFile().toPath());
@@ -70,7 +69,7 @@ public class Preferences {
             for(String line : fileContent) {
                 StringBuilder newLine = new StringBuilder();
                 for(int i = 0; i < line.length(); i++) {
-                    newLine.append((char) (line.charAt(i) - AppProperties.getPropertyAsInteger("preferenceShift")));
+                    newLine.append((char) (line.charAt(i) - Dependencies.getAppProperties().getPropertyAsInteger("preferenceShift")));
                 }
                 if(key == null) {
                     key = newLine.toString();
@@ -85,7 +84,7 @@ public class Preferences {
         }
     }
 
-    public static File getPreferencesFile() {
+    public File getPreferencesFile() {
         File file = new File("preferences.txt");
         try {
             boolean c = file.createNewFile();

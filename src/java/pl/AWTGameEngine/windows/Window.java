@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.windows;
 
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
@@ -35,10 +36,11 @@ public class Window extends JFrame {
 
     public Window(RenderEngine renderEngine) {
         this.renderEngine = renderEngine;
+        AppProperties appProperties = Dependencies.getAppProperties();
         font = new Font(
-            AppProperties.getProperty("font"),
+            appProperties.getProperty("font"),
             Font.PLAIN,
-            AppProperties.getPropertyAsInteger("fontSize")
+            appProperties.getPropertyAsInteger("fontSize")
         );
     }
 

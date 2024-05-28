@@ -3,6 +3,7 @@ package pl.AWTGameEngine.scenes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
@@ -24,13 +25,15 @@ public class SceneLoader {
 
     public void loadSceneFile(String scenePath) {
         Logger.log(2, "Loading scene: " + scenePath);
+        ResourceManager resourceManager = Dependencies.getResourceManager();
+        AppProperties appProperties = Dependencies.getAppProperties();
         if(window.getCurrentScene() != null) {
             Scene scene = window.getCurrentScene();
             window.setCurrentScene(null);
             scene.removeAllObjects();
-            ResourceManager.clearAudioClips();
+            resourceManager.clearAudioClips();
         }
-        try(InputStream sceneStream = ResourceManager.getResourceAsStream(scenePath)) {
+        try(InputStream sceneStream = resourceManager.getResourceAsStream(scenePath)) {
             Document document = getDocument(sceneStream);
             SceneOptions sceneOptions = getSceneOptions(document);
             String title;
@@ -44,9 +47,9 @@ public class SceneLoader {
                     window.setFullScreen(true);
                 }
             } else {
-                title = AppProperties.getProperty("title");
-                multiplier = AppProperties.getPropertyAsDouble("multiplier");
-                window.setFullScreen(AppProperties.getPropertyAsBoolean("fullscreen"));
+                title = appProperties.getProperty("title");
+                multiplier = appProperties.getPropertyAsDouble("multiplier");
+                window.setFullScreen(appProperties.getPropertyAsBoolean("fullscreen"));
             }
             window.setTitle(title);
             window.setCurrentScene(new Scene(scenePath, window));

@@ -9,14 +9,15 @@ public class Main {
     public static void main(String[] args) {
         System.setProperty("sun.java2d.uiScale", "1");
         System.setProperty("sun.java2d.opengl", "true");
+        AppProperties appProperties = Dependencies.getAppProperties();
         for(String arg : args) {
-            AppProperties.addStartupArgument(arg);
+            appProperties.addStartupArgument(arg);
         }
-        Logger.setLevel(AppProperties.getPropertyAsInteger("logLevel"));
-        Logger.setLogFile(AppProperties.getPropertyAsBoolean("logFile"));
-        Logger.setCallerClass(AppProperties.getPropertyAsBoolean("logCallerClass"));
+        Logger.setLevel(appProperties.getPropertyAsInteger("logLevel"));
+        Logger.setLogFile(appProperties.getPropertyAsBoolean("logFile"));
+        Logger.setCallerClass(appProperties.getPropertyAsBoolean("logCallerClass"));
         Logger.log(2, "Requesting default window...");
-        WindowsManager.createDefaultWindow();
+        Dependencies.getWindowsManager().createDefaultWindow();
         Logger.log(2, "Started app.");
     }
 

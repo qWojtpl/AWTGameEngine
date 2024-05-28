@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.engine.Logger;
@@ -100,7 +101,7 @@ public class MusicPlayer extends ObjectComponent {
 
     @SerializationSetter
     public void setSourcePath(String sourcePath) {
-        setSource(ResourceManager.getResourceAsAudioClip(sourcePath));
+        setSource(Dependencies.getResourceManager().getResourceAsAudioClip(sourcePath));
     }
 
     public void setAutoPlay(boolean autoPlay) {
