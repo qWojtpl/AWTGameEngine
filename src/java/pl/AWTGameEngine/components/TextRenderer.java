@@ -18,7 +18,6 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
     private float size = 30.0f;
     private HorizontalAlign horizontal = HorizontalAlign.LEFT;
     private VerticalAlign vertical = VerticalAlign.TOP;
-    private TextWrap wrap = TextWrap.NO_WRAP;
     private boolean propertyChanged = false;
 
     public TextRenderer(GameObject object) {
@@ -39,9 +38,6 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
                             .getWidth()
             );
             int x, y;
-            if(TextWrap.WRAP.equals(wrap)) {
-                //todo: implement wrap
-            }
             if(HorizontalAlign.LEFT.equals(horizontal)) {
                 x = 0;
             } else if (HorizontalAlign.RIGHT.equals(horizontal)) {
@@ -96,11 +92,6 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
     @SerializationGetter
     public VerticalAlign getVerticalAlign() {
         return this.vertical;
-    }
-
-    @SerializationGetter
-    public TextWrap getWrap() {
-        return this.wrap;
     }
 
     @SerializationSetter
@@ -167,19 +158,6 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
         align(align);
     }
 
-    public void setWrap(TextWrap wrap) {
-        this.wrap = wrap;
-    }
-
-    @SerializationSetter
-    public void setWrap(String wrap) {
-        try {
-            setWrap(TextWrap.valueOf(wrap.toUpperCase()));
-        } catch(IllegalArgumentException e) {
-            setWrap(TextWrap.NO_WRAP);
-        }
-    }
-
     @Override
     public void onWebRenderRequest(WebGraphicsManager g) {
         if(!propertyChanged) {
@@ -203,12 +181,6 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
         TOP,
         CENTER,
         BOTTOM
-    }
-
-    public enum TextWrap {
-        WRAP,
-        NO_WRAP,
-        WRAP_AFTER_SPACE
     }
 
 }

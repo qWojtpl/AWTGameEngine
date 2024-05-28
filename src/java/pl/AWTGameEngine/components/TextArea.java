@@ -30,7 +30,6 @@ public class TextArea extends ObjectComponent {
         super(object);
         setText(text);
         textRenderer.align(TextRenderer.HorizontalAlign.LEFT, TextRenderer.VerticalAlign.TOP);
-        textRenderer.setWrap(TextRenderer.TextWrap.WRAP);
         background.setColor(new ColorObject(Color.WHITE));
         backgroundDisabled.setColor(new ColorObject(ColorObject.deserialize("rgba(222,222,222,0)")));
     }
