@@ -134,11 +134,21 @@ public class SceneLoader {
 
     public void attachSceneData(NodeList sceneData, GameObject defaultParent) {
         for(int i = 0; i < sceneData.getLength(); i++) {
-            GameObject object = window.getCurrentScene().createGameObject(
-                    sceneData.item(i).getAttributes().getNamedItem("id").getNodeValue());
-            object.deserialize(sceneData.item(i));
-            if(object.getParent() == null) {
-                object.setParent(defaultParent);
+            if(!sceneData.item(i).getParentNode().getNodeName().equals("Scene")) {
+                continue;
+            }
+            initObject(sceneData.item(i), defaultParent);
+        }
+    }
+
+    private void initObject(Node node, GameObject parent) {
+        GameObject object = window.getCurrentScene().createGameObject(
+                node.getAttributes().getNamedItem("id").getNodeValue());
+        object.deserialize(node);
+        object.setParent(parent);
+        for(int i = 0; i < node.getChildNodes().getLength(); i++) {
+            if(node.getChildNodes().item(i).getNodeName().equals("Object")) {
+                initObject(node.getChildNodes().item(i), object);
             }
         }
     }

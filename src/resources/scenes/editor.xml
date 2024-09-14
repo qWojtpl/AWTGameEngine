@@ -11,15 +11,19 @@
     <Object id="topPanel" x="218" y="0" sizeX="523" sizeY="38">
         <BlankRenderer color="rgb(18,18,18)" />
     </Object>
-    <Object id="rightPanel" x="742" y="0" sizeX="218" sizeY="540">
-        <BlankRenderer color="rgb(18,18,18)" />
-    </Object>
-    <Object id="objectName" x="759" y="8" sizeX="185" sizeY="23">
-        <WebTextArea />
-    </Object>
+
     <Object id="test" x="500" y="200" sizeX="100" sizeY="100">
         <BlankRenderer color="green" />
         <Border color="red" />
+        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
+        <Object id="rightPanel" x="742" y="0" sizeX="218" sizeY="540">
+            <BlankRenderer color="rgb(18,18,18)" />
+            <Object id="objectName" x="759" y="8" sizeX="185" sizeY="23">
+                <WebTextArea />
+            </Object>
+        </Object>
+
     </Object>
     <Styles>
 
@@ -42,4 +46,7 @@
         }
 
     </Styles>
+    <Bindings>
+        <Binding owner="background:0" from="rightPanel:0:color" to="leftPanel:0:color" />
+    </Bindings>
 </Scene>

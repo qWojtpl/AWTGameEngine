@@ -5,7 +5,6 @@ import pl.AWTGameEngine.Dependencies;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Calendar;
 
 public class Logger {

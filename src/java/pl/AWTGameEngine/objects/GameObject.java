@@ -505,7 +505,6 @@ public class GameObject {
             setSizeY(Integer.parseInt(getValue(data, "sizeY")));
             setRotation(Integer.parseInt(getValue(data, "rotation")));
             setPriority(Integer.parseInt(getValue(data, "priority")));
-            setParent(getScene().getGameObjectByName(getValue(data, "parent")));
             if(getValue(data, "active").equals("0")) {
                 setActive(true);
             } else {
@@ -513,6 +512,9 @@ public class GameObject {
             }
             for(int i = 0; i < data.getChildNodes().getLength(); i++) {
                 Node childNode = data.getChildNodes().item(i);
+                if(childNode.getNodeName().equals("Object") || childNode.getNodeName().equals("#text")) {
+                    continue;
+                }
                 if(childNode.getNodeType() != Node.ELEMENT_NODE) {
                     continue;
                 }
