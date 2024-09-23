@@ -91,11 +91,13 @@ public class Scene {
 
     public void addGameObject(GameObject object) {
         if(gameObjects.containsKey(object.getIdentifier())) {
-            System.out.println("Object with this identifier already exists.");
+            Logger.log(1, "Cannot add object with identifier "
+                    + object.getIdentifier() + ", object with this identifier already exists in this scene.");
             return;
         }
         if(!this.equals(object.getScene())) {
-            System.out.println("Cannot add object which doesn't have this scene as a scene.");
+            Logger.log(1, "Cannot add object with identifier"
+                + object.getIdentifier() + ", object's scene is not set to this scene");
             return;
         }
         object.setPanel(window.getPanel());

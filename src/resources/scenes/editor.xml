@@ -5,13 +5,10 @@
     <Object id="leftPanel" x="0" y="0" sizeX="217" sizeY="540">
         <BlankRenderer color="rgb(18,18,18)" />
     </Object>
-    <Object id="filesPanel" x="0" y="0" sizeX="217" sizeY="270">
-
-    </Object>
+    <Object id="filesPanel" x="0" y="0" sizeX="217" sizeY="270" />
     <Object id="topPanel" x="218" y="0" sizeX="523" sizeY="38">
         <BlankRenderer color="rgb(18,18,18)" />
     </Object>
-
     <Object id="test" x="500" y="200" sizeX="100" sizeY="100">
         <BlankRenderer color="green" />
         <Border color="red" />
@@ -23,7 +20,6 @@
                 <WebTextArea />
             </Object>
         </Object>
-
     </Object>
     <Styles>
 

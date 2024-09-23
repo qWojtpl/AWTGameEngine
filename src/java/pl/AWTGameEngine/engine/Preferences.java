@@ -57,7 +57,7 @@ public class Preferences {
                 writer.close();
             }
         } catch(IOException e) {
-            System.out.println("Cannot create preferences file!");
+            Logger.log("Cannot create preferences file!", e);
         }
     }
 
@@ -79,18 +79,16 @@ public class Preferences {
                 }
             }
         } catch(Exception e) {
-            System.out.println("Cannot read preferences file.");
-            e.printStackTrace();
+            Logger.log("Cannot read preferences file.", e);
         }
     }
 
     public File getPreferencesFile() {
-        File file = new File("preferences.txt");
+        File file = new File("preferences.bin");
         try {
-            boolean c = file.createNewFile();
+            file.createNewFile();
         } catch(IOException e) {
-            System.out.println("Can't create preferences file");
-            e.printStackTrace();
+            Logger.log("Can't create preferences file", e);
         }
         return file;
     }

@@ -86,8 +86,7 @@ public class AppProperties {
             customProperties.put(propertiesPath, properties);
             return properties;
         } catch (IOException e) {
-            System.out.println("Cannot load properties: " + e.getMessage());
-            e.printStackTrace();
+            Logger.log("Cannot load properties: ", e);
         }
         return null;
     }
