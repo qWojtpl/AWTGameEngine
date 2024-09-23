@@ -44,7 +44,7 @@ public class Logger {
                 parseNumber(calendar.get(Calendar.MINUTE)) + ":" +
                 parseNumber(calendar.get(Calendar.SECOND)) + ":" +
                 parseThreeNumber(calendar.get(Calendar.MILLISECOND)) + "]" +
-                className + " " +
+                className + " " + (level == 1 ? "[ERROR] " : "") +
                 message + "\n";
         if(logFile) {
             try(FileWriter writer = new FileWriter(getLogFile(), append)) {

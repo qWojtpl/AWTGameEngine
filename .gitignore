@@ -1,6 +1,7 @@
 *.txt
 *.log
 *.wav
+*.bin
 /.idea
 .idea/*
 /META-INF

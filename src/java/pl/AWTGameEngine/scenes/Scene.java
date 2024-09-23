@@ -81,24 +81,27 @@ public class Scene {
     }
 
     public GameObject createGameObject(String identifier) {
-        if(gameObjects.containsKey(identifier)) {
-            return createGameObject(identifier + "!");
-        }
         GameObject go = new GameObject(identifier, this);
-        addGameObject(go);
+        try {
+            addGameObject(go);
+        } catch(RuntimeException e) {
+            return null;
+        }
         return go;
     }
 
     public void addGameObject(GameObject object) {
         if(gameObjects.containsKey(object.getIdentifier())) {
-            Logger.log(1, "Cannot add object with identifier "
-                    + object.getIdentifier() + ", object with this identifier already exists in this scene.");
-            return;
+            String errorMsg = "Cannot add object with identifier "
+                    + object.getIdentifier() + ", object with this identifier already exists in this scene.";
+            Logger.log(1, errorMsg);
+            throw new RuntimeException(errorMsg);
         }
         if(!this.equals(object.getScene())) {
-            Logger.log(1, "Cannot add object with identifier"
-                + object.getIdentifier() + ", object's scene is not set to this scene");
-            return;
+            String errorMsg = "Cannot add object with identifier"
+                    + object.getIdentifier() + ", object's scene is not set to this scene";
+            Logger.log(1, errorMsg);
+            throw new RuntimeException(errorMsg);
         }
         object.setPanel(window.getPanel());
         gameObjects.put(object.getIdentifier(), object);

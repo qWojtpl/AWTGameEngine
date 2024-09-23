@@ -142,8 +142,12 @@ public class SceneLoader {
     }
 
     private void initObject(Node node, GameObject parent) {
-        GameObject object = window.getCurrentScene().createGameObject(
-                node.getAttributes().getNamedItem("id").getNodeValue());
+        String identifier = node.getAttributes().getNamedItem("id").getNodeValue();
+        GameObject object = window.getCurrentScene().createGameObject(identifier);
+        if(object == null) {
+            Logger.log(1, "Cannot initialize object with identifier " + identifier + ", skipping its children!");
+            return;
+        }
         object.deserialize(node);
         object.setParent(parent);
         for(int i = 0; i < node.getChildNodes().getLength(); i++) {
