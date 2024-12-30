@@ -57,7 +57,7 @@ public class GameObject {
                 return;
             }
         }
-        if(component.isUnique() && getComponentsByClass(component.getClass()).isEmpty()) {
+        if(component.isUnique() && !getComponentsByClass(component.getClass()).isEmpty()) {
             Logger.log(1, "Component " + component.getClass().getName() + " is unique, cannot add another!");
             return;
         }
@@ -512,7 +512,7 @@ public class GameObject {
             }
             for(int i = 0; i < data.getChildNodes().getLength(); i++) {
                 Node childNode = data.getChildNodes().item(i);
-                if(childNode.getNodeName().equals("Object") || childNode.getNodeName().equals("#text")) {
+                if(childNode.getNodeName().equals("object") || childNode.getNodeName().equals("#text")) {
                     continue;
                 }
                 if(childNode.getNodeType() != Node.ELEMENT_NODE) {
