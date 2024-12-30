@@ -13,7 +13,6 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
-import java.util.Arrays;
 
 public class Window extends JFrame {
 

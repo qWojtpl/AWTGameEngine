@@ -73,13 +73,16 @@ public class SceneLoader {
     }
 
     public SceneOptions getSceneOptions(Document document) {
-        Node node = document.getElementsByTagName("Scene").item(0);
+        Node node = document.getElementsByTagName("scene").item(0);
         if(node == null) {
             return null;
         }
-        String title = "Default window title";
-        boolean fullScreen = false;
-        int renderFPS = 60, updateFPS = 60, multiplier = 3;
+        AppProperties properties = Dependencies.getAppProperties();
+        String title = properties.getProperty("title");
+        boolean fullScreen = properties.getPropertyAsBoolean("fullscreen");
+        int renderFPS = properties.getPropertyAsInteger("renderFPS"),
+                updateFPS = properties.getPropertyAsInteger("updateFPS"),
+                multiplier = properties.getPropertyAsInteger("multiplier");
         for(int i = 0; i < node.getAttributes().getLength(); i++) {
             Node item = node.getAttributes().item(i);
             switch(item.getNodeName().toUpperCase()) {
@@ -110,11 +113,11 @@ public class SceneLoader {
     }
 
     public NodeList getSceneData(Document document) {
-        return document.getElementsByTagName("Object");
+        return document.getElementsByTagName("object");
     }
 
     public String getCustomStyles(Document document) {
-        Node node = document.getElementsByTagName("Styles").item(0);
+        Node node = document.getElementsByTagName("styles").item(0);
         if(node == null) {
             return "";
         }
@@ -134,7 +137,7 @@ public class SceneLoader {
 
     public void attachSceneData(NodeList sceneData, GameObject defaultParent) {
         for(int i = 0; i < sceneData.getLength(); i++) {
-            if(!sceneData.item(i).getParentNode().getNodeName().equals("Scene")) {
+            if(!sceneData.item(i).getParentNode().getNodeName().equals("scene")) {
                 continue;
             }
             initObject(sceneData.item(i), defaultParent);
@@ -151,7 +154,7 @@ public class SceneLoader {
         object.deserialize(node);
         object.setParent(parent);
         for(int i = 0; i < node.getChildNodes().getLength(); i++) {
-            if(node.getChildNodes().item(i).getNodeName().equals("Object")) {
+            if(node.getChildNodes().item(i).getNodeName().equals("object")) {
                 initObject(node.getChildNodes().item(i), object);
             }
         }

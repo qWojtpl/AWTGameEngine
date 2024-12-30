@@ -4,7 +4,6 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -88,6 +87,7 @@ public class MusicPlayer extends ObjectComponent {
         return this.audioClip.getAudioClipPath();
     }
 
+    @SerializationGetter
     public boolean isAutoPlay() {
         return this.autoPlay;
     }
@@ -106,6 +106,11 @@ public class MusicPlayer extends ObjectComponent {
 
     public void setAutoPlay(boolean autoPlay) {
         this.autoPlay = autoPlay;
+    }
+
+    @SerializationSetter
+    public void setAutoPlay(String autoPlay) {
+        setAutoPlay(Boolean.parseBoolean(autoPlay));
     }
 
 }

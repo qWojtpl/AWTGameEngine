@@ -24,7 +24,7 @@ public class WindowsManager {
     public Window createWindow(String scenePath) {
         AppProperties appProperties = Dependencies.getAppProperties();
         Window window = new Window(Window.RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase()));
-        if(windows.size() == 0) {
+        if(windows.isEmpty()) {
             defaultFont = window.getFont();
         }
         window.setSceneLoader(new SceneLoader(window));

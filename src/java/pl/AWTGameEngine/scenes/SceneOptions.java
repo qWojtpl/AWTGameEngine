@@ -2,15 +2,11 @@ package pl.AWTGameEngine.scenes;
 
 public class SceneOptions {
 
-    private String title = "Default window title";
-    private boolean fullscreen = false;
-    private int renderFPS = 60;
-    private int updateFPS = 60;
-    private int multiplier = 1;
-
-    public SceneOptions() {
-
-    }
+    private final String title;
+    private final boolean fullscreen;
+    private final int renderFPS;
+    private final int updateFPS;
+    private final int multiplier;
 
     public SceneOptions(String title, boolean fullscreen, int renderFPS, int updateFPS, int multiplier) {
         this.title = title;
@@ -38,22 +34,6 @@ public class SceneOptions {
 
     public int getMultiplier() {
         return this.multiplier;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setFullscreen(boolean fullscreen) {
-        this.fullscreen = fullscreen;
-    }
-
-    public void setRenderFPS(int renderFPS) {
-        this.renderFPS = renderFPS;
-    }
-
-    public void setUpdateFPS(int updateFPS) {
-        this.updateFPS = updateFPS;
     }
 
 }

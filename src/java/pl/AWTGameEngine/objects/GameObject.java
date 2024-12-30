@@ -57,7 +57,7 @@ public class GameObject {
                 return;
             }
         }
-        if(component.isUnique() && getComponentsByClass(component.getClass()).size() > 0) {
+        if(component.isUnique() && getComponentsByClass(component.getClass()).isEmpty()) {
             Logger.log(1, "Component " + component.getClass().getName() + " is unique, cannot add another!");
             return;
         }
@@ -89,7 +89,7 @@ public class GameObject {
     }
 
     public boolean hasComponent(Class<? extends ObjectComponent> component) {
-        return getComponentsByClass(component).size() > 0;
+        return getComponentsByClass(component).isEmpty();
     }
 
     public void addChild(GameObject object) {
@@ -219,7 +219,7 @@ public class GameObject {
 
     public ObjectComponent getComponentByClass(Class<? extends ObjectComponent> clazz) {
         List<ObjectComponent> componentList = getComponentsByClass(clazz);
-        if(componentList.size() == 0) {
+        if(componentList.isEmpty()) {
             return null;
         }
         return componentList.get(0);
