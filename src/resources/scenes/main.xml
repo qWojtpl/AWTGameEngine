@@ -1,9 +1,3 @@
 <scene title="Main scene">
-    <object id="background" x="0" y="0" sizeX="400" sizeY="400">
-        <BlankRenderer color="black" />
-    </object>
-    <object id="sprite" x="0" y="0" sizeX="100" sizeY="100">
-        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
-        <MusicPlayer sourcePath="audio/dominique.wav" autoPlay="true" />
-    </object>
+
 </scene>

@@ -5,6 +5,7 @@ import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.engine.panels.NestedPanel;
+import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.scenes.Scene;
@@ -19,9 +20,9 @@ public class Window extends JFrame {
     private final RenderEngine renderEngine;
     private double multiplier = 3;
     private final int WIDTH = 480;
-    private final int HEIGHT = (int) (WIDTH * 0.5625);
     private NestedPanel panel;
     private WebPanel webPanel;
+    private Panel3D threeDimensionalPanel;
     private GameLoop renderLoop;
     private GameLoop updateLoop;
     private KeyListener keyListener;
@@ -56,6 +57,9 @@ public class Window extends JFrame {
     }
 
     public PanelObject getPanel() {
+        if(this.threeDimensionalPanel != null) {
+            return this.threeDimensionalPanel;
+        }
         if(this.webPanel != null) {
             return this.webPanel;
         }
@@ -106,6 +110,14 @@ public class Window extends JFrame {
         return this.fullScreen;
     }
 
+    public int getBaseWidth() {
+        return WIDTH;
+    }
+
+    public int getBaseHeight() {
+        return (int) (WIDTH * 0.5625);
+    }
+
     public void setMultiplier(double multiplier) {
         if(multiplier <= 0) {
             multiplier = 1;
@@ -114,22 +126,29 @@ public class Window extends JFrame {
             setUndecorated(true);
             GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             device.setFullScreenWindow(this);
-            multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / WIDTH);
+            multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / getBaseWidth());
         }
         this.multiplier = multiplier;
+        int width = (int) (getBaseWidth() * multiplier) - 1;
+        int height = (int) (getBaseHeight() * multiplier);
         if(RenderEngine.DEFAULT.equals(renderEngine)) {
             if(this.panel == null) {
                 this.panel = new NestedPanel(this);
                 add(panel);
             }
-        } else {
+        } else if(RenderEngine.WEB.equals(renderEngine)) {
             if(this.webPanel == null) {
                 this.webPanel = new WebPanel(this);
                 add(webPanel);
             }
             webPanel.loadWebView();
+        } else if(RenderEngine.THREE_DIMENSIONAL.equals(renderEngine)) {
+            if(this.threeDimensionalPanel == null) {
+                this.threeDimensionalPanel = new Panel3D(this, width, height);
+                add(threeDimensionalPanel);
+            }
         }
-        getPanel().setPreferredSize(new Dimension((int) (WIDTH * multiplier) - 1, (int) (HEIGHT * multiplier)));
+        getPanel().setPreferredSize(new Dimension(width, height));
         pack();
         setKeyListener(new KeyListener(this));
     }
@@ -181,7 +200,8 @@ public class Window extends JFrame {
     public enum RenderEngine {
 
         DEFAULT,
-        WEB
+        WEB,
+        THREE_DIMENSIONAL
 
     }
 

@@ -16,5 +16,6 @@ public interface PanelObject {
     void removeAll();
     void update();
     void setPreferredSize(Dimension dimension);
+    void setMouseListener(MouseListener listener);
 
 }

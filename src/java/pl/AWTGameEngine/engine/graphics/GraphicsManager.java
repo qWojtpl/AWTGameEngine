@@ -4,7 +4,6 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
-import pl.AWTGameEngine.windows.WindowsManager;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
