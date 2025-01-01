@@ -1,7 +1,9 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebRenderable;
@@ -11,6 +13,8 @@ import pl.AWTGameEngine.objects.GameObject;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 
+@DefaultComponent
+@WebComponent
 public class TextRenderer extends ObjectComponent implements WebRenderable {
 
     private String text = "Text";

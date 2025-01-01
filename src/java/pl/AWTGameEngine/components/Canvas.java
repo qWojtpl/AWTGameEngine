@@ -1,10 +1,14 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.objects.GameObject;
 
 @Unique
+@DefaultComponent
+@WebComponent
 public class Canvas extends ObjectComponent {
 
     public Canvas(GameObject object) {

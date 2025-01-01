@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.NotOnWeb;
+import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
@@ -10,7 +10,7 @@ import pl.AWTGameEngine.objects.GameObject;
 import java.awt.*;
 
 @Unique
-@NotOnWeb
+@DefaultComponent
 public class Button extends ObjectComponent {
 
     private final BlankRenderer background = new BlankRenderer(getObject());

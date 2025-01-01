@@ -1,14 +1,10 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.NotOnWeb;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.panels.NestedPanel;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.windows.Window;
 
-@NotOnWeb
 public class PanelComponent extends ObjectComponent {
 
     private NestedPanel nestedPanel;
@@ -43,21 +39,6 @@ public class PanelComponent extends ObjectComponent {
             getCamera().parseScale(getObject().getSizeX()),
             getCamera().parseScale(getObject().getSizeY())
         );
-    }
-
-    @Override
-    public void onAddChild(GameObject object) {
-        object.setPanel(nestedPanel);
-    }
-
-    @Override
-    public void onParentChange(GameObject newParent) {
-        getObject().getPanel().remove(nestedPanel);
-        if(newParent != null) {
-            newParent.getPanel().add(nestedPanel);
-        } else {
-            getWindow().getPanel().add(nestedPanel);
-        }
     }
 
     public NestedPanel getNestedPanel() {

@@ -202,21 +202,6 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
-    public void onAddChild(GameObject child) {
-
-    }
-
-    @EventMethod
-    public void onRemoveChild(GameObject child) {
-
-    }
-
-    @EventMethod
-    public void onParentChange(GameObject oldParent) {
-
-    }
-
-    @EventMethod
     public void onMouseClick() {
 
     }
@@ -269,12 +254,38 @@ public abstract class ObjectComponent {
         return false;
     }
 
-    public final boolean isNotOnWeb() {
-        return this.getClass().isAnnotationPresent(NotOnWeb.class);
+    public final boolean isDefaultComponent() {
+        return this.getClass().isAnnotationPresent(DefaultComponent.class);
     }
 
-    public final boolean isOnlyOnWeb() {
-        return this.getClass().isAnnotationPresent(OnlyOnWeb.class);
+    public final boolean isWebComponent() {
+        return this.getClass().isAnnotationPresent(WebComponent.class);
+    }
+
+    public final String getComponentName() {
+        String className = this.getClass().getSimpleName();
+        if(this.getClass().isAnnotationPresent(ComponentMeta.class)) {
+            String name = this.getClass().getAnnotation(ComponentMeta.class).name();
+            if(name.isBlank()) {
+                return className;
+            }
+            return name;
+        }
+        return className;
+    }
+
+    public final String getComponentDescription() {
+        if(this.getClass().isAnnotationPresent(ComponentMeta.class)) {
+            return this.getClass().getAnnotation(ComponentMeta.class).description();
+        }
+        return "No description provided.";
+    }
+
+    public final String getComponentAuthor() {
+        if(this.getClass().isAnnotationPresent(ComponentMeta.class)) {
+            return this.getClass().getAnnotation(ComponentMeta.class).author();
+        }
+        return "No author provided.";
     }
 
 }

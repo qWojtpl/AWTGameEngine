@@ -1,7 +1,9 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebRenderable;
@@ -10,6 +12,8 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.text.MessageFormat;
 
+@DefaultComponent
+@WebComponent
 public class BlankRenderer extends ObjectComponent implements WebRenderable {
 
     private ColorObject color = new ColorObject();

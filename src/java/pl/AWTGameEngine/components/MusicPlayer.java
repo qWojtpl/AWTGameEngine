@@ -1,8 +1,10 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.GameObject;
@@ -13,6 +15,8 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
 
+@DefaultComponent
+@WebComponent
 public class MusicPlayer extends ObjectComponent {
 
     private Clip clip;

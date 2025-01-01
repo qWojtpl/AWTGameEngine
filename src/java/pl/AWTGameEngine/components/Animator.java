@@ -1,9 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
@@ -12,6 +10,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@DefaultComponent
+@WebComponent
 @Unique
 public class Animator extends ObjectComponent {
 

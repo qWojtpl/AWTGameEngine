@@ -5,7 +5,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
@@ -37,15 +37,17 @@ public class WebPanel extends JFXPanel implements PanelObject {
     }
 
     public void loadWebView() {
-        Platform.runLater(() -> {
-            StringBuilder htmlString = new StringBuilder();
-            for(String line : Dependencies.getResourceManager().getResource(Dependencies.getAppProperties().getProperty("webViewPath") + "webview.html")) {
-                if(line.contains("@{CUSTOM-USER-STYLES}")) {
-                    htmlString.append(window.getCurrentScene().getCustomStyles());
-                    continue;
-                }
-                htmlString.append(line);
+        Logger.log(0, "Loading WebView file...");
+        StringBuilder htmlString = new StringBuilder();
+        for(String line : Dependencies.getResourceManager().getResource(Dependencies.getAppProperties().getProperty("webViewPath") + "webview.html")) {
+            if(line.contains("@{CUSTOM-USER-STYLES}")) {
+                htmlString.append(window.getCurrentScene().getCustomStyles());
+                continue;
             }
+            htmlString.append(line);
+        }
+        Logger.log(0, "WebView file loaded.");
+        Platform.runLater(() -> {
             webView.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
                 getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
             });
@@ -55,10 +57,12 @@ public class WebPanel extends JFXPanel implements PanelObject {
             webView.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
                 getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
             });
+            Logger.log(0, "Added listeners.");
             webView.getEngine().setJavaScriptEnabled(true);
             webView.contextMenuEnabledProperty().setValue(false);
             webView.getEngine().loadContent(htmlString.toString());
             graphicsManager = new WebGraphicsManager(webView);
+            Logger.log(0, "WebView loaded.");
         });
     }
 

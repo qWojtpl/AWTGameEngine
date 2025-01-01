@@ -7,7 +7,7 @@ import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
 
-@OnlyOnWeb
+@WebComponent
 @Conflicts({
         @ConflictsWith(BlankRenderer.class),
         @ConflictsWith(TextRenderer.class)

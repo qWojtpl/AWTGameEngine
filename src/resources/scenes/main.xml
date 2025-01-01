@@ -1,5 +1,9 @@
 <scene title="Main scene">
     <object id="1234" sizeX="100" sizeY="100" x="100" y="100">
         <BlankRenderer color="red" />
+        <CustomComponent _package="pl.AWTGameEngine.custom" />
+    </object>
+    <object id="12345" sizeX="300" sizeY="300" x="300" y="300">
+        <BlankRenderer color="#000000" />
     </object>
 </scene>

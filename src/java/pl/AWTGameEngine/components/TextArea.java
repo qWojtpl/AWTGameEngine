@@ -1,8 +1,9 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.NotOnWeb;
+import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -10,7 +11,8 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 
-@NotOnWeb
+@Unique
+@DefaultComponent
 public class TextArea extends ObjectComponent {
 
     private String text = "Text";

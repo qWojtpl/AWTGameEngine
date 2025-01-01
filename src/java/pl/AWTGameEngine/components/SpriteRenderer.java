@@ -1,9 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebRenderable;
@@ -13,6 +11,8 @@ import pl.AWTGameEngine.objects.Sprite;
 import java.text.MessageFormat;
 
 @Unique
+@DefaultComponent
+@WebComponent
 public class SpriteRenderer extends ObjectComponent implements WebRenderable {
 
     private Sprite sprite;

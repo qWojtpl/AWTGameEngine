@@ -40,15 +40,14 @@ public class GameObject {
 
     public void addComponent(ObjectComponent component) {
         if(Window.RenderEngine.WEB.equals(scene.getWindow().getRenderEngine())) {
-            if(component.isNotOnWeb()) {
-                Logger.log(1, "Component " + component.getClass().getName() + " is marked as NotOnWeb component, " +
-                        "but render engine is set to Web. Find component dedicated for web rendering instead.");
-                return;
+            if(!component.isWebComponent()) {
+                Logger.log(1, "Component " + component.getComponentName() +
+                        " cannot be added to " + identifier + " because is not marked as WebComponent");
             }
-        } else {
-            if(component.isOnlyOnWeb()) {
-                Logger.log(1, "Component " + component.getClass().getName() + " is marked as OnlyOnWeb component, " +
-                        "but render engine is set to Default. Find component dedicated for default rendering instead.");
+        } else if(Window.RenderEngine.DEFAULT.equals(scene.getWindow().getRenderEngine())) {
+            if(!component.isDefaultComponent()) {
+                Logger.log(1, "Component " + component.getComponentName() +
+                        " cannot be added to " + identifier + " because is not marked as DefaultComponent");
                 return;
             }
         }
