@@ -19,7 +19,7 @@ public class BoxCollider extends Collider {
 
     @Override
     public void onAddComponent() {
-        calculatePoints(getObject().getX(), getObject().getY(), getObject().getRotation());
+        calculatePoints(getObject().getX(), getObject().getY(), getObject().getRotationX());
         getColliderRegistry().registerCollider(this);
     }
 
@@ -40,7 +40,7 @@ public class BoxCollider extends Collider {
                 getCamera().parseScale(getObject().getSizeY() + sizeY),
                 new GraphicsManager.RenderOptions()
                         .setColor(visualizeColor.getColor())
-                        .setRotation(getObject().getRotation())
+                        .setRotation(getObject().getRotationX())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
                         .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
         );
@@ -48,7 +48,7 @@ public class BoxCollider extends Collider {
 
     @Override
     public boolean onUpdatePosition(int newX, int newY) {
-        calculatePoints(newX, newY, getObject().getRotation());
+        calculatePoints(newX, newY, getObject().getRotationX());
         return !getColliderRegistry().isColliding(getObject(), this, newX, newY);
     }
 

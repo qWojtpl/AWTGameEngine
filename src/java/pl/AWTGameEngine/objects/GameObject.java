@@ -4,7 +4,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.components.PanelComponent;
 import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
@@ -23,16 +22,12 @@ public class GameObject {
     private final String identifier;
     private final Scene scene;
     private boolean active = true;
-    private int x = 0;
-    private int y = 0;
-    private int rotation = 0;
-    private int sizeX = 100;
-    private int sizeY = 100;
+    private TransformSet position = new TransformSet(0, 0, 0);
+    private TransformSet rotation = new TransformSet(0, 0, 0);
+    private TransformSet size = new TransformSet(0, 0, 0);
     private int priority = 0;
-    private GameObject parent;
     private PanelObject panel;
     private EventHandler eventHandler = new EventHandler();
-    private final List<GameObject> children = new ArrayList<>();
     private final List<ObjectComponent> components = new ArrayList<>();
 
     public GameObject(String identifier, Scene scene) {
@@ -92,46 +87,15 @@ public class GameObject {
         return getComponentsByClass(component).isEmpty();
     }
 
-    public void addChild(GameObject object) {
-        if(this.children.contains(object)) {
-            return;
-        }
-        if(!this.equals(object.getParent())) {
-            object.setParent(this);
-            return;
-        }
-        this.children.add(object);
-        for(ObjectComponent component : eventHandler.getComponents("onAddChild#GameObject")) {
-            component.onAddChild(object);
-        }
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#boolean")) {
-            component.onUpdateGameObject(this);
-        }
-    }
-
-    public void removeChild(GameObject object) {
-        if(!this.children.contains(object)) {
-            return;
-        }
-        object.setPanel(getScene().getWindow().getPanel());
-        this.children.remove(object);
-        for(ObjectComponent component : eventHandler.getComponents("onRemoveChild#GameObject")) {
-            component.onRemoveChild(object);
-        }
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onUpdateGameObject#GameObject")) {
-            component.onUpdateGameObject(this);
-        }
-    }
-
     public void moveX(int x) {
-        int delta = x - this.x;
+        int delta = x - this.position.getX();
         if(delta == 0) {
             return;
         }
         int direction = delta < 0 ? -1 : 1;
         for(int i = 0; i < Math.abs(delta); i++) {
             if(tryMoveX(direction)) {
-                setX(this.x + direction);
+                setX(this.position.getX() + direction);
                 continue;
             }
             return;
@@ -140,7 +104,7 @@ public class GameObject {
 
     public boolean tryMoveX(int direction) {
         for(ObjectComponent component : getComponents()) {
-            if(!component.onUpdatePosition(this.x + direction, this.y)) {
+            if(!component.onUpdatePosition(this.position.getX() + direction, this.position.getY())) {
                 return false;
             }
         }
@@ -148,14 +112,14 @@ public class GameObject {
     }
 
     public void moveY(int y) {
-        int delta = y - this.y;
+        int delta = y - this.position.getY();
         if(delta == 0) {
             return;
         }
         int direction = delta < 0 ? -1 : 1;
         for(int i = 0; i < Math.abs(delta); i++) {
             if(tryMoveY(direction)) {
-                setY(this.y + direction);
+                setY(this.position.getY() + direction);
                 continue;
             }
             return;
@@ -164,7 +128,7 @@ public class GameObject {
 
     public boolean tryMoveY(int direction) {
         for(ObjectComponent component : getComponents()) {
-            if(!component.onUpdatePosition(this.x, this.y + direction)) {
+            if(!component.onUpdatePosition(this.position.getX(), this.position.getY() + direction)) {
                 return false;
             }
         }
@@ -172,14 +136,14 @@ public class GameObject {
     }
 
     public void rotate(int angle) {
-        int delta = angle - this.rotation;
+        int delta = angle - this.rotation.getX();
         if(delta == 0) {
             return;
         }
         int direction = delta < 0 ? -1 : 1;
         for(int i = 0; i < Math.abs(delta); i++) {
             if(tryRotate(direction)) {
-                setRotation(this.rotation + direction);
+                setRotationX(this.rotation.getX() + direction);
                 continue;
             }
             return;
@@ -188,7 +152,7 @@ public class GameObject {
 
     public boolean tryRotate(int direction) {
         for(ObjectComponent component : getComponents()) {
-            if(!component.onUpdateRotation(this.rotation + direction)) {
+            if(!component.onUpdateRotation(this.rotation.getX() + direction)) {
                 return false;
             }
         }
@@ -231,109 +195,50 @@ public class GameObject {
 
     @BindingGetter
     public int getX() {
-        return this.x;
+        return this.position.getX();
     }
 
     @BindingGetter
     public int getY() {
-        return this.y;
+        return this.position.getY();
+    }
+
+    public TransformSet getPosition() {
+        return this.position;
     }
 
     @BindingGetter
-    public int getRotation() {
-        if(this.parent == null) {
-            return this.rotation;
-        }
-        return this.rotation + this.parent.getRotation();
+    public int getRotationX() {
+        return this.rotation.getX();
+    }
+
+    public TransformSet getRotation() {
+        return this.rotation;
     }
 
     @BindingGetter
     public int getCenterX() {
-        if(this.parent == null) {
-            return getX() + getSizeX() / 2;
-        }
-        if(this.parent.hasComponent(PanelComponent.class)) {
-            return getX() + getSizeX() / 2;
-        }
-        return this.parent.getCenterX();
+        return getX() + getSizeX() / 2;
     }
 
     @BindingGetter
     public int getCenterY() {
-        if(this.parent == null) {
-            return getY() + getSizeY() / 2;
-        }
-        if(this.parent.hasComponent(PanelComponent.class)) {
-            return getY() + getSizeY() / 2;
-        }
-        return this.parent.getCenterY();
+        return getY() + getSizeY() / 2;
     }
 
     @BindingGetter
     public int getSizeX() {
-        return this.sizeX;
+        return this.size.getX();
     }
 
     @BindingGetter
     public int getSizeY() {
-        return this.sizeY;
-    }
-
-    @BindingGetter
-    public int getWidth() {
-        int width = 0;
-        for(GameObject object : getChildren()) {
-            if(object.getX() + object.getSizeX() > width) {
-                width = object.getX() + object.getSizeX();
-            }
-        }
-        return width;
-    }
-
-    @BindingGetter
-    public int getHeight() {
-        int height = 0;
-        for(GameObject object : getChildren()) {
-            if(object.getChildren().size() > 0) {
-                for(GameObject child : object.getChildren()) {
-                    if(child.getY() + child.getSizeY() > height) {
-                        height = child.getY() + child.getSizeY();
-                    }
-                }
-            }
-            if(object.getY() + object.getSizeY() > height) {
-                height = object.getY() + object.getSizeY();
-            }
-        }
-        return height;
-    }
-
-    @BindingGetter
-    public int getChildrenHeight() {
-        int height = 0;
-        for(GameObject child : getChildren()) {
-            height += child.getSizeY();
-        }
-        return height;
+        return this.size.getY();
     }
 
     @BindingGetter
     public int getPriority() {
         return this.priority;
-    }
-
-    public GameObject getParent() {
-        return this.parent;
-    }
-
-    public GameObject getAbsoluteParent() {
-        if(getParent() == null) {
-            return this;
-        }
-        if(getParent().hasComponent(PanelComponent.class)) {
-            return this;
-        }
-        return getParent().getAbsoluteParent();
     }
 
     public PanelObject getPanel() {
@@ -344,34 +249,18 @@ public class GameObject {
         return this.eventHandler;
     }
 
-    public List<GameObject> getChildren() {
-        return new ArrayList<>(children);
-    }
-
-    public List<GameObject> getAllChildren() {
-        List<GameObject> r = new ArrayList<>();
-        for(GameObject c : getChildren()) {
-            r.add(c);
-            r.addAll(c.getAllChildren());
-        }
-        return r;
-    }
-
     public void setActive(boolean active) {
         this.active = active;
     }
 
     public void setX(int x) {
-        int delta = x - this.x;
+        int delta = x - this.position.getX();
         if(delta == 0) {
             return;
         }
-        this.x = x;
-        for(GameObject go : getChildren()) {
-            go.setX(go.getX() + delta);
-        }
+        this.position.setX(x);
         for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
-            component.onUpdatePosition(x, this.y);
+            component.onUpdatePosition(x, this.position.getY());
         }
     }
 
@@ -381,13 +270,13 @@ public class GameObject {
     }
 
     public void setY(int y) {
-        int delta = y - this.y;
-        this.y = y;
-        for(GameObject go : getChildren()) {
-            go.setY(go.getY() + delta);
+        int delta = y - this.position.getY();
+        if(delta == 0) {
+            return;
         }
+        this.position.setY(y);
         for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
-            component.onUpdatePosition(this.x, y);
+            component.onUpdatePosition(this.position.getX(), y);
         }
     }
 
@@ -396,19 +285,27 @@ public class GameObject {
         setY(Integer.parseInt(y));
     }
 
-    public void setRotation(int angle) {
-        this.rotation = angle;
+    public void setPosition(TransformSet transform) {
+        this.position = transform;
+    }
+
+    public void setRotationX(int angle) {
+        this.rotation.setX(angle);
     }
 
     @BindingSetter
-    public void setRotation(String angle) {
-        setRotation(Integer.parseInt(angle));
+    public void setRotationX(String angle) {
+        setRotationX(Integer.parseInt(angle));
+    }
+
+    public void setRotation(TransformSet transform) {
+        this.rotation = transform;
     }
 
     public void setSizeX(int x) {
-        this.sizeX = x;
+        this.size.setX(x);
         for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#int#int")) {
-            component.onUpdateSize(x, this.sizeY);
+            component.onUpdateSize(x, this.size.getY());
         }
     }
 
@@ -418,9 +315,9 @@ public class GameObject {
     }
 
     public void setSizeY(int y) {
-        this.sizeY = y;
+        this.size.setY(y);
         for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#int#int")) {
-            component.onUpdateSize(this.x, y);
+            component.onUpdateSize(this.size.getX(), y);
         }
     }
 
@@ -434,6 +331,10 @@ public class GameObject {
         setSizeY(y);
     }
 
+    public void setSize(TransformSet transform) {
+        this.size = transform;
+    }
+
     public void setPriority(int priority) {
         getScene().removeSortedObject(this.priority, this);
         this.priority = priority;
@@ -445,26 +346,8 @@ public class GameObject {
         setPriority(Integer.parseInt(priority));
     }
 
-    public void setParent(GameObject parent) {
-        if(this.parent != null) {
-            this.parent.removeChild(this);
-        }
-        GameObject oldParent = this.parent;
-        this.parent = parent;
-        for(ObjectComponent component : eventHandler.getComponents("onParentChange#GameObject")) {
-            component.onParentChange(oldParent);
-        }
-        if(parent != null) {
-            setPanel(parent.getPanel());
-            parent.addChild(this);
-        }
-    }
-
     public void setPanel(PanelObject panel) {
         this.panel = panel;
-        for(GameObject object : getChildren()) {
-            object.setPanel(panel);
-        }
     }
 
     public void setEventHandler(EventHandler eventHandler) {
@@ -503,7 +386,7 @@ public class GameObject {
             setY(Integer.parseInt(getValue(data, "y")));
             setSizeX(Integer.parseInt(getValue(data, "sizeX")));
             setSizeY(Integer.parseInt(getValue(data, "sizeY")));
-            setRotation(Integer.parseInt(getValue(data, "rotation")));
+            setRotationX(Integer.parseInt(getValue(data, "rotation")));
             setPriority(Integer.parseInt(getValue(data, "priority")));
             if(getValue(data, "active").equals("0")) {
                 setActive(true);

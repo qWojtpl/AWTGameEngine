@@ -5,7 +5,6 @@ import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
-import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.GameObject;
@@ -35,7 +34,7 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
                 getCamera().parseScale(getObject().getSizeX()),
                 getCamera().parseScale(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
-                        .setRotation(getObject().getRotation())
+                        .setRotation(getObject().getRotationX())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
                         .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
                         .setContext(getObject())

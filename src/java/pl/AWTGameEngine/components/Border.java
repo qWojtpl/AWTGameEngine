@@ -30,7 +30,7 @@ public class Border extends ObjectComponent implements WebRenderable {
                 getCamera().parseScale(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
                         .setColor(color.getColor())
-                        .setRotation(getObject().getRotation())
+                        .setRotation(getObject().getRotationX())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
                         .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
         );

@@ -125,10 +125,6 @@ public class Scene {
                 object.removeComponent(component);
             }
         }
-        for(GameObject child : object.getChildren()) {
-            child.setParent(object.getParent());
-        }
-        object.setParent(null);
         gameObjects.remove(object.getIdentifier());
         removeSortedObject(object.getPriority(), object);
         bindingsManager.removeBindingsByOwner(object);

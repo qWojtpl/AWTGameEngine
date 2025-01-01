@@ -132,19 +132,15 @@ public class SceneLoader {
     }
 
     public void attachSceneData(NodeList sceneData) {
-        attachSceneData(sceneData, null);
-    }
-
-    public void attachSceneData(NodeList sceneData, GameObject defaultParent) {
         for(int i = 0; i < sceneData.getLength(); i++) {
             if(!sceneData.item(i).getParentNode().getNodeName().equals("scene")) {
                 continue;
             }
-            initObject(sceneData.item(i), defaultParent);
+            initObject(sceneData.item(i));
         }
     }
 
-    private void initObject(Node node, GameObject parent) {
+    private void initObject(Node node) {
         String identifier = node.getAttributes().getNamedItem("id").getNodeValue();
         GameObject object = window.getCurrentScene().createGameObject(identifier);
         if(object == null) {
@@ -152,10 +148,11 @@ public class SceneLoader {
             return;
         }
         object.deserialize(node);
-        object.setParent(parent);
         for(int i = 0; i < node.getChildNodes().getLength(); i++) {
             if(node.getChildNodes().item(i).getNodeName().equals("object")) {
-                initObject(node.getChildNodes().item(i), object);
+                Logger.log(1, "Cannot initialize object with identifier " +
+                        node.getChildNodes().item(i).getAttributes().getNamedItem("id").getNodeValue() +
+                        ". You can't nest object in another object. Use group instead.");
             }
         }
     }

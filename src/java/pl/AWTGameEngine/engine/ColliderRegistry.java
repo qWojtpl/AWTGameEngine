@@ -50,7 +50,7 @@ public class ColliderRegistry {
             Area clonedArea = (Area) baseArea.clone();
             clonedArea.intersect(colliderArea);
             if(!clonedArea.isEmpty()) {
-                for(ObjectComponent component : object.getAbsoluteParent().getEventHandler().getComponents("onCollide#GameObject")) {
+                for(ObjectComponent component : object.getEventHandler().getComponents("onCollide#GameObject")) {
                     component.onCollide(c.getObject());
                 }
                 collided.add(c.getObject());
