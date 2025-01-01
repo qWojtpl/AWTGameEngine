@@ -6,9 +6,7 @@ import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.ObjectComponent;
 import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
-import pl.AWTGameEngine.engine.graphics.GraphicsManager;
-import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
-import pl.AWTGameEngine.engine.graphics.WebRenderable;
+import pl.AWTGameEngine.engine.graphics.*;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
@@ -23,7 +21,7 @@ public class GameObject {
     private final Scene scene;
     private boolean active = true;
     private TransformSet position = new TransformSet(0, 0, 0);
-    private TransformSet rotation = new TransformSet(0, 0, 0);
+    private TransformSet rotation = new TransformSet(0, 0, 45);
     private TransformSet size = new TransformSet(0, 0, 0);
     private int priority = 0;
     private PanelObject panel;
@@ -39,15 +37,23 @@ public class GameObject {
     }
 
     public void addComponent(ObjectComponent component) {
-        if(Window.RenderEngine.WEB.equals(scene.getWindow().getRenderEngine())) {
+        Window.RenderEngine renderEngine = scene.getWindow().getRenderEngine();
+        if(Window.RenderEngine.WEB.equals(renderEngine)) {
             if(!component.isWebComponent()) {
                 Logger.log(1, "Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as WebComponent");
+                return;
             }
-        } else if(Window.RenderEngine.DEFAULT.equals(scene.getWindow().getRenderEngine())) {
+        } else if(Window.RenderEngine.DEFAULT.equals(renderEngine)) {
             if(!component.isDefaultComponent()) {
                 Logger.log(1, "Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as DefaultComponent");
+                return;
+            }
+        } else if(Window.RenderEngine.THREE_DIMENSIONAL.equals(renderEngine)) {
+            if(!component.is3DComponent()) {
+                Logger.log(1, "Component " + component.getComponentName() +
+                        " cannot be added to " + identifier + " because is not marked as Component3D");
                 return;
             }
         }
@@ -235,6 +241,10 @@ public class GameObject {
         return this.size.getY();
     }
 
+    public TransformSet getSize() {
+        return this.size;
+    }
+
     @BindingGetter
     public int getPriority() {
         return this.priority;
@@ -284,6 +294,23 @@ public class GameObject {
         setY(Integer.parseInt(y));
     }
 
+    public void setZ(int z) {
+        int delta = z - this.position.getZ();
+        if(delta == 0) {
+            return;
+        }
+        this.position.setZ(z);
+        //todo
+        /*for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
+            component.onUpdatePosition(this.position.getX(), y);
+        }*/
+    }
+
+    @BindingSetter
+    public void setZ(String z) {
+        setZ(Integer.parseInt(z));
+    }
+
     public void setPosition(TransformSet transform) {
         this.position = transform;
     }
@@ -325,9 +352,17 @@ public class GameObject {
         setSizeY(Integer.parseInt(y));
     }
 
-    public void setSize(int x, int y) {
-        setSizeX(x);
-        setSizeY(y);
+    public void setSizeZ(int z) {
+        this.size.setZ(z);
+        //todo
+        /*for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#int#int")) {
+            component.onUpdateSize(this.size.getX(), y);
+        }*/
+    }
+
+    @BindingSetter
+    public void setSizeZ(String z) {
+        setSizeZ(Integer.parseInt(z));
     }
 
     public void setSize(TransformSet transform) {
@@ -379,12 +414,22 @@ public class GameObject {
         }
     }
 
+    public void render3D(GraphicsManager3D g) {
+        for(ObjectComponent component : getComponents()) {
+            if(component instanceof Renderable3D) {
+                ((Renderable3D) component).on3DRenderRequest(g);
+            }
+        }
+    }
+
     public void deserialize(Node data) {
         try {
             setX(Integer.parseInt(getValue(data, "x")));
             setY(Integer.parseInt(getValue(data, "y")));
+            setZ(Integer.parseInt(getValue(data, "z")));
             setSizeX(Integer.parseInt(getValue(data, "sizeX")));
             setSizeY(Integer.parseInt(getValue(data, "sizeY")));
+            setSizeZ(Integer.parseInt(getValue(data, "sizeZ")));
             setRotationX(Integer.parseInt(getValue(data, "rotation")));
             setPriority(Integer.parseInt(getValue(data, "priority")));
             if(getValue(data, "active").equals("0")) {

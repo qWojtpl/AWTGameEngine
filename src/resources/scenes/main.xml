@@ -1,9 +1,7 @@
-<scene title="Main scene">
-    <object id="1234" sizeX="100" sizeY="100" x="100" y="100">
-        <BlankRenderer color="red" />
+<!--todo renderFPS default value if not set-->
+<scene title="Main scene" renderFPS="144" updateFPS="144">
+    <object id="1234" sizeX="100" sizeY="100" sizeZ="500" x="600" y="300">
+        <Box3D />
         <CustomComponent _package="pl.AWTGameEngine.custom" />
-    </object>
-    <object id="12345" sizeX="300" sizeY="300" x="300" y="300">
-        <BlankRenderer color="#000000" />
     </object>
 </scene>

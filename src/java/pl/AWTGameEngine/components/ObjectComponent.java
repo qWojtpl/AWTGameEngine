@@ -262,6 +262,10 @@ public abstract class ObjectComponent {
         return this.getClass().isAnnotationPresent(WebComponent.class);
     }
 
+    public final boolean is3DComponent() {
+        return this.getClass().isAnnotationPresent(Component3D.class);
+    }
+
     public final String getComponentName() {
         String className = this.getClass().getSimpleName();
         if(this.getClass().isAnnotationPresent(ComponentMeta.class)) {
