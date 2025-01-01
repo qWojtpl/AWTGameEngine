@@ -142,6 +142,11 @@ public abstract class ObjectComponent {
 
     }
 
+    @EventMethod
+    public void onUpdateCameraPosition(int newX, int newY, int newZ) {
+
+    }
+
     /**
      * Method will be called when component will be added to the object.
      */

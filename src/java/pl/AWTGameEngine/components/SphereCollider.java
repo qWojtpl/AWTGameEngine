@@ -33,8 +33,8 @@ public class SphereCollider extends Collider {
         g.drawOval(
                 getCamera().parseX(getObject(), getObject().getX() + x),
                 getCamera().parseY(getObject(), getObject().getY() + y),
-                getCamera().parseScale(getObject().getSizeX() + sizeX),
-                getCamera().parseScale(getObject().getSizeY() + sizeY),
+                getCamera().parsePlainValue(getObject().getSizeX() + sizeX),
+                getCamera().parsePlainValue(getObject().getSizeY() + sizeY),
                 new GraphicsManager.RenderOptions()
                         .setColor(visualizeColor.getColor())
                         .setRotation(getObject().getRotationX())

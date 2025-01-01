@@ -21,7 +21,7 @@ public class GameObject {
     private final Scene scene;
     private boolean active = true;
     private TransformSet position = new TransformSet(0, 0, 0);
-    private TransformSet rotation = new TransformSet(0, 0, 45);
+    private TransformSet rotation = new TransformSet(0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
     private int priority = 0;
     private PanelObject panel;
@@ -319,6 +319,16 @@ public class GameObject {
         this.rotation.setX(angle);
     }
 
+    @Platform3D
+    public void setRotationY(int angle) {
+        this.rotation.setY(angle);
+    }
+
+    @Platform3D
+    public void setRotationZ(int angle) {
+        this.rotation.setZ(angle);
+    }
+
     @BindingSetter
     public void setRotationX(String angle) {
         setRotationX(Integer.parseInt(angle));
@@ -430,7 +440,9 @@ public class GameObject {
             setSizeX(Integer.parseInt(getValue(data, "sizeX")));
             setSizeY(Integer.parseInt(getValue(data, "sizeY")));
             setSizeZ(Integer.parseInt(getValue(data, "sizeZ")));
-            setRotationX(Integer.parseInt(getValue(data, "rotation")));
+            setRotationX(Integer.parseInt(getValue(data, "rotationX")));
+            setRotationY(Integer.parseInt(getValue(data, "rotationY")));
+            setRotationZ(Integer.parseInt(getValue(data, "rotationZ")));
             setPriority(Integer.parseInt(getValue(data, "priority")));
             if(getValue(data, "active").equals("0")) {
                 setActive(true);

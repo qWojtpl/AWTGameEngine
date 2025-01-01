@@ -31,8 +31,8 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
                 sprite,
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
-                getCamera().parseScale(getObject().getSizeX()),
-                getCamera().parseScale(getObject().getSizeY()),
+                getCamera().parsePlainValue(getObject().getSizeX()),
+                getCamera().parsePlainValue(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
                         .setRotation(getObject().getRotationX())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))

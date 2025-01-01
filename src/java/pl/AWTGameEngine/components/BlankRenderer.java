@@ -28,8 +28,8 @@ public class BlankRenderer extends ObjectComponent implements WebRenderable {
         g.fillRect(
                 getCamera().parseX(getObject(), getObject().getX()),
                 getCamera().parseY(getObject(), getObject().getY()),
-                getCamera().parseScale(getObject().getSizeX()),
-                getCamera().parseScale(getObject().getSizeY()),
+                getCamera().parsePlainValue(getObject().getSizeX()),
+                getCamera().parsePlainValue(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
                         .setColor(color.getColor())
                         .setRotation(getObject().getRotationX())

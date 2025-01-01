@@ -25,8 +25,8 @@ public class WebGraphicsManager {
         Camera camera = object.getPanel().getCamera();
         execute(String.format("setSize(\"%s\", \"%s\", \"%s\");",
                 object.getIdentifier(),
-                camera.parseScale(object.getSizeX()),
-                camera.parseScale(object.getSizeY())));
+                camera.parsePlainValue(object.getSizeX()),
+                camera.parsePlainValue(object.getSizeY())));
     }
 
     public void updateRotation(GameObject object) {

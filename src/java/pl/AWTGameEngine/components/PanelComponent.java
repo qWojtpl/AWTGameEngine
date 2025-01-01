@@ -36,8 +36,8 @@ public class PanelComponent extends ObjectComponent {
             getCamera().parseY(getObject(), getObject().getY())
         );
         nestedPanel.setSize(
-            getCamera().parseScale(getObject().getSizeX()),
-            getCamera().parseScale(getObject().getSizeY())
+            getCamera().parsePlainValue(getObject().getSizeX()),
+            getCamera().parsePlainValue(getObject().getSizeY())
         );
     }
 
