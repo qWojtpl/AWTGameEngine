@@ -39,7 +39,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
     public void loadWebView() {
         Platform.runLater(() -> {
             StringBuilder htmlString = new StringBuilder();
-            for(String line : Objects.requireNonNull(Dependencies.getResourceManager().getResource("webview/webview.html"))) {
+            for(String line : Dependencies.getResourceManager().getResource(Dependencies.getAppProperties().getProperty("webViewPath") + "webview.html")) {
                 if(line.contains("@{CUSTOM-USER-STYLES}")) {
                     htmlString.append(window.getCurrentScene().getCustomStyles());
                     continue;

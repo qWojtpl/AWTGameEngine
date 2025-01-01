@@ -1,7 +1,5 @@
 <scene title="Main scene">
-    <object id="1234">
-        <object id="12345">
-            <BlankRenderer color="red" />
-        </object>
+    <object id="1234" sizeX="100" sizeY="100" x="100" y="100">
+        <BlankRenderer color="red" />
     </object>
 </scene>

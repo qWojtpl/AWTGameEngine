@@ -3,8 +3,6 @@ package pl.AWTGameEngine.windows;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.GameLoop;
-import pl.AWTGameEngine.engine.ProjectManager;
-import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.scenes.SceneLoader;
@@ -13,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class WindowsManager {
 
@@ -28,7 +25,6 @@ public class WindowsManager {
             defaultFont = window.getFont();
         }
         window.setSceneLoader(new SceneLoader(window));
-        window.setProjectManager(new ProjectManager(window));
         window.setResizable(false);
         window.setTitle(appProperties.getProperty("title"));
 

@@ -14,6 +14,7 @@ public class GameLoop extends Thread {
         this.renderLoop = renderLoop;
     }
 
+    @SuppressWarnings("BusyWait")
     @Override
     public void run() {
         while(window.getWindowListener().isOpened()) {

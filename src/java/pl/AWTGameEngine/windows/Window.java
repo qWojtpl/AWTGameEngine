@@ -29,7 +29,6 @@ public class Window extends JFrame {
     private WindowListener windowListener;
     private Scene currentScene;
     private SceneLoader sceneLoader;
-    private ProjectManager projectManager;
     private boolean staticMode;
     private boolean fullScreen;
     private final Font font;
@@ -88,10 +87,6 @@ public class Window extends JFrame {
 
     public SceneLoader getSceneLoader() {
         return this.sceneLoader;
-    }
-
-    public ProjectManager getProjectManager() {
-        return this.projectManager;
     }
 
     public Font getFont() {
@@ -183,10 +178,6 @@ public class Window extends JFrame {
 
     public void setSceneLoader(SceneLoader sceneLoader) {
         this.sceneLoader = sceneLoader;
-    }
-
-    public void setProjectManager(ProjectManager projectManager) {
-        this.projectManager = projectManager;
     }
 
     public void setStaticMode(boolean staticMode) {
