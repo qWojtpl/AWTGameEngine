@@ -13,10 +13,10 @@ import java.util.Base64;
 public class Sprite {
 
     private final String imagePath;
-    private final Image image;
+    private final BufferedImage image;
     private String base64;
 
-    public Sprite(String imagePath, Image image) {
+    public Sprite(String imagePath, BufferedImage image) {
         this.imagePath = imagePath;
         this.image = image;
     }
@@ -25,7 +25,7 @@ public class Sprite {
         return this.imagePath;
     }
 
-    public Image getImage() {
+    public BufferedImage getImage() {
         return this.image;
     }
 
@@ -40,7 +40,7 @@ public class Sprite {
         String returnable;
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             String[] split = imagePath.split("\\.");
-            ImageIO.write((BufferedImage) image, split[split.length - 1], stream);
+            ImageIO.write(image, split[split.length - 1], stream);
             byte[] imageBytes = stream.toByteArray();
             returnable = new String(Base64.getEncoder().encode(imageBytes), StandardCharsets.UTF_8);
         } catch(IOException e) {

@@ -1,15 +1,20 @@
 package pl.AWTGameEngine.engine.graphics;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
+import java.io.InputStream;
+import java.util.Base64;
 import java.util.HashMap;
 
 public class GraphicsManager3D {
@@ -21,17 +26,21 @@ public class GraphicsManager3D {
         this.panel = panel;
     }
 
-    public void renderBox(String identifier, TransformSet position, TransformSet scale, TransformSet rotation) {
+    public void renderBox(String identifier, TransformSet position, TransformSet scale, TransformSet rotation, Sprite sprite) {
         Platform.runLater(() -> {
             Box box = boxes.getOrDefault(identifier, null);
             if(box == null) {
                 box = new Box();
                 box.setMaterial(new PhongMaterial() {{
-                    setDiffuseMap(new Image("sprites/beaver.jpg"));
-                    setSpecularColor(Color.WHITE);
+                    setDiffuseColor(Color.WHITE);
                 }});
                 boxes.put(identifier, box);
                 panel.getRootGroup().getChildren().add(box);
+            }
+            if(sprite != null) {
+                box.setMaterial(new PhongMaterial() {{
+                    setDiffuseMap(SwingFXUtils.toFXImage(sprite.getImage(), null));
+                }});
             }
             box.setScaleX(panel.getCamera().parsePlainValue(scale.getX()));
             box.setScaleY(panel.getCamera().parsePlainValue(scale.getY()));

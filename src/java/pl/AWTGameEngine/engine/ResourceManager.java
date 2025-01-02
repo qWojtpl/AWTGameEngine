@@ -6,6 +6,7 @@ import pl.AWTGameEngine.objects.Sprite;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;
@@ -91,7 +92,7 @@ public class ResourceManager {
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
-            Image img = ImageIO.read(stream);
+            BufferedImage img = ImageIO.read(stream);
             Sprite sprite = new Sprite(name, img);
             spriteResources.put(name, sprite);
             stream.close();
