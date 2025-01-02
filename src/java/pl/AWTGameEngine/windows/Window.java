@@ -32,6 +32,7 @@ public class Window extends JFrame {
     private boolean staticMode;
     private boolean fullScreen;
     private final Font font;
+    private Cursor cursor;
 
     public Window(RenderEngine renderEngine) {
         this.renderEngine = renderEngine;
@@ -113,6 +114,10 @@ public class Window extends JFrame {
         return (int) (WIDTH * 0.5625);
     }
 
+    public Cursor getCursor() {
+        return this.cursor;
+    }
+
     public void setMultiplier(double multiplier) {
         if(multiplier <= 0) {
             multiplier = 1;
@@ -186,6 +191,18 @@ public class Window extends JFrame {
 
     public void setFullScreen(boolean fullScreen) {
         this.fullScreen = fullScreen;
+    }
+
+    @Override
+    public void setCursor(Cursor cursor) {
+        this.cursor = cursor;
+        if(RenderEngine.THREE_DIMENSIONAL.equals(renderEngine)) {
+            threeDimensionalPanel.setCursor(cursor);
+        } else if(RenderEngine.WEB.equals(renderEngine)) {
+            webPanel.setCursor(cursor);
+        } else {
+            panel.setCursor(cursor);
+        }
     }
 
     public enum RenderEngine {
