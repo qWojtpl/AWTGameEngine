@@ -8,19 +8,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Shape3D;
+import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
-import java.io.InputStream;
-import java.util.Base64;
 import java.util.HashMap;
 
 public class GraphicsManager3D {
 
     private final Panel3D panel;
     private final HashMap<String, Box> boxes = new HashMap<>();
+    private final HashMap<String, Sphere> spheres = new HashMap<>();
 
     public GraphicsManager3D(Panel3D panel) {
         this.panel = panel;
@@ -37,22 +38,41 @@ public class GraphicsManager3D {
                 boxes.put(identifier, box);
                 panel.getRootGroup().getChildren().add(box);
             }
-            if(sprite != null) {
-                box.setMaterial(new PhongMaterial() {{
-                    setDiffuseMap(SwingFXUtils.toFXImage(sprite.getImage(), null));
-                }});
-            }
-            box.setScaleX(panel.getCamera().parsePlainValue(scale.getX()));
-            box.setScaleY(panel.getCamera().parsePlainValue(scale.getY()));
-            box.setScaleZ(panel.getCamera().parsePlainValue(scale.getZ()));
-            box.setTranslateX(panel.getCamera().parsePlainValue(position.getX()));
-            box.setTranslateY(panel.getCamera().parsePlainValue(position.getY()));
-            box.setTranslateZ(panel.getCamera().parsePlainValue(position.getZ()));
-            box.getTransforms().clear();
-            box.getTransforms().add(new Rotate(rotation.getX(), Rotate.X_AXIS));
-            box.getTransforms().add(new Rotate(rotation.getY(), Rotate.Y_AXIS));
-            box.getTransforms().add(new Rotate(rotation.getZ(), Rotate.Z_AXIS));
+            renderShape3D(box, position, scale, rotation, sprite);
         });
+    }
+
+    public void renderSphere(String identifier, TransformSet position, TransformSet scale, TransformSet rotation, Sprite sprite) {
+        Platform.runLater(() -> {
+            Sphere sphere = spheres.getOrDefault(identifier, null);
+            if(sphere == null) {
+                sphere = new Sphere();
+                sphere.setMaterial(new PhongMaterial() {{
+                    setDiffuseColor(Color.WHITE);
+                }});
+                spheres.put(identifier, sphere);
+                panel.getRootGroup().getChildren().add(sphere);
+            }
+            renderShape3D(sphere, position, scale, rotation, sprite);
+        });
+    }
+
+    private void renderShape3D(Shape3D shape, TransformSet position, TransformSet scale, TransformSet rotation, Sprite sprite) {
+        if(sprite != null) {
+            shape.setMaterial(new PhongMaterial() {{
+                setDiffuseMap(SwingFXUtils.toFXImage(sprite.getImage(), null));
+            }});
+        }
+        shape.setScaleX(panel.getCamera().parsePlainValue(scale.getX()));
+        shape.setScaleY(panel.getCamera().parsePlainValue(scale.getY()));
+        shape.setScaleZ(panel.getCamera().parsePlainValue(scale.getZ()));
+        shape.setTranslateX(panel.getCamera().parsePlainValue(position.getX()));
+        shape.setTranslateY(panel.getCamera().parsePlainValue(position.getY()));
+        shape.setTranslateZ(panel.getCamera().parsePlainValue(position.getZ()));
+        shape.getTransforms().clear();
+        shape.getTransforms().add(new Rotate(rotation.getX(), Rotate.X_AXIS));
+        shape.getTransforms().add(new Rotate(rotation.getY(), Rotate.Y_AXIS));
+        shape.getTransforms().add(new Rotate(rotation.getZ(), Rotate.Z_AXIS));
     }
 
 }
