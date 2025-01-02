@@ -4,11 +4,9 @@ import pl.AWTGameEngine.annotations.BindingGetter;
 import pl.AWTGameEngine.annotations.BindingSetter;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
-import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.engine.BindingsManager;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 public class BindableProperty {

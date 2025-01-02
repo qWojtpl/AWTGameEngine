@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.annotations;
 
-import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

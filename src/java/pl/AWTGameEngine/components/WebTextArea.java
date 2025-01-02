@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import javafx.application.Platform;
 import pl.AWTGameEngine.annotations.*;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.engine.panels.WebPanel;

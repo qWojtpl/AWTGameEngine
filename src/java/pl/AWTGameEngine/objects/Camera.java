@@ -1,8 +1,7 @@
 package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.components.Canvas;
-import pl.AWTGameEngine.components.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 

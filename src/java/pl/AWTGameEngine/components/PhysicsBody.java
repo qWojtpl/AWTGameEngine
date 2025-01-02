@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Vector;
 

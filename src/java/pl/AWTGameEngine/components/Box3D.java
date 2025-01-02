@@ -4,7 +4,7 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.Component3D;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
-import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.objects.GameObject;

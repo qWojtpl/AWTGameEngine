@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;

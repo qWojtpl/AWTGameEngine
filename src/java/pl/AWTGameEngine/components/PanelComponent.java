@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.panels.NestedPanel;
 import pl.AWTGameEngine.objects.Camera;

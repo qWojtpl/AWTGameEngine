@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.GameObject;

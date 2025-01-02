@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.swing.*;

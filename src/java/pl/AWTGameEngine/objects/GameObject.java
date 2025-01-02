@@ -3,7 +3,7 @@ package pl.AWTGameEngine.objects;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.*;
-import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.graphics.*;

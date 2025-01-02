@@ -1,14 +1,11 @@
 package pl.AWTGameEngine.scenes;
 
-import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
-import pl.AWTGameEngine.engine.panels.NestedPanel;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.*;
 
 public class Scene {

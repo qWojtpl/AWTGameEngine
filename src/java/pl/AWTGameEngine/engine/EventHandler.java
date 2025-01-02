@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.EventMethod;
-import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 
 import java.lang.reflect.Method;

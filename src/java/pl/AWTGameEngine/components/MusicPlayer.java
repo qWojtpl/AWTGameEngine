@@ -5,6 +5,7 @@ import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.GameObject;

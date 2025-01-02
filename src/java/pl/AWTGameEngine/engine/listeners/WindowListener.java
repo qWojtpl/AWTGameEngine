@@ -1,9 +1,8 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 
