@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.graphics;
 
 import javafx.application.Platform;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -28,7 +29,6 @@ public class GraphicsManager3D {
                 box.setMaterial(new PhongMaterial() {{
                     setDiffuseMap(new Image("sprites/beaver.jpg"));
                     setSpecularColor(Color.WHITE);
-                    setSpecularPower(50);
                 }});
                 boxes.put(identifier, box);
                 panel.getRootGroup().getChildren().add(box);

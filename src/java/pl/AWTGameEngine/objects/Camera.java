@@ -2,6 +2,8 @@ package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.components.Canvas;
 import pl.AWTGameEngine.components.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 
 import java.util.List;
@@ -13,6 +15,7 @@ public class Camera {
     private int y = 0;
     private int z = 0;
     private float zoom = 1;
+    private TransformSet rotation = new TransformSet();
 
     public Camera(PanelObject panel) {
         this.panel = panel;
@@ -80,6 +83,10 @@ public class Camera {
         return this.zoom;
     }
 
+    public TransformSet getRotation() {
+        return new TransformSet(rotation.getX(), rotation.getY(), rotation.getZ());
+    }
+
     public void setX(int x) {
         this.x = x;
         updatedPosition();
@@ -112,7 +119,30 @@ public class Camera {
         this.zoom = zoom;
     }
 
+    public void setRotation(TransformSet transform) {
+        this.rotation.setX(transform.getX());
+        this.rotation.setY(transform.getY());
+        this.rotation.setZ(transform.getZ());
+        updatedRotation();
+    }
+
+    public void setRotationX(int x) {
+        this.rotation.setX(x);
+        updatedRotation();
+    }
+
+    public void setRotationY(int y) {
+        this.rotation.setY(y);
+        updatedRotation();
+    }
+
+    public void setRotationZ(int z) {
+        this.rotation.setZ(z);
+        updatedRotation();
+    }
+
     private void updatedPosition() {
+        updateCamera3D();
         List<ObjectComponent> components = panel.getWindow().getCurrentScene()
                 .getSceneEventHandler().getComponents("onUpdateCameraPosition#int#int");
         for(ObjectComponent component : components) {
@@ -121,10 +151,26 @@ public class Camera {
     }
 
     private void updatedPositionZ() {
+        updateCamera3D();
         List<ObjectComponent> components = panel.getWindow().getCurrentScene()
                 .getSceneEventHandler().getComponents("onUpdateCameraPosition#int#int#int");
         for(ObjectComponent component : components) {
             component.onUpdateCameraPosition(this.x, this.y, this.z);
+        }
+    }
+
+    private void updatedRotation() {
+        updateCamera3D();
+        List<ObjectComponent> components = panel.getWindow().getCurrentScene()
+                .getSceneEventHandler().getComponents("onUpdateCameraRotation#int#int#int");
+        for(ObjectComponent component : components) {
+            component.onUpdateCameraRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
+        }
+    }
+
+    private void updateCamera3D() {
+        if(panel instanceof Panel3D) {
+            ((Panel3D) panel).updateCamera3D();
         }
     }
 

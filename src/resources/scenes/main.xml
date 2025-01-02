@@ -1,7 +1,10 @@
 <!--todo renderFPS default value if not set-->
 <scene title="Main scene" renderFPS="144" updateFPS="144">
-    <object id="1234" sizeX="100" sizeY="100" sizeZ="100" x="600" y="300">
+    <object id="1234" sizeX="100" sizeY="100" sizeZ="100" x="0" y="0" z="200">
         <Box3D />
         <CustomComponent _package="pl.AWTGameEngine.custom" />
+    </object>
+    <object id="123" sizeX="100" sizeY="100" sizeZ="100" x="200" y="0" z="200">
+        <Box3D />
     </object>
 </scene>
