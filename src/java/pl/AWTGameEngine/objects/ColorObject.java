@@ -1,143 +1,219 @@
 package pl.AWTGameEngine.objects;
 
-import java.awt.*;
+import java.awt.Color;
 import java.lang.reflect.Field;
+import java.util.Locale;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Represents a colored object with optional alpha transitions.
+ */
 public class ColorObject {
 
+    private static final ScheduledExecutorService TRANSITION_EXECUTOR =
+            Executors.newSingleThreadScheduledExecutor(r -> {
+                Thread t = new Thread(r, "ColorTransitionThread");
+                t.setDaemon(true); // So the application can exit cleanly
+                return t;
+            });
+
     private Color color;
-    private Transient transientThread;
+    private TransientTransition currentTransition;
 
     public ColorObject() {
-        setColor(Color.BLACK);
+        this(Color.BLACK);
     }
 
     public ColorObject(Color color) {
         setColor(color);
     }
 
-    public ColorObject(String color) {
-        setColor(color);
+    public ColorObject(String colorString) {
+        setColor(colorString);
     }
 
+    /**
+     * Serialize a ColorObject into "rgb(r,g,b)" or "rgba(r,g,b,a)" format.
+     */
     public static String serialize(ColorObject object) {
-        if(object.getColor().getAlpha() != 255) {
-            return "rgba(" +
-                    object.getColor().getRed() + "," +
-                    object.getColor().getGreen() + "," +
-                    object.getColor().getBlue() + "," +
-                    object.getColor().getAlpha() +
-                    ")";
+        Color c = object.getColor();
+        if (c.getAlpha() < 255) {
+            return String.format(Locale.ROOT, "rgba(%d,%d,%d,%d)",
+                    c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        } else {
+            return String.format(Locale.ROOT, "rgb(%d,%d,%d)",
+                    c.getRed(), c.getGreen(), c.getBlue());
         }
-        return "rgb(" +
-                object.getColor().getRed() + "," +
-                object.getColor().getGreen() + "," +
-                object.getColor().getBlue() +
-                ")";
     }
 
+    /**
+     * Serialize this ColorObject into its string representation.
+     */
     public String serialize() {
         return serialize(this);
     }
 
-    public static Color deserialize(String color) {
-        Color c = Color.BLACK;
-        if(color.toLowerCase().startsWith("rgb")) {
-            color = color.replace("(", "").replace(")", "");
-            int argumentCount = 3;
-            if(color.toLowerCase().startsWith("rgba")) {
-                argumentCount++;
-            }
-            if(argumentCount == 3) {
-                color = color.replace("rgb", "");
-            } else {
-                color = color.replace("rgba", "");
-            }
-            String[] split = color.split(",");
-            if(split.length != argumentCount) {
-                return c;
-            }
-            try {
-                int[] args = new int[]{0, 0, 0, 255};
-                for(int i = 0; i < argumentCount; i++) {
-                    args[i] = Integer.parseInt(split[i]);
-                }
-                c = new Color(args[0], args[1], args[2], args[3]);
-            } catch(NumberFormatException ignored) {}
-            return c;
+    /**
+     * Convert an "rgb(...)" or "rgba(...)" string to a Color object, or
+     * fallback to reflection-based named colors (e.g., "black", "red").
+     */
+    public static Color deserialize(String colorString) {
+        if (colorString == null || colorString.isEmpty()) {
+            return Color.BLACK;
         }
+
+        String lower = colorString.toLowerCase(Locale.ROOT).trim();
+        if (lower.startsWith("rgb")) {
+            return parseRgbString(lower);
+        }
+
+        // Attempt to parse named color via reflection
         try {
-            Field field = Class.forName("java.awt.Color").getField(color.toLowerCase());
-            c = (Color) field.get(null);
-        } catch(Exception ignored) {}
-        return c;
-    }
-
-    public void transientAlpha(int newAlpha, int time) {
-        if(transientThread != null) {
-            transientThread.cancel();
+            Field field = Color.class.getField(lower);
+            return (Color) field.get(null);
+        } catch (Exception e) {
+            // If no matching field, fallback to black
+            return Color.BLACK;
         }
-        transientThread = new Transient(this, getColor().getAlpha(), newAlpha, time);
-        transientThread.start();
     }
 
+    /**
+     * Gradually changes the alpha value from the current alpha to `newAlpha` over `time` milliseconds.
+     * Any ongoing transition is cancelled before starting a new one.
+     */
+    public void transientAlpha(int newAlpha, long timeMillis) {
+        cancelTransitionIfAny();
+        currentTransition = new TransientTransition(this, newAlpha, timeMillis);
+        currentTransition.start();
+    }
+
+    /**
+     * Get the current Color.
+     */
     public Color getColor() {
         return this.color;
     }
 
+    /**
+     * Check whether the alpha is currently transitioning.
+     */
     public boolean isTransiting() {
-        return transientThread != null;
+        return (currentTransition != null && !currentTransition.isCancelled());
     }
 
+    /**
+     * Set the current Color directly.
+     */
     public void setColor(Color color) {
-        this.color = color;
+        this.color = color != null ? color : Color.BLACK;
     }
 
-    public void setColor(String color) {
-        this.color = deserialize(color);
+    /**
+     * Set the current Color from a string, using `deserialize`.
+     */
+    public void setColor(String colorString) {
+        this.color = deserialize(colorString);
     }
 
-    static class Transient extends Thread {
+    /**
+     * Cancel any active alpha transition.
+     */
+    public void cancelTransitionIfAny() {
+        if (currentTransition != null) {
+            currentTransition.cancel();
+            currentTransition = null;
+        }
+    }
 
+    /**
+     * Helper method to parse "rgb(...)" or "rgba(...)" strings.
+     */
+    private static Color parseRgbString(String rgbString) {
+        // e.g. "rgba(255,0,123,128)" or "rgb(255,255,255)"
+        String digits = rgbString.replaceAll("[a-z()]", "");
+        String[] split = digits.split(",");
+        // Expected 3 for rgb or 4 for rgba
+        if (split.length < 3 || split.length > 4) {
+            return Color.BLACK;
+        }
+        try {
+            int r = Integer.parseInt(split[0].trim());
+            int g = Integer.parseInt(split[1].trim());
+            int b = Integer.parseInt(split[2].trim());
+            int a = (split.length == 4) ? Integer.parseInt(split[3].trim()) : 255;
+            return new Color(r, g, b, a);
+        } catch (NumberFormatException e) {
+            return Color.BLACK;
+        }
+    }
+
+    /**
+     * Inner class to manage alpha transitions over time using a scheduled executor.
+     */
+    private static class TransientTransition {
         private final ColorObject parent;
-        private int alpha;
-        private final int newAlpha;
-        private final double interval;
-        private boolean canceled = false;
+        private final int targetAlpha;
+        private final long timeMillis;
+        private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
-        public Transient(ColorObject parent, int alpha, int newAlpha, double time) {
+        // We'll calculate how much alpha to change each step.
+        private int stepSize;
+        private long stepDelay;
+        private int currentAlpha;
+
+        public TransientTransition(ColorObject parent, int newAlpha, long timeMillis) {
             this.parent = parent;
-            this.alpha = alpha;
-            this.newAlpha = newAlpha;
-            double interval = time / Math.abs(newAlpha - alpha);
-            if(interval < 1) {
-                interval = 1;
-            }
-            this.interval = interval;
+            this.targetAlpha = Math.max(0, Math.min(255, newAlpha)); // clamp 0-255
+            this.timeMillis = Math.max(1, timeMillis);               // prevent zero or negative
+            this.currentAlpha = parent.getColor().getAlpha();
         }
 
-        @Override
-        public void run() {
-            while(alpha != newAlpha && !canceled) {
-                try {
-                    Thread.sleep((long) interval);
-                } catch(InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(alpha > newAlpha) {
-                    alpha--;
-                } else {
-                    alpha++;
-                }
-                Color c = parent.getColor();
-                parent.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha));
+        public void start() {
+            int alphaDiff = targetAlpha - currentAlpha;
+            int steps = Math.abs(alphaDiff);
+            if (steps == 0) {
+                return; // no change needed
             }
+
+            // The time is split into 'steps' intervals
+            stepDelay = timeMillis / steps;
+            stepSize = (alphaDiff < 0) ? -1 : 1;
+
+            // Schedule repeated tasks for each alpha increment
+            for (int i = 1; i <= steps; i++) {
+                long delay = i * stepDelay;
+                TRANSITION_EXECUTOR.schedule(this::updateAlpha, delay, TimeUnit.MILLISECONDS);
+            }
+        }
+
+        /**
+         * Increment or decrement alpha by 1 step, then update the parent's Color.
+         */
+        private void updateAlpha() {
+            if (cancelled.get()) {
+                return;
+            }
+
+            currentAlpha += stepSize;
+            Color oldColor = parent.getColor();
+            parent.setColor(new Color(
+                    oldColor.getRed(),
+                    oldColor.getGreen(),
+                    oldColor.getBlue(),
+                    currentAlpha
+            ));
         }
 
         public void cancel() {
-            canceled = true;
+            cancelled.set(true);
         }
 
+        public boolean isCancelled() {
+            return cancelled.get();
+        }
     }
-
 }
+
