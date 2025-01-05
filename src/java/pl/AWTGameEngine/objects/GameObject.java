@@ -50,7 +50,7 @@ public class GameObject {
                         " cannot be added to " + identifier + " because is not marked as DefaultComponent");
                 return;
             }
-        } else if(Window.RenderEngine.THREE_DIMENSIONAL.equals(renderEngine)) {
+        } else if(Window.RenderEngine.FX3D.equals(renderEngine)) {
             if(!component.is3DComponent()) {
                 Logger.log(1, "Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as Component3D");

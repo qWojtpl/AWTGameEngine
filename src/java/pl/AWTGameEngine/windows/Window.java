@@ -78,7 +78,7 @@ public class Window extends JFrame {
                 add(webPanel);
                 currentScene.getPanelRegistry().addPanel(webPanel);
             }
-        } else if(RenderEngine.THREE_DIMENSIONAL.equals(renderEngine)) {
+        } else if(RenderEngine.FX3D.equals(renderEngine)) {
             if(this.threeDimensionalPanel == null) {
                 this.threeDimensionalPanel = new Panel3D(this, width, height);
                 add(threeDimensionalPanel);
@@ -219,7 +219,7 @@ public class Window extends JFrame {
     @Override
     public void setCursor(Cursor cursor) {
         this.cursor = cursor;
-        if(RenderEngine.THREE_DIMENSIONAL.equals(renderEngine)) {
+        if(RenderEngine.FX3D.equals(renderEngine)) {
             threeDimensionalPanel.setCursor(cursor);
         } else if(RenderEngine.WEB.equals(renderEngine)) {
             webPanel.setCursor(cursor);
@@ -232,7 +232,7 @@ public class Window extends JFrame {
 
         DEFAULT,
         WEB,
-        THREE_DIMENSIONAL
+        FX3D
 
     }
 

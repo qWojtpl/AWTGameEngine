@@ -2,7 +2,30 @@
     <object id="blankSquare" x="200" y="200" sizeX="200" sizeY="200">
         <BlankRenderer color="red" />
     </object>
-    <object id="blankSquare2" x="300" y="300" sizeX="200" sizeY="200">
-        <BlankRenderer color="black" />
+    <object id="beaverSquare" x="300" y="300" sizeX="200" sizeY="200">
+        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
     </object>
+    <styles>
+
+        object {
+            border-radius: 20px;
+        }
+
+        #beaverSquare {
+            animation-name: rotate;
+            animation-timing-function: linear;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+    </styles>
 </scene>
