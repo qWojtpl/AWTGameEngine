@@ -67,8 +67,14 @@ public class NestedPanel extends JPanel implements PanelObject {
         }
     }
 
+    @Override
     public void update() {
         repaint();
+    }
+
+    @Override
+    public void unload() {
+
     }
 
     public Window getWindow() {

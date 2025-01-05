@@ -48,6 +48,46 @@ public class Window extends JFrame {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
+    public void unloadScene() {
+        currentScene.removeAllObjects();
+        setCurrentScene(null);
+        Dependencies.getResourceManager().clearAudioClips();
+        getPanel().unload();
+        if(getPanel() instanceof NestedPanel) {
+            remove(panel);
+            panel = null;
+        } else if(getPanel() instanceof WebPanel) {
+            remove(webPanel);
+            webPanel = null;
+        } else if(getPanel() instanceof Panel3D) {
+            remove(threeDimensionalPanel);
+            threeDimensionalPanel = null;
+        }
+    }
+
+    private void createPanel(int width, int height) {
+        if(RenderEngine.DEFAULT.equals(renderEngine)) {
+            if(this.panel == null) {
+                this.panel = new NestedPanel(this);
+                add(panel);
+                currentScene.getPanelRegistry().addPanel(panel);
+            }
+        } else if(RenderEngine.WEB.equals(renderEngine)) {
+            if(this.webPanel == null) {
+                this.webPanel = new WebPanel(this);
+                add(webPanel);
+                currentScene.getPanelRegistry().addPanel(webPanel);
+            }
+        } else if(RenderEngine.THREE_DIMENSIONAL.equals(renderEngine)) {
+            if(this.threeDimensionalPanel == null) {
+                this.threeDimensionalPanel = new Panel3D(this, width, height);
+                add(threeDimensionalPanel);
+                currentScene.getPanelRegistry().addPanel(threeDimensionalPanel);
+            }
+        }
+        getPanel().setPreferredSize(new Dimension(width, height));
+    }
+
     public RenderEngine getRenderEngine() {
         return this.renderEngine;
     }
@@ -131,24 +171,7 @@ public class Window extends JFrame {
         this.multiplier = multiplier;
         int width = (int) (getBaseWidth() * multiplier) - 1;
         int height = (int) (getBaseHeight() * multiplier);
-        if(RenderEngine.DEFAULT.equals(renderEngine)) {
-            if(this.panel == null) {
-                this.panel = new NestedPanel(this);
-                add(panel);
-            }
-        } else if(RenderEngine.WEB.equals(renderEngine)) {
-            if(this.webPanel == null) {
-                this.webPanel = new WebPanel(this);
-                add(webPanel);
-            }
-            webPanel.loadWebView();
-        } else if(RenderEngine.THREE_DIMENSIONAL.equals(renderEngine)) {
-            if(this.threeDimensionalPanel == null) {
-                this.threeDimensionalPanel = new Panel3D(this, width, height);
-                add(threeDimensionalPanel);
-            }
-        }
-        getPanel().setPreferredSize(new Dimension(width, height));
+        createPanel(width, height);
         pack();
         setKeyListener(new KeyListener(this));
     }

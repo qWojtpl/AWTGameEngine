@@ -28,10 +28,7 @@ public class SceneLoader {
         ResourceManager resourceManager = Dependencies.getResourceManager();
         AppProperties appProperties = Dependencies.getAppProperties();
         if(window.getCurrentScene() != null) {
-            Scene scene = window.getCurrentScene();
-            window.setCurrentScene(null);
-            scene.removeAllObjects();
-            resourceManager.clearAudioClips();
+            window.unloadScene();
         }
         try(InputStream sceneStream = resourceManager.getResourceAsStream(scenePath)) {
             Document document = getDocument(sceneStream);
@@ -55,7 +52,6 @@ public class SceneLoader {
             window.setCurrentScene(new Scene(scenePath, window));
             window.setMultiplier(multiplier);
             window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            window.getPanel().removeAll();
             window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
             window.setLocationRelativeTo(null);
             NodeList data = getSceneData(document);

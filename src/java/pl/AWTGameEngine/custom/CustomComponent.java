@@ -19,6 +19,7 @@ public class CustomComponent extends ObjectComponent {
         // camera movement
         if(getKeyListener().hasPressedKey(87)) {
             getCamera().setZ(getCamera().getZ() + value);
+            getSceneLoader().loadSceneFile("scenes/main.xml");
         }
         if(getKeyListener().hasPressedKey(83)) {
             getCamera().setZ(getCamera().getZ() - value);

@@ -32,11 +32,12 @@ public class WebPanel extends JFXPanel implements PanelObject {
         Platform.runLater(() -> {
             this.webView = new WebView();
             setScene(new javafx.scene.Scene(webView));
+            loadWebView();
         });
         setMouseListener(new MouseListener(this));
     }
 
-    public void loadWebView() {
+    private void loadWebView() {
         Logger.log(0, "Loading WebView file...");
         StringBuilder htmlString = new StringBuilder();
         for(String line : Dependencies.getResourceManager().getResource(Dependencies.getAppProperties().getProperty("webViewPath") + "webview.html")) {
@@ -47,25 +48,24 @@ public class WebPanel extends JFXPanel implements PanelObject {
             htmlString.append(line);
         }
         Logger.log(0, "WebView file loaded.");
-        Platform.runLater(() -> {
-            webView.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
-                getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
-            });
-            webView.addEventHandler(KeyEvent.KEY_TYPED, (event) -> {
-                getWindow().getKeyListener().asKeyType(event.getCode().getCode());
-            });
-            webView.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
-                getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
-            });
-            Logger.log(0, "Added listeners.");
-            webView.getEngine().setJavaScriptEnabled(true);
-            webView.contextMenuEnabledProperty().setValue(false);
-            webView.getEngine().loadContent(htmlString.toString());
-            graphicsManager = new WebGraphicsManager(webView);
-            Logger.log(0, "WebView loaded.");
+        webView.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
+            getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
         });
+        webView.addEventHandler(KeyEvent.KEY_TYPED, (event) -> {
+            getWindow().getKeyListener().asKeyType(event.getCode().getCode());
+        });
+        webView.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
+            getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
+        });
+        Logger.log(0, "Added listeners.");
+        webView.getEngine().setJavaScriptEnabled(true);
+        webView.contextMenuEnabledProperty().setValue(false);
+        webView.getEngine().loadContent(htmlString.toString());
+        graphicsManager = new WebGraphicsManager(webView);
+        Logger.log(0, "WebView loaded.");
     }
 
+    @Override
     public void update() {
         if(window.getCurrentScene() == null) {
             return;
@@ -84,6 +84,11 @@ public class WebPanel extends JFXPanel implements PanelObject {
                 }
             }
         }
+    }
+
+    @Override
+    public void unload() {
+        setScene(null);
     }
 
     public Window getWindow() {

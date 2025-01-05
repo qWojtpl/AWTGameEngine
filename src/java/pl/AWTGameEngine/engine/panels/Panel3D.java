@@ -21,37 +21,22 @@ import java.util.List;
 public class Panel3D extends JFXPanel implements PanelObject {
 
     private final Window window;
-    private final javafx.scene.Scene fxScene;
-    private final javafx.scene.Group rootGroup;
-    private MouseListener mouseListener;
     private final Camera camera;
     private final GraphicsManager3D graphicsManager3D;
+    private final javafx.scene.Group rootGroup;
+    private final javafx.scene.Scene fxScene;
+    private MouseListener mouseListener;
 
     public Panel3D(Window window, int width, int height) {
         this.window = window;
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManager3D(this);
-        PerspectiveCamera cam3d = new PerspectiveCamera(true);
         this.rootGroup = new Group();
         this.fxScene = new Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
-        fxScene.setFill(Color.LIGHTGRAY);
-        cam3d.setNearClip(0.01);
-        cam3d.setFarClip(6000);
-        cam3d.getTransforms().add(new Rotate(0, Rotate.X_AXIS));
-        cam3d.getTransforms().add(new Rotate(0, Rotate.Y_AXIS));
-        cam3d.getTransforms().add(new Rotate(0, Rotate.Z_AXIS));
-        fxScene.setCamera(cam3d);
-        setMouseListener(new MouseListener(this));
+        initCamera(0.01f, 6000);
+        initListeners();
         setScene(fxScene);
-        fxScene.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
-            getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
-        });
-        fxScene.addEventHandler(KeyEvent.KEY_TYPED, (event) -> {
-            getWindow().getKeyListener().asKeyType(event.getCode().getCode());
-        });
-        fxScene.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
-            getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
-        });
+        fxScene.setFill(Color.LIGHTGRAY);
     }
 
     @Override
@@ -102,6 +87,11 @@ public class Panel3D extends JFXPanel implements PanelObject {
         }
     }
 
+    @Override
+    public void unload() {
+        setScene(null);
+    }
+
     public void setMouseListener(MouseListener mouseListener) {
         if (this.mouseListener != null) {
             removeMouseListener(this.mouseListener);
@@ -125,6 +115,29 @@ public class Panel3D extends JFXPanel implements PanelObject {
         cam3d.setTranslateX(camera.getX());
         cam3d.setTranslateY(camera.getY());
         cam3d.setTranslateZ(camera.getZ());
+    }
+
+    private void initCamera(float nearClip, float farClip) {
+        PerspectiveCamera cam3d = new PerspectiveCamera(true);
+        cam3d.setNearClip(nearClip);
+        cam3d.setFarClip(farClip);
+        cam3d.getTransforms().add(new Rotate(0, Rotate.X_AXIS));
+        cam3d.getTransforms().add(new Rotate(0, Rotate.Y_AXIS));
+        cam3d.getTransforms().add(new Rotate(0, Rotate.Z_AXIS));
+        fxScene.setCamera(cam3d);
+    }
+
+    private void initListeners() {
+        setMouseListener(new MouseListener(this));
+        fxScene.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
+            getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
+        });
+        fxScene.addEventHandler(KeyEvent.KEY_TYPED, (event) -> {
+            getWindow().getKeyListener().asKeyType(event.getCode().getCode());
+        });
+        fxScene.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
+            getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
+        });
     }
 
 }

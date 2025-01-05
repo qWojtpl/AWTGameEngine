@@ -24,6 +24,7 @@ public class WindowsManager {
         if(windows.isEmpty()) {
             defaultFont = window.getFont();
         }
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSceneLoader(new SceneLoader(window));
         window.setResizable(false);
         window.setTitle(appProperties.getProperty("title"));
@@ -54,7 +55,6 @@ public class WindowsManager {
 
     public void createDefaultWindow() {
         defaultWindow = createWindow(Dependencies.getAppProperties().getProperty("main"));
-        defaultWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public Window getDefaultWindow() {

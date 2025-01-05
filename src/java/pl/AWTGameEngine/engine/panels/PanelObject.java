@@ -12,8 +12,7 @@ public interface PanelObject {
     Camera getCamera();
     MouseListener getMouseListener();
     Component add(Component comp);
-    void remove(Component comp);
-    void removeAll();
+    void unload();
     void update();
     void setPreferredSize(Dimension dimension);
     void setMouseListener(MouseListener listener);

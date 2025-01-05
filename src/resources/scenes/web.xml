@@ -1,0 +1,8 @@
+<scene title="Web demo" renderFPS="60" updateFPS="60">
+    <object id="blankSquare" x="200" y="200" sizeX="200" sizeY="200">
+        <BlankRenderer color="red" />
+    </object>
+    <object id="blankSquare2" x="300" y="300" sizeX="200" sizeY="200">
+        <BlankRenderer color="black" />
+    </object>
+</scene>
