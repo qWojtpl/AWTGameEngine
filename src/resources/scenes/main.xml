@@ -3,6 +3,7 @@
     <object id="box1" sizeX="100" sizeY="100" sizeZ="100" x="0" y="0" z="200">
         <Box3D spriteSource="sprites/beaver.jpg" />
         <CustomComponent _package="pl.AWTGameEngine.custom" />
+        <Movement3D _package="pl.AWTGameEngine.custom" />
     </object>
     <object id="box2" sizeX="100" sizeY="100" sizeZ="100" x="200" y="0" z="200">
         <Box3D spriteSource="sprites/beaver2.png" />

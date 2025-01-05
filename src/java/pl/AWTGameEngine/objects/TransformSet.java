@@ -44,4 +44,9 @@ public class TransformSet {
         this.z = z;
     }
 
+    @Override
+    public String toString() {
+        return "[TransformSet[x=" + x + ",y=" + y + ",z=" + z + "]]";
+    }
+
 }

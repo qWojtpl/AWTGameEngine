@@ -39,12 +39,12 @@ public class CustomComponent extends ObjectComponent {
         while(getCamera().getRotation().getY() >= 360) {
             getCamera().setRotationY(getCamera().getRotation().getY() - 360);
         }
-        if(getKeyListener().hasPressedKey(102)) {
+/*        if(getKeyListener().hasPressedKey(102)) {
             getCamera().setRotationY(getCamera().getRotation().getY() + value / 10);
-        }
-        if(getKeyListener().hasPressedKey(100)) {
+        }*/
+/*        if(getKeyListener().hasPressedKey(100)) {
             getCamera().setRotationY(getCamera().getRotation().getY() - value / 10);
-        }
+        }*/
     }
 
     @Override
