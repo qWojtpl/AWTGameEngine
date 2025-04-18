@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.AppProperties;
+import pl.AWTGameEngine.engine.GameObjectDeserializer;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.objects.GameObject;
@@ -143,7 +144,7 @@ public class SceneLoader {
             Logger.log(1, "Cannot initialize object with identifier " + identifier + ", skipping its children!");
             return;
         }
-        object.deserialize(node);
+        GameObjectDeserializer.deserialize(object, node);
         for(int i = 0; i < node.getChildNodes().getLength(); i++) {
             if(node.getChildNodes().item(i).getNodeName().equals("object")) {
                 Logger.log(1, "Cannot initialize object with identifier " +
