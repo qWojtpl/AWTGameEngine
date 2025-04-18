@@ -23,6 +23,7 @@ public class MusicPlayer extends ObjectComponent {
     private Clip clip;
     private AudioClip audioClip;
     private boolean autoPlay = true;
+    private int loopCount = -1;
 
     public MusicPlayer(GameObject object) {
         super(object);
@@ -71,7 +72,7 @@ public class MusicPlayer extends ObjectComponent {
             return;
         }
         clip.setFramePosition(0);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        setLoopCount(loopCount);
         (new Thread(clip::start)).start();
     }
 
@@ -97,6 +98,11 @@ public class MusicPlayer extends ObjectComponent {
         return this.autoPlay;
     }
 
+    @SerializationGetter
+    public int getLoopCount() {
+        return this.loopCount;
+    }
+
     public void setSource(AudioClip audioClip) {
         this.audioClip = audioClip;
         if(clip != null) {
@@ -116,6 +122,20 @@ public class MusicPlayer extends ObjectComponent {
     @SerializationSetter
     public void setAutoPlay(String autoPlay) {
         setAutoPlay(Boolean.parseBoolean(autoPlay));
+    }
+
+    public void setLoopCount(int loop) {
+        this.loopCount = loop;
+        if(loop == -1) {
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } else {
+            clip.loop(this.loopCount);
+        }
+    }
+
+    @SerializationSetter
+    public void setLoopCount(String loop) {
+        setLoopCount(Integer.parseInt(loop));
     }
 
 }

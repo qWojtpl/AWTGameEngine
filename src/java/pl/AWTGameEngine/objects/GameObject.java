@@ -194,12 +194,10 @@ public class GameObject {
         return this.active;
     }
 
-    @BindingGetter
     public int getX() {
         return this.position.getX();
     }
 
-    @BindingGetter
     public int getY() {
         return this.position.getY();
     }
@@ -208,7 +206,6 @@ public class GameObject {
         return this.position;
     }
 
-    @BindingGetter
     public int getRotationX() {
         return this.rotation.getX();
     }
@@ -217,22 +214,18 @@ public class GameObject {
         return this.rotation;
     }
 
-    @BindingGetter
     public int getCenterX() {
         return getX() + getSizeX() / 2;
     }
 
-    @BindingGetter
     public int getCenterY() {
         return getY() + getSizeY() / 2;
     }
 
-    @BindingGetter
     public int getSizeX() {
         return this.size.getX();
     }
 
-    @BindingGetter
     public int getSizeY() {
         return this.size.getY();
     }
@@ -241,7 +234,6 @@ public class GameObject {
         return this.size;
     }
 
-    @BindingGetter
     public int getPriority() {
         return this.priority;
     }
@@ -269,7 +261,6 @@ public class GameObject {
         }
     }
 
-    @BindingSetter
     public void setX(String x) {
         setX(Integer.parseInt(x));
     }
@@ -285,7 +276,6 @@ public class GameObject {
         }
     }
 
-    @BindingSetter
     public void setY(String y) {
         setY(Integer.parseInt(y));
     }
@@ -302,7 +292,6 @@ public class GameObject {
         }*/
     }
 
-    @BindingSetter
     public void setZ(String z) {
         setZ(Integer.parseInt(z));
     }
@@ -325,7 +314,6 @@ public class GameObject {
         this.rotation.setZ(angle);
     }
 
-    @BindingSetter
     public void setRotationX(String angle) {
         setRotationX(Integer.parseInt(angle));
     }
@@ -341,7 +329,6 @@ public class GameObject {
         }
     }
 
-    @BindingSetter
     public void setSizeX(String x) {
         setSizeX(Integer.parseInt(x));
     }
@@ -353,7 +340,6 @@ public class GameObject {
         }
     }
 
-    @BindingSetter
     public void setSizeY(String y) {
         setSizeY(Integer.parseInt(y));
     }
@@ -366,7 +352,6 @@ public class GameObject {
         }*/
     }
 
-    @BindingSetter
     public void setSizeZ(String z) {
         setSizeZ(Integer.parseInt(z));
     }
@@ -381,7 +366,6 @@ public class GameObject {
         getScene().addSortedObject(priority, this);
     }
 
-    @BindingSetter
     public void setPriority(String priority) {
         setPriority(Integer.parseInt(priority));
     }
