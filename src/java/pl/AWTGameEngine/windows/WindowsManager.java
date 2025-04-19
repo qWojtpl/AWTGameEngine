@@ -6,6 +6,7 @@ import pl.AWTGameEngine.engine.GameLoop;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.scenes.SceneLoader;
+import pl.AWTGameEngine.windows.opengl.GLWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +21,14 @@ public class WindowsManager {
 
     public Window createWindow(String scenePath) {
         AppProperties appProperties = Dependencies.getAppProperties();
-        Window window = new Window(Window.RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase()));
+        Window.RenderEngine renderEngine = Window.RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase());
+        Window window;
+        boolean opengl = renderEngine.equals(Window.RenderEngine.FX3D);
+        if(opengl) {
+            window = new GLWindow(renderEngine);
+        } else {
+            window = new Window(renderEngine);
+        }
         if(windows.isEmpty()) {
             defaultFont = window.getFont();
         }
@@ -49,7 +57,10 @@ public class WindowsManager {
         loop.start();
 
         windows.add(window);
-        window.setVisible(true);
+
+        if(!opengl) {
+            window.setVisible(true);
+        }
         return window;
     }
 
