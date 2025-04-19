@@ -19,7 +19,7 @@ public class Window extends JFrame {
 
     private final RenderEngine renderEngine;
     private boolean sameSize = false;
-    private final int WIDTH = 480;
+    private final int WIDTH = 1920;
     private NestedPanel panel;
     private WebPanel webPanel;
     private Panel3D threeDimensionalPanel;

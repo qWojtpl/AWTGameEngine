@@ -1,6 +1,8 @@
 package pl.AWTGameEngine.custom;
 
 import javafx.geometry.Bounds;
+import javafx.scene.Group;
+import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.annotations.Component3D;
 import pl.AWTGameEngine.annotations.ComponentMeta;
 import pl.AWTGameEngine.annotations.DefaultComponent;
@@ -45,13 +47,63 @@ public class Movement3D extends ObjectComponent {
         if(!getWindow().isFocused()) {
             return;
         }
-        if(getKeyListener().hasPressedKey(100)) {
-            getCamera().setRotationZ(getCamera().getRotation().getZ() - 1);
+        int speed = 10;
+
+        double forward = 0, right = 0, up = 0;
+
+        if(getKeyListener().hasPressedKey(87)) { // W
+            forward = speed;
         }
-        if(getKeyListener().hasPressedKey(102)) {
-            getCamera().setRotationZ(getCamera().getRotation().getZ() + 1);
+        if(getKeyListener().hasPressedKey(65)) { // A
+            right = -speed;
         }
-        
+        if(getKeyListener().hasPressedKey(83)) { // S
+            forward = -speed;
+        }
+        if(getKeyListener().hasPressedKey(68)) { // D
+            right = speed;
+        }
+
+        handleMovement(forward, right, up, false);
+        handleRotation();
+        moveMouse();
+    }
+
+    private void handleMovement(double forward, double right, double up, boolean noclip) {
+        Panel3D panel = (Panel3D) getObject().getPanel();
+
+        Group pitchGroup = panel.getCameraPitch();
+        Group yawGroup = panel.getCameraYaw();
+
+        pitchGroup.setRotationAxis(Rotate.X_AXIS);
+        yawGroup.setRotationAxis(Rotate.Y_AXIS);
+
+        double pitchRad = Math.toRadians(pitchGroup.getRotate());
+        double yawRad = Math.toRadians(yawGroup.getRotate());
+
+        // Forward
+        double dirX = Math.sin(yawRad) * Math.cos(pitchRad);
+        double dirY = -Math.sin(pitchRad);
+        double dirZ = Math.cos(yawRad) * Math.cos(pitchRad);
+
+        // Left/right
+        double rightX = Math.cos(yawRad);
+        double rightZ = -Math.sin(yawRad);
+
+        double dx = dirX * forward + rightX * right;
+        double dy = dirY * forward + up;
+        double dz = dirZ * forward + rightZ * right;
+
+        if(!noclip) {
+            dy = 0;
+        }
+
+        getCamera().setX((int) (pitchGroup.getTranslateX() + dx));
+        getCamera().setY((int) (pitchGroup.getTranslateY() + dy));
+        getCamera().setZ((int) (pitchGroup.getTranslateZ() + dz));
+    }
+
+    private void handleRotation() {
         int mouseX = getMouseListener().getMouseScreenX();
         int delta = CENTER_X - mouseX;
         int newRotationY = getCamera().getRotation().getY() + delta * -1;
@@ -67,7 +119,6 @@ public class Movement3D extends ObjectComponent {
             newRotationX = -90;
         }
         getCamera().setRotationX(newRotationX);
-        moveMouse();
     }
 
     private void moveMouse() {

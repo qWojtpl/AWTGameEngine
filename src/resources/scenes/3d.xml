@@ -2,7 +2,6 @@
 <scene title="Main scene" renderFPS="144" updateFPS="144">
     <object id="box1" sizeX="100" sizeY="100" sizeZ="100" x="0" y="0" z="200">
         <Box3D spriteSource="sprites/beaver.jpg" />
-        <CustomComponent _package="pl.AWTGameEngine.custom" />
         <Movement3D _package="pl.AWTGameEngine.custom" />
     </object>
     <object id="box2" sizeX="100" sizeY="100" sizeZ="100" x="200" y="0" z="200">
@@ -10,5 +9,8 @@
     </object>
     <object id="sphere1" sizeX="100" sizeY="100" sizeZ="100" x="0" y="-200" z="200">
         <Sphere3D spriteSource="sprites/beaver.jpg" />
+    </object>
+    <object id="floor" sizeX="1000" sizeY="10" sizeZ="1000" x="-500" y="300" z="-500">
+        <Box3D />
     </object>
 </scene>

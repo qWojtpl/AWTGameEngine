@@ -2,6 +2,7 @@ package pl.AWTGameEngine;
 
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.scenes.SceneBuilder;
 
 public class Main {
 
@@ -15,9 +16,28 @@ public class Main {
         Logger.setLevel(appProperties.getPropertyAsInteger("logLevel"));
         Logger.setLogFile(appProperties.getPropertyAsBoolean("logFile"));
         Logger.setCallerClass(appProperties.getPropertyAsBoolean("logCallerClass"));
+        if(isSceneBuilder(args)) {
+            return;
+        }
         Logger.log(2, "Requesting default window...");
         Dependencies.getWindowsManager().createDefaultWindow();
         Logger.log(2, "Started app.");
+    }
+
+    private static boolean isSceneBuilder(String[] args) {
+        boolean sceneBuilder = false;
+        for(String arg : args) {
+            if(arg.equals("-build")) {
+                sceneBuilder = true;
+                continue;
+            }
+            if(arg.startsWith("-")) {
+                break;
+            } else {
+                SceneBuilder.build(arg);
+            }
+        }
+        return sceneBuilder;
     }
 
 }
