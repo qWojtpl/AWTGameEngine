@@ -14,7 +14,9 @@ public interface PanelObject {
     Component add(Component comp);
     void unload();
     void update();
+    void setSize(Dimension dimension);
     void setPreferredSize(Dimension dimension);
     void setMouseListener(MouseListener listener);
+    Dimension getSize();
 
 }

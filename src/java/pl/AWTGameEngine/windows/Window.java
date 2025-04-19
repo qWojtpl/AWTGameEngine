@@ -69,20 +69,20 @@ public class Window extends JFrame {
         if(RenderEngine.DEFAULT.equals(renderEngine)) {
             if(this.panel == null) {
                 this.panel = new NestedPanel(this);
-                add(panel);
+                add(panel, BorderLayout.CENTER);
             }
         } else if(RenderEngine.WEB.equals(renderEngine)) {
             if(this.webPanel == null) {
                 this.webPanel = new WebPanel(this);
-                add(webPanel);
+                add(webPanel, BorderLayout.CENTER);
             }
         } else if(RenderEngine.FX3D.equals(renderEngine)) {
             if(this.threeDimensionalPanel == null) {
                 this.threeDimensionalPanel = new Panel3D(this, width, height);
-                add(threeDimensionalPanel);
+                add(threeDimensionalPanel, BorderLayout.CENTER);
             }
         }
-        getPanel().setPreferredSize(new Dimension(width, height));
+        getPanel().setSize(new Dimension(width, height));
     }
 
     public void init() {
@@ -91,12 +91,17 @@ public class Window extends JFrame {
             GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             device.setFullScreenWindow(this);
         }
+        setSize(getBaseWidth(), getBaseHeight());
         createPanel(getBaseWidth(), getBaseHeight());
         setKeyListener(new KeyListener(this));
         setWindowListener(new WindowListener(this));
+        setLayout(new BorderLayout());
         addComponentListener(getWindowListener());
         setVisible(true);
-        pack();
+    }
+
+    public void updateRatio(int r1, int r2) {
+        getPanel().setSize(new Dimension(getWidth(), getWidth() * r2 / r1));
     }
 
     public RenderEngine getRenderEngine() {

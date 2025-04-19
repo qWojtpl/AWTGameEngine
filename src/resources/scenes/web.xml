@@ -1,4 +1,4 @@
-<scene title="Web demo" renderFPS="60" updateFPS="60">
+<scene title="Web demo" renderFPS="144" updateFPS="60" sameSize="true">
     <object id="blankSquare" x="200" y="200" sizeX="200" sizeY="200">
         <BlankRenderer color="red" />
     </object>

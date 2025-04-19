@@ -224,6 +224,11 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
+    public void onWindowResize(int newWidth, int newHeight) {
+
+    }
+
+    @EventMethod
     public void onWindowClosing() {
 
     }

@@ -59,4 +59,10 @@ public class WebHandler extends ObjectComponent implements WebRenderable {
         updatePosition = true;
     }
 
+    @Override
+    public void onWindowResize(int newWidth, int newHeight) {
+        updatePosition = true;
+        updateSize = true;
+    }
+
 }
