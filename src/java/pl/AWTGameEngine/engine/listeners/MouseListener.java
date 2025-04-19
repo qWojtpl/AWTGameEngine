@@ -93,8 +93,8 @@ public class MouseListener implements
 
     public void updatePosition(MouseEvent e) {
         Camera camera = panel.getCamera();
-        mouseX = (int) (e.getX() / camera.getZoom() + camera.getX());
-        mouseY = (int) (e.getY() / camera.getZoom() + camera.getY());
+        mouseX = (int) (e.getX() / camera.getMultiplier() + camera.getX());
+        mouseY = (int) (e.getY() / camera.getMultiplier() + camera.getY());
         mouseWindowX = e.getX();
         mouseWindowY = e.getY();
         mouseScreenX = e.getXOnScreen();

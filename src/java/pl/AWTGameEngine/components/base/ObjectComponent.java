@@ -3,7 +3,6 @@ package pl.AWTGameEngine.components.base;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
-import pl.AWTGameEngine.engine.PanelRegistry;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
@@ -34,10 +33,6 @@ public abstract class ObjectComponent {
 
     protected final ColliderRegistry getColliderRegistry() {
         return getScene().getColliderRegistry();
-    }
-
-    protected final PanelRegistry getPanelRegistry() {
-        return getScene().getPanelRegistry();
     }
 
     protected final Camera getCamera() {

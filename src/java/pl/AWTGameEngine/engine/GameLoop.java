@@ -25,9 +25,7 @@ public class GameLoop extends Thread {
             }
             if(window.getCurrentScene() != null) {
                 if(renderLoop) {
-                    for(PanelObject panel : window.getCurrentScene().getPanelRegistry().getPanels()) {
-                        panel.update();
-                    }
+                    window.getPanel().update();
                 } else {
                     window.getCurrentScene().update();
                 }

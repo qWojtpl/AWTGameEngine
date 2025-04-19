@@ -18,7 +18,7 @@ import java.awt.event.WindowEvent;
 public class Window extends JFrame {
 
     private final RenderEngine renderEngine;
-    private double multiplier = 3;
+    private boolean sameSize = false;
     private final int WIDTH = 480;
     private NestedPanel panel;
     private WebPanel webPanel;
@@ -70,30 +70,41 @@ public class Window extends JFrame {
             if(this.panel == null) {
                 this.panel = new NestedPanel(this);
                 add(panel);
-                currentScene.getPanelRegistry().addPanel(panel);
             }
         } else if(RenderEngine.WEB.equals(renderEngine)) {
             if(this.webPanel == null) {
                 this.webPanel = new WebPanel(this);
                 add(webPanel);
-                currentScene.getPanelRegistry().addPanel(webPanel);
             }
         } else if(RenderEngine.FX3D.equals(renderEngine)) {
             if(this.threeDimensionalPanel == null) {
                 this.threeDimensionalPanel = new Panel3D(this, width, height);
                 add(threeDimensionalPanel);
-                currentScene.getPanelRegistry().addPanel(threeDimensionalPanel);
             }
         }
         getPanel().setPreferredSize(new Dimension(width, height));
+    }
+
+    public void init() {
+        if(isFullScreen()) {
+            setUndecorated(true);
+            GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            device.setFullScreenWindow(this);
+        }
+        createPanel(getBaseWidth(), getBaseHeight());
+        setKeyListener(new KeyListener(this));
+        setWindowListener(new WindowListener(this));
+        addComponentListener(getWindowListener());
+        setVisible(true);
+        pack();
     }
 
     public RenderEngine getRenderEngine() {
         return this.renderEngine;
     }
 
-    public double getMultiplier() {
-        return this.multiplier;
+    public boolean isSameSize() {
+        return this.sameSize;
     }
 
     public PanelObject getPanel() {
@@ -158,24 +169,6 @@ public class Window extends JFrame {
         return this.cursor;
     }
 
-    public void setMultiplier(double multiplier) {
-        if(multiplier <= 0) {
-            multiplier = 1;
-        }
-        if(isFullScreen()) {
-            setUndecorated(true);
-            GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-            device.setFullScreenWindow(this);
-            multiplier = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / getBaseWidth());
-        }
-        this.multiplier = multiplier;
-        int width = (int) (getBaseWidth() * multiplier) - 1;
-        int height = (int) (getBaseHeight() * multiplier);
-        createPanel(width, height);
-        pack();
-        setKeyListener(new KeyListener(this));
-    }
-
     public void setRenderLoop(GameLoop loop) {
         this.renderLoop = loop;
     }
@@ -198,6 +191,10 @@ public class Window extends JFrame {
         }
         this.windowListener = windowListener;
         addWindowListener(windowListener);
+    }
+
+    public void setSameSize(boolean sameSize) {
+        this.sameSize = sameSize;
     }
 
     public void setCurrentScene(Scene scene) {

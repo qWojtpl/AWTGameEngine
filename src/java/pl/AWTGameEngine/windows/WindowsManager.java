@@ -26,7 +26,7 @@ public class WindowsManager {
         }
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSceneLoader(new SceneLoader(window));
-        window.setResizable(false);
+        //window.setResizable(false);
         window.setTitle(appProperties.getProperty("title"));
 
         Sprite icon = Dependencies.getResourceManager().getResourceAsSprite(appProperties.getProperty("icon"));
@@ -34,22 +34,21 @@ public class WindowsManager {
             window.setIconImage(icon.getImage());
         }
 
-        window.setWindowListener(new WindowListener(window));
-        window.addComponentListener(window.getWindowListener());
+        GameLoop updateLoop = new GameLoop(window, false);
+        updateLoop.setFPS(appProperties.getPropertyAsInteger("updateFps"));
+        window.setUpdateLoop(updateLoop);
 
-        GameLoop loop = new GameLoop(window, true);
-        loop.setFPS(appProperties.getPropertyAsInteger("renderFps"));
-        window.setRenderLoop(loop);
-        loop.start();
+        GameLoop renderLoop = new GameLoop(window, true);
+        renderLoop.setFPS(appProperties.getPropertyAsInteger("renderFps"));
+        window.setRenderLoop(renderLoop);
 
-        loop = new GameLoop(window, false);
-        loop.setFPS(appProperties.getPropertyAsInteger("updateFps"));
-        window.setUpdateLoop(loop);
+        window.init();
         window.getSceneLoader().loadSceneFile(scenePath);
-        loop.start();
-
         windows.add(window);
-        window.setVisible(true);
+
+        updateLoop.start();
+        renderLoop.start();
+
         return window;
     }
 

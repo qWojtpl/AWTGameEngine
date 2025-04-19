@@ -13,7 +13,6 @@ import pl.AWTGameEngine.windows.Window;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.awt.*;
 import java.io.InputStream;
 
 public class SceneLoader {
@@ -35,25 +34,23 @@ public class SceneLoader {
             Document document = getDocument(sceneStream);
             SceneOptions sceneOptions = getSceneOptions(document);
             String title;
-            double multiplier;
+            boolean sameSize;
             if(sceneOptions != null) {
                 title = sceneOptions.getTitle();
                 window.getRenderLoop().setFPS(sceneOptions.getRenderFPS());
                 window.getUpdateLoop().setFPS(sceneOptions.getUpdateFPS());
-                multiplier = sceneOptions.getMultiplier();
                 if(sceneOptions.isFullscreen()) {
                     window.setFullScreen(true);
                 }
+                sameSize = sceneOptions.isSameSize();
             } else {
                 title = appProperties.getProperty("title");
-                multiplier = appProperties.getPropertyAsDouble("multiplier");
+                sameSize = appProperties.getPropertyAsBoolean("sameSize");
                 window.setFullScreen(appProperties.getPropertyAsBoolean("fullscreen"));
             }
             window.setTitle(title);
             window.setCurrentScene(new Scene(scenePath, window));
-            window.setMultiplier(multiplier);
-            window.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            window.getCurrentScene().getPanelRegistry().addPanel(window.getPanel());
+            window.setSameSize(sameSize);
             window.setLocationRelativeTo(null);
             NodeList data = getSceneData(document);
             if(data == null) {
@@ -65,7 +62,6 @@ public class SceneLoader {
             Logger.log("Cannot load scene " + scenePath, e);
             return;
         }
-        window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         Logger.log(2, "Scene loaded.");
     }
 
@@ -76,10 +72,10 @@ public class SceneLoader {
         }
         AppProperties properties = Dependencies.getAppProperties();
         String title = properties.getProperty("title");
-        boolean fullScreen = properties.getPropertyAsBoolean("fullscreen");
+        boolean fullScreen = properties.getPropertyAsBoolean("fullscreen"),
+                sameSize = properties.getPropertyAsBoolean("sameSize");
         int renderFPS = properties.getPropertyAsInteger("renderFPS"),
-                updateFPS = properties.getPropertyAsInteger("updateFPS"),
-                multiplier = properties.getPropertyAsInteger("multiplier");
+            updateFPS = properties.getPropertyAsInteger("updateFPS");
         for(int i = 0; i < node.getAttributes().getLength(); i++) {
             Node item = node.getAttributes().item(i);
             switch(item.getNodeName().toUpperCase()) {
@@ -95,8 +91,8 @@ public class SceneLoader {
                 case "UPDATEFPS":
                     updateFPS = Integer.parseInt(item.getNodeValue());
                     break;
-                case "MULTIPLIER":
-                    multiplier = Integer.parseInt(item.getNodeValue());
+                case "SAMESIZE":
+                    sameSize = Boolean.parseBoolean(item.getNodeValue());
                     break;
             }
         }
@@ -105,7 +101,7 @@ public class SceneLoader {
                 fullScreen,
                 renderFPS,
                 updateFPS,
-                multiplier
+                sameSize
         );
     }
 

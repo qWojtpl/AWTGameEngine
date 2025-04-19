@@ -13,12 +13,10 @@ public class Camera {
     private int x = 0;
     private int y = 0;
     private int z = 0;
-    private float zoom = 1;
-    private TransformSet rotation = new TransformSet();
+    private final TransformSet rotation = new TransformSet();
 
     public Camera(PanelObject panel) {
         this.panel = panel;
-        setZoom((float) (panel.getWindow().getMultiplier() / 2f));
     }
 
     public int parseX(GameObject object, int value) {
@@ -34,11 +32,11 @@ public class Camera {
     }
 
     private int parse(int value, int relative) {
-        return Math.round((value - relative) * getZoom());
+        return Math.round((value - relative) * getMultiplier());
     }
 
     public int parsePlainValue(int value) {
-        return Math.round(value * getZoom());
+        return Math.round(value * getMultiplier());
     }
 
     public PanelObject getPanel() {
@@ -78,12 +76,15 @@ public class Camera {
         return this.y;
     }
 
-    public float getZoom() {
-        return this.zoom;
-    }
-
     public TransformSet getRotation() {
         return new TransformSet(rotation.getX(), rotation.getY(), rotation.getZ());
+    }
+
+    public float getMultiplier() {
+        if(!panel.getWindow().isSameSize()) {
+            return 1;
+        }
+        return ((float) panel.getWindow().getWidth() / panel.getWindow().getBaseWidth());
     }
 
     public void setX(int x) {
@@ -112,10 +113,6 @@ public class Camera {
         this.y = transform.getY();
         this.z = transform.getZ();
         updatedPositionZ();
-    }
-
-    public void setZoom(float zoom) {
-        this.zoom = zoom;
     }
 
     public void setRotation(TransformSet transform) {

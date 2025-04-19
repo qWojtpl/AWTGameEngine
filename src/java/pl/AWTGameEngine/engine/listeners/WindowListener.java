@@ -6,6 +6,7 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
@@ -45,7 +46,10 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
 
     @Override
     public void componentResized(ComponentEvent e) {
-
+        if(!window.isSameSize()) {
+            return;
+        }
+        window.getPanel().setPreferredSize(new Dimension(e.getComponent().getWidth(), e.getComponent().getHeight()));
     }
 
     @Override

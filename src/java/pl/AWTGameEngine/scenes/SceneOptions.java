@@ -6,14 +6,14 @@ public class SceneOptions {
     private final boolean fullscreen;
     private final int renderFPS;
     private final int updateFPS;
-    private final int multiplier;
+    private final boolean sameSize;
 
-    public SceneOptions(String title, boolean fullscreen, int renderFPS, int updateFPS, int multiplier) {
+    public SceneOptions(String title, boolean fullscreen, int renderFPS, int updateFPS, boolean sameSize) {
         this.title = title;
         this.fullscreen = fullscreen;
         this.renderFPS = renderFPS;
         this.updateFPS = updateFPS;
-        this.multiplier = multiplier;
+        this.sameSize = sameSize;
     }
 
     public String getTitle() {
@@ -32,8 +32,8 @@ public class SceneOptions {
         return this.updateFPS;
     }
 
-    public int getMultiplier() {
-        return this.multiplier;
+    public boolean isSameSize() {
+        return this.sameSize;
     }
 
 }

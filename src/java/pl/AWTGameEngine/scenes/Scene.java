@@ -2,7 +2,6 @@ package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
-import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -15,7 +14,6 @@ public class Scene {
     private LinkedHashMap<Integer, List<GameObject>> sortedObjects = new LinkedHashMap<>();
     private final Window window;
     private ColliderRegistry colliderRegistry;
-    private PanelRegistry panelRegistry;
     private EventHandler sceneEventHandler;
     private String customStyles;
 
@@ -23,7 +21,6 @@ public class Scene {
         this.name = name;
         this.window = window;
         setColliderRegistry(new ColliderRegistry());
-        setPanelRegistry(new PanelRegistry());
         setSceneEventHandler(new EventHandler());
     }
 
@@ -39,10 +36,6 @@ public class Scene {
         return this.colliderRegistry;
     }
 
-    public PanelRegistry getPanelRegistry() {
-        return this.panelRegistry;
-    }
-
     public EventHandler getSceneEventHandler() {
         return this.sceneEventHandler;
     }
@@ -53,10 +46,6 @@ public class Scene {
 
     public void setColliderRegistry(ColliderRegistry registry) {
         this.colliderRegistry = registry;
-    }
-
-    public void setPanelRegistry(PanelRegistry registry) {
-        this.panelRegistry = registry;
     }
 
     public void setSceneEventHandler(EventHandler sceneEventHandler) {
@@ -193,9 +182,7 @@ public class Scene {
                 component.onAfterUpdate();
             }
         }
-        for(PanelObject panel : panelRegistry.getPanels()) {
-            panel.getMouseListener().refresh();
-        }
+        window.getPanel().getMouseListener().refresh();
     }
 
 }
