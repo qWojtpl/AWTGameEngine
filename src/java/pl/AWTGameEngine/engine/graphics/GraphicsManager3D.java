@@ -5,6 +5,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Shape3D;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
@@ -19,6 +20,7 @@ public class GraphicsManager3D {
     private final Panel3D panel;
     private final HashMap<String, Box> boxes = new HashMap<>();
     private final HashMap<String, Sphere> spheres = new HashMap<>();
+    private final HashMap<String, Cylinder> cylinders = new HashMap<>();
 
     public GraphicsManager3D(Panel3D panel) {
         this.panel = panel;
@@ -51,6 +53,21 @@ public class GraphicsManager3D {
                 panel.getRootGroup().getChildren().add(sphere);
             }
             renderShape3D(sphere, position, scale, rotation, sprite);
+        });
+    }
+
+    public void renderCylinder(String identifier, TransformSet position, TransformSet scale, TransformSet rotation, Sprite sprite) {
+        Platform.runLater(() -> {
+           Cylinder cylinder = cylinders.getOrDefault(identifier, null);
+           if(cylinder == null) {
+               cylinder = new Cylinder();
+               cylinder.setMaterial(new PhongMaterial() {{
+                   setDiffuseColor(Color.WHITE);
+               }});
+               cylinders.put(identifier, cylinder);
+               panel.getRootGroup().getChildren().add(cylinder);
+           }
+           renderShape3D(cylinder, position, scale, rotation, sprite);
         });
     }
 

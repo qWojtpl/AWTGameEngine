@@ -126,7 +126,6 @@ public class Panel3D extends JFXPanel implements PanelObject {
         javafx.scene.Camera cam3d = fxScene.getCamera();
         cam3d.setRotationAxis(Rotate.Z_AXIS);
         cam3d.setRotate(camera.getRotation().getZ());
-
     }
 
     private void initCamera(float nearClip, float farClip) {

@@ -64,9 +64,8 @@ public class Movement3D extends ObjectComponent {
             right = speed;
         }
 
-        handleMovement(forward, right, up, false);
+        handleMovement(forward, right, up, true);
         handleRotation();
-        moveMouse();
     }
 
     private void handleMovement(double forward, double right, double up, boolean noclip) {
@@ -105,13 +104,19 @@ public class Movement3D extends ObjectComponent {
 
     private void handleRotation() {
         int mouseX = getMouseListener().getMouseScreenX();
+        int mouseY = getMouseListener().getMouseScreenY();
         int delta = CENTER_X - mouseX;
+        if(delta != 0) {
+            moveMouse();
+        }
         int newRotationY = getCamera().getRotation().getY() + delta * -1;
         newRotationY = newRotationY % 360;
         getCamera().setRotationY(newRotationY);
 
-        int mouseY = getMouseListener().getMouseScreenY();
         delta = CENTER_Y - mouseY;
+        if(delta != 0) {
+            moveMouse();
+        }
         int newRotationX = getCamera().getRotation().getX() + delta;
         if(newRotationX > 90) {
             newRotationX = 90;

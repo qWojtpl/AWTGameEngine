@@ -10,6 +10,9 @@
     <object id="sphere1" sizeX="100" sizeY="100" sizeZ="100" x="0" y="-200" z="200">
         <Sphere3D spriteSource="sprites/beaver.jpg" />
     </object>
+    <object id="cylinder1" sizeX="100" sizeY="100" sizeZ="100" x="200" y="-200" z="200">
+        <Cylinder3D spriteSource="sprites/beaver.jpg" />
+    </object>
     <object id="floor" sizeX="1000" sizeY="10" sizeZ="1000" x="-500" y="300" z="-500">
         <Box3D />
     </object>
