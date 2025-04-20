@@ -13,7 +13,9 @@ import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GraphicsManager3D {
 
@@ -87,6 +89,35 @@ public class GraphicsManager3D {
         shape.getTransforms().add(new Rotate(rotation.getX(), Rotate.X_AXIS));
         shape.getTransforms().add(new Rotate(rotation.getY(), Rotate.Y_AXIS));
         shape.getTransforms().add(new Rotate(rotation.getZ(), Rotate.Z_AXIS));
+    }
+
+    public Box getBox(String identifier) {
+        return boxes.getOrDefault(identifier, null);
+    }
+
+    public Sphere getSphere(String identifier) {
+        return spheres.getOrDefault(identifier, null);
+    }
+
+    public Cylinder getCylinder(String identifier) {
+        return cylinders.getOrDefault(identifier, null);
+    }
+
+    public List<Shape3D> getShapesByIdentifier(String identifier) {
+        List<Shape3D> shapes = new ArrayList<>();
+        Shape3D box = boxes.getOrDefault(identifier, null);
+        Shape3D sphere = spheres.getOrDefault(identifier, null);
+        Shape3D cylinder = cylinders.getOrDefault(identifier, null);
+        if(box != null) {
+            shapes.add(box);
+        }
+        if(sphere != null) {
+            shapes.add(sphere);
+        }
+        if(cylinder != null) {
+            shapes.add(cylinder);
+        }
+        return shapes;
     }
 
 }

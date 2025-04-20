@@ -27,6 +27,16 @@ public class TransformSet {
         this.z = z;
     }
 
+    public TransformSet clone() {
+        return new TransformSet(this.x, this.y, this.z);
+    }
+
+    public void clear() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
     public double getX() {
         return this.x;
     }
