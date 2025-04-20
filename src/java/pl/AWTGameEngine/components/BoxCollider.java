@@ -9,8 +9,8 @@ import java.util.List;
 
 public class BoxCollider extends Collider {
 
-    private List<Integer> pointsX = new ArrayList<>();
-    private List<Integer> pointsY = new ArrayList<>();
+    private List<Double> pointsX = new ArrayList<>();
+    private List<Double> pointsY = new ArrayList<>();
     private Path2D path;
 
     public BoxCollider(GameObject object) {
@@ -47,13 +47,13 @@ public class BoxCollider extends Collider {
     }
 
     @Override
-    public boolean onUpdatePosition(int newX, int newY) {
+    public boolean onUpdatePosition(double newX, double newY) {
         calculatePoints(newX, newY, getObject().getRotationX());
         return !getColliderRegistry().isColliding(getObject(), this, newX, newY);
     }
 
     @Override
-    public boolean onUpdateRotation(int newRotation) {
+    public boolean onUpdateRotation(double newRotation) {
         calculatePoints(getObject().getX(), getObject().getY(), newRotation);
         return !getColliderRegistry().isColliding(getObject(), this, getObject().getX(), getObject().getY());
     }
@@ -62,20 +62,20 @@ public class BoxCollider extends Collider {
      Method source:
      <a href="https://gamedev.stackexchange.com/questions/86755/how-to-calculate-corner-positions-marks-of-a-rotated-tilted-rectangle">StackExchange</a>
      */
-    public void calculatePoints(int objX, int objY, int rotation) {
-        int[] fixedX = new int[]{0, getObject().getSizeX() + sizeX, getObject().getSizeX() + sizeX, 0};
-        int[] fixedY = new int[]{0, 0, getObject().getSizeY() + sizeY, getObject().getSizeY() + sizeY};
+    public void calculatePoints(double objX, double objY, double rotation) {
+        double[] fixedX = new double[]{0, getObject().getSizeX() + sizeX, getObject().getSizeX() + sizeX, 0};
+        double[] fixedY = new double[]{0, 0, getObject().getSizeY() + sizeY, getObject().getSizeY() + sizeY};
         pointsX = new ArrayList<>();
         pointsY = new ArrayList<>();
         path = new Path2D.Double();
         for(int i = 0; i < 4; i++) {
-            int tempX = objX + x + fixedX[i] - (objX + getObject().getSizeX() / 2) - x - sizeX / 2;
-            int tempY = objY + y + fixedY[i] - (objY + getObject().getSizeY() / 2) - y - sizeY / 2;
+            double tempX = objX + x + fixedX[i] - (objX + getObject().getSizeX() / 2) - x - sizeX / 2;
+            double tempY = objY + y + fixedY[i] - (objY + getObject().getSizeY() / 2) - y - sizeY / 2;
             double theta = Math.toRadians(rotation);
-            int rotatedX = (int) Math.round(tempX * Math.cos(theta) - tempY * Math.sin(theta));
-            int rotatedY = (int) Math.round(tempX * Math.sin(theta) + tempY * Math.cos(theta));
-            int xP = rotatedX + (objX + getObject().getSizeX() / 2) + x + sizeX / 2;
-            int yP = rotatedY + (objY + getObject().getSizeY() / 2) + y + sizeY / 2;
+            double rotatedX = Math.round(tempX * Math.cos(theta) - tempY * Math.sin(theta));
+            double rotatedY = Math.round(tempX * Math.sin(theta) + tempY * Math.cos(theta));
+            double xP = rotatedX + (objX + getObject().getSizeX() / 2) + x + sizeX / 2;
+            double yP = rotatedY + (objY + getObject().getSizeY() / 2) + y + sizeY / 2;
             pointsX.add(xP);
             pointsY.add(yP);
             if(i == 0) {
@@ -88,7 +88,7 @@ public class BoxCollider extends Collider {
     }
 
     @Override
-    public Path2D calculatePath(int newX, int newY) {
+    public Path2D calculatePath(double newX, double newY) {
         Path2D path = new Path2D.Double();
         for(int i = 0; i < 4; i++) {
             if(i == 0) {
@@ -100,11 +100,11 @@ public class BoxCollider extends Collider {
         return path;
     }
 
-    public List<Integer> getPointsX() {
+    public List<Double> getPointsX() {
         return new ArrayList<>(pointsX);
     }
 
-    public List<Integer> getPointsY() {
+    public List<Double> getPointsY() {
         return new ArrayList<>(pointsY);
     }
 

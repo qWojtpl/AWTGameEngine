@@ -32,8 +32,8 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
     @Override
     public void onRender(GraphicsManager g) {
         final String[] lines = text.split("\n");
-        final int height = g.getGraphics().getFontMetrics(getWindow().getFont(size)).getHeight();
-        final int totalHeight = lines.length * height;
+        final double height = g.getGraphics().getFontMetrics(getWindow().getFont(size)).getHeight();
+        final double totalHeight = lines.length * height;
         for(int i = 1; i <= lines.length; i++) {
             String line = lines[i - 1];
             Font font = getWindow().getFont(size);
@@ -42,7 +42,7 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
                             .getBounds()
                             .getWidth()
             );
-            int x, y;
+            double x, y;
             if(HorizontalAlign.LEFT.equals(horizontal)) {
                 x = 0;
             } else if (HorizontalAlign.RIGHT.equals(horizontal)) {

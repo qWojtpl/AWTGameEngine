@@ -109,7 +109,7 @@ public class Movement3D extends ObjectComponent {
         if(delta != 0) {
             moveMouse();
         }
-        int newRotationY = getCamera().getRotation().getY() + delta * -1;
+        double newRotationY = getCamera().getRotation().getY() + delta * -1;
         newRotationY = newRotationY % 360;
         getCamera().setRotationY(newRotationY);
 
@@ -117,7 +117,7 @@ public class Movement3D extends ObjectComponent {
         if(delta != 0) {
             moveMouse();
         }
-        int newRotationX = getCamera().getRotation().getX() + delta;
+        double newRotationX = getCamera().getRotation().getX() + delta;
         if(newRotationX > 90) {
             newRotationX = 90;
         } else if(newRotationX < -90) {

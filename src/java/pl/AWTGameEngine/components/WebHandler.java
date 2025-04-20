@@ -37,25 +37,25 @@ public class WebHandler extends ObjectComponent implements WebRenderable {
     }
 
     @Override
-    public boolean onUpdatePosition(int newX, int newY) {
+    public boolean onUpdatePosition(double newX, double newY) {
         updatePosition = true;
         return true;
     }
 
     @Override
-    public boolean onUpdateSize(int newX, int newY) {
+    public boolean onUpdateSize(double newX, double newY) {
         updateSize = true;
         return true;
     }
 
     @Override
-    public boolean onUpdateRotation(int newRotation) {
+    public boolean onUpdateRotation(double newRotation) {
         updateRotation = true;
         return true;
     }
 
     @Override
-    public void onUpdateCameraPosition(int newX, int newY) {
+    public void onUpdateCameraPosition(double newX, double newY) {
         updatePosition = true;
     }
 

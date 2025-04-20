@@ -44,7 +44,7 @@ public class SphereCollider extends Collider {
     }
 
     @Override
-    public boolean onUpdatePosition(int newX, int newY) {
+    public boolean onUpdatePosition(double newX, double newY) {
         calculatePoints();
         return !getColliderRegistry().isColliding(getObject(), this, newX, newY);
     }
@@ -54,7 +54,7 @@ public class SphereCollider extends Collider {
     }
 
     @Override
-    public Path2D calculatePath(int newX, int newY) {
+    public Path2D calculatePath(double newX, double newY) {
         Path2D path = new Path2D.Double();
         path.append(new Ellipse2D.Double(newX, newY, getObject().getSizeX(), getObject().getSizeY()), true);
         return path;

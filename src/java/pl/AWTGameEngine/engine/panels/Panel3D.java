@@ -1,10 +1,7 @@
 package pl.AWTGameEngine.engine.panels;
 
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
+import javafx.scene.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
@@ -33,7 +30,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
         this.window = window;
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManager3D(this);
-        this.rootGroup = new Group();
+        this.rootGroup = new Group(new AmbientLight());
         this.fxScene = new Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
         initCamera(0.01f, 60000);
         initListeners();
@@ -132,6 +129,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
         PerspectiveCamera cam3d = new PerspectiveCamera(true);
         cam3d.setNearClip(nearClip);
         cam3d.setFarClip(farClip);
+        cam3d.setCache(true);
         cameraPitch.getChildren().add(cam3d);
         cameraYaw.getChildren().add(cameraPitch);
         rootGroup.getChildren().add(cameraYaw);

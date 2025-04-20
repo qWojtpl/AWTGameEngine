@@ -11,10 +11,10 @@ import java.awt.geom.Path2D;
 
 public abstract class Collider extends ObjectComponent {
 
-    protected int x = 0;
-    protected int y = 0;
-    protected int sizeX = 0;
-    protected int sizeY = 0;
+    protected double x = 0;
+    protected double y = 0;
+    protected double sizeX = 0;
+    protected double sizeY = 0;
     protected boolean visualize = false;
     protected ColorObject visualizeColor = new ColorObject(Color.GREEN);
 
@@ -22,27 +22,27 @@ public abstract class Collider extends ObjectComponent {
         super(object);
     }
 
-    public Path2D calculatePath(int newX, int newY) {
+    public Path2D calculatePath(double newX, double newY) {
         return new Path2D.Double();
     }
 
     @SerializationGetter
-    public int getX() {
+    public double getX() {
         return this.x;
     }
 
     @SerializationGetter
-    public int getY() {
+    public double getY() {
         return this.y;
     }
 
     @SerializationGetter
-    public int getSizeX() {
+    public double getSizeX() {
         return this.sizeX;
     }
 
     @SerializationGetter
-    public int getSizeY() {
+    public double getSizeY() {
         return this.sizeY;
     }
 
@@ -64,7 +64,7 @@ public abstract class Collider extends ObjectComponent {
         return this.visualizeColor.serialize();
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
@@ -73,7 +73,7 @@ public abstract class Collider extends ObjectComponent {
         setX(Integer.parseInt(x));
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
@@ -82,22 +82,22 @@ public abstract class Collider extends ObjectComponent {
         setY(Integer.parseInt(y));
     }
 
-    public void setSizeX(int sizeX) {
+    public void setSizeX(double sizeX) {
         this.sizeX = sizeX;
     }
 
     @SerializationSetter
     public void setSizeX(String sizeX) {
-        setSizeX(Integer.parseInt(sizeX));
+        setSizeX(Double.parseDouble(sizeX));
     }
 
-    public void setSizeY(int sizeY) {
+    public void setSizeY(double sizeY) {
         this.sizeY = sizeY;
     }
 
     @SerializationSetter
     public void setSizeY(String sizeY) {
-        setSizeY(Integer.parseInt(sizeY));
+        setSizeY(Double.parseDouble(sizeY));
     }
 
     public void setVisualize(boolean visualize) {

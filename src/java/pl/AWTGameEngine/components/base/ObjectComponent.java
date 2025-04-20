@@ -110,32 +110,32 @@ public abstract class ObjectComponent {
      * @return True when position can be updated. Return false to cancel position update.
      */
     @EventMethod
-    public boolean onUpdatePosition(int newX, int newY) {
+    public boolean onUpdatePosition(double newX, double newY) {
         return true;
     }
 
     @EventMethod
-    public boolean onUpdateSize(int newX, int newY) {
+    public boolean onUpdateSize(double newX, double newY) {
         return true;
     }
 
     @EventMethod
-    public boolean onUpdateRotation(int newRotation) {
+    public boolean onUpdateRotation(double newRotation) {
         return true;
     }
 
     @EventMethod
-    public void onUpdateCameraPosition(int newX, int newY) {
+    public void onUpdateCameraPosition(double newX, double newY) {
 
     }
 
     @EventMethod
-    public void onUpdateCameraPosition(int newX, int newY, int newZ) {
+    public void onUpdateCameraPosition(double newX, double newY, double newZ) {
 
     }
 
     @EventMethod
-    public void onUpdateCameraRotation(int newX, int newY, int newZ) {
+    public void onUpdateCameraRotation(double newX, double newY, double newZ) {
 
     }
 

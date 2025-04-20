@@ -10,32 +10,32 @@ import java.util.List;
 public class Camera {
 
     private final PanelObject panel;
-    private int x = 0;
-    private int y = 0;
-    private int z = 0;
+    private double x = 0;
+    private double y = 0;
+    private double z = 0;
     private final TransformSet rotation = new TransformSet();
 
     public Camera(PanelObject panel) {
         this.panel = panel;
     }
 
-    public int parseX(GameObject object, int value) {
+    public double parseX(GameObject object, double value) {
         return parse(value, getRelativeX(object));
     }
 
-    public int parseY(GameObject object, int value) {
+    public double parseY(GameObject object, double value) {
         return parse(value, getRelativeY(object));
     }
 
-    public int parseZ(GameObject object, int value) {
+    public double parseZ(GameObject object, double value) {
         return parse(value, getRelativeZ(object));
     }
 
-    private int parse(int value, int relative) {
+    private double parse(double value, double relative) {
         return Math.round((value - relative) * getMultiplier());
     }
 
-    public int parsePlainValue(int value) {
+    public double parsePlainValue(double value) {
         return Math.round(value * getMultiplier());
     }
 
@@ -43,33 +43,33 @@ public class Camera {
         return this.panel;
     }
 
-    public int getX() {
+    public double getX() {
         return this.x;
     }
 
-    public int getRelativeX(GameObject object) {
+    public double getRelativeX(GameObject object) {
         if(object.getComponentsByClass(Canvas.class).isEmpty()) {
             return 0;
         }
         return this.x;
     }
 
-    public int getY() {
+    public double getY() {
         return this.y;
     }
 
-    public int getRelativeY(GameObject object) {
+    public double getRelativeY(GameObject object) {
         if(object.getComponentsByClass(Canvas.class).isEmpty()) {
             return 0;
         }
         return this.y;
     }
 
-    public int getZ() {
+    public double getZ() {
         return this.z;
     }
 
-    public int getRelativeZ(GameObject object) {
+    public double getRelativeZ(GameObject object) {
         if(object.getComponentsByClass(Canvas.class).isEmpty()) {
             return 0;
         }
@@ -87,22 +87,22 @@ public class Camera {
         return ((float) panel.getSize().getWidth() / panel.getWindow().getBaseWidth());
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
         updatedPosition();
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
         updatedPosition();
     }
 
-    public void setZ(int z) {
+    public void setZ(double z) {
         this.z = z;
         updatedPosition();
     }
 
-    public void setBounds(int x, int y) {
+    public void setBounds(double x, double y) {
         this.x = x;
         this.y = y;
         updatedPosition();
@@ -122,17 +122,17 @@ public class Camera {
         updatedRotation();
     }
 
-    public void setRotationX(int x) {
+    public void setRotationX(double x) {
         this.rotation.setX(x);
         updatedRotation();
     }
 
-    public void setRotationY(int y) {
+    public void setRotationY(double y) {
         this.rotation.setY(y);
         updatedRotation();
     }
 
-    public void setRotationZ(int z) {
+    public void setRotationZ(double z) {
         this.rotation.setZ(z);
         updatedRotation();
     }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class NestedPanel extends JPanel implements PanelObject {
+public class DefaultPanel extends JPanel implements PanelObject {
 
     private final Window window;
     private final Camera camera;
@@ -20,7 +20,7 @@ public class NestedPanel extends JPanel implements PanelObject {
     private MouseListener mouseListener;
     private GameObject parentObject = null;
 
-    public NestedPanel(GameObject parentObject) {
+    public DefaultPanel(GameObject parentObject) {
         super();
         setLayout(null);
         setBackground(Color.WHITE);
@@ -30,7 +30,7 @@ public class NestedPanel extends JPanel implements PanelObject {
         this.parentObject = parentObject;
     }
 
-    public NestedPanel(Window window) {
+    public DefaultPanel(Window window) {
         super();
         setLayout(null);
         setBackground(Color.WHITE);

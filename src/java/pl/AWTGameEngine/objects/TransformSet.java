@@ -4,43 +4,43 @@ import pl.AWTGameEngine.annotations.Platform3D;
 
 public class TransformSet {
 
-    private int x = 0;
-    private int y = 0;
-    private int z = 0;
+    private double x = 0;
+    private double y = 0;
+    private double z = 0;
 
     public TransformSet() {
 
     }
 
-    public TransformSet(int x, int y, int z) {
+    public TransformSet(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public int getX() {
+    public double getX() {
         return this.x;
     }
 
-    public int getY() {
+    public double getY() {
         return this.y;
     }
 
     @Platform3D
-    public int getZ() {
+    public double getZ() {
         return this.z;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
     @Platform3D
-    public void setZ(int z) {
+    public void setZ(double z) {
         this.z = z;
     }
 

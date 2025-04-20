@@ -17,7 +17,7 @@ public class ColliderRegistry {
         colliders.add(collider);
     }
 
-    public boolean isColliding(GameObject object, Collider collider, int newX, int newY) {
+    public boolean isColliding(GameObject object, Collider collider, double newX, double newY) {
         List<Collider> colliderComponents = new ArrayList<>();
         for(ObjectComponent component : object.getComponents()) {
             if(!(component instanceof Collider)) {

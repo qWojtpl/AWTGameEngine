@@ -27,11 +27,11 @@ public class Main {
     private static boolean isSceneBuilder(String[] args) {
         boolean sceneBuilder = false;
         for(String arg : args) {
-            if(arg.equals("-build")) {
-                sceneBuilder = true;
-                continue;
-            }
             if(arg.startsWith("-")) {
+                if(arg.equals("--build")) {
+                    sceneBuilder = true;
+                    continue;
+                }
                 break;
             } else {
                 SceneBuilder.build(arg);

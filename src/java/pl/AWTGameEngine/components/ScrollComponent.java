@@ -58,7 +58,7 @@ public class ScrollComponent extends ObjectComponent {
         if(getObject().hasComponent(Canvas.class) && !scroll.hasComponent(Canvas.class)) {
             scroll.addComponent(new Canvas(scroll));
         }
-        int x = 0, y = 0;
+        double x = 0, y = 0;
         if(getObject().hasComponent(Canvas.class)) {
             x = getCamera().getX();
             y = getCamera().getY();
@@ -101,7 +101,7 @@ public class ScrollComponent extends ObjectComponent {
             } else {
                 scroll.setSizeY(getObject().getSizeY() / scrollSize);
             }
-            int y = (int) (getObject().getY() + shift);
+            double y = (int) (getObject().getY() + shift);
             value = shift / getObject().getSizeY();
             if(y < getObject().getY()) {
                 y = getObject().getY();
@@ -120,7 +120,7 @@ public class ScrollComponent extends ObjectComponent {
                 scroll.setSizeX(getObject().getSizeX() / scrollSize);
             }
             scroll.setSizeY(getObject().getSizeY());
-            int x = (int) (getObject().getX() + shift);
+            double x = (int) (getObject().getX() + shift);
             value = shift / getObject().getSizeX();
             if (x < getObject().getX()) {
                 x = getObject().getX();

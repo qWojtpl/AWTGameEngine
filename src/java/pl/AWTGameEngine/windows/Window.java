@@ -4,7 +4,7 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
-import pl.AWTGameEngine.engine.panels.NestedPanel;
+import pl.AWTGameEngine.engine.panels.DefaultPanel;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.engine.panels.WebPanel;
@@ -20,7 +20,7 @@ public class Window extends JFrame {
     private final RenderEngine renderEngine;
     private boolean sameSize = false;
     private final int WIDTH = 1920;
-    private NestedPanel panel;
+    private DefaultPanel panel;
     private WebPanel webPanel;
     private Panel3D threeDimensionalPanel;
     private GameLoop renderLoop;
@@ -53,7 +53,7 @@ public class Window extends JFrame {
         setCurrentScene(null);
         Dependencies.getResourceManager().clearAudioClips();
         getPanel().unload();
-        if(getPanel() instanceof NestedPanel) {
+        if(getPanel() instanceof DefaultPanel) {
             remove(panel);
             panel = null;
         } else if(getPanel() instanceof WebPanel) {
@@ -68,7 +68,7 @@ public class Window extends JFrame {
     private void createPanel(int width, int height) {
         if(RenderEngine.DEFAULT.equals(renderEngine)) {
             if(this.panel == null) {
-                this.panel = new NestedPanel(this);
+                this.panel = new DefaultPanel(this);
                 add(panel, BorderLayout.CENTER);
             }
         } else if(RenderEngine.WEB.equals(renderEngine)) {

@@ -88,13 +88,13 @@ public class GameObject {
         return getComponentsByClass(component).isEmpty();
     }
 
-    public void moveX(int x) {
-        int delta = x - this.position.getX();
+    public void moveX(double x) {
+        double delta = x - this.position.getX();
         if(delta == 0) {
             return;
         }
-        int direction = delta < 0 ? -1 : 1;
-        for(int i = 0; i < Math.abs(delta); i++) {
+        double direction = delta < 0 ? -1 : 1;
+        for(double i = 0; i < Math.abs(delta); i++) {
             if(tryMoveX(direction)) {
                 setX(this.position.getX() + direction);
                 continue;
@@ -103,7 +103,7 @@ public class GameObject {
         }
     }
 
-    public boolean tryMoveX(int direction) {
+    public boolean tryMoveX(double direction) {
         for(ObjectComponent component : getComponents()) {
             if(!component.onUpdatePosition(this.position.getX() + direction, this.position.getY())) {
                 return false;
@@ -112,13 +112,13 @@ public class GameObject {
         return true;
     }
 
-    public void moveY(int y) {
-        int delta = y - this.position.getY();
+    public void moveY(double y) {
+        double delta = y - this.position.getY();
         if(delta == 0) {
             return;
         }
-        int direction = delta < 0 ? -1 : 1;
-        for(int i = 0; i < Math.abs(delta); i++) {
+        double direction = delta < 0 ? -1 : 1;
+        for(double i = 0; i < Math.abs(delta); i++) {
             if(tryMoveY(direction)) {
                 setY(this.position.getY() + direction);
                 continue;
@@ -127,7 +127,7 @@ public class GameObject {
         }
     }
 
-    public boolean tryMoveY(int direction) {
+    public boolean tryMoveY(double direction) {
         for(ObjectComponent component : getComponents()) {
             if(!component.onUpdatePosition(this.position.getX(), this.position.getY() + direction)) {
                 return false;
@@ -136,13 +136,13 @@ public class GameObject {
         return true;
     }
 
-    public void rotate(int angle) {
-        int delta = angle - this.rotation.getX();
+    public void rotate(double angle) {
+        double delta = angle - this.rotation.getX();
         if(delta == 0) {
             return;
         }
-        int direction = delta < 0 ? -1 : 1;
-        for(int i = 0; i < Math.abs(delta); i++) {
+        double direction = delta < 0 ? -1 : 1;
+        for(double i = 0; i < Math.abs(delta); i++) {
             if(tryRotate(direction)) {
                 setRotationX(this.rotation.getX() + direction);
                 continue;
@@ -151,7 +151,7 @@ public class GameObject {
         }
     }
 
-    public boolean tryRotate(int direction) {
+    public boolean tryRotate(double direction) {
         for(ObjectComponent component : getComponents()) {
             if(!component.onUpdateRotation(this.rotation.getX() + direction)) {
                 return false;
@@ -194,11 +194,11 @@ public class GameObject {
         return this.active;
     }
 
-    public int getX() {
+    public double getX() {
         return this.position.getX();
     }
 
-    public int getY() {
+    public double getY() {
         return this.position.getY();
     }
 
@@ -206,7 +206,7 @@ public class GameObject {
         return this.position;
     }
 
-    public int getRotationX() {
+    public double getRotationX() {
         return this.rotation.getX();
     }
 
@@ -214,19 +214,19 @@ public class GameObject {
         return this.rotation;
     }
 
-    public int getCenterX() {
+    public double getCenterX() {
         return getX() + getSizeX() / 2;
     }
 
-    public int getCenterY() {
+    public double getCenterY() {
         return getY() + getSizeY() / 2;
     }
 
-    public int getSizeX() {
+    public double getSizeX() {
         return this.size.getX();
     }
 
-    public int getSizeY() {
+    public double getSizeY() {
         return this.size.getY();
     }
 
@@ -250,13 +250,13 @@ public class GameObject {
         this.active = active;
     }
 
-    public void setX(int x) {
-        int delta = x - this.position.getX();
+    public void setX(double x) {
+        double delta = x - this.position.getX();
         if(delta == 0) {
             return;
         }
         this.position.setX(x);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
             component.onUpdatePosition(x, this.position.getY());
         }
     }
@@ -265,13 +265,13 @@ public class GameObject {
         setX(Integer.parseInt(x));
     }
 
-    public void setY(int y) {
-        int delta = y - this.position.getY();
+    public void setY(double y) {
+        double delta = y - this.position.getY();
         if(delta == 0) {
             return;
         }
         this.position.setY(y);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
             component.onUpdatePosition(this.position.getX(), y);
         }
     }
@@ -280,14 +280,14 @@ public class GameObject {
         setY(Integer.parseInt(y));
     }
 
-    public void setZ(int z) {
-        int delta = z - this.position.getZ();
+    public void setZ(double z) {
+        double delta = z - this.position.getZ();
         if(delta == 0) {
             return;
         }
         this.position.setZ(z);
         //todo
-        /*for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#int#int")) {
+        /*for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
             component.onUpdatePosition(this.position.getX(), y);
         }*/
     }
@@ -300,17 +300,17 @@ public class GameObject {
         this.position = transform;
     }
 
-    public void setRotationX(int angle) {
+    public void setRotationX(double angle) {
         this.rotation.setX(angle);
     }
 
     @Platform3D
-    public void setRotationY(int angle) {
+    public void setRotationY(double angle) {
         this.rotation.setY(angle);
     }
 
     @Platform3D
-    public void setRotationZ(int angle) {
+    public void setRotationZ(double angle) {
         this.rotation.setZ(angle);
     }
 
@@ -322,9 +322,9 @@ public class GameObject {
         this.rotation = transform;
     }
 
-    public void setSizeX(int x) {
+    public void setSizeX(double x) {
         this.size.setX(x);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#int#int")) {
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
             component.onUpdateSize(x, this.size.getY());
         }
     }
@@ -333,9 +333,9 @@ public class GameObject {
         setSizeX(Integer.parseInt(x));
     }
 
-    public void setSizeY(int y) {
+    public void setSizeY(double y) {
         this.size.setY(y);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#int#int")) {
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
             component.onUpdateSize(this.size.getX(), y);
         }
     }
@@ -344,10 +344,10 @@ public class GameObject {
         setSizeY(Integer.parseInt(y));
     }
 
-    public void setSizeZ(int z) {
+    public void setSizeZ(double z) {
         this.size.setZ(z);
         //todo
-        /*for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#int#int")) {
+        /*for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
             component.onUpdateSize(this.size.getX(), y);
         }*/
     }

@@ -14,66 +14,66 @@ public class GraphicsManager {
     private Graphics2D graphics2D;
     private AffineTransform oldTransform;
 
-    public void drawLine(int x1, int y1, int x2, int y2, RenderOptions renderOptions) {
+    public void drawLine(double x1, double y1, double x2, double y2, RenderOptions renderOptions) {
         if(graphics == null) {
             return;
         }
         readOptions(renderOptions);
-        graphics.drawLine(x1, y1, x2, y2);
+        graphics.drawLine((int) x1, (int) y1, (int) x2, (int) y2);
         rollBackOptions();
     }
 
-    public void drawOval(int x, int y, int width, int height, RenderOptions renderOptions) {
+    public void drawOval(double x, double y, double width, double height, RenderOptions renderOptions) {
         if(graphics == null) {
             return;
         }
         readOptions(renderOptions);
-        graphics.drawOval(x, y, width, height);
+        graphics.drawOval((int) x, (int) y, (int) width, (int) height);
         rollBackOptions();
     }
 
-    public void fillOval(int x, int y, int width, int height, RenderOptions renderOptions) {
+    public void fillOval(double x, double y, double width, double height, RenderOptions renderOptions) {
         if(graphics == null) {
             return;
         }
         readOptions(renderOptions);
-        graphics.fillOval(x, y, width, height);
+        graphics.fillOval((int) x, (int) y, (int) width, (int) height);
         rollBackOptions();
     }
 
-    public void drawRect(int x, int y, int width, int height, RenderOptions renderOptions) {
+    public void drawRect(double x, double y, double width, double height, RenderOptions renderOptions) {
         if(graphics == null) {
             return;
         }
         readOptions(renderOptions);
-        graphics.drawRect(x, y, width, height);
+        graphics.drawRect((int) x, (int) y, (int) width, (int) height);
         rollBackOptions();
     }
 
-    public void fillRect(int x, int y, int width, int height, RenderOptions renderOptions) {
+    public void fillRect(double x, double y, double width, double height, RenderOptions renderOptions) {
         if(graphics == null) {
             return;
         }
         readOptions(renderOptions);
-        graphics.fillRect(x, y, width, height);
+        graphics.fillRect((int) x, (int) y, (int) width, (int) height);
         rollBackOptions();
     }
 
-    public void drawImage(Sprite image, int x, int y, int width, int height, RenderOptions renderOptions) {
+    public void drawImage(Sprite image, double x, double y, double width, double height, RenderOptions renderOptions) {
         if(graphics == null) {
             return;
         }
         readOptions(renderOptions);
-        graphics.drawImage(image.getImage(), x, y, width, height, null);
+        graphics.drawImage(image.getImage(), (int) x, (int) y, (int) width, (int) height, null);
         rollBackOptions();
     }
 
-    public void drawString(String string, int x, int y, RenderOptions renderOptions) {
+    public void drawString(String string, double x, double y, RenderOptions renderOptions) {
         if(graphics == null) {
             return;
         }
         readOptions(renderOptions);
-        graphics.drawString(string, x, y);
+        graphics.drawString(string, (int) x, (int) y);
         rollBackOptions();
     }
 
@@ -85,7 +85,7 @@ public class GraphicsManager {
         graphics.setFont(options.getFont());
         graphics2D.setStroke(new BasicStroke(options.getStroke()));
         if(oldTransform == null) {
-            int rotation = options.getRotation();
+            double rotation = options.getRotation();
             if(rotation != 0) {
                 oldTransform = graphics2D.getTransform();
                 AffineTransform transform = new AffineTransform();
@@ -115,9 +115,9 @@ public class GraphicsManager {
 
         private Color color = Color.BLACK;
         private Font font = Dependencies.getWindowsManager().getDefaultFont();
-        private int rotation = 0;
-        private int rotationCenterX = 0;
-        private int rotationCenterY = 0;
+        private double rotation = 0;
+        private double rotationCenterX = 0;
+        private double rotationCenterY = 0;
         private float stroke = 1;
         private GameObject context;
 
@@ -129,15 +129,15 @@ public class GraphicsManager {
             return this.font;
         }
 
-        public int getRotation() {
+        public double getRotation() {
             return this.rotation;
         }
 
-        public int getRotationCenterX() {
+        public double getRotationCenterX() {
             return this.rotationCenterX;
         }
 
-        public int getRotationCenterY() {
+        public double getRotationCenterY() {
             return this.rotationCenterY;
         }
 
@@ -163,17 +163,17 @@ public class GraphicsManager {
             return this;
         }
 
-        public RenderOptions setRotation(int rotation) {
+        public RenderOptions setRotation(double rotation) {
             this.rotation = rotation;
             return this;
         }
 
-        public RenderOptions setRotationCenterX(int x) {
+        public RenderOptions setRotationCenterX(double x) {
             this.rotationCenterX = x;
             return this;
         }
 
-        public RenderOptions setRotationCenterY(int y) {
+        public RenderOptions setRotationCenterY(double y) {
             this.rotationCenterY = y;
             return this;
         }
