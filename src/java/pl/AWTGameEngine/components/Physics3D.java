@@ -9,7 +9,7 @@ import pl.AWTGameEngine.objects.TransformSet;
 public class Physics3D extends ObjectComponent {
 
     private int mass = 10;
-    private TransformSet velocity;
+    private TransformSet velocity = new TransformSet(0.5, 0.8);
 
     public Physics3D(GameObject object) {
         super(object);
@@ -18,10 +18,14 @@ public class Physics3D extends ObjectComponent {
     @Override
     public void onUpdate() {
         if(velocity.getX() > 0) {
-            getObject().setX(getObject().getX() + 1);
-            velocity.setX(velocity.getX() - 1);
+            getObject().setX(getObject().getX() + velocity.getX());
         }
-
+        if(velocity.getY() > 0) {
+            getObject().setY(getObject().getY() + velocity.getY());
+        }
+        if(velocity.getZ() > 0) {
+            getObject().setZ(getObject().getPosition().getZ() + velocity.getZ());
+        }
     }
 
 }

@@ -12,6 +12,15 @@ public class TransformSet {
 
     }
 
+    public TransformSet(double x) {
+        this.x = x;
+    }
+
+    public TransformSet(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public TransformSet(double x, double y, double z) {
         this.x = x;
         this.y = y;

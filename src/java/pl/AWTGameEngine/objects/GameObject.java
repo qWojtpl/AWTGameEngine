@@ -202,6 +202,10 @@ public class GameObject {
         return this.position.getY();
     }
 
+    public double getZ() {
+        return this.position.getZ();
+    }
+
     public TransformSet getPosition() {
         return this.position;
     }

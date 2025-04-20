@@ -4,17 +4,17 @@
         <Box3D spriteSource="sprites/beaver.jpg" />
         <Movement3D _package="pl.AWTGameEngine.custom" />
     </object>
-    <object id="box2" sizeX="100" sizeY="100" sizeZ="100" x="200" y="-100" z="200">
+    <object id="box2" sizeX="100" sizeY="100" sizeZ="100" x="200" y="100" z="200">
         <Box3D spriteSource="sprites/beaver2.png" />
         <Physics3D />
     </object>
-    <object id="sphere1" sizeX="100" sizeY="100" sizeZ="100" x="0" y="-300" z="200">
+    <object id="sphere1" sizeX="100" sizeY="100" sizeZ="100" x="0" y="300" z="200">
         <Sphere3D spriteSource="sprites/beaver.jpg" />
     </object>
-    <object id="cylinder1" sizeX="100" sizeY="100" sizeZ="100" x="200" y="-300" z="200">
+    <object id="cylinder1" sizeX="100" sizeY="100" sizeZ="100" x="200" y="300" z="200">
         <Cylinder3D spriteSource="sprites/beaver.jpg" />
     </object>
-    <object id="floor" sizeX="500" sizeY="10" sizeZ="500" x="-200" y="100" z="200">
+    <object id="floor" sizeX="500" sizeY="10" sizeZ="500" x="-200" y="-100" z="200">
         <Box3D />
     </object>
 </scene>

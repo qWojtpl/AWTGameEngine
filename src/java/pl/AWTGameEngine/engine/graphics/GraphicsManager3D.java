@@ -81,7 +81,7 @@ public class GraphicsManager3D {
         shape.setScaleY(panel.getCamera().parsePlainValue(scale.getY()));
         shape.setScaleZ(panel.getCamera().parsePlainValue(scale.getZ()));
         shape.setTranslateX(panel.getCamera().parsePlainValue(position.getX()));
-        shape.setTranslateY(panel.getCamera().parsePlainValue(position.getY()));
+        shape.setTranslateY(-panel.getCamera().parsePlainValue(position.getY()));
         shape.setTranslateZ(panel.getCamera().parsePlainValue(position.getZ()));
         shape.getTransforms().clear();
         shape.getTransforms().add(new Rotate(rotation.getX(), Rotate.X_AXIS));
