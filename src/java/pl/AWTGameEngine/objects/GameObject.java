@@ -263,6 +263,9 @@ public class GameObject {
         for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
             component.onUpdatePosition(x, this.position.getY());
         }
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
+            component.onUpdatePosition(x, this.position.getY(), this.position.getZ());
+        }
     }
 
     public void setX(String x) {
@@ -278,6 +281,9 @@ public class GameObject {
         for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
             component.onUpdatePosition(this.position.getX(), y);
         }
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
+            component.onUpdatePosition(this.position.getX(), y, this.position.getZ());
+        }
     }
 
     public void setY(String y) {
@@ -290,10 +296,9 @@ public class GameObject {
             return;
         }
         this.position.setZ(z);
-        //todo
-        /*for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
-            component.onUpdatePosition(this.position.getX(), y);
-        }*/
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
+            component.onUpdatePosition(this.position.getX(), this.position.getY(), z);
+        }
     }
 
     public void setZ(String z) {
@@ -331,6 +336,9 @@ public class GameObject {
         for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
             component.onUpdateSize(x, this.size.getY());
         }
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
+            component.onUpdateSize(x, this.size.getY(), this.size.getZ());
+        }
     }
 
     public void setSizeX(String x) {
@@ -342,6 +350,9 @@ public class GameObject {
         for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
             component.onUpdateSize(this.size.getX(), y);
         }
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
+            component.onUpdateSize(this.size.getX(), y, this.size.getZ());
+        }
     }
 
     public void setSizeY(String y) {
@@ -350,10 +361,9 @@ public class GameObject {
 
     public void setSizeZ(double z) {
         this.size.setZ(z);
-        //todo
-        /*for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
-            component.onUpdateSize(this.size.getX(), y);
-        }*/
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
+            component.onUpdateSize(this.size.getX(), this.size.getY(), z);
+        }
     }
 
     public void setSizeZ(String z) {

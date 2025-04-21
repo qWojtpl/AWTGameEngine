@@ -5,6 +5,7 @@ import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.Scene;
@@ -45,6 +46,10 @@ public abstract class ObjectComponent {
 
     protected final Scene getScene() {
         return getObject().getScene();
+    }
+
+    protected final PanelObject getPanel() {
+        return getObject().getPanel();
     }
 
     protected final SceneLoader getSceneLoader() {
@@ -115,7 +120,17 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
+    public boolean onUpdatePosition(double newX, double newY, double newZ) {
+        return true;
+    }
+
+    @EventMethod
     public boolean onUpdateSize(double newX, double newY) {
+        return true;
+    }
+
+    @EventMethod
+    public boolean onUpdateSize(double newX, double newY, double newZ) {
         return true;
     }
 

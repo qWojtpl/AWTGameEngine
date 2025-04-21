@@ -28,7 +28,7 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
         WindowsManager windowsManager = Dependencies.getWindowsManager();
         windowsManager.removeWindow(window);
         if(window.equals(windowsManager.getDefaultWindow())) {
-            Dependencies.getResourceManager().clearAudioClips();
+            window.unloadScene();
             Logger.log(2, "Stopped app.");
         }
     }
