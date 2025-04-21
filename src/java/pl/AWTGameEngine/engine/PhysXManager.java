@@ -28,53 +28,6 @@ public class PhysXManager {
         sceneDesc.setCpuDispatcher(cpuDispatcher);
         sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
         scene = physics.createScene(sceneDesc);
-
-//        // create a few temporary objects used during setup
-//
-//        // clean up temp objects
-//        groundGeometry.destroy();
-//        boxGeometry.destroy();
-//        tmpFilterData.destroy();
-//        tmpPose.destroy();
-//        tmpVec.destroy();
-//        shapeFlags.destroy();
-//        sceneDesc.destroy();
-//        tolerances.destroy();
-//
-//        // box starts at a height of 5
-//        float boxHeight = box.getGlobalPose().getP().getY();
-//        Logger.log(0, boxHeight + " == 5f +- " + 0.0001f);
-//
-//        // run physics simulation
-//        for (int i = 0; i <= 500; i++) {
-//            scene.simulate(1f/60f);
-//            scene.fetchResults(true);
-//
-//            boxHeight = box.getGlobalPose().getP().getY();
-//            if (i % 10 == 0) {
-//                System.out.println("Step " + i + ": h = " + boxHeight);
-//            }
-//        }
-//
-//        // box should rest on the ground
-//
-//        Logger.log(0,  "1f == " + boxHeight + " +- 0.0001f");
-//
-//        // cleanup stuff
-//        scene.removeActor(ground);
-//        ground.release();
-//        groundShape.release();
-//
-//        scene.removeActor(box);
-//        box.release();
-//        boxShape.release();
-//
-//        scene.release();
-//        material.release();
-//        physics.release();
-//        foundation.release();
-//        errorCb.destroy();
-//        allocator.destroy();
     }
 
     private String getVersionString() {
@@ -103,7 +56,7 @@ public class PhysXManager {
         scene.release();
         gravityVector.destroy();
         cpuDispatcher.destroy();
-        foundation.release();
+        physics.destroy();
         tolerances.destroy();
         foundation.release();
         errorCb.destroy();

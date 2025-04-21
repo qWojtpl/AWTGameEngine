@@ -105,7 +105,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
 
     @Override
     public void updateScene() {
-        physXManager.getPxScene().simulate(1f/20f);
+        physXManager.getPxScene().simulate(1f/10f);
         physXManager.getPxScene().fetchResults(true);
     }
 

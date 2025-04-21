@@ -5,7 +5,7 @@
         <Movement3D _package="pl.AWTGameEngine.custom" />
     </object>
     <object id="box3" sizeX="5" sizeY="5" sizeZ="5" x="0" y="110" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" mass="1" />
+        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" mass="5" />
     </object>
     <object id="box2" sizeX="5" sizeY="5" sizeZ="5" x="10" y="100" z="200">
         <Box3D spriteSource="sprites/beaver2.png" staticShape="false" />
@@ -19,4 +19,6 @@
     <object id="floor" sizeX="500" sizeY="10" sizeZ="500" x="-200" y="-100" z="200">
         <Box3D />
     </object>
+
+
 </scene>
