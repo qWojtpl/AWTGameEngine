@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.engine.panels;
 
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.*;
 import javafx.scene.input.KeyEvent;
@@ -121,30 +122,28 @@ public class Panel3D extends JFXPanel implements PanelObject {
     }
 
     public void updateCamera3D() {
-        cameraPitch.setTranslateX(camera.getX());
-        cameraPitch.setTranslateY(camera.getY());
-        cameraPitch.setTranslateZ(camera.getZ());
+        Platform.runLater(() -> {
+            cameraPitch.setTranslateX(camera.getX());
+            cameraPitch.setTranslateY(camera.getY());
+            cameraPitch.setTranslateZ(camera.getZ());
 
-        cameraPitch.setRotationAxis(Rotate.X_AXIS);
-        cameraPitch.setRotate(camera.getRotation().getX());
-        cameraYaw.setRotationAxis(Rotate.Y_AXIS);
-        cameraYaw.setRotate(camera.getRotation().getY());
-        javafx.scene.Camera cam3d = fxScene.getCamera();
-        cam3d.setRotationAxis(Rotate.Z_AXIS);
-        cam3d.setRotate(camera.getRotation().getZ());
+            cameraPitch.setRotationAxis(Rotate.X_AXIS);
+            cameraPitch.setRotate(camera.getRotation().getX());
+            cameraYaw.setRotationAxis(Rotate.Y_AXIS);
+            cameraYaw.setRotate(camera.getRotation().getY());
+            javafx.scene.Camera cam3d = fxScene.getCamera();
+            cam3d.setRotationAxis(Rotate.Z_AXIS);
+            cam3d.setRotate(camera.getRotation().getZ());
+        });
     }
 
     private void initCamera(float nearClip, float farClip) {
         PerspectiveCamera cam3d = new PerspectiveCamera(true);
         cam3d.setNearClip(nearClip);
         cam3d.setFarClip(farClip);
-        cam3d.setCache(true);
         cameraPitch.getChildren().add(cam3d);
         cameraYaw.getChildren().add(cameraPitch);
         rootGroup.getChildren().add(cameraYaw);
-
-        cameraPitch.getTransforms().add(new Rotate(0, Rotate.X_AXIS));
-        cameraYaw.getTransforms().add(new Rotate(0, Rotate.Y_AXIS));
 
         fxScene.setCamera(cam3d);
     }
