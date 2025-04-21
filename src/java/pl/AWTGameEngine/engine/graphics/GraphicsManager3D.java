@@ -13,9 +13,7 @@ import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GraphicsManager3D {
 
@@ -28,7 +26,7 @@ public class GraphicsManager3D {
         this.panel = panel;
     }
 
-    public void renderBox(String identifier, TransformSet position, TransformSet scale, TransformSet rotation, Sprite sprite) {
+    public void createBox(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite) {
         Platform.runLater(() -> {
             Box box = boxes.getOrDefault(identifier, null);
             if(box == null) {
@@ -39,11 +37,14 @@ public class GraphicsManager3D {
                 boxes.put(identifier, box);
                 panel.getRootGroup().getChildren().add(box);
             }
-            renderShape3D(box, position, scale, rotation, sprite);
+            updatePosition(box, position);
+            updateSize(box, size);
+            updateRotation(box, rotation);
+            updateSprite(box, sprite);
         });
     }
 
-    public void renderSphere(String identifier, TransformSet position, TransformSet scale, TransformSet rotation, Sprite sprite) {
+    public void createSphere(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite) {
         Platform.runLater(() -> {
             Sphere sphere = spheres.getOrDefault(identifier, null);
             if(sphere == null) {
@@ -54,41 +55,67 @@ public class GraphicsManager3D {
                 spheres.put(identifier, sphere);
                 panel.getRootGroup().getChildren().add(sphere);
             }
-            renderShape3D(sphere, position, scale, rotation, sprite);
+            updatePosition(sphere, position);
+            updateSize(sphere, size);
+            updateRotation(sphere, rotation);
+            updateSprite(sphere, sprite);
         });
     }
 
-    public void renderCylinder(String identifier, TransformSet position, TransformSet scale, TransformSet rotation, Sprite sprite) {
+    public void createCylinder(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite) {
         Platform.runLater(() -> {
-           Cylinder cylinder = cylinders.getOrDefault(identifier, null);
-           if(cylinder == null) {
-               cylinder = new Cylinder();
-               cylinder.setMaterial(new PhongMaterial() {{
-                   setDiffuseColor(Color.WHITE);
-               }});
-               cylinders.put(identifier, cylinder);
-               panel.getRootGroup().getChildren().add(cylinder);
-           }
-           renderShape3D(cylinder, position, scale, rotation, sprite);
+            Cylinder cylinder = cylinders.getOrDefault(identifier, null);
+            if(cylinder == null) {
+                cylinder = new Cylinder();
+                cylinder.setMaterial(new PhongMaterial() {{
+                    setDiffuseColor(Color.WHITE);
+                }});
+                cylinders.put(identifier, cylinder);
+                panel.getRootGroup().getChildren().add(cylinder);
+            }
+            updatePosition(cylinder, position);
+            updateSize(cylinder, size);
+            updateRotation(cylinder, rotation);
+            updateSprite(cylinder, sprite);
         });
     }
 
-    private void renderShape3D(Shape3D shape, TransformSet position, TransformSet scale, TransformSet rotation, Sprite sprite) {
-        if(sprite != null) {
+    public void updatePosition(Shape3D shape, TransformSet position) {
+        Platform.runLater(() -> {
+            shape.setTranslateX(panel.getCamera().parsePlainValue(position.getX()));
+            shape.setTranslateY(-panel.getCamera().parsePlainValue(position.getY()));
+            shape.setTranslateZ(panel.getCamera().parsePlainValue(position.getZ()));
+        });
+    }
+
+    public void updateSize(Shape3D shape, TransformSet scale) {
+        Platform.runLater(() -> {
+            shape.setScaleX(panel.getCamera().parsePlainValue(scale.getX()));
+            shape.setScaleY(panel.getCamera().parsePlainValue(scale.getY()));
+            shape.setScaleZ(panel.getCamera().parsePlainValue(scale.getZ()));
+        });
+    }
+
+    public void updateRotation(Shape3D shape, TransformSet rotation) {
+        Platform.runLater(() -> {
+            shape.setRotationAxis(Rotate.X_AXIS);
+            shape.setRotate(rotation.getX());
+            shape.setRotationAxis(Rotate.Y_AXIS);
+            shape.setRotate(rotation.getY());
+            shape.setRotationAxis(Rotate.Z_AXIS);
+            shape.setRotate(rotation.getZ());
+        });
+    }
+
+    public void updateSprite(Shape3D shape, Sprite sprite) {
+        if(shape == null || sprite == null) {
+            return;
+        }
+        Platform.runLater(() -> {
             shape.setMaterial(new PhongMaterial() {{
                 setDiffuseMap(SwingFXUtils.toFXImage(sprite.getImage(), null));
             }});
-        }
-        shape.setScaleX(panel.getCamera().parsePlainValue(scale.getX()));
-        shape.setScaleY(panel.getCamera().parsePlainValue(scale.getY()));
-        shape.setScaleZ(panel.getCamera().parsePlainValue(scale.getZ()));
-        shape.setTranslateX(panel.getCamera().parsePlainValue(position.getX()));
-        shape.setTranslateY(-panel.getCamera().parsePlainValue(position.getY()));
-        shape.setTranslateZ(panel.getCamera().parsePlainValue(position.getZ()));
-        shape.getTransforms().clear();
-        shape.getTransforms().add(new Rotate(rotation.getX(), Rotate.X_AXIS));
-        shape.getTransforms().add(new Rotate(rotation.getY(), Rotate.Y_AXIS));
-        shape.getTransforms().add(new Rotate(rotation.getZ(), Rotate.Z_AXIS));
+        });
     }
 
     public Box getBox(String identifier) {
@@ -101,23 +128,6 @@ public class GraphicsManager3D {
 
     public Cylinder getCylinder(String identifier) {
         return cylinders.getOrDefault(identifier, null);
-    }
-
-    public List<Shape3D> getShapesByIdentifier(String identifier) {
-        List<Shape3D> shapes = new ArrayList<>();
-        Shape3D box = boxes.getOrDefault(identifier, null);
-        Shape3D sphere = spheres.getOrDefault(identifier, null);
-        Shape3D cylinder = cylinders.getOrDefault(identifier, null);
-        if(box != null) {
-            shapes.add(box);
-        }
-        if(sphere != null) {
-            shapes.add(sphere);
-        }
-        if(cylinder != null) {
-            shapes.add(cylinder);
-        }
-        return shapes;
     }
 
 }

@@ -1,7 +1,7 @@
 <!--todo renderFPS default value if not set-->
-<scene title="3D scene" renderFPS="144" updateFPS="144">
+<scene title="3D scene" renderFPS="10" updateFPS="144">
     <object id="box1" sizeX="100" sizeY="100" sizeZ="100" x="0" y="1000" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
         <Movement3D _package="pl.AWTGameEngine.custom" />
     </object>
     <object id="box2" sizeX="100" sizeY="100" sizeZ="100" x="200" y="100" z="200">

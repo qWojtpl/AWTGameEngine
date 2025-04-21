@@ -5,6 +5,7 @@ import javafx.scene.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
+import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
@@ -19,6 +20,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
     private final Window window;
     private final Camera camera;
     private final GraphicsManager3D graphicsManager3D;
+    private final PhysXManager physXManager;
     private final javafx.scene.Group rootGroup;
     private final javafx.scene.Scene fxScene;
     private MouseListener mouseListener;
@@ -30,9 +32,11 @@ public class Panel3D extends JFXPanel implements PanelObject {
         this.window = window;
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManager3D(this);
+        this.physXManager = new PhysXManager();
         this.rootGroup = new Group(new AmbientLight());
         this.fxScene = new Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
-        initCamera(0.01f, 60000);
+        physXManager.init();
+        initCamera(0.1f, 10000);
         initListeners();
         setScene(fxScene);
         fxScene.setFill(Color.LIGHTGRAY);
@@ -63,6 +67,10 @@ public class Panel3D extends JFXPanel implements PanelObject {
 
     public GraphicsManager3D getGraphicsManager3D() {
         return this.graphicsManager3D;
+    }
+
+    public PhysXManager getPhysXManager() {
+        return this.physXManager;
     }
 
     public Group getCameraYaw() {
@@ -96,6 +104,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
 
     @Override
     public void unload() {
+        physXManager.cleanup();
         setScene(null);
     }
 
