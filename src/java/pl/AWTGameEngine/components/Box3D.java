@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components;
 
 import javafx.scene.shape.Shape3D;
 import physx.common.PxIDENTITYEnum;
+import physx.common.PxQuat;
 import physx.common.PxTransform;
 import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
@@ -9,11 +10,11 @@ import physx.physics.*;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.RotationHelper;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
 @Component3D
@@ -28,8 +29,6 @@ public class Box3D extends Base3DShape implements Renderable3D {
     private PxMaterial material;
     private PxBoxGeometry boxGeometry;
     private PxShape shape;
-    private PxRigidDynamic rigidDynamic;
-    private PxRigidStatic rigidStatic;
     private final PxTransform pose = new PxTransform(PxIDENTITYEnum.PxIdentity);
     private final PxFilterData filterData = new PxFilterData(1, 1, 0, 0);
 
@@ -69,6 +68,7 @@ public class Box3D extends Base3DShape implements Renderable3D {
         } else {
             rigidDynamic = physics.createRigidDynamic(pose);
             rigidDynamic.attachShape(shape);
+            rigidDynamic.setMass((float) getMass());
             physXManager.getPxScene().addActor(rigidDynamic);
         }
     }
@@ -119,71 +119,28 @@ public class Box3D extends Base3DShape implements Renderable3D {
 
     @Override
     public void onUpdate() {
+        PxVec3 position;
+        PxQuat quat;
         if(!isStaticShape()) {
-            physXManager.getPxScene().simulate(1f/20f);
-            physXManager.getPxScene().fetchResults(true);
-            getObject().setPosition(new TransformSet(
-                    rigidDynamic.getGlobalPose().getP().getX(),
-                    rigidDynamic.getGlobalPose().getP().getY(),
-                    rigidDynamic.getGlobalPose().getP().getZ()
-            ));
-            double[] rot = quaternionToEulerXYZ(rigidDynamic.getGlobalPose().getQ().getX(), rigidDynamic.getGlobalPose().getQ().getY(), rigidDynamic.getGlobalPose().getQ().getZ(), rigidDynamic.getGlobalPose().getQ().getW());
-            getObject().setRotation(new TransformSet(rot[0], rot[1], rot[2]));
+            position = rigidDynamic.getGlobalPose().getP();
+            quat = rigidDynamic.getGlobalPose().getQ();
         } else {
-            getObject().setPosition(new TransformSet(
-                    rigidStatic.getGlobalPose().getP().getX(),
-                    rigidStatic.getGlobalPose().getP().getY(),
-                    rigidStatic.getGlobalPose().getP().getZ()
-            ));
+            position = rigidStatic.getGlobalPose().getP();
+            quat = rigidStatic.getGlobalPose().getQ();
         }
-
+        getObject().setPosition(new TransformSet(
+                position.getX(),
+                position.getY(),
+                position.getZ()
+        ));
+        double[] rot = RotationHelper.quaternionToEulerXYZ(quat.getX(), quat.getY(), quat.getZ(), quat.getW());
+        getObject().setRotation(new TransformSet(rot[0], rot[1], rot[2]));
     }
 
     @Override
     public void on3DRenderRequest(GraphicsManager3D g) {
         Shape3D shape = g.getBox(getObject().getIdentifier());
         handleUpdates(g, shape);
-    }
-
-    public static double[] quaternionToEulerXYZ(double x, double y, double z, double w) {
-        double norm = Math.sqrt(x*x + y*y + z*z + w*w);
-        x /= norm;
-        y /= norm;
-        z /= norm;
-        w /= norm;
-
-        double m00 = 1 - 2 * (y * y + z * z);
-        double m01 = 2 * (x * y - z * w);
-        double m02 = 2 * (x * z + y * w);
-
-        double m10 = 2 * (x * y + z * w);
-        double m11 = 1 - 2 * (x * x + z * z);
-        double m12 = 2 * (y * z - x * w);
-
-        double m20 = 2 * (x * z - y * w);
-        double m21 = 2 * (y * z + x * w);
-        double m22 = 1 - 2 * (x * x + y * y);
-
-        double pitch;
-        if (Math.abs(m20) < 1) {
-            pitch = Math.asin(-m20);
-            double roll = Math.atan2(m21, m22);
-            double yaw = Math.atan2(m10, m00);
-            return new double[] {
-                    Math.toDegrees(roll),   // X
-                    Math.toDegrees(pitch),  // Y
-                    Math.toDegrees(yaw)     // Z
-            };
-        } else {
-            pitch = Math.copySign(Math.PI / 2, -m20);
-            double roll = 0;
-            double yaw = Math.atan2(-m01, m11);
-            return new double[] {
-                    Math.toDegrees(roll),   // X
-                    Math.toDegrees(pitch),  // Y
-                    Math.toDegrees(yaw)     // Z
-            };
-        }
     }
 
 }

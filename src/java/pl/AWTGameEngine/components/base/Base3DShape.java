@@ -1,7 +1,8 @@
 package pl.AWTGameEngine.components.base;
 
 import javafx.scene.shape.Shape3D;
-import physx.common.PxVec3;
+import physx.physics.PxRigidDynamic;
+import physx.physics.PxRigidStatic;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
@@ -16,6 +17,11 @@ public abstract class Base3DShape extends ObjectComponent {
     protected boolean updateRotation = false;
     protected boolean updateSprite = false;
     private boolean staticShape = true;
+
+    protected PxRigidDynamic rigidDynamic;
+    protected PxRigidStatic rigidStatic;
+
+    private double mass = 0.5;
 
     public Base3DShape(GameObject object) {
         super(object);
@@ -59,6 +65,19 @@ public abstract class Base3DShape extends ObjectComponent {
         this.staticShape = staticShape;
     }
 
+    public double getMass() {
+        return this.mass;
+    }
+
+    public void setMass(double mass) {
+        this.mass = mass;
+        if(!isStaticShape()) {
+            if(rigidDynamic != null) {
+                rigidDynamic.setMass((float) mass);
+            }
+        }
+    }
+
     @SerializationSetter
     public void setSpriteSource(String source) {
         setSprite(Dependencies.getResourceManager().getResourceAsSprite(source));
@@ -67,6 +86,11 @@ public abstract class Base3DShape extends ObjectComponent {
     @SerializationSetter
     public void setStaticShape(String staticShape) {
         setStaticShape(Boolean.parseBoolean(staticShape));
+    }
+
+    @SerializationSetter
+    public void setMass(String mass) {
+        setMass(Double.parseDouble(mass));
     }
 
 }

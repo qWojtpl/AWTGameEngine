@@ -66,7 +66,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
     }
 
     @Override
-    public void update() {
+    public void updateRender() {
         if(window.getCurrentScene() == null) {
             return;
         }
@@ -84,6 +84,11 @@ public class WebPanel extends JFXPanel implements PanelObject {
                 }
             }
         }
+    }
+
+    @Override
+    public void updateScene() {
+
     }
 
     @Override

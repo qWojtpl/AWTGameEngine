@@ -13,7 +13,8 @@ public interface PanelObject {
     MouseListener getMouseListener();
     Component add(Component comp);
     void unload();
-    void update();
+    void updateRender();
+    void updateScene();
     void setSize(Dimension dimension);
     void setPreferredSize(Dimension dimension);
     void setMouseListener(MouseListener listener);

@@ -68,8 +68,13 @@ public class DefaultPanel extends JPanel implements PanelObject {
     }
 
     @Override
-    public void update() {
+    public void updateRender() {
         repaint();
+    }
+
+    @Override
+    public void updateScene() {
+
     }
 
     @Override

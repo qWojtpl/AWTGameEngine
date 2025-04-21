@@ -81,6 +81,9 @@ public class GraphicsManager3D {
     }
 
     public void updatePosition(Shape3D shape, TransformSet position) {
+        if(shape == null) {
+            return;
+        }
         Platform.runLater(() -> {
             shape.setTranslateX(panel.getCamera().parsePlainValue(position.getX()));
             shape.setTranslateY(-panel.getCamera().parsePlainValue(position.getY()));
@@ -89,6 +92,9 @@ public class GraphicsManager3D {
     }
 
     public void updateSize(Shape3D shape, TransformSet scale) {
+        if(shape == null) {
+            return;
+        }
         Platform.runLater(() -> {
             shape.setScaleX(panel.getCamera().parsePlainValue(scale.getX()));
             shape.setScaleY(panel.getCamera().parsePlainValue(scale.getY()));
@@ -97,6 +103,9 @@ public class GraphicsManager3D {
     }
 
     public void updateRotation(Shape3D shape, TransformSet rotation) {
+        if(shape == null) {
+            return;
+        }
         Platform.runLater(() -> {
             shape.setRotationAxis(Rotate.X_AXIS);
             shape.setRotate(rotation.getX());

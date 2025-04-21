@@ -83,7 +83,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
     }
 
     @Override
-    public void update() {
+    public void updateRender() {
         if(window.getCurrentScene() == null) {
             return;
         }
@@ -101,6 +101,12 @@ public class Panel3D extends JFXPanel implements PanelObject {
                 }
             }
         }
+    }
+
+    @Override
+    public void updateScene() {
+        physXManager.getPxScene().simulate(1f/20f);
+        physXManager.getPxScene().fetchResults(true);
     }
 
     @Override

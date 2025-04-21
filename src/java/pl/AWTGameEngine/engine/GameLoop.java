@@ -24,9 +24,10 @@ public class GameLoop extends Thread {
             }
             if(window.getCurrentScene() != null) {
                 if(renderLoop) {
-                    window.getPanel().update();
+                    window.getPanel().updateRender();
                 } else {
                     window.getCurrentScene().update();
+                    window.getPanel().updateScene();
                 }
             }
         }
