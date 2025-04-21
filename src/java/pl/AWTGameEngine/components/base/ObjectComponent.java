@@ -140,6 +140,11 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
+    public boolean onUpdateRotation(double newX, double newY,  double newZ) {
+        return true;
+    }
+
+    @EventMethod
     public void onUpdateCameraPosition(double newX, double newY) {
 
     }

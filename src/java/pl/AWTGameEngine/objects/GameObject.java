@@ -307,20 +307,38 @@ public class GameObject {
 
     public void setPosition(TransformSet transform) {
         this.position = transform;
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
+            component.onUpdatePosition(this.position.getX(), this.position.getY());
+        }
+        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
+            component.onUpdatePosition(this.position.getX(), this.position.getY(), this.position.getZ());
+        }
     }
 
     public void setRotationX(double angle) {
         this.rotation.setX(angle);
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double")) {
+            component.onUpdateRotation(this.rotation.getX());
+        }
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
+            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
+        }
     }
 
     @Platform3D
     public void setRotationY(double angle) {
         this.rotation.setY(angle);
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
+            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
+        }
     }
 
     @Platform3D
     public void setRotationZ(double angle) {
         this.rotation.setZ(angle);
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
+            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
+        }
     }
 
     public void setRotationX(String angle) {
@@ -329,6 +347,9 @@ public class GameObject {
 
     public void setRotation(TransformSet transform) {
         this.rotation = transform;
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
+            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
+        }
     }
 
     public void setSizeX(double x) {

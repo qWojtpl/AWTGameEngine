@@ -19,7 +19,6 @@ public abstract class Base3DShape extends ObjectComponent {
 
     public Base3DShape(GameObject object) {
         super(object);
-        createShape();
     }
 
     protected abstract void createShape();
@@ -27,7 +26,6 @@ public abstract class Base3DShape extends ObjectComponent {
     protected void handleUpdates(GraphicsManager3D g, Shape3D shape) {
         if(updatePosition) {
             g.updatePosition(shape, getObject().getPosition());
-            System.out.println("updating position");
             updatePosition = false;
         }
         if(updateSize) {
@@ -42,18 +40,6 @@ public abstract class Base3DShape extends ObjectComponent {
             g.updateSprite(shape, sprite);
             updateSprite = false;
         }
-    }
-
-    @Override
-    public boolean onUpdatePosition(double newX, double newY, double newZ) {
-        updatePosition = true;
-        return true;
-    }
-
-    @Override
-    public boolean onUpdateSize(double newX, double newY, double newZ) {
-        updateSize = true;
-        return true;
     }
 
     public Sprite getSprite() {

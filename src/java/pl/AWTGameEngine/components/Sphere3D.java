@@ -31,6 +31,23 @@ public class Sphere3D extends Base3DShape implements Renderable3D {
     }
 
     @Override
+    public void onAddComponent() {
+        createShape();
+    }
+
+    @Override
+    public boolean onUpdatePosition(double newX, double newY, double newZ) {
+        updatePosition = true;
+        return true;
+    }
+
+    @Override
+    public boolean onUpdateSize(double newX, double newY, double newZ) {
+        updateSize = true;
+        return true;
+    }
+
+    @Override
     public void on3DRenderRequest(GraphicsManager3D g) {
         Shape3D shape = g.getSphere(getObject().getIdentifier());
         handleUpdates(g, shape);
