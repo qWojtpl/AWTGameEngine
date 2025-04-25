@@ -10,6 +10,7 @@ META-INF/*
 out/*
 /projects
 projects/*
+/target
 !/.gitignore
 !/LICENSE.txt
 !/README.md
