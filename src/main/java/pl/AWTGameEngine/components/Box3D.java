@@ -39,7 +39,9 @@ public class Box3D extends Base3DShape implements Renderable3D {
 
     @Override
     protected void createShape() {
-        ((Panel3D) getPanel()).getGraphicsManager3D().createBox(
+        GraphicsManager3D g = ((Panel3D) getPanel()).getGraphicsManager3D();
+
+        g.createBox(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),

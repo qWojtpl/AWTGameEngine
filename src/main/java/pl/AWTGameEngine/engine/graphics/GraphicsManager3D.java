@@ -2,17 +2,21 @@ package pl.AWTGameEngine.engine.graphics;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.Shape3D;
-import javafx.scene.shape.Sphere;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
+import org.fxyz3d.importers.obj.ObjImporter;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class GraphicsManager3D {
@@ -21,6 +25,9 @@ public class GraphicsManager3D {
     private final HashMap<String, Box> boxes = new HashMap<>();
     private final HashMap<String, Sphere> spheres = new HashMap<>();
     private final HashMap<String, Cylinder> cylinders = new HashMap<>();
+    private final HashMap<String, Group> models = new HashMap<>();
+
+    private final ObjImporter importer = new ObjImporter();
 
     public GraphicsManager3D(Panel3D panel) {
         this.panel = panel;
@@ -80,50 +87,74 @@ public class GraphicsManager3D {
         });
     }
 
-    public void updatePosition(Shape3D shape, TransformSet position) {
-        if(shape == null) {
-            return;
-        }
+    public void createCustomModel(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, String modelPath) {
         Platform.runLater(() -> {
-            shape.setTranslateX(panel.getCamera().parsePlainValue(position.getX()));
-            shape.setTranslateY(-panel.getCamera().parsePlainValue(position.getY()));
-            shape.setTranslateZ(panel.getCamera().parsePlainValue(position.getZ()));
+            try {
+                Group model = models.getOrDefault(identifier, null);
+                if(model == null) {
+                    model = new Group(importer.load(new File(modelPath).toURI().toURL()).getMeshViews());
+//                cylinder.setMaterial(new PhongMaterial() {{
+//                    setDiffuseColor(Color.WHITE);
+//                }});
+                    models.put(identifier, model);
+                    panel.getRootGroup().getChildren().add(model);
+                }
+                updatePosition(model, position);
+                updateSize(model, size);
+                updateRotation(model, rotation);
+                updateSprite(model, sprite);
+            } catch(IOException e) {
+                Logger.log("Cannot create custom model", e);
+            }
         });
     }
 
-    public void updateSize(Shape3D shape, TransformSet scale) {
-        if(shape == null) {
+    public void updatePosition(Node node, TransformSet position) {
+        if(node == null) {
             return;
         }
         Platform.runLater(() -> {
-            shape.setScaleX(panel.getCamera().parsePlainValue(scale.getX()));
-            shape.setScaleY(panel.getCamera().parsePlainValue(scale.getY()));
-            shape.setScaleZ(panel.getCamera().parsePlainValue(scale.getZ()));
+            node.setTranslateX(panel.getCamera().parsePlainValue(position.getX()));
+            node.setTranslateY(-panel.getCamera().parsePlainValue(position.getY()));
+            node.setTranslateZ(panel.getCamera().parsePlainValue(position.getZ()));
         });
     }
 
-    public void updateRotation(Shape3D shape, TransformSet rotation) {
-        if(shape == null) {
+    public void updateSize(Node node, TransformSet scale) {
+        if(node == null) {
             return;
         }
         Platform.runLater(() -> {
-            shape.setRotationAxis(Rotate.X_AXIS);
-            shape.setRotate(rotation.getX());
-            shape.setRotationAxis(Rotate.Y_AXIS);
-            shape.setRotate(rotation.getY());
-            shape.setRotationAxis(Rotate.Z_AXIS);
-            shape.setRotate(rotation.getZ());
+            node.setScaleX(panel.getCamera().parsePlainValue(scale.getX()));
+            node.setScaleY(panel.getCamera().parsePlainValue(scale.getY()));
+            node.setScaleZ(panel.getCamera().parsePlainValue(scale.getZ()));
         });
     }
 
-    public void updateSprite(Shape3D shape, Sprite sprite) {
-        if(shape == null || sprite == null) {
+    public void updateRotation(Node node, TransformSet rotation) {
+        if(node == null) {
             return;
         }
         Platform.runLater(() -> {
-            shape.setMaterial(new PhongMaterial() {{
-                setDiffuseMap(SwingFXUtils.toFXImage(sprite.getImage(), null));
-            }});
+            node.setRotationAxis(Rotate.X_AXIS);
+            node.setRotate(rotation.getX());
+            node.setRotationAxis(Rotate.Y_AXIS);
+            node.setRotate(rotation.getY());
+            node.setRotationAxis(Rotate.Z_AXIS);
+            node.setRotate(rotation.getZ());
+        });
+    }
+
+    public void updateSprite(Node node, Sprite sprite) {
+        if(node == null || sprite == null) {
+            return;
+        }
+        Platform.runLater(() -> {
+            if(node instanceof Shape3D) {
+                ((Shape3D) node).setMaterial(new PhongMaterial() {{
+                    setDiffuseMap(SwingFXUtils.toFXImage(sprite.getImage(), null));
+                }});
+            }
         });
     }
 
@@ -137,6 +168,10 @@ public class GraphicsManager3D {
 
     public Cylinder getCylinder(String identifier) {
         return cylinders.getOrDefault(identifier, null);
+    }
+
+    public Group getCustomModel(String identifier) {
+        return models.getOrDefault(identifier, null);
     }
 
 }

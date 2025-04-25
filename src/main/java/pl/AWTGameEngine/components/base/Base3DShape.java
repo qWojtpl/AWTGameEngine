@@ -1,15 +1,16 @@
 package pl.AWTGameEngine.components.base;
 
-import javafx.scene.shape.Shape3D;
+import javafx.scene.Node;
 import physx.physics.PxRigidDynamic;
 import physx.physics.PxRigidStatic;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
+import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
-public abstract class Base3DShape extends ObjectComponent {
+public abstract class Base3DShape extends ObjectComponent implements Renderable3D {
 
     protected Sprite sprite;
     protected boolean updatePosition = false;
@@ -29,21 +30,21 @@ public abstract class Base3DShape extends ObjectComponent {
 
     protected abstract void createShape();
 
-    protected void handleUpdates(GraphicsManager3D g, Shape3D shape) {
+    protected void handleUpdates(GraphicsManager3D g, Node node) {
         if(updatePosition) {
-            g.updatePosition(shape, getObject().getPosition());
+            g.updatePosition(node, getObject().getPosition());
             updatePosition = false;
         }
         if(updateSize) {
-            g.updateSize(shape, getObject().getSize());
+            g.updateSize(node, getObject().getSize());
             updateSize = false;
         }
         if(updateRotation) {
-            g.updateRotation(shape, getObject().getRotation());
+            g.updateRotation(node, getObject().getRotation());
             updateRotation = false;
         }
         if(updateSprite) {
-            g.updateSprite(shape, sprite);
+            g.updateSprite(node, sprite);
             updateSprite = false;
         }
     }

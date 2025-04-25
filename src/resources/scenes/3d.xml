@@ -19,6 +19,8 @@
     <object id="floor" sizeX="500" sizeY="10" sizeZ="500" x="-200" y="-100" z="200">
         <Box3D />
     </object>
-
+    <object id="testModel" sizeX="1" sizeY="1" sizeZ="1" x="0" y="100" z="0">
+        <Model3D modelPath="test" />
+    </object>
 
 </scene>

@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>21</version>
+            <version>21.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -62,7 +62,7 @@
 
         <dependency>
             <groupId>org.fxyz3d</groupId>
-            <artifactId>fxyz3d</artifactId>
+            <artifactId>fxyz3d-importers</artifactId>
             <version>0.6.0</version>
         </dependency>
 
