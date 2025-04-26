@@ -168,6 +168,14 @@ public abstract class ObjectComponent {
     }
 
     /**
+     * Method will be called when another component will be added to the object.
+     */
+    @EventMethod
+    public void onAddComponent(ObjectComponent component) {
+
+    }
+
+    /**
      * Method will be called when component will be removed from the object.
      */
     @EventMethod

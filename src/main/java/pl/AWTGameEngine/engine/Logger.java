@@ -29,7 +29,7 @@ public class Logger {
         String className = "";
         if(callerClass) {
             int stackTraceIndex = 2;
-            if(Thread.currentThread().getStackTrace()[stackTraceIndex].getClassName().equals(Logger.class.getName())) {
+            while(Thread.currentThread().getStackTrace()[stackTraceIndex].getClassName().equals(Logger.class.getName())) {
                 stackTraceIndex++;
             }
             String[] split = Thread.currentThread().getStackTrace()[stackTraceIndex].getClassName().split("\\.");

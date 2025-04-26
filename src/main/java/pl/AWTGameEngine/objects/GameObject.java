@@ -75,6 +75,12 @@ public class GameObject {
         eventHandler.registerComponent(component);
         getScene().getSceneEventHandler().registerComponent(component);
         component.onAddComponent();
+        for(ObjectComponent c : eventHandler.getComponents("onAddComponent#ObjectComponent")) {
+            if(c == component) {
+                continue;
+            }
+            c.onAddComponent(component);
+        }
     }
 
     public void removeComponent(ObjectComponent component) {

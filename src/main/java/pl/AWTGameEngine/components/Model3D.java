@@ -15,7 +15,6 @@ import pl.AWTGameEngine.objects.Sprite;
 @Component3D
 public class Model3D extends ObjectComponent implements Renderable3D {
 
-    private Group model;
     private String modelPath;
 
     protected Sprite sprite;
@@ -28,12 +27,8 @@ public class Model3D extends ObjectComponent implements Renderable3D {
         super(object);
     }
 
-    protected void createShape() {
-
-    }
-
     public Group getModel() {
-        return this.model;
+        return ((Panel3D) getPanel()).getGraphicsManager3D().getCustomModel(getObject().getIdentifier());
     }
 
     @Override
