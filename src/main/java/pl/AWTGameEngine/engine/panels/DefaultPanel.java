@@ -73,7 +73,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
     }
 
     @Override
-    public void updateScene() {
+    public void updatePhysics() {
 
     }
 

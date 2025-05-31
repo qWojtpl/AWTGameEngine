@@ -2,8 +2,10 @@ package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.AppProperties;
-import pl.AWTGameEngine.engine.GameLoop;
-import pl.AWTGameEngine.engine.listeners.WindowListener;
+import pl.AWTGameEngine.engine.loops.BaseLoop;
+import pl.AWTGameEngine.engine.loops.PhysicsLoop;
+import pl.AWTGameEngine.engine.loops.RenderLoop;
+import pl.AWTGameEngine.engine.loops.UpdateLoop;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
@@ -34,13 +36,17 @@ public class WindowsManager {
             window.setIconImage(icon.getImage());
         }
 
-        GameLoop updateLoop = new GameLoop(window, false);
+        BaseLoop updateLoop = new UpdateLoop(window);
         updateLoop.setFPS(appProperties.getPropertyAsInteger("updateFps"));
         window.setUpdateLoop(updateLoop);
 
-        GameLoop renderLoop = new GameLoop(window, true);
+        BaseLoop renderLoop = new RenderLoop(window);
         renderLoop.setFPS(appProperties.getPropertyAsInteger("renderFps"));
         window.setRenderLoop(renderLoop);
+
+        BaseLoop physicsLoop = new PhysicsLoop(window);
+        physicsLoop.setFPS(appProperties.getPropertyAsInteger("physicsFps"));
+        window.setPhysicsLoop(physicsLoop);
 
         window.init();
         window.getSceneLoader().loadSceneFile(scenePath);
@@ -48,6 +54,7 @@ public class WindowsManager {
 
         updateLoop.start();
         renderLoop.start();
+        physicsLoop.start();
 
         return window;
     }

@@ -39,6 +39,7 @@ public class SceneLoader {
                 title = sceneOptions.getTitle();
                 window.getRenderLoop().setFPS(sceneOptions.getRenderFPS());
                 window.getUpdateLoop().setFPS(sceneOptions.getUpdateFPS());
+                window.getPhysicsLoop().setFPS(sceneOptions.getPhysicsFPS());
                 if(sceneOptions.isFullscreen()) {
                     window.setFullScreen(true);
                 }
@@ -75,7 +76,8 @@ public class SceneLoader {
         boolean fullScreen = properties.getPropertyAsBoolean("fullscreen"),
                 sameSize = properties.getPropertyAsBoolean("sameSize");
         int renderFPS = properties.getPropertyAsInteger("renderFPS"),
-            updateFPS = properties.getPropertyAsInteger("updateFPS");
+            updateFPS = properties.getPropertyAsInteger("updateFPS"),
+            physicsFPS = properties.getPropertyAsInteger("physicsFPS");
         for(int i = 0; i < node.getAttributes().getLength(); i++) {
             Node item = node.getAttributes().item(i);
             switch(item.getNodeName().toUpperCase()) {
@@ -91,6 +93,9 @@ public class SceneLoader {
                 case "UPDATEFPS":
                     updateFPS = Integer.parseInt(item.getNodeValue());
                     break;
+                case "PHYSICSFPS":
+                    physicsFPS = Integer.parseInt(item.getNodeValue());
+                    break;
                 case "SAMESIZE":
                     sameSize = Boolean.parseBoolean(item.getNodeValue());
                     break;
@@ -101,6 +106,7 @@ public class SceneLoader {
                 fullScreen,
                 renderFPS,
                 updateFPS,
+                physicsFPS,
                 sameSize
         );
     }

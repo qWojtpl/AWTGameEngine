@@ -78,6 +78,11 @@ public abstract class ObjectComponent {
 
     }
 
+    @EventMethod
+    public void onPhysicsUpdate() {
+
+    }
+
     /**
      * Method is called before frame draw.
      * AfterUpdate is called after Update.

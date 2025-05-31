@@ -453,4 +453,10 @@ public class GameObject {
         }
     }
 
+    public void updatePhysics() {
+        for(ObjectComponent component : eventHandler.getComponents("onPhysicsUpdate")) {
+            component.onPhysicsUpdate();
+        }
+    }
+
 }

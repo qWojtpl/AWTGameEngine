@@ -104,9 +104,20 @@ public class Panel3D extends JFXPanel implements PanelObject {
     }
 
     @Override
-    public void updateScene() {
-        physXManager.getPxScene().simulate(1f/10f);
+    public void updatePhysics() {
+        physXManager.getPxScene().simulate(1f/((float) getWindow().getPhysicsLoop().getFPS() / 6));
         physXManager.getPxScene().fetchResults(true);
+        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
+        for (int i : sortedObjects.keySet()) {
+            for(GameObject go : sortedObjects.get(i)) {
+                if(!go.isActive()) {
+                    continue;
+                }
+                if(this.equals(go.getPanel())) {
+                    go.updatePhysics();
+                }
+            }
+        }
     }
 
     @Override

@@ -125,7 +125,7 @@ public class Box3D extends Base3DShape implements Renderable3D {
     private double previousW;
 
     @Override
-    public void onUpdate() {
+    public void onPhysicsUpdate() {
         PxVec3 position;
         PxQuat quat;
         if(!isStaticShape()) {

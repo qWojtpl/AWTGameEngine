@@ -4,6 +4,7 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
+import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.panels.DefaultPanel;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.engine.panels.PanelObject;
@@ -23,8 +24,9 @@ public class Window extends JFrame {
     private DefaultPanel panel;
     private WebPanel webPanel;
     private Panel3D threeDimensionalPanel;
-    private GameLoop renderLoop;
-    private GameLoop updateLoop;
+    private BaseLoop renderLoop;
+    private BaseLoop updateLoop;
+    private BaseLoop physicsLoop;
     private KeyListener keyListener;
     private WindowListener windowListener;
     private Scene currentScene;
@@ -122,12 +124,16 @@ public class Window extends JFrame {
         return this.panel;
     }
 
-    public GameLoop getRenderLoop() {
+    public BaseLoop getRenderLoop() {
         return this.renderLoop;
     }
 
-    public GameLoop getUpdateLoop() {
+    public BaseLoop getUpdateLoop() {
         return this.updateLoop;
+    }
+
+    public BaseLoop getPhysicsLoop() {
+        return this.physicsLoop;
     }
 
     public KeyListener getKeyListener() {
@@ -174,12 +180,16 @@ public class Window extends JFrame {
         return this.cursor;
     }
 
-    public void setRenderLoop(GameLoop loop) {
+    public void setRenderLoop(BaseLoop loop) {
         this.renderLoop = loop;
     }
 
-    public void setUpdateLoop(GameLoop loop) {
+    public void setUpdateLoop(BaseLoop loop) {
         this.updateLoop = loop;
+    }
+
+    public void setPhysicsLoop(BaseLoop loop) {
+        this.physicsLoop = loop;
     }
 
     public void setKeyListener(KeyListener listener) {

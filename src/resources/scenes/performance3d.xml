@@ -1,4 +1,4 @@
-<scene title="3D performance test" renderFPS="144" updateFPS="60">
+<scene title="3D performance test" renderFPS="144" updateFPS="60" physicsFPS="1">
     <object id="floor" sizeX="20000" sizeY="10" sizeZ="20000" x="-1000" y="-100" z="-1000">
         <Box3D />
         <Movement3D _package="pl.AWTGameEngine.custom" />

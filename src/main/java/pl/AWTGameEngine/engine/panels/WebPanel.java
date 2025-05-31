@@ -87,7 +87,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
     }
 
     @Override
-    public void updateScene() {
+    public void updatePhysics() {
 
     }
 
