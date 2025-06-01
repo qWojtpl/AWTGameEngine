@@ -2,9 +2,11 @@ package pl.AWTGameEngine.engine.panels;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
@@ -24,6 +26,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
     private final PhysXManager physXManager;
     private final javafx.scene.Group rootGroup;
     private final javafx.scene.Scene fxScene;
+    private final double cullingDistance = 20000;
     private MouseListener mouseListener;
 
     private final javafx.scene.Group cameraYaw = new Group();
@@ -151,6 +154,13 @@ public class Panel3D extends JFXPanel implements PanelObject {
             javafx.scene.Camera cam3d = fxScene.getCamera();
             cam3d.setRotationAxis(Rotate.Z_AXIS);
             cam3d.setRotate(camera.getRotation().getZ());
+
+            Point3D cameraPosition = new Point3D(camera.getX(), camera.getY(), camera.getZ());
+
+            for(Box box : graphicsManager3D.getBoxes()) {
+                Point3D boxPosition = new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ());
+                box.setVisible(cameraPosition.distance(boxPosition) < cullingDistance);
+            }
         });
     }
 

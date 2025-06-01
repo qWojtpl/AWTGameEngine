@@ -15,8 +15,8 @@ import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class GraphicsManager3D {
@@ -172,6 +172,10 @@ public class GraphicsManager3D {
 
     public Group getCustomModel(String identifier) {
         return models.getOrDefault(identifier, null);
+    }
+
+    public Collection<Box> getBoxes() {
+        return boxes.values();
     }
 
 }
