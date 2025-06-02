@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.engine;
+package pl.AWTGameEngine.engine.helpers;
 
 public class RotationHelper {
 

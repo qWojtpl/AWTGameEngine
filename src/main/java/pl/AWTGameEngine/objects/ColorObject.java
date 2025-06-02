@@ -85,6 +85,10 @@ public class ColorObject {
         return this.color;
     }
 
+    public javafx.scene.paint.Color getFxColor() {
+        return new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    }
+
     public boolean isTransiting() {
         return transientThread != null;
     }

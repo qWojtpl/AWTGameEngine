@@ -1,6 +1,8 @@
 package pl.AWTGameEngine.components;
 
-import javafx.scene.shape.Shape3D;
+import javafx.application.Platform;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
 import physx.common.PxIDENTITYEnum;
 import physx.common.PxQuat;
 import physx.common.PxTransform;
@@ -10,11 +12,12 @@ import physx.physics.*;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.engine.PhysXManager;
-import pl.AWTGameEngine.engine.RotationHelper;
+import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
 @Component3D
@@ -41,13 +44,14 @@ public class Box3D extends Base3DShape implements Renderable3D {
     protected void createShape() {
         GraphicsManager3D g = ((Panel3D) getPanel()).getGraphicsManager3D();
 
-        g.createBox(
+        g.createBox(new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),
                 getObject().getRotation(),
-                getSprite()
-        );
+                getSprite(),
+                null
+        ));
     }
 
     @Override

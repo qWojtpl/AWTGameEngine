@@ -9,6 +9,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
@@ -35,11 +36,13 @@ public class Model3D extends ObjectComponent implements Renderable3D {
     public void onAddComponent() {
         getObject().getRotation().setZ(180);
         ((Panel3D) getPanel()).getGraphicsManager3D().createCustomModel(
-                getObject().getIdentifier(),
-                getObject().getPosition(),
-                getObject().getSize(),
-                getObject().getRotation(),
-                getSprite(),
+                new GraphicsManager3D.RenderOptions(
+                        getObject().getIdentifier(),
+                        getObject().getPosition(),
+                        getObject().getSize(),
+                        getObject().getRotation(),
+                        getSprite(),
+                        null),
                 modelPath
         );
     }

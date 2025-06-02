@@ -1,6 +1,8 @@
 package pl.AWTGameEngine.objects;
 
+import javafx.scene.image.WritableImage;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.helpers.ImageHelper;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,6 +21,11 @@ public class Sprite {
     public Sprite(String imagePath, BufferedImage image) {
         this.imagePath = imagePath;
         this.image = image;
+    }
+
+    public Sprite(WritableImage writableImage) {
+        this.imagePath = "WritableImage";
+        this.image = ImageHelper.imageToBufferedImage(writableImage);
     }
 
     public String getImagePath() {

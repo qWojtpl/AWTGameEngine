@@ -21,12 +21,13 @@ public class Cylinder3D extends Base3DShape implements Renderable3D {
 
     @Override
     protected void createShape() {
-        ((Panel3D) getPanel()).getGraphicsManager3D().createCylinder(
+        ((Panel3D) getPanel()).getGraphicsManager3D().createCylinder(new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),
                 getObject().getRotation(),
-                getSprite()
+                getSprite(),
+                null)
         );
     }
 

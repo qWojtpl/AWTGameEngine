@@ -11,6 +11,7 @@ import javafx.scene.transform.Rotate;
 import org.fxyz3d.importers.obj.ObjImporter;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -33,76 +34,80 @@ public class GraphicsManager3D {
         this.panel = panel;
     }
 
-    public void createBox(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite) {
+    public void createBox(RenderOptions options) {
         Platform.runLater(() -> {
-            Box box = boxes.getOrDefault(identifier, null);
+            Box box = boxes.getOrDefault(options.getIdentifier(), null);
             if(box == null) {
                 box = new Box();
                 box.setMaterial(new PhongMaterial() {{
                     setDiffuseColor(Color.WHITE);
                 }});
-                boxes.put(identifier, box);
+                boxes.put(options.getIdentifier(), box);
                 panel.getRootGroup().getChildren().add(box);
             }
-            updatePosition(box, position);
-            updateSize(box, size);
-            updateRotation(box, rotation);
-            updateSprite(box, sprite);
+            updatePosition(box, options.getPosition());
+            updateSize(box, options.getSize());
+            updateRotation(box, options.getRotation());
+            updateSprite(box, options.getSprite());
+            updateColor(box, options.getColor());
         });
     }
 
-    public void createSphere(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite) {
+    public void createSphere(RenderOptions options) {
         Platform.runLater(() -> {
-            Sphere sphere = spheres.getOrDefault(identifier, null);
+            Sphere sphere = spheres.getOrDefault(options.getIdentifier(), null);
             if(sphere == null) {
                 sphere = new Sphere();
                 sphere.setMaterial(new PhongMaterial() {{
                     setDiffuseColor(Color.WHITE);
                 }});
-                spheres.put(identifier, sphere);
+                spheres.put(options.getIdentifier(), sphere);
                 panel.getRootGroup().getChildren().add(sphere);
             }
-            updatePosition(sphere, position);
-            updateSize(sphere, size);
-            updateRotation(sphere, rotation);
-            updateSprite(sphere, sprite);
+            updatePosition(sphere, options.getPosition());
+            updateSize(sphere, options.getSize());
+            updateRotation(sphere, options.getRotation());
+            updateSprite(sphere, options.getSprite());
+            updateColor(sphere, options.getColor());
         });
     }
 
-    public void createCylinder(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite) {
+    public void createCylinder(RenderOptions options) {
         Platform.runLater(() -> {
-            Cylinder cylinder = cylinders.getOrDefault(identifier, null);
+            Cylinder cylinder = cylinders.getOrDefault(options.getIdentifier(), null);
             if(cylinder == null) {
                 cylinder = new Cylinder();
                 cylinder.setMaterial(new PhongMaterial() {{
                     setDiffuseColor(Color.WHITE);
                 }});
-                cylinders.put(identifier, cylinder);
+                cylinders.put(options.getIdentifier(), cylinder);
                 panel.getRootGroup().getChildren().add(cylinder);
             }
-            updatePosition(cylinder, position);
-            updateSize(cylinder, size);
-            updateRotation(cylinder, rotation);
-            updateSprite(cylinder, sprite);
+            updatePosition(cylinder, options.getPosition());
+            updateSize(cylinder, options.getSize());
+            updateRotation(cylinder, options.getRotation());
+            updateSprite(cylinder, options.getSprite());
+            updateColor(cylinder, options.getColor());
         });
     }
 
-    public void createCustomModel(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, String modelPath) {
+    public void createCustomModel(RenderOptions options, String modelPath) {
         Platform.runLater(() -> {
             try {
-                Group model = models.getOrDefault(identifier, null);
+                Group model = models.getOrDefault(options.getIdentifier(), null);
                 if(model == null) {
                     model = new Group(importer.load(new File(modelPath).toURI().toURL()).getMeshViews());
 //                cylinder.setMaterial(new PhongMaterial() {{
 //                    setDiffuseColor(Color.WHITE);
 //                }});
-                    models.put(identifier, model);
+                    models.put(options.getIdentifier(), model);
                     panel.getRootGroup().getChildren().add(model);
                 }
-                updatePosition(model, position);
-                updateSize(model, size);
-                updateRotation(model, rotation);
-                updateSprite(model, sprite);
+                updatePosition(model, options.getPosition());
+                updateSize(model, options.getSize());
+                updateRotation(model, options.getRotation());
+                updateSprite(model, options.getSprite());
+                updateColor(model, options.getColor());
             } catch(IOException e) {
                 Logger.log("Cannot create custom model", e);
             }
@@ -158,6 +163,19 @@ public class GraphicsManager3D {
         });
     }
 
+    public void updateColor(Node node, ColorObject color) {
+        if(node == null || color == null) {
+            return;
+        }
+        Platform.runLater(() -> {
+            if(node instanceof Shape3D) {
+                ((Shape3D) node).setMaterial(new PhongMaterial() {{
+                    setDiffuseColor(color.getFxColor());
+                }});
+            }
+        });
+    }
+
     public Box getBox(String identifier) {
         return boxes.getOrDefault(identifier, null);
     }
@@ -176,6 +194,75 @@ public class GraphicsManager3D {
 
     public Collection<Box> getBoxes() {
         return boxes.values();
+    }
+
+    public static class RenderOptions {
+
+        private final String identifier;
+        private TransformSet position;
+        private TransformSet size;
+        private TransformSet rotation;
+        private Sprite sprite;
+        private ColorObject color;
+
+        public RenderOptions(String identifier) {
+            this.identifier = identifier;
+        }
+
+        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, ColorObject color) {
+            this.identifier = identifier;
+            this.position = position;
+            this.size = size;
+            this.rotation = rotation;
+            this.sprite = sprite;
+            this.color = color;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public TransformSet getPosition() {
+            return position;
+        }
+
+        public TransformSet getSize() {
+            return size;
+        }
+
+        public TransformSet getRotation() {
+            return rotation;
+        }
+
+        public Sprite getSprite() {
+            return sprite;
+        }
+
+        public ColorObject getColor() {
+            return color;
+        }
+
+        public void setPosition(TransformSet position) {
+            this.position = position;
+        }
+
+        public void setSize(TransformSet size) {
+            this.size = size;
+        }
+
+        public void setRotation(TransformSet rotation) {
+            this.rotation = rotation;
+        }
+
+        public void setSprite(Sprite sprite) {
+            this.sprite = sprite;
+        }
+
+        public void setColor(ColorObject color) {
+            this.color = color;
+        }
+
+
     }
 
 }

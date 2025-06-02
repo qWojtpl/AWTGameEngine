@@ -7,16 +7,19 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
 public abstract class Base3DShape extends ObjectComponent implements Renderable3D {
 
     protected Sprite sprite;
+    protected ColorObject color;
     protected boolean updatePosition = false;
     protected boolean updateSize = false;
     protected boolean updateRotation = false;
     protected boolean updateSprite = false;
+    protected boolean updateColor = false;
     private boolean staticShape = true;
 
     protected PxRigidDynamic rigidDynamic;
@@ -46,6 +49,10 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
         if(updateSprite) {
             g.updateSprite(node, sprite);
             updateSprite = false;
+        }
+        if(updateColor) {
+            g.updateColor(node, color);
+            updateColor = false;
         }
     }
 
@@ -79,6 +86,11 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
         }
     }
 
+    public void setColor(ColorObject color) {
+        this.color = color;
+        updateColor = true;
+    }
+
     @SerializationSetter
     public void setSpriteSource(String source) {
         setSprite(Dependencies.getResourceManager().getResourceAsSprite(source));
@@ -92,6 +104,11 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
     @SerializationSetter
     public void setMass(String mass) {
         setMass(Double.parseDouble(mass));
+    }
+
+    @SerializationSetter
+    public void setColor(String color) {
+        setColor(new ColorObject(color));
     }
 
 }

@@ -21,13 +21,14 @@ public class Sphere3D extends Base3DShape implements Renderable3D {
 
     @Override
     protected void createShape() {
-        ((Panel3D) getPanel()).getGraphicsManager3D().createSphere(
+        ((Panel3D) getPanel()).getGraphicsManager3D().createSphere(new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),
                 getObject().getRotation(),
-                getSprite()
-        );
+                getSprite(),
+                null
+        ));
     }
 
     @Override
