@@ -68,4 +68,16 @@ public class TransformSet {
         return "[TransformSet[x=" + x + ",y=" + y + ",z=" + z + "]]";
     }
 
+    public TransformSet deserialize(String values) {
+        String[] split = values.split(",");
+        if(split.length >= 2) {
+            setX(Double.parseDouble(split[0]));
+            setY(Double.parseDouble(split[1]));
+        }
+        if(split.length == 3) {
+            setZ(Double.parseDouble(split[2]));
+        }
+        return this;
+    }
+
 }

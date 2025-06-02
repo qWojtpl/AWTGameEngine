@@ -1,6 +1,6 @@
 <!--todo renderFPS default value if not set-->
 <scene title="3D scene" renderFPS="144" updateFPS="144" physicsFPS="360">
-    <object id="box1" sizeX="5" sizeY="5" sizeZ="5" x="0" y="100" z="200">
+    <object id="box1" position="0,100,200" size="5,5,5">
         <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
         <Movement3D _package="pl.AWTGameEngine.custom" />
     </object>

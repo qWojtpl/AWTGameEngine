@@ -399,6 +399,9 @@ public class GameObject {
 
     public void setSize(TransformSet transform) {
         this.size = transform;
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
+            component.onUpdateSize(this.size.getX(), this.size.getY(), this.size.getZ());
+        }      
     }
 
     public void setPriority(int priority) {
