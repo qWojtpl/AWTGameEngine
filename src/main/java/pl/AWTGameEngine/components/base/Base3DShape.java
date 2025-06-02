@@ -77,6 +77,10 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
         return this.mass;
     }
 
+    public ColorObject getColor() {
+        return this.color;
+    }
+
     public void setMass(double mass) {
         this.mass = mass;
         if(!isStaticShape()) {

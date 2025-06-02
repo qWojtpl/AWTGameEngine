@@ -181,7 +181,7 @@ public class GameObject {
     public List<ObjectComponent> getComponentsByClass(Class<? extends ObjectComponent> clazz) {
         List<ObjectComponent> componentList = new ArrayList<>();
         for(ObjectComponent component : components) {
-            if(component.getClass().equals(clazz)) {
+            if(clazz.isInstance(component)) {
                 componentList.add(component);
             }
         }

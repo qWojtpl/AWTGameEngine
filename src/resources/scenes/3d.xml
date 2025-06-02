@@ -9,6 +9,7 @@
     </object>
     <object id="box2" sizeX="5" sizeY="5" sizeZ="5" x="10" y="100" z="200">
         <Box3D spriteSource="sprites/beaver2.png" staticShape="false" />
+        <MirrorTexture _package="pl.AWTGameEngine.custom" />
     </object>
     <object id="sphere1" sizeX="5" sizeY="5" sizeZ="5" x="0" y="110" z="200">
         <Sphere3D spriteSource="sprites/beaver.jpg" />
@@ -17,7 +18,7 @@
         <Cylinder3D spriteSource="sprites/beaver.jpg" />
     </object>
     <object id="floor" sizeX="500" sizeY="10" sizeZ="500" x="-200" y="-100" z="200">
-        <Box3D />
+        <Box3D color="rgb(0,0,0)" />
     </object>
     <object id="testModel" sizeX="1" sizeY="1" sizeZ="1" x="0" y="100" z="0">
 <!--        <Model3D modelPath="test" />-->
