@@ -21,7 +21,8 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
 
     private Base3DShape target;
     private Panel3D panel;
-    private int i = 0;
+    private int counter = 0;
+    private int divider = 10;
     private double nearClip = 0.1;
     private double farClip = 1000;
     private TransformSet position = new TransformSet();
@@ -44,11 +45,11 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
         if(target == null) {
             return;
         }
-        if(i != 10) {
-            i++;
+        if(counter != divider) {
+            counter++;
             return;
         }
-        i = 0;
+        counter = 0;
         Platform.runLater(() -> {
             Camera oldCamera = panel.getFxScene().getCamera();
 
@@ -65,7 +66,7 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
             panel.getRootGroup().getChildren().add(cameraYaw);
 
             cameraPitch.setTranslateX(position.getX());
-            cameraPitch.setTranslateY(position.getY());
+            cameraPitch.setTranslateY(-position.getY());
             cameraPitch.setTranslateZ(position.getZ());
 
             cameraPitch.setRotationAxis(Rotate.X_AXIS);
@@ -146,6 +147,15 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
     @SerializationSetter
     public void setRotation(String rotation) {
         setRotation(new TransformSet().deserialize(rotation));
+    }
+
+    public void setDivider(int divider) {
+        this.divider = divider;
+    }
+
+    @SerializationSetter
+    public void setDivider(String divider) {
+        setDivider(Integer.parseInt(divider));
     }
 
 }
