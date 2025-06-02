@@ -3,10 +3,7 @@ package pl.AWTGameEngine.custom;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.transform.Rotate;
-import pl.AWTGameEngine.annotations.Component3D;
-import pl.AWTGameEngine.annotations.ComponentMeta;
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.panels.Panel3D;
@@ -15,8 +12,6 @@ import pl.AWTGameEngine.objects.GameObject;
 import java.awt.*;
 
 @Component3D
-@DefaultComponent
-@WebComponent
 @ComponentMeta(
         name = "Movement3D",
         description = "Basic player movement implementation",
@@ -27,6 +22,8 @@ public class Movement3D extends ObjectComponent {
     private final int CENTER_X;
     private final int CENTER_Y;
     private Robot robot;
+    private boolean noclip = true;
+    private double speed = 10;
 
     public Movement3D(GameObject object) {
         super(object);
@@ -47,7 +44,6 @@ public class Movement3D extends ObjectComponent {
         if(!getWindow().isFocused()) {
             return;
         }
-        int speed = 10;
 
         double forward = 0, right = 0, up = 0;
 
@@ -64,11 +60,11 @@ public class Movement3D extends ObjectComponent {
             right = speed;
         }
 
-        handleMovement(forward, right, up, true);
+        handleMovement(forward, right, up);
         handleRotation();
     }
 
-    private void handleMovement(double forward, double right, double up, boolean noclip) {
+    private void handleMovement(double forward, double right, double up) {
         Panel3D panel = (Panel3D) getObject().getPanel();
 
         Group pitchGroup = panel.getCameraPitch();
@@ -128,6 +124,32 @@ public class Movement3D extends ObjectComponent {
 
     private void moveMouse() {
         robot.mouseMove(CENTER_X, CENTER_Y);
+    }
+
+    public boolean isNoclip() {
+        return this.noclip;
+    }
+
+    public double getSpeed() {
+        return this.speed;
+    }
+
+    public void setNoclip(boolean noclip) {
+        this.noclip = noclip;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    @SerializationSetter
+    public void setNoclip(String noclip) {
+        setNoclip(Boolean.parseBoolean(noclip));
+    }
+
+    @SerializationSetter
+    public void setSpeed(String speed) {
+        setSpeed(Double.parseDouble(speed));
     }
 
 }
