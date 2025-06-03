@@ -25,8 +25,6 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
     private int divider = 10;
     private double nearClip = 0.1;
     private double farClip = 1000;
-    private TransformSet position = new TransformSet();
-    private TransformSet rotation = new TransformSet();
 
     public MirrorTexture(GameObject object) {
         super(object);
@@ -65,16 +63,16 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
             cameraYaw.getChildren().add(cameraPitch);
             panel.getRootGroup().getChildren().add(cameraYaw);
 
-            cameraPitch.setTranslateX(position.getX());
-            cameraPitch.setTranslateY(-position.getY());
-            cameraPitch.setTranslateZ(position.getZ());
+            cameraPitch.setTranslateX(getObject().getPosition().getX());
+            cameraPitch.setTranslateY(-getObject().getPosition().getY());
+            cameraPitch.setTranslateZ(getObject().getPosition().getZ());
 
             cameraPitch.setRotationAxis(Rotate.X_AXIS);
-            cameraPitch.setRotate(rotation.getX());
+            cameraPitch.setRotate(getObject().getRotation().getX());
             cameraYaw.setRotationAxis(Rotate.Y_AXIS);
-            cameraYaw.setRotate(rotation.getY());
+            cameraYaw.setRotate(getObject().getRotation().getY());
             newCamera.setRotationAxis(Rotate.Z_AXIS);
-            newCamera.setRotate(rotation.getZ());
+            newCamera.setRotate(getObject().getRotation().getZ());
 
             // take a snapshot
             panel.getFxScene().setCamera(newCamera);
@@ -95,14 +93,6 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
 
     public double getFarClip() {
         return this.farClip;
-    }
-
-    public TransformSet getPosition() {
-        return this.position;
-    }
-
-    public TransformSet getRotation() {
-        return this.rotation;
     }
 
     @SerializationSetter
@@ -129,24 +119,6 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
     @SerializationSetter
     public void setFarClip(String farClip) {
         setFarClip(Double.parseDouble(farClip));
-    }
-
-    public void setPosition(TransformSet position) {
-        this.position = position;
-    }
-
-    @SerializationSetter
-    public void setPosition(String position) {
-        setPosition(new TransformSet().deserialize(position));
-    }
-
-    public void setRotation(TransformSet rotation) {
-        this.rotation = rotation;
-    }
-
-    @SerializationSetter
-    public void setRotation(String rotation) {
-        setRotation(new TransformSet().deserialize(rotation));
     }
 
     public void setDivider(int divider) {

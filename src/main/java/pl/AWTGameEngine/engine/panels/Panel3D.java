@@ -26,11 +26,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
     private final PhysXManager physXManager;
     private final javafx.scene.Group rootGroup;
     private final javafx.scene.Scene fxScene;
-    private final double cullingDistance = 20000;
     private MouseListener mouseListener;
-
-    private final javafx.scene.Group cameraYaw = new Group();
-    private final javafx.scene.Group cameraPitch = new Group();
 
     public Panel3D(Window window, int width, int height) {
         this.window = window;
@@ -40,7 +36,6 @@ public class Panel3D extends JFXPanel implements PanelObject {
         this.rootGroup = new Group(new AmbientLight());
         this.fxScene = new Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
         physXManager.init();
-        initCamera(0.1f, 10000);
         initListeners();
         setScene(fxScene);
         fxScene.setFill(Color.LIGHTGRAY);
@@ -75,14 +70,6 @@ public class Panel3D extends JFXPanel implements PanelObject {
 
     public PhysXManager getPhysXManager() {
         return this.physXManager;
-    }
-
-    public Group getCameraYaw() {
-        return this.cameraYaw;
-    }
-
-    public Group getCameraPitch() {
-        return this.cameraPitch;
     }
 
     @Override
@@ -139,40 +126,6 @@ public class Panel3D extends JFXPanel implements PanelObject {
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
         addMouseWheelListener(mouseListener);
-    }
-
-    public void updateCamera3D() {
-        Platform.runLater(() -> {
-            cameraPitch.setTranslateX(camera.getX());
-            cameraPitch.setTranslateY(camera.getY());
-            cameraPitch.setTranslateZ(camera.getZ());
-
-            cameraPitch.setRotationAxis(Rotate.X_AXIS);
-            cameraPitch.setRotate(camera.getRotation().getX());
-            cameraYaw.setRotationAxis(Rotate.Y_AXIS);
-            cameraYaw.setRotate(camera.getRotation().getY());
-            javafx.scene.Camera cam3d = fxScene.getCamera();
-            cam3d.setRotationAxis(Rotate.Z_AXIS);
-            cam3d.setRotate(camera.getRotation().getZ());
-
-            Point3D cameraPosition = new Point3D(camera.getX(), camera.getY(), camera.getZ());
-
-            for(Box box : graphicsManager3D.getBoxes()) {
-                Point3D boxPosition = new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ());
-                box.setVisible(cameraPosition.distance(boxPosition) < cullingDistance);
-            }
-        });
-    }
-
-    private void initCamera(float nearClip, float farClip) {
-        PerspectiveCamera cam3d = new PerspectiveCamera(true);
-        cam3d.setNearClip(nearClip);
-        cam3d.setFarClip(farClip);
-        cameraPitch.getChildren().add(cam3d);
-        cameraYaw.getChildren().add(cameraPitch);
-        rootGroup.getChildren().add(cameraYaw);
-
-        fxScene.setCamera(cam3d);
     }
 
     private void initListeners() {

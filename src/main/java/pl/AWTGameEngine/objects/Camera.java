@@ -138,7 +138,6 @@ public class Camera {
     }
 
     private void updatedPosition() {
-        updateCamera3D();
         List<ObjectComponent> components = panel.getWindow().getCurrentScene()
                 .getSceneEventHandler().getComponents("onUpdateCameraPosition#int#int");
         for(ObjectComponent component : components) {
@@ -147,7 +146,6 @@ public class Camera {
     }
 
     private void updatedPositionZ() {
-        updateCamera3D();
         List<ObjectComponent> components = panel.getWindow().getCurrentScene()
                 .getSceneEventHandler().getComponents("onUpdateCameraPosition#int#int#int");
         for(ObjectComponent component : components) {
@@ -156,17 +154,10 @@ public class Camera {
     }
 
     private void updatedRotation() {
-        updateCamera3D();
         List<ObjectComponent> components = panel.getWindow().getCurrentScene()
                 .getSceneEventHandler().getComponents("onUpdateCameraRotation#int#int#int");
         for(ObjectComponent component : components) {
             component.onUpdateCameraRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
-        }
-    }
-
-    private void updateCamera3D() {
-        if(panel instanceof Panel3D) {
-            ((Panel3D) panel).updateCamera3D();
         }
     }
 
