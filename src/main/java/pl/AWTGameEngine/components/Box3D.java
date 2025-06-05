@@ -55,6 +55,11 @@ public class Box3D extends Base3DShape implements Renderable3D {
     }
 
     @Override
+    protected void removeShape() {
+        ((Panel3D) getPanel()).getGraphicsManager3D().removeBox(getObject().getIdentifier());
+    }
+
+    @Override
     public void onAddComponent() {
         createShape();
         PxPhysics physics = physXManager.getPxPhysics();
@@ -81,6 +86,7 @@ public class Box3D extends Base3DShape implements Renderable3D {
 
     @Override
     public void onRemoveComponent() {
+        removeShape();
         if(isStaticShape()) {
             physXManager.getPxScene().removeActor(rigidStatic);
             rigidStatic.release();

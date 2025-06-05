@@ -48,6 +48,11 @@ public class Model3D extends ObjectComponent implements Renderable3D {
         );
     }
 
+    @Override
+    public void onRemoveComponent() {
+        ((Panel3D) getPanel()).getGraphicsManager3D().removeCustomModel(getObject().getIdentifier());
+    }
+
     @SerializationSetter
     public void setModelPath(String path) {
         this.modelPath = path;

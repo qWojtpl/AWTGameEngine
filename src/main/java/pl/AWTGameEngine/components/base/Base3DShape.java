@@ -33,6 +33,8 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
 
     protected abstract void createShape();
 
+    protected abstract void removeShape();
+
     protected void handleUpdates(GraphicsManager3D g, Node node) {
         if(updatePosition) {
             g.updatePosition(node, getObject().getPosition());

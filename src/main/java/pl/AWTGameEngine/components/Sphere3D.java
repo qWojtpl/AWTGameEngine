@@ -32,8 +32,18 @@ public class Sphere3D extends Base3DShape implements Renderable3D {
     }
 
     @Override
+    protected void removeShape() {
+        ((Panel3D) getPanel()).getGraphicsManager3D().removeSphere(getObject().getIdentifier());
+    }
+
+    @Override
     public void onAddComponent() {
         createShape();
+    }
+
+    @Override
+    public void onRemoveComponent() {
+        removeShape();
     }
 
     @Override

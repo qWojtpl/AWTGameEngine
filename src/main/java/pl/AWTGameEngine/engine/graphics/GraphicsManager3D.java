@@ -36,7 +36,7 @@ public class GraphicsManager3D {
 
     public void createBox(RenderOptions options) {
         Platform.runLater(() -> {
-            Box box = boxes.getOrDefault(options.getIdentifier(), null);
+            Box box = getBox(options.getIdentifier());
             if(box == null) {
                 box = new Box();
                 box.setMaterial(new PhongMaterial() {{
@@ -53,9 +53,19 @@ public class GraphicsManager3D {
         });
     }
 
+    public void removeBox(String identifier) {
+        Platform.runLater(() -> {
+            Box box = getBox(identifier);
+            if(box != null) {
+                boxes.remove(identifier);
+                panel.getRootGroup().getChildren().remove(box);
+            }
+        });
+    }
+
     public void createSphere(RenderOptions options) {
         Platform.runLater(() -> {
-            Sphere sphere = spheres.getOrDefault(options.getIdentifier(), null);
+            Sphere sphere = getSphere(options.getIdentifier());
             if(sphere == null) {
                 sphere = new Sphere();
                 sphere.setMaterial(new PhongMaterial() {{
@@ -72,9 +82,19 @@ public class GraphicsManager3D {
         });
     }
 
+    public void removeSphere(String identifier) {
+        Platform.runLater(() -> {
+            Sphere sphere = getSphere(identifier);
+            if(sphere != null) {
+                spheres.remove(identifier);
+                panel.getRootGroup().getChildren().remove(sphere);
+            }
+        });
+    }
+
     public void createCylinder(RenderOptions options) {
         Platform.runLater(() -> {
-            Cylinder cylinder = cylinders.getOrDefault(options.getIdentifier(), null);
+            Cylinder cylinder = getCylinder(options.getIdentifier());
             if(cylinder == null) {
                 cylinder = new Cylinder();
                 cylinder.setMaterial(new PhongMaterial() {{
@@ -91,10 +111,20 @@ public class GraphicsManager3D {
         });
     }
 
+    public void removeCylinder(String identifier) {
+        Platform.runLater(() -> {
+            Cylinder cylinder = getCylinder(identifier);
+            if(cylinder != null) {
+                cylinders.remove(identifier);
+                panel.getRootGroup().getChildren().remove(cylinder);
+            }
+        });
+    }
+
     public void createCustomModel(RenderOptions options, String modelPath) {
         Platform.runLater(() -> {
             try {
-                Group model = models.getOrDefault(options.getIdentifier(), null);
+                Group model = getCustomModel(options.getIdentifier());
                 if(model == null) {
                     model = new Group(importer.load(new File(modelPath).toURI().toURL()).getMeshViews());
 //                cylinder.setMaterial(new PhongMaterial() {{
@@ -110,6 +140,16 @@ public class GraphicsManager3D {
                 updateColor(model, options.getColor());
             } catch(IOException e) {
                 Logger.log("Cannot create custom model", e);
+            }
+        });
+    }
+
+    public void removeCustomModel(String identifier) {
+        Platform.runLater(() -> {
+            Group model = getCustomModel(identifier);
+            if(model != null) {
+                models.remove(identifier);
+                panel.getRootGroup().getChildren().remove(model);
             }
         });
     }
