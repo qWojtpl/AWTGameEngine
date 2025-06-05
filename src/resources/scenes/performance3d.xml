@@ -1,7 +1,18 @@
 <scene title="3D performance test" renderFPS="144" updateFPS="60" physicsFPS="60">
+    <object id="player">
+        <Movement3D _package="pl.AWTGameEngine.custom" />
+        <Camera3D />
+    </object>
     <object id="floor" sizeX="20000" sizeY="10" sizeZ="20000" x="-1000" y="-100" z="-1000">
         <Box3D />
-        <Movement3D _package="pl.AWTGameEngine.custom" />
+    </object>
+
+    <object id="mirrorScreen" size="500,200,1" position="-200,100,700">
+        <Box3D />
+    </object>
+    <object id="mirrorCamera" position="-100,50,695" size="5,5,5" rotationY="180">
+        <Cylinder3D spriteSource="sprites/beaver.jpg" />
+        <MirrorTexture target="mirrorScreen" divider="100" _package="pl.AWTGameEngine.custom" />
     </object>
 
     <!-- boxes -->

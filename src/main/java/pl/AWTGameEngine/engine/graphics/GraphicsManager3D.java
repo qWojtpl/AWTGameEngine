@@ -42,6 +42,9 @@ public class GraphicsManager3D {
                 box.setMaterial(new PhongMaterial() {{
                     setDiffuseColor(Color.WHITE);
                 }});
+                if(options.isFrontCullFace()) {
+                    box.setCullFace(CullFace.FRONT);
+                }
                 boxes.put(options.getIdentifier(), box);
                 panel.getRootGroup().getChildren().add(box);
             }
@@ -71,6 +74,9 @@ public class GraphicsManager3D {
                 sphere.setMaterial(new PhongMaterial() {{
                     setDiffuseColor(Color.WHITE);
                 }});
+                if(options.isFrontCullFace()) {
+                    sphere.setCullFace(CullFace.FRONT);
+                }
                 spheres.put(options.getIdentifier(), sphere);
                 panel.getRootGroup().getChildren().add(sphere);
             }
@@ -100,6 +106,9 @@ public class GraphicsManager3D {
                 cylinder.setMaterial(new PhongMaterial() {{
                     setDiffuseColor(Color.WHITE);
                 }});
+                if(options.isFrontCullFace()) {
+                    cylinder.setCullFace(CullFace.FRONT);
+                }
                 cylinders.put(options.getIdentifier(), cylinder);
                 panel.getRootGroup().getChildren().add(cylinder);
             }
@@ -244,6 +253,7 @@ public class GraphicsManager3D {
         private TransformSet rotation;
         private Sprite sprite;
         private ColorObject color;
+        private boolean frontCullFace = false;
 
         public RenderOptions(String identifier) {
             this.identifier = identifier;
@@ -256,6 +266,16 @@ public class GraphicsManager3D {
             this.rotation = rotation;
             this.sprite = sprite;
             this.color = color;
+        }
+
+        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, ColorObject color, boolean frontCullFace) {
+            this.identifier = identifier;
+            this.position = position;
+            this.size = size;
+            this.rotation = rotation;
+            this.sprite = sprite;
+            this.color = color;
+            this.frontCullFace = frontCullFace;
         }
 
         public String getIdentifier() {
@@ -282,6 +302,10 @@ public class GraphicsManager3D {
             return color;
         }
 
+        public boolean isFrontCullFace() {
+            return frontCullFace;
+        }
+
         public void setPosition(TransformSet position) {
             this.position = position;
         }
@@ -302,6 +326,9 @@ public class GraphicsManager3D {
             this.color = color;
         }
 
+        public void setFrontCullFace(boolean frontCullFace) {
+            this.frontCullFace = frontCullFace;
+        }
 
     }
 

@@ -1,8 +1,17 @@
 <!--todo renderFPS default value if not set-->
 <scene title="3D scene" renderFPS="144" updateFPS="144" physicsFPS="360">
-    <object id="player" >
+    <object id="player">
         <Movement3D _package="pl.AWTGameEngine.custom" />
         <Camera3D />
+    </object>
+    <object id="small1" position="0,1005,200" size="1,1,1">
+        <Box3D staticShape="false" color="rgba(255,0,0,125)" />
+    </object>
+    <object id="small2" position="0,1006,200" size="1,1,1">
+        <Box3D staticShape="false" color="rgba(255,0,0,125)" />
+    </object>
+    <object id="small3" position="0,1007,200" size="1,1,1">
+        <Box3D staticShape="false" color="rgba(255,0,0,125)" />
     </object>
     <object id="box1" position="0,100,200" size="5,5,5">
         <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
@@ -25,8 +34,11 @@
     <object id="testModel" sizeX="1" sizeY="1" sizeZ="1" x="0" y="100" z="0">
 <!--        <Model3D modelPath="test" />-->
     </object>
-    <object id="mirrorScreen" size="300,200,1" position="0,100,500">
+    <object id="mirrorScreen" size="500,200,1" position="-200,100,700">
         <Box3D />
-        <MirrorTexture _package="pl.AWTGameEngine.custom" divider="10" />
+    </object>
+    <object id="mirrorCamera" position="-100,50,695" size="5,5,5" rotationY="180">
+        <Cylinder3D spriteSource="sprites/beaver.jpg" />
+        <MirrorTexture target="mirrorScreen" divider="10" _package="pl.AWTGameEngine.custom" />
     </object>
 </scene>
