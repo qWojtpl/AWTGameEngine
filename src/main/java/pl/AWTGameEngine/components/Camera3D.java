@@ -8,11 +8,13 @@ import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.annotations.Component3D;
 import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
 
 @Component3D
+@Unique
 public class Camera3D extends ObjectComponent {
 
     private final PerspectiveCamera perspectiveCamera = new PerspectiveCamera(true);

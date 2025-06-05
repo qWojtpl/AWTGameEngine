@@ -270,6 +270,14 @@ public abstract class ObjectComponent {
         return this.getClass().isAnnotationPresent(Unique.class);
     }
 
+    public final boolean hasRequiredClass() {
+        return this.getClass().isAnnotationPresent(Requires.class);
+    }
+
+    public final Class<? extends ObjectComponent> getRequiredClass() {
+        return this.getClass().getAnnotation(Requires.class).value();
+    }
+
     public final boolean conflictsWith(Class<? extends ObjectComponent> component) {
         if(component == null) {
             return false;

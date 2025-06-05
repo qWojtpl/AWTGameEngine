@@ -58,6 +58,13 @@ public class GameObject {
             Logger.log(1, "Component " + component.getClass().getName() + " is unique, cannot add another!");
             return;
         }
+        if(component.hasRequiredClass()) {
+            Class<? extends ObjectComponent> requiredClass = component.getRequiredClass();
+            if(getComponentsByClass(requiredClass).isEmpty()) {
+                Logger.log(1, "Cannot add component " + component.getClass().getName() + ", because it requires " + requiredClass + " component!");
+                return;
+            }
+        }
         if(!component.getObject().equals(this)) {
             Logger.log(1, "Component " + component.getClass().getName() + " object is wrong!");
             return;
