@@ -19,6 +19,7 @@ import java.awt.event.WindowEvent;
 public class Window extends JFrame {
 
     private final RenderEngine renderEngine;
+    private final boolean serverWindow;
     private boolean sameSize = false;
     private final int WIDTH = 1920;
     private DefaultPanel panel;
@@ -36,8 +37,9 @@ public class Window extends JFrame {
     private final Font font;
     private Cursor cursor;
 
-    public Window(RenderEngine renderEngine) {
+    public Window(RenderEngine renderEngine, boolean serverWindow) {
         this.renderEngine = renderEngine;
+        this.serverWindow = serverWindow;
         AppProperties appProperties = Dependencies.getAppProperties();
         font = new Font(
             appProperties.getProperty("font"),
@@ -88,7 +90,7 @@ public class Window extends JFrame {
     }
 
     public void init() {
-        if(isFullScreen()) {
+        if(isFullScreen() && !serverWindow) {
             setUndecorated(true);
             GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             device.setFullScreenWindow(this);
@@ -99,7 +101,9 @@ public class Window extends JFrame {
         setWindowListener(new WindowListener(this));
         setLayout(new BorderLayout());
         addComponentListener(getWindowListener());
-        setVisible(true);
+        if(!serverWindow) {
+            setVisible(true);
+        }
     }
 
     public void updateRatio(int r1, int r2) {
@@ -108,6 +112,10 @@ public class Window extends JFrame {
 
     public RenderEngine getRenderEngine() {
         return this.renderEngine;
+    }
+
+    public boolean isServerWindow() {
+        return this.serverWindow;
     }
 
     public boolean isSameSize() {

@@ -20,7 +20,6 @@ public class PhysXManager {
     private final PxShapeFlags shapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eSCENE_QUERY_SHAPE.value | PxShapeFlagEnum.eSIMULATION_SHAPE.value));
 
     public void init() {
-
         Logger.log(0, "PhysX loaded, version " + getVersionString());
 
         sceneDesc = new PxSceneDesc(tolerances);

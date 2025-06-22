@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.scenes;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -140,7 +141,13 @@ public class SceneLoader {
     }
 
     private void initObject(Node node) {
-        String identifier = node.getAttributes().getNamedItem("id").getNodeValue();
+        String identifier;
+        try {
+             identifier = node.getAttributes().getNamedItem("id").getNodeValue();
+        } catch(Exception e) {
+            Logger.log("Object doesn't have an identifier.", e);
+            return;
+        }
         GameObject object = window.getCurrentScene().createGameObject(identifier);
         if(object == null) {
             Logger.log(1, "Cannot initialize object with identifier " + identifier + ", skipping its children!");

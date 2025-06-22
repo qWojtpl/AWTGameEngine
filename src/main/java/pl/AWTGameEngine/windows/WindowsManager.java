@@ -22,13 +22,16 @@ public class WindowsManager {
 
     public Window createWindow(String scenePath) {
         AppProperties appProperties = Dependencies.getAppProperties();
-        Window window = new Window(Window.RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase()));
+        boolean server = appProperties.getPropertyAsBoolean("server");
+        Window window = new Window(
+                Window.RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase()),
+                server);
         if(windows.isEmpty()) {
             defaultFont = window.getFont();
         }
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSceneLoader(new SceneLoader(window));
-        //window.setResizable(false);
+
         window.setTitle(appProperties.getProperty("title"));
 
         Sprite icon = Dependencies.getResourceManager().getResourceAsSprite(appProperties.getProperty("icon"));
@@ -53,7 +56,11 @@ public class WindowsManager {
         windows.add(window);
 
         updateLoop.start();
-        renderLoop.start();
+
+        if(!server) {
+            renderLoop.start();
+        }
+
         physicsLoop.start();
 
         return window;

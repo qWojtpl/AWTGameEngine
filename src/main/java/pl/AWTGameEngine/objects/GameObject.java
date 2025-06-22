@@ -60,7 +60,14 @@ public class GameObject {
         }
         if(component.hasRequiredClass()) {
             Class<? extends ObjectComponent> requiredClass = component.getRequiredClass();
-            if(getComponentsByClass(requiredClass).isEmpty()) {
+            boolean found = false;
+            for(ObjectComponent c : components) {
+                if(c.getClass().isInstance(requiredClass)) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found) {
                 Logger.log(1, "Cannot add component " + component.getClass().getName() + ", because it requires " + requiredClass + " component!");
                 return;
             }

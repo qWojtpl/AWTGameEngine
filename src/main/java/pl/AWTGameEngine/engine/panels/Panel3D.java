@@ -1,13 +1,9 @@
 package pl.AWTGameEngine.engine.panels;
 
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
-import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
