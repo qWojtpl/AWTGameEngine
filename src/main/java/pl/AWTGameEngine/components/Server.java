@@ -30,7 +30,11 @@ public class Server extends ObjectComponent {
     private final Thread udpThread = new Thread(this::onUDPThreadUpdate);
     private ServerSocket tcpSocket;
     private DatagramSocket udpSocket;
+
+    // clients
     private final List<Socket> sockets = new ArrayList<>();
+    private final HashMap<Socket, Integer> clientIds = new HashMap<>();
+    private int currentId = 0;
 
     public Server(GameObject object) {
         super(object);
@@ -75,9 +79,11 @@ public class Server extends ObjectComponent {
 
     private void handleConnection(Socket clientSocket) {
         sockets.add(clientSocket);
-        int id = sockets.size();
-        Logger.log(0, "Client " + tcpSocket.getInetAddress().getHostAddress() + " connected.");
-        Logger.log(0, "\t\tAssigned new client with ID " + id);
+        Logger.log(0, "Client " + getClientAddress(clientSocket) + " connected.");
+
+        int id = currentId++;
+        clientIds.put(clientSocket, id);
+        Logger.log(0, "\t\t-> Assigned new client to ID " + id);
 
         PrintWriter out;
         BufferedReader in;
@@ -89,13 +95,15 @@ public class Server extends ObjectComponent {
             return;
         }
 
-        Logger.log(0, "\t\tEstablished connection.");
+        out.println(id);
+        Logger.log(0, "\t\t-> Established connection.");
 
         while (clientSocket.isConnected()) {
             try {
                 Logger.log(0, "Received message: " + in.readLine());
             } catch (IOException e) {
-                Logger.log("Error while receiving client " + id + " messages", e);
+                disconnect(clientSocket);
+                break;
             }
         }
 
@@ -113,6 +121,21 @@ public class Server extends ObjectComponent {
             
 
         }
+    }
+
+    public void disconnect(Socket clientSocket) {
+        try {
+            Logger.log(0, "Client " + getClientAddress(clientSocket) +
+                    " (ID " + clientIds.get(clientSocket) + ") disconnected.");
+            clientSocket.close();
+            sockets.remove(clientSocket);
+        } catch(IOException e) {
+            Logger.log("Cannot disconnect client", e);
+        }
+    }
+
+    private String getClientAddress(Socket clientSocket) {
+        return clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort();
     }
 
     public void sendPacket(Socket socket, String message) {
