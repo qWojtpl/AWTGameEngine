@@ -48,7 +48,7 @@ public class Client extends ObjectComponent {
             socket = new Socket(ip, port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            sendMessage("Hello!");
+            sendMessage("Hello!", true);
         } catch (IOException e) {
             Logger.log("Cannot connect to " + address, e);
         }
@@ -63,16 +63,19 @@ public class Client extends ObjectComponent {
         }
     }
 
-    private void sendMessage(String message) {
-        Logger.log(0, "Sending message: " + message);
-        out.println(message);
-        String response = null;
-        try {
-            response = in.readLine();
-        } catch (IOException e) {
-            Logger.log("Cannot read a response", e);
-        }
-        Logger.log(0, "Server responded with " + response);
+    private void sendMessage(String message, boolean b) {
+        new Thread(() -> {
+            Logger.log(0, "Sending message: " + message);
+            out.println(message);
+            String response = null;
+            try {
+                response = in.readLine();
+            } catch (IOException e) {
+                Logger.log("Cannot read a response", e);
+            }
+            Logger.log(0, "Server responded with " + response);
+            if(b) sendMessage("t2", false);
+        }, "CLIENT-MESSAGE").start();
     }
 
     @SerializationSetter

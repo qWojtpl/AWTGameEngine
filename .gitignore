@@ -14,3 +14,4 @@ projects/*
 !/.gitignore
 !/LICENSE.txt
 !/README.md
+dependency-reduced-pom.xml

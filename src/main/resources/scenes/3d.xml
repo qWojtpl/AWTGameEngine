@@ -1,7 +1,6 @@
 <!--todo renderFPS default value if not set-->
 <scene title="3D scene" renderFPS="144" updateFPS="144" physicsFPS="360">
     <object id="server">
-        <Server syncList="player,small1,small2,small3" maxClients="2" port="3308" />
         <Client autoConnect="127.0.0.1:3308" />
     </object>
     <object id="player">
