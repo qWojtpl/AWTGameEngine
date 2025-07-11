@@ -55,6 +55,9 @@ public class Client extends ObjectComponent {
     }
 
     public void disconnect() {
+        if(socket == null) {
+            return;
+        }
         try {
             socket.close();
             Logger.log(0, "Disconnected.");

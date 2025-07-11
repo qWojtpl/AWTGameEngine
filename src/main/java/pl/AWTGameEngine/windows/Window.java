@@ -5,10 +5,7 @@ import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
-import pl.AWTGameEngine.engine.panels.DefaultPanel;
-import pl.AWTGameEngine.engine.panels.Panel3D;
-import pl.AWTGameEngine.engine.panels.PanelObject;
-import pl.AWTGameEngine.engine.panels.WebPanel;
+import pl.AWTGameEngine.engine.panels.*;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
@@ -25,6 +22,7 @@ public class Window extends JFrame {
     private DefaultPanel panel;
     private WebPanel webPanel;
     private Panel3D threeDimensionalPanel;
+    private PanelGL openGlPanel;
     private BaseLoop renderLoop;
     private BaseLoop updateLoop;
     private BaseLoop physicsLoop;
@@ -42,9 +40,9 @@ public class Window extends JFrame {
         this.serverWindow = serverWindow;
         AppProperties appProperties = Dependencies.getAppProperties();
         font = new Font(
-            appProperties.getProperty("font"),
-            Font.PLAIN,
-            appProperties.getPropertyAsInteger("fontSize")
+                appProperties.getProperty("font"),
+                Font.PLAIN,
+                appProperties.getPropertyAsInteger("fontSize")
         );
     }
 
@@ -57,40 +55,48 @@ public class Window extends JFrame {
         setCurrentScene(null);
         Dependencies.getResourceManager().clearAudioClips();
         getPanel().unload();
-        if(getPanel() instanceof DefaultPanel) {
+        if (getPanel() instanceof DefaultPanel) {
             remove(panel);
             panel = null;
-        } else if(getPanel() instanceof WebPanel) {
+        } else if (getPanel() instanceof WebPanel) {
             remove(webPanel);
             webPanel = null;
-        } else if(getPanel() instanceof Panel3D) {
+        } else if (getPanel() instanceof Panel3D) {
             remove(threeDimensionalPanel);
             threeDimensionalPanel = null;
+        } else if (getPanel() instanceof PanelGL) {
+            remove(openGlPanel);
+            openGlPanel = null;
         }
     }
 
     private void createPanel(int width, int height) {
-        if(RenderEngine.DEFAULT.equals(renderEngine)) {
-            if(this.panel == null) {
+        if (RenderEngine.DEFAULT.equals(renderEngine)) {
+            if (this.panel == null) {
                 this.panel = new DefaultPanel(this);
                 add(panel, BorderLayout.CENTER);
             }
-        } else if(RenderEngine.WEB.equals(renderEngine)) {
-            if(this.webPanel == null) {
+        } else if (RenderEngine.WEB.equals(renderEngine)) {
+            if (this.webPanel == null) {
                 this.webPanel = new WebPanel(this);
                 add(webPanel, BorderLayout.CENTER);
             }
-        } else if(RenderEngine.FX3D.equals(renderEngine)) {
-            if(this.threeDimensionalPanel == null) {
+        } else if (RenderEngine.FX3D.equals(renderEngine)) {
+            if (this.threeDimensionalPanel == null) {
                 this.threeDimensionalPanel = new Panel3D(this, width, height);
                 add(threeDimensionalPanel, BorderLayout.CENTER);
+            }
+        } else if (RenderEngine.OPENGL.equals(renderEngine)) {
+            if (this.openGlPanel == null) {
+                this.openGlPanel = new PanelGL(this, width, height);
+                add(openGlPanel, BorderLayout.CENTER);
             }
         }
         getPanel().setSize(new Dimension(width, height));
     }
 
     public void init() {
-        if(isFullScreen() && !serverWindow) {
+        if (isFullScreen() && !serverWindow) {
             setUndecorated(true);
             GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             device.setFullScreenWindow(this);
@@ -101,7 +107,7 @@ public class Window extends JFrame {
         setWindowListener(new WindowListener(this));
         setLayout(new BorderLayout());
         addComponentListener(getWindowListener());
-        if(!serverWindow) {
+        if (!serverWindow) {
             setVisible(true);
         }
     }
@@ -123,10 +129,13 @@ public class Window extends JFrame {
     }
 
     public PanelObject getPanel() {
-        if(this.threeDimensionalPanel != null) {
+        if (this.threeDimensionalPanel != null) {
             return this.threeDimensionalPanel;
         }
-        if(this.webPanel != null) {
+        if (this.openGlPanel != null) {
+            return this.openGlPanel;
+        }
+        if (this.webPanel != null) {
             return this.webPanel;
         }
         return this.panel;
@@ -201,7 +210,7 @@ public class Window extends JFrame {
     }
 
     public void setKeyListener(KeyListener listener) {
-        if(this.keyListener != null) {
+        if (this.keyListener != null) {
             removeKeyListener(this.keyListener);
         }
         this.keyListener = listener;
@@ -209,7 +218,7 @@ public class Window extends JFrame {
     }
 
     public void setWindowListener(WindowListener windowListener) {
-        if(this.windowListener != null) {
+        if (this.windowListener != null) {
             removeWindowListener(this.windowListener);
         }
         this.windowListener = windowListener;
@@ -239,9 +248,11 @@ public class Window extends JFrame {
     @Override
     public void setCursor(Cursor cursor) {
         this.cursor = cursor;
-        if(RenderEngine.FX3D.equals(renderEngine)) {
+        if (RenderEngine.FX3D.equals(renderEngine)) {
             threeDimensionalPanel.setCursor(cursor);
-        } else if(RenderEngine.WEB.equals(renderEngine)) {
+        } else if (RenderEngine.OPENGL.equals(renderEngine)) {
+            openGlPanel.setCursor(cursor);
+        } else if (RenderEngine.WEB.equals(renderEngine)) {
             webPanel.setCursor(cursor);
         } else {
             panel.setCursor(cursor);
@@ -252,7 +263,8 @@ public class Window extends JFrame {
 
         DEFAULT,
         WEB,
-        FX3D
+        FX3D,
+        OPENGL
 
     }
 

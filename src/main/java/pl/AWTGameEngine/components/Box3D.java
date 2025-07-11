@@ -1,8 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import javafx.application.Platform;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.image.WritableImage;
 import physx.common.PxIDENTITYEnum;
 import physx.common.PxQuat;
 import physx.common.PxTransform;
@@ -17,7 +14,6 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
 @Component3D
@@ -164,7 +160,7 @@ public class Box3D extends Base3DShape implements Renderable3D {
 
     @Override
     public void on3DRenderRequest(GraphicsManager3D g) {
-        handleUpdates(g, g.getBox(getObject().getIdentifier()));
+        handleUpdates(g, GraphicsManager3D.ShapeType.BOX);
     }
 
 }

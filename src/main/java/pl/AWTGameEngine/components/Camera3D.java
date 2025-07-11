@@ -63,10 +63,10 @@ public class Camera3D extends ObjectComponent {
 
             Point3D cameraPosition = new Point3D(newX, newY, newZ);
 
-            for(Box box : panel3D.getGraphicsManager3D().getBoxes()) {
-                Point3D boxPosition = new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ());
-                box.setVisible(cameraPosition.distance(boxPosition) < cullingDistance);
-            }
+//            for(Box box : panel3D.getGraphicsManager3D().getBoxes()) {
+//                Point3D boxPosition = new Point3D(box.getTranslateX(), box.getTranslateY(), box.getTranslateZ());
+//                box.setVisible(cameraPosition.distance(boxPosition) < cullingDistance);
+//            }
         });
         return true;
     }

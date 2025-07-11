@@ -1,12 +1,12 @@
 package pl.AWTGameEngine.engine.panels;
 
+import com.jogamp.opengl.*;
+import com.jogamp.opengl.awt.GLCanvas;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.*;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.GraphicsManagerFX;
+import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
@@ -15,27 +15,25 @@ import pl.AWTGameEngine.windows.Window;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class Panel3D extends JFXPanel implements PanelObject {
+public class PanelGL extends JFXPanel implements PanelObject, GLEventListener {
 
     private final Window window;
     private final Camera camera;
     private final GraphicsManager3D graphicsManager3D;
     private final PhysXManager physXManager;
-    private final javafx.scene.Group rootGroup;
-    private final javafx.scene.Scene fxScene;
+    private GLProfile profile;
+    private GLCapabilities capabilities;
+    private GLCanvas canvas;
     private MouseListener mouseListener;
 
-    public Panel3D(Window window, int width, int height) {
+    public PanelGL(Window window, int width, int height) {
         this.window = window;
         this.camera = new Camera(this);
-        this.graphicsManager3D = new GraphicsManagerFX(this);
+        this.graphicsManager3D = new GraphicsManagerGL(this);
         this.physXManager = new PhysXManager();
-        this.rootGroup = new Group(new AmbientLight());
-        this.fxScene = new Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
         physXManager.init();
+        initOpenGL(width, height);
         initListeners();
-        setScene(fxScene);
-        fxScene.setFill(Color.LIGHTGRAY);
     }
 
     @Override
@@ -51,14 +49,6 @@ public class Panel3D extends JFXPanel implements PanelObject {
     @Override
     public MouseListener getMouseListener() {
         return this.mouseListener;
-    }
-
-    public javafx.scene.Scene getFxScene() {
-        return this.fxScene;
-    }
-
-    public javafx.scene.Group getRootGroup() {
-        return this.rootGroup;
     }
 
     public GraphicsManager3D getGraphicsManager3D() {
@@ -88,6 +78,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
                 }
             }
         }
+        canvas.display();
     }
 
     @Override
@@ -125,17 +116,54 @@ public class Panel3D extends JFXPanel implements PanelObject {
         addMouseWheelListener(mouseListener);
     }
 
-    private void initListeners() {
-        setMouseListener(new MouseListener(this));
-        fxScene.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
-            getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
-        });
-        fxScene.addEventHandler(KeyEvent.KEY_TYPED, (event) -> {
-            getWindow().getKeyListener().asKeyType(event.getCode().getCode());
-        });
-        fxScene.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
-            getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
-        });
+    private void initOpenGL(int width, int height) {
+        profile = GLProfile.get(GLProfile.GL2);
+        capabilities = new GLCapabilities(profile);
+        canvas = new GLCanvas(capabilities);
+        canvas.setSize(width, height);
+        add(canvas);
     }
 
+    private void initListeners() {
+        setMouseListener(new MouseListener(this));
+//        fxScene.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
+//            getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
+//        });
+//        fxScene.addEventHandler(KeyEvent.KEY_TYPED, (event) -> {
+//            getWindow().getKeyListener().asKeyType(event.getCode().getCode());
+//        });
+//        fxScene.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
+//            getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
+//        });
+    }
+
+    @Override
+    public void init(GLAutoDrawable glAutoDrawable) {
+        GL2 gl = glAutoDrawable.getGL().getGL2();
+        gl.glClearColor(0f, 0f, 0f, 1f);
+    }
+
+    @Override
+    public void dispose(GLAutoDrawable glAutoDrawable) {
+
+    }
+
+    @Override
+    public void display(GLAutoDrawable glAutoDrawable) {
+        GL2 gl = glAutoDrawable.getGL().getGL2();
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+
+        gl.glBegin(GL2.GL_TRIANGLES);
+        gl.glColor3f(1f, 0f, 0f);
+        gl.glVertex2f(-0.5f, -0.5f);
+        gl.glVertex2f(0.5f, -0.5f);
+        gl.glVertex2f(0f, 0.5f);
+        gl.glEnd();
+    }
+
+    @Override
+    public void reshape(GLAutoDrawable glAutoDrawable, int x, int y, int width, int height) {
+        GL2 gl = glAutoDrawable.getGL().getGL2();
+        gl.glViewport(0, 0, width, height);
+    }
 }
