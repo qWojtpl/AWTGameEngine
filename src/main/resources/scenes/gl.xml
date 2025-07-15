@@ -1,5 +1,8 @@
 <scene title="OpenGL scene" renderFPS="144" updateFPS="144" physicsFPS="360">
-    <object id="box" position="0,0,0" size="10,10,10">
+    <object id="box" position="0,0,0" size="1,1,1">
         <Box3D staticShape="false" color="rgba(255,0,0,125)" />
+    </object>
+    <object id="box0" position="0,100,0" size="1,1,1">
+        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
     </object>
 </scene>
