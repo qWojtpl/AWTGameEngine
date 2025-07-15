@@ -27,8 +27,10 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             //gl.glRotatef(options.getRotation().getFloatable().getX(), options.getRotation().getFloatable().getY(), options.getRotation().getFloatable().getZ(), 0.0f);
             gl.glRotatef(angle, 1.0f, 1.0f, 0.0f);
             gl.glScalef(options.getSize().getFloatable().getX(), options.getSize().getFloatable().getY(), options.getSize().getFloatable().getZ());
-            drawBox(gl);
-            angle += 0.5f;
+            if(ShapeType.BOX.equals(options.getShapeType())) {
+                drawBox(gl);
+            }
+            angle += 0;
         }
     }
 

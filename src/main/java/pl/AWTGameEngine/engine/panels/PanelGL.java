@@ -10,6 +10,7 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
+import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
@@ -144,12 +145,16 @@ public class PanelGL extends JFXPanel implements PanelObject {
                 gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
                 gl.glLoadIdentity();
 
-                // Kamera patrzy z góry na scenę
-                glu.gluLookAt(0, 0, 6, 0, 0, 0, 0, 1, 0);
+                double[] lookAt = RotationHelper.rotationToVectorLookAt(
+                        getCamera().getX(), getCamera().getY(), getCamera().getZ(),
+                        getCamera().getRotation().getX(),
+                        getCamera().getRotation().getY(),
+                        getCamera().getRotation().getZ());
+                glu.gluLookAt(getCamera().getX(), getCamera().getY(), -60, lookAt[0], lookAt[1], lookAt[2], 0, 1, 0);
 
                 ((GraphicsManagerGL) graphicsManager3D).drawScene(gl);
 
-                angle += 0.5f; // ← animacja obrotu
+                angle += 0.5f;
             }
 
             @Override
@@ -160,7 +165,7 @@ public class PanelGL extends JFXPanel implements PanelObject {
 
                 gl.glMatrixMode(GL2.GL_PROJECTION);
                 gl.glLoadIdentity();
-                glu.gluPerspective(45.0, aspect, 1.0, 100.0);
+                glu.gluPerspective(30, aspect, 1.0, 100.0);
 
                 gl.glMatrixMode(GL2.GL_MODELVIEW);
                 gl.glLoadIdentity();

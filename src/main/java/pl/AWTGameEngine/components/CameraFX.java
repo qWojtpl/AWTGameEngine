@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.annotations.Component3D;
 import pl.AWTGameEngine.annotations.SerializationSetter;
@@ -15,7 +14,7 @@ import pl.AWTGameEngine.objects.GameObject;
 
 @Component3D
 @Unique
-public class Camera3D extends ObjectComponent {
+public class CameraFX extends ObjectComponent {
 
     private final PerspectiveCamera perspectiveCamera = new PerspectiveCamera(true);
     private final javafx.scene.Group cameraYaw = new Group();
@@ -25,7 +24,7 @@ public class Camera3D extends ObjectComponent {
     private double farClip = 10000;
     private double cullingDistance = 20000;
 
-    public Camera3D(GameObject object) {
+    public CameraFX(GameObject object) {
         super(object);
     }
 

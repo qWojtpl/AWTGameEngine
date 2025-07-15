@@ -43,4 +43,19 @@ public class RotationHelper {
         }
     }
 
+    public static double[] rotationToVectorLookAt(double px, double py, double pz, double rx, double ry, double rz) {
+        double radYaw = (float)Math.toRadians(ry);
+        double radPitch = (float)Math.toRadians(rx);
+
+        double dirX = (float)(Math.cos(radPitch) * Math.sin(radYaw));
+        double dirY = (float)(Math.sin(radPitch));
+        double dirZ = (float)(-Math.cos(radPitch) * Math.cos(radYaw));
+
+        double lookAtX = px + dirX;
+        double lookAtY = py + dirY;
+        double lookAtZ = pz + dirZ;
+
+        return new double[]{lookAtX, lookAtY, lookAtZ};
+    }
+
 }
