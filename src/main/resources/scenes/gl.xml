@@ -1,0 +1,5 @@
+<scene title="OpenGL scene" renderFPS="144" updateFPS="144" physicsFPS="360">
+    <object id="box" position="0,0,0" size="10,10,10">
+        <Box3D staticShape="false" color="rgba(255,0,0,125)" />
+    </object>
+</scene>

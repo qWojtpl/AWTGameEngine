@@ -13,6 +13,7 @@ import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -25,6 +26,7 @@ import pl.AWTGameEngine.objects.TransformSet;
 public class Box3D extends Base3DShape implements Renderable3D {
 
     private final PhysXManager physXManager;
+    private final GraphicsManager3D graphicsManager3D;
     private PxMaterial material;
     private PxBoxGeometry boxGeometry;
     private PxShape shape;
@@ -33,14 +35,19 @@ public class Box3D extends Base3DShape implements Renderable3D {
 
     public Box3D(GameObject object) {
         super(object);
-        physXManager = ((Panel3D) getPanel()).getPhysXManager();
+        if(getPanel() instanceof Panel3D) {
+            physXManager = ((Panel3D) getPanel()).getPhysXManager();
+            graphicsManager3D = ((Panel3D) getPanel()).getGraphicsManager3D();
+        } else {
+            physXManager = ((PanelGL) getPanel()).getPhysXManager();
+            graphicsManager3D = ((PanelGL) getPanel()).getGraphicsManager3D();
+        }
     }
 
     @Override
     protected void createShape() {
-        GraphicsManager3D g = ((Panel3D) getPanel()).getGraphicsManager3D();
 
-        g.createBox(new GraphicsManager3D.RenderOptions(
+        graphicsManager3D.createBox(new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),
@@ -52,7 +59,7 @@ public class Box3D extends Base3DShape implements Renderable3D {
 
     @Override
     protected void removeShape() {
-        ((Panel3D) getPanel()).getGraphicsManager3D().removeBox(getObject().getIdentifier());
+        graphicsManager3D.removeBox(getObject().getIdentifier());
     }
 
     @Override
