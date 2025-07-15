@@ -25,7 +25,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         for(RenderOptions options : renderables.values()) {
             gl.glTranslatef(options.getPosition().getFloatable().getX(), options.getPosition().getFloatable().getY(), options.getPosition().getFloatable().getZ());
             //gl.glRotatef(options.getRotation().getFloatable().getX(), options.getRotation().getFloatable().getY(), options.getRotation().getFloatable().getZ(), 0.0f);
-            gl.glRotatef(angle, 1.0f, 1.0f, 0.0f); // ← obrót
+            gl.glRotatef(angle, 1.0f, 1.0f, 0.0f);
             gl.glScalef(options.getSize().getFloatable().getX(), options.getSize().getFloatable().getY(), options.getSize().getFloatable().getZ());
             drawBox(gl);
             angle += 0.5f;

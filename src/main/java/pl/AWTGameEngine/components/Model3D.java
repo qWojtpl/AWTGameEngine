@@ -36,6 +36,7 @@ public class Model3D extends ObjectComponent implements Renderable3D {
                         getObject().getSize(),
                         getObject().getRotation(),
                         getSprite(),
+                        GraphicsManager3D.ShapeType.MODEL,
                         null
                 ),
                 modelPath

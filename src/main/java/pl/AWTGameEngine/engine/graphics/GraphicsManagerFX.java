@@ -17,16 +17,12 @@ import pl.AWTGameEngine.objects.TransformSet;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class GraphicsManagerFX extends GraphicsManager3D {
 
     private final Panel3D panel;
-    protected final HashMap<String, Box> boxes = new HashMap<>();
-    protected final HashMap<String, Sphere> spheres = new HashMap<>();
-    protected final HashMap<String, Cylinder> cylinders = new HashMap<>();
-    protected final HashMap<String, Group> models = new HashMap<>();
+    private final HashMap<String, Renderable> renderables = new HashMap<>();
 
     private final ObjImporter importer = new ObjImporter();
 
@@ -34,10 +30,38 @@ public class GraphicsManagerFX extends GraphicsManager3D {
         this.panel = panel;
     }
 
+    public static class Renderable {
+
+        private final RenderOptions renderOptions;
+        private final Group group;
+
+        public Renderable(RenderOptions renderOptions, Group group) {
+            this.renderOptions = renderOptions;
+            this.group = group;
+        }
+
+        public RenderOptions getRenderOptions() {
+            return this.renderOptions;
+        }
+
+        public Group getGroup() {
+            return this.group;
+        }
+
+        public Node getNode() {
+            return this.group.getChildren().get(0);
+        }
+
+    }
+
     @Override
     public void createBox(RenderOptions options) {
         Platform.runLater(() -> {
-            Box box = getBox(options.getIdentifier());
+            Renderable renderable = renderables.getOrDefault(options.getIdentifier(), null);
+            Box box = null;
+            if(renderable != null) {
+                box = (Box) renderable.getNode();
+            }
             if(box == null) {
                 box = new Box();
                 box.setMaterial(new PhongMaterial() {{
@@ -46,8 +70,9 @@ public class GraphicsManagerFX extends GraphicsManager3D {
                 if(options.isFrontCullFace()) {
                     box.setCullFace(CullFace.FRONT);
                 }
-                boxes.put(options.getIdentifier(), box);
-                panel.getRootGroup().getChildren().add(box);
+                Group g = new Group(box);
+                renderables.put(options.getIdentifier(), new Renderable(options, g));
+                panel.getRootGroup().getChildren().add(g);
             }
             updatePosition(options.getIdentifier(), ShapeType.BOX, options.getPosition());
             updateSize(options.getIdentifier(), ShapeType.BOX, options.getSize());
@@ -60,9 +85,13 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     @Override
     public void removeBox(String identifier) {
         Platform.runLater(() -> {
-            Box box = getBox(identifier);
+            Renderable renderable = renderables.getOrDefault(identifier, null);
+            Box box = null;
+            if(renderable != null) {
+                box = (Box) renderable.getNode();
+            }
             if(box != null) {
-                boxes.remove(identifier);
+                renderables.remove(identifier);
                 panel.getRootGroup().getChildren().remove(box);
             }
         });
@@ -71,7 +100,11 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     @Override
     public void createSphere(RenderOptions options) {
         Platform.runLater(() -> {
-            Sphere sphere = getSphere(options.getIdentifier());
+            Renderable renderable = renderables.getOrDefault(options.getIdentifier(), null);
+            Sphere sphere = null;
+            if(renderable != null) {
+                sphere = (Sphere) renderable.getNode();
+            }
             if(sphere == null) {
                 sphere = new Sphere();
                 sphere.setMaterial(new PhongMaterial() {{
@@ -80,8 +113,9 @@ public class GraphicsManagerFX extends GraphicsManager3D {
                 if(options.isFrontCullFace()) {
                     sphere.setCullFace(CullFace.FRONT);
                 }
-                spheres.put(options.getIdentifier(), sphere);
-                panel.getRootGroup().getChildren().add(sphere);
+                Group g = new Group(sphere);
+                renderables.put(options.getIdentifier(), new Renderable(options, g));
+                panel.getRootGroup().getChildren().add(g);
             }
             updatePosition(options.getIdentifier(), ShapeType.SPHERE, options.getPosition());
             updateSize(options.getIdentifier(), ShapeType.SPHERE, options.getSize());
@@ -94,9 +128,13 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     @Override
     public void removeSphere(String identifier) {
         Platform.runLater(() -> {
-            Sphere sphere = getSphere(identifier);
+            Renderable renderable = renderables.getOrDefault(identifier, null);
+            Sphere sphere = null;
+            if(renderable != null) {
+                sphere = (Sphere) renderable.getNode();
+            }
             if(sphere != null) {
-                spheres.remove(identifier);
+                renderables.remove(identifier);
                 panel.getRootGroup().getChildren().remove(sphere);
             }
         });
@@ -105,7 +143,11 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     @Override
     public void createCylinder(RenderOptions options) {
         Platform.runLater(() -> {
-            Cylinder cylinder = getCylinder(options.getIdentifier());
+            Renderable renderable = renderables.getOrDefault(options.getIdentifier(), null);
+            Cylinder cylinder = null;
+            if(renderable != null) {
+                cylinder = (Cylinder) renderable.getNode();
+            }
             if(cylinder == null) {
                 cylinder = new Cylinder();
                 cylinder.setMaterial(new PhongMaterial() {{
@@ -114,8 +156,9 @@ public class GraphicsManagerFX extends GraphicsManager3D {
                 if(options.isFrontCullFace()) {
                     cylinder.setCullFace(CullFace.FRONT);
                 }
-                cylinders.put(options.getIdentifier(), cylinder);
-                panel.getRootGroup().getChildren().add(cylinder);
+                Group g = new Group(cylinder);
+                renderables.put(options.getIdentifier(), new Renderable(options, g));
+                panel.getRootGroup().getChildren().add(g);
             }
             updatePosition(options.getIdentifier(), ShapeType.CYLINDER, options.getPosition());
             updateSize(options.getIdentifier(), ShapeType.CYLINDER, options.getSize());
@@ -128,9 +171,13 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     @Override
     public void removeCylinder(String identifier) {
         Platform.runLater(() -> {
-            Cylinder cylinder = getCylinder(identifier);
+            Renderable renderable = renderables.getOrDefault(identifier, null);
+            Cylinder cylinder = null;
+            if(renderable != null) {
+                cylinder = (Cylinder) renderable.getNode();
+            }
             if(cylinder != null) {
-                cylinders.remove(identifier);
+                renderables.remove(identifier);
                 panel.getRootGroup().getChildren().remove(cylinder);
             }
         });
@@ -140,13 +187,13 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     public void createCustomModel(RenderOptions options, String modelPath) {
         Platform.runLater(() -> {
             try {
-                Group model = getCustomModel(options.getIdentifier());
+                Group model = renderables.getOrDefault(options.getIdentifier(), null).getGroup();
                 if(model == null) {
                     model = new Group(importer.load(new File(modelPath).toURI().toURL()).getMeshViews());
 //                cylinder.setMaterial(new PhongMaterial() {{
 //                    setDiffuseColor(Color.WHITE);
 //                }});
-                    models.put(options.getIdentifier(), model);
+                    renderables.put(options.getIdentifier(), new Renderable(options, model));
                     panel.getRootGroup().getChildren().add(model);
                 }
                 updatePosition(options.getIdentifier(), ShapeType.MODEL, options.getPosition());
@@ -163,9 +210,13 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     @Override
     public void removeCustomModel(String identifier) {
         Platform.runLater(() -> {
-            Group model = getCustomModel(identifier);
+            Renderable renderable = renderables.getOrDefault(identifier, null);
+            Group model = null;
+            if(renderable != null) {
+                model = renderable.getGroup();
+            }
             if(model != null) {
-                models.remove(identifier);
+                renderables.remove(identifier);
                 panel.getRootGroup().getChildren().remove(model);
             }
         });
@@ -259,40 +310,22 @@ public class GraphicsManagerFX extends GraphicsManager3D {
 
     private Node getNode(String identifier, ShapeType shape) {
         switch(shape) {
-            case BOX -> {
-                return getBox(identifier);
-            }
-            case CYLINDER -> {
-                return getCylinder(identifier);
-            }
-            case SPHERE -> {
-                return getSphere(identifier);
+            case BOX, SPHERE, CYLINDER -> {
+                Renderable renderable = renderables.getOrDefault(identifier, null);
+                if(renderable != null) {
+                    return renderable.getNode();
+                }
+                return null;
             }
             case MODEL -> {
-                return getCustomModel(identifier);
+                Renderable renderable = renderables.getOrDefault(identifier, null);
+                if(renderable != null) {
+                    return renderable.getGroup();
+                }
+                return null;
             }
         }
         return null;
-    }
-
-    public Box getBox(String identifier) {
-        return boxes.getOrDefault(identifier, null);
-    }
-
-    public Sphere getSphere(String identifier) {
-        return spheres.getOrDefault(identifier, null);
-    }
-
-    public Cylinder getCylinder(String identifier) {
-        return cylinders.getOrDefault(identifier, null);
-    }
-
-    public Group getCustomModel(String identifier) {
-        return models.getOrDefault(identifier, null);
-    }
-
-    public Collection<Box> getBoxes() {
-        return boxes.values();
     }
 
 }

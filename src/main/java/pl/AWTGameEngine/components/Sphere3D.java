@@ -26,6 +26,7 @@ public class Sphere3D extends Base3DShape implements Renderable3D {
                 getObject().getSize(),
                 getObject().getRotation(),
                 getSprite(),
+                GraphicsManager3D.ShapeType.SPHERE,
                 getColor()
         ));
     }

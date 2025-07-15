@@ -48,28 +48,31 @@ public abstract class GraphicsManager3D {
         private TransformSet rotation;
         private Sprite sprite;
         private ColorObject color;
+        private ShapeType shapeType;
         private boolean frontCullFace = false;
 
         public RenderOptions(String identifier) {
             this.identifier = identifier;
         }
 
-        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, ColorObject color) {
+        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, ShapeType shapeType, ColorObject color) {
             this.identifier = identifier;
             this.position = position;
             this.size = size;
             this.rotation = rotation;
             this.sprite = sprite;
             this.color = color;
+            this.shapeType = shapeType;
         }
 
-        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, ColorObject color, boolean frontCullFace) {
+        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, ShapeType shapeType, ColorObject color, boolean frontCullFace) {
             this.identifier = identifier;
             this.position = position;
             this.size = size;
             this.rotation = rotation;
             this.sprite = sprite;
             this.color = color;
+            this.shapeType = shapeType;
             this.frontCullFace = frontCullFace;
         }
 
@@ -95,6 +98,10 @@ public abstract class GraphicsManager3D {
 
         public ColorObject getColor() {
             return color;
+        }
+
+        public ShapeType getShapeType() {
+            return this.shapeType;
         }
 
         public boolean isFrontCullFace() {
@@ -123,6 +130,10 @@ public abstract class GraphicsManager3D {
 
         public void setFrontCullFace(boolean frontCullFace) {
             this.frontCullFace = frontCullFace;
+        }
+
+        public void setShapeType(ShapeType shapeType) {
+            this.shapeType = shapeType;
         }
 
     }
