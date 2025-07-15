@@ -33,6 +33,8 @@ public abstract class GraphicsManager3D {
 
     public abstract void updateColor(String identifier, ShapeType shape, ColorObject color);
 
+    public abstract void updateGlTexture(String identifier, ShapeType shape, String glTexture);
+
     public enum ShapeType {
         BOX,
         CYLINDER,
@@ -49,6 +51,7 @@ public abstract class GraphicsManager3D {
         private Sprite sprite;
         private ColorObject color;
         private ShapeType shapeType;
+        private String glTexture;
         private boolean frontCullFace = false;
 
         public RenderOptions(String identifier) {
@@ -104,6 +107,10 @@ public abstract class GraphicsManager3D {
             return this.shapeType;
         }
 
+        public String getGlTexture() {
+            return this.glTexture;
+        }
+
         public boolean isFrontCullFace() {
             return frontCullFace;
         }
@@ -134,6 +141,10 @@ public abstract class GraphicsManager3D {
 
         public void setShapeType(ShapeType shapeType) {
             this.shapeType = shapeType;
+        }
+
+        public void setGlTexture(String glTexture) {
+            this.glTexture = glTexture;
         }
 
     }

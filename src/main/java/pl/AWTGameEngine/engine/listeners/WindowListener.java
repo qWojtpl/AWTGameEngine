@@ -3,6 +3,7 @@ package pl.AWTGameEngine.engine.listeners;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;

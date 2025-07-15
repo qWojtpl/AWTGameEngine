@@ -48,7 +48,7 @@ public class Box3D extends Base3DShape implements Renderable3D {
     @Override
     protected void createShape() {
 
-        graphicsManager3D.createBox(new GraphicsManager3D.RenderOptions(
+        GraphicsManager3D.RenderOptions options = new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),
@@ -56,7 +56,13 @@ public class Box3D extends Base3DShape implements Renderable3D {
                 getSprite(),
                 GraphicsManager3D.ShapeType.BOX,
                 getColor()
-        ));
+        );
+
+        if(glTexture != null) {
+            options.setGlTexture(glTexture);
+        }
+
+        graphicsManager3D.createBox(options);
     }
 
     @Override

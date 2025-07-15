@@ -13,8 +13,6 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 public class WebPanel extends JFXPanel implements PanelObject {
 

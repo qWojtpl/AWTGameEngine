@@ -34,6 +34,7 @@ public class KeyListener implements java.awt.event.KeyListener {
         }
         pressedKeys.add(e.getKeyCode());
         pressedKeysChars.add(e.getKeyChar());
+
         for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#int")) {
             component.onKeyType(e.getKeyCode());
         }
@@ -45,7 +46,6 @@ public class KeyListener implements java.awt.event.KeyListener {
         pressedKeysChars.remove(e.getKeyChar());
     }
 
-    //todo: better implementation
     public void asKeyPress(int key) {
         pressedKeys.add(key);
     }

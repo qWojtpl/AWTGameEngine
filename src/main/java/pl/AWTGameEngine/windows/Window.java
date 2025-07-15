@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.windows;
 
+import com.jogamp.opengl.awt.GLCanvas;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;

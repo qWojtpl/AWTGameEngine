@@ -1,13 +1,18 @@
 package pl.AWTGameEngine.engine.graphics;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
+import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class GraphicsManagerGL extends GraphicsManager3D {
@@ -22,64 +27,70 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     public void drawScene(GL2 gl) {
-        for(RenderOptions options : renderables.values()) {
+        for (RenderOptions options : renderables.values()) {
             gl.glTranslatef(options.getPosition().getFloatable().getX(), options.getPosition().getFloatable().getY(), options.getPosition().getFloatable().getZ());
             //gl.glRotatef(options.getRotation().getFloatable().getX(), options.getRotation().getFloatable().getY(), options.getRotation().getFloatable().getZ(), 0.0f);
             gl.glRotatef(angle, 1.0f, 1.0f, 0.0f);
             gl.glScalef(options.getSize().getFloatable().getX(), options.getSize().getFloatable().getY(), options.getSize().getFloatable().getZ());
-            if(ShapeType.BOX.equals(options.getShapeType())) {
-                drawBox(gl);
+            if (ShapeType.BOX.equals(options.getShapeType())) {
+                drawBox(gl, options);
             }
             angle += 0;
         }
     }
 
-    private void drawBox(GL2 gl) {
+    private void drawBox(GL2 gl, RenderOptions renderOptions) {
+
+        if(renderOptions.getGlTexture() != null) {
+            Texture texture = panelGL.getTexture(renderOptions.getGlTexture());
+            texture.enable(gl);
+            texture.bind(gl);
+        }
+
+        gl.glColor3f(1f, 1f, 1f);
         gl.glBegin(GL2.GL_QUADS);
 
         // Front
-        gl.glColor3f(1, 0, 0);
-        gl.glVertex3f(-1, -1,  1);
-        gl.glVertex3f( 1, -1,  1);
-        gl.glVertex3f( 1,  1,  1);
-        gl.glVertex3f(-1,  1,  1);
+        gl.glTexCoord2f(0f, 1f); gl.glVertex3f(-1, -1,  1);
+        gl.glTexCoord2f(1f, 1f); gl.glVertex3f( 1, -1,  1);
+        gl.glTexCoord2f(1f, 0f); gl.glVertex3f( 1,  1,  1);
+        gl.glTexCoord2f(0f, 0f); gl.glVertex3f(-1,  1,  1);
 
         // Back
-        gl.glColor3f(0, 1, 0);
-        gl.glVertex3f(-1, -1, -1);
-        gl.glVertex3f(-1,  1, -1);
-        gl.glVertex3f( 1,  1, -1);
-        gl.glVertex3f( 1, -1, -1);
+        gl.glTexCoord2f(1f, 1f); gl.glVertex3f(-1, -1, -1);
+        gl.glTexCoord2f(1f, 0f); gl.glVertex3f(-1,  1, -1);
+        gl.glTexCoord2f(0f, 0f); gl.glVertex3f( 1,  1, -1);
+        gl.glTexCoord2f(0f, 1f); gl.glVertex3f( 1, -1, -1);
 
         // Left
-        gl.glColor3f(0, 0, 1);
-        gl.glVertex3f(-1, -1, -1);
-        gl.glVertex3f(-1, -1,  1);
-        gl.glVertex3f(-1,  1,  1);
-        gl.glVertex3f(-1,  1, -1);
+        gl.glTexCoord2f(1f, 1f); gl.glVertex3f(-1, -1, -1);
+        gl.glTexCoord2f(0f, 1f); gl.glVertex3f(-1, -1,  1);
+        gl.glTexCoord2f(0f, 0f); gl.glVertex3f(-1,  1,  1);
+        gl.glTexCoord2f(1f, 0f); gl.glVertex3f(-1,  1, -1);
 
         // Right
-        gl.glColor3f(1, 1, 0);
-        gl.glVertex3f(1, -1, -1);
-        gl.glVertex3f(1,  1, -1);
-        gl.glVertex3f(1,  1,  1);
-        gl.glVertex3f(1, -1,  1);
+        gl.glTexCoord2f(0f, 1f); gl.glVertex3f(1, -1, -1);
+        gl.glTexCoord2f(1f, 1f); gl.glVertex3f(1,  1, -1);
+        gl.glTexCoord2f(1f, 0f); gl.glVertex3f(1,  1,  1);
+        gl.glTexCoord2f(0f, 0f); gl.glVertex3f(1, -1,  1);
 
         // Top
-        gl.glColor3f(1, 0, 1);
-        gl.glVertex3f(-1, 1, -1);
-        gl.glVertex3f(-1, 1,  1);
-        gl.glVertex3f( 1, 1,  1);
-        gl.glVertex3f( 1, 1, -1);
+        gl.glTexCoord2f(0f, 0f); gl.glVertex3f(-1, 1, -1);
+        gl.glTexCoord2f(0f, 1f); gl.glVertex3f(-1, 1,  1);
+        gl.glTexCoord2f(1f, 1f); gl.glVertex3f( 1, 1,  1);
+        gl.glTexCoord2f(1f, 0f); gl.glVertex3f( 1, 1, -1);
 
         // Bottom
-        gl.glColor3f(0, 1, 1);
-        gl.glVertex3f(-1, -1, -1);
-        gl.glVertex3f( 1, -1, -1);
-        gl.glVertex3f( 1, -1,  1);
-        gl.glVertex3f(-1, -1,  1);
+        gl.glTexCoord2f(1f, 0f); gl.glVertex3f(-1, -1, -1);
+        gl.glTexCoord2f(0f, 0f); gl.glVertex3f( 1, -1, -1);
+        gl.glTexCoord2f(0f, 1f); gl.glVertex3f( 1, -1,  1);
+        gl.glTexCoord2f(1f, 1f); gl.glVertex3f(-1, -1,  1);
 
         gl.glEnd();
+
+        if(renderOptions.getGlTexture() != null) {
+            panelGL.getTexture(renderOptions.getGlTexture()).disable(gl);
+        }
     }
 
     @Override
@@ -142,12 +153,17 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     @Override
     public void updateSprite(String identifier, ShapeType shape, Sprite sprite) {
-        renderables.get(identifier).setSprite(sprite);
+
     }
 
     @Override
     public void updateColor(String identifier, ShapeType shape, ColorObject color) {
         renderables.get(identifier).setColor(color);
+    }
+
+    @Override
+    public void updateGlTexture(String identifier, ShapeType shape, String glTexture) {
+        renderables.get(identifier).setGlTexture(glTexture);
     }
 
 }

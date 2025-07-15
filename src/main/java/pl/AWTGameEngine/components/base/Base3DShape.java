@@ -14,11 +14,13 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
 
     protected Sprite sprite;
     protected ColorObject color;
+    protected String glTexture;
     protected boolean updatePosition = false;
     protected boolean updateSize = false;
     protected boolean updateRotation = false;
     protected boolean updateSprite = false;
     protected boolean updateColor = false;
+    protected boolean updateGlTexture = false;
     private boolean staticShape = true;
 
     protected PxRigidDynamic rigidDynamic;
@@ -54,6 +56,10 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
         if(updateColor) {
             g.updateColor(getObject().getIdentifier(), shapeType, color);
             updateColor = false;
+        }
+        if(updateGlTexture) {
+            g.updateGlTexture(getObject().getIdentifier(), shapeType, glTexture);
+            updateGlTexture = false;
         }
     }
 
@@ -114,6 +120,12 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
     @SerializationSetter
     public void setColor(String color) {
         setColor(new ColorObject(color));
+    }
+
+    @SerializationSetter
+    public void setGlTexture(String glTexture) {
+        this.glTexture = glTexture;
+        updateGlTexture = true;
     }
 
 }

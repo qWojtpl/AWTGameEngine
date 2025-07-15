@@ -1,12 +1,8 @@
 package pl.AWTGameEngine.custom;
 
-import javafx.geometry.Bounds;
-import javafx.scene.Group;
-import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -14,11 +10,11 @@ import java.awt.*;
 
 @Component3D
 @ComponentMeta(
-        name = "Movement3D",
+        name = "MovementFX",
         description = "Basic player movement implementation",
         author = "Wojt_pl"
 )
-public class Movement3D extends ObjectComponent {
+public class MovementFX extends ObjectComponent {
 
     private final int CENTER_X;
     private final int CENTER_Y;
@@ -26,13 +22,13 @@ public class Movement3D extends ObjectComponent {
     private boolean noclip = true;
     private double speed = 10;
 
-    public Movement3D(GameObject object) {
+    public MovementFX(GameObject object) {
         super(object);
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         try {
             this.robot = new Robot(device);
         } catch(Exception e) {
-            Logger.log("Error initializing Movement3D component", e);
+            Logger.log("Error initializing MovementFX component", e);
         }
         Rectangle bounds = device.getConfigurations()[0].getBounds();
         CENTER_X = (int) (bounds.getWidth() / 2);
