@@ -20,7 +20,6 @@ public class GameObject {
     private TransformSet position = new TransformSet(0, 0, 0);
     private TransformSet rotation = new TransformSet(0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
-    private int priority = 0;
     private PanelObject panel;
     private EventHandler eventHandler = new EventHandler();
     private final List<ObjectComponent> components = new ArrayList<>();
@@ -258,10 +257,6 @@ public class GameObject {
         return this.size;
     }
 
-    public int getPriority() {
-        return this.priority;
-    }
-
     public PanelObject getPanel() {
         return this.panel;
     }
@@ -416,16 +411,6 @@ public class GameObject {
         for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
             component.onUpdateSize(this.size.getX(), this.size.getY(), this.size.getZ());
         }      
-    }
-
-    public void setPriority(int priority) {
-        getScene().removeSortedObject(this.priority, this);
-        this.priority = priority;
-        getScene().addSortedObject(priority, this);
-    }
-
-    public void setPriority(String priority) {
-        setPriority(Integer.parseInt(priority));
     }
 
     public void setPanel(PanelObject panel) {

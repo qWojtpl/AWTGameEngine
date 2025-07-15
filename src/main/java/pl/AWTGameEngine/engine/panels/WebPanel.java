@@ -73,16 +73,8 @@ public class WebPanel extends JFXPanel implements PanelObject {
         if(graphicsManager == null) {
             return;
         }
-        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
-        for (int i : sortedObjects.keySet()) {
-            for(GameObject go : sortedObjects.get(i)) {
-                if(!go.isActive()) {
-                    continue;
-                }
-                if(this.equals(go.getPanel())) {
-                    go.webRender(graphicsManager);
-                }
-            }
+        for(GameObject go : getWindow().getCurrentScene().getGameObjects()) {
+            go.webRender(graphicsManager);
         }
     }
 

@@ -46,23 +46,13 @@ public class DefaultPanel extends JPanel implements PanelObject {
             return;
         }
         graphicsManager.setGraphics(g);
-        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
-        List<GameObject> renderList = new ArrayList<>();
-        for(int i : sortedObjects.keySet()) {
-            for(GameObject go : sortedObjects.get(i)) {
-                if(!go.isActive()) {
-                    continue;
-                }
-                if(this.equals(go.getPanel())) {
-                    renderList.add(go);
-                    go.preRender(graphicsManager);
-                }
-            }
+        for(GameObject go : window.getCurrentScene().getGameObjects()) {
+            go.preRender(graphicsManager);
         }
-        for(GameObject go : renderList) {
+        for(GameObject go : window.getCurrentScene().getGameObjects()) {
             go.render(graphicsManager);
         }
-        for(GameObject go : renderList) {
+        for(GameObject go : window.getCurrentScene().getGameObjects()) {
             go.afterRender(graphicsManager);
         }
     }

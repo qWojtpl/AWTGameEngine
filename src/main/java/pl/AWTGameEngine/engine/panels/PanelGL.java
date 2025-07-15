@@ -15,6 +15,7 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
+import java.awt.*;
 import java.nio.FloatBuffer;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,17 +72,6 @@ public class PanelGL extends JFXPanel implements PanelObject {
         if(graphicsManager3D == null) {
             return;
         }
-        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
-        for (int i : sortedObjects.keySet()) {
-            for(GameObject go : sortedObjects.get(i)) {
-                if(!go.isActive()) {
-                    continue;
-                }
-                if(this.equals(go.getPanel())) {
-                    go.render3D(graphicsManager3D);
-                }
-            }
-        }
         canvas.display();
     }
 
@@ -89,16 +79,9 @@ public class PanelGL extends JFXPanel implements PanelObject {
     public void updatePhysics() {
         physXManager.getPxScene().simulate(1f/((float) getWindow().getPhysicsLoop().getFPS() / 6));
         physXManager.getPxScene().fetchResults(true);
-        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
-        for (int i : sortedObjects.keySet()) {
-            for(GameObject go : sortedObjects.get(i)) {
-                if(!go.isActive()) {
-                    continue;
-                }
-                if(this.equals(go.getPanel())) {
-                    go.updatePhysics();
-                }
-            }
+
+        for(GameObject go : getWindow().getCurrentScene().getGameObjects()) {
+            go.updatePhysics();
         }
     }
 
@@ -172,6 +155,11 @@ public class PanelGL extends JFXPanel implements PanelObject {
 
             @Override
             public void display(GLAutoDrawable drawable) {
+
+                for(GameObject go : getWindow().getCurrentScene().getGameObjects()) {
+                    go.render3D(graphicsManager3D);
+                }
+
                 gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
                 gl.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
@@ -228,6 +216,12 @@ public class PanelGL extends JFXPanel implements PanelObject {
 //        fxScene.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
 //            getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
 //        });
+    }
+
+    @Override
+    public void setSize(Dimension dimension) {
+        super.setSize(dimension);
+        canvas.setSize(dimension);
     }
 
 }

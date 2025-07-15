@@ -34,7 +34,6 @@ public class GameObjectDeserializer {
                 gameObject.setRotationY(Integer.parseInt(getValue(data, "rotationY")));
                 gameObject.setRotationZ(Integer.parseInt(getValue(data, "rotationZ")));
             }
-            gameObject.setPriority(Integer.parseInt(getValue(data, "priority")));
             if(getValue(data, "active").equals("0")) {
                 gameObject.setActive(true);
             } else {
