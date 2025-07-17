@@ -8,7 +8,7 @@ import pl.AWTGameEngine.objects.TransformSet;
 
 import java.awt.*;
 
-@Component3D
+@ComponentFX
 @ComponentMeta(
         name = "MovementFX",
         description = "Basic player movement implementation",

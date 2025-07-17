@@ -2,16 +2,18 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.Component3D;
+import pl.AWTGameEngine.annotations.ComponentFX;
+import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
-import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
-@Component3D
+@ComponentFX
+@ComponentGL
 public class Model3D extends ObjectComponent implements Renderable3D {
 
     private String modelPath;
@@ -29,7 +31,7 @@ public class Model3D extends ObjectComponent implements Renderable3D {
     @Override
     public void onAddComponent() {
         getObject().getRotation().setZ(180);
-        ((Panel3D) getPanel()).getGraphicsManager3D().createCustomModel(
+        ((PanelFX) getPanel()).getGraphicsManager3D().createCustomModel(
                 new GraphicsManager3D.RenderOptions(
                         getObject().getIdentifier(),
                         getObject().getPosition(),
@@ -46,7 +48,7 @@ public class Model3D extends ObjectComponent implements Renderable3D {
 
     @Override
     public void onRemoveComponent() {
-        ((Panel3D) getPanel()).getGraphicsManager3D().removeCustomModel(getObject().getIdentifier());
+        ((PanelFX) getPanel()).getGraphicsManager3D().removeCustomModel(getObject().getIdentifier());
     }
 
     @SerializationSetter

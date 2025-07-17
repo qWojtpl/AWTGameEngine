@@ -10,7 +10,7 @@ import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import org.fxyz3d.importers.obj.ObjImporter;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.Sprite;
@@ -22,12 +22,12 @@ import java.util.HashMap;
 
 public class GraphicsManagerFX extends GraphicsManager3D {
 
-    private final Panel3D panel;
+    private final PanelFX panel;
     private final HashMap<String, Renderable> renderables = new HashMap<>();
 
     private final ObjImporter importer = new ObjImporter();
 
-    public GraphicsManagerFX(Panel3D panel) {
+    public GraphicsManagerFX(PanelFX panel) {
         this.panel = panel;
     }
 

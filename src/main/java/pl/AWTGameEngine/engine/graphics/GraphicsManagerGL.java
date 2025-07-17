@@ -9,7 +9,9 @@ import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GraphicsManagerGL extends GraphicsManager3D {
 
@@ -21,7 +23,8 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     public void drawScene(GL2 gl) {
-        for (RenderOptions options : renderables.values()) {
+        List<RenderOptions> renderableList = new ArrayList<>(renderables.values());
+        for (RenderOptions options : renderableList) {
             gl.glPushMatrix();
             gl.glTranslated(options.getPosition().getX(), options.getPosition().getY(), options.getPosition().getZ());
             double[] axis = RotationHelper.quaternionToAxisAngle(

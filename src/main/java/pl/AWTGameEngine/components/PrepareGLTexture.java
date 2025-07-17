@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.Component3D;
+import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
@@ -9,7 +9,7 @@ import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
-@Component3D
+@ComponentGL
 public class PrepareGLTexture extends ObjectComponent {
 
     private String name;

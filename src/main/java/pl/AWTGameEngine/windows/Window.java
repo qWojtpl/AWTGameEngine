@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.windows;
 
-import com.jogamp.opengl.awt.GLCanvas;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
@@ -22,7 +21,7 @@ public class Window extends JFrame {
     private final int WIDTH = 1920;
     private DefaultPanel panel;
     private WebPanel webPanel;
-    private Panel3D threeDimensionalPanel;
+    private PanelFX threeDimensionalPanel;
     private PanelGL openGlPanel;
     private BaseLoop renderLoop;
     private BaseLoop updateLoop;
@@ -45,6 +44,7 @@ public class Window extends JFrame {
                 Font.PLAIN,
                 appProperties.getPropertyAsInteger("fontSize")
         );
+        getContentPane().setBackground(Color.BLACK);
     }
 
     public void close() {
@@ -62,7 +62,7 @@ public class Window extends JFrame {
         } else if (getPanel() instanceof WebPanel) {
             remove(webPanel);
             webPanel = null;
-        } else if (getPanel() instanceof Panel3D) {
+        } else if (getPanel() instanceof PanelFX) {
             remove(threeDimensionalPanel);
             threeDimensionalPanel = null;
         } else if (getPanel() instanceof PanelGL) {
@@ -84,7 +84,7 @@ public class Window extends JFrame {
             }
         } else if (RenderEngine.FX3D.equals(renderEngine)) {
             if (this.threeDimensionalPanel == null) {
-                this.threeDimensionalPanel = new Panel3D(this, width, height);
+                this.threeDimensionalPanel = new PanelFX(this, width, height);
                 add(threeDimensionalPanel, BorderLayout.CENTER);
             }
         } else if (RenderEngine.OPENGL.equals(renderEngine)) {

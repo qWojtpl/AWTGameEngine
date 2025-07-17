@@ -1,9 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.Component3D;
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationSetter;
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
@@ -14,7 +11,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-@Component3D
+@ComponentFX
+@ComponentGL
 @DefaultComponent
 @WebComponent
 public class Client extends ObjectComponent {

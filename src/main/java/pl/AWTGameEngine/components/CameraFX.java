@@ -5,21 +5,21 @@ import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.transform.Rotate;
-import pl.AWTGameEngine.annotations.Component3D;
+import pl.AWTGameEngine.annotations.ComponentFX;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 
-@Component3D
+@ComponentFX
 @Unique
 public class CameraFX extends ObjectComponent {
 
     private final PerspectiveCamera perspectiveCamera = new PerspectiveCamera(true);
     private final javafx.scene.Group cameraYaw = new Group();
     private final javafx.scene.Group cameraPitch = new Group();
-    private Panel3D panel3D;
+    private PanelFX panelFX;
     private double nearClip = 0.1;
     private double farClip = 10000;
     private double cullingDistance = 20000;
@@ -30,25 +30,25 @@ public class CameraFX extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        this.panel3D = (Panel3D) getPanel();
+        this.panelFX = (PanelFX) getPanel();
 
         Platform.runLater(() -> {
             perspectiveCamera.setNearClip(nearClip);
             perspectiveCamera.setFarClip(farClip);
             cameraPitch.getChildren().add(perspectiveCamera);
             cameraYaw.getChildren().add(cameraPitch);
-            panel3D.getRootGroup().getChildren().add(cameraYaw);
+            panelFX.getRootGroup().getChildren().add(cameraYaw);
 
-            panel3D.getFxScene().setCamera(perspectiveCamera);
+            panelFX.getFxScene().setCamera(perspectiveCamera);
         });
     }
 
     @Override
     public void onRemoveComponent() {
         Platform.runLater(() -> {
-            panel3D.getRootGroup().getChildren().remove(cameraYaw);
-            if(panel3D.getFxScene().getCamera().equals(perspectiveCamera)) {
-                panel3D.getFxScene().setCamera(null);
+            panelFX.getRootGroup().getChildren().remove(cameraYaw);
+            if(panelFX.getFxScene().getCamera().equals(perspectiveCamera)) {
+                panelFX.getFxScene().setCamera(null);
             }
         });
     }

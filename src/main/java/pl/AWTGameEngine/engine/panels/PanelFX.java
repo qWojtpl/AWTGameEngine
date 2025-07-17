@@ -12,10 +12,7 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-
-public class Panel3D extends JFXPanel implements PanelObject {
+public class PanelFX extends JFXPanel implements PanelObject {
 
     private final Window window;
     private final Camera camera;
@@ -25,7 +22,7 @@ public class Panel3D extends JFXPanel implements PanelObject {
     private final javafx.scene.Scene fxScene;
     private MouseListener mouseListener;
 
-    public Panel3D(Window window, int width, int height) {
+    public PanelFX(Window window, int width, int height) {
         this.window = window;
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManagerFX(this);

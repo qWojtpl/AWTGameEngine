@@ -85,6 +85,10 @@ public class PanelGL extends JPanel implements PanelObject {
 
     @Override
     public void updatePhysics() {
+        if(getWindow().getCurrentScene() == null) {
+            return;
+        }
+
         physXManager.getPxScene().simulate(1f/((float) getWindow().getPhysicsLoop().getFPS() / 6));
         physXManager.getPxScene().fetchResults(true);
 
@@ -180,7 +184,7 @@ public class PanelGL extends JPanel implements PanelObject {
                         getCamera().getRotation().getY(),
                         getCamera().getRotation().getZ());
 
-                glu.gluLookAt(getCamera().getX(), getCamera().getY(), getCamera().getZ() - 60, 0, 0, 0, 0, 1, 0);
+                glu.gluLookAt(getCamera().getX(), getCamera().getY(), getCamera().getZ() - 450, 0, 0, 0, 0, 1, 0);
 
                 ((GraphicsManagerGL) graphicsManager3D).drawScene(gl);
             }
@@ -193,7 +197,7 @@ public class PanelGL extends JPanel implements PanelObject {
 
                 gl.glMatrixMode(GL2.GL_PROJECTION);
                 gl.glLoadIdentity();
-                glu.gluPerspective(30, aspect, 1.0, 1000.0);
+                glu.gluPerspective(30, aspect, 1.0, 10000.0);
 
                 gl.glMatrixMode(GL2.GL_MODELVIEW);
                 gl.glLoadIdentity();

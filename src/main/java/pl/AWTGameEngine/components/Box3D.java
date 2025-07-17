@@ -8,18 +8,17 @@ import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.Base3DShape;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
-import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
-import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.TransformSet;
 
-@Component3D
+@ComponentFX
+@ComponentGL
 @Unique
 @Conflicts({
         @ConflictsWith(Sphere3D.class),
@@ -37,9 +36,9 @@ public class Box3D extends Base3DShape implements Renderable3D {
 
     public Box3D(GameObject object) {
         super(object);
-        if(getPanel() instanceof Panel3D) {
-            physXManager = ((Panel3D) getPanel()).getPhysXManager();
-            graphicsManager3D = ((Panel3D) getPanel()).getGraphicsManager3D();
+        if(getPanel() instanceof PanelFX) {
+            physXManager = ((PanelFX) getPanel()).getPhysXManager();
+            graphicsManager3D = ((PanelFX) getPanel()).getGraphicsManager3D();
         } else {
             physXManager = ((PanelGL) getPanel()).getPhysXManager();
             graphicsManager3D = ((PanelGL) getPanel()).getGraphicsManager3D();

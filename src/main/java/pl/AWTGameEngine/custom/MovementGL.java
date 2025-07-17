@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.annotations.Component3D;
+import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.annotations.ComponentMeta;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -10,7 +10,7 @@ import pl.AWTGameEngine.objects.TransformSet;
 
 import java.awt.*;
 
-@Component3D
+@ComponentGL
 @ComponentMeta(
         name = "MovementGL",
         description = "Basic player movement implementation",

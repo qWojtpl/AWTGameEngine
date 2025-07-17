@@ -48,10 +48,16 @@ public class GameObject {
                         " cannot be added to " + identifier + " because is not marked as DefaultComponent");
                 return;
             }
-        } else if(Window.RenderEngine.FX3D.equals(renderEngine) || Window.RenderEngine.OPENGL.equals(renderEngine)) {
-            if(!component.is3DComponent()) {
+        } else if(Window.RenderEngine.FX3D.equals(renderEngine)) {
+            if(!component.isFXComponent()) {
                 Logger.log(1, "Component " + component.getComponentName() +
-                        " cannot be added to " + identifier + " because is not marked as Component3D");
+                        " cannot be added to " + identifier + " because is not marked as ComponentFX");
+                return;
+            }
+        }  else if(Window.RenderEngine.OPENGL.equals(renderEngine)) {
+            if(!component.isGLComponent()) {
+                Logger.log(1, "Component " + component.getComponentName() +
+                        " cannot be added to " + identifier + " because is not marked as ComponentGL");
                 return;
             }
         }

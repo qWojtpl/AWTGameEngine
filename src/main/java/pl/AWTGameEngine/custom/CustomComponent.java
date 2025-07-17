@@ -1,11 +1,11 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.annotations.Component3D;
+import pl.AWTGameEngine.annotations.ComponentFX;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
 
-@Component3D
+@ComponentFX
 public class CustomComponent extends ObjectComponent {
 
     private final int value = 10;
