@@ -13,6 +13,7 @@ public class GameObjectDeserializer {
 
     public static void deserialize(GameObject gameObject, Node data) {
         try {
+            //todo: integers to doubles
             if(!getValue(data, "position").equals("0")) {
                 gameObject.setPosition(new TransformSet().deserialize(getValue(data, "position")));
             } else {
@@ -30,9 +31,10 @@ public class GameObjectDeserializer {
             if(!getValue(data, "rotation").equals("0")) {
                 gameObject.setSize(new TransformSet().deserialize(getValue(data, "rotation")));
             } else {
-                gameObject.setRotationX(Integer.parseInt(getValue(data, "rotationX")));
-                gameObject.setRotationY(Integer.parseInt(getValue(data, "rotationY")));
-                gameObject.setRotationZ(Integer.parseInt(getValue(data, "rotationZ")));
+                int x = Integer.parseInt(getValue(data, "rotationX"));
+                int y = Integer.parseInt(getValue(data, "rotationY"));
+                int z = Integer.parseInt(getValue(data, "rotationZ"));
+                gameObject.setRotation(new TransformSet(x, y, z));
             }
             if(getValue(data, "active").equals("0")) {
                 gameObject.setActive(true);

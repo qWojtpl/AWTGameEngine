@@ -46,7 +46,7 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
             updateSize = false;
         }
         if(updateRotation) {
-            g.updateRotation(getObject().getIdentifier(), shapeType, getObject().getRotation());
+            g.updateRotation(getObject().getIdentifier(), shapeType, getObject().getRotation(), getObject().getQuaternionRotation());
             updateRotation = false;
         }
         if(updateSprite) {

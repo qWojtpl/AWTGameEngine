@@ -87,7 +87,6 @@ public class MovementGL extends ObjectComponent {
             dy = 0;
         }
 
-
         getCamera().setPosition(new TransformSet(getCamera().getX() + dx, getCamera().getY() + dy, getCamera().getZ() + dz));
     }
 

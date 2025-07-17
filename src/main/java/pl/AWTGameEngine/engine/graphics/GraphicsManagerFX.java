@@ -12,6 +12,7 @@ import org.fxyz3d.importers.obj.ObjImporter;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -76,7 +77,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
             }
             updatePosition(options.getIdentifier(), ShapeType.BOX, options.getPosition());
             updateSize(options.getIdentifier(), ShapeType.BOX, options.getSize());
-            updateRotation(options.getIdentifier(), ShapeType.BOX, options.getRotation());
+            updateRotation(options.getIdentifier(), ShapeType.BOX, options.getRotation(), options.getQuaternionRotation());
             updateSprite(options.getIdentifier(), ShapeType.BOX, options.getSprite());
             updateColor(options.getIdentifier(), ShapeType.BOX, options.getColor());
         });
@@ -119,7 +120,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
             }
             updatePosition(options.getIdentifier(), ShapeType.SPHERE, options.getPosition());
             updateSize(options.getIdentifier(), ShapeType.SPHERE, options.getSize());
-            updateRotation(options.getIdentifier(), ShapeType.SPHERE, options.getRotation());
+            updateRotation(options.getIdentifier(), ShapeType.SPHERE, options.getRotation(), options.getQuaternionRotation());
             updateSprite(options.getIdentifier(), ShapeType.SPHERE, options.getSprite());
             updateColor(options.getIdentifier(), ShapeType.SPHERE, options.getColor());
         });
@@ -162,7 +163,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
             }
             updatePosition(options.getIdentifier(), ShapeType.CYLINDER, options.getPosition());
             updateSize(options.getIdentifier(), ShapeType.CYLINDER, options.getSize());
-            updateRotation(options.getIdentifier(), ShapeType.CYLINDER, options.getRotation());
+            updateRotation(options.getIdentifier(), ShapeType.CYLINDER, options.getRotation(), options.getQuaternionRotation());
             updateSprite(options.getIdentifier(), ShapeType.CYLINDER, options.getSprite());
             updateColor(options.getIdentifier(), ShapeType.CYLINDER, options.getColor());
         });
@@ -198,7 +199,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
                 }
                 updatePosition(options.getIdentifier(), ShapeType.MODEL, options.getPosition());
                 updateSize(options.getIdentifier(), ShapeType.MODEL, options.getSize());
-                updateRotation(options.getIdentifier(), ShapeType.MODEL, options.getRotation());
+                updateRotation(options.getIdentifier(), ShapeType.MODEL, options.getRotation(), options.getQuaternionRotation());
                 updateSprite(options.getIdentifier(), ShapeType.MODEL, options.getSprite());
                 updateColor(options.getIdentifier(), ShapeType.MODEL, options.getColor());
             } catch(IOException e) {
@@ -255,7 +256,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     }
 
     @Override
-    public void updateRotation(String identifier, ShapeType shape, TransformSet rotation) {
+    public void updateRotation(String identifier, ShapeType shape, TransformSet rotation, QuaternionTransformSet quaternionRotation) {
         if(identifier == null || shape == null || rotation == null) {
             return;
         }

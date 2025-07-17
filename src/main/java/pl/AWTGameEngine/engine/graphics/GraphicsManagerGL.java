@@ -1,15 +1,11 @@
 package pl.AWTGameEngine.engine.graphics;
 
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureIO;
-import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
-import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -20,22 +16,26 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     private final PanelGL panelGL;
     private final HashMap<String, RenderOptions> renderables = new HashMap<>();
 
-    private float angle;
-
     public GraphicsManagerGL(PanelGL panelGL) {
         this.panelGL = panelGL;
     }
 
     public void drawScene(GL2 gl) {
         for (RenderOptions options : renderables.values()) {
-            gl.glTranslatef(options.getPosition().getFloatable().getX(), options.getPosition().getFloatable().getY(), options.getPosition().getFloatable().getZ());
-            //gl.glRotatef(options.getRotation().getFloatable().getX(), options.getRotation().getFloatable().getY(), options.getRotation().getFloatable().getZ(), 0.0f);
-            gl.glRotatef(angle, 1.0f, 1.0f, 0.0f);
-            gl.glScalef(options.getSize().getFloatable().getX(), options.getSize().getFloatable().getY(), options.getSize().getFloatable().getZ());
+            gl.glPushMatrix();
+            gl.glTranslated(options.getPosition().getX(), options.getPosition().getY(), options.getPosition().getZ());
+            double[] axis = RotationHelper.quaternionToAxisAngle(
+                    options.getQuaternionRotation().getX(),
+                    options.getQuaternionRotation().getY(),
+                    options.getQuaternionRotation().getZ(),
+                    options.getQuaternionRotation().getW()
+            );
+            gl.glRotated(axis[0], axis[1], axis[2], axis[3]);
+            gl.glScaled(options.getSize().getX(), options.getSize().getY(), options.getSize().getZ());
             if (ShapeType.BOX.equals(options.getShapeType())) {
                 drawBox(gl, options);
             }
-            angle += 0;
+            gl.glPopMatrix();
         }
     }
 
@@ -147,8 +147,9 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     @Override
-    public void updateRotation(String identifier, ShapeType shape, TransformSet rotation) {
+    public void updateRotation(String identifier, ShapeType shape, TransformSet rotation, QuaternionTransformSet quaternionRotation) {
         renderables.get(identifier).setRotation(rotation);
+        renderables.get(identifier).setQuaternionRotation(quaternionRotation);
     }
 
     @Override

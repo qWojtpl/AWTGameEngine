@@ -16,6 +16,7 @@ import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.TransformSet;
 
 @Component3D
@@ -53,6 +54,7 @@ public class Box3D extends Base3DShape implements Renderable3D {
                 getObject().getPosition(),
                 getObject().getSize(),
                 getObject().getRotation(),
+                getObject().getQuaternionRotation(),
                 getSprite(),
                 GraphicsManager3D.ShapeType.BOX,
                 getColor()
@@ -164,12 +166,11 @@ public class Box3D extends Base3DShape implements Renderable3D {
             ));
         }
         if(quat.getX() != previousX || quat.getY() != previousY || quat.getZ() != previousZ || quat.getW() != previousW) {
-            double[] rot = RotationHelper.quaternionToEulerXYZ(quat.getX(), quat.getY(), quat.getZ(), quat.getW());
             previousX = quat.getX();
             previousY = quat.getY();
             previousZ = quat.getZ();
             previousW = quat.getW();
-            getObject().setRotation(new TransformSet(rot[0], rot[1], rot[2]));
+            getObject().setQuaternionRotation(new QuaternionTransformSet(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
         }
     }
 

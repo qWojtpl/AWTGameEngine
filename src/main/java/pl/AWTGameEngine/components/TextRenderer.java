@@ -64,7 +64,7 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
                     new GraphicsManager.RenderOptions()
                             .setColor(color.getColor())
                             .setFont(getWindow().getFont(getSize() * getCamera().getMultiplier()))
-                            .setRotation(getObject().getRotationX())
+                            .setRotation(getObject().getRotation().getX())
                             .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
                             .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
             );

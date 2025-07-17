@@ -8,7 +8,7 @@
     <object id="box" position="0,0,-10" size="10,10,10">
         <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="true" />
     </object>
-    <object id="box0" position="0,50,-10" size="10,10,10">
-        <Box3D staticShape="false" color="rgba(255,0,0,125)" />
+    <object id="box1" position="0,200,-10" size="10,10,10">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
 </scene>

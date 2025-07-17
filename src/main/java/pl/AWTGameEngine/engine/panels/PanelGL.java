@@ -19,6 +19,7 @@ import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class PanelGL extends JPanel implements PanelObject {
@@ -178,7 +179,8 @@ public class PanelGL extends JPanel implements PanelObject {
                         getCamera().getRotation().getX(),
                         getCamera().getRotation().getY(),
                         getCamera().getRotation().getZ());
-                glu.gluLookAt(getCamera().getX(), getCamera().getY(), -60, lookAt[0], lookAt[1], lookAt[2], 0, 1, 0);
+
+                glu.gluLookAt(getCamera().getX(), getCamera().getY(), getCamera().getZ() - 60, 0, 0, 0, 0, 1, 0);
 
                 ((GraphicsManagerGL) graphicsManager3D).drawScene(gl);
             }

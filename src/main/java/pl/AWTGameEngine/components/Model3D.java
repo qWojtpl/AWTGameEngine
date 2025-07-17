@@ -35,6 +35,7 @@ public class Model3D extends ObjectComponent implements Renderable3D {
                         getObject().getPosition(),
                         getObject().getSize(),
                         getObject().getRotation(),
+                        getObject().getQuaternionRotation(),
                         getSprite(),
                         GraphicsManager3D.ShapeType.MODEL,
                         null
@@ -68,7 +69,7 @@ public class Model3D extends ObjectComponent implements Renderable3D {
             updateSize = false;
         }
         if(updateRotation) {
-            g.updateRotation(getObject().getIdentifier(), shapeType, getObject().getRotation());
+            g.updateRotation(getObject().getIdentifier(), shapeType, getObject().getRotation(), getObject().getQuaternionRotation());
             updateRotation = false;
         }
         if(updateSprite) {

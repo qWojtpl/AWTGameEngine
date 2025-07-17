@@ -2,6 +2,7 @@
 package pl.AWTGameEngine.engine.graphics;
 
 import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -27,7 +28,7 @@ public abstract class GraphicsManager3D {
 
     public abstract void updateSize(String identifier, ShapeType shape, TransformSet scale);
 
-    public abstract void updateRotation(String identifier, ShapeType shape, TransformSet rotation);
+    public abstract void updateRotation(String identifier, ShapeType shape, TransformSet rotation, QuaternionTransformSet quaternionRotation);
 
     public abstract void updateSprite(String identifier, ShapeType shape, Sprite sprite);
 
@@ -48,6 +49,7 @@ public abstract class GraphicsManager3D {
         private TransformSet position;
         private TransformSet size;
         private TransformSet rotation;
+        private QuaternionTransformSet quaternionRotation;
         private Sprite sprite;
         private ColorObject color;
         private ShapeType shapeType;
@@ -58,21 +60,23 @@ public abstract class GraphicsManager3D {
             this.identifier = identifier;
         }
 
-        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, ShapeType shapeType, ColorObject color) {
+        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, QuaternionTransformSet quaternionRotation, Sprite sprite, ShapeType shapeType, ColorObject color) {
             this.identifier = identifier;
             this.position = position;
             this.size = size;
             this.rotation = rotation;
+            this.quaternionRotation = quaternionRotation;
             this.sprite = sprite;
             this.color = color;
             this.shapeType = shapeType;
         }
 
-        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, Sprite sprite, ShapeType shapeType, ColorObject color, boolean frontCullFace) {
+        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, QuaternionTransformSet quaternionRotation, Sprite sprite, ShapeType shapeType, ColorObject color, boolean frontCullFace) {
             this.identifier = identifier;
             this.position = position;
             this.size = size;
             this.rotation = rotation;
+            this.quaternionRotation = quaternionRotation;
             this.sprite = sprite;
             this.color = color;
             this.shapeType = shapeType;
@@ -93,6 +97,10 @@ public abstract class GraphicsManager3D {
 
         public TransformSet getRotation() {
             return rotation;
+        }
+
+        public QuaternionTransformSet getQuaternionRotation() {
+            return quaternionRotation;
         }
 
         public Sprite getSprite() {
@@ -125,6 +133,10 @@ public abstract class GraphicsManager3D {
 
         public void setRotation(TransformSet rotation) {
             this.rotation = rotation;
+        }
+
+        public void setQuaternionRotation(QuaternionTransformSet rotation) {
+            this.quaternionRotation = rotation;
         }
 
         public void setSprite(Sprite sprite) {

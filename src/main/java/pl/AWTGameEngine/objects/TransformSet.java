@@ -80,34 +80,4 @@ public class TransformSet {
         return this;
     }
 
-    public FloatableTransformSet getFloatable() {
-        return new FloatableTransformSet(this);
-    }
-
-    public static class FloatableTransformSet {
-
-        private final float x;
-        private final float y;
-        private final float z;
-
-        public FloatableTransformSet(TransformSet transformSet) {
-            this.x = (float) transformSet.getX();
-            this.y = (float) transformSet.getY();
-            this.z = (float) transformSet.getZ();
-        }
-
-        public float getX() {
-            return this.x;
-        }
-
-        public float getY() {
-            return this.y;
-        }
-
-        public float getZ() {
-            return this.z;
-        }
-
-    }
-
 }

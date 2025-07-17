@@ -43,13 +43,61 @@ public class RotationHelper {
         }
     }
 
-    public static double[] rotationToVectorLookAt(double px, double py, double pz, double rx, double ry, double rz) {
-        double radYaw = (float)Math.toRadians(ry);
-        double radPitch = (float)Math.toRadians(rx);
+    public static double[] xyzEulerToQuaternion(double x, double y, double z) {
+        double pitch = (float) Math.toRadians(x);
+        double yaw = (float) Math.toRadians(y);
+        double roll = (float) Math.toRadians(z);
 
-        double dirX = (float)(Math.cos(radPitch) * Math.sin(radYaw));
-        double dirY = (float)(Math.sin(radPitch));
-        double dirZ = (float)(-Math.cos(radPitch) * Math.cos(radYaw));
+        double cy = (float) Math.cos(yaw * 0.5);
+        double sy = (float) Math.sin(yaw * 0.5);
+        double cp = (float) Math.cos(pitch * 0.5);
+        double sp = (float) Math.sin(pitch * 0.5);
+        double cr = (float) Math.cos(roll * 0.5);
+        double sr = (float) Math.sin(roll * 0.5);
+
+        double w = cr * cp * cy + sr * sp * sy;
+        double x1 = sr * cp * cy - cr * sp * sy;
+        double y1 = cr * sp * cy + sr * cp * sy;
+        double z1 = cr * cp * sy - sr * sp * cy;
+
+        return new double[]{x1, y1, z1, w};
+    }
+
+    public static double[] quaternionToAxisAngle(double x, double y, double z, double w) {
+        if (w > 1.0 || w < -1.0) {
+            double norm = Math.sqrt(x * x + y * y + z * z + w * w);
+            x /= norm;
+            y /= norm;
+            z /= norm;
+            w /= norm;
+        }
+
+        double angleRad = 2.0 * Math.acos(w);
+        double s = Math.sqrt(1.0 - w * w);
+
+        double axisX, axisY, axisZ;
+        if (s < 0.0001) {
+            axisX = x;
+            axisY = y;
+            axisZ = z;
+        } else {
+            axisX = x / s;
+            axisY = y / s;
+            axisZ = z / s;
+        }
+
+        double angleDeg = Math.toDegrees(angleRad);
+
+        return new double[] { angleDeg, axisX, axisY, axisZ };
+    }
+
+    public static double[] rotationToVectorLookAt(double px, double py, double pz, double rx, double ry, double rz) {
+        double radYaw = Math.toRadians(ry);
+        double radPitch = Math.toRadians(rx);
+
+        double dirX = Math.cos(radPitch) * Math.sin(radYaw);
+        double dirY = Math.sin(radPitch);
+        double dirZ = -Math.cos(radPitch) * Math.cos(radYaw);
 
         double lookAtX = px + dirX;
         double lookAtY = py + dirY;
