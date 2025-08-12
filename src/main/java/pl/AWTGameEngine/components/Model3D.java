@@ -19,6 +19,7 @@ public class Model3D extends ObjectComponent implements Renderable3D {
     private String modelPath;
 
     protected Sprite sprite;
+    protected boolean initialized = false;
     protected boolean updatePosition = false;
     protected boolean updateSize = false;
     protected boolean updateRotation = false;
@@ -44,6 +45,7 @@ public class Model3D extends ObjectComponent implements Renderable3D {
                 ),
                 modelPath
         );
+        initialized = true;
     }
 
     @Override
@@ -62,6 +64,9 @@ public class Model3D extends ObjectComponent implements Renderable3D {
     }
 
     protected void handleUpdates(GraphicsManager3D g, GraphicsManager3D.ShapeType shapeType) {
+        if(!initialized) {
+            return;
+        }
         if(updatePosition) {
             g.updatePosition(getObject().getIdentifier(), shapeType, getObject().getPosition());
             updatePosition = false;

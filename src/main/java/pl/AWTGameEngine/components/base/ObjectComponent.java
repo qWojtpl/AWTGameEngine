@@ -139,6 +139,7 @@ public abstract class ObjectComponent {
         return true;
     }
 
+    //todo: fire this event for 2D
     @EventMethod
     public boolean onUpdateRotation(double newRotation) {
         return true;
@@ -146,6 +147,11 @@ public abstract class ObjectComponent {
 
     @EventMethod
     public boolean onUpdateRotation(double newX, double newY,  double newZ) {
+        return true;
+    }
+
+    @EventMethod
+    public boolean onUpdateRotation(double newX, double newY, double newZ, double newW) {
         return true;
     }
 

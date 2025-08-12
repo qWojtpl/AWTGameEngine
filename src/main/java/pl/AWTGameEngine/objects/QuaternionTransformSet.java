@@ -2,10 +2,10 @@ package pl.AWTGameEngine.objects;
 
 public class QuaternionTransformSet {
 
-    private double x = 0;
-    private double y = 0;
-    private double z = 0;
-    private double w = 0;
+    private double x;
+    private double y;
+    private double z;
+    private double w;
 
     public QuaternionTransformSet(double x, double y, double z, double w) {
         this.x = x;

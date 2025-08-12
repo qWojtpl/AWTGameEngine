@@ -104,14 +104,14 @@ public class PanelGL extends JPanel implements PanelObject {
 
     public void setMouseListener(MouseListener mouseListener) {
         if (this.mouseListener != null) {
-            removeMouseListener(this.mouseListener);
-            removeMouseMotionListener(this.mouseListener);
-            removeMouseWheelListener(this.mouseListener);
+            canvas.removeMouseListener(this.mouseListener);
+            canvas.removeMouseMotionListener(this.mouseListener);
+            canvas.removeMouseWheelListener(this.mouseListener);
         }
         this.mouseListener = mouseListener;
-        addMouseListener(mouseListener);
-        addMouseMotionListener(mouseListener);
-        addMouseWheelListener(mouseListener);
+        canvas.addMouseListener(mouseListener);
+        canvas.addMouseMotionListener(mouseListener);
+        canvas.addMouseWheelListener(mouseListener);
     }
 
     public void prepareTexture(String name, Sprite sprite) {
@@ -142,7 +142,7 @@ public class PanelGL extends JPanel implements PanelObject {
             public void init(GLAutoDrawable drawable) {
                 GL2 gl = drawable.getGL().getGL2();
 
-                gl.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+                gl.glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
                 gl.glEnable(GL.GL_DEPTH_TEST);
 
                 for(String name : prepareTextures.keySet()) {

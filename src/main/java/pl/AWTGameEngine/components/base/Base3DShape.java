@@ -15,6 +15,7 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
     protected Sprite sprite;
     protected ColorObject color;
     protected String glTexture;
+    protected boolean initialized = false;
     protected boolean updatePosition = false;
     protected boolean updateSize = false;
     protected boolean updateRotation = false;
@@ -37,6 +38,9 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
     protected abstract void removeShape();
 
     protected void handleUpdates(GraphicsManager3D g, GraphicsManager3D.ShapeType shapeType) {
+        if(!initialized) {
+            return;
+        }
         if(updatePosition) {
             g.updatePosition(getObject().getIdentifier(), shapeType, getObject().getPosition());
             updatePosition = false;

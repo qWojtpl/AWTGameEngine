@@ -15,7 +15,7 @@ import java.awt.event.WindowEvent;
 
 public class Window extends JFrame {
 
-    private final RenderEngine renderEngine;
+    private RenderEngine renderEngine;
     private final boolean serverWindow;
     private boolean sameSize = false;
     private final int WIDTH = 1920;

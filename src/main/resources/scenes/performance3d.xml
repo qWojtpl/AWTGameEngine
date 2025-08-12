@@ -1,8 +1,9 @@
 <scene title="3D performance test" renderFPS="144" updateFPS="60" physicsFPS="60">
-<!--    <object id="player">-->
-<!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
-<!--        <CameraFX />-->
-<!--    </object>-->
+    <object id="player">
+        <MovementFX _package="pl.AWTGameEngine.custom" />
+        <MovementGL _package="pl.AWTGameEngine.custom" />
+        <CameraFX />
+    </object>
     <object id="glTextures">
         <PrepareGLTexture name="beaver" spriteSource="sprites/beaver.jpg" submit="true" />
     </object>
@@ -13,10 +14,10 @@
     <object id="mirrorScreen" size="500,200,1" position="-200,100,700">
         <Box3D />
     </object>
-<!--    <object id="mirrorCamera" position="-100,50,695" size="5,5,5" rotationY="180">-->
-<!--        <Cylinder3D spriteSource="sprites/beaver.jpg" glTexture="beaver" />-->
-<!--        <MirrorTexture target="mirrorScreen" divider="100" _package="pl.AWTGameEngine.custom" />-->
-<!--    </object>-->
+    <object id="mirrorCamera" position="-100,50,695" size="5,5,5" rotationY="180">
+        <Cylinder3D spriteSource="sprites/beaver.jpg" glTexture="beaver" />
+        <MirrorTexture target="mirrorScreen" divider="100" _package="pl.AWTGameEngine.custom" />
+    </object>
 
     <!-- boxes -->
 

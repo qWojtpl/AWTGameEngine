@@ -7,6 +7,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
 
@@ -93,6 +94,7 @@ public class MovementGL extends ObjectComponent {
     private void handleRotation() {
         int mouseX = getMouseListener().getMouseScreenX();
         int mouseY = getMouseListener().getMouseScreenY();
+
         int delta = CENTER_X - mouseX;
         if(delta != 0) {
             moveMouse();

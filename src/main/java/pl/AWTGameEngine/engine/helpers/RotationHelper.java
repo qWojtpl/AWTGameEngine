@@ -44,16 +44,16 @@ public class RotationHelper {
     }
 
     public static double[] xyzEulerToQuaternion(double x, double y, double z) {
-        double pitch = (float) Math.toRadians(x);
-        double yaw = (float) Math.toRadians(y);
-        double roll = (float) Math.toRadians(z);
+        double pitch = Math.toRadians(x);
+        double yaw = Math.toRadians(y);
+        double roll = Math.toRadians(z);
 
-        double cy = (float) Math.cos(yaw * 0.5);
-        double sy = (float) Math.sin(yaw * 0.5);
-        double cp = (float) Math.cos(pitch * 0.5);
-        double sp = (float) Math.sin(pitch * 0.5);
-        double cr = (float) Math.cos(roll * 0.5);
-        double sr = (float) Math.sin(roll * 0.5);
+        double cy = Math.cos(yaw * 0.5);
+        double sy = Math.sin(yaw * 0.5);
+        double cp = Math.cos(pitch * 0.5);
+        double sp = Math.sin(pitch * 0.5);
+        double cr = Math.cos(roll * 0.5);
+        double sr = Math.sin(roll * 0.5);
 
         double w = cr * cp * cy + sr * sp * sy;
         double x1 = sr * cp * cy - cr * sp * sy;

@@ -8,7 +8,6 @@ import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 
 @ComponentFX
-@ComponentGL
 @Conflicts({
         @ConflictsWith(Sphere3D.class),
         @ConflictsWith(Box3D.class)
@@ -31,6 +30,7 @@ public class Cylinder3D extends Base3DShape implements Renderable3D {
                 GraphicsManager3D.ShapeType.CYLINDER,
                 getColor())
         );
+        initialized = true;
     }
 
     @Override

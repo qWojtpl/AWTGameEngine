@@ -64,6 +64,7 @@ public class Box3D extends Base3DShape implements Renderable3D {
         }
 
         graphicsManager3D.createBox(options);
+        initialized = true;
     }
 
     @Override

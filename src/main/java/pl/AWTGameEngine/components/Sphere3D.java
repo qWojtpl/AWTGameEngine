@@ -31,6 +31,7 @@ public class Sphere3D extends Base3DShape implements Renderable3D {
                 GraphicsManager3D.ShapeType.SPHERE,
                 getColor()
         ));
+        initialized = true;
     }
 
     @Override
