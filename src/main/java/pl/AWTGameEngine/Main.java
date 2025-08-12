@@ -19,9 +19,9 @@ public class Main {
         if(isSceneBuilder(args)) {
             return;
         }
-        Logger.log(2, "Requesting default window...");
+        Logger.info("Requesting default window...");
         Dependencies.getWindowsManager().createDefaultWindow();
-        Logger.log(2, "Started app.");
+        Logger.info("Started app.");
     }
 
     private static boolean isSceneBuilder(String[] args) {

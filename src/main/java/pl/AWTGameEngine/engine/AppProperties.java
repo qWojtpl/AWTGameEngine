@@ -86,7 +86,7 @@ public class AppProperties {
             customProperties.put(propertiesPath, properties);
             return properties;
         } catch (IOException e) {
-            Logger.log("Cannot load properties: ", e);
+            Logger.exception("Cannot load properties: ", e);
         }
         return null;
     }

@@ -5,6 +5,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.graphics.*;
+import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
@@ -19,8 +20,8 @@ public class GameObject {
     private boolean active = true;
     private TransformSet position = new TransformSet(0, 0, 0);
     private TransformSet rotation = new TransformSet(0, 0, 0);
+    private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
-    private int priority = 0;
     private PanelObject panel;
     private EventHandler eventHandler = new EventHandler();
     private final List<ObjectComponent> components = new ArrayList<>();
@@ -37,25 +38,31 @@ public class GameObject {
         Window.RenderEngine renderEngine = scene.getWindow().getRenderEngine();
         if(Window.RenderEngine.WEB.equals(renderEngine)) {
             if(!component.isWebComponent()) {
-                Logger.log(1, "Component " + component.getComponentName() +
+                Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as WebComponent");
                 return;
             }
         } else if(Window.RenderEngine.DEFAULT.equals(renderEngine)) {
             if(!component.isDefaultComponent()) {
-                Logger.log(1, "Component " + component.getComponentName() +
+                Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as DefaultComponent");
                 return;
             }
         } else if(Window.RenderEngine.FX3D.equals(renderEngine)) {
-            if(!component.is3DComponent()) {
-                Logger.log(1, "Component " + component.getComponentName() +
-                        " cannot be added to " + identifier + " because is not marked as Component3D");
+            if(!component.isFXComponent()) {
+                Logger.error("Component " + component.getComponentName() +
+                        " cannot be added to " + identifier + " because is not marked as ComponentFX");
+                return;
+            }
+        }  else if(Window.RenderEngine.OPENGL.equals(renderEngine)) {
+            if(!component.isGLComponent()) {
+                Logger.error("Component " + component.getComponentName() +
+                        " cannot be added to " + identifier + " because is not marked as ComponentGL");
                 return;
             }
         }
         if(component.isUnique() && !getComponentsByClass(component.getClass()).isEmpty()) {
-            Logger.log(1, "Component " + component.getClass().getName() + " is unique, cannot add another!");
+            Logger.error("Component " + component.getClass().getName() + " is unique, cannot add another!");
             return;
         }
         if(component.hasRequiredClass()) {
@@ -68,18 +75,17 @@ public class GameObject {
                 }
             }
             if(!found) {
-                Logger.log(1, "Cannot add component " + component.getClass().getName() + ", because it requires " + requiredClass + " component!");
+                Logger.error("Cannot add component " + component.getClass().getName() + ", because it requires " + requiredClass + " component!");
                 return;
             }
         }
         if(!component.getObject().equals(this)) {
-            Logger.log(1, "Component " + component.getClass().getName() + " object is wrong!");
+            Logger.error("Component " + component.getClass().getName() + " object is wrong!");
             return;
         }
         for(ObjectComponent c : getComponents()) {
             if(c.conflictsWith(component.getClass()) || component.conflictsWith(c.getClass())) {
-                Logger.log(1,
-                        "GameObject: " + getIdentifier() + "\nObject components: " + getComponents() + "\n" +
+                Logger.error("GameObject: " + getIdentifier() + "\nObject components: " + getComponents() + "\n" +
                                 "Component " + c.getClass().getName() + " has conflict with "
                                 + component.getClass().getName() + "; cannot add component " + component.getClass().getName());
                 return;
@@ -157,14 +163,14 @@ public class GameObject {
     }
 
     public void rotate(double angle) {
-        double delta = angle - this.rotation.getX();
+        double delta = angle - rotation.getX();
         if(delta == 0) {
             return;
         }
         double direction = delta < 0 ? -1 : 1;
         for(double i = 0; i < Math.abs(delta); i++) {
             if(tryRotate(direction)) {
-                setRotationX(this.rotation.getX() + direction);
+                setRotation(new TransformSet(rotation.getX() + direction, rotation.getY(), rotation.getZ()));
                 continue;
             }
             return;
@@ -230,12 +236,12 @@ public class GameObject {
         return this.position;
     }
 
-    public double getRotationX() {
-        return this.rotation.getX();
-    }
-
     public TransformSet getRotation() {
         return this.rotation;
+    }
+
+    public QuaternionTransformSet getQuaternionRotation() {
+        return this.quaternionRotation;
     }
 
     public double getCenterX() {
@@ -256,10 +262,6 @@ public class GameObject {
 
     public TransformSet getSize() {
         return this.size;
-    }
-
-    public int getPriority() {
-        return this.priority;
     }
 
     public PanelObject getPanel() {
@@ -335,38 +337,19 @@ public class GameObject {
         }
     }
 
-    public void setRotationX(double angle) {
-        this.rotation.setX(angle);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double")) {
-            component.onUpdateRotation(this.rotation.getX());
-        }
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
-            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
-        }
-    }
-
-    @Platform3D
-    public void setRotationY(double angle) {
-        this.rotation.setY(angle);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
-            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
-        }
-    }
-
-    @Platform3D
-    public void setRotationZ(double angle) {
-        this.rotation.setZ(angle);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
-            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
-        }
-    }
-
-    public void setRotationX(String angle) {
-        setRotationX(Integer.parseInt(angle));
-    }
-
     public void setRotation(TransformSet transform) {
         this.rotation = transform;
+        double[] pos = RotationHelper.xyzEulerToQuaternion(transform.getX(), transform.getY(), transform.getZ());
+        this.quaternionRotation = new QuaternionTransformSet(pos[0], pos[1], pos[2], pos[3]);
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
+            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
+        }
+    }
+
+    public void setQuaternionRotation(QuaternionTransformSet transform) {
+        this.quaternionRotation = transform;
+        double[] pos = RotationHelper.quaternionToEulerXYZ(transform.getX(), transform.getY(), transform.getZ(), transform.getW());
+        this.rotation = new TransformSet(pos[0], pos[1], pos[2]);
         for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
             component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
         }
@@ -416,16 +399,6 @@ public class GameObject {
         for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
             component.onUpdateSize(this.size.getX(), this.size.getY(), this.size.getZ());
         }      
-    }
-
-    public void setPriority(int priority) {
-        getScene().removeSortedObject(this.priority, this);
-        this.priority = priority;
-        getScene().addSortedObject(priority, this);
-    }
-
-    public void setPriority(String priority) {
-        setPriority(Integer.parseInt(priority));
     }
 
     public void setPanel(PanelObject panel) {

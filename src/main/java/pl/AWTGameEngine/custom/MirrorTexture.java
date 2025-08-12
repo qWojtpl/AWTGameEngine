@@ -4,23 +4,22 @@ import javafx.application.Platform;
 import javafx.scene.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Rotate;
-import pl.AWTGameEngine.annotations.Component3D;
+import pl.AWTGameEngine.annotations.ComponentFX;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
-import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
-import pl.AWTGameEngine.objects.TransformSet;
 
-@Component3D
+@ComponentFX
 public class MirrorTexture extends ObjectComponent implements Renderable3D {
 
     private Base3DShape target;
-    private Panel3D panel;
+    private PanelFX panel;
     private int counter = 0;
     private int divider = 10;
     private double nearClip = 0.1;
@@ -35,7 +34,7 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
         if(target == null) {
             setTarget(getObject().getIdentifier());
         }
-        panel = (Panel3D) getPanel();
+        panel = (PanelFX) getPanel();
     }
 
     @Override
@@ -99,7 +98,7 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
     public void setTarget(String identifier) {
         target = (Base3DShape) getObjectByName(identifier).getComponentByClass(Base3DShape.class);
         if(target == null) {
-            Logger.log(1, "Not found texture target: " + identifier);
+            Logger.error("Not found texture target: " + identifier);
         }
     }
 

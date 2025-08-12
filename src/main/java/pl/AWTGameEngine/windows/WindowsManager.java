@@ -21,12 +21,19 @@ public class WindowsManager {
     private Font defaultFont;
 
     public Window createWindow(String scenePath) {
+        return createWindow(scenePath, null);
+    }
+
+    public Window createWindow(String scenePath, Window.RenderEngine renderEngine) {
         AppProperties appProperties = Dependencies.getAppProperties();
         boolean server = appProperties.getPropertyAsBoolean("server");
+        if (renderEngine == null) {
+            renderEngine = Window.RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase());
+        }
         Window window = new Window(
-                Window.RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase()),
+                renderEngine,
                 server);
-        if(windows.isEmpty()) {
+        if (windows.isEmpty()) {
             defaultFont = window.getFont();
         }
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,7 +42,7 @@ public class WindowsManager {
         window.setTitle(appProperties.getProperty("title"));
 
         Sprite icon = Dependencies.getResourceManager().getResourceAsSprite(appProperties.getProperty("icon"));
-        if(icon != null) {
+        if (icon != null) {
             window.setIconImage(icon.getImage());
         }
 
@@ -57,7 +64,7 @@ public class WindowsManager {
 
         updateLoop.start();
 
-        if(!server) {
+        if (!server) {
             renderLoop.start();
         }
 
@@ -85,5 +92,4 @@ public class WindowsManager {
     public void removeWindow(Window window) {
         windows.remove(window);
     }
-
 }

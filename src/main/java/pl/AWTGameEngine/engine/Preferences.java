@@ -57,7 +57,7 @@ public class Preferences {
                 writer.close();
             }
         } catch(IOException e) {
-            Logger.log("Cannot create preferences file!", e);
+            Logger.exception("Cannot create preferences file!", e);
         }
     }
 
@@ -79,7 +79,7 @@ public class Preferences {
                 }
             }
         } catch(Exception e) {
-            Logger.log("Cannot read preferences file.", e);
+            Logger.exception("Cannot read preferences file.", e);
         }
     }
 
@@ -88,7 +88,7 @@ public class Preferences {
         try {
             file.createNewFile();
         } catch(IOException e) {
-            Logger.log("Can't create preferences file", e);
+            Logger.exception("Can't create preferences file", e);
         }
         return file;
     }

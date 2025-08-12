@@ -1,14 +1,13 @@
 package pl.AWTGameEngine.components;
 
-import javafx.scene.shape.Shape3D;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
-import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 
-@Component3D
+@ComponentFX
 @Conflicts({
         @ConflictsWith(Sphere3D.class),
         @ConflictsWith(Box3D.class)
@@ -21,19 +20,22 @@ public class Cylinder3D extends Base3DShape implements Renderable3D {
 
     @Override
     protected void createShape() {
-        ((Panel3D) getPanel()).getGraphicsManager3D().createCylinder(new GraphicsManager3D.RenderOptions(
+        ((PanelFX) getPanel()).getGraphicsManager3D().createCylinder(new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),
                 getObject().getRotation(),
+                getObject().getQuaternionRotation(),
                 getSprite(),
+                GraphicsManager3D.ShapeType.CYLINDER,
                 getColor())
         );
+        initialized = true;
     }
 
     @Override
     protected void removeShape() {
-        ((Panel3D) getPanel()).getGraphicsManager3D().removeCylinder(getObject().getIdentifier());
+        ((PanelFX) getPanel()).getGraphicsManager3D().removeCylinder(getObject().getIdentifier());
     }
 
     @Override
@@ -60,8 +62,7 @@ public class Cylinder3D extends Base3DShape implements Renderable3D {
 
     @Override
     public void on3DRenderRequest(GraphicsManager3D g) {
-        Shape3D shape = g.getCylinder(getObject().getIdentifier());
-        handleUpdates(g, shape);
+        handleUpdates(g, GraphicsManager3D.ShapeType.CYLINDER);
     }
 
 }

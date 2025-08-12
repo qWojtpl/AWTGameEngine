@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.components.base;
 
-import javafx.scene.Node;
 import physx.physics.PxRigidDynamic;
 import physx.physics.PxRigidStatic;
 import pl.AWTGameEngine.Dependencies;
@@ -15,11 +14,14 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
 
     protected Sprite sprite;
     protected ColorObject color;
+    protected String glTexture;
+    protected boolean initialized = false;
     protected boolean updatePosition = false;
     protected boolean updateSize = false;
     protected boolean updateRotation = false;
     protected boolean updateSprite = false;
     protected boolean updateColor = false;
+    protected boolean updateGlTexture = false;
     private boolean staticShape = true;
 
     protected PxRigidDynamic rigidDynamic;
@@ -35,26 +37,33 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
 
     protected abstract void removeShape();
 
-    protected void handleUpdates(GraphicsManager3D g, Node node) {
+    protected void handleUpdates(GraphicsManager3D g, GraphicsManager3D.ShapeType shapeType) {
+        if(!initialized) {
+            return;
+        }
         if(updatePosition) {
-            g.updatePosition(node, getObject().getPosition());
+            g.updatePosition(getObject().getIdentifier(), shapeType, getObject().getPosition());
             updatePosition = false;
         }
         if(updateSize) {
-            g.updateSize(node, getObject().getSize());
+            g.updateSize(getObject().getIdentifier(), shapeType, getObject().getSize());
             updateSize = false;
         }
         if(updateRotation) {
-            g.updateRotation(node, getObject().getRotation());
+            g.updateRotation(getObject().getIdentifier(), shapeType, getObject().getRotation(), getObject().getQuaternionRotation());
             updateRotation = false;
         }
         if(updateSprite) {
-            g.updateSprite(node, sprite);
+            g.updateSprite(getObject().getIdentifier(), shapeType, sprite);
             updateSprite = false;
         }
         if(updateColor) {
-            g.updateColor(node, color);
+            g.updateColor(getObject().getIdentifier(), shapeType, color);
             updateColor = false;
+        }
+        if(updateGlTexture) {
+            g.updateGlTexture(getObject().getIdentifier(), shapeType, glTexture);
+            updateGlTexture = false;
         }
     }
 
@@ -115,6 +124,12 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
     @SerializationSetter
     public void setColor(String color) {
         setColor(new ColorObject(color));
+    }
+
+    @SerializationSetter
+    public void setGlTexture(String glTexture) {
+        this.glTexture = glTexture;
+        updateGlTexture = true;
     }
 
 }

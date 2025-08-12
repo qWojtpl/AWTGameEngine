@@ -1,24 +1,23 @@
 package pl.AWTGameEngine.custom;
 
-import javafx.geometry.Bounds;
-import javafx.scene.Group;
-import javafx.scene.transform.Rotate;
-import pl.AWTGameEngine.annotations.*;
+import pl.AWTGameEngine.annotations.ComponentGL;
+import pl.AWTGameEngine.annotations.ComponentMeta;
+import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
 
-@Component3D
+@ComponentGL
 @ComponentMeta(
-        name = "Movement3D",
+        name = "MovementGL",
         description = "Basic player movement implementation",
         author = "Wojt_pl"
 )
-public class Movement3D extends ObjectComponent {
+public class MovementGL extends ObjectComponent {
 
     private final int CENTER_X;
     private final int CENTER_Y;
@@ -26,13 +25,13 @@ public class Movement3D extends ObjectComponent {
     private boolean noclip = true;
     private double speed = 10;
 
-    public Movement3D(GameObject object) {
+    public MovementGL(GameObject object) {
         super(object);
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         try {
             this.robot = new Robot(device);
         } catch(Exception e) {
-            Logger.log("Error initializing Movement3D component", e);
+            Logger.exception("Error initializing MovementGL component", e);
         }
         Rectangle bounds = device.getConfigurations()[0].getBounds();
         CENTER_X = (int) (bounds.getWidth() / 2);
@@ -67,7 +66,7 @@ public class Movement3D extends ObjectComponent {
 
     private void handleMovement(double forward, double right, double up) {
 
-        TransformSet rotation = getObject().getRotation();
+        TransformSet rotation = getCamera().getRotation();
 
         double pitchRad = Math.toRadians(rotation.getX());
         double yawRad = Math.toRadians(rotation.getY());
@@ -89,37 +88,32 @@ public class Movement3D extends ObjectComponent {
             dy = 0;
         }
 
-        TransformSet position = getObject().getPosition();
-
-        getObject().setPosition(new TransformSet(
-                position.getX() + dx,
-                position.getY() + dy,
-                position.getZ() + dz)
-        );
+        getCamera().setPosition(new TransformSet(getCamera().getX() + dx, getCamera().getY() + dy, getCamera().getZ() + dz));
     }
 
     private void handleRotation() {
         int mouseX = getMouseListener().getMouseScreenX();
         int mouseY = getMouseListener().getMouseScreenY();
+
         int delta = CENTER_X - mouseX;
         if(delta != 0) {
             moveMouse();
         }
-        double newRotationY = getObject().getRotation().getY() + delta * -1;
+        double newRotationY = getCamera().getRotation().getY() + delta * -1;
         newRotationY = newRotationY % 360;
 
         delta = CENTER_Y - mouseY;
         if(delta != 0) {
             moveMouse();
         }
-        double newRotationX = getObject().getRotation().getX() + delta;
+        double newRotationX = getCamera().getRotation().getX() + delta;
         if(newRotationX > 90) {
             newRotationX = 90;
         } else if(newRotationX < -90) {
             newRotationX = -90;
         }
 
-        getObject().setRotation(new TransformSet(newRotationX, newRotationY, 0));
+        getCamera().setRotation(new TransformSet(newRotationX, newRotationY, 0));
     }
 
     private void moveMouse() {

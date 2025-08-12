@@ -6,15 +6,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
+import pl.AWTGameEngine.engine.graphics.GraphicsManagerFX;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-
-public class Panel3D extends JFXPanel implements PanelObject {
+public class PanelFX extends JFXPanel implements PanelObject {
 
     private final Window window;
     private final Camera camera;
@@ -24,10 +22,10 @@ public class Panel3D extends JFXPanel implements PanelObject {
     private final javafx.scene.Scene fxScene;
     private MouseListener mouseListener;
 
-    public Panel3D(Window window, int width, int height) {
+    public PanelFX(Window window, int width, int height) {
         this.window = window;
         this.camera = new Camera(this);
-        this.graphicsManager3D = new GraphicsManager3D(this);
+        this.graphicsManager3D = new GraphicsManagerFX(this);
         this.physXManager = new PhysXManager();
         this.rootGroup = new Group(new AmbientLight());
         this.fxScene = new Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
@@ -76,16 +74,8 @@ public class Panel3D extends JFXPanel implements PanelObject {
         if(graphicsManager3D == null) {
             return;
         }
-        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
-        for (int i : sortedObjects.keySet()) {
-            for(GameObject go : sortedObjects.get(i)) {
-                if(!go.isActive()) {
-                    continue;
-                }
-                if(this.equals(go.getPanel())) {
-                    go.render3D(graphicsManager3D);
-                }
-            }
+        for(GameObject go : window.getCurrentScene().getGameObjects()) {
+            go.render3D(graphicsManager3D);
         }
     }
 
@@ -93,16 +83,8 @@ public class Panel3D extends JFXPanel implements PanelObject {
     public void updatePhysics() {
         physXManager.getPxScene().simulate(1f/((float) getWindow().getPhysicsLoop().getFPS() / 6));
         physXManager.getPxScene().fetchResults(true);
-        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
-        for (int i : sortedObjects.keySet()) {
-            for(GameObject go : sortedObjects.get(i)) {
-                if(!go.isActive()) {
-                    continue;
-                }
-                if(this.equals(go.getPanel())) {
-                    go.updatePhysics();
-                }
-            }
+        for(GameObject go : window.getCurrentScene().getGameObjects()) {
+            go.updatePhysics();
         }
     }
 

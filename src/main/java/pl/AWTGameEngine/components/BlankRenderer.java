@@ -33,7 +33,7 @@ public class BlankRenderer extends ObjectComponent implements WebRenderable {
                 getCamera().parsePlainValue(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
                         .setColor(color.getColor())
-                        .setRotation(getObject().getRotationX())
+                        .setRotation(getObject().getRotation().getX())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
                         .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
         );

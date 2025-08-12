@@ -8,9 +8,6 @@ import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 public class DefaultPanel extends JPanel implements PanelObject {
 
@@ -18,17 +15,6 @@ public class DefaultPanel extends JPanel implements PanelObject {
     private final Camera camera;
     private final GraphicsManager graphicsManager = new GraphicsManager();
     private MouseListener mouseListener;
-    private GameObject parentObject = null;
-
-    public DefaultPanel(GameObject parentObject) {
-        super();
-        setLayout(null);
-        setBackground(Color.WHITE);
-        this.window = parentObject.getScene().getWindow();
-        this.camera = new Camera(this);
-        setMouseListener(new MouseListener(this));
-        this.parentObject = parentObject;
-    }
 
     public DefaultPanel(Window window) {
         super();
@@ -46,23 +32,13 @@ public class DefaultPanel extends JPanel implements PanelObject {
             return;
         }
         graphicsManager.setGraphics(g);
-        LinkedHashMap<Integer, List<GameObject>> sortedObjects = window.getCurrentScene().getSortedObjects();
-        List<GameObject> renderList = new ArrayList<>();
-        for(int i : sortedObjects.keySet()) {
-            for(GameObject go : sortedObjects.get(i)) {
-                if(!go.isActive()) {
-                    continue;
-                }
-                if(this.equals(go.getPanel())) {
-                    renderList.add(go);
-                    go.preRender(graphicsManager);
-                }
-            }
+        for(GameObject go : window.getCurrentScene().getGameObjects()) {
+            go.preRender(graphicsManager);
         }
-        for(GameObject go : renderList) {
+        for(GameObject go : window.getCurrentScene().getGameObjects()) {
             go.render(graphicsManager);
         }
-        for(GameObject go : renderList) {
+        for(GameObject go : window.getCurrentScene().getGameObjects()) {
             go.afterRender(graphicsManager);
         }
     }
@@ -96,10 +72,6 @@ public class DefaultPanel extends JPanel implements PanelObject {
 
     public MouseListener getMouseListener() {
         return this.mouseListener;
-    }
-
-    public GameObject getParentObject() {
-        return this.parentObject;
     }
 
     public void setMouseListener(MouseListener mouseListener) {

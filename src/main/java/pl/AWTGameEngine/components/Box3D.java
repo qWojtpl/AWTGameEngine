@@ -1,8 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import javafx.application.Platform;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.image.WritableImage;
 import physx.common.PxIDENTITYEnum;
 import physx.common.PxQuat;
 import physx.common.PxTransform;
@@ -12,15 +9,16 @@ import physx.physics.*;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.engine.PhysXManager;
-import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
-import pl.AWTGameEngine.engine.panels.Panel3D;
+import pl.AWTGameEngine.engine.panels.PanelFX;
+import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.TransformSet;
 
-@Component3D
+@ComponentFX
+@ComponentGL
 @Unique
 @Conflicts({
         @ConflictsWith(Sphere3D.class),
@@ -29,6 +27,7 @@ import pl.AWTGameEngine.objects.TransformSet;
 public class Box3D extends Base3DShape implements Renderable3D {
 
     private final PhysXManager physXManager;
+    private final GraphicsManager3D graphicsManager3D;
     private PxMaterial material;
     private PxBoxGeometry boxGeometry;
     private PxShape shape;
@@ -37,26 +36,40 @@ public class Box3D extends Base3DShape implements Renderable3D {
 
     public Box3D(GameObject object) {
         super(object);
-        physXManager = ((Panel3D) getPanel()).getPhysXManager();
+        if(getPanel() instanceof PanelFX) {
+            physXManager = ((PanelFX) getPanel()).getPhysXManager();
+            graphicsManager3D = ((PanelFX) getPanel()).getGraphicsManager3D();
+        } else {
+            physXManager = ((PanelGL) getPanel()).getPhysXManager();
+            graphicsManager3D = ((PanelGL) getPanel()).getGraphicsManager3D();
+        }
     }
 
     @Override
     protected void createShape() {
-        GraphicsManager3D g = ((Panel3D) getPanel()).getGraphicsManager3D();
 
-        g.createBox(new GraphicsManager3D.RenderOptions(
+        GraphicsManager3D.RenderOptions options = new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),
                 getObject().getRotation(),
+                getObject().getQuaternionRotation(),
                 getSprite(),
+                GraphicsManager3D.ShapeType.BOX,
                 getColor()
-        ));
+        );
+
+        if(glTexture != null) {
+            options.setGlTexture(glTexture);
+        }
+
+        graphicsManager3D.createBox(options);
+        initialized = true;
     }
 
     @Override
     protected void removeShape() {
-        ((Panel3D) getPanel()).getGraphicsManager3D().removeBox(getObject().getIdentifier());
+        graphicsManager3D.removeBox(getObject().getIdentifier());
     }
 
     @Override
@@ -153,18 +166,17 @@ public class Box3D extends Base3DShape implements Renderable3D {
             ));
         }
         if(quat.getX() != previousX || quat.getY() != previousY || quat.getZ() != previousZ || quat.getW() != previousW) {
-            double[] rot = RotationHelper.quaternionToEulerXYZ(quat.getX(), quat.getY(), quat.getZ(), quat.getW());
             previousX = quat.getX();
             previousY = quat.getY();
             previousZ = quat.getZ();
             previousW = quat.getW();
-            getObject().setRotation(new TransformSet(rot[0], rot[1], rot[2]));
+            getObject().setQuaternionRotation(new QuaternionTransformSet(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
         }
     }
 
     @Override
     public void on3DRenderRequest(GraphicsManager3D g) {
-        handleUpdates(g, g.getBox(getObject().getIdentifier()));
+        handleUpdates(g, GraphicsManager3D.ShapeType.BOX);
     }
 
 }

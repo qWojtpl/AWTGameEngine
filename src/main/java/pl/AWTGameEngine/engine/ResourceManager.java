@@ -24,7 +24,7 @@ public class ResourceManager {
     private final List<AudioClip> audioClips = new ArrayList<>();
 
     public void copyResource(String name, String path) {
-        Logger.log(2, "Copying resource: " + name + " to " + path);
+        Logger.info("Copying resource: " + name + " to " + path);
         name = getResourceName(name);
         try {
             InputStream stream = getStream(name);
@@ -51,7 +51,7 @@ public class ResourceManager {
             stream.close();
             fileOutputStream.close();
         } catch(Exception e) {
-            Logger.log("Cannot copy file resource: " + name, e);
+            Logger.exception("Cannot copy file resource: " + name, e);
         }
     }
 
@@ -60,7 +60,7 @@ public class ResourceManager {
         if(resources.containsKey(name)) {
             return resources.get(name);
         }
-        Logger.log(2, "Reading file resource: " + name);
+        Logger.info("Reading file resource: " + name);
         try {
             InputStream stream = getStream(name);
             if(stream == null) {
@@ -76,7 +76,7 @@ public class ResourceManager {
             stream.close();
             return lines;
         } catch(Exception e) {
-            Logger.log("Cannot get file resource: " + name, e);
+            Logger.exception("Cannot get file resource: " + name, e);
         }
         return null;
     }
@@ -86,7 +86,7 @@ public class ResourceManager {
         if(spriteResources.containsKey(name)) {
             return spriteResources.get(name);
         }
-        Logger.log(2, "Reading sprite resource: " + name);
+        Logger.info("Reading sprite resource: " + name);
         try {
             InputStream stream = getStream(name);
             if(stream == null) {
@@ -98,14 +98,14 @@ public class ResourceManager {
             stream.close();
             return sprite;
         } catch(Exception e) {
-            Logger.log("Cannot get sprite from resource: " + name, e);
+            Logger.exception("Cannot get sprite from resource: " + name, e);
         }
         return null;
     }
 
     public AudioClip getResourceAsAudioClip(String name) {
         name = getResourceName(name);
-        Logger.log(2, "Reading audio resource: " + name);
+        Logger.info("Reading audio resource: " + name);
         try {
             InputStream stream = getStream(name);
             if(stream == null) {
@@ -116,14 +116,14 @@ public class ResourceManager {
             audioClips.add(audioClip);
             return audioClip;
         } catch(Exception e) {
-            Logger.log("Cannot get audio from resource: " + name, e);
+            Logger.exception("Cannot get audio from resource: " + name, e);
         }
         return null;
     }
 
     public InputStream getResourceAsStream(String name) {
         name = getResourceName(name);
-        Logger.log(2, "Reading stream resource: " + name);
+        Logger.info("Reading stream resource: " + name);
         try {
             InputStream stream = getStream(name);
             if(stream == null) {
@@ -131,7 +131,7 @@ public class ResourceManager {
             }
             return stream;
         } catch(Exception e) {
-            Logger.log("Cannot get stream from resource: " + name, e);
+            Logger.exception("Cannot get stream from resource: " + name, e);
         }
         return null;
     }
@@ -149,7 +149,7 @@ public class ResourceManager {
             urlResources.put(name, url);
             return url;
         } catch(Exception e) {
-            Logger.log("Cannot get URL from resource: " + name, e);
+            Logger.exception("Cannot get URL from resource: " + name, e);
         }
         return null;
     }
@@ -197,7 +197,7 @@ public class ResourceManager {
             try {
                 audioClip.getAudioStream().close();
             } catch(IOException e) {
-                Logger.log("Cannot close audio stream: ", e);
+                Logger.exception("Cannot close audio stream: ", e);
             }
         }
         audioClips.clear();

@@ -1,9 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.Component3D;
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationSetter;
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
@@ -20,7 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Component3D
+@ComponentFX
+@ComponentGL
 @DefaultComponent
 @WebComponent
 public class Server extends ObjectComponent {
@@ -43,12 +41,12 @@ public class Server extends ObjectComponent {
     @Override
     public void onAddComponent() {
         try {
-            Logger.log(0, "Starting server on port " + port + "...");
+            Logger.info("Starting server on port " + port + "...");
             this.tcpSocket = new ServerSocket(port);
             tcpThread.start();
-            Logger.log(0, "Server started.");
+            Logger.info("Server started.");
         } catch (IOException e) {
-            Logger.log("Cannot start server", e);
+            Logger.exception("Cannot start server", e);
         }
     }
 
@@ -59,10 +57,10 @@ public class Server extends ObjectComponent {
                 s.close();
                 sockets.remove(s);
             }
-            Logger.log(0, "Server closed.");
+            Logger.info("Server closed.");
             tcpSocket.close();
         } catch (IOException e) {
-            Logger.log("Cannot close server socket!", e);
+            Logger.exception("Cannot close server socket!", e);
         }
     }
 
@@ -72,18 +70,18 @@ public class Server extends ObjectComponent {
                 Socket clientSocket = tcpSocket.accept();
                 new Thread(() -> handleConnection(clientSocket), "SERVER-CLIENT-" + (sockets.size() + 1)).start();
             } catch (IOException e) {
-                Logger.log("Server TCP exception", e);
+                Logger.exception("Server TCP exception", e);
             }
         }
     }
 
     private void handleConnection(Socket clientSocket) {
         sockets.add(clientSocket);
-        Logger.log(0, "Client " + getClientAddress(clientSocket) + " connected.");
+        Logger.info("Client " + getClientAddress(clientSocket) + " connected.");
 
         int id = currentId++;
         clientIds.put(clientSocket, id);
-        Logger.log(0, "\t\t-> Assigned new client to ID " + id);
+        Logger.info("\t\t-> Assigned new client to ID " + id);
 
         PrintWriter out;
         BufferedReader in;
@@ -91,16 +89,16 @@ public class Server extends ObjectComponent {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
-            Logger.log("Error while initializing client connection with ID " + id, e);
+            Logger.exception("Error while initializing client connection with ID " + id, e);
             return;
         }
 
         out.println(id);
-        Logger.log(0, "\t\t-> Established connection.");
+        Logger.info("\t\t-> Established connection.");
 
         while (clientSocket.isConnected()) {
             try {
-                Logger.log(0, "Received message: " + in.readLine());
+                Logger.info("Received message: " + in.readLine());
             } catch (IOException e) {
                 disconnect(clientSocket);
                 break;
@@ -111,7 +109,7 @@ public class Server extends ObjectComponent {
             out.close();
             in.close();
         } catch(IOException e) {
-            Logger.log("Cannot close client " + id + " connection", e);
+            Logger.exception("Cannot close client " + id + " connection", e);
         }
     }
 
@@ -125,12 +123,12 @@ public class Server extends ObjectComponent {
 
     public void disconnect(Socket clientSocket) {
         try {
-            Logger.log(0, "Client " + getClientAddress(clientSocket) +
+            Logger.info("Client " + getClientAddress(clientSocket) +
                     " (ID " + clientIds.get(clientSocket) + ") disconnected.");
             clientSocket.close();
             sockets.remove(clientSocket);
         } catch(IOException e) {
-            Logger.log("Cannot disconnect client", e);
+            Logger.exception("Cannot disconnect client", e);
         }
     }
 
@@ -144,7 +142,7 @@ public class Server extends ObjectComponent {
         try {
             udpSocket.send(packet);
         } catch (IOException e) {
-            Logger.log("Cannot send packet", e);
+            Logger.exception("Cannot send packet", e);
         }
     }
 

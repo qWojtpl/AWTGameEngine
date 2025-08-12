@@ -139,6 +139,7 @@ public abstract class ObjectComponent {
         return true;
     }
 
+    //todo: fire this event for 2D
     @EventMethod
     public boolean onUpdateRotation(double newRotation) {
         return true;
@@ -146,6 +147,11 @@ public abstract class ObjectComponent {
 
     @EventMethod
     public boolean onUpdateRotation(double newX, double newY,  double newZ) {
+        return true;
+    }
+
+    @EventMethod
+    public boolean onUpdateRotation(double newX, double newY, double newZ, double newW) {
         return true;
     }
 
@@ -305,8 +311,12 @@ public abstract class ObjectComponent {
         return this.getClass().isAnnotationPresent(WebComponent.class);
     }
 
-    public final boolean is3DComponent() {
-        return this.getClass().isAnnotationPresent(Component3D.class);
+    public final boolean isFXComponent() {
+        return this.getClass().isAnnotationPresent(ComponentFX.class);
+    }
+
+    public final boolean isGLComponent() {
+        return this.getClass().isAnnotationPresent(ComponentGL.class);
     }
 
     public final String getComponentName() {

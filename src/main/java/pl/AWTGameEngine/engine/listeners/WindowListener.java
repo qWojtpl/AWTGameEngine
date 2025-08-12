@@ -3,6 +3,7 @@ package pl.AWTGameEngine.engine.listeners;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
@@ -29,7 +30,7 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
         windowsManager.removeWindow(window);
         if(window.equals(windowsManager.getDefaultWindow())) {
             window.unloadScene();
-            Logger.log(2, "Stopped app.");
+            Logger.info("Stopped app.");
         }
     }
 

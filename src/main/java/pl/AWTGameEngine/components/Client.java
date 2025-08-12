@@ -1,9 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.Component3D;
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationSetter;
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
@@ -14,7 +11,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-@Component3D
+@ComponentFX
+@ComponentGL
 @DefaultComponent
 @WebComponent
 public class Client extends ObjectComponent {
@@ -43,37 +41,40 @@ public class Client extends ObjectComponent {
 
     public void connect(String ip, int port) {
         String address = ip + ":" + port;
-        Logger.log(0, "Connecting to " + address + "...");
+        Logger.info("Connecting to " + address + "...");
         try {
             socket = new Socket(ip, port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             sendMessage("Hello!", true);
         } catch (IOException e) {
-            Logger.log("Cannot connect to " + address, e);
+            Logger.exception("Cannot connect to " + address, e);
         }
     }
 
     public void disconnect() {
+        if(socket == null) {
+            return;
+        }
         try {
             socket.close();
-            Logger.log(0, "Disconnected.");
+            Logger.info("Disconnected.");
         } catch (IOException e) {
-            Logger.log("Cannot disconnect!", e);
+            Logger.exception("Cannot disconnect!", e);
         }
     }
 
     private void sendMessage(String message, boolean b) {
         new Thread(() -> {
-            Logger.log(0, "Sending message: " + message);
+            Logger.info("Sending message: " + message);
             out.println(message);
             String response = null;
             try {
                 response = in.readLine();
             } catch (IOException e) {
-                Logger.log("Cannot read a response", e);
+                Logger.exception("Cannot read a response", e);
             }
-            Logger.log(0, "Server responded with " + response);
+            Logger.info("Server responded with " + response);
             if(b) sendMessage("t2", false);
         }, "CLIENT-MESSAGE").start();
     }

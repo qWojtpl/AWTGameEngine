@@ -1,0 +1,14 @@
+<scene title="OpenGL scene" renderFPS="144" updateFPS="144" physicsFPS="180">
+    <object id="textureHolder">
+        <PrepareGLTexture name="beaver" spriteSource="sprites/beaver.jpg" submit="true" />
+    </object>
+    <object id="camera" position="0,0,-60">
+        <MovementGL _package="pl.AWTGameEngine.custom" />
+    </object>
+    <object id="box" position="0,0,-10" size="10,10,10">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="true" />
+    </object>
+    <object id="box1" position="0,200,-10" size="10,10,10">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
+    </object>
+</scene>

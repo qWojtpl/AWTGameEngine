@@ -1,7 +1,11 @@
 <scene title="3D performance test" renderFPS="144" updateFPS="60" physicsFPS="60">
     <object id="player">
-        <Movement3D _package="pl.AWTGameEngine.custom" />
-        <Camera3D />
+        <MovementFX _package="pl.AWTGameEngine.custom" />
+        <MovementGL _package="pl.AWTGameEngine.custom" />
+        <CameraFX />
+    </object>
+    <object id="glTextures">
+        <PrepareGLTexture name="beaver" spriteSource="sprites/beaver.jpg" submit="true" />
     </object>
     <object id="floor" sizeX="20000" sizeY="10" sizeZ="20000" x="-1000" y="-100" z="-1000">
         <Box3D />
@@ -11,910 +15,910 @@
         <Box3D />
     </object>
     <object id="mirrorCamera" position="-100,50,695" size="5,5,5" rotationY="180">
-        <Cylinder3D spriteSource="sprites/beaver.jpg" />
+        <Cylinder3D spriteSource="sprites/beaver.jpg" glTexture="beaver" />
         <MirrorTexture target="mirrorScreen" divider="100" _package="pl.AWTGameEngine.custom" />
     </object>
 
     <!-- boxes -->
 
-    <object id="box0" sizeX="5" sizeY="5" sizeZ="5" x="0" y="100" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box0" sizeX="5" sizeY="5" sizeZ="5" x="0" y="100" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box1" sizeX="5" sizeY="5" sizeZ="5" x="0" y="114" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box1" sizeX="5" sizeY="5" sizeZ="5" x="0" y="114" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box2" sizeX="5" sizeY="5" sizeZ="5" x="0" y="128" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box2" sizeX="5" sizeY="5" sizeZ="5" x="0" y="128" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box3" sizeX="5" sizeY="5" sizeZ="5" x="0" y="142" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box3" sizeX="5" sizeY="5" sizeZ="5" x="0" y="142" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box4" sizeX="5" sizeY="5" sizeZ="5" x="0" y="156" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box4" sizeX="5" sizeY="5" sizeZ="5" x="0" y="156" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box5" sizeX="5" sizeY="5" sizeZ="5" x="0" y="170" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box5" sizeX="5" sizeY="5" sizeZ="5" x="0" y="170" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box6" sizeX="5" sizeY="5" sizeZ="5" x="0" y="184" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box6" sizeX="5" sizeY="5" sizeZ="5" x="0" y="184" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box7" sizeX="5" sizeY="5" sizeZ="5" x="0" y="198" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box7" sizeX="5" sizeY="5" sizeZ="5" x="0" y="198" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box8" sizeX="5" sizeY="5" sizeZ="5" x="0" y="212" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box8" sizeX="5" sizeY="5" sizeZ="5" x="0" y="212" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box9" sizeX="5" sizeY="5" sizeZ="5" x="0" y="226" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box9" sizeX="5" sizeY="5" sizeZ="5" x="0" y="226" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box10" sizeX="5" sizeY="5" sizeZ="5" x="0" y="240" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box10" sizeX="5" sizeY="5" sizeZ="5" x="0" y="240" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box11" sizeX="5" sizeY="5" sizeZ="5" x="0" y="254" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box11" sizeX="5" sizeY="5" sizeZ="5" x="0" y="254" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box12" sizeX="5" sizeY="5" sizeZ="5" x="0" y="268" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box12" sizeX="5" sizeY="5" sizeZ="5" x="0" y="268" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box13" sizeX="5" sizeY="5" sizeZ="5" x="0" y="282" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box13" sizeX="5" sizeY="5" sizeZ="5" x="0" y="282" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box14" sizeX="5" sizeY="5" sizeZ="5" x="0" y="296" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box14" sizeX="5" sizeY="5" sizeZ="5" x="0" y="296" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box15" sizeX="5" sizeY="5" sizeZ="5" x="0" y="310" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box15" sizeX="5" sizeY="5" sizeZ="5" x="0" y="310" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box16" sizeX="5" sizeY="5" sizeZ="5" x="0" y="324" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box16" sizeX="5" sizeY="5" sizeZ="5" x="0" y="324" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box17" sizeX="5" sizeY="5" sizeZ="5" x="0" y="338" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box17" sizeX="5" sizeY="5" sizeZ="5" x="0" y="338" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box18" sizeX="5" sizeY="5" sizeZ="5" x="0" y="352" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box18" sizeX="5" sizeY="5" sizeZ="5" x="0" y="352" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box19" sizeX="5" sizeY="5" sizeZ="5" x="0" y="366" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box19" sizeX="5" sizeY="5" sizeZ="5" x="0" y="366" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box20" sizeX="5" sizeY="5" sizeZ="5" x="0" y="380" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box20" sizeX="5" sizeY="5" sizeZ="5" x="0" y="380" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box21" sizeX="5" sizeY="5" sizeZ="5" x="0" y="394" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box21" sizeX="5" sizeY="5" sizeZ="5" x="0" y="394" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box22" sizeX="5" sizeY="5" sizeZ="5" x="0" y="408" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box22" sizeX="5" sizeY="5" sizeZ="5" x="0" y="408" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box23" sizeX="5" sizeY="5" sizeZ="5" x="0" y="422" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box23" sizeX="5" sizeY="5" sizeZ="5" x="0" y="422" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box24" sizeX="5" sizeY="5" sizeZ="5" x="0" y="436" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box24" sizeX="5" sizeY="5" sizeZ="5" x="0" y="436" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box25" sizeX="5" sizeY="5" sizeZ="5" x="0" y="450" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box25" sizeX="5" sizeY="5" sizeZ="5" x="0" y="450" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box26" sizeX="5" sizeY="5" sizeZ="5" x="0" y="464" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box26" sizeX="5" sizeY="5" sizeZ="5" x="0" y="464" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box27" sizeX="5" sizeY="5" sizeZ="5" x="0" y="478" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box27" sizeX="5" sizeY="5" sizeZ="5" x="0" y="478" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box28" sizeX="5" sizeY="5" sizeZ="5" x="0" y="492" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box28" sizeX="5" sizeY="5" sizeZ="5" x="0" y="492" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box29" sizeX="5" sizeY="5" sizeZ="5" x="0" y="506" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box29" sizeX="5" sizeY="5" sizeZ="5" x="0" y="506" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box30" sizeX="5" sizeY="5" sizeZ="5" x="0" y="520" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box30" sizeX="5" sizeY="5" sizeZ="5" x="0" y="520" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box31" sizeX="5" sizeY="5" sizeZ="5" x="0" y="534" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box31" sizeX="5" sizeY="5" sizeZ="5" x="0" y="534" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box32" sizeX="5" sizeY="5" sizeZ="5" x="0" y="548" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box32" sizeX="5" sizeY="5" sizeZ="5" x="0" y="548" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box33" sizeX="5" sizeY="5" sizeZ="5" x="0" y="562" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box33" sizeX="5" sizeY="5" sizeZ="5" x="0" y="562" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box34" sizeX="5" sizeY="5" sizeZ="5" x="0" y="576" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box34" sizeX="5" sizeY="5" sizeZ="5" x="0" y="576" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box35" sizeX="5" sizeY="5" sizeZ="5" x="0" y="590" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box35" sizeX="5" sizeY="5" sizeZ="5" x="0" y="590" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box36" sizeX="5" sizeY="5" sizeZ="5" x="0" y="604" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box36" sizeX="5" sizeY="5" sizeZ="5" x="0" y="604" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box37" sizeX="5" sizeY="5" sizeZ="5" x="0" y="618" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box37" sizeX="5" sizeY="5" sizeZ="5" x="0" y="618" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box38" sizeX="5" sizeY="5" sizeZ="5" x="0" y="632" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box38" sizeX="5" sizeY="5" sizeZ="5" x="0" y="632" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box39" sizeX="5" sizeY="5" sizeZ="5" x="0" y="646" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box39" sizeX="5" sizeY="5" sizeZ="5" x="0" y="646" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box40" sizeX="5" sizeY="5" sizeZ="5" x="0" y="660" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box40" sizeX="5" sizeY="5" sizeZ="5" x="0" y="660" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box41" sizeX="5" sizeY="5" sizeZ="5" x="0" y="674" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box41" sizeX="5" sizeY="5" sizeZ="5" x="0" y="674" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box42" sizeX="5" sizeY="5" sizeZ="5" x="0" y="688" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box42" sizeX="5" sizeY="5" sizeZ="5" x="0" y="688" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box43" sizeX="5" sizeY="5" sizeZ="5" x="0" y="702" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box43" sizeX="5" sizeY="5" sizeZ="5" x="0" y="702" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box44" sizeX="5" sizeY="5" sizeZ="5" x="0" y="716" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box44" sizeX="5" sizeY="5" sizeZ="5" x="0" y="716" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box45" sizeX="5" sizeY="5" sizeZ="5" x="0" y="730" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box45" sizeX="5" sizeY="5" sizeZ="5" x="0" y="730" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box46" sizeX="5" sizeY="5" sizeZ="5" x="0" y="744" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box46" sizeX="5" sizeY="5" sizeZ="5" x="0" y="744" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box47" sizeX="5" sizeY="5" sizeZ="5" x="0" y="758" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box47" sizeX="5" sizeY="5" sizeZ="5" x="0" y="758" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box48" sizeX="5" sizeY="5" sizeZ="5" x="0" y="772" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box48" sizeX="5" sizeY="5" sizeZ="5" x="0" y="772" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box49" sizeX="5" sizeY="5" sizeZ="5" x="0" y="786" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box49" sizeX="5" sizeY="5" sizeZ="5" x="0" y="786" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box50" sizeX="5" sizeY="5" sizeZ="5" x="0" y="800" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box50" sizeX="5" sizeY="5" sizeZ="5" x="0" y="800" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box51" sizeX="5" sizeY="5" sizeZ="5" x="0" y="814" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box51" sizeX="5" sizeY="5" sizeZ="5" x="0" y="814" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box52" sizeX="5" sizeY="5" sizeZ="5" x="0" y="828" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box52" sizeX="5" sizeY="5" sizeZ="5" x="0" y="828" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box53" sizeX="5" sizeY="5" sizeZ="5" x="0" y="842" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box53" sizeX="5" sizeY="5" sizeZ="5" x="0" y="842" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box54" sizeX="5" sizeY="5" sizeZ="5" x="0" y="856" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box54" sizeX="5" sizeY="5" sizeZ="5" x="0" y="856" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box55" sizeX="5" sizeY="5" sizeZ="5" x="0" y="870" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box55" sizeX="5" sizeY="5" sizeZ="5" x="0" y="870" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box56" sizeX="5" sizeY="5" sizeZ="5" x="0" y="884" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box56" sizeX="5" sizeY="5" sizeZ="5" x="0" y="884" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box57" sizeX="5" sizeY="5" sizeZ="5" x="0" y="898" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box57" sizeX="5" sizeY="5" sizeZ="5" x="0" y="898" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box58" sizeX="5" sizeY="5" sizeZ="5" x="0" y="912" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box58" sizeX="5" sizeY="5" sizeZ="5" x="0" y="912" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box59" sizeX="5" sizeY="5" sizeZ="5" x="0" y="926" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box59" sizeX="5" sizeY="5" sizeZ="5" x="0" y="926" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box60" sizeX="5" sizeY="5" sizeZ="5" x="0" y="940" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box60" sizeX="5" sizeY="5" sizeZ="5" x="0" y="940" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box61" sizeX="5" sizeY="5" sizeZ="5" x="0" y="954" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box61" sizeX="5" sizeY="5" sizeZ="5" x="0" y="954" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box62" sizeX="5" sizeY="5" sizeZ="5" x="0" y="968" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box62" sizeX="5" sizeY="5" sizeZ="5" x="0" y="968" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box63" sizeX="5" sizeY="5" sizeZ="5" x="0" y="982" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box63" sizeX="5" sizeY="5" sizeZ="5" x="0" y="982" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box64" sizeX="5" sizeY="5" sizeZ="5" x="0" y="996" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box64" sizeX="5" sizeY="5" sizeZ="5" x="0" y="996" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box65" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1010" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box65" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1010" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box66" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1024" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box66" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1024" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box67" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1038" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box67" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1038" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box68" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1052" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box68" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1052" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box69" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1066" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box69" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1066" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box70" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1080" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box70" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1080" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box71" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1094" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box71" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1094" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box72" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1108" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box72" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1108" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box73" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1122" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box73" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1122" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box74" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1136" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box74" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1136" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box75" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1150" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box75" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1150" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box76" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1164" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box76" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1164" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box77" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1178" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box77" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1178" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box78" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1192" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box78" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1192" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box79" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1206" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box79" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1206" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box80" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1220" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box80" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1220" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box81" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1234" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box81" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1234" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box82" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1248" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box82" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1248" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box83" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1262" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box83" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1262" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box84" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1276" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box84" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1276" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box85" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1290" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box85" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1290" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box86" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1304" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box86" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1304" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box87" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1318" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box87" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1318" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box88" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1332" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box88" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1332" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box89" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1346" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box89" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1346" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box90" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1360" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box90" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1360" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box91" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1374" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box91" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1374" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box92" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1388" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box92" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1388" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box93" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1402" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box93" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1402" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box94" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1416" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box94" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1416" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box95" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1430" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box95" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1430" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box96" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1444" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box96" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1444" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box97" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1458" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box97" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1458" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box98" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1472" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box98" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1472" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box99" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1486" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box99" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1486" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box100" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1500" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box100" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1500" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box101" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1514" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box101" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1514" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box102" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1528" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box102" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1528" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box103" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1542" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box103" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1542" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box104" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1556" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box104" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1556" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box105" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1570" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box105" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1570" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box106" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1584" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box106" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1584" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box107" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1598" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box107" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1598" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box108" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1612" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box108" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1612" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box109" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1626" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box109" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1626" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box110" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1640" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box110" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1640" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box111" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1654" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box111" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1654" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box112" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1668" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box112" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1668" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box113" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1682" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box113" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1682" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box114" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1696" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box114" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1696" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box115" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1710" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box115" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1710" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box116" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1724" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box116" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1724" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box117" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1738" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box117" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1738" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box118" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1752" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box118" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1752" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box119" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1766" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box119" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1766" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box120" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1780" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box120" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1780" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box121" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1794" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box121" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1794" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box122" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1808" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box122" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1808" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box123" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1822" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box123" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1822" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box124" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1836" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box124" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1836" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box125" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1850" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box125" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1850" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box126" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1864" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box126" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1864" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box127" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1878" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box127" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1878" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box128" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1892" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box128" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1892" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box129" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1906" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box129" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1906" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box130" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1920" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box130" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1920" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box131" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1934" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box131" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1934" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box132" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1948" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box132" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1948" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box133" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1962" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box133" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1962" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box134" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1976" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box134" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1976" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box135" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1990" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box135" sizeX="5" sizeY="5" sizeZ="5" x="0" y="1990" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box136" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2004" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box136" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2004" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box137" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2018" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box137" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2018" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box138" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2032" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box138" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2032" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box139" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2046" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box139" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2046" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box140" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2060" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box140" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2060" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box141" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2074" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box141" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2074" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box142" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2088" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box142" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2088" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box143" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2102" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box143" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2102" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box144" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2116" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box144" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2116" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box145" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2130" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box145" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2130" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box146" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2144" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box146" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2144" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box147" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2158" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box147" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2158" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box148" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2172" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box148" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2172" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box149" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2186" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box149" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2186" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box150" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2200" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box150" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2200" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box151" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2214" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box151" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2214" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box152" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2228" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box152" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2228" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box153" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2242" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box153" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2242" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box154" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2256" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box154" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2256" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box155" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2270" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box155" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2270" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box156" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2284" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box156" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2284" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box157" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2298" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box157" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2298" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box158" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2312" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box158" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2312" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box159" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2326" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box159" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2326" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box160" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2340" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box160" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2340" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box161" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2354" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box161" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2354" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box162" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2368" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box162" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2368" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box163" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2382" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box163" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2382" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box164" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2396" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box164" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2396" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box165" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2410" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box165" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2410" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box166" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2424" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box166" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2424" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box167" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2438" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box167" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2438" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box168" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2452" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box168" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2452" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box169" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2466" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box169" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2466" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box170" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2480" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box170" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2480" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box171" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2494" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box171" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2494" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box172" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2508" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box172" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2508" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box173" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2522" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box173" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2522" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box174" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2536" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box174" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2536" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box175" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2550" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box175" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2550" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box176" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2564" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box176" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2564" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box177" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2578" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box177" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2578" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box178" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2592" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box178" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2592" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box179" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2606" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box179" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2606" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box180" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2620" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box180" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2620" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box181" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2634" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box181" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2634" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box182" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2648" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box182" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2648" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box183" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2662" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box183" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2662" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box184" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2676" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box184" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2676" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box185" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2690" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box185" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2690" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box186" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2704" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box186" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2704" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box187" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2718" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box187" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2718" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box188" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2732" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box188" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2732" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box189" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2746" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box189" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2746" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box190" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2760" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box190" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2760" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box191" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2774" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box191" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2774" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box192" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2788" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box192" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2788" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box193" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2802" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box193" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2802" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box194" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2816" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box194" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2816" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box195" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2830" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box195" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2830" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box196" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2844" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box196" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2844" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box197" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2858" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box197" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2858" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box198" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2872" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box198" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2872" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box199" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2886" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box199" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2886" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box200" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2900" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box200" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2900" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box201" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2914" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box201" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2914" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box202" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2928" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box202" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2928" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box203" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2942" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box203" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2942" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box204" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2956" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box204" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2956" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box205" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2970" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box205" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2970" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box206" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2984" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box206" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2984" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box207" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2998" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box207" sizeX="5" sizeY="5" sizeZ="5" x="0" y="2998" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box208" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3012" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box208" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3012" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box209" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3026" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box209" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3026" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box210" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3040" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box210" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3040" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box211" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3054" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box211" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3054" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box212" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3068" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box212" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3068" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box213" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3082" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box213" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3082" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box214" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3096" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box214" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3096" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box215" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3110" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box215" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3110" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box216" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3124" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box216" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3124" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box217" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3138" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box217" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3138" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box218" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3152" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box218" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3152" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box219" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3166" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box219" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3166" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box220" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3180" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box220" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3180" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box221" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3194" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box221" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3194" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box222" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3208" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box222" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3208" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box223" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3222" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box223" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3222" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box224" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3236" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box224" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3236" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box225" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3250" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box225" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3250" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box226" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3264" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box226" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3264" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box227" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3278" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box227" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3278" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box228" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3292" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box228" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3292" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box229" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3306" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box229" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3306" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box230" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3320" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box230" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3320" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box231" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3334" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box231" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3334" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box232" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3348" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box232" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3348" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box233" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3362" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box233" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3362" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box234" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3376" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box234" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3376" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box235" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3390" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box235" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3390" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box236" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3404" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box236" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3404" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box237" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3418" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box237" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3418" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box238" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3432" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box238" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3432" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box239" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3446" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box239" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3446" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box240" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3460" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box240" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3460" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box241" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3474" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box241" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3474" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box242" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3488" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box242" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3488" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box243" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3502" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box243" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3502" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box244" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3516" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box244" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3516" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box245" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3530" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box245" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3530" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box246" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3544" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box246" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3544" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box247" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3558" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box247" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3558" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box248" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3572" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box248" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3572" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box249" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3586" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box249" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3586" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box250" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3600" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box250" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3600" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box251" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3614" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box251" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3614" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box252" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3628" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box252" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3628" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box253" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3642" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box253" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3642" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box254" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3656" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box254" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3656" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box255" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3670" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box255" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3670" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box256" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3684" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box256" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3684" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box257" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3698" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box257" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3698" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box258" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3712" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box258" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3712" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box259" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3726" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box259" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3726" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box260" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3740" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box260" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3740" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box261" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3754" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box261" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3754" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box262" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3768" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box262" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3768" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box263" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3782" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box263" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3782" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box264" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3796" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box264" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3796" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box265" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3810" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box265" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3810" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box266" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3824" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box266" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3824" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box267" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3838" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box267" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3838" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box268" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3852" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box268" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3852" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box269" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3866" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box269" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3866" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box270" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3880" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box270" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3880" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box271" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3894" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box271" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3894" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box272" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3908" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box272" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3908" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box273" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3922" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box273" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3922" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box274" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3936" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box274" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3936" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box275" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3950" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box275" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3950" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box276" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3964" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box276" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3964" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box277" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3978" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box277" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3978" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box278" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3992" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box278" sizeX="5" sizeY="5" sizeZ="5" x="0" y="3992" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box279" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4006" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box279" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4006" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box280" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4020" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box280" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4020" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box281" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4034" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box281" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4034" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box282" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4048" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box282" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4048" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box283" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4062" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box283" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4062" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box284" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4076" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box284" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4076" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box285" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4090" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box285" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4090" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box286" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4104" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box286" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4104" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box287" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4118" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box287" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4118" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box288" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4132" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box288" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4132" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box289" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4146" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box289" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4146" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box290" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4160" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box290" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4160" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box291" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4174" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box291" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4174" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box292" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4188" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box292" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4188" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box293" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4202" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box293" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4202" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box294" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4216" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box294" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4216" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box295" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4230" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box295" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4230" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box296" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4244" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box296" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4244" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box297" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4258" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box297" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4258" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box298" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4272" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box298" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4272" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
-    <object id="box299" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4286" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+    <object id="box299" sizeX="5" sizeY="5" sizeZ="5" x="0" y="4286" z="0">
+        <Box3D spriteSource="sprites/beaver.jpg" glTexture="beaver" staticShape="false" />
     </object>
 </scene>

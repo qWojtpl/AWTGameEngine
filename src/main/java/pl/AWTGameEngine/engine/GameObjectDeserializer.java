@@ -13,6 +13,7 @@ public class GameObjectDeserializer {
 
     public static void deserialize(GameObject gameObject, Node data) {
         try {
+            //todo: integers to doubles
             if(!getValue(data, "position").equals("0")) {
                 gameObject.setPosition(new TransformSet().deserialize(getValue(data, "position")));
             } else {
@@ -30,11 +31,11 @@ public class GameObjectDeserializer {
             if(!getValue(data, "rotation").equals("0")) {
                 gameObject.setSize(new TransformSet().deserialize(getValue(data, "rotation")));
             } else {
-                gameObject.setRotationX(Integer.parseInt(getValue(data, "rotationX")));
-                gameObject.setRotationY(Integer.parseInt(getValue(data, "rotationY")));
-                gameObject.setRotationZ(Integer.parseInt(getValue(data, "rotationZ")));
+                int x = Integer.parseInt(getValue(data, "rotationX"));
+                int y = Integer.parseInt(getValue(data, "rotationY"));
+                int z = Integer.parseInt(getValue(data, "rotationZ"));
+                gameObject.setRotation(new TransformSet(x, y, z));
             }
-            gameObject.setPriority(Integer.parseInt(getValue(data, "priority")));
             if(getValue(data, "active").equals("0")) {
                 gameObject.setActive(true);
             } else {
@@ -72,14 +73,14 @@ public class GameObjectDeserializer {
                         if (clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
                             clazz.getDeclaredMethod(methodName, String.class).invoke(o, value);
                         } else {
-                            Logger.log(1, "Tried to invoke " + methodName
+                            Logger.error("Tried to invoke " + methodName
                                     + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
                         }
                     } else {
                         if (clazz.getSuperclass().getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
                             clazz.getSuperclass().getDeclaredMethod(methodName, String.class).invoke(o, value);
                         } else {
-                            Logger.log(1, "Tried to invoke " + methodName
+                            Logger.error("Tried to invoke " + methodName
                                     + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
                         }
                     }
@@ -88,7 +89,7 @@ public class GameObjectDeserializer {
             }
         } catch(NumberFormatException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                 InvocationTargetException | ClassNotFoundException | ClassCastException e) {
-            Logger.log("Error while deserializing GameObject: " + gameObject.getIdentifier(), e);
+            Logger.exception("Error while deserializing GameObject: " + gameObject.getIdentifier(), e);
         }
     }
 

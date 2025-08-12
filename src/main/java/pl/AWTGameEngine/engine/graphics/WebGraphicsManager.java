@@ -31,7 +31,7 @@ public class WebGraphicsManager {
 
     public void updateRotation(GameObject object) {
         execute(String.format("setRotation(\"%s\", \"%s\");",
-                object.getIdentifier(), object.getRotationX()));
+                object.getIdentifier(), object.getRotation().getX()));
     }
 
     public void execute(String script) {

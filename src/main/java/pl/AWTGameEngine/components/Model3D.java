@@ -1,24 +1,25 @@
+
 package pl.AWTGameEngine.components;
 
-import javafx.scene.Group;
-import javafx.scene.Node;
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.Component3D;
+import pl.AWTGameEngine.annotations.ComponentFX;
+import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
-import pl.AWTGameEngine.engine.panels.Panel3D;
-import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
-@Component3D
+@ComponentFX
+@ComponentGL
 public class Model3D extends ObjectComponent implements Renderable3D {
 
     private String modelPath;
 
     protected Sprite sprite;
+    protected boolean initialized = false;
     protected boolean updatePosition = false;
     protected boolean updateSize = false;
     protected boolean updateRotation = false;
@@ -28,29 +29,28 @@ public class Model3D extends ObjectComponent implements Renderable3D {
         super(object);
     }
 
-    public Group getModel() {
-        return ((Panel3D) getPanel()).getGraphicsManager3D().getCustomModel(getObject().getIdentifier());
-    }
-
     @Override
     public void onAddComponent() {
         getObject().getRotation().setZ(180);
-        ((Panel3D) getPanel()).getGraphicsManager3D().createCustomModel(
+        ((PanelFX) getPanel()).getGraphicsManager3D().createCustomModel(
                 new GraphicsManager3D.RenderOptions(
                         getObject().getIdentifier(),
                         getObject().getPosition(),
                         getObject().getSize(),
                         getObject().getRotation(),
+                        getObject().getQuaternionRotation(),
                         getSprite(),
+                        GraphicsManager3D.ShapeType.MODEL,
                         null
                 ),
                 modelPath
         );
+        initialized = true;
     }
 
     @Override
     public void onRemoveComponent() {
-        ((Panel3D) getPanel()).getGraphicsManager3D().removeCustomModel(getObject().getIdentifier());
+        ((PanelFX) getPanel()).getGraphicsManager3D().removeCustomModel(getObject().getIdentifier());
     }
 
     @SerializationSetter
@@ -60,24 +60,27 @@ public class Model3D extends ObjectComponent implements Renderable3D {
 
     @Override
     public void on3DRenderRequest(GraphicsManager3D g) {
-        handleUpdates(g, g.getCustomModel(getObject().getIdentifier()));
+        handleUpdates(g, GraphicsManager3D.ShapeType.MODEL);
     }
 
-    protected void handleUpdates(GraphicsManager3D g, Node node) {
+    protected void handleUpdates(GraphicsManager3D g, GraphicsManager3D.ShapeType shapeType) {
+        if(!initialized) {
+            return;
+        }
         if(updatePosition) {
-            g.updatePosition(node, getObject().getPosition());
+            g.updatePosition(getObject().getIdentifier(), shapeType, getObject().getPosition());
             updatePosition = false;
         }
         if(updateSize) {
-            g.updateSize(node, getObject().getSize());
+            g.updateSize(getObject().getIdentifier(), shapeType, getObject().getSize());
             updateSize = false;
         }
         if(updateRotation) {
-            g.updateRotation(node, getObject().getRotation());
+            g.updateRotation(getObject().getIdentifier(), shapeType, getObject().getRotation(), getObject().getQuaternionRotation());
             updateRotation = false;
         }
         if(updateSprite) {
-            g.updateSprite(node, sprite);
+            g.updateSprite(getObject().getIdentifier(), shapeType, sprite);
             updateSprite = false;
         }
     }
