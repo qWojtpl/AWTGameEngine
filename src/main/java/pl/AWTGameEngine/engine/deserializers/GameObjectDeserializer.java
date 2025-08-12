@@ -1,9 +1,10 @@
-package pl.AWTGameEngine.engine;
+package pl.AWTGameEngine.engine.deserializers;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -43,7 +44,7 @@ public class GameObjectDeserializer {
             }
             for(int i = 0; i < data.getChildNodes().getLength(); i++) {
                 Node childNode = data.getChildNodes().item(i);
-                if(childNode.getNodeName().equals("object") || childNode.getNodeName().equals("#text")) {
+                if(childNode.getNodeName().equals("object") || childNode.getNodeName().startsWith("#")) {
                     continue;
                 }
                 if(childNode.getNodeType() != Node.ELEMENT_NODE) {

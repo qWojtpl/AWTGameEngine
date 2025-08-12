@@ -1,14 +1,14 @@
 package pl.AWTGameEngine.scenes;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.AppProperties;
-import pl.AWTGameEngine.engine.GameObjectDeserializer;
+import pl.AWTGameEngine.engine.deserializers.GameObjectDeserializer;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.engine.deserializers.StyleDeserializer;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -58,7 +58,6 @@ public class SceneLoader {
             if(data == null) {
                 return;
             }
-            window.getCurrentScene().setCustomStyles(getCustomStyles(document));
             attachSceneData(data);
         } catch(Exception e) {
             Logger.exception("Cannot load scene " + scenePath, e);
@@ -113,15 +112,7 @@ public class SceneLoader {
     }
 
     public NodeList getSceneData(Document document) {
-        return document.getElementsByTagName("object");
-    }
-
-    public String getCustomStyles(Document document) {
-        Node node = document.getElementsByTagName("styles").item(0);
-        if(node == null) {
-            return "";
-        }
-        return node.getTextContent();
+        return document.getElementsByTagName("scene").item(0).getChildNodes();
     }
 
     public Document getDocument(InputStream stream) throws Exception {
@@ -133,32 +124,50 @@ public class SceneLoader {
 
     public void attachSceneData(NodeList sceneData) {
         for(int i = 0; i < sceneData.getLength(); i++) {
-            if(!sceneData.item(i).getParentNode().getNodeName().equals("scene")) {
+            if(sceneData.item(i).getNodeName().startsWith("#")) { // #comment or #text
                 continue;
             }
-            initObject(sceneData.item(i));
+            initNode(sceneData.item(i));
         }
     }
 
-    private void initObject(Node node) {
-        String identifier;
-        try {
-             identifier = node.getAttributes().getNamedItem("id").getNodeValue();
-        } catch(Exception e) {
-            Logger.exception("Object doesn't have an identifier.", e);
-            return;
-        }
-        GameObject object = window.getCurrentScene().createGameObject(identifier);
-        if(object == null) {
-            Logger.warning("Cannot initialize object with identifier " + identifier + ", skipping its children!");
-            return;
-        }
-        GameObjectDeserializer.deserialize(object, node);
-        for(int i = 0; i < node.getChildNodes().getLength(); i++) {
-            if(node.getChildNodes().item(i).getNodeName().equals("object")) {
-                Logger.error("Cannot initialize object with identifier " +
-                        node.getChildNodes().item(i).getAttributes().getNamedItem("id").getNodeValue() +
-                        ". You can't nest object in another object. Use group instead.");
+    private void initNode(Node node) {
+        String nodeName = node.getNodeName().toLowerCase();
+        if("object".equals(nodeName)) {
+            String identifier;
+            try {
+                identifier = node.getAttributes().getNamedItem("id").getNodeValue();
+            } catch(Exception e) {
+                Logger.exception("Object doesn't have an identifier.", e);
+                return;
+            }
+            GameObject object = window.getCurrentScene().createGameObject(identifier);
+            if(object == null) {
+                Logger.warning("Cannot initialize object with identifier " + identifier + ", skipping its children!");
+                return;
+            }
+            GameObjectDeserializer.deserialize(object, node);
+            for(int i = 0; i < node.getChildNodes().getLength(); i++) {
+                if(node.getChildNodes().item(i).getNodeName().equals("object")) {
+                    Logger.error("Cannot initialize object with identifier " +
+                            node.getChildNodes().item(i).getAttributes().getNamedItem("id").getNodeValue() +
+                            ". You can't nest object in another object. Use group instead.");
+                }
+            }
+        } else if("styles".equals(nodeName)) {
+            String source = "";
+            try {
+                source = node.getAttributes().getNamedItem("source").getNodeValue();
+            } catch(Exception e) {
+                Logger.warning("You can use CSS from external source using SOURCE attribute.");
+            }
+            if(source == null || source.isEmpty()) {
+                StyleDeserializer.deserialize(getWindow().getCurrentScene(), node);
+            } else {
+                if(!node.getTextContent().isEmpty()) {
+                    Logger.warning("Please note - if you're using CSS with external source, you cannot nest another CSS inside. Use additional tag.");
+                }
+                StyleDeserializer.deserialize(getWindow().getCurrentScene(), source);
             }
         }
     }

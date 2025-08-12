@@ -14,7 +14,7 @@ public class Scene {
     private final Window window;
     private ColliderRegistry colliderRegistry;
     private EventHandler sceneEventHandler;
-    private String customStyles;
+    private String customStyles = "";
 
     public Scene(String name, Window window) {
         this.name = name;
