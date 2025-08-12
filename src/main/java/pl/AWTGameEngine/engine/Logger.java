@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
+@SuppressWarnings("CallToPrintStackTrace")
 public class Logger {
 
     private static int level = 0;
@@ -18,11 +19,19 @@ public class Logger {
 
     }
 
-    public static void log(int level, String message) {
-        log(level, message, null);
+    public static void info(String message) {
+        log(1, message, "", ConsoleColor.RESET);
     }
 
-    public static void log(int level, String message, ConsoleColor color) {
+    public static void error(String message) {
+        log(2, message, "[ERROR] ", ConsoleColor.RED);
+    }
+
+    public static void warning(String message) {
+        log(3, message, "[WARN] ", ConsoleColor.YELLOW);
+    }
+
+    public static void log(int level, String message, String prefix, ConsoleColor color) {
         if(Logger.level < level) {
             return;
         }
@@ -44,7 +53,7 @@ public class Logger {
                 parseNumber(calendar.get(Calendar.MINUTE)) + ":" +
                 parseNumber(calendar.get(Calendar.SECOND)) + ":" +
                 parseThreeNumber(calendar.get(Calendar.MILLISECOND)) + "]" +
-                className + " " + (level == 1 ? "[ERROR] " : "") +
+                className + " " + prefix +
                 message + "\n";
         if(logFile) {
             try(FileWriter writer = new FileWriter(getLogFile(), append)) {
@@ -57,28 +66,22 @@ public class Logger {
                 append = true;
             }
         }
-        if(color == null) {
-            color = ConsoleColor.RESET;
-            if(level == 1) {
-                color = ConsoleColor.RED;
-            }
-        }
         System.out.print(color.value + message + ConsoleColor.RESET.value);
     }
 
-    public static void log(String message, Exception exception) {
+    public static void exception(String message, Exception exception) {
         message += "\n" + exception.getMessage();
         StringBuilder messageBuilder = new StringBuilder(message);
         for(StackTraceElement element : exception.getStackTrace()) {
             messageBuilder.append("\n\t");
             messageBuilder.append(element.toString());
         }
-        log(1, messageBuilder.toString());
+        error(messageBuilder.toString());
     }
 
     public static void clearLog() {
         append = false;
-        log(0, "");
+        info("");
     }
 
     public static File getLogFile() {
@@ -109,8 +112,8 @@ public class Logger {
     }
 
     public static void setLevel(int level) {
-        if(level < 0 || level > 2) {
-            level = 2;
+        if(level < 0 || level > 3) {
+            level = 3;
         }
         Logger.level = level;
     }

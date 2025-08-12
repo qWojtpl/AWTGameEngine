@@ -203,7 +203,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
                 updateSprite(options.getIdentifier(), ShapeType.MODEL, options.getSprite());
                 updateColor(options.getIdentifier(), ShapeType.MODEL, options.getColor());
             } catch(IOException e) {
-                Logger.log("Cannot create custom model", e);
+                Logger.exception("Cannot create custom model", e);
             }
         });
     }

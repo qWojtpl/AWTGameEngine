@@ -38,31 +38,31 @@ public class GameObject {
         Window.RenderEngine renderEngine = scene.getWindow().getRenderEngine();
         if(Window.RenderEngine.WEB.equals(renderEngine)) {
             if(!component.isWebComponent()) {
-                Logger.log(1, "Component " + component.getComponentName() +
+                Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as WebComponent");
                 return;
             }
         } else if(Window.RenderEngine.DEFAULT.equals(renderEngine)) {
             if(!component.isDefaultComponent()) {
-                Logger.log(1, "Component " + component.getComponentName() +
+                Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as DefaultComponent");
                 return;
             }
         } else if(Window.RenderEngine.FX3D.equals(renderEngine)) {
             if(!component.isFXComponent()) {
-                Logger.log(1, "Component " + component.getComponentName() +
+                Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as ComponentFX");
                 return;
             }
         }  else if(Window.RenderEngine.OPENGL.equals(renderEngine)) {
             if(!component.isGLComponent()) {
-                Logger.log(1, "Component " + component.getComponentName() +
+                Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as ComponentGL");
                 return;
             }
         }
         if(component.isUnique() && !getComponentsByClass(component.getClass()).isEmpty()) {
-            Logger.log(1, "Component " + component.getClass().getName() + " is unique, cannot add another!");
+            Logger.error("Component " + component.getClass().getName() + " is unique, cannot add another!");
             return;
         }
         if(component.hasRequiredClass()) {
@@ -75,18 +75,17 @@ public class GameObject {
                 }
             }
             if(!found) {
-                Logger.log(1, "Cannot add component " + component.getClass().getName() + ", because it requires " + requiredClass + " component!");
+                Logger.error("Cannot add component " + component.getClass().getName() + ", because it requires " + requiredClass + " component!");
                 return;
             }
         }
         if(!component.getObject().equals(this)) {
-            Logger.log(1, "Component " + component.getClass().getName() + " object is wrong!");
+            Logger.error("Component " + component.getClass().getName() + " object is wrong!");
             return;
         }
         for(ObjectComponent c : getComponents()) {
             if(c.conflictsWith(component.getClass()) || component.conflictsWith(c.getClass())) {
-                Logger.log(1,
-                        "GameObject: " + getIdentifier() + "\nObject components: " + getComponents() + "\n" +
+                Logger.error("GameObject: " + getIdentifier() + "\nObject components: " + getComponents() + "\n" +
                                 "Component " + c.getClass().getName() + " has conflict with "
                                 + component.getClass().getName() + "; cannot add component " + component.getClass().getName());
                 return;

@@ -28,7 +28,7 @@ public class MovementFX extends ObjectComponent {
         try {
             this.robot = new Robot(device);
         } catch(Exception e) {
-            Logger.log("Error initializing MovementFX component", e);
+            Logger.exception("Error initializing MovementFX component", e);
         }
         Rectangle bounds = device.getConfigurations()[0].getBounds();
         CENTER_X = (int) (bounds.getWidth() / 2);

@@ -30,7 +30,7 @@ public class MusicPlayer extends ObjectComponent {
         try {
             clip = AudioSystem.getClip();
         } catch(LineUnavailableException e) {
-            Logger.log("Line is unavailable", e);
+            Logger.exception("Line is unavailable", e);
             clip = null;
         }
     }
@@ -41,12 +41,12 @@ public class MusicPlayer extends ObjectComponent {
     }
 
     private void logClip() {
-        Logger.log(1, "Cannot open clip. Clip cannot be initialized.");
+        Logger.error("Cannot open clip. Clip cannot be initialized.");
     }
 
     private void open() {
         if(audioClip == null) {
-            Logger.log(1, "Cannot open clip. AudioClip is not set.");
+            Logger.error("Cannot open clip. AudioClip is not set.");
             return;
         }
         if(clip == null) {
@@ -62,7 +62,7 @@ public class MusicPlayer extends ObjectComponent {
                 play();
             }
         } catch(LineUnavailableException | IOException e) {
-            Logger.log("Line is unavailable", e);
+            Logger.exception("Line is unavailable", e);
         }
     }
 

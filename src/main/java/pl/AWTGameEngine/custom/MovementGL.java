@@ -31,7 +31,7 @@ public class MovementGL extends ObjectComponent {
         try {
             this.robot = new Robot(device);
         } catch(Exception e) {
-            Logger.log("Error initializing MovementGL component", e);
+            Logger.exception("Error initializing MovementGL component", e);
         }
         Rectangle bounds = device.getConfigurations()[0].getBounds();
         CENTER_X = (int) (bounds.getWidth() / 2);

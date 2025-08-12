@@ -51,7 +51,7 @@ public class Sprite {
             byte[] imageBytes = stream.toByteArray();
             returnable = new String(Base64.getEncoder().encode(imageBytes), StandardCharsets.UTF_8);
         } catch(IOException e) {
-            Logger.log("Cannot get Base64 from image " + imagePath, e);
+            Logger.exception("Cannot get Base64 from image " + imagePath, e);
             return null;
         }
         if(cacheResult) {

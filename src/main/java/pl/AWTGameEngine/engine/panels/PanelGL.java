@@ -125,11 +125,11 @@ public class PanelGL extends JPanel implements PanelObject {
     public void submitInit() {
         canvas.setFocusable(false);
         add(canvas);
-        Logger.log(0, "OpenGL initialized.");
+        Logger.info("OpenGL initialized.");
     }
 
     private void initOpenGL(int width, int height) {
-        Logger.log(0, "Initializing OpenGL...");
+        Logger.info("Initializing OpenGL...");
         profile = GLProfile.get(GLProfile.GL2);
         capabilities = new GLCapabilities(profile);
         canvas = new GLCanvas(capabilities);
@@ -203,7 +203,7 @@ public class PanelGL extends JPanel implements PanelObject {
                 gl.glLoadIdentity();
             }
         });
-        Logger.log(0, "Waiting for textures...");
+        Logger.info("Waiting for textures...");
     }
 
     private void initListeners() {

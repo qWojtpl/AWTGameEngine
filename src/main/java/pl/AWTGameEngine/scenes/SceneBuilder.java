@@ -14,7 +14,7 @@ public class SceneBuilder {
     }
 
     public static void build(String path) {
-        Logger.log(0, path);
+        Logger.info(path);
     }
 
 }

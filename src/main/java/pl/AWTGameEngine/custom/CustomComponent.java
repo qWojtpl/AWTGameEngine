@@ -49,7 +49,7 @@ public class CustomComponent extends ObjectComponent {
 
     @Override
     public void onMouseClick() {
-        Logger.log(1, "Clicked");
+        Logger.info("Clicked");
     }
 
 }

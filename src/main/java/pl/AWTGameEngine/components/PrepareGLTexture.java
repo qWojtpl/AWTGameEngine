@@ -26,15 +26,15 @@ public class PrepareGLTexture extends ObjectComponent {
             return;
         }
         if(name == null) {
-            Logger.log(2, "Cannot prepare texture, because name is null.");
+            Logger.error("Cannot prepare texture, because name is null.");
             return;
         }
         if(sprite == null) {
-            Logger.log(2, "Cannot prepare texture, because spriteSource is not set.");
+            Logger.error("Cannot prepare texture, because spriteSource is not set.");
             return;
         }
         ((PanelGL) getPanel()).prepareTexture(name, sprite);
-        Logger.log(0, "Prepared GL texture: " + name);
+        Logger.info("Prepared GL texture: " + name);
         if(submit) {
             ((PanelGL) getPanel()).submitInit();
         }

@@ -68,19 +68,19 @@ public class Scene {
     public void addGameObject(GameObject object) {
         if(object.getIdentifier().contains("$")) {
             String errorMsg = "Cannot add object with identifier which contains $ sign - this sign is reserved.";
-            Logger.log(1, errorMsg);
+            Logger.error(errorMsg);
             throw new RuntimeException(errorMsg);
         }
         if(gameObjects.containsKey(object.getIdentifier())) {
             String errorMsg = "Cannot add object with identifier "
                     + object.getIdentifier() + ", object with this identifier already exists in this scene.";
-            Logger.log(1, errorMsg);
+            Logger.error(errorMsg);
             throw new RuntimeException(errorMsg);
         }
         if(!this.equals(object.getScene())) {
             String errorMsg = "Cannot add object with identifier"
                     + object.getIdentifier() + ", object's scene is not set to this scene";
-            Logger.log(1, errorMsg);
+            Logger.error(errorMsg);
             throw new RuntimeException(errorMsg);
         }
         object.setPanel(window.getPanel());

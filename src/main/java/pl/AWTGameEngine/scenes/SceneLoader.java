@@ -25,7 +25,7 @@ public class SceneLoader {
     }
 
     public void loadSceneFile(String scenePath) {
-        Logger.log(2, "Loading scene: " + scenePath);
+        Logger.info("Loading scene: " + scenePath);
         ResourceManager resourceManager = Dependencies.getResourceManager();
         AppProperties appProperties = Dependencies.getAppProperties();
         if(window.getCurrentScene() != null) {
@@ -61,10 +61,10 @@ public class SceneLoader {
             window.getCurrentScene().setCustomStyles(getCustomStyles(document));
             attachSceneData(data);
         } catch(Exception e) {
-            Logger.log("Cannot load scene " + scenePath, e);
+            Logger.exception("Cannot load scene " + scenePath, e);
             return;
         }
-        Logger.log(2, "Scene loaded.");
+        Logger.info("Scene loaded.");
     }
 
     public SceneOptions getSceneOptions(Document document) {
@@ -145,18 +145,18 @@ public class SceneLoader {
         try {
              identifier = node.getAttributes().getNamedItem("id").getNodeValue();
         } catch(Exception e) {
-            Logger.log("Object doesn't have an identifier.", e);
+            Logger.exception("Object doesn't have an identifier.", e);
             return;
         }
         GameObject object = window.getCurrentScene().createGameObject(identifier);
         if(object == null) {
-            Logger.log(1, "Cannot initialize object with identifier " + identifier + ", skipping its children!");
+            Logger.warning("Cannot initialize object with identifier " + identifier + ", skipping its children!");
             return;
         }
         GameObjectDeserializer.deserialize(object, node);
         for(int i = 0; i < node.getChildNodes().getLength(); i++) {
             if(node.getChildNodes().item(i).getNodeName().equals("object")) {
-                Logger.log(1, "Cannot initialize object with identifier " +
+                Logger.error("Cannot initialize object with identifier " +
                         node.getChildNodes().item(i).getAttributes().getNamedItem("id").getNodeValue() +
                         ". You can't nest object in another object. Use group instead.");
             }

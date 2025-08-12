@@ -98,7 +98,7 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
     public void setTarget(String identifier) {
         target = (Base3DShape) getObjectByName(identifier).getComponentByClass(Base3DShape.class);
         if(target == null) {
-            Logger.log(1, "Not found texture target: " + identifier);
+            Logger.error("Not found texture target: " + identifier);
         }
     }
 

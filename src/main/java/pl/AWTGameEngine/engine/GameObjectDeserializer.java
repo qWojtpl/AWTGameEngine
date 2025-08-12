@@ -73,14 +73,14 @@ public class GameObjectDeserializer {
                         if (clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
                             clazz.getDeclaredMethod(methodName, String.class).invoke(o, value);
                         } else {
-                            Logger.log(1, "Tried to invoke " + methodName
+                            Logger.error("Tried to invoke " + methodName
                                     + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
                         }
                     } else {
                         if (clazz.getSuperclass().getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
                             clazz.getSuperclass().getDeclaredMethod(methodName, String.class).invoke(o, value);
                         } else {
-                            Logger.log(1, "Tried to invoke " + methodName
+                            Logger.error("Tried to invoke " + methodName
                                     + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
                         }
                     }
@@ -89,7 +89,7 @@ public class GameObjectDeserializer {
             }
         } catch(NumberFormatException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                 InvocationTargetException | ClassNotFoundException | ClassCastException e) {
-            Logger.log("Error while deserializing GameObject: " + gameObject.getIdentifier(), e);
+            Logger.exception("Error while deserializing GameObject: " + gameObject.getIdentifier(), e);
         }
     }
 
