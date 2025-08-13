@@ -2,8 +2,11 @@
     <object id="blankSquare" x="200" y="200" sizeX="200" sizeY="200">
         <BlankRenderer color="red" />
     </object>
-    <object id="beaverSquare" x="300" y="300" sizeX="200" sizeY="200">
+    <object id="beaverSquare" x="300" y="300" sizeX="500" sizeY="500">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+    </object>
+    <object id="flex" x="0" y="0" sizeX="1920" sizeY="1080">
+        <FlexDisplay items="blankSquare,beaverSquare" />
     </object>
     <styles source="scenes/styles/style.css" />
 </scene>

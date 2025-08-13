@@ -80,4 +80,8 @@ public class TransformSet {
         return this;
     }
 
+    public boolean isEmpty() {
+        return this.x == 0 && this.y == 0 && this.z == 0;
+    }
+
 }

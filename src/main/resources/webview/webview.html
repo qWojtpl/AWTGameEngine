@@ -35,6 +35,8 @@
 
         const elements = new Object();
 
+        /*    TRANSFORMS    */
+
         function setPosition(identifier, x, y) {
             let object = getObject(identifier);
             object.style.left = x + "px";
@@ -51,6 +53,8 @@
             let object = getObject(identifier);
             object.style.transform = "rotate(" + rotation + "deg)";
         }
+
+        /*    IMAGE, COLOR, BORDER    */
 
         function drawImage(identifier, base64) {
             let object = getObject(identifier);
@@ -75,6 +79,8 @@
             object.style.fontSize = size + "px";
         }
 
+        /*    INPUT    */
+
         function initInput(identifier) {
             let object = getObject(identifier);
             if(object.children.length > 0) {
@@ -95,6 +101,32 @@
             initInput(identifier);
             getObject(identifier).children[0].value = value;
         }
+
+        /*    FLEX    */
+
+        function setFlex(identifier) {
+            getObject(identifier).style.display = "flex";
+        }
+
+        function setFlexGap(identifier, gap) {
+            getObject(identifier).style.gap = gap + "px";
+        }
+
+        function setFlexAlignItems(identifier, align) {
+            getObject(identifier).style.alignItems = align;
+        }
+
+        function setFlexJustifyContent(identifier, justify) {
+            getObject(identifier).style.justifyContent = justify;
+        }
+
+        function appendFlexChild(identifier, child) {
+            let childObj = getObject(child);
+            childObj.style.position = "unset";
+            getObject(identifier).appendChild(childObj);
+        }
+
+        /*    OBJECT CREATOR    */
 
         function getObject(identifier) {
             if(elements[identifier] != null) {

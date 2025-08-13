@@ -2,6 +2,8 @@ package pl.AWTGameEngine.engine.graphics;
 
 import javafx.application.Platform;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSException;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -36,7 +38,11 @@ public class WebGraphicsManager {
 
     public void execute(String script) {
         Platform.runLater(() -> {
-            webView.getEngine().executeScript(script);
+            try {
+                webView.getEngine().executeScript(script);
+            } catch(JSException e) {
+                Logger.exception("Cannot execute script", e);
+            }
         });
     }
 
