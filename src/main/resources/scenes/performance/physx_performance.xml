@@ -1,4 +1,4 @@
-<!-- To be honest, don't event try to run this performance on JFX render engine  !-->
+<!-- To be honest, don't event try to run this performance on JFX render engine  -->
 <scene title="PhysX Performance test" renderFPS="144" updateFPS="60" physicsFPS="60">
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />
@@ -6,7 +6,7 @@
     <object id="glTextures">
         <PrepareGLTexture name="beaver" spriteSource="sprites/beaver.jpg" submit="true" />
     </object>
-    <object id="floor" sizeX="20000" sizeY="10" sizeZ="20000" x="-1000" y="-100" z="-1000">
+    <object id="floor" sizeX="20000" sizeY="20" sizeZ="20000" x="-1000" y="-100" z="-1000">
         <Box3D />
     </object>
 
@@ -30,7 +30,7 @@
         return 0;
     }
 
-    !-->
+    -->
 
     <!-- boxes -->
 

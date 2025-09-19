@@ -29,6 +29,11 @@ public class PhysXManager {
         scene = physics.createScene(sceneDesc);
     }
 
+    public void simulateFrame(double fps) {
+        getPxScene().simulate(1f/((float) fps / 6));
+        getPxScene().fetchResults(true);
+    }
+
     private String getVersionString() {
         int versionMajor = VERSION >> 24;
         int versionMinor = (VERSION >> 16) & 0xff;

@@ -27,7 +27,7 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
     protected PxRigidDynamic rigidDynamic;
     protected PxRigidStatic rigidStatic;
 
-    private double mass = 0.5;
+    private double mass = 0.03;
 
     public Base3DShape(GameObject object) {
         super(object);

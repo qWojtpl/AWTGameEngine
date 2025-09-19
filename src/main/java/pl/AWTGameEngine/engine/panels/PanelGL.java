@@ -5,7 +5,6 @@ import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
-import javafx.embed.swing.JFXPanel;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
@@ -19,7 +18,6 @@ import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class PanelGL extends JPanel implements PanelObject {
@@ -89,8 +87,7 @@ public class PanelGL extends JPanel implements PanelObject {
             return;
         }
 
-        physXManager.getPxScene().simulate(1f/((float) getWindow().getPhysicsLoop().getFPS() / 6));
-        physXManager.getPxScene().fetchResults(true);
+        physXManager.simulateFrame(getWindow().getPhysicsLoop().getFPS());
 
         for(GameObject go : getWindow().getCurrentScene().getGameObjects()) {
             go.updatePhysics();
@@ -142,7 +139,7 @@ public class PanelGL extends JPanel implements PanelObject {
             public void init(GLAutoDrawable drawable) {
                 GL2 gl = drawable.getGL().getGL2();
 
-                gl.glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
+                gl.glClearColor(0.192156863f, 0.337254902f, 0.474509804f, 1.0f);
                 gl.glEnable(GL.GL_DEPTH_TEST);
 
                 for(String name : prepareTextures.keySet()) {
