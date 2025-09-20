@@ -326,7 +326,7 @@ public class GameObject {
     }
 
     public void setPosition(TransformSet transform) {
-        this.position = transform;
+        this.position = transform.clone();
         for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
             component.onUpdatePosition(this.position.getX(), this.position.getY());
         }
@@ -336,7 +336,7 @@ public class GameObject {
     }
 
     public void setRotation(TransformSet transform) {
-        this.rotation = transform;
+        this.rotation = transform.clone();
         double[] pos = RotationHelper.xyzEulerToQuaternion(transform.getX(), transform.getY(), transform.getZ());
         this.quaternionRotation = new QuaternionTransformSet(pos[0], pos[1], pos[2], pos[3]);
         for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
@@ -345,7 +345,7 @@ public class GameObject {
     }
 
     public void setQuaternionRotation(QuaternionTransformSet transform) {
-        this.quaternionRotation = transform;
+        this.quaternionRotation = transform.clone();
         double[] pos = RotationHelper.quaternionToEulerXYZ(transform.getX(), transform.getY(), transform.getZ(), transform.getW());
         this.rotation = new TransformSet(pos[0], pos[1], pos[2]);
         for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {

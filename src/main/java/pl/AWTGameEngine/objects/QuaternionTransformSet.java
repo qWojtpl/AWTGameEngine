@@ -53,6 +53,10 @@ public class QuaternionTransformSet {
         this.w = 0;
     }
 
+    public QuaternionTransformSet clone() {
+        return new QuaternionTransformSet(this.x, this.y, this.z, this.w);
+    }
+
     @Override
     public String toString() {
         return "QuaternionTransformSet[x=" + x + ",y=" + y + ",z=" + z + ",w=" + w + "]";

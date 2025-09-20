@@ -1,20 +1,12 @@
 package pl.AWTGameEngine.components;
 
-import physx.common.PxIDENTITYEnum;
-import physx.common.PxQuat;
-import physx.common.PxTransform;
-import physx.common.PxVec3;
-import physx.geometry.PxBoxGeometry;
-import physx.physics.*;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.Base3DShape;
-import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.RigidBody;
 import pl.AWTGameEngine.objects.TransformSet;
 
