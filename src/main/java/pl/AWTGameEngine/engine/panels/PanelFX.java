@@ -4,9 +4,11 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFX;
+import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
@@ -74,16 +76,18 @@ public class PanelFX extends JFXPanel implements PanelObject {
         if(graphicsManager3D == null) {
             return;
         }
-        for(GameObject go : window.getCurrentScene().getGameObjects()) {
-            go.render3D(graphicsManager3D);
+        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
+            if(component instanceof Renderable3D) {
+                ((Renderable3D) component).on3DRenderRequest(graphicsManager3D);
+            }
         }
     }
 
     @Override
     public void updatePhysics() {
         physXManager.simulateFrame(getWindow().getPhysicsLoop().getFPS());
-        for(GameObject go : window.getCurrentScene().getGameObjects()) {
-            go.updatePhysics();
+        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onPhysicsUpdate")) {
+            component.onPhysicsUpdate();
         }
     }
 

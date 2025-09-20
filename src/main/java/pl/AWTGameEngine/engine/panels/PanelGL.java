@@ -5,10 +5,12 @@ import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
+import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
@@ -89,8 +91,8 @@ public class PanelGL extends JPanel implements PanelObject {
 
         physXManager.simulateFrame(getWindow().getPhysicsLoop().getFPS());
 
-        for(GameObject go : getWindow().getCurrentScene().getGameObjects()) {
-            go.updatePhysics();
+        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onPhysicsUpdate")) {
+            component.onPhysicsUpdate();
         }
     }
 
@@ -166,8 +168,10 @@ public class PanelGL extends JPanel implements PanelObject {
                     return;
                 }
 
-                for(GameObject go : getWindow().getCurrentScene().getGameObjects()) {
-                    go.render3D(graphicsManager3D);
+                for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
+                    if(component instanceof Renderable3D) {
+                        ((Renderable3D) component).on3DRenderRequest(graphicsManager3D);
+                    }
                 }
 
                 final GL2 gl = drawable.getGL().getGL2();

@@ -3,8 +3,6 @@ package pl.AWTGameEngine.engine.listeners;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.panels.PanelGL;
-import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 
@@ -55,11 +53,9 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
         } else {
             window.getPanel().setSize(new Dimension(newWidth, newHeight));
         }
-        if(window.getRenderEngine().equals(Window.RenderEngine.WEB)) {
-            if(window.getCurrentScene() != null) {
-                for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowResize#int#int")) {
-                    component.onWindowResize(newWidth, newHeight);
-                }
+        if(window.getCurrentScene() != null) {
+            for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowResize#int#int")) {
+                component.onWindowResize(newWidth, newHeight);
             }
         }
     }

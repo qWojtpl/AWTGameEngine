@@ -223,21 +223,6 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
-    public void onCreateGameObject(GameObject newObject) {
-
-    }
-
-    @EventMethod
-    public void onRemoveGameObject(GameObject object) {
-
-    }
-
-    @EventMethod
-    public void onUpdateGameObject(GameObject updatedObject) {
-
-    }
-
-    @EventMethod
     public void onMouseClick() {
 
     }

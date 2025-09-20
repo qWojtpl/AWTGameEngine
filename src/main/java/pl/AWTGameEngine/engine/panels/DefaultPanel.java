@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.engine.panels;
 
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
@@ -32,14 +33,14 @@ public class DefaultPanel extends JPanel implements PanelObject {
             return;
         }
         graphicsManager.setGraphics(g);
-        for(GameObject go : window.getCurrentScene().getGameObjects()) {
-            go.preRender(graphicsManager);
+        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onPreRender#GraphicsManager")) {
+            component.onPreRender(graphicsManager);
         }
-        for(GameObject go : window.getCurrentScene().getGameObjects()) {
-            go.render(graphicsManager);
+        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onRender#GraphicsManager")) {
+            component.onRender(graphicsManager);
         }
-        for(GameObject go : window.getCurrentScene().getGameObjects()) {
-            go.afterRender(graphicsManager);
+        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onAfterRender#GraphicsManager")) {
+            component.onAfterRender(graphicsManager);
         }
     }
 

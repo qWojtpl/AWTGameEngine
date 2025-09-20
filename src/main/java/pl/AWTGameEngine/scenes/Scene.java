@@ -85,14 +85,6 @@ public class Scene {
         }
         object.setPanel(window.getPanel());
         gameObjects.put(object.getIdentifier(), object);
-        for(GameObject obj : getActiveGameObjects()) {
-            if(obj.equals(object)) {
-                continue;
-            }
-            for(ObjectComponent component : obj.getEventHandler().getComponents("onCreateGameObject#GameObject")) {
-                component.onCreateGameObject(object);
-            }
-        }
     }
 
     public void removeGameObject(GameObject object) {
@@ -105,14 +97,6 @@ public class Scene {
             }
         }
         gameObjects.remove(object.getIdentifier());
-        for(GameObject obj : getActiveGameObjects()) {
-            if(obj.equals(object)) {
-                continue;
-            }
-            for(ObjectComponent component : obj.getEventHandler().getComponents("onRemoveGameObject#GameObject")) {
-                component.onRemoveGameObject(object);
-            }
-        }
     }
 
     public GameObject getGameObjectByName(String identifier) {

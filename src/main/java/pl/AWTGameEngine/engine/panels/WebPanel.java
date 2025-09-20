@@ -5,8 +5,10 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
@@ -71,8 +73,10 @@ public class WebPanel extends JFXPanel implements PanelObject {
         if(graphicsManager == null) {
             return;
         }
-        for(GameObject go : getWindow().getCurrentScene().getGameObjects()) {
-            go.webRender(graphicsManager);
+        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onWebRenderRequest#WebGraphicsManager")) {
+            if(component instanceof WebRenderable) {
+                ((WebRenderable) component).onWebRenderRequest(graphicsManager);
+            }
         }
     }
 

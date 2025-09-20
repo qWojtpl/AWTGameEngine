@@ -1,10 +1,8 @@
 package pl.AWTGameEngine.objects;
 
-import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
-import pl.AWTGameEngine.engine.graphics.*;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
@@ -23,7 +21,7 @@ public class GameObject {
     private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
     private PanelObject panel;
-    private EventHandler eventHandler = new EventHandler();
+    private final EventHandler eventHandler = new EventHandler();
     private final List<ObjectComponent> components = new ArrayList<>();
 
     public GameObject(String identifier, Scene scene) {
@@ -233,11 +231,11 @@ public class GameObject {
     }
 
     public TransformSet getPosition() {
-        return this.position;
+        return this.position.clone();
     }
 
     public TransformSet getRotation() {
-        return this.rotation;
+        return this.rotation.clone();
     }
 
     public QuaternionTransformSet getQuaternionRotation() {
@@ -261,7 +259,7 @@ public class GameObject {
     }
 
     public TransformSet getSize() {
-        return this.size;
+        return this.size.clone();
     }
 
     public PanelObject getPanel() {
@@ -403,50 +401,6 @@ public class GameObject {
 
     public void setPanel(PanelObject panel) {
         this.panel = panel;
-    }
-
-    public void setEventHandler(EventHandler eventHandler) {
-        this.eventHandler = eventHandler;
-    }
-
-    public void preRender(GraphicsManager g) {
-        for(ObjectComponent component : eventHandler.getComponents("onPreRender#GraphicsManager")) {
-            component.onPreRender(g);
-        }
-    }
-
-    public void render(GraphicsManager g) {
-        for(ObjectComponent component : eventHandler.getComponents("onRender#GraphicsManager")) {
-            component.onRender(g);
-        }
-    }
-
-    public void afterRender(GraphicsManager g) {
-        for(ObjectComponent component : eventHandler.getComponents("onAfterRender#GraphicsManager")) {
-            component.onAfterRender(g);
-        }
-    }
-
-    public void webRender(WebGraphicsManager g) {
-        for(ObjectComponent component : getComponents()) {
-            if(component instanceof WebRenderable) {
-                ((WebRenderable) component).onWebRenderRequest(g);
-            }
-        }
-    }
-
-    public void render3D(GraphicsManager3D g) {
-        for(ObjectComponent component : getComponents()) {
-            if(component instanceof Renderable3D) {
-                ((Renderable3D) component).on3DRenderRequest(g);
-            }
-        }
-    }
-
-    public void updatePhysics() {
-        for(ObjectComponent component : eventHandler.getComponents("onPhysicsUpdate")) {
-            component.onPhysicsUpdate();
-        }
     }
 
 }
