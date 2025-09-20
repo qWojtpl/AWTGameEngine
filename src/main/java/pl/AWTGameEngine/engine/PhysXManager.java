@@ -4,20 +4,32 @@ import physx.PxTopLevelFunctions;
 import physx.common.*;
 import physx.physics.*;
 
-public class PhysXManager {
+public final class PhysXManager {
 
-    private final int NUM_THREADS = 4;
-    private final int VERSION = PxTopLevelFunctions.getPHYSICS_VERSION();
-    private final PxDefaultAllocator allocator = new PxDefaultAllocator();
-    private final PxDefaultErrorCallback errorCb = new PxDefaultErrorCallback();
-    private final PxFoundation foundation = PxTopLevelFunctions.CreateFoundation(VERSION, allocator, errorCb);
-    private final PxTolerancesScale tolerances = new PxTolerancesScale();
-    private final PxPhysics physics = PxTopLevelFunctions.CreatePhysics(VERSION, foundation, tolerances);
-    private final PxDefaultCpuDispatcher cpuDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(NUM_THREADS);
-    private final PxVec3 gravityVector = new PxVec3(0f, -9.81f, 0f);
+    private static PhysXManager INSTANCE;
+    private final static int NUM_THREADS = 4;
+    private final static int VERSION = PxTopLevelFunctions.getPHYSICS_VERSION();
+    private final PxDefaultAllocator allocator;
+    private final PxDefaultErrorCallback errorCb;
+    private final PxFoundation foundation;
+    private final PxTolerancesScale tolerances;
+    private final PxPhysics physics;
+    private final PxDefaultCpuDispatcher cpuDispatcher;
+    private final PxVec3 gravityVector;
+    private final PxShapeFlags shapeFlags;
     private PxSceneDesc sceneDesc;
     private PxScene scene;
-    private final PxShapeFlags shapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eSCENE_QUERY_SHAPE.value | PxShapeFlagEnum.eSIMULATION_SHAPE.value));
+
+    PhysXManager() {
+        allocator = new PxDefaultAllocator();
+        errorCb = new PxDefaultErrorCallback();
+        foundation = PxTopLevelFunctions.CreateFoundation(VERSION, allocator, errorCb);
+        tolerances = new PxTolerancesScale();
+        physics = PxTopLevelFunctions.CreatePhysics(VERSION, foundation, tolerances);
+        cpuDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(NUM_THREADS);
+        gravityVector = new PxVec3(0f, -9.81f, 0f);
+        shapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eSCENE_QUERY_SHAPE.value | PxShapeFlagEnum.eSIMULATION_SHAPE.value));
+    }
 
     public void init() {
         Logger.info("PhysX loaded, version " + getVersionString());
@@ -65,6 +77,13 @@ public class PhysXManager {
         foundation.release();
         errorCb.destroy();
         allocator.destroy();
+    }
+
+    public static PhysXManager getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new PhysXManager();
+        }
+        return INSTANCE;
     }
 
 }

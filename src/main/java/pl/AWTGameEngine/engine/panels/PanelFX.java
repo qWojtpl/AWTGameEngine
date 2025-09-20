@@ -28,7 +28,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
         this.window = window;
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManagerFX(this);
-        this.physXManager = new PhysXManager();
+        this.physXManager = PhysXManager.getInstance();
         this.rootGroup = new Group(new AmbientLight());
         this.fxScene = new Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
         physXManager.init();

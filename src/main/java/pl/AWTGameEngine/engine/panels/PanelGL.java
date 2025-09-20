@@ -39,7 +39,7 @@ public class PanelGL extends JPanel implements PanelObject {
         this.window = window;
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManagerGL(this);
-        this.physXManager = new PhysXManager();
+        this.physXManager = PhysXManager.getInstance();
         physXManager.init();
         initOpenGL(width, height);
         initListeners();
