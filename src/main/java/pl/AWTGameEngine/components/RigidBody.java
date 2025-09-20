@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.objects;
+package pl.AWTGameEngine.components;
 
 import physx.common.PxIDENTITYEnum;
 import physx.common.PxQuat;
@@ -6,12 +6,17 @@ import physx.common.PxTransform;
 import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
+import pl.AWTGameEngine.annotations.ComponentFX;
+import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.TransformSet;
 
-public abstract class RigidBody {
+public abstract class RigidBody extends ObjectComponent {
 
-    private final ObjectComponent component;
+    // PhysX
     protected final PhysXManager physXManager = PhysXManager.getInstance();
     protected PxMaterial material;
     protected PxBoxGeometry boxGeometry;
@@ -20,25 +25,25 @@ public abstract class RigidBody {
     protected final PxTransform pose = new PxTransform(PxIDENTITYEnum.PxIdentity);
     protected final PxFilterData filterData = new PxFilterData(1, 1, 0, 0);
 
+    // Internal variables
     protected double mass = 0.03;
-
     private QuaternionTransformSet cachedRotation = new QuaternionTransformSet(0, 0, 0, 0);
 
-    public RigidBody(ObjectComponent component) {
-        this.component = component;
+    public RigidBody(GameObject object) {
+        super(object);
     }
 
     public void initialize() {
         physics = physXManager.getPxPhysics();
         boxGeometry = new PxBoxGeometry(
-                (float) getComponent().getObject().getSize().getX(),
-                (float) getComponent().getObject().getSize().getY(),
-                (float) getComponent().getObject().getSize().getZ()
+                (float) getObject().getSize().getX(),
+                (float) getObject().getSize().getY(),
+                (float) getObject().getSize().getZ()
         );
         material = physics.createMaterial(0.5f, 0.5f, 0.5f);
         shape = physics.createShape(boxGeometry, material, true, physXManager.getShapeFlags());
         shape.setSimulationFilterData(filterData);
-        updatePosition(getComponent().getObject().getPosition());
+        updatePosition(getObject().getPosition());
     }
 
     public abstract void destroy();
@@ -49,10 +54,6 @@ public abstract class RigidBody {
         shape.release();
         boxGeometry.destroy();
         material.release();
-    }
-
-    public ObjectComponent getComponent() {
-        return this.component;
     }
 
     public double getMass() {
@@ -78,9 +79,8 @@ public abstract class RigidBody {
     public abstract void physicsUpdate();
 
     protected void updateCachedPositions(PxVec3 position, PxQuat rotation) {
-        GameObject object = component.getObject();
-        if(position.getX() != object.getPosition().getX() || position.getY() != object.getPosition().getY() || position.getZ() != object.getPosition().getZ()) {
-            object.setPosition(new TransformSet(
+        if(position.getX() != getObject().getPosition().getX() || position.getY() != getObject().getPosition().getY() || position.getZ() != getObject().getPosition().getZ()) {
+            getObject().setPosition(new TransformSet(
                     position.getX(),
                     position.getY(),
                     position.getZ()
@@ -89,16 +89,20 @@ public abstract class RigidBody {
         if(rotation.getX() != cachedRotation.getX() || rotation.getY() != cachedRotation.getY() ||
                 rotation.getZ() != cachedRotation.getZ() || rotation.getW() != cachedRotation.getW()) {
             cachedRotation = new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW());
-            object.setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
+            getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
         }
     }
 
+    @ComponentFX
+    @ComponentGL
     public static class Dynamic extends RigidBody {
 
         private PxRigidDynamic rigidDynamic;
 
-        public Dynamic(ObjectComponent component) {
-            super(component);
+        private boolean disableGravity = false;
+
+        public Dynamic(GameObject object) {
+            super(object);
         }
 
         @Override
@@ -107,11 +111,13 @@ public abstract class RigidBody {
             rigidDynamic = physics.createRigidDynamic(pose);
             rigidDynamic.attachShape(shape);
             rigidDynamic.setMass((float) mass);
+            setDisableGravity(disableGravity);
             physXManager.getPxScene().addActor(rigidDynamic);
         }
 
         @Override
         public void destroy() {
+            rigidDynamic.detachShape(shape);
             physXManager.getPxScene().removeActor(rigidDynamic);
             rigidDynamic.release();
         }
@@ -121,14 +127,33 @@ public abstract class RigidBody {
             updateCachedPositions(rigidDynamic.getGlobalPose().getP(), rigidDynamic.getGlobalPose().getQ());
         }
 
+        public void addForce(TransformSet force) {
+            PxVec3 vec3 = new PxVec3((float) force.getX(), (float) force.getY(), (float) force.getZ());
+            rigidDynamic.addForce(vec3);
+            vec3.destroy();
+        }
+
+        public void setDisableGravity(boolean disableGravity) {
+            this.disableGravity = disableGravity;
+            if(rigidDynamic != null) {
+                rigidDynamic.setActorFlag(PxActorFlagEnum.eDISABLE_GRAVITY, disableGravity);
+            }
+        }
+
+        public boolean isGravityDisabled() {
+            return this.disableGravity;
+        }
+
     }
 
+    @ComponentFX
+    @ComponentGL
     public static class Static extends RigidBody {
 
         private PxRigidStatic rigidStatic;
 
-        public Static(ObjectComponent component) {
-            super(component);
+        public Static(GameObject object) {
+            super(object);
         }
 
         @Override
@@ -141,6 +166,7 @@ public abstract class RigidBody {
 
         @Override
         public void destroy() {
+            rigidStatic.detachShape(shape);
             physXManager.getPxScene().removeActor(rigidStatic);
             rigidStatic.release();
         }
@@ -150,6 +176,41 @@ public abstract class RigidBody {
             updateCachedPositions(rigidStatic.getGlobalPose().getP(), rigidStatic.getGlobalPose().getQ());
         }
 
+    }
+
+    // Events
+
+    @Override
+    public void onAddComponent() {
+        initialize();
+    }
+
+    @Override
+    public void onRemoveComponent() {
+        destroy();
+    }
+
+    @Override
+    public void onPhysicsUpdate() {
+        physicsUpdate();
+    }
+
+    @Override
+    public boolean onUpdatePosition(double newX, double newY, double newZ) {
+        updatePosition(new TransformSet(newX, newY, newZ));
+        return true;
+    }
+
+    @Override
+    public boolean onUpdateSize(double newX, double newY, double newZ) {
+        updateSize(new TransformSet(newX, newY, newZ));
+        return true;
+    }
+
+    @Override
+    public boolean onUpdateRotation(double newX, double newY, double newZ) {
+        //todo
+        return true;
     }
 
 }

@@ -50,7 +50,7 @@ public class GameObjectDeserializer {
                 if(childNode.getNodeType() != Node.ELEMENT_NODE) {
                     continue;
                 }
-                String className = ((Element) childNode).getTagName();
+                String className = ((Element) childNode).getTagName().replace(".", "$");
                 String pckg = getValue(childNode, "_package");
                 if(!pckg.equals("0")) {
                     className = pckg + "." + className;

@@ -7,7 +7,6 @@ import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.RigidBody;
 import pl.AWTGameEngine.objects.TransformSet;
 
 @ComponentFX
@@ -20,8 +19,6 @@ import pl.AWTGameEngine.objects.TransformSet;
 public class Box3D extends Base3DShape implements Renderable3D {
 
     private final GraphicsManager3D graphicsManager3D;
-
-    private RigidBody rigidBody;
 
     public Box3D(GameObject object) {
         super(object);
@@ -62,32 +59,22 @@ public class Box3D extends Base3DShape implements Renderable3D {
     @Override
     public void onAddComponent() {
         createShape();
-        if(isStaticShape()) {
-            rigidBody = new RigidBody.Static(this);
-        } else {
-            rigidBody = new RigidBody.Dynamic(this);
-            rigidBody.setMass(getMass());
-        }
-        rigidBody.initialize();
     }
 
     @Override
     public void onRemoveComponent() {
         removeShape();
-        rigidBody.destroy();
     }
 
     @Override
     public boolean onUpdatePosition(double newX, double newY, double newZ) {
         updatePosition = true;
-        rigidBody.updatePosition(new TransformSet(newX, newY, newZ));
         return true;
     }
 
     @Override
     public boolean onUpdateSize(double newX, double newY, double newZ) {
         updateSize = true;
-        rigidBody.updateSize(new TransformSet(newX, newY, newZ));
         return true;
     }
 
@@ -95,11 +82,6 @@ public class Box3D extends Base3DShape implements Renderable3D {
     public boolean onUpdateRotation(double newX, double newY, double newZ) {
         updateRotation = true;
         return true;
-    }
-
-    @Override
-    public void onPhysicsUpdate() {
-        rigidBody.physicsUpdate();
     }
 
     @Override
