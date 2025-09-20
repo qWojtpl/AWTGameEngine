@@ -24,9 +24,6 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
     protected boolean updateGlTexture = false;
     private boolean staticShape = true;
 
-    protected PxRigidDynamic rigidDynamic;
-    protected PxRigidStatic rigidStatic;
-
     private double mass = 0.03;
 
     public Base3DShape(GameObject object) {
@@ -94,11 +91,6 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
 
     public void setMass(double mass) {
         this.mass = mass;
-        if(!isStaticShape()) {
-            if(rigidDynamic != null) {
-                rigidDynamic.setMass((float) mass);
-            }
-        }
     }
 
     public void setColor(ColorObject color) {

@@ -27,7 +27,7 @@ public final class PhysXManager {
         tolerances = new PxTolerancesScale();
         physics = PxTopLevelFunctions.CreatePhysics(VERSION, foundation, tolerances);
         cpuDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(NUM_THREADS);
-        gravityVector = new PxVec3(0f, -9.81f, 0f);
+        gravityVector = new PxVec3(0f, -9.807f, 0f);
         shapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eSCENE_QUERY_SHAPE.value | PxShapeFlagEnum.eSIMULATION_SHAPE.value));
     }
 

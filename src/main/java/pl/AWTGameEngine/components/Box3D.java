@@ -15,6 +15,7 @@ import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.RigidBody;
 import pl.AWTGameEngine.objects.TransformSet;
 
 @ComponentFX
@@ -26,21 +27,15 @@ import pl.AWTGameEngine.objects.TransformSet;
 })
 public class Box3D extends Base3DShape implements Renderable3D {
 
-    private final PhysXManager physXManager;
     private final GraphicsManager3D graphicsManager3D;
-    private PxMaterial material;
-    private PxBoxGeometry boxGeometry;
-    private PxShape shape;
-    private final PxTransform pose = new PxTransform(PxIDENTITYEnum.PxIdentity);
-    private final PxFilterData filterData = new PxFilterData(1, 1, 0, 0);
+
+    private RigidBody rigidBody;
 
     public Box3D(GameObject object) {
         super(object);
         if(getPanel() instanceof PanelFX) {
-            physXManager = ((PanelFX) getPanel()).getPhysXManager();
             graphicsManager3D = ((PanelFX) getPanel()).getGraphicsManager3D();
         } else {
-            physXManager = ((PanelGL) getPanel()).getPhysXManager();
             graphicsManager3D = ((PanelGL) getPanel()).getGraphicsManager3D();
         }
     }
@@ -75,64 +70,32 @@ public class Box3D extends Base3DShape implements Renderable3D {
     @Override
     public void onAddComponent() {
         createShape();
-        PxPhysics physics = physXManager.getPxPhysics();
-        boxGeometry = new PxBoxGeometry(
-                (float) getObject().getSize().getX(),
-                (float) getObject().getSize().getY(),
-                (float) getObject().getSize().getZ()
-        );
-        material = physics.createMaterial(0.5f, 0.5f, 0.5f);
-        shape = physics.createShape(boxGeometry, material, true, physXManager.getShapeFlags());
-        shape.setSimulationFilterData(filterData);
-        updateVectorPosition(getObject().getX(), getObject().getY(), getObject().getZ());
         if(isStaticShape()) {
-            rigidStatic = physics.createRigidStatic(pose);
-            rigidStatic.attachShape(shape);
-            physXManager.getPxScene().addActor(rigidStatic);
+            rigidBody = new RigidBody.Static(this);
         } else {
-            rigidDynamic = physics.createRigidDynamic(pose);
-            rigidDynamic.attachShape(shape);
-            rigidDynamic.setMass((float) getMass());
-            physXManager.getPxScene().addActor(rigidDynamic);
+            rigidBody = new RigidBody.Dynamic(this);
+            rigidBody.setMass(getMass());
         }
+        rigidBody.initialize();
     }
 
     @Override
     public void onRemoveComponent() {
         removeShape();
-        if(isStaticShape()) {
-            physXManager.getPxScene().removeActor(rigidStatic);
-            rigidStatic.release();
-        } else {
-            physXManager.getPxScene().removeActor(rigidDynamic);
-            rigidDynamic.release();
-        }
-        pose.destroy();
-        filterData.destroy();
-        shape.release();
-        boxGeometry.destroy();
-        material.release();
-    }
-
-    private void updateVectorPosition(double newX, double newY, double newZ) {
-        PxVec3 newVector = new PxVec3((float) newX, (float) newY, (float) newZ);
-        pose.setP(newVector);
-        newVector.destroy();
+        rigidBody.destroy();
     }
 
     @Override
     public boolean onUpdatePosition(double newX, double newY, double newZ) {
         updatePosition = true;
-        updateVectorPosition(newX, newY, newZ);
+        rigidBody.updatePosition(new TransformSet(newX, newY, newZ));
         return true;
     }
 
     @Override
     public boolean onUpdateSize(double newX, double newY, double newZ) {
         updateSize = true;
-        PxVec3 newVector = new PxVec3((float) newX / 2, (float) newY / 2, (float) newZ / 2);
-        boxGeometry.setHalfExtents(newVector);
-        newVector.destroy();
+        rigidBody.updateSize(new TransformSet(newX, newY, newZ));
         return true;
     }
 
@@ -142,36 +105,9 @@ public class Box3D extends Base3DShape implements Renderable3D {
         return true;
     }
 
-    private double previousX;
-    private double previousY;
-    private double previousZ;
-    private double previousW;
-
     @Override
     public void onPhysicsUpdate() {
-        PxVec3 position;
-        PxQuat quat;
-        if(!isStaticShape()) {
-            position = rigidDynamic.getGlobalPose().getP();
-            quat = rigidDynamic.getGlobalPose().getQ();
-        } else {
-            position = rigidStatic.getGlobalPose().getP();
-            quat = rigidStatic.getGlobalPose().getQ();
-        }
-        if(position.getX() != getObject().getPosition().getX() || position.getY() != getObject().getPosition().getY() || position.getZ() != getObject().getPosition().getZ()) {
-            getObject().setPosition(new TransformSet(
-                    position.getX(),
-                    position.getY(),
-                    position.getZ()
-            ));
-        }
-        if(quat.getX() != previousX || quat.getY() != previousY || quat.getZ() != previousZ || quat.getW() != previousW) {
-            previousX = quat.getX();
-            previousY = quat.getY();
-            previousZ = quat.getZ();
-            previousW = quat.getW();
-            getObject().setQuaternionRotation(new QuaternionTransformSet(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
-        }
+        rigidBody.physicsUpdate();
     }
 
     @Override
