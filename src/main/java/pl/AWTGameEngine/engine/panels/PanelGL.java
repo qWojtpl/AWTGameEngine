@@ -14,7 +14,6 @@ import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
-import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.windows.Window;
 
@@ -185,7 +184,7 @@ public class PanelGL extends JPanel implements PanelObject {
                         getCamera().getRotation().getY(),
                         getCamera().getRotation().getZ());
 
-                glu.gluLookAt(getCamera().getX(), getCamera().getY(), getCamera().getZ() - 450, 0, 0, 0, 0, 1, 0);
+                glu.gluLookAt(getCamera().getX(), getCamera().getY(), getCamera().getZ(), lookAt[0], lookAt[1], lookAt[2], 0, 1.0f, 0);
 
                 ((GraphicsManagerGL) graphicsManager3D).drawScene(gl);
             }

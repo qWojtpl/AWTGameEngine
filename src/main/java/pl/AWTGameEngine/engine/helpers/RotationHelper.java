@@ -92,16 +92,19 @@ public class RotationHelper {
     }
 
     public static double[] rotationToVectorLookAt(double px, double py, double pz, double rx, double ry, double rz) {
-        double radYaw = Math.toRadians(ry);
-        double radPitch = Math.toRadians(rx);
+        if (rx > 89.9f) {
+            rx = 89.9f;
+        } else if (rx < -89.9f) {
+            rx = -89.9f;
+        }
 
-        double dirX = Math.cos(radPitch) * Math.sin(radYaw);
-        double dirY = Math.sin(radPitch);
-        double dirZ = -Math.cos(radPitch) * Math.cos(radYaw);
+        double lookX = Math.cos(Math.toRadians(rx)) * Math.sin(Math.toRadians(ry));
+        double lookY = Math.sin(Math.toRadians(rx));
+        double lookZ = -Math.cos(Math.toRadians(rx)) * Math.cos(Math.toRadians(ry));
 
-        double lookAtX = px + dirX;
-        double lookAtY = py + dirY;
-        double lookAtZ = pz + dirZ;
+        double lookAtX = px + lookX;
+        double lookAtY = py + lookY;
+        double lookAtZ = pz + lookZ;
 
         return new double[]{lookAtX, lookAtY, lookAtZ};
     }

@@ -72,13 +72,13 @@ public class MovementGL extends ObjectComponent {
         double yawRad = Math.toRadians(rotation.getY());
 
         // Forward
-        double dirX = Math.sin(yawRad) * Math.cos(pitchRad);
-        double dirY = -Math.sin(pitchRad);
-        double dirZ = Math.cos(yawRad) * Math.cos(pitchRad);
+        double dirX = Math.cos(pitchRad) * Math.sin(yawRad);
+        double dirY = Math.sin(pitchRad);
+        double dirZ = -Math.cos(pitchRad) * Math.cos(yawRad);
 
         // Left/right
         double rightX = Math.cos(yawRad);
-        double rightZ = -Math.sin(yawRad);
+        double rightZ = Math.sin(yawRad);
 
         double dx = dirX * forward + rightX * right;
         double dy = dirY * forward + up;
