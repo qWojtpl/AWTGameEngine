@@ -61,7 +61,7 @@ public class TextArea extends ObjectComponent {
     @Override
     public void onUpdate() {
         textRenderer.setText(getRenderedText());
-        if(pointerIterator >= getWindow().getRenderLoop().getFPS()) {
+        if(pointerIterator >= getWindow().getRenderLoop().getTargetFps()) {
             pointerIterator = 0;
         } else {
             pointerIterator++;
@@ -228,7 +228,7 @@ public class TextArea extends ObjectComponent {
         }
         StringBuilder rendered = new StringBuilder();
         for(int i = 0; i <= text.length(); i++) {
-            if(pointerLocation == i && pointerIterator >= getWindow().getRenderLoop().getFPS() / 2) {
+            if(pointerLocation == i && pointerIterator >= getWindow().getRenderLoop().getTargetFps() / 2) {
                 rendered.append("|");
             }
             if(i < text.length()) {

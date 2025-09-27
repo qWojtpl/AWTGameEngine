@@ -38,9 +38,9 @@ public class SceneLoader {
             boolean sameSize;
             if(sceneOptions != null) {
                 title = sceneOptions.getTitle();
-                window.getRenderLoop().setFPS(sceneOptions.getRenderFPS());
-                window.getUpdateLoop().setFPS(sceneOptions.getUpdateFPS());
-                window.getPhysicsLoop().setFPS(sceneOptions.getPhysicsFPS());
+                window.getUpdateLoop().setTargetFps(sceneOptions.getUpdateFPS());
+                window.getRenderLoop().setTargetFps(sceneOptions.getRenderFPS());
+                window.getPhysicsLoop().setTargetFps(sceneOptions.getPhysicsFPS());
                 if(sceneOptions.isFullscreen()) {
                     window.setFullScreen(true);
                 }

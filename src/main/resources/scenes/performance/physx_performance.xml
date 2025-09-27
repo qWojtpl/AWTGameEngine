@@ -1,5 +1,5 @@
 <!-- To be honest, don't event try to run this performance on JFX render engine  -->
-<scene title="PhysX Performance test" renderFPS="144" updateFPS="60" physicsFPS="60">
+<scene title="PhysX Performance test" renderFPS="0" updateFPS="60" physicsFPS="60" fullscreen="true">
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />
         <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />

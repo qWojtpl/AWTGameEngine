@@ -8,18 +8,17 @@ public class UpdateLoop extends BaseLoop {
         super(window);
     }
 
-    @SuppressWarnings("BusyWait")
     @Override
-    public void run() {
-        while(window.getWindowListener().isOpened()) {
-            try {
-                Thread.sleep((long) (1000 / getFPS()));
-            } catch(InterruptedException ignored) {
-                break;
-            }
-            if(window.getCurrentScene() != null) {
-                window.getCurrentScene().update();
-            }
+    public void iteration() {
+        if(window.getCurrentScene() != null) {
+            window.getCurrentScene().update();
+        }
+    }
+
+    @Override
+    protected void everySecondIteration() {
+        if(window.getCurrentScene() != null) {
+            window.getCurrentScene().updateSecond();
         }
     }
 

@@ -9,6 +9,7 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.TransformSet;
 import pl.AWTGameEngine.windows.Window;
 
 import java.util.HashMap;
@@ -45,6 +46,7 @@ public class OpenGLInitializer implements GLEventListener {
 
         prepareTextures.clear();
 
+        gl.setSwapInterval(0);
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
@@ -59,6 +61,11 @@ public class OpenGLInitializer implements GLEventListener {
     @Override
     public void display(GLAutoDrawable drawable) {
 
+        final GL2 gl = drawable.getGL().getGL2();
+
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+        gl.glLoadIdentity();
+
         if(window.getCurrentScene() == null) {
             return;
         }
@@ -66,11 +73,6 @@ public class OpenGLInitializer implements GLEventListener {
         for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
             component.on3DRenderRequest(graphicsManagerGL);
         }
-
-        final GL2 gl = drawable.getGL().getGL2();
-
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        gl.glLoadIdentity();
 
         double[] lookAt = RotationHelper.rotationToVectorLookAt(
                 camera.getX(), camera.getY(), camera.getZ(),

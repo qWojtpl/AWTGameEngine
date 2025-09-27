@@ -80,6 +80,11 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
+    public void onEverySecond() {
+
+    }
+
+    @EventMethod
     public void onPhysicsUpdate() {
 
     }

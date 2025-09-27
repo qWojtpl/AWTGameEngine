@@ -144,4 +144,10 @@ public class Scene {
         window.getPanel().getMouseListener().refresh();
     }
 
+    public void updateSecond() {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onEverySecond")) {
+            component.onEverySecond();
+        }
+    }
+
 }

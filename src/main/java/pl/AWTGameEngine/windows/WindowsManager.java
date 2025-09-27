@@ -47,15 +47,15 @@ public class WindowsManager {
         }
 
         BaseLoop updateLoop = new UpdateLoop(window);
-        updateLoop.setFPS(appProperties.getPropertyAsInteger("updateFps"));
+        updateLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));
         window.setUpdateLoop(updateLoop);
 
         BaseLoop renderLoop = new RenderLoop(window);
-        renderLoop.setFPS(appProperties.getPropertyAsInteger("renderFps"));
+        renderLoop.setTargetFps(appProperties.getPropertyAsInteger("renderFps"));
         window.setRenderLoop(renderLoop);
 
         BaseLoop physicsLoop = new PhysicsLoop(window);
-        physicsLoop.setFPS(appProperties.getPropertyAsInteger("physicsFps"));
+        physicsLoop.setTargetFps(appProperties.getPropertyAsInteger("physicsFps"));
         window.setPhysicsLoop(physicsLoop);
 
         window.init();

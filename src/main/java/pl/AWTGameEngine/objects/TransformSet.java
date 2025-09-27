@@ -80,6 +80,13 @@ public class TransformSet {
         return this;
     }
 
+    public double distanceTo(TransformSet transformSet) {
+        double xR = Math.abs(this.x - transformSet.getX());
+        double yR = Math.abs(this.y - transformSet.getX());
+        double zR = Math.abs(this.z - transformSet.getX());
+        return xR + yR + zR;
+    }
+
     public boolean isEmpty() {
         return this.x == 0 && this.y == 0 && this.z == 0;
     }

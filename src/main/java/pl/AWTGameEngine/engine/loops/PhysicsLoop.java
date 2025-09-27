@@ -8,19 +8,16 @@ public class PhysicsLoop extends BaseLoop {
         super(window);
     }
 
-    @SuppressWarnings("BusyWait")
     @Override
-    public void run() {
-        while(window.getWindowListener().isOpened()) {
-            try {
-                Thread.sleep((long) (1000 / getFPS()));
-            } catch(InterruptedException ignored) {
-                break;
-            }
-            if(window.getCurrentScene() != null) {
-                window.getPanel().updatePhysics();
-            }
+    public void iteration() {
+        if(window.getCurrentScene() != null) {
+            window.getPanel().updatePhysics();
         }
+    }
+
+    @Override
+    protected void everySecondIteration() {
+
     }
 
 }

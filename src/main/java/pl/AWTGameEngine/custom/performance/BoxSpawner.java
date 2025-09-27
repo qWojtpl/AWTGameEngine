@@ -14,9 +14,6 @@ import pl.AWTGameEngine.objects.TransformSet;
 public class BoxSpawner extends ObjectComponent {
 
     private boolean counterEnabled = true;
-    private double updateFPS = 0;
-    private double renderFPS = 0;
-    private double physicsFPS = 0;
     private int boxCounter = 0;
 
     public BoxSpawner(GameObject object) {
@@ -25,17 +22,7 @@ public class BoxSpawner extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        new Thread(() -> {
-            while(counterEnabled) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                printFPS();
-            }
-        }).start();
-        spawnBoxes(1500);
+        spawnBoxes(500);
     }
 
     @Override
@@ -43,25 +30,23 @@ public class BoxSpawner extends ObjectComponent {
         counterEnabled = false;
     }
 
-    private void printFPS() {
-        System.out.println("Update FPS: " + updateFPS);
-        System.out.println("Render FPS: " + renderFPS);
-        System.out.println("Physics FPS: " + physicsFPS);
-        if(updateFPS > 1) {
+    @Override
+    public void onEverySecond() {
+        System.out.println("Update FPS: " + getWindow().getUpdateLoop().getActualFps());
+        System.out.println("Render FPS: " + getWindow().getRenderLoop().getActualFps());
+        System.out.println("Physics FPS: " + getWindow().getPhysicsLoop().getActualFps());
+        if(getWindow().getUpdateLoop().getActualFps() > 1) {
             System.out.println("Cubes: " + (getScene().getGameObjects().size() - 3)); // player, floor, textures
         }
-        updateFPS = 0;
-        renderFPS = 0;
-        physicsFPS = 0;
     }
 
     private void spawnBoxes(int count) {
         int size = 10;
-        for(int i = 0; i < boxCounter; i++) {
-            GameObject object = getScene().getGameObjectByName("boxspawner-" + i);
-            RigidBody.Dynamic rigidBody = (RigidBody.Dynamic) object.getComponentByClass(RigidBody.Dynamic.class);
-            rigidBody.addForce(new TransformSet(0, 10, 0));
-        }
+//        for(int i = 0; i < boxCounter; i++) {
+//            GameObject object = getScene().getGameObjectByName("boxspawner-" + i);
+//            RigidBody.Dynamic rigidBody = (RigidBody.Dynamic) object.getComponentByClass(RigidBody.Dynamic.class);
+//            rigidBody.addForce(new TransformSet(0, 10, 0));
+//        }
         for(int i = 0; i < count; i++) {
             GameObject object = getScene().createGameObject("boxspawner-" + boxCounter++);
             object.setSize(new TransformSet(size, size, size));
@@ -75,21 +60,10 @@ public class BoxSpawner extends ObjectComponent {
     }
 
     @Override
-    public void onUpdate() {
-        updateFPS++;
-    }
-
-    @Override
     public void onPhysicsUpdate() {
-        physicsFPS++;
         if(getKeyListener().hasPressedKey(69)) {
             spawnBoxes(500);
         }
-    }
-
-    @Override
-    public void on3DRenderRequest(GraphicsManager3D g) {
-        renderFPS++;
     }
 
 
