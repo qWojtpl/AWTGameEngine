@@ -6,11 +6,12 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Scene {
 
     private final String name;
-    private final LinkedHashMap<String, GameObject> gameObjects = new LinkedHashMap<>();
+    private final ConcurrentHashMap<String, GameObject> gameObjects = new ConcurrentHashMap<>();
     private final Window window;
     private ColliderRegistry colliderRegistry;
     private EventHandler sceneEventHandler;

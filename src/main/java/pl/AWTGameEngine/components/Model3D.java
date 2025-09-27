@@ -7,14 +7,13 @@ import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
 @ComponentFX
 @ComponentGL
-public class Model3D extends ObjectComponent implements Renderable3D {
+public class Model3D extends ObjectComponent {
 
     private String modelPath;
 

@@ -10,13 +10,13 @@ import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GraphicsManagerGL extends GraphicsManager3D {
 
     private final PanelGL panelGL;
-    private final HashMap<String, RenderOptions> renderables = new HashMap<>();
+    private final ConcurrentHashMap<String, RenderOptions> renderables = new ConcurrentHashMap<>();
 
     public GraphicsManagerGL(PanelGL panelGL) {
         this.panelGL = panelGL;

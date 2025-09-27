@@ -1,16 +1,13 @@
 package pl.AWTGameEngine.components.base;
 
-import physx.physics.PxRigidDynamic;
-import physx.physics.PxRigidStatic;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
-public abstract class Base3DShape extends ObjectComponent implements Renderable3D {
+public abstract class Base3DShape extends ObjectComponent {
 
     protected Sprite sprite;
     protected ColorObject color;

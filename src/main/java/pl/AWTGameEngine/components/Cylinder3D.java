@@ -3,7 +3,6 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -12,7 +11,7 @@ import pl.AWTGameEngine.objects.GameObject;
         @ConflictsWith(Sphere3D.class),
         @ConflictsWith(Box3D.class)
 })
-public class Cylinder3D extends Base3DShape implements Renderable3D {
+public class Cylinder3D extends Base3DShape {
 
     public Cylinder3D(GameObject object) {
         super(object);

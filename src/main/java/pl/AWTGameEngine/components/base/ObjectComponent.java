@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components.base;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.panels.PanelObject;
@@ -112,6 +113,11 @@ public abstract class ObjectComponent {
 
     @EventMethod
     public void onAfterRender(GraphicsManager g) {
+
+    }
+
+    @EventMethod
+    public void on3DRenderRequest(GraphicsManager3D g) {
 
     }
 

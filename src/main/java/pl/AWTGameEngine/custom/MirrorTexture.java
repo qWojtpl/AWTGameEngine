@@ -10,13 +10,12 @@ import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
 @ComponentFX
-public class MirrorTexture extends ObjectComponent implements Renderable3D {
+public class MirrorTexture extends ObjectComponent {
 
     private Base3DShape target;
     private PanelFX panel;

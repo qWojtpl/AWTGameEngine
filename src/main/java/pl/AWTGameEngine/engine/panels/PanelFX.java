@@ -8,10 +8,8 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFX;
-import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
-import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 public class PanelFX extends JFXPanel implements PanelObject {
@@ -77,9 +75,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
             return;
         }
         for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
-            if(component instanceof Renderable3D) {
-                ((Renderable3D) component).on3DRenderRequest(graphicsManager3D);
-            }
+            component.on3DRenderRequest(graphicsManager3D);
         }
     }
 
