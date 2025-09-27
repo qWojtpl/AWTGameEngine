@@ -257,6 +257,11 @@ public abstract class ObjectComponent {
 
     }
 
+    @EventMethod
+    public void onSerializationFinish() {
+
+    }
+
     public final boolean isUnique() {
         return this.getClass().isAnnotationPresent(Unique.class);
     }

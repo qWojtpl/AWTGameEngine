@@ -67,7 +67,7 @@ public class GameObject {
             Class<? extends ObjectComponent> requiredClass = component.getRequiredClass();
             boolean found = false;
             for(ObjectComponent c : components) {
-                if(c.getClass().isInstance(requiredClass)) {
+                if(c.getClass().isInstance(requiredClass) || c.getClass().equals(requiredClass)) {
                     found = true;
                     break;
                 }

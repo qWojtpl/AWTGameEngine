@@ -88,6 +88,9 @@ public class GameObjectDeserializer {
                 }
                 gameObject.addComponent(o);
             }
+            for(ObjectComponent component : gameObject.getEventHandler().getComponents("onSerializationFinish")) {
+                component.onSerializationFinish();
+            }
         } catch(NumberFormatException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                 InvocationTargetException | ClassNotFoundException | ClassCastException e) {
             Logger.exception("Error while deserializing GameObject: " + gameObject.getIdentifier(), e);

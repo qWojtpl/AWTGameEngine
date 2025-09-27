@@ -107,6 +107,14 @@
             <version>2.3.2</version>
         </dependency>
 
+        <!-- JAssimp -->
+
+        <dependency>
+            <groupId>com.github.dabasan</groupId>
+            <artifactId>jassimp</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- PhysX -->
 
         <dependency>

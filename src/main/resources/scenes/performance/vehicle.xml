@@ -1,0 +1,25 @@
+<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="60">
+
+    <object id="player">
+        <MovementGL _package="pl.AWTGameEngine.custom" />
+    </object>
+
+    <object id="glTextures">
+        <PrepareGLTexture name="beaver" spriteSource="sprites/beaver.jpg" submit="true" />
+    </object>
+
+    <object id="floor" x="500" y="-100" z="-500" size="1000,10,1000">
+        <Box3D />
+        <RigidBody.Static />
+    </object>
+
+    <object id="vehicle" x="100" y="100" z="100" size="10,10,20">
+        <Box3D glTexture="beaver" />
+        <Vehicle />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+    </object>
+
+</scene>

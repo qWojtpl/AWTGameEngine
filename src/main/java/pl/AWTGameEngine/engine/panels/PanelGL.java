@@ -154,6 +154,10 @@ public class PanelGL extends JPanel implements PanelObject {
                 gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
                 gl.glDepthFunc(GL.GL_LEQUAL);
                 gl.glShadeModel(GL2.GL_SMOOTH);
+
+                for(String key : textures.keySet()) {
+                    textures.get(key).disable(gl);
+                }
             }
 
             @Override
