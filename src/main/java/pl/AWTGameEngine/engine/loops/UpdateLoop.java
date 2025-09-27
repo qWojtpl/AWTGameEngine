@@ -5,7 +5,7 @@ import pl.AWTGameEngine.windows.Window;
 public class UpdateLoop extends BaseLoop {
 
     public UpdateLoop(Window window) {
-        super(window);
+        super(window, "UpdateLoop");
     }
 
     @Override

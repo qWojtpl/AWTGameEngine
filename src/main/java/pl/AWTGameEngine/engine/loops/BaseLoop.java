@@ -6,12 +6,15 @@ import pl.AWTGameEngine.windows.Window;
 public abstract class BaseLoop extends Thread {
 
     protected final Window window;
+    private final String loopName;
     private double targetFps = 1;
     private double actualFps = 0;
     private double actualFpsIterator = 0;
 
-    public BaseLoop(Window window) {
+    public BaseLoop(Window window, String loopName) {
         this.window = window;
+        this.loopName = loopName;
+        this.setName(loopName);
     }
 
     @Override
@@ -27,7 +30,7 @@ public abstract class BaseLoop extends Thread {
                 actualFpsIterator = 0;
                 everySecondIteration();
             }
-        }).start();
+        }, loopName + "-everySecond").start();
         while(window.getWindowListener().isOpened()) {
             try {
                 if(getTargetFps() != 0) {

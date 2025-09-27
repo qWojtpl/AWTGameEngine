@@ -5,7 +5,7 @@ import pl.AWTGameEngine.windows.Window;
 public class PhysicsLoop extends BaseLoop {
 
     public PhysicsLoop(Window window) {
-        super(window);
+        super(window, "PhysicsLoop");
     }
 
     @Override
