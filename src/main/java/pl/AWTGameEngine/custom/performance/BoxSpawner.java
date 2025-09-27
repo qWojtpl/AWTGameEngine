@@ -56,10 +56,16 @@ public class BoxSpawner extends ObjectComponent {
     }
 
     private void spawnBoxes(int count) {
+        int size = 10;
+        for(int i = 0; i < boxCounter; i++) {
+            GameObject object = getScene().getGameObjectByName("boxspawner-" + i);
+            RigidBody.Dynamic rigidBody = (RigidBody.Dynamic) object.getComponentByClass(RigidBody.Dynamic.class);
+            rigidBody.addForce(new TransformSet(0, 10, 0));
+        }
         for(int i = 0; i < count; i++) {
             GameObject object = getScene().createGameObject("boxspawner-" + boxCounter++);
-            object.setSize(new TransformSet(1, 1, 1));
-            object.setPosition(new TransformSet(0, 100 + 10 * i, 0));
+            object.setSize(new TransformSet(size, size, size));
+            object.setPosition(new TransformSet(0, 100 + (size + 4) * i, 0));
             RigidBody.Dynamic rigidBody = new RigidBody.Dynamic(object);
             Box3D box3D = new Box3D(object);
             box3D.setGlTexture("beaver");

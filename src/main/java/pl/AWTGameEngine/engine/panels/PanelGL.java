@@ -7,6 +7,7 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.OpenGLInitializer;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
@@ -131,75 +132,7 @@ public class PanelGL extends JPanel implements PanelObject {
         capabilities = new GLCapabilities(profile);
         canvas = new GLCanvas(capabilities);
         canvas.setSize(width, height);
-        canvas.addGLEventListener(new GLEventListener() {
-
-            private final GLU glu = new GLU();
-
-            @Override
-            public void init(GLAutoDrawable drawable) {
-                GL2 gl = drawable.getGL().getGL2();
-
-                gl.glClearColor(0.192156863f, 0.337254902f, 0.474509804f, 1.0f);
-                gl.glEnable(GL.GL_DEPTH_TEST);
-
-                for(String name : prepareTextures.keySet()) {
-                    textures.put(name, AWTTextureIO.newTexture(profile, prepareTextures.get(name).getImage(), true));
-                }
-
-                prepareTextures.clear();
-
-                gl.glEnable(GL2.GL_TEXTURE_2D);
-                gl.glEnable(GL.GL_BLEND);
-                gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-                gl.glDepthFunc(GL.GL_LEQUAL);
-                gl.glShadeModel(GL2.GL_SMOOTH);
-            }
-
-            @Override
-            public void dispose(GLAutoDrawable drawable) {
-            }
-
-            @Override
-            public void display(GLAutoDrawable drawable) {
-
-                if(getWindow().getCurrentScene() == null) {
-                    return;
-                }
-
-                for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
-                    component.on3DRenderRequest(graphicsManager3D);
-                }
-
-                final GL2 gl = drawable.getGL().getGL2();
-
-                gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-                gl.glLoadIdentity();
-
-                double[] lookAt = RotationHelper.rotationToVectorLookAt(
-                        getCamera().getX(), getCamera().getY(), getCamera().getZ(),
-                        getCamera().getRotation().getX(),
-                        getCamera().getRotation().getY(),
-                        getCamera().getRotation().getZ());
-
-                glu.gluLookAt(getCamera().getX(), getCamera().getY(), getCamera().getZ(), lookAt[0], lookAt[1], lookAt[2], 0, 1.0f, 0);
-
-                ((GraphicsManagerGL) graphicsManager3D).drawScene(gl);
-            }
-
-            @Override
-            public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-                final GL2 gl = drawable.getGL().getGL2();
-                if (height <= 0) height = 1;
-                final float aspect = (float) width / height;
-
-                gl.glMatrixMode(GL2.GL_PROJECTION);
-                gl.glLoadIdentity();
-                glu.gluPerspective(30, aspect, 1.0, 10000.0);
-
-                gl.glMatrixMode(GL2.GL_MODELVIEW);
-                gl.glLoadIdentity();
-            }
-        });
+        canvas.addGLEventListener(new OpenGLInitializer(window, camera, profile, (GraphicsManagerGL) graphicsManager3D, prepareTextures, textures));
         Logger.info("Waiting for textures...");
     }
 
