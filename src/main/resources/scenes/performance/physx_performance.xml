@@ -2,6 +2,8 @@
 <scene title="PhysX Performance test" renderFPS="0" updateFPS="60" physicsFPS="60" fullscreen="true">
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />
+        <CameraFX />
+        <MovementFX _package="pl.AWTGameEngine.custom" />
         <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />
     </object>
     <object id="glTextures">

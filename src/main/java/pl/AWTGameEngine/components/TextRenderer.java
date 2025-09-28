@@ -7,7 +7,6 @@ import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
-import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -16,7 +15,7 @@ import java.awt.font.FontRenderContext;
 
 @DefaultComponent
 @WebComponent
-public class TextRenderer extends ObjectComponent implements WebRenderable {
+public class TextRenderer extends ObjectComponent {
 
     private String text = "Text";
     private ColorObject color = new ColorObject();

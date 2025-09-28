@@ -9,7 +9,6 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.Sprite;
-import pl.AWTGameEngine.objects.TransformSet;
 import pl.AWTGameEngine.windows.Window;
 
 import java.util.HashMap;
@@ -52,6 +51,8 @@ public class OpenGLInitializer implements GLEventListener {
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glShadeModel(GL2.GL_SMOOTH);
+
+        Thread.currentThread().setName("RenderLoop-opengl");
     }
 
     @Override

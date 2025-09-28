@@ -8,7 +8,6 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
-import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.windows.Window;
@@ -73,9 +72,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
             return;
         }
         for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onWebRenderRequest#WebGraphicsManager")) {
-            if(component instanceof WebRenderable) {
-                ((WebRenderable) component).onWebRenderRequest(graphicsManager);
-            }
+            component.onWebRenderRequest(graphicsManager);
         }
     }
 

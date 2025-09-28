@@ -13,7 +13,6 @@ import pl.AWTGameEngine.objects.TransformSet;
 @ComponentFX
 public class BoxSpawner extends ObjectComponent {
 
-    private boolean counterEnabled = true;
     private int boxCounter = 0;
 
     public BoxSpawner(GameObject object) {
@@ -23,11 +22,6 @@ public class BoxSpawner extends ObjectComponent {
     @Override
     public void onAddComponent() {
         spawnBoxes(500);
-    }
-
-    @Override
-    public void onRemoveComponent() {
-        counterEnabled = false;
     }
 
     @Override
@@ -65,6 +59,5 @@ public class BoxSpawner extends ObjectComponent {
             spawnBoxes(500);
         }
     }
-
 
 }

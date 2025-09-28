@@ -7,13 +7,12 @@ import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
-import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
 @DefaultComponent
 @WebComponent
-public class Border extends ObjectComponent implements WebRenderable {
+public class Border extends ObjectComponent {
 
     private boolean enabled = true;
     private ColorObject color = new ColorObject();
