@@ -8,7 +8,7 @@
     <object id="flex" x="0" y="0" sizeX="1920" sizeY="1080">
         <FlexDisplay items="blankSquare,beaverSquare" />
     </object>
-    <object id="marquee" x="0" y="100" sizeX="1000" sizeY="10">
+    <object id="marquee" x="0" y="100" sizeX="1920" sizeY="10">
         <MarqueeText _package="pl.AWTGameEngine.custom" />
     </object>
     <styles source="scenes/styles/style.css" />
