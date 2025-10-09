@@ -49,11 +49,6 @@ public class Button extends ObjectComponent {
 
     @Override
     public void onUpdate() {
-        onStaticUpdate();
-    }
-
-    @Override
-    public void onStaticUpdate() {
         backgroundComponentColor.setColor(backgroundColor.getColor());
         textComponentColor.setColor(textColor.getColor());
         if(getMouseListener().getMouseX() >= getObject().getX()

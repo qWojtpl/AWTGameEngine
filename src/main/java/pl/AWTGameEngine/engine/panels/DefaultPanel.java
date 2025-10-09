@@ -55,7 +55,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
 
     @Override
     public void unload() {
-
+        window.remove(this);
     }
 
     public Window getWindow() {

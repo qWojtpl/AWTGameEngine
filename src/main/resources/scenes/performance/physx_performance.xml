@@ -1,5 +1,6 @@
 <!-- To be honest, don't event try to run this performance on JFX render engine  -->
 <scene title="PhysX Performance test" renderFPS="0" updateFPS="60" physicsFPS="60" fullscreen="true">
+    <scene source="scenes/default.xml" renderEngine="default" />
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />
         <CameraFX />

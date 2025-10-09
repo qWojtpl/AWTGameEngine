@@ -46,11 +46,6 @@ public class ScrollComponent extends ObjectComponent {
     }
 
     @Override
-    public void onStaticUpdate() {
-        onUpdate();
-    }
-
-    @Override
     public void onUpdate() {
         if(getMouseListener() == null || scroll == null) {
             return;

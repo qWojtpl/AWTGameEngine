@@ -84,6 +84,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
     @Override
     public void unload() {
         setScene(null);
+        window.remove(this);
     }
 
     public Window getWindow() {

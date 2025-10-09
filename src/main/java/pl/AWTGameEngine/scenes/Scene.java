@@ -2,6 +2,7 @@ package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -12,24 +13,24 @@ public class Scene {
 
     private final String name;
     private final ConcurrentHashMap<String, GameObject> gameObjects = new ConcurrentHashMap<>();
+    private final PanelObject panel;
     private final Window window;
+    private final RenderEngine renderEngine;
     private ColliderRegistry colliderRegistry;
     private EventHandler sceneEventHandler;
     private String customStyles = "";
 
-    public Scene(String name, Window window) {
+    public Scene(String name, PanelObject panel, Window window, RenderEngine renderEngine) {
         this.name = name;
+        this.panel = panel;
         this.window = window;
+        this.renderEngine = renderEngine;
         setColliderRegistry(new ColliderRegistry());
         setSceneEventHandler(new EventHandler());
     }
 
     public String getName() {
         return this.name;
-    }
-
-    public Window getWindow() {
-        return this.window;
     }
 
     public ColliderRegistry getColliderRegistry() {
@@ -84,7 +85,7 @@ public class Scene {
             Logger.error(errorMsg);
             throw new RuntimeException(errorMsg);
         }
-        object.setPanel(window.getPanel());
+        object.setPanel(panel);
         gameObjects.put(object.getIdentifier(), object);
     }
 
@@ -125,23 +126,29 @@ public class Scene {
         }
     }
 
+    public PanelObject getPanel() {
+        return this.panel;
+    }
+
+    public Window getWindow() {
+        return this.window;
+    }
+
+    public RenderEngine getRenderEngine() {
+        return this.renderEngine;
+    }
+
     public void update() {
-        if(window.isStaticMode()) {
-            for(ObjectComponent component : sceneEventHandler.getComponents("onStaticUpdate")) {
-                component.onStaticUpdate();
-            }
-        } else {
-            for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate")) {
-                component.onPreUpdate();
-            }
-            for(ObjectComponent component : sceneEventHandler.getComponents("onUpdate")) {
-                component.onUpdate();
-            }
-            for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
-                component.onAfterUpdate();
-            }
+        for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate")) {
+            component.onPreUpdate();
         }
-        window.getPanel().getMouseListener().refresh();
+        for(ObjectComponent component : sceneEventHandler.getComponents("onUpdate")) {
+            component.onUpdate();
+        }
+        for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
+            component.onAfterUpdate();
+        }
+        panel.getMouseListener().refresh();
     }
 
     public void updateSecond() {

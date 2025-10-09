@@ -100,11 +100,6 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
-    public void onStaticUpdate() {
-
-    }
-
-    @EventMethod
     public void onPreRender(GraphicsManager g) {
 
     }

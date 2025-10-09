@@ -95,6 +95,7 @@ public class PanelGL extends JPanel implements PanelObject {
     @Override
     public void unload() {
         physXManager.cleanup();
+        window.remove(this);
     }
 
     public void setMouseListener(MouseListener mouseListener) {

@@ -91,6 +91,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
     public void unload() {
         physXManager.cleanup();
         setScene(null);
+        window.remove(this);
     }
 
     public void setMouseListener(MouseListener mouseListener) {

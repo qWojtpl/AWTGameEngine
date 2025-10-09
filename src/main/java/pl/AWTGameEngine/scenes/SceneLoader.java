@@ -5,15 +5,17 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.AppProperties;
-import pl.AWTGameEngine.engine.deserializers.GameObjectDeserializer;
+import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
-import pl.AWTGameEngine.engine.deserializers.StyleDeserializer;
+import pl.AWTGameEngine.engine.deserializers.*;
+import pl.AWTGameEngine.engine.panels.*;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.awt.*;
 import java.io.InputStream;
 
 public class SceneLoader {
@@ -24,12 +26,12 @@ public class SceneLoader {
         this.window = window;
     }
 
-    public void loadSceneFile(String scenePath) {
+    public void loadSceneFile(String scenePath, RenderEngine renderEngine) {
         Logger.info("Loading scene: " + scenePath);
         ResourceManager resourceManager = Dependencies.getResourceManager();
         AppProperties appProperties = Dependencies.getAppProperties();
         if(window.getCurrentScene() != null) {
-            window.unloadScene();
+            window.unloadScenes();
         }
         try(InputStream sceneStream = resourceManager.getResourceAsStream(scenePath)) {
             Document document = getDocument(sceneStream);
@@ -51,19 +53,41 @@ public class SceneLoader {
                 window.setFullScreen(appProperties.getPropertyAsBoolean("fullscreen"));
             }
             window.setTitle(title);
-            window.setCurrentScene(new Scene(scenePath, window));
+            Scene newScene = new Scene(scenePath, createPanel(window, renderEngine), window, renderEngine);
+            window.addScene(newScene);
+            window.setCurrentScene(newScene);
             window.setSameSize(sameSize);
             window.setLocationRelativeTo(null);
             NodeList data = getSceneData(document);
             if(data == null) {
                 return;
             }
-            attachSceneData(data);
+            attachSceneData(newScene, data);
         } catch(Exception e) {
             Logger.exception("Cannot load scene " + scenePath, e);
             return;
         }
-        Logger.info("Scene loaded.");
+        Logger.info("Scene " + scenePath + " loaded.");
+    }
+
+    public PanelObject createPanel(Window window, RenderEngine renderEngine) {
+        PanelObject panel = null;
+        if (RenderEngine.DEFAULT.equals(renderEngine)) {
+            panel = new DefaultPanel(window);
+            window.add((DefaultPanel) panel, BorderLayout.CENTER);
+        } else if (RenderEngine.WEB.equals(renderEngine)) {
+            panel = new WebPanel(window);
+            window.add((WebPanel) panel, BorderLayout.CENTER);
+        } else if (RenderEngine.FX3D.equals(renderEngine)) {
+            panel = new PanelFX(window, window.getBaseWidth(), window.getBaseHeight());
+            window.add((PanelFX) panel, BorderLayout.CENTER);
+        } else if (RenderEngine.OPENGL.equals(renderEngine)) {
+            panel = new PanelGL(window, window.getBaseWidth(), window.getBaseHeight());
+            window.add((PanelGL) panel, BorderLayout.CENTER);
+        }
+        assert panel != null;
+        panel.setSize(new Dimension(window.getBaseWidth(), window.getBaseHeight()));
+        return panel;
     }
 
     public SceneOptions getSceneOptions(Document document) {
@@ -122,16 +146,16 @@ public class SceneLoader {
         return document;
     }
 
-    public void attachSceneData(NodeList sceneData) {
+    public void attachSceneData(Scene scene, NodeList sceneData) {
         for(int i = 0; i < sceneData.getLength(); i++) {
             if(sceneData.item(i).getNodeName().startsWith("#")) { // #comment or #text
                 continue;
             }
-            initNode(sceneData.item(i));
+            initNode(scene, sceneData.item(i));
         }
     }
 
-    private void initNode(Node node) {
+    private void initNode(Scene scene, Node node) {
         String nodeName = node.getNodeName().toLowerCase();
         if("object".equals(nodeName)) {
             String identifier;
@@ -141,7 +165,7 @@ public class SceneLoader {
                 Logger.exception("Object doesn't have an identifier.", e);
                 return;
             }
-            GameObject object = window.getCurrentScene().createGameObject(identifier);
+            GameObject object = scene.createGameObject(identifier);
             if(object == null) {
                 Logger.warning("Cannot initialize object with identifier " + identifier + ", skipping its children!");
                 return;
@@ -168,6 +192,19 @@ public class SceneLoader {
                     Logger.warning("Please note - if you're using CSS with external source, you cannot nest another CSS inside. Use additional tag.");
                 }
                 StyleDeserializer.deserialize(getWindow().getCurrentScene(), source);
+            }
+        } else if("scene".equals(nodeName)) {
+            String source = "";
+            String renderEngine = "";
+            try {
+                source = node.getAttributes().getNamedItem("source").getNodeValue();
+                renderEngine = node.getAttributes().getNamedItem("renderEngine").getNodeValue();
+            } catch(Exception e) {
+                Logger.warning("Nested scene source is empty.");
+            }
+            if(source != null && !source.isEmpty()) {
+                NestedSceneDeserializer.deserialize(getWindow().getCurrentScene(), source,
+                        renderEngine.isEmpty() ? Dependencies.getAppProperties().getProperty("renderEngine") : renderEngine);
             }
         }
     }
