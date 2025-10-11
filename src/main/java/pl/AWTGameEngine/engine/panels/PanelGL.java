@@ -12,14 +12,16 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-public class PanelGL extends JPanel implements PanelObject {
+public class PanelGL extends JLayeredPane implements PanelObject {
 
+    private final Scene scene;
     private final Window window;
     private final Camera camera;
     private final GraphicsManager3D graphicsManager3D;
@@ -31,14 +33,19 @@ public class PanelGL extends JPanel implements PanelObject {
     private GLCanvas canvas;
     private MouseListener mouseListener;
 
-    public PanelGL(Window window, int width, int height) {
-        this.window = window;
+    public PanelGL(Scene scene, int width, int height) {
+        this.scene = scene;
+        this.window = scene.getWindow();
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManagerGL(this);
         this.physXManager = PhysXManager.getInstance();
         physXManager.init();
         initOpenGL(width, height);
         initListeners();
+    }
+
+    public Scene getScene() {
+        return this.scene;
     }
 
     @Override

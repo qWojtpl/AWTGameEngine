@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.components.Border;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.Logger;
@@ -28,11 +29,9 @@ public class SceneLoader {
 
     public void loadSceneFile(String scenePath, RenderEngine renderEngine) {
         Logger.info("Loading scene: " + scenePath);
+        Scene newScene;
         ResourceManager resourceManager = Dependencies.getResourceManager();
         AppProperties appProperties = Dependencies.getAppProperties();
-        if(window.getCurrentScene() != null) {
-            window.unloadScenes();
-        }
         try(InputStream sceneStream = resourceManager.getResourceAsStream(scenePath)) {
             Document document = getDocument(sceneStream);
             SceneOptions sceneOptions = getSceneOptions(document);
@@ -53,14 +52,15 @@ public class SceneLoader {
                 window.setFullScreen(appProperties.getPropertyAsBoolean("fullscreen"));
             }
             window.setTitle(title);
-            Scene newScene = new Scene(scenePath, createPanel(window, renderEngine), window, renderEngine);
+            newScene = new Scene(scenePath, window, renderEngine);
+            newScene.setPanel(createPanel(newScene, renderEngine));
             window.addScene(newScene);
             window.setCurrentScene(newScene);
             window.setSameSize(sameSize);
             window.setLocationRelativeTo(null);
             NodeList data = getSceneData(document);
             if(data == null) {
-                return;
+                throw new RuntimeException("No scene data found.");
             }
             attachSceneData(newScene, data);
         } catch(Exception e) {
@@ -68,25 +68,26 @@ public class SceneLoader {
             return;
         }
         Logger.info("Scene " + scenePath + " loaded.");
+        newScene.triggerAfterLoad();
     }
 
-    public PanelObject createPanel(Window window, RenderEngine renderEngine) {
+    public PanelObject createPanel(Scene scene, RenderEngine renderEngine) {
         PanelObject panel = null;
         if (RenderEngine.DEFAULT.equals(renderEngine)) {
-            panel = new DefaultPanel(window);
+            panel = new DefaultPanel(scene);
             window.add((DefaultPanel) panel, BorderLayout.CENTER);
         } else if (RenderEngine.WEB.equals(renderEngine)) {
-            panel = new WebPanel(window);
+            panel = new WebPanel(scene);
             window.add((WebPanel) panel, BorderLayout.CENTER);
         } else if (RenderEngine.FX3D.equals(renderEngine)) {
-            panel = new PanelFX(window, window.getBaseWidth(), window.getBaseHeight());
+            panel = new PanelFX(scene, scene.getWindow().getBaseWidth(), scene.getWindow().getBaseHeight());
             window.add((PanelFX) panel, BorderLayout.CENTER);
         } else if (RenderEngine.OPENGL.equals(renderEngine)) {
-            panel = new PanelGL(window, window.getBaseWidth(), window.getBaseHeight());
+            panel = new PanelGL(scene, scene.getWindow().getBaseWidth(), scene.getWindow().getBaseHeight());
             window.add((PanelGL) panel, BorderLayout.CENTER);
         }
         assert panel != null;
-        panel.setSize(new Dimension(window.getBaseWidth(), window.getBaseHeight()));
+        panel.setSize(new Dimension(scene.getWindow().getBaseWidth(), scene.getWindow().getBaseHeight()));
         return panel;
     }
 
@@ -186,12 +187,12 @@ public class SceneLoader {
                 Logger.warning("You can use CSS from external source using SOURCE attribute.");
             }
             if(source == null || source.isEmpty()) {
-                StyleDeserializer.deserialize(getWindow().getCurrentScene(), node);
+                StyleDeserializer.deserialize(scene, node);
             } else {
                 if(!node.getTextContent().isEmpty()) {
                     Logger.warning("Please note - if you're using CSS with external source, you cannot nest another CSS inside. Use additional tag.");
                 }
-                StyleDeserializer.deserialize(getWindow().getCurrentScene(), source);
+                StyleDeserializer.deserialize(scene, source);
             }
         } else if("scene".equals(nodeName)) {
             String source = "";
@@ -203,7 +204,7 @@ public class SceneLoader {
                 Logger.warning("Nested scene source is empty.");
             }
             if(source != null && !source.isEmpty()) {
-                NestedSceneDeserializer.deserialize(getWindow().getCurrentScene(), source,
+                NestedSceneDeserializer.deserialize(scene, source,
                         renderEngine.isEmpty() ? Dependencies.getAppProperties().getProperty("renderEngine") : renderEngine);
             }
         }

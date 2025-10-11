@@ -10,20 +10,23 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
 
 public class WebPanel extends JFXPanel implements PanelObject {
 
+    private final Scene scene;
     private final Window window;
     private WebView webView;
     private final Camera camera;
     private WebGraphicsManager graphicsManager;
     private MouseListener mouseListener;
 
-    public WebPanel(Window window) {
-        this.window = window;
+    public WebPanel(Scene scene) {
+        this.scene = scene;
+        this.window = scene.getWindow();
         setLayout(null);
         setBackground(Color.WHITE);
         this.camera = new Camera(this);

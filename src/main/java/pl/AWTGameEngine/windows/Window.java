@@ -48,6 +48,7 @@ public class Window extends JFrame {
     }
 
     public void unloadScenes() {
+        Logger.info("Unloading all scenes...");
         for(Scene scene : scenes.keySet()) {
             scene.removeAllObjects();
         }
@@ -129,6 +130,10 @@ public class Window extends JFrame {
         return this.sceneLoader;
     }
 
+    public List<Scene> getScenes() {
+        return new ArrayList<>(scenes.keySet());
+    }
+
     public Font getFont() {
         return this.font;
     }
@@ -194,8 +199,7 @@ public class Window extends JFrame {
             throw new RuntimeException("Scene must be owned by this window!");
         }
         for(Scene scene : new ArrayList<>(scenes.keySet())) {
-            scenes.remove(scene);
-            scenes.put(scene, scene.equals(newCurrentScene));
+            scenes.replace(scene, scene.equals(newCurrentScene));
             scene.getPanel().setOpaque(!scene.equals(newCurrentScene));
         }
     }

@@ -13,16 +13,16 @@ public class Scene {
 
     private final String name;
     private final ConcurrentHashMap<String, GameObject> gameObjects = new ConcurrentHashMap<>();
-    private final PanelObject panel;
     private final Window window;
     private final RenderEngine renderEngine;
+    private PanelObject panel;
     private ColliderRegistry colliderRegistry;
     private EventHandler sceneEventHandler;
     private String customStyles = "";
+    private final HashMap<String, RenderEngine> loadAfterLoad = new HashMap<>();
 
-    public Scene(String name, PanelObject panel, Window window, RenderEngine renderEngine) {
+    public Scene(String name, Window window, RenderEngine renderEngine) {
         this.name = name;
-        this.panel = panel;
         this.window = window;
         this.renderEngine = renderEngine;
         setColliderRegistry(new ColliderRegistry());
@@ -55,6 +55,10 @@ public class Scene {
 
     public void setCustomStyles(String styles) {
         this.customStyles = styles;
+    }
+
+    public void setPanel(PanelObject panel) {
+        this.panel = panel;
     }
 
     public GameObject createGameObject(String identifier) {
@@ -124,6 +128,18 @@ public class Scene {
         for(GameObject object : getGameObjects()) {
             removeGameObject(object);
         }
+    }
+
+    public void loadAfterLoad(String source, RenderEngine renderEngine) {
+        loadAfterLoad.put(source, renderEngine);
+    }
+
+    public void triggerAfterLoad() {
+        for(String path : loadAfterLoad.keySet()) {
+            getWindow().getSceneLoader().loadSceneFile(path, loadAfterLoad.get(path));
+        }
+        getWindow().setCurrentScene(this);
+        loadAfterLoad.clear();
     }
 
     public PanelObject getPanel() {

@@ -1,4 +1,5 @@
 <scene title="Default rendering scene" renderFPS="144" updateFPS="144" sameSize="true">
+    <scene source="scenes/default2.xml" renderEngine="default" />
     <object id="test" x="0" y="100" sizeX="480" sizeY="100">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
     </object>

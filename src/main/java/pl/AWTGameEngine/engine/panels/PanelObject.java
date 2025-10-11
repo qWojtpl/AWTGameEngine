@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine.panels;
 
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
