@@ -1,6 +1,6 @@
 <!-- To be honest, don't event try to run this performance on JFX render engine  -->
 <scene title="PhysX Performance test" renderFPS="0" updateFPS="60" physicsFPS="60" fullscreen="true">
-    <scene source="scenes/default.xml" renderEngine="default" />
+    <scene source="scenes/default2.xml" renderEngine="default" />
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />
         <CameraFX />
@@ -14,26 +14,4 @@
         <Box3D />
         <RigidBody.Static />
     </object>
-
-    <!-- GENERATOR
-
-    #include <iostream>
-    using namespace std;
-
-    int main()
-    {
-        int i = 0;
-        for(int x = 0; x < 60; x += 6) {
-            for(int y = 100; y < 1000; y += 14) {
-                for(int z = 0; z < 60; z += 6) {
-                    cout<<"\t\t<object id=\"box"<<i++<<"\" sizeX=\"5\" sizeY=\"5\" sizeZ=\"5\" x=\""<<x<<"\" y=\""<<y<<"\" z=\""<<z<<"\">\n";
-                    cout<<"\t\t\t<Box3D spriteSource=\"sprites/beaver.jpg\" glTexture=\"beaver\" staticShape=\"false\" />\n";
-                    cout<<"\t\t</object>\n";
-                }
-            }
-        }
-        return 0;
-    }
-
-    -->
 </scene>

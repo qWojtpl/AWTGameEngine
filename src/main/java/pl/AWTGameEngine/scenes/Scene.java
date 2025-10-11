@@ -135,11 +135,14 @@ public class Scene {
     }
 
     public void triggerAfterLoad() {
+        int c = loadAfterLoad.keySet().size();
         for(String path : loadAfterLoad.keySet()) {
             getWindow().getSceneLoader().loadSceneFile(path, loadAfterLoad.get(path));
         }
-        getWindow().setCurrentScene(this);
-        loadAfterLoad.clear();
+        if(c > 0) {
+            getWindow().setCurrentScene(this);
+            loadAfterLoad.clear();
+        }
     }
 
     public PanelObject getPanel() {

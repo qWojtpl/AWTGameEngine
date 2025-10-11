@@ -68,7 +68,7 @@ public class Window extends JFrame {
         setSize(getBaseWidth(), getBaseHeight());
         setKeyListener(new KeyListener(this));
         setWindowListener(new WindowListener(this));
-        setLayout(new BorderLayout());
+        setLayeredPane(new JLayeredPane());
         addComponentListener(getWindowListener());
         if (!serverWindow) {
             setVisible(true);
@@ -200,7 +200,7 @@ public class Window extends JFrame {
         }
         for(Scene scene : new ArrayList<>(scenes.keySet())) {
             scenes.replace(scene, scene.equals(newCurrentScene));
-            scene.getPanel().setOpaque(!scene.equals(newCurrentScene));
+            scene.getPanel().setOpaque(scene.equals(newCurrentScene));
         }
     }
 
