@@ -54,11 +54,6 @@ public class TextArea extends ObjectComponent {
     }
 
     @Override
-    public void onStaticUpdate() {
-        onUpdate();
-    }
-
-    @Override
     public void onUpdate() {
         textRenderer.setText(getRenderedText());
         if(pointerIterator >= getWindow().getRenderLoop().getTargetFps()) {

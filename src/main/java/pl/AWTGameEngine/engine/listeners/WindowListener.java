@@ -3,6 +3,7 @@ package pl.AWTGameEngine.engine.listeners;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
 
@@ -27,7 +28,7 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
         WindowsManager windowsManager = Dependencies.getWindowsManager();
         windowsManager.removeWindow(window);
         if(window.equals(windowsManager.getDefaultWindow())) {
-            window.unloadScene();
+            window.unloadScenes();
             Logger.info("Stopped app.");
         }
     }
@@ -51,7 +52,9 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
         if(window.isSameSize()) {
             window.updateRatio(16, 9);
         } else {
-            window.getPanel().setSize(new Dimension(newWidth, newHeight));
+            for(PanelObject panel : window.getPanels()) {
+                panel.setSize(new Dimension(newWidth, newHeight));
+            }
         }
         if(window.getCurrentScene() != null) {
             for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowResize#int#int")) {

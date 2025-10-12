@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.engine.loops;
 
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.windows.Window;
 
 public class PhysicsLoop extends BaseLoop {
@@ -11,7 +12,9 @@ public class PhysicsLoop extends BaseLoop {
     @Override
     public void iteration() {
         if(window.getCurrentScene() != null) {
-            window.getPanel().updatePhysics();
+            for(PanelObject panel : window.getPanels()) {
+                panel.updatePhysics();
+            }
         }
     }
 

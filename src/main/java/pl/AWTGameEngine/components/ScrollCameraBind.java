@@ -20,11 +20,6 @@ public class ScrollCameraBind extends ObjectComponent {
 
     @Override
     public void onUpdate() {
-        onStaticUpdate();
-    }
-
-    @Override
-    public void onStaticUpdate() {
         for(ObjectComponent component : getObject().getComponentsByClass(ScrollComponent.class)) {
             ScrollComponent scrollComponent = (ScrollComponent) component;
             scrollComponent.setScrollSize(maxValue / 100);

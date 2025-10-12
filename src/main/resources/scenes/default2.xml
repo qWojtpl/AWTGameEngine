@@ -1,0 +1,8 @@
+<scene title="Default2 rendering scene" renderFPS="60" updateFPS="60" physicsFPS="60" sameSize="true">
+    <object id="test2" x="500" y="100" sizeX="480" sizeY="100">
+        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+    </object>
+    <object id="textAreaTest" x="50" y="300" sizeX="300" sizeY="100">
+        <TextArea />
+    </object>
+</scene>

@@ -1,20 +1,23 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.scenes.Scene;
+import pl.AWTGameEngine.windows.Window;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-//todo: mouselistener for web
 public class MouseListener implements
         java.awt.event.MouseListener,
         java.awt.event.MouseMotionListener,
         java.awt.event.MouseWheelListener {
 
-    private final PanelObject panel;
+    private final Window window;
     private int mouseX;
     private int mouseY;
     private int mouseWindowX;
@@ -30,28 +33,37 @@ public class MouseListener implements
     private MouseEvent moveEvent;
     private MouseWheelEvent mouseWheelEvent;
 
-    public MouseListener(PanelObject panel) {
-        this.panel = panel;
+    private static MouseListener currentInstance;
+
+    public MouseListener(Window window) {
+        this.window = window;
+        currentInstance = this;
+    }
+
+    public static MouseListener getInstance() {
+        return currentInstance;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         clickEvent = e;
-        GameObject clickedObject = null;
-        for(GameObject object : getPanel().getWindow().getCurrentScene().getActiveGameObjects()) {
-            if(!panel.equals(object.getPanel())) {
+        for(Scene scene : window.getScenes()) {
+            if(!RenderEngine.DEFAULT.equals(scene.getRenderEngine()) && !RenderEngine.WEB.equals(scene.getRenderEngine())) {
                 continue;
             }
-            if(getMouseX() >= object.getX() && getMouseX() <= object.getX() + object.getSizeX()
-            && getMouseY() >= object.getY() && getMouseY() <= object.getY() + object.getSizeY()) {
-                for(ObjectComponent component : object.getEventHandler().getComponents("onMouseClick")) {
-                    component.onMouseClick();
+            GameObject clickedObject = null;
+            for(GameObject object : scene.getGameObjects()) {
+                if (getMouseX() >= object.getX() && getMouseX() <= object.getX() + object.getSizeX()
+                        && getMouseY() >= object.getY() && getMouseY() <= object.getY() + object.getSizeY()) {
+                    for (ObjectComponent component : object.getEventHandler().getComponents("onMouseClick")) {
+                        component.onMouseClick();
+                    }
+                    clickedObject = object;
                 }
-                clickedObject = object;
             }
-        }
-        for(ObjectComponent component : panel.getWindow().getCurrentScene().getSceneEventHandler().getComponents("onMouseClick#GameObject")) {
-            component.onMouseClick(clickedObject);
+            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onMouseClick#GameObject")) {
+                component.onMouseClick(clickedObject);
+            }
         }
     }
 
@@ -92,7 +104,7 @@ public class MouseListener implements
     }
 
     public void updatePosition(MouseEvent e) {
-        Camera camera = panel.getCamera();
+        Camera camera = window.getCurrentScene().getPanel().getCamera();
         mouseX = (int) (e.getX() / camera.getMultiplier() + camera.getX());
         mouseY = (int) (e.getY() / camera.getMultiplier() + camera.getY());
         mouseWindowX = e.getX();
@@ -111,10 +123,6 @@ public class MouseListener implements
         dragEvent = null;
         moveEvent = null;
         mouseWheelEvent = null;
-    }
-
-    public PanelObject getPanel() {
-        return this.panel;
     }
 
     /**

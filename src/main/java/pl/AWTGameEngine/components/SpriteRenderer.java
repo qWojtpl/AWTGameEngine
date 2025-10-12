@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;

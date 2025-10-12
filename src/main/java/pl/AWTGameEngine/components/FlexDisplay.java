@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
@@ -72,7 +73,7 @@ public class FlexDisplay extends ObjectComponent {
     }
 
     private boolean isWebRenderEngine() {
-        return Window.RenderEngine.WEB.equals(getWindow().getRenderEngine());
+        return RenderEngine.WEB.equals(getScene().getRenderEngine());
     }
 
     public List<GameObject> getItems() {

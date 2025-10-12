@@ -9,12 +9,14 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.util.HashMap;
 
 public class OpenGLInitializer implements GLEventListener {
 
+    private final Scene scene;
     private final Window window;
     private final Camera camera;
     private final GLProfile profile;
@@ -23,8 +25,9 @@ public class OpenGLInitializer implements GLEventListener {
     private final HashMap<String, Texture> textures;
     private final GLU glu = new GLU();
 
-    public OpenGLInitializer(Window window, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL, HashMap<String, Sprite> prepareTextures, HashMap<String, Texture> textures) {
-        this.window = window;
+    public OpenGLInitializer(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL, HashMap<String, Sprite> prepareTextures, HashMap<String, Texture> textures) {
+        this.scene = scene;
+        this.window = scene.getWindow();
         this.camera = camera;
         this.profile = profile;
         this.graphicsManagerGL = graphicsManagerGL;
@@ -71,7 +74,7 @@ public class OpenGLInitializer implements GLEventListener {
             return;
         }
 
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
             component.on3DRenderRequest(graphicsManagerGL);
         }
 
