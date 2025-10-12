@@ -1,10 +1,16 @@
 package pl.AWTGameEngine.scenes;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.engine.deserializers.GameObjectDeserializer;
+import pl.AWTGameEngine.engine.deserializers.NestedSceneDeserializer;
+import pl.AWTGameEngine.engine.deserializers.StyleDeserializer;
+import pl.AWTGameEngine.objects.GameObject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,10 +39,11 @@ public class SceneBuilder {
             SceneOptions options = sceneLoader.getSceneOptions(document);
 
             appendOptions(fileBuilder, options);
-
-            NodeList data = sceneLoader.getSceneData(document);
-
-            appendTrailer(fileBuilder);
+            StringBuilder methodBuilder = new StringBuilder();
+            appendObjects(fileBuilder, methodBuilder, sceneLoader.getSceneData(document));
+            fileBuilder.append("\t}\n");
+            fileBuilder.append(methodBuilder);
+            fileBuilder.append("}");
 
             Logger.info("Creating file...");
 
@@ -83,6 +90,7 @@ public class SceneBuilder {
         fileBuilder.append("/* Auto-generated using SceneBuilder at ");
         fileBuilder.append(System.currentTimeMillis() / 1000L);
         fileBuilder.append(" */\n");
+        fileBuilder.append("import java.util.Arrays;\n\n");
         fileBuilder.append("public class ");
         fileBuilder.append(fileName);
         fileBuilder.append(" {\n\n");
@@ -104,9 +112,54 @@ public class SceneBuilder {
         appendMethodBody(fileBuilder, createCall("window", "setSameSize", "boolean.class", String.valueOf(options.isSameSize())));
     }
 
-    private static void appendTrailer(StringBuilder fileBuilder) {
-        fileBuilder.append("\t}\n");
-        fileBuilder.append("}");
+    private static void appendObjects(StringBuilder fileBuilder, StringBuilder methodBuilder, NodeList sceneData) {
+        appendMethodBody(fileBuilder, "/* Objects */");
+        for(int i = 0; i < sceneData.getLength(); i++) {
+            if(sceneData.item(i).getNodeName().startsWith("#")) { // #comment or #text
+                continue;
+            }
+            initNode(fileBuilder, methodBuilder, sceneData.item(i));
+        }
+    }
+
+    private static void initNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
+        String nodeName = node.getNodeName().toLowerCase();
+        if("object".equals(nodeName)) {
+
+            String identifier;
+            try {
+                identifier = node.getAttributes().getNamedItem("id").getNodeValue();
+            } catch (Exception e) {
+                Logger.exception("Object doesn't have an identifier.", e);
+                return;
+            }
+            String address = getAddress();
+            appendMethodBody(fileBuilder, address + "(scene)");
+            methodBuilder.append("\tprivate static void ");
+            methodBuilder.append(address);
+            methodBuilder.append("(Object scene) throws Exception {\n");
+            appendMethodBody(methodBuilder, "Object " + address + " = " + createCall("scene", "createGameObject", "String.class", "\"" + identifier + "\""));
+            for(int i = 0; i < node.getChildNodes().getLength(); i++) {
+                Node childNode = node.getChildNodes().item(i);
+                if(childNode.getNodeName().startsWith("#")) { // #comment or #text
+                    continue;
+                }
+                String componentAddress = getAddress();
+                /*
+                Class<? extends ObjectComponent> clazz = Class.forName(className)
+                        .asSubclass(ObjectComponent.class);
+                ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(gameObject);
+                 */
+                String pckg = "pl.AWTGameEngine.components";
+                if(childNode.getAttributes().getNamedItem("_package") != null) {
+                    pckg = childNode.getAttributes().getNamedItem("_package").getNodeValue();
+                }
+                pckg = pckg + "." + childNode.getNodeName().replace(".", "$");
+                appendMethodBody(methodBuilder, "Object " + componentAddress + " = Class.forName(\"" + pckg + "\").getConstructors()[0].newInstance(" + address + ")");
+                appendMethodBody(methodBuilder, createCall(address, "addComponent", componentAddress));
+            }
+            methodBuilder.append("\t}\n\n");
+        }
     }
 
     private static void appendMethodBody(StringBuilder fileBuilder, String m) {
@@ -116,7 +169,7 @@ public class SceneBuilder {
     }
 
     private static String createCall(String object, String field, String value) {
-        return object + ".getClass().getMethod(\"" + field + "\").invoke(" + object + ", " + value + ")";
+        return "Arrays.stream(" + object + ".getClass().getMethods()).filter(method -> method.getName().equals(" + "\"" + field + "\"" + ")).findFirst().orElseThrow(() -> new NoSuchMethodException()).invoke(" + object + ", " + value + ")";
     }
 
     private static String createCall(String object, String field, String fieldType, String value) {
