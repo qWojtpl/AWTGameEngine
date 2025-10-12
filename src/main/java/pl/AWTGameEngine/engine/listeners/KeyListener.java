@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.event.KeyEvent;
@@ -22,8 +23,10 @@ public class KeyListener implements java.awt.event.KeyListener {
         if(window.getCurrentScene() == null) {
             return;
         }
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#char")) {
-            component.onKeyType(e.getKeyChar());
+        for(Scene scene : window.getScenes()) {
+            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#char")) {
+                component.onKeyType(e.getKeyChar());
+            }
         }
     }
 
@@ -35,8 +38,10 @@ public class KeyListener implements java.awt.event.KeyListener {
         pressedKeys.add(e.getKeyCode());
         pressedKeysChars.add(e.getKeyChar());
 
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#int")) {
-            component.onKeyType(e.getKeyCode());
+        for(Scene scene : window.getScenes()) {
+            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#int")) {
+                component.onKeyType(e.getKeyCode());
+            }
         }
     }
 
@@ -54,8 +59,10 @@ public class KeyListener implements java.awt.event.KeyListener {
         if(window.getCurrentScene() == null) {
             return;
         }
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#int")) {
-            component.onKeyType(key);
+        for(Scene scene : window.getScenes()) {
+            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#int")) {
+                component.onKeyType(key);
+            }
         }
     }
 
