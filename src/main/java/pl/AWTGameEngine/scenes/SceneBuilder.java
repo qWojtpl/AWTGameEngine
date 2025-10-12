@@ -7,9 +7,7 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Scanner;
 
 public class SceneBuilder {
@@ -66,9 +64,24 @@ public class SceneBuilder {
             String compiler = System.getProperty("java.home") + File.separator + "bin" + File.separator + "javac.exe";
 
             Process process = Runtime.getRuntime().exec("cmd /c " + compiler + " " + file.getAbsolutePath());
+
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(process.getErrorStream()));
+
+            boolean errors = false;
+            String message = null;
+            while ((message = stdError.readLine()) != null) {
+                Logger.error(message);
+                errors = true;
+            }
+
             process.waitFor();
 
-            Logger.info("Scene " + path + " successfully built and saved in ./scenebuilder/" + getFileName(path) + ".class");
+            if(errors) {
+                throw new RuntimeException("Java build ended with errors.");
+            } else {
+                Logger.info("Scene " + path + " successfully built and saved in ./scenebuilder/" + getFileName(path) + ".class");
+            }
 
         } catch(Exception e) {
             Logger.exception("Cannot build scene " + path, e);
@@ -108,6 +121,7 @@ public class SceneBuilder {
 
     private static void appendObjects(StringBuilder fileBuilder, StringBuilder methodBuilder, NodeList sceneData) {
         appendMethodBody(fileBuilder, "/* Objects */");
+        appendMethodBody(fileBuilder, "java.lang.reflect.Method createGameObjectMethod = scene.getClass().getMethod(\"createGameObject\", String.class)");
         for(int i = 0; i < sceneData.getLength(); i++) {
             if(sceneData.item(i).getNodeName().startsWith("#")) { // #comment or #text
                 continue;
@@ -128,11 +142,11 @@ public class SceneBuilder {
                 return;
             }
             String address = getAddress();
-            appendMethodBody(fileBuilder, address + "(scene)");
+            appendMethodBody(fileBuilder, address + "(scene, createGameObjectMethod)");
             methodBuilder.append("\tprivate static void ");
             methodBuilder.append(address);
-            methodBuilder.append("(Object scene) throws Exception {\n");
-            appendMethodBody(methodBuilder, "Object " + address + " = " + createCall("scene", "createGameObject", "String.class", "\"" + identifier + "\""));
+            methodBuilder.append("(Object scene, java.lang.reflect.Method sceneMethod) throws Exception {\n");
+            appendMethodBody(methodBuilder, "Object " + address + " = sceneMethod.invoke(scene, \"" + identifier + "\")");
             appendMethodBody(methodBuilder, createCall(address, "setX", "double.class", getValue(node, "x")));
             appendMethodBody(methodBuilder, createCall(address, "setY", "double.class", getValue(node, "y")));
             appendMethodBody(methodBuilder, createCall(address, "setZ", "double.class", getValue(node, "z")));
@@ -187,7 +201,7 @@ public class SceneBuilder {
     }
 
     private static String createCall(String object, String field, String value) {
-        return "Arrays.stream(" + object + ".getClass().getMethods()).filter(method -> method.getName().equals(" + "\"" + field + "\"" + ")).findFirst().orElseThrow(() -> new NoSuchMethodException()).invoke(" + object + ", " + value + ")";
+        return "Arrays.stream(" + object + ".getClass().getMethods()).filter(method -> method.getName().equals(" + "\"" + field + "\"" + ")).findFirst().orElseThrow(() -> new NoSuchMethodException()).invoke(" + object + (value != null ? ", " + value : "") + ")";
     }
 
     private static String createCall(String object, String field, String fieldType, String value) {
