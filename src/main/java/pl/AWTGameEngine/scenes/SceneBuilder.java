@@ -4,24 +4,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
-import pl.AWTGameEngine.engine.deserializers.GameObjectDeserializer;
-import pl.AWTGameEngine.engine.deserializers.NestedSceneDeserializer;
-import pl.AWTGameEngine.engine.deserializers.StyleDeserializer;
-import pl.AWTGameEngine.objects.GameObject;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class SceneBuilder {
 
     private static final ResourceManager resourceManager;
-    private static int addressCounter = 0;
+    private static long addressCounter = 0;
 
     static {
         resourceManager = Dependencies.getResourceManager();
@@ -139,27 +133,51 @@ public class SceneBuilder {
             methodBuilder.append(address);
             methodBuilder.append("(Object scene) throws Exception {\n");
             appendMethodBody(methodBuilder, "Object " + address + " = " + createCall("scene", "createGameObject", "String.class", "\"" + identifier + "\""));
+            appendMethodBody(methodBuilder, createCall(address, "setX", "double.class", getValue(node, "x")));
+            appendMethodBody(methodBuilder, createCall(address, "setY", "double.class", getValue(node, "y")));
+            appendMethodBody(methodBuilder, createCall(address, "setZ", "double.class", getValue(node, "z")));
+            appendMethodBody(methodBuilder, createCall(address, "setSizeX", "double.class", getValue(node, "sizeX")));
+            appendMethodBody(methodBuilder, createCall(address, "setSizeY", "double.class", getValue(node, "sizeY")));
+            appendMethodBody(methodBuilder, createCall(address, "setSizeZ", "double.class", getValue(node, "sizeZ")));
             for(int i = 0; i < node.getChildNodes().getLength(); i++) {
                 Node childNode = node.getChildNodes().item(i);
                 if(childNode.getNodeName().startsWith("#")) { // #comment or #text
                     continue;
                 }
                 String componentAddress = getAddress();
-                /*
-                Class<? extends ObjectComponent> clazz = Class.forName(className)
-                        .asSubclass(ObjectComponent.class);
-                ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(gameObject);
-                 */
                 String pckg = "pl.AWTGameEngine.components";
                 if(childNode.getAttributes().getNamedItem("_package") != null) {
                     pckg = childNode.getAttributes().getNamedItem("_package").getNodeValue();
                 }
                 pckg = pckg + "." + childNode.getNodeName().replace(".", "$");
                 appendMethodBody(methodBuilder, "Object " + componentAddress + " = Class.forName(\"" + pckg + "\").getConstructors()[0].newInstance(" + address + ")");
+
+                for(int j = 0; j < childNode.getAttributes().getLength(); j++) {
+                    Node attribute = childNode.getAttributes().item(j);
+                    if(attribute.getNodeName().equals("_package")) {
+                        continue;
+                    }
+                    String[] split = attribute.getNodeName().split("");
+                    split[0] = split[0].toUpperCase();
+                    String attributeName = String.join("", split);
+                    appendMethodBody(methodBuilder, createCall(componentAddress, "set" + attributeName, "String.class", "\"" + attribute.getNodeValue() + "\""));
+                }
+
                 appendMethodBody(methodBuilder, createCall(address, "addComponent", componentAddress));
             }
             methodBuilder.append("\t}\n\n");
         }
+    }
+
+    private static String getValue(Node node, String name) {
+        if(node.getAttributes() == null) {
+            return "0";
+        }
+        Node namedItem = node.getAttributes().getNamedItem(name);
+        if(namedItem == null) {
+            return "0";
+        }
+        return namedItem.getNodeValue();
     }
 
     private static void appendMethodBody(StringBuilder fileBuilder, String m) {
@@ -177,7 +195,7 @@ public class SceneBuilder {
     }
 
     private static String getAddress() {
-        return "x" + Integer.toHexString(addressCounter++);
+        return "x" + Long.toHexString(addressCounter++);
     }
 
 }
