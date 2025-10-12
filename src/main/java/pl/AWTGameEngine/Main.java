@@ -30,6 +30,8 @@ public class Main {
             if(arg.startsWith("-")) {
                 if(arg.equals("--build")) {
                     sceneBuilder = true;
+                    Logger.warning("Please note: don't build scene every time while debugging/development. " +
+                            "Using SceneBuilder is intended to use it before release to provide faster loading.");
                     continue;
                 }
                 break;
