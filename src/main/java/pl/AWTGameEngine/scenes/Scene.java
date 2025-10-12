@@ -137,7 +137,7 @@ public class Scene {
     public void triggerAfterLoad() {
         int c = loadAfterLoad.keySet().size();
         for(String path : loadAfterLoad.keySet()) {
-            getWindow().getSceneLoader().loadSceneFile(path, loadAfterLoad.get(path));
+            getWindow().getSceneLoader().loadSceneFile(path, loadAfterLoad.get(path), true);
         }
         if(c > 0) {
             getWindow().setCurrentScene(this);
@@ -167,7 +167,9 @@ public class Scene {
         for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
             component.onAfterUpdate();
         }
-        panel.getMouseListener().refresh();
+        if(panel.getMouseListener() != null) {
+            panel.getMouseListener().refresh();
+        }
     }
 
     public void updateSecond() {

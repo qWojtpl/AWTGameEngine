@@ -39,6 +39,11 @@ public class PanelFX extends JFXPanel implements PanelObject {
     }
 
     @Override
+    public Scene getParentScene() {
+        return this.scene;
+    }
+
+    @Override
     public Window getWindow() {
         return this.scene.getWindow();
     }
@@ -110,7 +115,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
     }
 
     private void initListeners() {
-        setMouseListener(new MouseListener(this));
+        setMouseListener(new MouseListener(window));
         fxScene.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
             getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
         });

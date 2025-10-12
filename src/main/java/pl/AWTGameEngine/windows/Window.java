@@ -3,6 +3,7 @@ package pl.AWTGameEngine.windows;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
+import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.panels.*;
@@ -66,6 +67,7 @@ public class Window extends JFrame {
             device.setFullScreenWindow(this);
         }
         setSize(getBaseWidth(), getBaseHeight());
+        setLocationRelativeTo(null);
         setKeyListener(new KeyListener(this));
         setWindowListener(new WindowListener(this));
         setLayeredPane(new JLayeredPane());
@@ -201,6 +203,11 @@ public class Window extends JFrame {
         for(Scene scene : new ArrayList<>(scenes.keySet())) {
             scenes.replace(scene, scene.equals(newCurrentScene));
             scene.getPanel().setOpaque(scene.equals(newCurrentScene));
+            if(!scene.equals(newCurrentScene)) {
+                scene.getPanel().setMouseListener(null);
+            } else {
+                scene.getPanel().setMouseListener(new MouseListener(this));
+            }
         }
     }
 

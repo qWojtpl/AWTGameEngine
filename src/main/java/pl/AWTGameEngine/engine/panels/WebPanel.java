@@ -35,7 +35,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
             setScene(new javafx.scene.Scene(webView));
             loadWebView();
         });
-        setMouseListener(new MouseListener(this));
+        setMouseListener(new MouseListener(window));
     }
 
     private void loadWebView() {
@@ -88,6 +88,11 @@ public class WebPanel extends JFXPanel implements PanelObject {
     public void unload() {
         setScene(null);
         window.remove(this);
+    }
+
+    @Override
+    public Scene getParentScene() {
+        return this.scene;
     }
 
     public Window getWindow() {

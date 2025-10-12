@@ -4,7 +4,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.components.Border;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.Logger;
@@ -27,7 +26,11 @@ public class SceneLoader {
         this.window = window;
     }
 
-    public void loadSceneFile(String scenePath, RenderEngine renderEngine) {
+    public void loadSceneFile(String scenePath) {
+        loadSceneFile(scenePath, RenderEngine.valueOf(Dependencies.getAppProperties().getProperty("renderEngine")), false);
+    }
+
+    public void loadSceneFile(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
         Logger.info("Loading scene: " + scenePath);
         Scene newScene;
         ResourceManager resourceManager = Dependencies.getResourceManager();
@@ -35,29 +38,32 @@ public class SceneLoader {
         try(InputStream sceneStream = resourceManager.getResourceAsStream(scenePath)) {
             Document document = getDocument(sceneStream);
             SceneOptions sceneOptions = getSceneOptions(document);
-            String title;
-            boolean sameSize;
-            if(sceneOptions != null) {
-                title = sceneOptions.getTitle();
-                window.getUpdateLoop().setTargetFps(sceneOptions.getUpdateFPS());
-                window.getRenderLoop().setTargetFps(sceneOptions.getRenderFPS());
-                window.getPhysicsLoop().setTargetFps(sceneOptions.getPhysicsFPS());
-                if(sceneOptions.isFullscreen()) {
-                    window.setFullScreen(true);
+            if(!nestedScene) {
+                String title;
+                boolean sameSize;
+                if(sceneOptions != null) {
+                    title = sceneOptions.getTitle();
+                    window.getUpdateLoop().setTargetFps(sceneOptions.getUpdateFPS());
+                    window.getRenderLoop().setTargetFps(sceneOptions.getRenderFPS());
+                    window.getPhysicsLoop().setTargetFps(sceneOptions.getPhysicsFPS());
+                    if(sceneOptions.isFullscreen()) {
+                        window.setFullScreen(true);
+                    }
+                    sameSize = sceneOptions.isSameSize();
+                } else {
+                    title = appProperties.getProperty("title");
+                    sameSize = appProperties.getPropertyAsBoolean("sameSize");
+                    window.setFullScreen(appProperties.getPropertyAsBoolean("fullscreen"));
                 }
-                sameSize = sceneOptions.isSameSize();
-            } else {
-                title = appProperties.getProperty("title");
-                sameSize = appProperties.getPropertyAsBoolean("sameSize");
-                window.setFullScreen(appProperties.getPropertyAsBoolean("fullscreen"));
+                window.setTitle(title);
+                window.setSameSize(sameSize);
             }
-            window.setTitle(title);
             newScene = new Scene(scenePath, window, renderEngine);
             newScene.setPanel(createPanel(newScene, renderEngine));
             window.addScene(newScene);
-            window.setCurrentScene(newScene);
-            window.setSameSize(sameSize);
-            window.setLocationRelativeTo(null);
+            if(!nestedScene) {
+                window.setCurrentScene(newScene);
+            }
             NodeList data = getSceneData(document);
             if(data == null) {
                 throw new RuntimeException("No scene data found.");

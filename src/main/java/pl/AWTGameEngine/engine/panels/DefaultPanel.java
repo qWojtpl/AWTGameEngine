@@ -26,7 +26,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
         this.window = scene.getWindow();
         this.scene = scene;
         this.camera = new Camera(this);
-        setMouseListener(new MouseListener(this));
+        setMouseListener(new MouseListener(window));
     }
 
     @Override
@@ -60,6 +60,11 @@ public class DefaultPanel extends JPanel implements PanelObject {
     @Override
     public void unload() {
         window.remove(this);
+    }
+
+    @Override
+    public Scene getParentScene() {
+        return this.scene;
     }
 
     public Window getWindow() {

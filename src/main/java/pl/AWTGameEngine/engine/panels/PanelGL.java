@@ -45,7 +45,8 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         initListeners();
     }
 
-    public Scene getScene() {
+    @Override
+    public Scene getParentScene() {
         return this.scene;
     }
 
@@ -144,7 +145,7 @@ public class PanelGL extends JLayeredPane implements PanelObject {
     }
 
     private void initListeners() {
-        setMouseListener(new MouseListener(this));
+        setMouseListener(new MouseListener(window));
     }
 
     @Override

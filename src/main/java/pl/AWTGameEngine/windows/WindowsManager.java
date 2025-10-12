@@ -58,7 +58,7 @@ public class WindowsManager {
         window.setPhysicsLoop(physicsLoop);
 
         window.init();
-        window.getSceneLoader().loadSceneFile(scenePath, renderEngine);
+        window.getSceneLoader().loadSceneFile(scenePath, renderEngine, false);
         windows.add(window);
 
         updateLoop.start();
