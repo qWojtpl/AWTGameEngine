@@ -6,7 +6,6 @@ import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
-import pl.AWTGameEngine.windows.Window;
 
 import java.util.*;
 import java.util.List;
@@ -27,32 +26,32 @@ public class GameObject {
     public GameObject(String identifier, Scene scene) {
         this.identifier = identifier;
         this.scene = scene;
-        if(Window.RenderEngine.WEB.equals(getScene().getWindow().getRenderEngine())) {
+        if(RenderEngine.WEB.equals(getScene().getRenderEngine())) {
             this.addComponent(new WebHandler(this));
         }
     }
 
     public void addComponent(ObjectComponent component) {
-        Window.RenderEngine renderEngine = scene.getWindow().getRenderEngine();
-        if(Window.RenderEngine.WEB.equals(renderEngine)) {
+        RenderEngine renderEngine = scene.getRenderEngine();
+        if(RenderEngine.WEB.equals(renderEngine)) {
             if(!component.isWebComponent()) {
                 Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as WebComponent");
                 return;
             }
-        } else if(Window.RenderEngine.DEFAULT.equals(renderEngine)) {
+        } else if(RenderEngine.DEFAULT.equals(renderEngine)) {
             if(!component.isDefaultComponent()) {
                 Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as DefaultComponent");
                 return;
             }
-        } else if(Window.RenderEngine.FX3D.equals(renderEngine)) {
+        } else if(RenderEngine.FX3D.equals(renderEngine)) {
             if(!component.isFXComponent()) {
                 Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as ComponentFX");
                 return;
             }
-        }  else if(Window.RenderEngine.OPENGL.equals(renderEngine)) {
+        }  else if(RenderEngine.OPENGL.equals(renderEngine)) {
             if(!component.isGLComponent()) {
                 Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as ComponentGL");

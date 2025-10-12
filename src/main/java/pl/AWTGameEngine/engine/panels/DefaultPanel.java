@@ -1,9 +1,11 @@
 package pl.AWTGameEngine.engine.panels;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
@@ -12,17 +14,19 @@ import java.awt.*;
 public class DefaultPanel extends JPanel implements PanelObject {
 
     private final Window window;
+    private final Scene scene;
     private final Camera camera;
     private final GraphicsManager graphicsManager = new GraphicsManager();
     private MouseListener mouseListener;
 
-    public DefaultPanel(Window window) {
+    public DefaultPanel(Scene scene) {
         super();
         setLayout(null);
         setBackground(Color.WHITE);
-        this.window = window;
+        this.window = scene.getWindow();
+        this.scene = scene;
         this.camera = new Camera(this);
-        setMouseListener(new MouseListener(this));
+        setMouseListener(new MouseListener(window));
     }
 
     @Override
@@ -32,13 +36,13 @@ public class DefaultPanel extends JPanel implements PanelObject {
             return;
         }
         graphicsManager.setGraphics(g);
-        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onPreRender#GraphicsManager")) {
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPreRender#GraphicsManager")) {
             component.onPreRender(graphicsManager);
         }
-        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onRender#GraphicsManager")) {
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onRender#GraphicsManager")) {
             component.onRender(graphicsManager);
         }
-        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onAfterRender#GraphicsManager")) {
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onAfterRender#GraphicsManager")) {
             component.onAfterRender(graphicsManager);
         }
     }
@@ -55,7 +59,12 @@ public class DefaultPanel extends JPanel implements PanelObject {
 
     @Override
     public void unload() {
+        window.remove(this);
+    }
 
+    @Override
+    public Scene getParentScene() {
+        return this.scene;
     }
 
     public Window getWindow() {
@@ -68,10 +77,6 @@ public class DefaultPanel extends JPanel implements PanelObject {
 
     public GraphicsManager getGraphicsManager() {
         return this.graphicsManager;
-    }
-
-    public MouseListener getMouseListener() {
-        return this.mouseListener;
     }
 
     public void setMouseListener(MouseListener mouseListener) {

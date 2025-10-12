@@ -2,6 +2,7 @@ package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -13,23 +14,23 @@ public class Scene {
     private final String name;
     private final ConcurrentHashMap<String, GameObject> gameObjects = new ConcurrentHashMap<>();
     private final Window window;
+    private final RenderEngine renderEngine;
+    private PanelObject panel;
     private ColliderRegistry colliderRegistry;
     private EventHandler sceneEventHandler;
     private String customStyles = "";
+    private final HashMap<String, RenderEngine> loadAfterLoad = new HashMap<>();
 
-    public Scene(String name, Window window) {
+    public Scene(String name, Window window, RenderEngine renderEngine) {
         this.name = name;
         this.window = window;
+        this.renderEngine = renderEngine;
         setColliderRegistry(new ColliderRegistry());
         setSceneEventHandler(new EventHandler());
     }
 
     public String getName() {
         return this.name;
-    }
-
-    public Window getWindow() {
-        return this.window;
     }
 
     public ColliderRegistry getColliderRegistry() {
@@ -54,6 +55,10 @@ public class Scene {
 
     public void setCustomStyles(String styles) {
         this.customStyles = styles;
+    }
+
+    public void setPanel(PanelObject panel) {
+        this.panel = panel;
     }
 
     public GameObject createGameObject(String identifier) {
@@ -84,7 +89,7 @@ public class Scene {
             Logger.error(errorMsg);
             throw new RuntimeException(errorMsg);
         }
-        object.setPanel(window.getPanel());
+        object.setPanel(panel);
         gameObjects.put(object.getIdentifier(), object);
     }
 
@@ -125,23 +130,43 @@ public class Scene {
         }
     }
 
-    public void update() {
-        if(window.isStaticMode()) {
-            for(ObjectComponent component : sceneEventHandler.getComponents("onStaticUpdate")) {
-                component.onStaticUpdate();
-            }
-        } else {
-            for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate")) {
-                component.onPreUpdate();
-            }
-            for(ObjectComponent component : sceneEventHandler.getComponents("onUpdate")) {
-                component.onUpdate();
-            }
-            for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
-                component.onAfterUpdate();
-            }
+    public void loadAfterLoad(String source, RenderEngine renderEngine) {
+        loadAfterLoad.put(source, renderEngine);
+    }
+
+    public void triggerAfterLoad() {
+        int c = loadAfterLoad.keySet().size();
+        for(String path : loadAfterLoad.keySet()) {
+            getWindow().getSceneLoader().loadSceneFile(path, loadAfterLoad.get(path), true);
         }
-        window.getPanel().getMouseListener().refresh();
+        if(c > 0) {
+            getWindow().setCurrentScene(this);
+            loadAfterLoad.clear();
+        }
+    }
+
+    public PanelObject getPanel() {
+        return this.panel;
+    }
+
+    public Window getWindow() {
+        return this.window;
+    }
+
+    public RenderEngine getRenderEngine() {
+        return this.renderEngine;
+    }
+
+    public void update() {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onPreUpdate")) {
+            component.onPreUpdate();
+        }
+        for(ObjectComponent component : sceneEventHandler.getComponents("onUpdate")) {
+            component.onUpdate();
+        }
+        for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
+            component.onAfterUpdate();
+        }
     }
 
     public void updateSecond() {

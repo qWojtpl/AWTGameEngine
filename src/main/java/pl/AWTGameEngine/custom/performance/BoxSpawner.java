@@ -5,6 +5,8 @@ import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.components.Box3D;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.RenderEngine;
+import pl.AWTGameEngine.engine.deserializers.NestedSceneDeserializer;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
@@ -32,6 +34,7 @@ public class BoxSpawner extends ObjectComponent {
         if(getWindow().getUpdateLoop().getActualFps() > 1) {
             System.out.println("Cubes: " + (getScene().getGameObjects().size() - 3)); // player, floor, textures
         }
+        System.out.println("Current scene: " + getWindow().getCurrentScene().getName());
     }
 
     private void spawnBoxes(int count) {

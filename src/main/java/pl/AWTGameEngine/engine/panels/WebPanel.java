@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine.panels;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.Event;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import pl.AWTGameEngine.Dependencies;
@@ -10,29 +11,57 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 
 public class WebPanel extends JFXPanel implements PanelObject {
 
+    private final Scene scene;
     private final Window window;
     private WebView webView;
     private final Camera camera;
     private WebGraphicsManager graphicsManager;
     private MouseListener mouseListener;
 
-    public WebPanel(Window window) {
-        this.window = window;
+    public WebPanel(Scene scene) {
+        this.scene = scene;
+        this.window = scene.getWindow();
         setLayout(null);
-        setBackground(Color.WHITE);
+        setBackground(Color.BLACK);
+
         this.camera = new Camera(this);
         Platform.runLater(() -> {
             this.webView = new WebView();
-            setScene(new javafx.scene.Scene(webView));
+
+            // transparent
+            javafx.scene.Scene fxScene = new javafx.scene.Scene(webView, new javafx.scene.paint.Color(0, 0, 0, 0));
+            webView.setStyle("-fx-background-color: transparent;");
+            webView.getEngine().setUserStyleSheetLocation("data:,body{background:transparent !important;}");
+            com.sun.webkit.WebPage webPage = com.sun.javafx.webkit.Accessor.getPageFor(webView.getEngine());
+            webPage.setBackgroundColor((new javafx.scene.paint.Color(0, 0, 0, 0)).hashCode());
+            //
+
+            webView.setFocusTraversable(false);
+
+            webView.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, (event) -> {
+                getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
+                getWindow().getKeyListener().asKeyType(event.getCode().getCode());
+            });
+            webView.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_TYPED, (event) -> {
+                getWindow().getKeyListener().asKeyType(event.getCharacter().charAt(0));
+            });
+            webView.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_RELEASED, (event) -> {
+                getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
+            });
+
+            setScene(fxScene);
             loadWebView();
         });
-        setMouseListener(new MouseListener(this));
+
+        setMouseListener(new MouseListener(window));
     }
 
     private void loadWebView() {
@@ -40,22 +69,12 @@ public class WebPanel extends JFXPanel implements PanelObject {
         StringBuilder htmlString = new StringBuilder();
         for(String line : Dependencies.getResourceManager().getResource(Dependencies.getAppProperties().getProperty("webViewPath") + "webview.html")) {
             if(line.contains("@{CUSTOM-USER-STYLES}")) {
-                htmlString.append(window.getCurrentScene().getCustomStyles());
+                htmlString.append(scene.getCustomStyles());
                 continue;
             }
             htmlString.append(line);
         }
         Logger.info("WebView file loaded.");
-        webView.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
-            getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
-        });
-        webView.addEventHandler(KeyEvent.KEY_TYPED, (event) -> {
-            getWindow().getKeyListener().asKeyType(event.getCode().getCode());
-        });
-        webView.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
-            getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
-        });
-        Logger.info("Added listeners.");
         webView.getEngine().setJavaScriptEnabled(true);
         webView.contextMenuEnabledProperty().setValue(false);
         webView.getEngine().loadContent(htmlString.toString());
@@ -71,7 +90,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
         if(graphicsManager == null) {
             return;
         }
-        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onWebRenderRequest#WebGraphicsManager")) {
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onWebRenderRequest#WebGraphicsManager")) {
             component.onWebRenderRequest(graphicsManager);
         }
     }
@@ -84,6 +103,12 @@ public class WebPanel extends JFXPanel implements PanelObject {
     @Override
     public void unload() {
         setScene(null);
+        window.remove(this);
+    }
+
+    @Override
+    public Scene getParentScene() {
+        return this.scene;
     }
 
     public Window getWindow() {
@@ -100,10 +125,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
     public WebGraphicsManager getGraphicsManager() {
         return this.graphicsManager;
-    }
-
-    public MouseListener getMouseListener() {
-        return this.mouseListener;
     }
 
     public void setMouseListener(MouseListener mouseListener) {

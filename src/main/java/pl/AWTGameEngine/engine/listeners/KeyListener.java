@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.event.KeyEvent;
@@ -19,24 +20,22 @@ public class KeyListener implements java.awt.event.KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        if(window.getCurrentScene() == null) {
-            return;
-        }
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#char")) {
-            component.onKeyType(e.getKeyChar());
+        for(Scene scene : window.getScenes()) {
+            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#char")) {
+                component.onKeyType(e.getKeyChar());
+            }
         }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(window.getCurrentScene() == null) {
-            return;
-        }
         pressedKeys.add(e.getKeyCode());
         pressedKeysChars.add(e.getKeyChar());
 
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#int")) {
-            component.onKeyType(e.getKeyCode());
+        for(Scene scene : window.getScenes()) {
+            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#int")) {
+                component.onKeyType(e.getKeyCode());
+            }
         }
     }
 
@@ -51,11 +50,18 @@ public class KeyListener implements java.awt.event.KeyListener {
     }
 
     public void asKeyType(int key) {
-        if(window.getCurrentScene() == null) {
-            return;
+        for(Scene scene : window.getScenes()) {
+            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#int")) {
+                component.onKeyType(key);
+            }
         }
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onKeyType#int")) {
-            component.onKeyType(key);
+    }
+
+    public void asKeyType(char character) {
+        for(Scene scene : window.getScenes()) {
+            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#char")) {
+                component.onKeyType(character);
+            }
         }
     }
 
