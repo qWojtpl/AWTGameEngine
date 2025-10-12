@@ -16,7 +16,11 @@ import pl.AWTGameEngine.windows.Window;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
+import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 public class SceneLoader {
 
@@ -32,6 +36,10 @@ public class SceneLoader {
 
     public void loadSceneFile(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
         Logger.info("Loading scene: " + scenePath);
+        if(scenePath.endsWith(".class")) {
+            loadSceneBinary(scenePath, renderEngine, nestedScene);
+            return;
+        }
         Scene newScene;
         ResourceManager resourceManager = Dependencies.getResourceManager();
         AppProperties appProperties = Dependencies.getAppProperties();
@@ -75,6 +83,34 @@ public class SceneLoader {
         }
         Logger.info("Scene " + scenePath + " loaded.");
         newScene.triggerAfterLoad();
+    }
+
+    public void loadSceneBinary(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
+        Scene newScene = new Scene(scenePath, window, renderEngine);
+        newScene.setPanel(createPanel(newScene, renderEngine));
+        window.addScene(newScene);
+        if(!nestedScene) {
+            window.setCurrentScene(newScene);
+        }
+        try {
+            String[] split = scenePath.split("[\\/\\\\]");
+            String className = split[split.length - 1].replace(".class", "");
+
+            URL url = new File(scenePath.replace(className + ".class", "")).toURI().toURL();
+            URL[] urls = new URL[]{url};
+
+            try(URLClassLoader cl = new URLClassLoader(urls)) {
+
+                Class<?> cls = cl.loadClass(className);
+                Object object = cls.getConstructor().newInstance();
+                object.getClass().getMethod("load", Object.class, Object.class).invoke(object, window, newScene);
+            }
+
+        } catch (InvocationTargetException e) {
+            Logger.error("Cannot load scene binary " + scenePath + ":\n\t" + e.getCause());
+        } catch (Exception e) {
+            Logger.exception("Cannot load scene binary " + scenePath, e);
+        }
     }
 
     public PanelObject createPanel(Scene scene, RenderEngine renderEngine) {

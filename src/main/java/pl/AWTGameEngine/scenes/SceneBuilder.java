@@ -9,6 +9,7 @@ import pl.AWTGameEngine.engine.ResourceManager;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class SceneBuilder {
@@ -59,7 +60,12 @@ public class SceneBuilder {
 
             Logger.info("Building java...");
 
+            //todo: Linux
 
+            String compiler = System.getProperty("java.home") + File.separator + "bin" + File.separator + "javac.exe";
+
+            Process process = Runtime.getRuntime().exec("cmd /c " + compiler + " " + file.getAbsolutePath());
+            process.waitFor();
 
             Logger.info("Scene " + path + " successfully built and saved in ./scenebuilder/" + getFileName(path) + ".class");
 
@@ -69,12 +75,14 @@ public class SceneBuilder {
     }
 
     private static String getFileName(String path) {
-        String[] split = path.split("/");
+        String[] split = path.split("[\\/\\\\]");
         return split[split.length - 1].replace(".", "_");
     }
 
     private static void appendStructure(StringBuilder fileBuilder, String fileName) {
-        fileBuilder.append("package pl.AWTGameEngine.scenebuilder;\n\n");
+        fileBuilder.append("/* Auto-generated using SceneBuilder at ");
+        fileBuilder.append(System.currentTimeMillis() / 1000L);
+        fileBuilder.append(" */\n");
         fileBuilder.append("public class ");
         fileBuilder.append(fileName);
         fileBuilder.append(" {\n\n");
@@ -83,17 +91,17 @@ public class SceneBuilder {
 
     private static void appendOptions(StringBuilder fileBuilder, SceneOptions options) {
         appendMethodBody(fileBuilder, "/* Scene options */");
-        appendMethodBody(fileBuilder, createCall("window", "setTitle", "\"" + options.getTitle() + "\""));
-        appendMethodBody(fileBuilder, createCall("window", "setFullscreen", String.valueOf(options.isFullscreen())));
+        appendMethodBody(fileBuilder, createCall("window", "setTitle", "String.class", "\"" + options.getTitle() + "\""));
+        appendMethodBody(fileBuilder, createCall("window", "setFullScreen", "boolean.class", String.valueOf(options.isFullscreen())));
         // FPS
-        int[] values = new int[]{ options.getUpdateFPS(), options.getRenderFPS(), options.getPhysicsFPS() };
+        double[] values = new double[]{ options.getUpdateFPS(), options.getRenderFPS(), options.getPhysicsFPS() };
         String[] names = new String[]{ "Update", "Render", "Physics" };
         for(int i = 0; i < values.length; i++) {
             String address = getAddress();
-            appendMethodBody(fileBuilder, "Object " + address + " = " + createCall("window", "get" + names[i] + "Loop", "window"));
-            appendMethodBody(fileBuilder, createCall(address, "setTargetFPS", String.valueOf(values[i])));
+            appendMethodBody(fileBuilder, "Object " + address + " = " + createCall("window", "get" + names[i] + "Loop", null));
+            appendMethodBody(fileBuilder, createCall(address, "setTargetFps", "double.class", String.valueOf(values[i])));
         }
-        appendMethodBody(fileBuilder, createCall("window", "setSameSize", String.valueOf(options.isSameSize())));
+        appendMethodBody(fileBuilder, createCall("window", "setSameSize", "boolean.class", String.valueOf(options.isSameSize())));
     }
 
     private static void appendTrailer(StringBuilder fileBuilder) {
@@ -109,6 +117,10 @@ public class SceneBuilder {
 
     private static String createCall(String object, String field, String value) {
         return object + ".getClass().getMethod(\"" + field + "\").invoke(" + object + ", " + value + ")";
+    }
+
+    private static String createCall(String object, String field, String fieldType, String value) {
+        return object + ".getClass().getMethod(\"" + field + "\", " + fieldType + ").invoke(" + object + (value != null ? ", " + value : "") + ")";
     }
 
     private static String getAddress() {
