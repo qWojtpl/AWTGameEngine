@@ -21,7 +21,7 @@ public class SceneBuilder {
         resourceManager = Dependencies.getResourceManager();
     }
 
-    public static void build(String path) {
+    public static void build(String path, boolean force) {
         Logger.info("Starting scene building: " + path);
 
         StringBuilder fileBuilder = new StringBuilder();
@@ -46,11 +46,11 @@ public class SceneBuilder {
 
             File file = new File("./scenebuilder/" + getFileName(path) + ".java");
             boolean b = file.createNewFile();
-            if(!b) {
+            if(!b && !force) {
                 Logger.warning("Scene file with this name already exists. Do you wish to continue? (Y/n)");
                 Scanner scanner = new Scanner(System.in);
                 String input = scanner.nextLine();
-                if(!input.equals("Y")) {
+                if(!input.equalsIgnoreCase("y")) {
                     throw new RuntimeException("Building aborted.");
                 }
             }
