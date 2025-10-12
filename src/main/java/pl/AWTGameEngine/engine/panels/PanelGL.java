@@ -60,11 +60,6 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         return this.camera;
     }
 
-    @Override
-    public MouseListener getMouseListener() {
-        return this.mouseListener;
-    }
-
     public GraphicsManager3D getGraphicsManager3D() {
         return this.graphicsManager3D;
     }

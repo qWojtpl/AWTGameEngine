@@ -203,7 +203,7 @@ public class Window extends JFrame {
         for(Scene scene : new ArrayList<>(scenes.keySet())) {
             scenes.replace(scene, scene.equals(newCurrentScene));
             scene.getPanel().setOpaque(scene.equals(newCurrentScene));
-            if(!scene.equals(newCurrentScene)) {
+            if(scene.equals(newCurrentScene)) {
                 scene.getPanel().setMouseListener(null);
             } else {
                 scene.getPanel().setMouseListener(new MouseListener(this));

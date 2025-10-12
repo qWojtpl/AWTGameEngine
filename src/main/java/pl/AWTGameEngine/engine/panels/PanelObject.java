@@ -12,7 +12,6 @@ public interface PanelObject {
     Window getWindow();
     Camera getCamera();
     Scene getParentScene();
-    MouseListener getMouseListener();
     Component add(Component comp);
     void unload();
     void updateRender();

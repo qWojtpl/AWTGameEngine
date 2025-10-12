@@ -79,10 +79,6 @@ public class DefaultPanel extends JPanel implements PanelObject {
         return this.graphicsManager;
     }
 
-    public MouseListener getMouseListener() {
-        return this.mouseListener;
-    }
-
     public void setMouseListener(MouseListener mouseListener) {
         if(this.mouseListener != null) {
             removeMouseListener(this.mouseListener);

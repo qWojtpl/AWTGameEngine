@@ -167,9 +167,6 @@ public class Scene {
         for(ObjectComponent component : sceneEventHandler.getComponents("onAfterUpdate")) {
             component.onAfterUpdate();
         }
-        if(panel.getMouseListener() != null) {
-            panel.getMouseListener().refresh();
-        }
     }
 
     public void updateSecond() {

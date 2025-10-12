@@ -28,13 +28,24 @@ public class WebPanel extends JFXPanel implements PanelObject {
         this.scene = scene;
         this.window = scene.getWindow();
         setLayout(null);
-        setBackground(Color.WHITE);
+        setBackground(Color.BLACK);
+
         this.camera = new Camera(this);
         Platform.runLater(() -> {
             this.webView = new WebView();
-            setScene(new javafx.scene.Scene(webView));
+
+            // transparent
+            javafx.scene.Scene fxScene = new javafx.scene.Scene(webView, new javafx.scene.paint.Color(0, 0, 0, 0));
+            webView.setStyle("-fx-background-color: transparent;");
+            webView.getEngine().setUserStyleSheetLocation("data:,body{background:transparent !important;}");
+            com.sun.webkit.WebPage webPage = com.sun.javafx.webkit.Accessor.getPageFor(webView.getEngine());
+            webPage.setBackgroundColor((new javafx.scene.paint.Color(0, 0, 0, 0)).hashCode());
+            //
+
+            setScene(fxScene);
             loadWebView();
         });
+
         setMouseListener(new MouseListener(window));
     }
 
@@ -43,7 +54,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
         StringBuilder htmlString = new StringBuilder();
         for(String line : Dependencies.getResourceManager().getResource(Dependencies.getAppProperties().getProperty("webViewPath") + "webview.html")) {
             if(line.contains("@{CUSTOM-USER-STYLES}")) {
-                htmlString.append(window.getCurrentScene().getCustomStyles());
+                htmlString.append(scene.getCustomStyles());
                 continue;
             }
             htmlString.append(line);
@@ -74,7 +85,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
         if(graphicsManager == null) {
             return;
         }
-        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("onWebRenderRequest#WebGraphicsManager")) {
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onWebRenderRequest#WebGraphicsManager")) {
             component.onWebRenderRequest(graphicsManager);
         }
     }
@@ -109,10 +120,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
     public WebGraphicsManager getGraphicsManager() {
         return this.graphicsManager;
-    }
-
-    public MouseListener getMouseListener() {
-        return this.mouseListener;
     }
 
     public void setMouseListener(MouseListener mouseListener) {

@@ -53,11 +53,6 @@ public class PanelFX extends JFXPanel implements PanelObject {
         return this.camera;
     }
 
-    @Override
-    public MouseListener getMouseListener() {
-        return this.mouseListener;
-    }
-
     public javafx.scene.Scene getFxScene() {
         return this.fxScene;
     }
@@ -82,7 +77,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
         if(graphicsManager3D == null) {
             return;
         }
-        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
             component.on3DRenderRequest(graphicsManager3D);
         }
     }

@@ -34,8 +34,15 @@ public class MouseListener implements
     private MouseEvent moveEvent;
     private MouseWheelEvent mouseWheelEvent;
 
+    private static MouseListener currentInstance;
+
     public MouseListener(Window window) {
         this.window = window;
+        currentInstance = this;
+    }
+
+    public static MouseListener getInstance() {
+        return currentInstance;
     }
 
     @Override

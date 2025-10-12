@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.engine.loops;
 
+import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
@@ -14,6 +15,9 @@ public class UpdateLoop extends BaseLoop {
         if(window.getCurrentScene() != null) {
             for(Scene scene : window.getScenes()) {
                 scene.update();
+            }
+            if(MouseListener.getInstance() != null) {
+                MouseListener.getInstance().refresh();
             }
         }
     }
