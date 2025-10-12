@@ -6,7 +6,6 @@ import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
-import pl.AWTGameEngine.windows.Window;
 
 import java.util.*;
 import java.util.List;

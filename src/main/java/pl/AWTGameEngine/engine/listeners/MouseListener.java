@@ -12,7 +12,6 @@ import pl.AWTGameEngine.windows.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-//todo: mouselistener for web
 public class MouseListener implements
         java.awt.event.MouseListener,
         java.awt.event.MouseMotionListener,

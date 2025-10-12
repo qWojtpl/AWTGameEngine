@@ -20,9 +20,6 @@ public class KeyListener implements java.awt.event.KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        if(window.getCurrentScene() == null) {
-            return;
-        }
         for(Scene scene : window.getScenes()) {
             for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#char")) {
                 component.onKeyType(e.getKeyChar());
@@ -32,9 +29,6 @@ public class KeyListener implements java.awt.event.KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(window.getCurrentScene() == null) {
-            return;
-        }
         pressedKeys.add(e.getKeyCode());
         pressedKeysChars.add(e.getKeyChar());
 
@@ -56,12 +50,17 @@ public class KeyListener implements java.awt.event.KeyListener {
     }
 
     public void asKeyType(int key) {
-        if(window.getCurrentScene() == null) {
-            return;
-        }
         for(Scene scene : window.getScenes()) {
             for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#int")) {
                 component.onKeyType(key);
+            }
+        }
+    }
+
+    public void asKeyType(char character) {
+        for(Scene scene : window.getScenes()) {
+            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onKeyType#char")) {
+                component.onKeyType(character);
             }
         }
     }

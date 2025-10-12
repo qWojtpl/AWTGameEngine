@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine.panels;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.Event;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import pl.AWTGameEngine.Dependencies;
@@ -14,6 +15,7 @@ import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 
 public class WebPanel extends JFXPanel implements PanelObject {
 
@@ -42,6 +44,19 @@ public class WebPanel extends JFXPanel implements PanelObject {
             webPage.setBackgroundColor((new javafx.scene.paint.Color(0, 0, 0, 0)).hashCode());
             //
 
+            webView.setFocusTraversable(false);
+
+            webView.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, (event) -> {
+                getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
+                getWindow().getKeyListener().asKeyType(event.getCode().getCode());
+            });
+            webView.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_TYPED, (event) -> {
+                getWindow().getKeyListener().asKeyType(event.getCharacter().charAt(0));
+            });
+            webView.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_RELEASED, (event) -> {
+                getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
+            });
+
             setScene(fxScene);
             loadWebView();
         });
@@ -60,16 +75,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
             htmlString.append(line);
         }
         Logger.info("WebView file loaded.");
-        webView.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
-            getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
-        });
-        webView.addEventHandler(KeyEvent.KEY_TYPED, (event) -> {
-            getWindow().getKeyListener().asKeyType(event.getCode().getCode());
-        });
-        webView.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
-            getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
-        });
-        Logger.info("Added listeners.");
         webView.getEngine().setJavaScriptEnabled(true);
         webView.contextMenuEnabledProperty().setValue(false);
         webView.getEngine().loadContent(htmlString.toString());
