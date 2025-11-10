@@ -1,0 +1,13 @@
+<scene title="2D physics" renderFPS="144" updateFPS="144" physicsFPS="360">
+
+    <object id="beaver" x="0" y="0" sizeX="100" sizeY="100">
+        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <RigidBody.Dynamic2D />
+    </object>
+
+    <object id="floor" x="100" y="-200" sizeX="400" sizeY="50">
+        <BlankRenderer color="rgb(255,0,0)" />
+        <RigidBody.Dynamic2D disableGravity="true" />
+    </object>
+
+</scene>
