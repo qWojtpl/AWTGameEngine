@@ -2,6 +2,7 @@ package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.AppProperties;
+import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.loops.PhysicsLoop;
@@ -44,6 +45,8 @@ public class WindowsManager {
         if (icon != null) {
             window.setIconImage(icon.getImage());
         }
+
+        PhysXManager.getInstance();
 
         BaseLoop updateLoop = new UpdateLoop(window);
         updateLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));

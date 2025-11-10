@@ -82,6 +82,7 @@ public final class PhysXManager {
     public static PhysXManager getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new PhysXManager();
+            INSTANCE.init();
         }
         return INSTANCE;
     }

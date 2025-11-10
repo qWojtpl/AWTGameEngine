@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.engine.ColliderRegistry;
+import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -60,6 +61,10 @@ public abstract class ObjectComponent {
 
     protected final GameObject getObjectByName(String name) {
         return getScene().getGameObjectByName(name);
+    }
+
+    protected final RenderEngine getRenderEngine() {
+        return getObject().getPanel().getParentScene().getRenderEngine();
     }
 
     /**

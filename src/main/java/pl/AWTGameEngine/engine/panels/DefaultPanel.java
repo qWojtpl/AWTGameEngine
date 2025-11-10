@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine.panels;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
@@ -54,9 +55,16 @@ public class DefaultPanel extends JPanel implements PanelObject {
 
     @Override
     public void updatePhysics() {
+        if(getWindow().getCurrentScene() == null) {
+            return;
+        }
 
+        PhysXManager.getInstance().simulateFrame(getWindow().getPhysicsLoop().getTargetFps());
+
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
+            component.onPhysicsUpdate();
+        }
     }
-
     @Override
     public void unload() {
         window.remove(this);

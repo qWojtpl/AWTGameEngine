@@ -40,7 +40,6 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManagerGL(this);
         this.physXManager = PhysXManager.getInstance();
-        physXManager.init();
         initOpenGL(width, height);
         initListeners();
     }

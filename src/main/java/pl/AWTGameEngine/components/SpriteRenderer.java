@@ -30,8 +30,8 @@ public class SpriteRenderer extends ObjectComponent {
         }
         g.drawImage(
                 sprite,
-                getCamera().parseX(getObject(), getObject().getX()),
-                getCamera().parseY(getObject(), getObject().getY()),
+                getCamera().parseX(getObject(), getObject().getX() - getObject().getSizeX() / 2),
+                getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
                 getCamera().parsePlainValue(getObject().getSizeX()),
                 getCamera().parsePlainValue(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()

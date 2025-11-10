@@ -26,8 +26,8 @@ public class BlankRenderer extends ObjectComponent {
     @Override
     public void onRender(GraphicsManager g) {
         g.fillRect(
-                getCamera().parseX(getObject(), getObject().getX()),
-                getCamera().parseY(getObject(), getObject().getY()),
+                getCamera().parseX(getObject(), getObject().getX() - getObject().getSizeX() / 2),
+                getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
                 getCamera().parsePlainValue(getObject().getSizeX()),
                 getCamera().parsePlainValue(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
