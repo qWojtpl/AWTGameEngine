@@ -3,7 +3,10 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.deserializers.NetMessageDeserializer;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.TransformSet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,6 +51,11 @@ public class Client extends ObjectComponent {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             handleConnection();
             Logger.info("Connected.");
+            Logger.info("Requesting object...");
+            TransformSet position = new TransformSet(400, 400);
+            TransformSet size = new TransformSet(100, 100);
+            sendNetBlock(new NetBlock("player{id}", null, position, size));
+            sendNetBlock(new NetBlock("player{id}", "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)"));
         } catch (IOException e) {
             Logger.exception("Cannot connect to " + address, e);
         }
@@ -74,26 +82,7 @@ public class Client extends ObjectComponent {
                     if(response == null) {
                         continue;
                     }
-                    String[] split = response.split(";");
-                    GameObject object = getScene().getGameObjectByName(split[0]);
-                    if(object == null) {
-                        Logger.warning(split[0] + " object not found, creating a new one...");
-                        object = getScene().createGameObject(split[0]);
-                    }
-                    if("null".equals(split[1]) || split[1] == null) { // object-related synchronization instead of component-related
-                        object.onPositionSynchronizeReceived(split[2]);
-                        continue;
-                    }
-                    Class<? extends ObjectComponent> clazz = Class.forName(split[1])
-                            .asSubclass(ObjectComponent.class);
-                    ObjectComponent component = object.getComponentByClass(clazz);
-                    //todo: many same components inside one object
-                    if(component == null) {
-                        Logger.warning(split[0] + " object doesn't have component " + split[1] + ", adding a new one...");
-                        component = clazz.getConstructor(GameObject.class).newInstance(object);
-                        object.addComponent(component);
-                    }
-                    component.onSynchronizeReceived(split[2]);
+                    NetMessageDeserializer.deserialize(getScene(), response, socket);
                 } catch (Exception e) {
                     Logger.exception("Cannot read a response (" + response + ")", e);
                 }
@@ -103,6 +92,10 @@ public class Client extends ObjectComponent {
 
     private void sendMessage(String message) {
         out.println(message);
+    }
+
+    private void sendNetBlock(NetBlock netBlock) {
+        sendMessage(netBlock.formMessage());
     }
 
     @SerializationSetter

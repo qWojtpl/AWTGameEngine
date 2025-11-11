@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.deserializers.NetMessageDeserializer;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.NetBlock;
 
@@ -32,8 +33,9 @@ public class Server extends ObjectComponent {
 
     // clients
     private final List<Socket> sockets = new ArrayList<>();
-    private final HashMap<Socket, PrintWriter> writers = new HashMap<>();
     private final HashMap<Socket, Integer> clientIds = new HashMap<>();
+    private final HashMap<Integer, PrintWriter> writers = new HashMap<>();
+    private final HashMap<Integer, List<GameObject>> ownership = new HashMap<>();
     private int currentId = 0;
 
     public Server(GameObject object) {
@@ -105,7 +107,7 @@ public class Server extends ObjectComponent {
     }
 
     private void sendTCPMessage(Socket client, String message) {
-        writers.get(client).println(message);
+        writers.get(getClientId(client)).println(message);
     }
 
     private void handleConnection(Socket clientSocket) {
@@ -120,13 +122,14 @@ public class Server extends ObjectComponent {
         BufferedReader in;
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
-            writers.put(clientSocket, out);
+            writers.put(id, out);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
             Logger.exception("Error while initializing client connection with ID " + id, e);
             return;
         }
 
+        ownership.put(id, new ArrayList<>());
         Logger.info("\t\t-> Established connection.");
 
         while (clientSocket.isConnected()) {
@@ -135,7 +138,7 @@ public class Server extends ObjectComponent {
                 if(message == null) {
                     continue;
                 }
-                Logger.info("Received message: " + message);
+                NetMessageDeserializer.deserialize(getScene(), message, clientSocket, this);
             } catch (IOException e) {
                 Logger.exception("Exception while receiving a message. Have to disconnect a client.", e);
                 disconnect(clientSocket);
@@ -146,7 +149,8 @@ public class Server extends ObjectComponent {
         try {
             out.close();
             in.close();
-            writers.remove(clientSocket);
+            writers.remove(id);
+            ownership.remove(id);
         } catch(IOException e) {
             Logger.exception("Cannot close client " + id + " connection", e);
         }
@@ -183,6 +187,18 @@ public class Server extends ObjectComponent {
         } catch (IOException e) {
             Logger.exception("Cannot send packet", e);
         }
+    }
+
+    public boolean canChange(Socket client, GameObject object) {
+        return ownership.get(getClientId(client)).contains(object);
+    }
+
+    public void assignOwnership(GameObject object, Socket client) {
+        ownership.get(getClientId(client)).add(object);
+    }
+
+    public int getClientId(Socket client) {
+        return clientIds.get(client);
     }
 
     @SerializationSetter

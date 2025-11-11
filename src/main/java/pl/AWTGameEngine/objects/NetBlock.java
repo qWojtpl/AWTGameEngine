@@ -18,6 +18,12 @@ public class NetBlock {
         this.data = data;
     }
 
+    public NetBlock(String identifier, String component, TransformSet position, TransformSet size) {
+        this.identifier = identifier;
+        this.component = component;
+        this.data = position.toString() + size;
+    }
+
     public String getIdentifier() {
         return this.identifier;
     }

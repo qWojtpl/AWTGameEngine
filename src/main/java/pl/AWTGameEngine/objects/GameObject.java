@@ -410,7 +410,8 @@ public class GameObject {
         return new NetBlock(
                 getIdentifier(),
                 null,
-                getPosition().toString() + getSize().toString()
+                getPosition(),
+                getSize()
         );
     }
 
