@@ -50,22 +50,35 @@ public class TransformSet {
         return this.z;
     }
 
-    public void setX(double x) {
+    public TransformSet setX(double x) {
         this.x = x;
+        return this;
     }
 
-    public void setY(double y) {
+    public TransformSet setY(double y) {
         this.y = y;
+        return this;
     }
 
     @Platform3D
-    public void setZ(double z) {
+    public TransformSet setZ(double z) {
         this.z = z;
+        return this;
     }
 
     @Override
     public String toString() {
         return "[TransformSet[x=" + x + ",y=" + y + ",z=" + z + "]]";
+    }
+
+    public TransformSet deserializeFromToString(String data) {
+        deserialize(data
+                .replace("x=", "")
+                .replace("y=", "")
+                .replace("z=", "")
+                .replaceAll("\\[", "")
+                .replaceAll("]", ""));
+        return this;
     }
 
     public TransformSet deserialize(String values) {

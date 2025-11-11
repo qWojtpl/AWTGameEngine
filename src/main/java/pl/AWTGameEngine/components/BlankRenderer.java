@@ -5,10 +5,12 @@ import pl.AWTGameEngine.annotations.SerializationGetter;
 import pl.AWTGameEngine.annotations.SerializationSetter;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
 
 import java.text.MessageFormat;
 
@@ -68,6 +70,22 @@ public class BlankRenderer extends ObjectComponent {
                     getObject().getIdentifier(), this.color.serialize()));
         }
         changedColor = false;
+    }
+
+    // Net
+
+    @Override
+    public NetBlock onSynchronize() {
+        return new NetBlock(
+                getObject().getIdentifier(),
+                this.getClass().getName(),
+                getColor()
+        );
+    }
+
+    @Override
+    public void onSynchronizeReceived(String data) {
+        setColor(data);
     }
 
 }

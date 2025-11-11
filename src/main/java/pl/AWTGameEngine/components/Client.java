@@ -46,7 +46,8 @@ public class Client extends ObjectComponent {
             socket = new Socket(ip, port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            sendMessage("Hello!", true);
+            handleConnection();
+            Logger.info("Connected.");
         } catch (IOException e) {
             Logger.exception("Cannot connect to " + address, e);
         }
@@ -64,19 +65,44 @@ public class Client extends ObjectComponent {
         }
     }
 
-    private void sendMessage(String message, boolean b) {
+    private void handleConnection() {
         new Thread(() -> {
-            Logger.info("Sending message: " + message);
-            out.println(message);
-            String response = null;
-            try {
-                response = in.readLine();
-            } catch (IOException e) {
-                Logger.exception("Cannot read a response", e);
+            while(socket.isConnected()) {
+                String response = "";
+                try {
+                    response = in.readLine();
+                    if(response == null) {
+                        continue;
+                    }
+                    String[] split = response.split(";");
+                    GameObject object = getScene().getGameObjectByName(split[0]);
+                    if(object == null) {
+                        Logger.warning(split[0] + " object not found, creating a new one...");
+                        object = getScene().createGameObject(split[0]);
+                    }
+                    if("null".equals(split[1]) || split[1] == null) { // object-related synchronization instead of component-related
+                        object.onPositionSynchronizeReceived(split[2]);
+                        continue;
+                    }
+                    Class<? extends ObjectComponent> clazz = Class.forName(split[1])
+                            .asSubclass(ObjectComponent.class);
+                    ObjectComponent component = object.getComponentByClass(clazz);
+                    //todo: many same components inside one object
+                    if(component == null) {
+                        Logger.warning(split[0] + " object doesn't have component " + split[1] + ", adding a new one...");
+                        component = clazz.getConstructor(GameObject.class).newInstance(object);
+                        object.addComponent(component);
+                    }
+                    component.onSynchronizeReceived(split[2]);
+                } catch (Exception e) {
+                    Logger.exception("Cannot read a response (" + response + ")", e);
+                }
             }
-            Logger.info("Server responded with " + response);
-            if(b) sendMessage("t2", false);
         }, "CLIENT-MESSAGE").start();
+    }
+
+    private void sendMessage(String message) {
+        out.println(message);
     }
 
     @SerializationSetter

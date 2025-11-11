@@ -11,6 +11,8 @@ import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.TransformSet;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
@@ -271,6 +273,21 @@ public abstract class ObjectComponent {
 
     @EventMethod
     public void onWindowClosing() {
+
+    }
+
+    /**
+     * Object synchronize is over a TCP connection to ensure that component will be updated.
+     * onSynchronize event is executed only on server side.
+     * @return NetBlock
+     */
+    @EventMethod
+    public NetBlock onSynchronize() {
+        return new NetBlock();
+    }
+
+    @EventMethod
+    public void onSynchronizeReceived(String data) {
 
     }
 

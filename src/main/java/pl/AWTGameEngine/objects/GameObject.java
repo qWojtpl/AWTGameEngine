@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.objects;
 
+import pl.AWTGameEngine.annotations.EventMethod;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
@@ -403,6 +404,20 @@ public class GameObject {
 
     public void setPanel(PanelObject panel) {
         this.panel = panel;
+    }
+
+    public final NetBlock onPositionSynchronize() {
+        return new NetBlock(
+                getIdentifier(),
+                null,
+                getPosition().toString() + getSize().toString()
+        );
+    }
+
+    public final void onPositionSynchronizeReceived(String data) {
+        String[] split = data.split("\\[TransformSet");
+        setPosition(new TransformSet().deserializeFromToString(split[1]));
+        setSize(new TransformSet().deserializeFromToString(split[2]));
     }
 
 }

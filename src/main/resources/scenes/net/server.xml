@@ -1,0 +1,9 @@
+<scene title="Net demo (server)" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+    <object id="server">
+        <Server port="5555" />
+    </object>
+    <object id="blankSquare" x="200" y="200" sizeX="200" sizeY="200">
+        <BlankRenderer color="red" />
+        <Movement2D _package="pl.AWTGameEngine.custom" />
+    </object>
+</scene>

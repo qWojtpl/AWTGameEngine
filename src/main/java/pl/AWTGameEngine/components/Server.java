@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,13 +25,14 @@ import java.util.List;
 public class Server extends ObjectComponent {
 
     private int port = 5555;
-    private final Thread tcpThread = new Thread(this::onTCPThreadUpdate);
+    private final Thread tcpThread = new Thread(this::acceptClient);
     private final Thread udpThread = new Thread(this::onUDPThreadUpdate);
     private ServerSocket tcpSocket;
     private DatagramSocket udpSocket;
 
     // clients
     private final List<Socket> sockets = new ArrayList<>();
+    private final HashMap<Socket, PrintWriter> writers = new HashMap<>();
     private final HashMap<Socket, Integer> clientIds = new HashMap<>();
     private int currentId = 0;
 
@@ -64,7 +66,34 @@ public class Server extends ObjectComponent {
         }
     }
 
-    private void onTCPThreadUpdate() {
+    @Override
+    public void onUpdate() {
+        List<NetBlock> blocks = new ArrayList<>();
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
+            NetBlock block = component.onSynchronize();
+            if(block.getIdentifier() != null) {
+                blocks.add(block);
+            }
+        }
+        for(Socket socket : sockets) {
+            for(NetBlock block : blocks) {
+                sendTCPMessage(socket, block.formMessage());
+            }
+        }
+        // synchronize position
+        //todo: UDP instead of TCP
+        blocks.clear();
+        for(GameObject object : getScene().getGameObjects()) {
+            blocks.add(object.onPositionSynchronize());
+        }
+        for(Socket socket : sockets) {
+            for(NetBlock block : blocks) {
+                sendTCPMessage(socket, block.formMessage());
+            }
+        }
+    }
+
+    private void acceptClient() {
         while(!tcpSocket.isClosed()) {
             try {
                 Socket clientSocket = tcpSocket.accept();
@@ -73,6 +102,10 @@ public class Server extends ObjectComponent {
                 Logger.exception("Server TCP exception", e);
             }
         }
+    }
+
+    private void sendTCPMessage(Socket client, String message) {
+        writers.get(client).println(message);
     }
 
     private void handleConnection(Socket clientSocket) {
@@ -87,19 +120,24 @@ public class Server extends ObjectComponent {
         BufferedReader in;
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
+            writers.put(clientSocket, out);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
             Logger.exception("Error while initializing client connection with ID " + id, e);
             return;
         }
 
-        out.println(id);
         Logger.info("\t\t-> Established connection.");
 
         while (clientSocket.isConnected()) {
             try {
-                Logger.info("Received message: " + in.readLine());
+                String message = in.readLine();
+                if(message == null) {
+                    continue;
+                }
+                Logger.info("Received message: " + message);
             } catch (IOException e) {
+                Logger.exception("Exception while receiving a message. Have to disconnect a client.", e);
                 disconnect(clientSocket);
                 break;
             }
@@ -108,6 +146,7 @@ public class Server extends ObjectComponent {
         try {
             out.close();
             in.close();
+            writers.remove(clientSocket);
         } catch(IOException e) {
             Logger.exception("Cannot close client " + id + " connection", e);
         }
