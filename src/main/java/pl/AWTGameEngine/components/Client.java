@@ -51,11 +51,7 @@ public class Client extends ObjectComponent {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             handleConnection();
             Logger.info("Connected.");
-            Logger.info("Requesting object...");
-            TransformSet position = new TransformSet(400, 400);
-            TransformSet size = new TransformSet(100, 100);
-            sendNetBlock(new NetBlock("player{id}", null, position, size));
-            sendNetBlock(new NetBlock("player{id}", "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)"));
+            createGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100));
         } catch (IOException e) {
             Logger.exception("Cannot connect to " + address, e);
         }
@@ -96,6 +92,12 @@ public class Client extends ObjectComponent {
 
     private void sendNetBlock(NetBlock netBlock) {
         sendMessage(netBlock.formMessage());
+    }
+
+    public void createGameObject(String identifier, TransformSet position, TransformSet size) {
+        Logger.info("Requesting object...");
+        sendNetBlock(new NetBlock(identifier, null, position, size));
+        sendNetBlock(new NetBlock(identifier, "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)"));
     }
 
     @SerializationSetter

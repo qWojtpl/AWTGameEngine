@@ -17,6 +17,9 @@ public class NetMessageDeserializer {
     public static void deserialize(Scene scene, String response, Socket client, Server server) {
         try {
             String[] split = response.split(";");
+            if(split[0].contains("{id}") && server != null) { // if server is null then deserializing is executing on a client
+                split[0] = split[0].replace("{id}", server.getClientId(client) + "");
+            }
             GameObject object = scene.getGameObjectByName(split[0]);
             if(object == null) {
                 Logger.warning(split[0] + " object not found, creating a new one...");
