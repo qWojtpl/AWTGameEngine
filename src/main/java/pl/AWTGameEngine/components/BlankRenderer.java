@@ -54,6 +54,9 @@ public class BlankRenderer extends ObjectComponent {
         if(color == null) {
             return;
         }
+        if(this.color.equals(color)) {
+            return;
+        }
         this.color = color;
         changedColor = true;
         netColorChanged = true;

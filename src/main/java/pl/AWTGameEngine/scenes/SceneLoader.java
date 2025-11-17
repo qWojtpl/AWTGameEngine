@@ -31,7 +31,10 @@ public class SceneLoader {
     }
 
     public void loadSceneFile(String scenePath) {
-        loadSceneFile(scenePath, RenderEngine.valueOf(Dependencies.getAppProperties().getProperty("renderEngine")), false);
+        loadSceneFile(
+                scenePath,
+                RenderEngine.valueOf(Dependencies.getAppProperties().getProperty("renderEngine").toUpperCase()),
+                false);
     }
 
     public void loadSceneFile(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
