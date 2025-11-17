@@ -105,6 +105,9 @@ public class TransformSet {
     }
 
     public boolean equals(TransformSet transformSet) {
+        if(transformSet == null) {
+            return false;
+        }
         return this.x == transformSet.getX() && this.y == transformSet.getY() && this.z == transformSet.getZ();
     }
 

@@ -17,8 +17,8 @@ public class GameObject {
     private boolean active = true;
     private TransformSet position = new TransformSet(0, 0, 0);
     private TransformSet rotation = new TransformSet(0, 0, 0);
-    private TransformSet netCachedPosition = new TransformSet(0, 0, 0);
-    private TransformSet netCachedSize = new TransformSet(0, 0, 0);
+    private TransformSet netCachedPosition = null;
+    private TransformSet netCachedSize = null;
     private int netOwner = -1;
     private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
@@ -413,7 +413,6 @@ public class GameObject {
     }
 
     public void setNetOwner(int id) {
-        System.out.println("SETTING NET OWNER TO " + id + getIdentifier());
         this.netOwner = id;
     }
 
@@ -439,13 +438,22 @@ public class GameObject {
         if(newPosition.equals(netCachedPosition) && newSize.equals(netCachedSize)) {
             return;
         }
-        netCachedPosition = newPosition;
-        netCachedSize = newSize;
+        // (cl) create -> (srv) received -> (srv) send new -> server don't want a cache to exist in onPositionSynchronize,
+        // because it would be blocked, so if it's a new object, cache won't be initialized here
+        if(netCachedPosition != null) {
+            netCachedPosition = newPosition;
+            netCachedSize = newSize;
+        }
         setPosition(newPosition);
         setSize(newSize);
         if(!server) {
             setNetOwner(Integer.parseInt(ownerSplit[1]));
         }
+    }
+
+    public void clearNetCache() {
+        netCachedPosition = null;
+        netCachedSize = null;
     }
 
 }

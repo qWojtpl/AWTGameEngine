@@ -58,7 +58,9 @@ public class Client extends ObjectComponent {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             handleConnection();
             Logger.info("Connected.");
-            createGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100));
+            requestGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100));
+            requestComponent("player{id}", "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)");
+            requestComponent("player{id}", "pl.AWTGameEngine.custom.Movement2D", "discover");
         } catch (IOException e) {
             Logger.exception("Cannot connect to " + address, e);
         }
@@ -88,9 +90,10 @@ public class Client extends ObjectComponent {
                     }
                     if(clientId == -1) {
                         clientId = Integer.parseInt(response); // first response is an id
-                        Logger.info("\t-> Server assigned ID " + clientId + " for me.");
+                        Logger.info("\t\t-> Server assigned ID " + clientId + " for me.");
                         continue;
                     }
+                    System.out.println("Received: " + response);
                     NetMessageDeserializer.deserialize(getScene(), response, socket);
                 } catch (Exception e) {
                     Logger.exception("Cannot read a response (" + response + ")", e);
@@ -100,6 +103,7 @@ public class Client extends ObjectComponent {
     }
 
     private void sendMessage(String message) {
+        System.out.println("Sent: " + message);
         out.println(message);
     }
 
@@ -112,6 +116,9 @@ public class Client extends ObjectComponent {
         List<NetBlock> blocks = new ArrayList<>();
         for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
             if(component.getObject().getNetOwner() != clientId) {
+                continue;
+            }
+            if(!component.canSynchronize()) {
                 continue;
             }
             NetBlock block = component.onSynchronize();
@@ -139,11 +146,14 @@ public class Client extends ObjectComponent {
         }
     }
 
-    public void createGameObject(String identifier, TransformSet position, TransformSet size) {
+    public void requestGameObject(String identifier, TransformSet position, TransformSet size) {
         Logger.info("Requesting object...");
         sendNetBlock(new NetBlock(identifier, position, size, clientId));
-        sendNetBlock(new NetBlock(identifier, "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)"));
-        sendNetBlock(new NetBlock(identifier, "pl.AWTGameEngine.custom.Movement2D", "abc"));
+    }
+
+    public void requestComponent(String identifier, String component, String data) {
+        Logger.info("Requesting component...");
+        sendNetBlock(new NetBlock(identifier, component, data));
     }
 
     @SerializationSetter

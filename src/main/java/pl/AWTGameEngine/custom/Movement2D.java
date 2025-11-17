@@ -11,6 +11,7 @@ import pl.AWTGameEngine.objects.NetBlock;
 public class Movement2D extends ObjectComponent {
 
     private final double speed = 4;
+    private boolean netDiscovered = false;
 
     public Movement2D(GameObject object) {
         super(object);
@@ -38,8 +39,22 @@ public class Movement2D extends ObjectComponent {
     }
 
     @Override
+    public boolean canSynchronize() {
+        if(netDiscovered) {
+            return false;
+        }
+        netDiscovered = true;
+        return true;
+    }
+
+    @Override
     public NetBlock onSynchronize() {
-        return new NetBlock(getObject().getIdentifier(), "pl.AWTGameEngine.custom.Movement2D", "abc");
+        return new NetBlock(getObject().getIdentifier(), "pl.AWTGameEngine.custom.Movement2D", "discover");
+    }
+
+    @Override
+    public void clearNetCache() {
+        netDiscovered = false;
     }
 
 }

@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.annotations.*;
+import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
@@ -276,6 +277,16 @@ public abstract class ObjectComponent {
 
     }
 
+    @EventMethod
+    public void onClientConnect(Server server, int clientId) {
+
+    }
+
+    @EventMethod
+    public void onClientDisconnect(Server server, int clientId) {
+
+    }
+
     /**
      * Object synchronize is over a TCP connection to ensure that component will be updated.
      * onSynchronize event is executed only on server side.
@@ -288,6 +299,14 @@ public abstract class ObjectComponent {
 
     @EventMethod
     public void onSynchronizeReceived(String data) {
+
+    }
+
+    public boolean canSynchronize() {
+        return true;
+    }
+
+    public void clearNetCache() {
 
     }
 

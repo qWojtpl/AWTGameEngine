@@ -35,7 +35,6 @@ public class Server extends ObjectComponent {
     private final List<Socket> sockets = new ArrayList<>();
     private final HashMap<Socket, Integer> clientIds = new HashMap<>();
     private final HashMap<Integer, PrintWriter> writers = new HashMap<>();
-    private final HashMap<Integer, List<GameObject>> ownership = new HashMap<>();
     private int currentId = 0;
 
     public Server(GameObject object) {
@@ -70,9 +69,14 @@ public class Server extends ObjectComponent {
 
     @Override
     public void onUpdate() {
+        sendObjectsPosition();
+        sendComponents();
+    }
+
+    private void sendObjectsPosition() {
         List<NetBlock> blocks = new ArrayList<>();
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
-            NetBlock block = component.onSynchronize();
+        for(GameObject object : getScene().getGameObjects()) {
+            NetBlock block = object.onPositionSynchronize();
             if(block.getIdentifier() != null) {
                 blocks.add(block);
             }
@@ -82,11 +86,15 @@ public class Server extends ObjectComponent {
                 sendTCPMessage(socket, block.formMessage());
             }
         }
-        // synchronize position
-        //todo: UDP instead of TCP
-        blocks.clear();
-        for(GameObject object : getScene().getGameObjects()) {
-            NetBlock block = object.onPositionSynchronize();
+    }
+
+    private void sendComponents() {
+        List<NetBlock> blocks = new ArrayList<>();
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
+            if(!component.canSynchronize()) {
+                continue;
+            }
+            NetBlock block = component.onSynchronize();
             if(block.getIdentifier() != null) {
                 blocks.add(block);
             }
@@ -110,6 +118,7 @@ public class Server extends ObjectComponent {
     }
 
     private void sendTCPMessage(Socket client, String message) {
+        //System.out.println("Sent: " + message);
         writers.get(getClientId(client)).println(message);
     }
 
@@ -131,9 +140,22 @@ public class Server extends ObjectComponent {
             return;
         }
 
-        ownership.put(id, new ArrayList<>());
         sockets.add(clientSocket);
         Logger.info("\t\t-> Established connection.");
+
+        // prepare objects to be sent to the client during next update
+
+        for(GameObject object : getScene().getGameObjects()) {
+            object.clearNetCache();
+        }
+
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
+            component.clearNetCache();
+        }
+
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#int")) {
+            component.onClientConnect(this, id);
+        }
 
         while (clientSocket.isConnected()) {
             try {
@@ -141,6 +163,7 @@ public class Server extends ObjectComponent {
                 if(message == null) {
                     continue;
                 }
+                //System.out.println("Received: " + message);
                 NetMessageDeserializer.deserialize(getScene(), message, clientSocket, this);
             } catch (IOException e) {
                 Logger.exception("Exception while receiving a message. Have to disconnect a client.", e);
@@ -153,7 +176,6 @@ public class Server extends ObjectComponent {
             out.close();
             in.close();
             writers.remove(id);
-            ownership.remove(id);
         } catch(IOException e) {
             Logger.exception("Cannot close client " + id + " connection", e);
         }
@@ -169,6 +191,9 @@ public class Server extends ObjectComponent {
         try {
             Logger.info("Client " + getClientAddress(clientSocket) +
                     " (ID " + clientIds.get(clientSocket) + ") disconnected.");
+            for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#int")) {
+                component.onClientDisconnect(this, clientIds.get(clientSocket));
+            }
             clientSocket.close();
             sockets.remove(clientSocket);
         } catch(IOException e) {
@@ -190,16 +215,12 @@ public class Server extends ObjectComponent {
         }
     }
 
-    public boolean canChange(Socket client, GameObject object) {
-        return ownership.get(getClientId(client)).contains(object);
-    }
-
-    public void assignOwnership(GameObject object, Socket client) {
-        ownership.get(getClientId(client)).add(object);
-    }
-
     public int getClientId(Socket client) {
         return clientIds.get(client);
+    }
+
+    public boolean canClientsRequestObject() {
+        return false;
     }
 
     @SerializationSetter

@@ -64,7 +64,12 @@ public class BlankRenderer extends ObjectComponent {
 
     @SerializationSetter
     public void setColor(String color) {
+        String oldColor = this.color.toString();
         this.color.setColor(color);
+        String newColor = this.color.toString();
+        if(oldColor.equals(newColor)) {
+            return;
+        }
         changedColor = true;
         netColorChanged = true;
     }
@@ -81,11 +86,18 @@ public class BlankRenderer extends ObjectComponent {
     // Net
 
     @Override
+    public boolean canSynchronize() {
+        //todo: bugged
+        return true;
+//        if(netColorChanged) {
+//            netColorChanged = false;
+//            return true;
+//        }
+//        return false;
+    }
+
+    @Override
     public NetBlock onSynchronize() {
-        if(!netColorChanged) {
-            return new NetBlock();
-        }
-        netColorChanged = false;
         return new NetBlock(
                 getObject().getIdentifier(),
                 this.getClass().getName(),
@@ -96,6 +108,12 @@ public class BlankRenderer extends ObjectComponent {
     @Override
     public void onSynchronizeReceived(String data) {
         setColor(data);
+    }
+
+    @Override
+    public void clearNetCache() {
+        System.out.println("SET NET COLOR CHANGED TO FALSE");
+        netColorChanged = true;
     }
 
 }

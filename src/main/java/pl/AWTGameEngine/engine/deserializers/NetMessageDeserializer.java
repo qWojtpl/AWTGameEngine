@@ -22,17 +22,22 @@ public class NetMessageDeserializer {
             }
             GameObject object = scene.getGameObjectByName(split[0]);
             if(object == null) {
+                if(server != null) {
+                    if (!server.canClientsRequestObject()) {
+                        Logger.error("Client " + server.getClientId(client) + " tried to request an object/component creation, but don't have permission for it.");
+                        return;
+                    }
+                }
                 Logger.warning(split[0] + " object not found, creating a new one...");
                 object = scene.createGameObject(split[0]);
                 if(server != null) {
-                    server.assignOwnership(object, client);
                     object.setNetOwner(server.getClientId(client));
                     Logger.warning("Assigned ownership of " + split[0] + " to client " + server.getClientId(client));
                 }
             }
             if(server != null) {
-                if(!server.canChange(client, object)) {
-                    Logger.warning("Client " + server.getClientId(client) + " tried to change an object, but don't have permission for it.");
+                if(object.getNetOwner() != server.getClientId(client)) {
+                    Logger.error("Client " + server.getClientId(client) + " tried to change an object, but don't have permission for it.");
                     return;
                 }
             }
@@ -49,7 +54,6 @@ public class NetMessageDeserializer {
                 component = clazz.getConstructor(GameObject.class).newInstance(object);
                 object.addComponent(component);
             }
-            System.out.println(response);
             component.onSynchronizeReceived(split[2]);
         } catch(Exception e) {
             Logger.exception("Cannot deserialize message", e);
