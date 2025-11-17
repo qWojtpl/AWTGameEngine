@@ -26,6 +26,7 @@ public class NetMessageDeserializer {
                 object = scene.createGameObject(split[0]);
                 if(server != null) {
                     server.assignOwnership(object, client);
+                    object.setNetOwner(server.getClientId(client));
                     Logger.warning("Assigned ownership of " + split[0] + " to client " + server.getClientId(client));
                 }
             }
@@ -36,7 +37,7 @@ public class NetMessageDeserializer {
                 }
             }
             if("null".equals(split[1]) || split[1] == null) { // object-related synchronization instead of component-related
-                object.onPositionSynchronizeReceived(split[2]);
+                object.onPositionSynchronizeReceived(split[2], server != null);
                 return;
             }
             Class<? extends ObjectComponent> clazz = Class.forName(split[1])
@@ -48,6 +49,7 @@ public class NetMessageDeserializer {
                 component = clazz.getConstructor(GameObject.class).newInstance(object);
                 object.addComponent(component);
             }
+            System.out.println(response);
             component.onSynchronizeReceived(split[2]);
         } catch(Exception e) {
             Logger.exception("Cannot deserialize message", e);

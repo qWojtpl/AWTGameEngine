@@ -4,12 +4,13 @@ import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
 
 @DefaultComponent
 @WebComponent
 public class Movement2D extends ObjectComponent {
 
-    private final double speed = 2;
+    private final double speed = 4;
 
     public Movement2D(GameObject object) {
         super(object);
@@ -34,6 +35,11 @@ public class Movement2D extends ObjectComponent {
             getObject().setPosition(getObject().getPosition().setX(getObject().getX() + speed));
         }
 
+    }
+
+    @Override
+    public NetBlock onSynchronize() {
+        return new NetBlock(getObject().getIdentifier(), "pl.AWTGameEngine.custom.Movement2D", "abc");
     }
 
 }

@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.objects;
 
-import pl.AWTGameEngine.annotations.EventMethod;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
@@ -18,6 +17,9 @@ public class GameObject {
     private boolean active = true;
     private TransformSet position = new TransformSet(0, 0, 0);
     private TransformSet rotation = new TransformSet(0, 0, 0);
+    private TransformSet netCachedPosition = new TransformSet(0, 0, 0);
+    private TransformSet netCachedSize = new TransformSet(0, 0, 0);
+    private int netOwner = -1;
     private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
     private PanelObject panel;
@@ -406,19 +408,44 @@ public class GameObject {
         this.panel = panel;
     }
 
+    public int getNetOwner() {
+        return this.netOwner;
+    }
+
+    public void setNetOwner(int id) {
+        System.out.println("SETTING NET OWNER TO " + id + getIdentifier());
+        this.netOwner = id;
+    }
+
     public final NetBlock onPositionSynchronize() {
+        if(getPosition().equals(netCachedPosition) && getSize().equals(netCachedSize)) {
+            return new NetBlock();
+        }
+        netCachedPosition = getPosition();
+        netCachedSize = getSize();
         return new NetBlock(
                 getIdentifier(),
-                null,
                 getPosition(),
-                getSize()
+                getSize(),
+                netOwner
         );
     }
 
-    public final void onPositionSynchronizeReceived(String data) {
-        String[] split = data.split("\\[TransformSet");
-        setPosition(new TransformSet().deserializeFromToString(split[1]));
-        setSize(new TransformSet().deserializeFromToString(split[2]));
+    public final void onPositionSynchronizeReceived(String data, boolean server) {
+        String[] ownerSplit = data.split("╚");
+        String[] split = ownerSplit[0].split("\\[TransformSet");
+        TransformSet newPosition = new TransformSet().deserializeFromToString(split[1]);
+        TransformSet newSize = new TransformSet().deserializeFromToString(split[2]);
+        if(newPosition.equals(netCachedPosition) && newSize.equals(netCachedSize)) {
+            return;
+        }
+        netCachedPosition = newPosition;
+        netCachedSize = newSize;
+        setPosition(newPosition);
+        setSize(newSize);
+        if(!server) {
+            setNetOwner(Integer.parseInt(ownerSplit[1]));
+        }
     }
 
 }

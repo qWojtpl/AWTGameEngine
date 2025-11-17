@@ -18,10 +18,10 @@ public class NetBlock {
         this.data = data;
     }
 
-    public NetBlock(String identifier, String component, TransformSet position, TransformSet size) {
+    public NetBlock(String identifier, TransformSet position, TransformSet size, int netOwner) {
         this.identifier = identifier;
-        this.component = component;
-        this.data = position.toString() + size;
+        this.component = null;
+        this.data = position.toString() + size + "╚" + netOwner;
     }
 
     public String getIdentifier() {

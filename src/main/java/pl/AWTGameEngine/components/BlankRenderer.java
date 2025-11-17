@@ -20,6 +20,7 @@ public class BlankRenderer extends ObjectComponent {
 
     private ColorObject color = new ColorObject();
     private boolean changedColor = false;
+    private boolean netColorChanged = false;
 
     public BlankRenderer(GameObject object) {
         super(object);
@@ -55,12 +56,14 @@ public class BlankRenderer extends ObjectComponent {
         }
         this.color = color;
         changedColor = true;
+        netColorChanged = true;
     }
 
     @SerializationSetter
     public void setColor(String color) {
         this.color.setColor(color);
         changedColor = true;
+        netColorChanged = true;
     }
 
     @Override
@@ -76,6 +79,10 @@ public class BlankRenderer extends ObjectComponent {
 
     @Override
     public NetBlock onSynchronize() {
+        if(!netColorChanged) {
+            return new NetBlock();
+        }
+        netColorChanged = false;
         return new NetBlock(
                 getObject().getIdentifier(),
                 this.getClass().getName(),

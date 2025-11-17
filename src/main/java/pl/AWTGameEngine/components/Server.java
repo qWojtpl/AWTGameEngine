@@ -86,7 +86,10 @@ public class Server extends ObjectComponent {
         //todo: UDP instead of TCP
         blocks.clear();
         for(GameObject object : getScene().getGameObjects()) {
-            blocks.add(object.onPositionSynchronize());
+            NetBlock block = object.onPositionSynchronize();
+            if(block.getIdentifier() != null) {
+                blocks.add(block);
+            }
         }
         for(Socket socket : sockets) {
             for(NetBlock block : blocks) {
@@ -111,11 +114,9 @@ public class Server extends ObjectComponent {
     }
 
     private void handleConnection(Socket clientSocket) {
-        sockets.add(clientSocket);
-        Logger.info("Client " + getClientAddress(clientSocket) + " connected.");
-
         int id = currentId++;
         clientIds.put(clientSocket, id);
+        Logger.info("Client " + getClientAddress(clientSocket) + " connected.");
         Logger.info("\t\t-> Assigned new client to ID " + id);
 
         PrintWriter out;
@@ -123,6 +124,7 @@ public class Server extends ObjectComponent {
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             writers.put(id, out);
+            out.println(id); // send id to a client
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
             Logger.exception("Error while initializing client connection with ID " + id, e);
@@ -130,6 +132,7 @@ public class Server extends ObjectComponent {
         }
 
         ownership.put(id, new ArrayList<>());
+        sockets.add(clientSocket);
         Logger.info("\t\t-> Established connection.");
 
         while (clientSocket.isConnected()) {
@@ -158,8 +161,6 @@ public class Server extends ObjectComponent {
 
     private void onUDPThreadUpdate() {
         while(!udpSocket.isClosed()) {
-
-            
 
         }
     }
@@ -204,11 +205,6 @@ public class Server extends ObjectComponent {
     @SerializationSetter
     public void setPort(String port) {
         this.port = Integer.parseInt(port);
-    }
-
-    @SerializationSetter
-    public void setSyncList(String syncList) {
-
     }
 
     @SerializationSetter
