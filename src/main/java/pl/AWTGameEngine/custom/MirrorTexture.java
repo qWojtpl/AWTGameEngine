@@ -5,7 +5,7 @@ import javafx.scene.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.annotations.ComponentFX;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
@@ -93,7 +93,7 @@ public class MirrorTexture extends ObjectComponent {
         return this.farClip;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setTarget(String identifier) {
         target = (Base3DShape) getObjectByName(identifier).getComponentByClass(Base3DShape.class);
         if(target == null) {
@@ -105,7 +105,7 @@ public class MirrorTexture extends ObjectComponent {
         this.nearClip = nearClip;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setNearClip(String nearClip) {
         setNearClip(Double.parseDouble(nearClip));
     }
@@ -114,7 +114,7 @@ public class MirrorTexture extends ObjectComponent {
         this.farClip = farClip;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setFarClip(String farClip) {
         setFarClip(Double.parseDouble(farClip));
     }
@@ -123,7 +123,7 @@ public class MirrorTexture extends ObjectComponent {
         this.divider = divider;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setDivider(String divider) {
         setDivider(Integer.parseInt(divider));
     }

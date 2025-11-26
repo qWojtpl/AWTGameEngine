@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -68,7 +68,7 @@ public abstract class Collider extends ObjectComponent {
         this.x = x;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setX(String x) {
         setX(Integer.parseInt(x));
     }
@@ -77,7 +77,7 @@ public abstract class Collider extends ObjectComponent {
         this.y = y;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setY(String y) {
         setY(Integer.parseInt(y));
     }
@@ -86,7 +86,7 @@ public abstract class Collider extends ObjectComponent {
         this.sizeX = sizeX;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSizeX(String sizeX) {
         setSizeX(Double.parseDouble(sizeX));
     }
@@ -95,7 +95,7 @@ public abstract class Collider extends ObjectComponent {
         this.sizeY = sizeY;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSizeY(String sizeY) {
         setSizeY(Double.parseDouble(sizeY));
     }
@@ -104,7 +104,7 @@ public abstract class Collider extends ObjectComponent {
         this.visualize = visualize;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setVisualize(String visualize) {
         setVisualize(Boolean.parseBoolean(visualize));
     }
@@ -116,7 +116,7 @@ public abstract class Collider extends ObjectComponent {
         this.visualizeColor = color;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setVisualizeColor(String color) {
         setVisualizeColor(new ColorObject(color));
     }

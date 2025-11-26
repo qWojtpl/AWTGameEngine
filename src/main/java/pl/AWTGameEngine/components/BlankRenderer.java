@@ -2,10 +2,9 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -62,7 +61,7 @@ public class BlankRenderer extends ObjectComponent {
         netColorChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setColor(String color) {
         String oldColor = this.color.toString();
         this.color.setColor(color);

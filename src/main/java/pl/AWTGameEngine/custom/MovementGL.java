@@ -2,12 +2,11 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.annotations.ComponentMeta;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
-import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
 
@@ -136,12 +135,12 @@ public class MovementGL extends ObjectComponent {
         this.speed = speed;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setNoclip(String noclip) {
         setNoclip(Boolean.parseBoolean(noclip));
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSpeed(String speed) {
         setSpeed(Double.parseDouble(speed));
     }

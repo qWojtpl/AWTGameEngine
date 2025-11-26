@@ -223,12 +223,12 @@ public class Server extends ObjectComponent {
         return false;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setPort(String port) {
         this.port = Integer.parseInt(port);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setMaxClients(String clients) {
 
     }

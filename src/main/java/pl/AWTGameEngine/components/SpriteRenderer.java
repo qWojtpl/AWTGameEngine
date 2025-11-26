@@ -3,7 +3,6 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
@@ -65,7 +64,7 @@ public class SpriteRenderer extends ObjectComponent {
         propertyChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSpriteSource(String spriteSource) {
         setSprite(Dependencies.getResourceManager().getResourceAsSprite(spriteSource));
     }

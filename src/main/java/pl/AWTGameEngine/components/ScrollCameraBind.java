@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
@@ -53,7 +53,7 @@ public class ScrollCameraBind extends ObjectComponent {
         this.maxValue = maxValue;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setMaxValue(String maxValue) {
         setMaxValue(Integer.parseInt(maxValue));
     }
@@ -62,7 +62,7 @@ public class ScrollCameraBind extends ObjectComponent {
         this.wheelSpeed = wheelSpeed;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setWheelSpeed(String wheelSpeed) {
         setWheelSpeed(Double.parseDouble(wheelSpeed));
     }

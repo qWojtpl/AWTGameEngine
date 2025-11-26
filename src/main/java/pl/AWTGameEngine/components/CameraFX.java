@@ -6,7 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.annotations.ComponentFX;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.panels.PanelFX;
@@ -111,7 +111,7 @@ public class CameraFX extends ObjectComponent {
         this.nearClip = nearClip;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setNearClip(String nearClip) {
         setNearClip(Double.parseDouble(nearClip));
     }
@@ -120,7 +120,7 @@ public class CameraFX extends ObjectComponent {
         this.farClip = farClip;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setFarClip(String farClip) {
         setFarClip(Double.parseDouble(farClip));
     }
@@ -129,7 +129,7 @@ public class CameraFX extends ObjectComponent {
         this.cullingDistance = cullingDistance;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setCullingDistance(String cullingDistance) {
         setCullingDistance(Double.parseDouble(cullingDistance));
     }

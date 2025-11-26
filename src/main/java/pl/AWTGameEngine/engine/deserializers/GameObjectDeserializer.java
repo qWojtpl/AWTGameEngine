@@ -2,7 +2,7 @@ package pl.AWTGameEngine.engine.deserializers;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
@@ -71,7 +71,7 @@ public class GameObjectDeserializer {
                     String value = childNode.getAttributes().item(j).getNodeValue();
                     String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
-                    if (clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
+                    if (clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(FromXML.class)) {
                         clazz.getDeclaredMethod(methodName, String.class).invoke(o, value);
                     } else {
                         Logger.error("Tried to invoke " + methodName

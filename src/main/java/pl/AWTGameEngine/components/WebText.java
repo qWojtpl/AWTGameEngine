@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.HTMLComponent;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -21,12 +20,12 @@ public class WebText extends HTMLComponent {
         super(object);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setPattern(String pattern) {
         this.pattern = pattern;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setValues(String values) {
         String[] split = values.split(",");
         for(String s : split) {
@@ -39,7 +38,7 @@ public class WebText extends HTMLComponent {
         values.put(key, value);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setColor(String color) {
         this.color = new ColorObject(color);
     }
@@ -48,7 +47,7 @@ public class WebText extends HTMLComponent {
         this.color = color;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSize(String size) {
         setSize(Integer.parseInt(size));
     }

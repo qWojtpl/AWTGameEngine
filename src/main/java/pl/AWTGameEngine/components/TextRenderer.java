@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
@@ -98,7 +98,7 @@ public class TextRenderer extends ObjectComponent {
         return this.vertical;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setText(String text) {
         this.text = text;
         propertyChanged = true;
@@ -112,7 +112,7 @@ public class TextRenderer extends ObjectComponent {
         propertyChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setColor(String color) {
         setColor(new ColorObject(color));
     }
@@ -122,7 +122,7 @@ public class TextRenderer extends ObjectComponent {
         propertyChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSize(String size) {
         setSize(Float.parseFloat(size));
     }
@@ -140,7 +140,7 @@ public class TextRenderer extends ObjectComponent {
         this.vertical = vertical;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setHorizontal(String horizontal) {
         HorizontalAlign align;
         try {
@@ -151,7 +151,7 @@ public class TextRenderer extends ObjectComponent {
         align(align);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setVertical(String vertical) {
         VerticalAlign align;
         try {

@@ -49,7 +49,7 @@ public class WebTextArea extends ObjectComponent {
         return this.text;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setText(String text) {
         this.text = text;
         propertyChanged = true;

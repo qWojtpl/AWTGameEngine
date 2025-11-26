@@ -3,7 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
@@ -110,7 +110,7 @@ public class MusicPlayer extends ObjectComponent {
         }
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSourcePath(String sourcePath) {
         setSource(Dependencies.getResourceManager().getResourceAsAudioClip(sourcePath));
     }
@@ -119,7 +119,7 @@ public class MusicPlayer extends ObjectComponent {
         this.autoPlay = autoPlay;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setAutoPlay(String autoPlay) {
         setAutoPlay(Boolean.parseBoolean(autoPlay));
     }
@@ -133,7 +133,7 @@ public class MusicPlayer extends ObjectComponent {
         }
     }
 
-    @SerializationSetter
+    @FromXML
     public void setLoopCount(String loop) {
         setLoopCount(Integer.parseInt(loop));
     }

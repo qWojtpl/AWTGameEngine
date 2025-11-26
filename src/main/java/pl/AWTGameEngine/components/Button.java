@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -126,7 +126,7 @@ public class Button extends ObjectComponent {
         return this.action;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setText(String text) {
         textRenderer.setText(text);
     }
@@ -135,7 +135,7 @@ public class Button extends ObjectComponent {
         textRenderer.setSize(size);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSize(String size) {
         try {
             setSize(Float.parseFloat(size));
@@ -148,7 +148,7 @@ public class Button extends ObjectComponent {
         this.backgroundColor = color;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setBackgroundColor(String color) {
         setBackgroundColor(new ColorObject(color));
     }
@@ -157,7 +157,7 @@ public class Button extends ObjectComponent {
         this.highlightColor = color;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setHighlightColor(String color) {
         setHighlightColor(new ColorObject(color));
     }
@@ -166,7 +166,7 @@ public class Button extends ObjectComponent {
         this.textColor = color;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setTextColor(String color) {
         setTextColor(new ColorObject(color));
     }
@@ -175,7 +175,7 @@ public class Button extends ObjectComponent {
         this.highlightTextColor = color;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setHighlightTextColor(String color) {
         setHighlightTextColor(new ColorObject(color));
     }
@@ -187,7 +187,7 @@ public class Button extends ObjectComponent {
         this.action = action;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setAction(String action) {
         try {
             setAction(Action.valueOf(action.toUpperCase()));

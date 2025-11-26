@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
@@ -70,7 +70,7 @@ public class Border extends ObjectComponent {
         propertyChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setEnabled(String enabled) {
         setEnabled(Boolean.parseBoolean(enabled));
     }
@@ -83,7 +83,7 @@ public class Border extends ObjectComponent {
         propertyChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setColor(String color) {
         setColor(new ColorObject(color));
     }

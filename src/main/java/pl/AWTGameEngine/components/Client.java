@@ -156,7 +156,7 @@ public class Client extends ObjectComponent {
         sendNetBlock(new NetBlock(identifier, component, data));
     }
 
-    @SerializationSetter
+    @FromXML
     public void setAutoConnect(String address) {
         this.autoConnectAddress = address;
     }
