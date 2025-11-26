@@ -1,0 +1,5 @@
+<scene updateFPS="60" renderFPS="60" physicsFPS="1" sameSize="true">
+    <object id="health">
+        <WebText color="rgb(255,0,255)" size="36" pattern="Health {health}" values="health=100" />
+    </object>
+</scene>

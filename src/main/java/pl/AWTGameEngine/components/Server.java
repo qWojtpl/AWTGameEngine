@@ -166,8 +166,8 @@ public class Server extends ObjectComponent {
                 //System.out.println("Received: " + message);
                 NetMessageDeserializer.deserialize(getScene(), message, clientSocket, this);
             } catch (IOException e) {
-                Logger.exception("Exception while receiving a message. Have to disconnect a client.", e);
                 disconnect(clientSocket);
+                Logger.exception("Exception while receiving a message. Had to disconnect a client.", e);
                 break;
             }
         }

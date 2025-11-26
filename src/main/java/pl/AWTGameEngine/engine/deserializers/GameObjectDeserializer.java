@@ -70,20 +70,12 @@ public class GameObjectDeserializer {
                     }
                     String value = childNode.getAttributes().item(j).getNodeValue();
                     String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                    if (clazz.getSuperclass().equals(ObjectComponent.class)) {
-                        if (clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
-                            clazz.getDeclaredMethod(methodName, String.class).invoke(o, value);
-                        } else {
-                            Logger.error("Tried to invoke " + methodName
-                                    + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
-                        }
+
+                    if (clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
+                        clazz.getDeclaredMethod(methodName, String.class).invoke(o, value);
                     } else {
-                        if (clazz.getSuperclass().getDeclaredMethod(methodName, String.class).isAnnotationPresent(SerializationSetter.class)) {
-                            clazz.getSuperclass().getDeclaredMethod(methodName, String.class).invoke(o, value);
-                        } else {
-                            Logger.error("Tried to invoke " + methodName
-                                    + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
-                        }
+                        Logger.error("Tried to invoke " + methodName
+                                + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
                     }
                 }
                 gameObject.addComponent(o);

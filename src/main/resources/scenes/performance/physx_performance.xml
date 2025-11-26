@@ -1,6 +1,6 @@
 <!-- To be honest, don't event try to run this performance on JFX render engine  -->
-<scene title="PhysX Performance test" renderFPS="0" updateFPS="60" physicsFPS="60" fullscreen="true">
-    <scene source="scenes/web.xml" renderEngine="web" />
+<scene title="PhysX Performance test" renderFPS="0" updateFPS="60" physicsFPS="60" fullscreen="true" sameSize="true">
+    <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />
         <CameraFX />
