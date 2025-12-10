@@ -148,4 +148,9 @@ public class WebPanel extends JFXPanel implements PanelObject {
         addMouseWheelListener(mouseListener);
     }
 
+    @Override
+    public void printToGraphics(Graphics2D g) {
+        super.print(g);
+    }
+
 }

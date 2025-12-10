@@ -18,6 +18,10 @@ import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.nio.Buffer;
+import java.nio.IntBuffer;
 import java.util.HashMap;
 
 public class PanelGL extends JLayeredPane implements PanelObject {
@@ -29,6 +33,7 @@ public class PanelGL extends JLayeredPane implements PanelObject {
     private final PhysXManager physXManager;
     private final HashMap<String, Sprite> prepareTextures = new HashMap<>();
     private final HashMap<String, Texture> textures = new HashMap<>();
+    private final BufferedImage printBuffer;
     private GLProfile profile;
     private GLCapabilities capabilities;
     private GLJPanel gljPanel;
@@ -41,6 +46,7 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         this.graphicsManager3D = new GraphicsManagerGL(this);
         this.physXManager = PhysXManager.getInstance();
         initOpenGL(width, height);
+        printBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         initListeners();
     }
 
@@ -111,6 +117,11 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         gljPanel.addMouseListener(mouseListener);
         gljPanel.addMouseMotionListener(mouseListener);
         gljPanel.addMouseWheelListener(mouseListener);
+    }
+
+    @Override
+    public void printToGraphics(Graphics2D g) {
+        //todo
     }
 
     public void prepareTexture(String name, Sprite sprite) {

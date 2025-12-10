@@ -13,6 +13,8 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
+import java.awt.*;
+
 public class PanelFX extends JFXPanel implements PanelObject {
 
     private final Scene scene;
@@ -120,6 +122,11 @@ public class PanelFX extends JFXPanel implements PanelObject {
         fxScene.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
             getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
         });
+    }
+
+    @Override
+    public void printToGraphics(Graphics2D g) {
+        super.print(g);
     }
 
 }

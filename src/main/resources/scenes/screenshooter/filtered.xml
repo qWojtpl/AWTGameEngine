@@ -1,0 +1,6 @@
+<scene title="ScreenShooter demo (filtered)" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+    <object id="filtered" x="960" y="540" sizeX="1920" sizeY="1080">
+        <SpriteRenderer />
+        <Filter _package="pl.AWTGameEngine.custom" />
+    </object>
+</scene>

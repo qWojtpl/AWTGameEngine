@@ -1,0 +1,11 @@
+<scene title="ScreenShooter demo" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+    <scene source="scenes/screenshooter/filtered.xml" renderEngine="default" />
+    <object id="blankSquare" x="200" y="200" sizeX="200" sizeY="200">
+<!--        <BlankRenderer color="red" />-->
+        <Movement2D _package="pl.AWTGameEngine.custom" />
+        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+    </object>
+    <object id="meter">
+        <FPSMeter _package="pl.AWTGameEngine.custom.performance" />
+    </object>
+</scene>

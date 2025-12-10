@@ -63,9 +63,9 @@ public class BlankRenderer extends ObjectComponent {
 
     @FromXML
     public void setColor(String color) {
-        String oldColor = this.color.toString();
+        String oldColor = this.color.serialize();
         this.color.setColor(color);
-        String newColor = this.color.toString();
+        String newColor = this.color.serialize();
         if(oldColor.equals(newColor)) {
             return;
         }
@@ -78,8 +78,8 @@ public class BlankRenderer extends ObjectComponent {
         if(changedColor) {
             g.execute(MessageFormat.format("setColor(\"{0}\", \"{1}\");",
                     getObject().getIdentifier(), this.color.serialize()));
+            changedColor = false;
         }
-        changedColor = false;
     }
 
     // Net
@@ -111,7 +111,6 @@ public class BlankRenderer extends ObjectComponent {
 
     @Override
     public void clearNetCache() {
-        System.out.println("SET NET COLOR CHANGED TO FALSE");
         netColorChanged = true;
     }
 

@@ -5,9 +5,6 @@ import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.components.Box3D;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.RenderEngine;
-import pl.AWTGameEngine.engine.deserializers.NestedSceneDeserializer;
-import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 

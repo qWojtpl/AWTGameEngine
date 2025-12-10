@@ -22,5 +22,6 @@ public interface PanelObject {
     Dimension getSize();
     void setCursor(Cursor cursor);
     void setOpaque(boolean opaque);
+    void printToGraphics(Graphics2D g);
 
 }

@@ -9,13 +9,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class Sprite {
 
     private final String imagePath;
-    private final BufferedImage image;
+    private BufferedImage image;
     private String base64;
 
     public Sprite(String imagePath, BufferedImage image) {
@@ -34,6 +35,50 @@ public class Sprite {
 
     public BufferedImage getImage() {
         return this.image;
+    }
+
+    public void updateBufferedImage(BufferedImage bufferedImage) {
+        this.image = bufferedImage;
+    }
+
+    public Sprite toNegative() {
+        for(int y = 0; y < image.getHeight(); y++){
+            for(int x = 0; x < image.getWidth(); x++){
+                int p = image.getRGB(x, y);
+
+                int a = (p>>24)&0xff;
+                int r = (p>>16)&0xff;
+                int g = (p>>8)&0xff;
+                int b = p&0xff;
+
+                r = 255 - r;
+                g = 255 - g;
+                b = 255 - b;
+
+                p = (a<<24) | (r<<16) | (g<<8) | b;
+
+                image.setRGB(x, y, p);
+            }
+        }
+        return this;
+    }
+
+    public Sprite scale(double scale) {
+        int scaledWidth = (int) (image.getWidth() * scale);
+        int scaledHeight = (int) (image.getHeight() * scale);
+        BufferedImage sampled = new BufferedImage(scaledWidth, scaledHeight, image.getType());
+
+        Graphics2D sampledGraphics = sampled.createGraphics();
+        sampledGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        sampledGraphics.drawImage(image, 0, 0, scaledWidth, scaledHeight, null);
+        sampledGraphics.dispose();
+
+        Graphics2D imageGraphics = image.createGraphics();
+        imageGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        imageGraphics.drawImage(sampled, 0, 0, image.getWidth(), image.getHeight(), null);
+        imageGraphics.dispose();
+
+        return this;
     }
 
     public String getImageBase64() {

@@ -99,4 +99,9 @@ public class DefaultPanel extends JPanel implements PanelObject {
         addMouseWheelListener(mouseListener);
     }
 
+    @Override
+    public void printToGraphics(Graphics2D g) {
+        super.print(g);
+    }
+
 }
