@@ -8,6 +8,8 @@ import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
 import pl.AWTGameEngine.annotations.ComponentFX;
 import pl.AWTGameEngine.annotations.ComponentGL;
+import pl.AWTGameEngine.annotations.ConflictsWith;
+import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.objects.GameObject;
@@ -95,6 +97,8 @@ public abstract class RigidBody extends ObjectComponent {
 
     @ComponentFX
     @ComponentGL
+    @Unique
+    @ConflictsWith(RigidBody.Static.class)
     public static class Dynamic extends RigidBody {
 
         private PxRigidDynamic rigidDynamic;
@@ -148,6 +152,8 @@ public abstract class RigidBody extends ObjectComponent {
 
     @ComponentFX
     @ComponentGL
+    @Unique
+    @ConflictsWith(RigidBody.Dynamic.class)
     public static class Static extends RigidBody {
 
         private PxRigidStatic rigidStatic;

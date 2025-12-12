@@ -5,6 +5,7 @@ import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.SpriteRenderer;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.helpers.ScreenShooter;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
@@ -26,6 +27,15 @@ public class Filter extends ObjectComponent {
 
     @Override
     public void onPreRender(GraphicsManager g) {
+        computeFilter();
+    }
+
+    @Override
+    public void onWebRenderRequest(WebGraphicsManager g) {
+        computeFilter();
+    }
+
+    private void computeFilter() {
         Sprite sprite = spriteRenderer.getSprite();
         if(sprite == null) {
             sprite = ScreenShooter.takeScreenshot(getWindow().getCurrentScene().getPanel());
@@ -33,7 +43,7 @@ public class Filter extends ObjectComponent {
         } else {
             sprite.updateBufferedImage(ScreenShooter.createImage(getWindow().getCurrentScene().getPanel()));
         }
-        sprite.toNegative().scale(0.2);
+        sprite.scale(0.9);
     }
 
 }

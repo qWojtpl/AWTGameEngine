@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -60,6 +59,9 @@ public class Sprite {
                 image.setRGB(x, y, p);
             }
         }
+
+        base64 = null;
+
         return this;
     }
 
@@ -77,6 +79,8 @@ public class Sprite {
         imageGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         imageGraphics.drawImage(sampled, 0, 0, image.getWidth(), image.getHeight(), null);
         imageGraphics.dispose();
+
+        base64 = null;
 
         return this;
     }

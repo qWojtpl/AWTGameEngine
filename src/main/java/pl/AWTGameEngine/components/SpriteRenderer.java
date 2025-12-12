@@ -16,7 +16,6 @@ import java.text.MessageFormat;
 public class SpriteRenderer extends ObjectComponent {
 
     private Sprite sprite;
-    private boolean propertyChanged = false;
 
     public SpriteRenderer(GameObject object) {
         super(object);
@@ -43,11 +42,10 @@ public class SpriteRenderer extends ObjectComponent {
 
     @Override
     public void onWebRenderRequest(WebGraphicsManager g) {
-        if(propertyChanged && sprite != null) {
+        if(sprite != null) {
             g.execute(MessageFormat.format("drawImage(\"{0}\", \"{1}\");",
-                    getObject().getIdentifier(), sprite.getImageBase64()));
+                    getObject().getIdentifier(), sprite.getImageBase64(true)));
         }
-        propertyChanged = false;
     }
 
     public Sprite getSprite() {
@@ -61,7 +59,6 @@ public class SpriteRenderer extends ObjectComponent {
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
-        propertyChanged = true;
     }
 
     @FromXML

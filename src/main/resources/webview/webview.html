@@ -52,7 +52,7 @@
 
         function setRotation(identifier, rotation) {
             let object = getObject(identifier);
-            object.style.transform = "rotate(" + rotation + "deg)";
+            object.style.transform = "rotate(" + rotation + "deg) translate(-50%,-50%)";
         }
 
         /*    IMAGE, COLOR, BORDER    */
@@ -137,6 +137,7 @@
             if(object == null) {
                 object = document.createElement("Object");
                 object.setAttribute("id", identifier);
+                object.style.transform = "translate(-50%,-50%)";
                 document.querySelector("body").appendChild(object);
             }
             elements[identifier] = object;

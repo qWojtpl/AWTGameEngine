@@ -66,7 +66,7 @@ public class WindowsManager {
 
         updateLoop.start();
 
-        if (!server) {
+        if(!server) {
             renderLoop.start();
         }
 

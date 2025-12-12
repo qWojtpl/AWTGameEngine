@@ -1,6 +1,12 @@
-<scene title="ScreenShooter demo (filtered)" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+<scene
+        title="ScreenShooter demo (filtered)"
+        renderFPS="144"
+        updateFPS="60"
+        physicsFPS="10"
+        sameSize="true"
+        packages="pl.AWTGameEngine.custom">
     <object id="filtered" x="960" y="540" sizeX="1920" sizeY="1080">
-        <SpriteRenderer />
+        <SpriteRenderer spriteSource="sprites/beaver2.png" />
         <Filter _package="pl.AWTGameEngine.custom" />
     </object>
 </scene>
