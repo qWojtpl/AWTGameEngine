@@ -3,6 +3,7 @@ package pl.AWTGameEngine.windows;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
+import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.panels.*;
@@ -12,31 +13,27 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Window extends JFrame {
 
-    private RenderEngine renderEngine;
     private final boolean serverWindow;
     private boolean sameSize = false;
     private final int WIDTH = 1920;
-    private DefaultPanel panel;
-    private WebPanel webPanel;
-    private PanelFX threeDimensionalPanel;
-    private PanelGL openGlPanel;
     private BaseLoop renderLoop;
     private BaseLoop updateLoop;
     private BaseLoop physicsLoop;
     private KeyListener keyListener;
     private WindowListener windowListener;
-    private Scene currentScene;
+    private final HashMap<Scene, Boolean> scenes = new HashMap<>();
     private SceneLoader sceneLoader;
-    private boolean staticMode;
     private boolean fullScreen;
     private final Font font;
     private Cursor cursor;
 
-    public Window(RenderEngine renderEngine, boolean serverWindow) {
-        this.renderEngine = renderEngine;
+    public Window(boolean serverWindow) {
         this.serverWindow = serverWindow;
         AppProperties appProperties = Dependencies.getAppProperties();
         font = new Font(
@@ -51,49 +48,16 @@ public class Window extends JFrame {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
-    public void unloadScene() {
-        currentScene.removeAllObjects();
-        setCurrentScene(null);
+    public void unloadScenes() {
+        Logger.info("Unloading all scenes...");
+        for(Scene scene : scenes.keySet()) {
+            scene.removeAllObjects();
+        }
         Dependencies.getResourceManager().clearAudioClips();
-        getPanel().unload();
-        if (getPanel() instanceof DefaultPanel) {
-            remove(panel);
-            panel = null;
-        } else if (getPanel() instanceof WebPanel) {
-            remove(webPanel);
-            webPanel = null;
-        } else if (getPanel() instanceof PanelFX) {
-            remove(threeDimensionalPanel);
-            threeDimensionalPanel = null;
-        } else if (getPanel() instanceof PanelGL) {
-            remove(openGlPanel);
-            openGlPanel = null;
+        for(Scene scene : scenes.keySet()) {
+            scene.getPanel().unload();
         }
-    }
-
-    private void createPanel(int width, int height) {
-        if (RenderEngine.DEFAULT.equals(renderEngine)) {
-            if (this.panel == null) {
-                this.panel = new DefaultPanel(this);
-                add(panel, BorderLayout.CENTER);
-            }
-        } else if (RenderEngine.WEB.equals(renderEngine)) {
-            if (this.webPanel == null) {
-                this.webPanel = new WebPanel(this);
-                add(webPanel, BorderLayout.CENTER);
-            }
-        } else if (RenderEngine.FX3D.equals(renderEngine)) {
-            if (this.threeDimensionalPanel == null) {
-                this.threeDimensionalPanel = new PanelFX(this, width, height);
-                add(threeDimensionalPanel, BorderLayout.CENTER);
-            }
-        } else if (RenderEngine.OPENGL.equals(renderEngine)) {
-            if (this.openGlPanel == null) {
-                this.openGlPanel = new PanelGL(this, width, height);
-                add(openGlPanel, BorderLayout.CENTER);
-            }
-        }
-        getPanel().setSize(new Dimension(width, height));
+        scenes.clear();
     }
 
     public void init() {
@@ -103,10 +67,10 @@ public class Window extends JFrame {
             device.setFullScreenWindow(this);
         }
         setSize(getBaseWidth(), getBaseHeight());
-        createPanel(getBaseWidth(), getBaseHeight());
+        setLocationRelativeTo(null);
         setKeyListener(new KeyListener(this));
         setWindowListener(new WindowListener(this));
-        setLayout(new BorderLayout());
+        setLayeredPane(new JLayeredPane());
         addComponentListener(getWindowListener());
         if (!serverWindow) {
             setVisible(true);
@@ -114,11 +78,9 @@ public class Window extends JFrame {
     }
 
     public void updateRatio(int r1, int r2) {
-        getPanel().setSize(new Dimension(getWidth(), getWidth() * r2 / r1));
-    }
-
-    public RenderEngine getRenderEngine() {
-        return this.renderEngine;
+        for(Scene scene : scenes.keySet()) {
+            scene.getPanel().setSize(new Dimension(getWidth(), getWidth() * r2 / r1));
+        }
     }
 
     public boolean isServerWindow() {
@@ -129,17 +91,12 @@ public class Window extends JFrame {
         return this.sameSize;
     }
 
-    public PanelObject getPanel() {
-        if (this.threeDimensionalPanel != null) {
-            return this.threeDimensionalPanel;
+    public List<PanelObject> getPanels() {
+        List<PanelObject> panels = new ArrayList<>();
+        for(Scene scene : scenes.keySet()) {
+            panels.add(scene.getPanel());
         }
-        if (this.openGlPanel != null) {
-            return this.openGlPanel;
-        }
-        if (this.webPanel != null) {
-            return this.webPanel;
-        }
-        return this.panel;
+        return panels;
     }
 
     public BaseLoop getRenderLoop() {
@@ -163,11 +120,20 @@ public class Window extends JFrame {
     }
 
     public Scene getCurrentScene() {
-        return this.currentScene;
+        for(Scene scene : scenes.keySet()) {
+            if(scenes.get(scene)) {
+                return scene;
+            }
+        }
+        return null;
     }
 
     public SceneLoader getSceneLoader() {
         return this.sceneLoader;
+    }
+
+    public List<Scene> getScenes() {
+        return new ArrayList<>(scenes.keySet());
     }
 
     public Font getFont() {
@@ -176,10 +142,6 @@ public class Window extends JFrame {
 
     public Font getFont(float size) {
         return getFont().deriveFont(size);
-    }
-
-    public boolean isStaticMode() {
-        return this.staticMode;
     }
 
     public boolean isFullScreen() {
@@ -230,16 +192,27 @@ public class Window extends JFrame {
         this.sameSize = sameSize;
     }
 
-    public void setCurrentScene(Scene scene) {
-        this.currentScene = scene;
+    public void addScene(Scene scene) {
+        scenes.putIfAbsent(scene, scenes.isEmpty());
+    }
+
+    public void setCurrentScene(Scene newCurrentScene) {
+        if(scenes.getOrDefault(newCurrentScene, null) == null) {
+            throw new RuntimeException("Scene must be owned by this window!");
+        }
+        for(Scene scene : new ArrayList<>(scenes.keySet())) {
+            scenes.replace(scene, scene.equals(newCurrentScene));
+            scene.getPanel().setOpaque(scene.equals(newCurrentScene));
+            if(scene.equals(newCurrentScene) && scenes.keySet().size() > 1) {
+                scene.getPanel().setMouseListener(null);
+            } else {
+                scene.getPanel().setMouseListener(new MouseListener(this));
+            }
+        }
     }
 
     public void setSceneLoader(SceneLoader sceneLoader) {
         this.sceneLoader = sceneLoader;
-    }
-
-    public void setStaticMode(boolean staticMode) {
-        this.staticMode = staticMode;
     }
 
     public void setFullScreen(boolean fullScreen) {
@@ -249,24 +222,9 @@ public class Window extends JFrame {
     @Override
     public void setCursor(Cursor cursor) {
         this.cursor = cursor;
-        if (RenderEngine.FX3D.equals(renderEngine)) {
-            threeDimensionalPanel.setCursor(cursor);
-        } else if (RenderEngine.OPENGL.equals(renderEngine)) {
-            openGlPanel.setCursor(cursor);
-        } else if (RenderEngine.WEB.equals(renderEngine)) {
-            webPanel.setCursor(cursor);
-        } else {
-            panel.setCursor(cursor);
+        for(Scene scene : scenes.keySet()) {
+            scene.getPanel().setCursor(cursor);
         }
-    }
-
-    public enum RenderEngine {
-
-        DEFAULT,
-        WEB,
-        FX3D,
-        OPENGL
-
     }
 
 }

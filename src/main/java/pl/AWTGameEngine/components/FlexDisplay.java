@@ -1,12 +1,12 @@
 package pl.AWTGameEngine.components;
 
 import javafx.application.Platform;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.windows.Window;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,14 +72,14 @@ public class FlexDisplay extends ObjectComponent {
     }
 
     private boolean isWebRenderEngine() {
-        return Window.RenderEngine.WEB.equals(getWindow().getRenderEngine());
+        return RenderEngine.WEB.equals(getScene().getRenderEngine());
     }
 
     public List<GameObject> getItems() {
         return new ArrayList<>(items);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setItems(String itemsString) {
         String[] itemArray = itemsString.split(",");
         for(String item : itemArray) {

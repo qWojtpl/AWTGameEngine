@@ -8,14 +8,16 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFX;
-import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
-import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
+
+import java.awt.*;
 
 public class PanelFX extends JFXPanel implements PanelObject {
 
+    private final Scene scene;
     private final Window window;
     private final Camera camera;
     private final GraphicsManager3D graphicsManager3D;
@@ -24,13 +26,14 @@ public class PanelFX extends JFXPanel implements PanelObject {
     private final javafx.scene.Scene fxScene;
     private MouseListener mouseListener;
 
-    public PanelFX(Window window, int width, int height) {
-        this.window = window;
+    public PanelFX(Scene scene, int width, int height) {
+        this.scene = scene;
+        this.window = scene.getWindow();
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManagerFX(this);
         this.physXManager = PhysXManager.getInstance();
         this.rootGroup = new Group(new AmbientLight());
-        this.fxScene = new Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
+        this.fxScene = new javafx.scene.Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
         physXManager.init();
         initListeners();
         setScene(fxScene);
@@ -38,18 +41,18 @@ public class PanelFX extends JFXPanel implements PanelObject {
     }
 
     @Override
+    public Scene getParentScene() {
+        return this.scene;
+    }
+
+    @Override
     public Window getWindow() {
-        return this.window;
+        return this.scene.getWindow();
     }
 
     @Override
     public Camera getCamera() {
         return this.camera;
-    }
-
-    @Override
-    public MouseListener getMouseListener() {
-        return this.mouseListener;
     }
 
     public javafx.scene.Scene getFxScene() {
@@ -76,16 +79,14 @@ public class PanelFX extends JFXPanel implements PanelObject {
         if(graphicsManager3D == null) {
             return;
         }
-        for(ObjectComponent component : getWindow().getCurrentScene().getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
-            if(component instanceof Renderable3D) {
-                ((Renderable3D) component).on3DRenderRequest(graphicsManager3D);
-            }
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
+            component.on3DRenderRequest(graphicsManager3D);
         }
     }
 
     @Override
     public void updatePhysics() {
-        physXManager.simulateFrame(getWindow().getPhysicsLoop().getFPS());
+        physXManager.simulateFrame(getWindow().getPhysicsLoop().getTargetFps());
         for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onPhysicsUpdate")) {
             component.onPhysicsUpdate();
         }
@@ -95,6 +96,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
     public void unload() {
         physXManager.cleanup();
         setScene(null);
+        window.remove(this);
     }
 
     public void setMouseListener(MouseListener mouseListener) {
@@ -110,7 +112,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
     }
 
     private void initListeners() {
-        setMouseListener(new MouseListener(this));
+        setMouseListener(new MouseListener(window));
         fxScene.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
             getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
         });
@@ -120,6 +122,11 @@ public class PanelFX extends JFXPanel implements PanelObject {
         fxScene.addEventHandler(KeyEvent.KEY_RELEASED, (event) -> {
             getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
         });
+    }
+
+    @Override
+    public void printToGraphics(Graphics2D g) {
+        super.print(g);
     }
 
 }

@@ -1,16 +1,13 @@
 package pl.AWTGameEngine.components.base;
 
-import physx.physics.PxRigidDynamic;
-import physx.physics.PxRigidStatic;
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
-public abstract class Base3DShape extends ObjectComponent implements Renderable3D {
+public abstract class Base3DShape extends ObjectComponent {
 
     protected Sprite sprite;
     protected ColorObject color;
@@ -98,27 +95,27 @@ public abstract class Base3DShape extends ObjectComponent implements Renderable3
         updateColor = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSpriteSource(String source) {
         setSprite(Dependencies.getResourceManager().getResourceAsSprite(source));
     }
 
-    @SerializationSetter
+    @FromXML
     public void setStaticShape(String staticShape) {
         setStaticShape(Boolean.parseBoolean(staticShape));
     }
 
-    @SerializationSetter
+    @FromXML
     public void setMass(String mass) {
         setMass(Double.parseDouble(mass));
     }
 
-    @SerializationSetter
+    @FromXML
     public void setColor(String color) {
         setColor(new ColorObject(color));
     }
 
-    @SerializationSetter
+    @FromXML
     public void setGlTexture(String glTexture) {
         this.glTexture = glTexture;
         updateGlTexture = true;

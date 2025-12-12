@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -54,14 +54,9 @@ public class TextArea extends ObjectComponent {
     }
 
     @Override
-    public void onStaticUpdate() {
-        onUpdate();
-    }
-
-    @Override
     public void onUpdate() {
         textRenderer.setText(getRenderedText());
-        if(pointerIterator >= getWindow().getRenderLoop().getFPS()) {
+        if(pointerIterator >= getWindow().getRenderLoop().getTargetFps()) {
             pointerIterator = 0;
         } else {
             pointerIterator++;
@@ -228,7 +223,7 @@ public class TextArea extends ObjectComponent {
         }
         StringBuilder rendered = new StringBuilder();
         for(int i = 0; i <= text.length(); i++) {
-            if(pointerLocation == i && pointerIterator >= getWindow().getRenderLoop().getFPS() / 2) {
+            if(pointerLocation == i && pointerIterator >= getWindow().getRenderLoop().getTargetFps() / 2) {
                 rendered.append("|");
             }
             if(i < text.length()) {
@@ -279,7 +274,7 @@ public class TextArea extends ObjectComponent {
         return "NOT_SET";
     }
 
-    @SerializationSetter
+    @FromXML
     public void setText(String text) {
         this.text = text;
         textRenderer.setText(text);
@@ -297,7 +292,7 @@ public class TextArea extends ObjectComponent {
         }
     }
 
-    @SerializationSetter
+    @FromXML
     public void setDisabled(String disabled) {
         setDisabled(Boolean.parseBoolean(disabled));
     }
@@ -316,7 +311,7 @@ public class TextArea extends ObjectComponent {
         background.setColor(color);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setBackgroundColor(String color) {
         background.setColor(color);
     }
@@ -325,7 +320,7 @@ public class TextArea extends ObjectComponent {
         backgroundDisabled.setColor(color);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setDisabledColor(String color) {
         backgroundDisabled.setColor(color);
     }
@@ -334,7 +329,7 @@ public class TextArea extends ObjectComponent {
         textRenderer.setColor(color);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setTextColor(String color) {
         textRenderer.setColor(color);
     }
@@ -343,7 +338,7 @@ public class TextArea extends ObjectComponent {
         border.setColor(color);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setBorderColor(String color) {
         setBorderColor(new ColorObject(color));
     }
@@ -356,7 +351,7 @@ public class TextArea extends ObjectComponent {
         setRegex(regex.getPattern());
     }
 
-    @SerializationSetter
+    @FromXML
     public void setRegexPattern(String pattern) {
         setRegexPattern(RegexPattern.valueOf(pattern));
     }

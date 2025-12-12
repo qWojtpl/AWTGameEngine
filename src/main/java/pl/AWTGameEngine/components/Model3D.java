@@ -4,17 +4,16 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.ComponentFX;
 import pl.AWTGameEngine.annotations.ComponentGL;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
 @ComponentFX
 @ComponentGL
-public class Model3D extends ObjectComponent implements Renderable3D {
+public class Model3D extends ObjectComponent {
 
     private String modelPath;
 
@@ -53,7 +52,7 @@ public class Model3D extends ObjectComponent implements Renderable3D {
         ((PanelFX) getPanel()).getGraphicsManager3D().removeCustomModel(getObject().getIdentifier());
     }
 
-    @SerializationSetter
+    @FromXML
     public void setModelPath(String path) {
         this.modelPath = path;
     }
@@ -85,7 +84,7 @@ public class Model3D extends ObjectComponent implements Renderable3D {
         }
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSpriteSource(String source) {
         setSprite(Dependencies.getResourceManager().getResourceAsSprite(source));
     }

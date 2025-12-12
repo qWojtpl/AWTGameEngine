@@ -10,13 +10,13 @@ import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GraphicsManagerGL extends GraphicsManager3D {
 
     private final PanelGL panelGL;
-    private final HashMap<String, RenderOptions> renderables = new HashMap<>();
+    private final ConcurrentHashMap<String, RenderOptions> renderables = new ConcurrentHashMap<>();
 
     public GraphicsManagerGL(PanelGL panelGL) {
         this.panelGL = panelGL;
@@ -25,6 +25,9 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     public void drawScene(GL2 gl) {
         List<RenderOptions> renderableList = new ArrayList<>(renderables.values());
         for (RenderOptions options : renderableList) {
+//            if(options.getPosition().distanceTo(new TransformSet(panelGL.getCamera().getX(), panelGL.getCamera().getY(), panelGL.getCamera().getZ())) > 2000) {
+//                continue;
+//            }
             gl.glPushMatrix();
             gl.glTranslated(options.getPosition().getX(), options.getPosition().getY(), options.getPosition().getZ());
             double[] axis = RotationHelper.quaternionToAxisAngle(

@@ -1,13 +1,19 @@
 package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.annotations.*;
+import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.engine.ColliderRegistry;
+import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
+import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.TransformSet;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
@@ -29,7 +35,7 @@ public abstract class ObjectComponent {
     }
 
     protected final MouseListener getMouseListener() {
-        return getObject().getPanel().getMouseListener();
+        return MouseListener.getInstance();
     }
 
     protected final ColliderRegistry getColliderRegistry() {
@@ -60,6 +66,10 @@ public abstract class ObjectComponent {
         return getScene().getGameObjectByName(name);
     }
 
+    protected final RenderEngine getRenderEngine() {
+        return getObject().getPanel().getParentScene().getRenderEngine();
+    }
+
     /**
      * Method is called before frame draw.
      * PreUpdate is called first.
@@ -79,6 +89,11 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
+    public void onEverySecond() {
+
+    }
+
+    @EventMethod
     public void onPhysicsUpdate() {
 
     }
@@ -89,11 +104,6 @@ public abstract class ObjectComponent {
      */
     @EventMethod
     public void onAfterUpdate() {
-
-    }
-
-    @EventMethod
-    public void onStaticUpdate() {
 
     }
 
@@ -112,6 +122,16 @@ public abstract class ObjectComponent {
 
     @EventMethod
     public void onAfterRender(GraphicsManager g) {
+
+    }
+
+    @EventMethod
+    public void on3DRenderRequest(GraphicsManager3D g) {
+
+    }
+
+    @EventMethod
+    public void onWebRenderRequest(WebGraphicsManager g) {
 
     }
 
@@ -258,7 +278,35 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
-    public void onSerializationFinish() {
+    public void onClientConnect(Server server, int clientId) {
+
+    }
+
+    @EventMethod
+    public void onClientDisconnect(Server server, int clientId) {
+
+    }
+
+    /**
+     * Object synchronize is over a TCP connection to ensure that component will be updated.
+     * onSynchronize event is executed only on server side.
+     * @return NetBlock
+     */
+    @EventMethod
+    public NetBlock onSynchronize() {
+        return new NetBlock();
+    }
+
+    @EventMethod
+    public void onSynchronizeReceived(String data) {
+
+    }
+
+    public boolean canSynchronize() {
+        return true;
+    }
+
+    public void clearNetCache() {
 
     }
 

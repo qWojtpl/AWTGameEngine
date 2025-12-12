@@ -1,0 +1,5 @@
+<scene title="Net demo (client)" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+    <object id="client">
+        <Client autoConnect="127.0.0.1:5555" />
+    </object>
+</scene>

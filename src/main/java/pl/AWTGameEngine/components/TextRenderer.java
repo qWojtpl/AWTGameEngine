@@ -2,12 +2,11 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
-import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -16,7 +15,7 @@ import java.awt.font.FontRenderContext;
 
 @DefaultComponent
 @WebComponent
-public class TextRenderer extends ObjectComponent implements WebRenderable {
+public class TextRenderer extends ObjectComponent {
 
     private String text = "Text";
     private ColorObject color = new ColorObject();
@@ -99,7 +98,7 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
         return this.vertical;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setText(String text) {
         this.text = text;
         propertyChanged = true;
@@ -113,7 +112,7 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
         propertyChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setColor(String color) {
         setColor(new ColorObject(color));
     }
@@ -123,7 +122,7 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
         propertyChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSize(String size) {
         setSize(Float.parseFloat(size));
     }
@@ -141,7 +140,7 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
         this.vertical = vertical;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setHorizontal(String horizontal) {
         HorizontalAlign align;
         try {
@@ -152,7 +151,7 @@ public class TextRenderer extends ObjectComponent implements WebRenderable {
         align(align);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setVertical(String vertical) {
         VerticalAlign align;
         try {

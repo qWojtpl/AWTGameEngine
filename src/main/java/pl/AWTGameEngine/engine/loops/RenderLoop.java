@@ -1,26 +1,26 @@
 package pl.AWTGameEngine.engine.loops;
 
+import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.windows.Window;
 
 public class RenderLoop extends BaseLoop {
 
     public RenderLoop(Window window) {
-        super(window);
+        super(window, "RenderLoop", false);
     }
 
-    @SuppressWarnings("BusyWait")
     @Override
-    public void run() {
-        while(window.getWindowListener().isOpened()) {
-            try {
-                Thread.sleep((long) (1000 / getFPS()));
-            } catch(InterruptedException ignored) {
-                break;
-            }
-            if(window.getCurrentScene() != null) {
-                window.getPanel().updateRender();
+    public void iteration() {
+        if(window.getCurrentScene() != null) {
+            for(PanelObject panel : window.getPanels()) {
+                panel.updateRender();
             }
         }
+    }
+
+    @Override
+    protected void everySecondIteration() {
+
     }
 
 }

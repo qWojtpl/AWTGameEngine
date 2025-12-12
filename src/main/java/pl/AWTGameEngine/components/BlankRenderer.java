@@ -2,23 +2,24 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
-import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
 
 import java.text.MessageFormat;
 
 @DefaultComponent
 @WebComponent
-public class BlankRenderer extends ObjectComponent implements WebRenderable {
+public class BlankRenderer extends ObjectComponent {
 
     private ColorObject color = new ColorObject();
     private boolean changedColor = false;
+    private boolean netColorChanged = false;
 
     public BlankRenderer(GameObject object) {
         super(object);
@@ -27,8 +28,8 @@ public class BlankRenderer extends ObjectComponent implements WebRenderable {
     @Override
     public void onRender(GraphicsManager g) {
         g.fillRect(
-                getCamera().parseX(getObject(), getObject().getX()),
-                getCamera().parseY(getObject(), getObject().getY()),
+                getCamera().parseX(getObject(), getObject().getX() - getObject().getSizeX() / 2),
+                getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
                 getCamera().parsePlainValue(getObject().getSizeX()),
                 getCamera().parsePlainValue(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
@@ -52,14 +53,24 @@ public class BlankRenderer extends ObjectComponent implements WebRenderable {
         if(color == null) {
             return;
         }
+        if(this.color.equals(color)) {
+            return;
+        }
         this.color = color;
         changedColor = true;
+        netColorChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setColor(String color) {
+        String oldColor = this.color.serialize();
         this.color.setColor(color);
+        String newColor = this.color.serialize();
+        if(oldColor.equals(newColor)) {
+            return;
+        }
         changedColor = true;
+        netColorChanged = true;
     }
 
     @Override
@@ -67,8 +78,40 @@ public class BlankRenderer extends ObjectComponent implements WebRenderable {
         if(changedColor) {
             g.execute(MessageFormat.format("setColor(\"{0}\", \"{1}\");",
                     getObject().getIdentifier(), this.color.serialize()));
+            changedColor = false;
         }
-        changedColor = false;
+    }
+
+    // Net
+
+    @Override
+    public boolean canSynchronize() {
+        //todo: bugged
+        return true;
+//        if(netColorChanged) {
+//            netColorChanged = false;
+//            return true;
+//        }
+//        return false;
+    }
+
+    @Override
+    public NetBlock onSynchronize() {
+        return new NetBlock(
+                getObject().getIdentifier(),
+                this.getClass().getName(),
+                getColor()
+        );
+    }
+
+    @Override
+    public void onSynchronizeReceived(String data) {
+        setColor(data);
+    }
+
+    @Override
+    public void clearNetCache() {
+        netColorChanged = true;
     }
 
 }

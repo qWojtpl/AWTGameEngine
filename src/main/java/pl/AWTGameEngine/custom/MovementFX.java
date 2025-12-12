@@ -138,12 +138,12 @@ public class MovementFX extends ObjectComponent {
         this.speed = speed;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setNoclip(String noclip) {
         setNoclip(Boolean.parseBoolean(noclip));
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSpeed(String speed) {
         setSpeed(Double.parseDouble(speed));
     }

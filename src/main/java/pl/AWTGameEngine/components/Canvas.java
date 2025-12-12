@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.annotations.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -24,7 +24,7 @@ public class Canvas extends ObjectComponent {
         }
     }
 
-    @SerializationSetter
+    @FromXML
     public void setAlign(String align) {
         try {
             CanvasAlign canvasAlign = CanvasAlign.valueOf(align.toUpperCase());

@@ -3,13 +3,18 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.deserializers.NetMessageDeserializer;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.TransformSet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 @ComponentFX
 @ComponentGL
@@ -21,6 +26,7 @@ public class Client extends ObjectComponent {
     private PrintWriter out;
     private BufferedReader in;
     private String autoConnectAddress = null;
+    private int clientId = -1;
 
     public Client(GameObject object) {
         super(object);
@@ -40,13 +46,21 @@ public class Client extends ObjectComponent {
     }
 
     public void connect(String ip, int port) {
+        if(clientId != -1) {
+            Logger.error("Client already connected.");
+            return;
+        }
         String address = ip + ":" + port;
         Logger.info("Connecting to " + address + "...");
         try {
             socket = new Socket(ip, port);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            sendMessage("Hello!", true);
+            handleConnection();
+            Logger.info("Connected.");
+            requestGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100));
+            requestComponent("player{id}", "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)");
+            requestComponent("player{id}", "pl.AWTGameEngine.custom.Movement2D", "discover");
         } catch (IOException e) {
             Logger.exception("Cannot connect to " + address, e);
         }
@@ -58,28 +72,91 @@ public class Client extends ObjectComponent {
         }
         try {
             socket.close();
+            clientId = -1;
             Logger.info("Disconnected.");
         } catch (IOException e) {
             Logger.exception("Cannot disconnect!", e);
         }
     }
 
-    private void sendMessage(String message, boolean b) {
+    private void handleConnection() {
         new Thread(() -> {
-            Logger.info("Sending message: " + message);
-            out.println(message);
-            String response = null;
-            try {
-                response = in.readLine();
-            } catch (IOException e) {
-                Logger.exception("Cannot read a response", e);
+            while(socket.isConnected()) {
+                String response = "";
+                try {
+                    response = in.readLine();
+                    if(response == null) {
+                        continue;
+                    }
+                    if(clientId == -1) {
+                        clientId = Integer.parseInt(response); // first response is an id
+                        Logger.info("\t\t-> Server assigned ID " + clientId + " for me.");
+                        continue;
+                    }
+                    System.out.println("Received: " + response);
+                    NetMessageDeserializer.deserialize(getScene(), response, socket);
+                } catch (Exception e) {
+                    Logger.exception("Cannot read a response (" + response + ")", e);
+                }
             }
-            Logger.info("Server responded with " + response);
-            if(b) sendMessage("t2", false);
         }, "CLIENT-MESSAGE").start();
     }
 
-    @SerializationSetter
+    private void sendMessage(String message) {
+        System.out.println("Sent: " + message);
+        out.println(message);
+    }
+
+    private void sendNetBlock(NetBlock netBlock) {
+        sendMessage(netBlock.formMessage());
+    }
+
+    @Override
+    public void onUpdate() {
+        List<NetBlock> blocks = new ArrayList<>();
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
+            if(component.getObject().getNetOwner() != clientId) {
+                continue;
+            }
+            if(!component.canSynchronize()) {
+                continue;
+            }
+            NetBlock block = component.onSynchronize();
+            if(block.getIdentifier() != null) {
+                blocks.add(block);
+            }
+        }
+        for(NetBlock block : blocks) {
+            sendNetBlock(block);
+        }
+        // synchronize position
+        //todo: UDP instead of TCP
+        blocks.clear();
+        for(GameObject object : getScene().getGameObjects()) {
+            if(object.getNetOwner() != clientId) {
+                continue;
+            }
+            NetBlock block = object.onPositionSynchronize();
+            if(block.getIdentifier() != null) {
+                blocks.add(block);
+            }
+        }
+        for(NetBlock block : blocks) {
+            sendNetBlock(block);
+        }
+    }
+
+    public void requestGameObject(String identifier, TransformSet position, TransformSet size) {
+        Logger.info("Requesting object...");
+        sendNetBlock(new NetBlock(identifier, position, size, clientId));
+    }
+
+    public void requestComponent(String identifier, String component, String data) {
+        Logger.info("Requesting component...");
+        sendNetBlock(new NetBlock(identifier, component, data));
+    }
+
+    @FromXML
     public void setAutoConnect(String address) {
         this.autoConnectAddress = address;
     }

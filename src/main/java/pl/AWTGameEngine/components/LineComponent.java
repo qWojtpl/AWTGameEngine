@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -49,7 +49,7 @@ public class LineComponent extends ObjectComponent {
         this.color = color;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setColor(String color) {
         setColorObject(new ColorObject(color));
     }
@@ -58,7 +58,7 @@ public class LineComponent extends ObjectComponent {
         this.thickness = thickness;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setThickness(String thickness) {
         setThickness(Float.parseFloat(thickness));
     }

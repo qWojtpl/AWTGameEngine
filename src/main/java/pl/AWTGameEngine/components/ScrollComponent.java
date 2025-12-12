@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.DefaultComponent;
 import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -43,11 +43,6 @@ public class ScrollComponent extends ObjectComponent {
         getObject().removeComponent(background);
         getScene().removeGameObject(scroll);
         scroll = null;
-    }
-
-    @Override
-    public void onStaticUpdate() {
-        onUpdate();
     }
 
     @Override
@@ -193,7 +188,7 @@ public class ScrollComponent extends ObjectComponent {
         updatePosition();
     }
 
-    @SerializationSetter
+    @FromXML
     public void setValue(String value) {
         setValue(Double.parseDouble(value));
     }
@@ -202,7 +197,7 @@ public class ScrollComponent extends ObjectComponent {
         this.horizontal = horizontal;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setHorizontal(String horizontal) {
         setHorizontal(Boolean.parseBoolean(horizontal));
     }
@@ -211,7 +206,7 @@ public class ScrollComponent extends ObjectComponent {
         this.scrollSize = size;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setScrollSize(String size) {
         setScrollSize(Integer.parseInt(size));
     }
@@ -220,7 +215,7 @@ public class ScrollComponent extends ObjectComponent {
         backgroundColor = object;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setBackgroundColor(String color) {
         setBackgroundColor(new ColorObject(color));
     }
@@ -229,7 +224,7 @@ public class ScrollComponent extends ObjectComponent {
         scrollColor = object;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setScrollColor(String color) {
         setScrollColor(new ColorObject(color));
     }
@@ -238,7 +233,7 @@ public class ScrollComponent extends ObjectComponent {
         selectedScrollColor = object;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSelectedScrollColor(String color) {
         setSelectedScrollColor(new ColorObject(color));
     }

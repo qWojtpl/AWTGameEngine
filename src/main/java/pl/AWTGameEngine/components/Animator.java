@@ -57,7 +57,7 @@ public class Animator extends ObjectComponent {
         this.loop = loop;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setLoop(String loop) {
         this.loop = Boolean.parseBoolean(loop);
     }
@@ -66,7 +66,7 @@ public class Animator extends ObjectComponent {
         frames.add(frame);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setNextFrame(String source) {
         AnimationFrame animFrame = new AnimationFrame();
         animFrame.setSprite(source);
@@ -83,7 +83,7 @@ public class Animator extends ObjectComponent {
         delays.add(delay);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setNextDelay(String delay) {
         try {
             setNextDelay(Integer.parseInt(delay));

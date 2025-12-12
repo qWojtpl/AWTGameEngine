@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
-import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -13,7 +12,7 @@ import pl.AWTGameEngine.objects.GameObject;
         @ConflictsWith(BlankRenderer.class),
         @ConflictsWith(TextRenderer.class)
 })
-public class WebTextArea extends ObjectComponent implements WebRenderable {
+public class WebTextArea extends ObjectComponent {
 
     private String text = "Text";
     private boolean propertyChanged = true;
@@ -50,7 +49,7 @@ public class WebTextArea extends ObjectComponent implements WebRenderable {
         return this.text;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setText(String text) {
         this.text = text;
         propertyChanged = true;

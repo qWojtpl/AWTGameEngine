@@ -5,7 +5,6 @@ import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
-import pl.AWTGameEngine.engine.graphics.WebRenderable;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
@@ -14,10 +13,9 @@ import java.text.MessageFormat;
 @Unique
 @DefaultComponent
 @WebComponent
-public class SpriteRenderer extends ObjectComponent implements WebRenderable {
+public class SpriteRenderer extends ObjectComponent {
 
     private Sprite sprite;
-    private boolean propertyChanged = false;
 
     public SpriteRenderer(GameObject object) {
         super(object);
@@ -30,8 +28,8 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
         }
         g.drawImage(
                 sprite,
-                getCamera().parseX(getObject(), getObject().getX()),
-                getCamera().parseY(getObject(), getObject().getY()),
+                getCamera().parseX(getObject(), getObject().getX() - getObject().getSizeX() / 2),
+                getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
                 getCamera().parsePlainValue(getObject().getSizeX()),
                 getCamera().parsePlainValue(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
@@ -44,11 +42,10 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
 
     @Override
     public void onWebRenderRequest(WebGraphicsManager g) {
-        if(propertyChanged && sprite != null) {
+        if(sprite != null) {
             g.execute(MessageFormat.format("drawImage(\"{0}\", \"{1}\");",
-                    getObject().getIdentifier(), sprite.getImageBase64()));
+                    getObject().getIdentifier(), sprite.getImageBase64(true)));
         }
-        propertyChanged = false;
     }
 
     public Sprite getSprite() {
@@ -62,10 +59,9 @@ public class SpriteRenderer extends ObjectComponent implements WebRenderable {
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
-        propertyChanged = true;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSpriteSource(String spriteSource) {
         setSprite(Dependencies.getResourceManager().getResourceAsSprite(spriteSource));
     }

@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.ComponentGL;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.panels.PanelGL;
@@ -40,17 +40,17 @@ public class PrepareGLTexture extends ObjectComponent {
         }
     }
 
-    @SerializationSetter
+    @FromXML
     public void setName(String name) {
         this.name = name;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSpriteSource(String spriteSource) {
         this.sprite = Dependencies.getResourceManager().getResourceAsSprite(spriteSource);
     }
 
-    @SerializationSetter
+    @FromXML
     public void setSubmit(String submit) {
         this.submit = Boolean.parseBoolean(submit);
     }

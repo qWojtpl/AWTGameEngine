@@ -2,6 +2,8 @@ package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.AppProperties;
+import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.loops.PhysicsLoop;
 import pl.AWTGameEngine.engine.loops.RenderLoop;
@@ -24,15 +26,13 @@ public class WindowsManager {
         return createWindow(scenePath, null);
     }
 
-    public Window createWindow(String scenePath, Window.RenderEngine renderEngine) {
+    public Window createWindow(String scenePath, RenderEngine renderEngine) {
         AppProperties appProperties = Dependencies.getAppProperties();
         boolean server = appProperties.getPropertyAsBoolean("server");
         if (renderEngine == null) {
-            renderEngine = Window.RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase());
+            renderEngine = RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase());
         }
-        Window window = new Window(
-                renderEngine,
-                server);
+        Window window = new Window(server);
         if (windows.isEmpty()) {
             defaultFont = window.getFont();
         }
@@ -46,25 +46,27 @@ public class WindowsManager {
             window.setIconImage(icon.getImage());
         }
 
+        PhysXManager.getInstance();
+
         BaseLoop updateLoop = new UpdateLoop(window);
-        updateLoop.setFPS(appProperties.getPropertyAsInteger("updateFps"));
+        updateLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));
         window.setUpdateLoop(updateLoop);
 
         BaseLoop renderLoop = new RenderLoop(window);
-        renderLoop.setFPS(appProperties.getPropertyAsInteger("renderFps"));
+        renderLoop.setTargetFps(appProperties.getPropertyAsInteger("renderFps"));
         window.setRenderLoop(renderLoop);
 
         BaseLoop physicsLoop = new PhysicsLoop(window);
-        physicsLoop.setFPS(appProperties.getPropertyAsInteger("physicsFps"));
+        physicsLoop.setTargetFps(appProperties.getPropertyAsInteger("physicsFps"));
         window.setPhysicsLoop(physicsLoop);
 
         window.init();
-        window.getSceneLoader().loadSceneFile(scenePath);
+        window.getSceneLoader().loadSceneFile(scenePath, renderEngine, false);
         windows.add(window);
 
         updateLoop.start();
 
-        if (!server) {
+        if(!server) {
             renderLoop.start();
         }
 

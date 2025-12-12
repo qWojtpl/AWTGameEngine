@@ -5,18 +5,17 @@ import javafx.scene.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Rotate;
 import pl.AWTGameEngine.annotations.ComponentFX;
-import pl.AWTGameEngine.annotations.SerializationSetter;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.Renderable3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
 
 @ComponentFX
-public class MirrorTexture extends ObjectComponent implements Renderable3D {
+public class MirrorTexture extends ObjectComponent {
 
     private Base3DShape target;
     private PanelFX panel;
@@ -94,7 +93,7 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
         return this.farClip;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setTarget(String identifier) {
         target = (Base3DShape) getObjectByName(identifier).getComponentByClass(Base3DShape.class);
         if(target == null) {
@@ -106,7 +105,7 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
         this.nearClip = nearClip;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setNearClip(String nearClip) {
         setNearClip(Double.parseDouble(nearClip));
     }
@@ -115,7 +114,7 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
         this.farClip = farClip;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setFarClip(String farClip) {
         setFarClip(Double.parseDouble(farClip));
     }
@@ -124,7 +123,7 @@ public class MirrorTexture extends ObjectComponent implements Renderable3D {
         this.divider = divider;
     }
 
-    @SerializationSetter
+    @FromXML
     public void setDivider(String divider) {
         setDivider(Integer.parseInt(divider));
     }

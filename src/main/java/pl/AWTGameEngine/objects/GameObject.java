@@ -6,7 +6,6 @@ import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
-import pl.AWTGameEngine.windows.Window;
 
 import java.util.*;
 import java.util.List;
@@ -18,6 +17,9 @@ public class GameObject {
     private boolean active = true;
     private TransformSet position = new TransformSet(0, 0, 0);
     private TransformSet rotation = new TransformSet(0, 0, 0);
+    private TransformSet netCachedPosition = null;
+    private TransformSet netCachedSize = null;
+    private int netOwner = -1;
     private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
     private PanelObject panel;
@@ -27,32 +29,32 @@ public class GameObject {
     public GameObject(String identifier, Scene scene) {
         this.identifier = identifier;
         this.scene = scene;
-        if(Window.RenderEngine.WEB.equals(getScene().getWindow().getRenderEngine())) {
+        if(RenderEngine.WEB.equals(getScene().getRenderEngine())) {
             this.addComponent(new WebHandler(this));
         }
     }
 
     public void addComponent(ObjectComponent component) {
-        Window.RenderEngine renderEngine = scene.getWindow().getRenderEngine();
-        if(Window.RenderEngine.WEB.equals(renderEngine)) {
+        RenderEngine renderEngine = scene.getRenderEngine();
+        if(RenderEngine.WEB.equals(renderEngine)) {
             if(!component.isWebComponent()) {
                 Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as WebComponent");
                 return;
             }
-        } else if(Window.RenderEngine.DEFAULT.equals(renderEngine)) {
+        } else if(RenderEngine.DEFAULT.equals(renderEngine)) {
             if(!component.isDefaultComponent()) {
                 Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as DefaultComponent");
                 return;
             }
-        } else if(Window.RenderEngine.FX3D.equals(renderEngine)) {
+        } else if(RenderEngine.FX3D.equals(renderEngine)) {
             if(!component.isFXComponent()) {
                 Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as ComponentFX");
                 return;
             }
-        }  else if(Window.RenderEngine.OPENGL.equals(renderEngine)) {
+        }  else if(RenderEngine.OPENGL.equals(renderEngine)) {
             if(!component.isGLComponent()) {
                 Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as ComponentGL");
@@ -393,7 +395,10 @@ public class GameObject {
     }
 
     public void setSize(TransformSet transform) {
-        this.size = transform;
+        this.size = transform.clone();
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
+            component.onUpdateSize(this.size.getX(), this.size.getY());
+        }
         for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
             component.onUpdateSize(this.size.getX(), this.size.getY(), this.size.getZ());
         }      
@@ -401,6 +406,54 @@ public class GameObject {
 
     public void setPanel(PanelObject panel) {
         this.panel = panel;
+    }
+
+    public int getNetOwner() {
+        return this.netOwner;
+    }
+
+    public void setNetOwner(int id) {
+        this.netOwner = id;
+    }
+
+    public final NetBlock onPositionSynchronize() {
+        if(getPosition().equals(netCachedPosition) && getSize().equals(netCachedSize)) {
+            return new NetBlock();
+        }
+        netCachedPosition = getPosition();
+        netCachedSize = getSize();
+        return new NetBlock(
+                getIdentifier(),
+                getPosition(),
+                getSize(),
+                netOwner
+        );
+    }
+
+    public final void onPositionSynchronizeReceived(String data, boolean server) {
+        String[] ownerSplit = data.split("╚");
+        String[] split = ownerSplit[0].split("\\[TransformSet");
+        TransformSet newPosition = new TransformSet().deserializeFromToString(split[1]);
+        TransformSet newSize = new TransformSet().deserializeFromToString(split[2]);
+        if(newPosition.equals(netCachedPosition) && newSize.equals(netCachedSize)) {
+            return;
+        }
+        // (cl) create -> (srv) received -> (srv) send new -> server don't want a cache to exist in onPositionSynchronize,
+        // because it would be blocked, so if it's a new object, cache won't be initialized here
+        if(netCachedPosition != null) {
+            netCachedPosition = newPosition;
+            netCachedSize = newSize;
+        }
+        setPosition(newPosition);
+        setSize(newSize);
+        if(!server) {
+            setNetOwner(Integer.parseInt(ownerSplit[1]));
+        }
+    }
+
+    public void clearNetCache() {
+        netCachedPosition = null;
+        netCachedSize = null;
     }
 
 }

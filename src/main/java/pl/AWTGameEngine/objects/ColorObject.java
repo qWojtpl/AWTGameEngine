@@ -106,6 +106,15 @@ public class ColorObject {
         this.color = deserialize(color);
     }
 
+    public boolean equals(ColorObject color) {
+        if(color == null) {
+            return false;
+        }
+        Color c = color.getColor();
+        return this.color.getRed() == c.getRed() && this.color.getGreen() == c.getGreen()
+                && this.color.getBlue() == c.getBlue() && this.color.getAlpha() == c.getAlpha();
+    }
+
     static class Transient extends Thread {
 
         private final ColorObject parent;
