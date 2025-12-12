@@ -287,6 +287,11 @@ public abstract class ObjectComponent {
 
     }
 
+    @EventMethod
+    public void onSerializationFinish() {
+
+    }
+
     /**
      * Object synchronize is over a TCP connection to ensure that component will be updated.
      * onSynchronize event is executed only on server side.

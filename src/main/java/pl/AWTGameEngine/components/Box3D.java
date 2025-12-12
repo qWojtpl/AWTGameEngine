@@ -49,6 +49,11 @@ public class Box3D extends Base3DShape {
         initialized = true;
     }
 
+    @FromXML
+    public void setGlTexture(String texture) {
+        super.setGlTexture(texture);
+    }
+
     @Override
     protected void removeShape() {
         graphicsManager3D.removeBox(getObject().getIdentifier());

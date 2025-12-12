@@ -73,7 +73,7 @@ public abstract class RigidBody extends ObjectComponent {
     }
 
     public void updateSize(TransformSet size) {
-        PxVec3 newVector = new PxVec3((float) size.getX() / 2, (float) size.getY() / 2, (float) size.getZ() / 2);
+        PxVec3 newVector = new PxVec3((float) size.getX(), (float) size.getY(), (float) size.getZ());
         boxGeometry.setHalfExtents(newVector);
         newVector.destroy();
     }

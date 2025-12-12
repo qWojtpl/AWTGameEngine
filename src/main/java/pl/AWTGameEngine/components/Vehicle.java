@@ -9,10 +9,7 @@ import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.physics.*;
 import physx.vehicle2.*;
-import pl.AWTGameEngine.annotations.ComponentFX;
-import pl.AWTGameEngine.annotations.ComponentGL;
-import pl.AWTGameEngine.annotations.Requires;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.objects.GameObject;
@@ -20,6 +17,7 @@ import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.TransformSet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,8 +31,18 @@ public class Vehicle extends ObjectComponent {
     private final PxVehiclePhysXSimulationContext context = new PxVehiclePhysXSimulationContext();
     private final List<Wheel> wheels = new ArrayList<>();
 
+    private Gearbox gearbox;
+
     public Vehicle(GameObject object) {
         super(object);
+    }
+
+    private void setGearbox(Gearbox gearbox) {
+        this.gearbox = gearbox;
+    }
+
+    public Gearbox getGearbox() {
+        return this.gearbox;
     }
 
     private void initialize() {
@@ -78,9 +86,10 @@ public class Vehicle extends ObjectComponent {
 
 
         physXManager.registerVehicle(this);
-        vehicle.getCommandState().setThrottle(0.5f);
+        vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(new PxTransform(new PxVec3(0, 30, 0)));
+        vehicle.getCommandState().setThrottle(1f);
         vehicle.getCommandState().setNbBrakes(0);
-        vehicle.getCommandState().setSteer(0f);
+        vehicle.getCommandState().setSteer(0.3f);
 
     }
 
@@ -115,8 +124,16 @@ public class Vehicle extends ObjectComponent {
         baseParams.getScale().setScale(1f);
 
         var rigidBody = baseParams.getRigidBodyParams();
-        rigidBody.setMass(870f);
-        PxVec3 moi = new PxVec3(3200f, 3400f, 750f);
+        float mass = 870;
+        rigidBody.setMass(mass);
+        double width  = getObject().getSize().getX();
+        double height = getObject().getSize().getY();
+        double length = getObject().getSize().getZ();
+
+        float moiX = (float)((1/12.0) * mass * (height*height + length*length));
+        float moiY = (float)((1/12.0) * mass * (width*width + length*length));
+        float moiZ = (float)((1/12.0) * mass * (width*width + height*height));
+        PxVec3 moi = new PxVec3(moiX, moiY, moiZ);
         rigidBody.setMoi(moi);
 
         var brakeResponse = baseParams.getBrakeResponseParams(0);
@@ -146,28 +163,34 @@ public class Vehicle extends ObjectComponent {
 
         List<PxTransform> suspensionAttachmentPoses = new ArrayList<>();
 
-        PxVec3 pos = new PxVec3(-0.8f, -0.1f, 1.27f);
+        float halfWidth  = (float) getObject().getSize().getX();
+        float halfHeight  = (float) getObject().getSize().getY();
+        float halfLength = (float) getObject().getSize().getZ();
+        float wheelRadius = 0.35f;
+        float yPos = -2;//-(halfHeight - wheelRadius);
+
+        PxVec3 pos = new PxVec3(-halfWidth, yPos, halfLength);
         PxQuat quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
 
         PxTransform transform = new PxTransform(pos, quat);
 
         suspensionAttachmentPoses.add(transform);
 
-        pos = new PxVec3(0.8f, -0.1f, 1.27f);
+        pos = new PxVec3(halfWidth, yPos, halfLength);
         quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
 
         transform = new PxTransform(pos, quat);
 
         suspensionAttachmentPoses.add(transform);
 
-        pos = new PxVec3(-0.8f, -0.1f, -1.6f);
+        pos = new PxVec3(-halfWidth, yPos, -halfLength);
         quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
 
         transform = new PxTransform(pos, quat);
 
         suspensionAttachmentPoses.add(transform);
 
-        pos = new PxVec3(0.8f, -0.1f, -1.6f);
+        pos = new PxVec3(halfWidth, yPos, -halfLength);
         quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
 
         transform = new PxTransform(pos, quat);
@@ -188,7 +211,7 @@ public class Vehicle extends ObjectComponent {
             suspension.setSuspensionAttachment(suspensionAttachmentPoses.get(i));
             suspension.setSuspensionTravelDir(suspensionTravelDir);
             suspension.setWheelAttachment(wheelAttachmentPose);
-            suspension.setSuspensionTravelDist(0.25f);
+            suspension.setSuspensionTravelDist(0.15f);
         }
 
         var suspensionCalc = baseParams.getSuspensionStateCalculationParams();
@@ -206,9 +229,9 @@ public class Vehicle extends ObjectComponent {
 
         for (int i = 0; i < 4; i++) {
             var suspensionForce = baseParams.getSuspensionForceParams(i);
-            suspensionForce.setDamping(8_000f);
-            suspensionForce.setStiffness(32_000f);
-            suspensionForce.setSprungMass(500f);
+            suspensionForce.setDamping(1500f);
+            suspensionForce.setStiffness(8000f);
+            suspensionForce.setSprungMass(mass / 4f);
         }
 
         for (int i = 0; i < 4; i++) {
@@ -231,13 +254,15 @@ public class Vehicle extends ObjectComponent {
             PxVehicleTireForceParamsExt.setLoadFilter(tireForce, 1, 1, 3f);
         }
 
+        float wheelMass = 12f;
+
         for (int i = 0; i < 4; i++) {
             var wheel = baseParams.getWheelParams(i);
-            wheel.setMass(25f);
-            wheel.setRadius(0.35f);
+            wheel.setMass(wheelMass);
+            wheel.setRadius(wheelRadius);
             wheel.setHalfWidth(0.15f);
-            wheel.setDampingRate(0.25f);
-            wheel.setMoi(1.17f);
+            wheel.setDampingRate(2.5f);
+            wheel.setMoi(0.5f * wheelMass * wheelRadius * wheelRadius);
         }
     }
 
@@ -298,24 +323,13 @@ public class Vehicle extends ObjectComponent {
         engine.getTorqueCurve().addPair(1f, 1f);
         engine.setMoi(1f);
         engine.setPeakTorque(500f);
-        engine.setIdleOmega(0f);
-        engine.setMaxOmega(600f);
+        engine.setIdleOmega(0);
+        engine.setMaxOmega(200f);
         engine.setDampingRateFullThrottle(0.15f);
         engine.setDampingRateZeroThrottleClutchEngaged(2f);
         engine.setDampingRateZeroThrottleClutchDisengaged(0.35f);
 
-        var gearbox = engineDriveParams.getGearBoxParams();
-        gearbox.setNeutralGear(1);
-        gearbox.setRatios(0, -4f);
-        gearbox.setRatios(1, 0f);
-        gearbox.setRatios(2, 4f);
-        gearbox.setRatios(3, 2f);
-        gearbox.setRatios(4, 1.5f);
-        gearbox.setRatios(5, 1.1f);
-        gearbox.setRatios(6, 1f);
-        gearbox.setNbRatios(7);
-        gearbox.setFinalRatio(4f);
-        gearbox.setSwitchTime(0.5f);
+        gearbox.init(engineDriveParams.getGearBoxParams());
 
         var fourWheelDiff = engineDriveParams.getFourWheelDifferentialParams();
         var multiWheelParams = engineDriveParams.getMultiWheelDifferentialParams();
@@ -385,6 +399,117 @@ public class Vehicle extends ObjectComponent {
 
     }
 
+    @Requires(Vehicle.class)
+    @ComponentGL
+    @ComponentFX
+    public static class Gearbox extends ObjectComponent {
+
+        private Vehicle vehicle;
+        private GearboxType gearboxType;
+        private List<Float> gearRatios = new ArrayList<>(Arrays.asList(-4f, 0f, 4f, 2f, 1.5f, 1.1f, 1f));
+        private int neutralGearIndex = 1;
+        private float switchTime;
+
+        private boolean initialized = false;
+
+        public Gearbox(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void onAddComponent() {
+            vehicle = (Vehicle) getObject().getComponentByClass(Vehicle.class);
+            vehicle.setGearbox(this);
+        }
+
+        public void init(PxVehicleGearboxParams gearbox) {
+            checkInitialized();
+            initialized = true;
+            gearbox.setNeutralGear(getNeutralGearIndex());
+            for(int i = 0; i < gearRatios.size(); i++) {
+                gearbox.setRatios(i, gearRatios.get(i));
+            }
+            gearbox.setNbRatios(7);
+            gearbox.setFinalRatio(4f);
+            gearbox.setSwitchTime(0.5f);
+        }
+
+        private void checkInitialized() {
+            if(initialized) {
+                throw new RuntimeException("Gearbox already initialized.");
+            }
+        }
+
+        public void setGearboxType(GearboxType gearboxType) {
+            checkInitialized();
+            this.gearboxType = gearboxType;
+        }
+
+        @FromXML
+        public void setGearboxType(String type) {
+            setGearboxType(GearboxType.valueOf(type));
+        }
+
+        public void setGearRatios(List<Float> ratios) {
+            checkInitialized();
+            this.gearRatios = ratios;
+        }
+
+        @FromXML
+        public void setGearRatios(String ratios) {
+            String[] split = ratios.replace(" ", "").split(",");
+            List<Float> newRatios = new ArrayList<>();
+            for(String s : split) {
+                newRatios.add(Float.parseFloat(s));
+            }
+            setGearRatios(newRatios);
+        }
+
+        public void setNeutralGearIndex(int index) {
+            checkInitialized();
+            this.neutralGearIndex = index;
+        }
+
+        @FromXML
+        public void setNeutralGearIndex(String index) {
+            setNeutralGearIndex(Integer.parseInt(index));
+        }
+
+        public void setCurrentGear(int gear) {
+            vehicle.getPxVehicle().getEngineDriveState().getGearboxState().setCurrentGear(gear);
+        }
+
+        public void setTargetGear(int gear) {
+            vehicle.getPxVehicle().getEngineDriveState().getGearboxState().setTargetGear(gear);
+        }
+
+        public Vehicle getVehicle() {
+            return this.vehicle;
+        }
+
+        public GearboxType getGearboxType() {
+            return this.gearboxType;
+        }
+
+        public List<Float> getGearRatios() {
+            return new ArrayList<>(this.gearRatios);
+        }
+
+        public int getNeutralGearIndex() {
+            return this.neutralGearIndex;
+        }
+
+        public int getCurrentGear() {
+            return vehicle.getPxVehicle().getEngineDriveState().getGearboxState().getCurrentGear();
+        }
+
+        public enum GearboxType {
+            MANUAL,
+            AUTOMATIC
+        }
+
+    }
+
     // Events
 
     @Override
@@ -402,6 +527,20 @@ public class Vehicle extends ObjectComponent {
         PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
         PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
         getObject().setPosition(new TransformSet(vec3.getX(), vec3.getY(), vec3.getZ()));
+
+        for(int i = 0; i < 4; i++) {
+            PxVec3 wheelPos = vehicle.getPhysXState().getPhysxActor().getWheelShapes(i).getActor().getGlobalPose().getP();
+            PxQuat quat = vehicle.getPhysXState().getPhysxActor().getWheelShapes(i).getActor().getGlobalPose().getQ();
+
+            GameObject wheelObject = getScene().getGameObjectByName("wheel" + i);
+
+            wheelObject.setPosition(new TransformSet(wheelPos.getX(), wheelPos.getY(), wheelPos.getZ()));
+            wheelObject.setQuaternionRotation(new QuaternionTransformSet(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
+
+            System.out.println(wheelObject.getQuaternionRotation());
+
+        }
+
         getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
     }
 

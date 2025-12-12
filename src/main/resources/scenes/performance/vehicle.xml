@@ -16,10 +16,27 @@
     <object id="vehicle" x="100" y="100" z="100" size="10,10,20">
         <Box3D glTexture="beaver" />
         <Vehicle />
+        <Vehicle.Gearbox />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
+    </object>
+
+    <object id="wheel0" x="100" y="100" z="100" size="10,10,10">
+        <Box3D />
+    </object>
+
+    <object id="wheel1" x="100" y="100" z="100" size="10,10,10">
+        <Box3D />
+    </object>
+
+    <object id="wheel2" x="100" y="100" z="100" size="10,10,10">
+        <Box3D />
+    </object>
+
+    <object id="wheel3" x="100" y="100" z="100" size="10,10,10">
+        <Box3D />
     </object>
 
 </scene>
