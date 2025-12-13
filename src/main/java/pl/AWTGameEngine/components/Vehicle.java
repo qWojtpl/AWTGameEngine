@@ -86,9 +86,9 @@ public class Vehicle extends ObjectComponent {
 
 
         physXManager.registerVehicle(this);
-        vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(new PxTransform(new PxVec3(0, 30, 0)));
-        vehicle.getCommandState().setThrottle(1f);
-        vehicle.getCommandState().setNbBrakes(0);
+        vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(new PxTransform(new PxVec3(0, 50, 0)));
+        vehicle.getCommandState().setThrottle(0.1f);
+        vehicle.getCommandState().setNbBrakes(1);
         vehicle.getCommandState().setSteer(0.3f);
 
     }
@@ -163,11 +163,11 @@ public class Vehicle extends ObjectComponent {
 
         List<PxTransform> suspensionAttachmentPoses = new ArrayList<>();
 
-        float halfWidth  = (float) getObject().getSize().getX();
-        float halfHeight  = (float) getObject().getSize().getY();
-        float halfLength = (float) getObject().getSize().getZ();
+        float halfWidth  = (float) getObject().getSize().getX() / 2;
+        float halfHeight  = (float) getObject().getSize().getY() / 2;
+        float halfLength = (float) getObject().getSize().getZ() / 2;
         float wheelRadius = 0.35f;
-        float yPos = -2;//-(halfHeight - wheelRadius);
+        float yPos = halfHeight + wheelRadius;
 
         PxVec3 pos = new PxVec3(-halfWidth, yPos, halfLength);
         PxQuat quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
@@ -211,7 +211,7 @@ public class Vehicle extends ObjectComponent {
             suspension.setSuspensionAttachment(suspensionAttachmentPoses.get(i));
             suspension.setSuspensionTravelDir(suspensionTravelDir);
             suspension.setWheelAttachment(wheelAttachmentPose);
-            suspension.setSuspensionTravelDist(0.15f);
+            suspension.setSuspensionTravelDist(1f/*(float) (getObject().getSizeY() + wheelRadius)*/);
         }
 
         var suspensionCalc = baseParams.getSuspensionStateCalculationParams();
@@ -229,9 +229,16 @@ public class Vehicle extends ObjectComponent {
 
         for (int i = 0; i < 4; i++) {
             var suspensionForce = baseParams.getSuspensionForceParams(i);
-            suspensionForce.setDamping(1500f);
-            suspensionForce.setStiffness(8000f);
-            suspensionForce.setSprungMass(mass / 4f);
+            float naturalFrequency = 7f;
+            float dampingRatio = 1.0f;
+
+            float sprungMass = mass / 4f;
+            float stiffness = naturalFrequency * naturalFrequency * sprungMass;
+            float damping   = dampingRatio * 2f * (float) Math.sqrt(stiffness * sprungMass);
+
+            suspensionForce.setStiffness(stiffness);
+            suspensionForce.setDamping(damping);
+            suspensionForce.setSprungMass(sprungMass);
         }
 
         for (int i = 0; i < 4; i++) {
@@ -260,8 +267,8 @@ public class Vehicle extends ObjectComponent {
             var wheel = baseParams.getWheelParams(i);
             wheel.setMass(wheelMass);
             wheel.setRadius(wheelRadius);
-            wheel.setHalfWidth(0.15f);
-            wheel.setDampingRate(2.5f);
+            wheel.setHalfWidth(0.3f);
+            wheel.setDampingRate(0.5f);
             wheel.setMoi(0.5f * wheelMass * wheelRadius * wheelRadius);
         }
     }
@@ -276,7 +283,7 @@ public class Vehicle extends ObjectComponent {
 
         var actorCMassLocalPose = new PxTransform(vec3, quat);
 
-        vec3 = new PxVec3(0f, 0.83f, 1.37f);
+        vec3 = new PxVec3((float) (getObject().getSize().getX() / 2), (float) (getObject().getSize().getY() / 2 - 0.02), (float) getObject().getSize().getZ() / 2);
         quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
 
         var actorShapeLocalPose = new PxTransform(vec3, quat);
@@ -324,7 +331,7 @@ public class Vehicle extends ObjectComponent {
         engine.setMoi(1f);
         engine.setPeakTorque(500f);
         engine.setIdleOmega(0);
-        engine.setMaxOmega(200f);
+        engine.setMaxOmega(600f);
         engine.setDampingRateFullThrottle(0.15f);
         engine.setDampingRateZeroThrottleClutchEngaged(2f);
         engine.setDampingRateZeroThrottleClutchDisengaged(0.35f);
@@ -527,20 +534,6 @@ public class Vehicle extends ObjectComponent {
         PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
         PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
         getObject().setPosition(new TransformSet(vec3.getX(), vec3.getY(), vec3.getZ()));
-
-        for(int i = 0; i < 4; i++) {
-            PxVec3 wheelPos = vehicle.getPhysXState().getPhysxActor().getWheelShapes(i).getActor().getGlobalPose().getP();
-            PxQuat quat = vehicle.getPhysXState().getPhysxActor().getWheelShapes(i).getActor().getGlobalPose().getQ();
-
-            GameObject wheelObject = getScene().getGameObjectByName("wheel" + i);
-
-            wheelObject.setPosition(new TransformSet(wheelPos.getX(), wheelPos.getY(), wheelPos.getZ()));
-            wheelObject.setQuaternionRotation(new QuaternionTransformSet(quat.getX(), quat.getY(), quat.getZ(), quat.getW()));
-
-            System.out.println(wheelObject.getQuaternionRotation());
-
-        }
-
         getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
     }
 

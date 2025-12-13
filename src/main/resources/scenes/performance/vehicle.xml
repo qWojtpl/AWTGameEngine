@@ -1,4 +1,4 @@
-<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="60">
+<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="360">
 
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />
@@ -23,20 +23,9 @@
         <Vehicle.Wheel />
     </object>
 
-    <object id="wheel0" x="100" y="100" z="100" size="10,10,10">
-        <Box3D />
-    </object>
-
-    <object id="wheel1" x="100" y="100" z="100" size="10,10,10">
-        <Box3D />
-    </object>
-
-    <object id="wheel2" x="100" y="100" z="100" size="10,10,10">
-        <Box3D />
-    </object>
-
-    <object id="wheel3" x="100" y="100" z="100" size="10,10,10">
-        <Box3D />
+    <object id="box" x="10" y="20" z="0" size="10,10,10">
+        <Box3D glTexture="beaver" />
+        <RigidBody.Dynamic />
     </object>
 
 </scene>
