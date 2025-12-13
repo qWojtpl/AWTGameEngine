@@ -87,7 +87,7 @@ public class Vehicle extends ObjectComponent {
 
         physXManager.registerVehicle(this);
         vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(new PxTransform(new PxVec3(0, 50, 0)));
-        vehicle.getCommandState().setThrottle(0.1f);
+        vehicle.getCommandState().setThrottle(1f);
         vehicle.getCommandState().setNbBrakes(1);
         vehicle.getCommandState().setSteer(0.3f);
 
@@ -513,6 +513,36 @@ public class Vehicle extends ObjectComponent {
         public enum GearboxType {
             MANUAL,
             AUTOMATIC
+        }
+
+    }
+
+    @ComponentFX
+    @ComponentGL
+    @Unique
+    public static class Collider extends RigidBody.Dynamic {
+
+        public Collider(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void initialize() {
+            super.initialize();
+            rigidDynamic.setRigidBodyFlag(PxRigidBodyFlagEnum.eKINEMATIC, true);
+        }
+
+        @Override
+        public void physicsUpdate() {
+            PxVec3 vec3 = new PxVec3(
+                    (float) getObject().getPosition().getX(),
+                    (float) getObject().getPosition().getY(),
+                    (float) getObject().getPosition().getZ()
+            );
+            PxTransform transform = new PxTransform(vec3);
+            rigidDynamic.setKinematicTarget(transform);
+            vec3.destroy();
+            transform.destroy();
         }
 
     }

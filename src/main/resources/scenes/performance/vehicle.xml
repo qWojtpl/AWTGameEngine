@@ -21,9 +21,10 @@
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
+        <Vehicle.Collider />
     </object>
-
-    <object id="box" x="10" y="20" z="0" size="10,10,10">
+s
+    <object id="box" x="20" y="20" z="0" size="10,10,10">
         <Box3D glTexture="beaver" />
         <RigidBody.Dynamic />
     </object>

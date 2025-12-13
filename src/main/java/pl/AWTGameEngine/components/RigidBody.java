@@ -101,7 +101,7 @@ public abstract class RigidBody extends ObjectComponent {
     @ConflictsWith(RigidBody.Static.class)
     public static class Dynamic extends RigidBody {
 
-        private PxRigidDynamic rigidDynamic;
+        protected PxRigidDynamic rigidDynamic;
 
         private boolean disableGravity = false;
 
@@ -122,6 +122,7 @@ public abstract class RigidBody extends ObjectComponent {
         @Override
         public void destroy() {
             rigidDynamic.detachShape(shape);
+            releaseObjects();
             physXManager.getPxScene().removeActor(rigidDynamic);
             rigidDynamic.release();
         }
@@ -156,7 +157,7 @@ public abstract class RigidBody extends ObjectComponent {
     @ConflictsWith(RigidBody.Dynamic.class)
     public static class Static extends RigidBody {
 
-        private PxRigidStatic rigidStatic;
+        protected PxRigidStatic rigidStatic;
 
         public Static(GameObject object) {
             super(object);
@@ -173,6 +174,7 @@ public abstract class RigidBody extends ObjectComponent {
         @Override
         public void destroy() {
             rigidStatic.detachShape(shape);
+            releaseObjects();
             physXManager.getPxScene().removeActor(rigidStatic);
             rigidStatic.release();
         }
