@@ -588,44 +588,6 @@ public class Vehicle extends ObjectComponent {
 
     }
 
-    @Requires(Vehicle.class)
-    @ComponentFX
-    @ComponentGL
-    @Unique
-    public static class Collider extends RigidBody.Dynamic {
-
-        public Collider(GameObject object) {
-            super(object);
-        }
-
-        @Override
-        public void initialize() {
-            super.initialize();
-            rigidDynamic.setRigidBodyFlag(PxRigidBodyFlagEnum.eKINEMATIC, true);
-        }
-
-        @Override
-        public void physicsUpdate() {
-            PxVec3 vec3 = new PxVec3(
-                    (float) getObject().getPosition().getX(),
-                    (float) getObject().getPosition().getY(),
-                    (float) getObject().getPosition().getZ()
-            );
-            PxQuat quat = new PxQuat(
-                    (float) getObject().getQuaternionRotation().getX(),
-                    (float) getObject().getQuaternionRotation().getY(),
-                    (float) getObject().getQuaternionRotation().getZ(),
-                    (float) getObject().getQuaternionRotation().getW()
-            );
-            PxTransform transform = new PxTransform(vec3, quat);
-            rigidDynamic.setKinematicTarget(transform);
-            vec3.destroy();
-            quat.destroy();
-            transform.destroy();
-        }
-
-    }
-
     // Events
 
     @Override

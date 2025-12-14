@@ -24,7 +24,7 @@
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
-        <Vehicle.Collider />
+        <RigidBody.Kinematic />
     </object>
 
     <object id="box0" x="30" y="-80" z="0" size="10,10,10">
