@@ -606,7 +606,7 @@ public class Vehicle extends ObjectComponent {
         PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
         getObject().setPosition(new TransformSet(vec3.getX(), vec3.getY() + getObject().getSizeY() * 1.5 + 1.35, vec3.getZ()));
         getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
-        System.out.println(vehicle.getEngineDriveState().getEngineState().getRotationSpeed());
+        //System.out.println(vehicle.getEngineDriveState().getEngineState().getRotationSpeed());
     }
 
 }

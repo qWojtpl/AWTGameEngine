@@ -44,7 +44,7 @@ public class BoxSpawner extends ObjectComponent {
         for(int i = 0; i < count; i++) {
             GameObject object = getScene().createGameObject("boxspawner-" + boxCounter++);
             object.setSize(new TransformSet(size, size, size));
-            object.setPosition(new TransformSet(0, 100 + (size + 4) * i, 0));
+            object.setPosition(new TransformSet(0, 100 + (size * 2 + 4) * i, 0));
             RigidBody.Dynamic rigidBody = new RigidBody.Dynamic(object);
             Box3D box3D = new Box3D(object);
             box3D.setGlTexture("beaver");

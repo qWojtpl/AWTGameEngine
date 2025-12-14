@@ -9,20 +9,10 @@
         <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />
     </object>
     <object id="glTextures">
-        <PrepareGLTexture name="beaver" spriteSource="sprites/beaver.jpg" submit="true" />
+        <PrepareGLTexture name="beaver" spriteSource="hdr_sprites/wood.jpg" submit="true" />
     </object>
     <object id="floor" sizeX="20000" sizeY="20" sizeZ="20000" x="-1000" y="-100" z="-1000">
         <Box3D />
         <RigidBody.Static />
-    </object>
-    <object id="vehicle" x="0" y="50" z="0" size="10,10,20">
-        <Box3D glTexture="beaver" />
-        <Vehicle />
-        <Vehicle.Gearbox />
-        <Vehicle.Wheel />
-        <Vehicle.Wheel />
-        <Vehicle.Wheel />
-        <Vehicle.Wheel />
-        <Vehicle.Collider />
     </object>
 </scene>
