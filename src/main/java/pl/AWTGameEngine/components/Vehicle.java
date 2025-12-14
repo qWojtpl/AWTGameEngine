@@ -4,7 +4,6 @@ import physx.common.PxIDENTITYEnum;
 import physx.common.PxQuat;
 import physx.common.PxTransform;
 import physx.common.PxVec3;
-import physx.cooking.PxCookingParams;
 import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.physics.*;
@@ -19,7 +18,6 @@ import pl.AWTGameEngine.objects.TransformSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 @ComponentFX
 @ComponentGL
@@ -29,20 +27,37 @@ public class Vehicle extends ObjectComponent {
     private final PhysXManager physXManager = PhysXManager.getInstance();
     private final EngineDriveVehicle vehicle = new EngineDriveVehicle();
     private final PxVehiclePhysXSimulationContext context = new PxVehiclePhysXSimulationContext();
-    private final List<Wheel> wheels = new ArrayList<>();
 
+    private Engine engine;
     private Gearbox gearbox;
+    private final List<Wheel> wheels = new ArrayList<>();
 
     public Vehicle(GameObject object) {
         super(object);
+    }
+
+    private void setEngine(Engine engine) {
+        this.engine = engine;
     }
 
     private void setGearbox(Gearbox gearbox) {
         this.gearbox = gearbox;
     }
 
+    public void registerWheel(Wheel wheel) {
+        wheels.add(wheel);
+    }
+
     public Gearbox getGearbox() {
         return this.gearbox;
+    }
+
+    public Engine getEngine() {
+        return this.engine;
+    }
+
+    public List<Wheel> getRegisteredWheels() {
+        return new ArrayList<>(wheels);
     }
 
     private void initialize() {
@@ -86,9 +101,8 @@ public class Vehicle extends ObjectComponent {
 
 
         physXManager.registerVehicle(this);
-        vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(new PxTransform(new PxVec3(0, 50, 0)));
         vehicle.getCommandState().setThrottle(1f);
-        vehicle.getCommandState().setNbBrakes(1);
+        vehicle.getCommandState().setNbBrakes(0);
         vehicle.getCommandState().setSteer(0.3f);
 
     }
@@ -234,7 +248,7 @@ public class Vehicle extends ObjectComponent {
 
             float sprungMass = mass / 4f;
             float stiffness = naturalFrequency * naturalFrequency * sprungMass;
-            float damping   = dampingRatio * 2f * (float) Math.sqrt(stiffness * sprungMass);
+            float damping = dampingRatio * 2f * (float) Math.sqrt(stiffness * sprungMass);
 
             suspensionForce.setStiffness(stiffness);
             suspensionForce.setDamping(damping);
@@ -324,18 +338,7 @@ public class Vehicle extends ObjectComponent {
 
         engineDriveParams.getClutchCommandResponseParams().setMaxResponse(10f);
 
-        var engine = engineDriveParams.getEngineParams();
-        engine.getTorqueCurve().addPair(0f, 1f);
-        engine.getTorqueCurve().addPair(0.33f, 1f);
-        engine.getTorqueCurve().addPair(1f, 1f);
-        engine.setMoi(1f);
-        engine.setPeakTorque(500f);
-        engine.setIdleOmega(0);
-        engine.setMaxOmega(600f);
-        engine.setDampingRateFullThrottle(0.15f);
-        engine.setDampingRateZeroThrottleClutchEngaged(2f);
-        engine.setDampingRateZeroThrottleClutchDisengaged(0.35f);
-
+        engine.init(engineDriveParams.getEngineParams());
         gearbox.init(engineDriveParams.getGearBoxParams());
 
         var fourWheelDiff = engineDriveParams.getFourWheelDifferentialParams();
@@ -366,10 +369,6 @@ public class Vehicle extends ObjectComponent {
         clutch.setEstimateIterations(5);
     }
 
-    public void initializeWheel(Wheel wheel) {
-        wheels.add(wheel);
-    }
-
     public EngineDriveVehicle getPxVehicle() {
         return this.vehicle;
     }
@@ -386,9 +385,7 @@ public class Vehicle extends ObjectComponent {
     @Requires(Vehicle.class)
     @ComponentGL
     @ComponentFX
-    public static class Wheel extends ObjectComponent {
-
-        private Vehicle vehicle;
+    public static class Wheel extends VehicleComponent {
 
         public Wheel(GameObject object) {
             super(object);
@@ -396,8 +393,27 @@ public class Vehicle extends ObjectComponent {
 
         @Override
         public void onAddComponent() {
+            super.onAddComponent();
+            vehicle.registerWheel(this);
+        }
+
+        public void init() {
+
+        }
+
+    }
+
+    private static class VehicleComponent extends ObjectComponent {
+
+        protected Vehicle vehicle;
+
+        public VehicleComponent(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void onAddComponent() {
             vehicle = (Vehicle) getObject().getComponentByClass(Vehicle.class);
-            vehicle.initializeWheel(this);
         }
 
         public Vehicle getVehicle() {
@@ -409,13 +425,59 @@ public class Vehicle extends ObjectComponent {
     @Requires(Vehicle.class)
     @ComponentGL
     @ComponentFX
-    public static class Gearbox extends ObjectComponent {
+    @Unique
+    public static class Engine extends VehicleComponent {
 
-        private Vehicle vehicle;
+        private float peakTorque = 500f;
+
+        public Engine(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void onAddComponent() {
+            super.onAddComponent();
+            vehicle.setEngine(this);
+        }
+
+        public void init(PxVehicleEngineParams engine) {
+            engine.getTorqueCurve().addPair(0f, 1f);
+            engine.getTorqueCurve().addPair(0.33f, 1f);
+            engine.getTorqueCurve().addPair(1f, 1f);
+            engine.setMoi(1f);
+            engine.setPeakTorque(peakTorque);
+            engine.setIdleOmega(0);
+            engine.setMaxOmega(8600f);
+            engine.setDampingRateFullThrottle(0.15f);
+            engine.setDampingRateZeroThrottleClutchEngaged(2f);
+            engine.setDampingRateZeroThrottleClutchDisengaged(0.35f);
+        }
+
+        public float getPeakTorque() {
+            return this.peakTorque;
+        }
+
+        public void setPeakTorque(float peakTorque) {
+            this.peakTorque = peakTorque;
+        }
+
+        @FromXML
+        public void setPeakTorque(String peakTorque) {
+            setPeakTorque(Float.parseFloat(peakTorque));
+        }
+
+    }
+
+    @Requires(Vehicle.class)
+    @ComponentGL
+    @ComponentFX
+    @Unique
+    public static class Gearbox extends VehicleComponent {
+
         private GearboxType gearboxType;
         private List<Float> gearRatios = new ArrayList<>(Arrays.asList(-4f, 0f, 4f, 2f, 1.5f, 1.1f, 1f));
         private int neutralGearIndex = 1;
-        private float switchTime;
+        private float switchTime = 0.5f;
 
         private boolean initialized = false;
 
@@ -425,7 +487,7 @@ public class Vehicle extends ObjectComponent {
 
         @Override
         public void onAddComponent() {
-            vehicle = (Vehicle) getObject().getComponentByClass(Vehicle.class);
+            super.onAddComponent();
             vehicle.setGearbox(this);
         }
 
@@ -482,16 +544,21 @@ public class Vehicle extends ObjectComponent {
             setNeutralGearIndex(Integer.parseInt(index));
         }
 
+        public void setSwitchTime(float switchTime) {
+            this.switchTime = switchTime;
+        }
+
+        @FromXML
+        public void setSwitchTime(String switchTime) {
+            setSwitchTime(Float.parseFloat(switchTime));
+        }
+
         public void setCurrentGear(int gear) {
             vehicle.getPxVehicle().getEngineDriveState().getGearboxState().setCurrentGear(gear);
         }
 
         public void setTargetGear(int gear) {
             vehicle.getPxVehicle().getEngineDriveState().getGearboxState().setTargetGear(gear);
-        }
-
-        public Vehicle getVehicle() {
-            return this.vehicle;
         }
 
         public GearboxType getGearboxType() {
@@ -510,6 +577,10 @@ public class Vehicle extends ObjectComponent {
             return vehicle.getPxVehicle().getEngineDriveState().getGearboxState().getCurrentGear();
         }
 
+        public float getSwitchTime() {
+            return this.switchTime;
+        }
+
         public enum GearboxType {
             MANUAL,
             AUTOMATIC
@@ -517,6 +588,7 @@ public class Vehicle extends ObjectComponent {
 
     }
 
+    @Requires(Vehicle.class)
     @ComponentFX
     @ComponentGL
     @Unique
@@ -539,9 +611,16 @@ public class Vehicle extends ObjectComponent {
                     (float) getObject().getPosition().getY(),
                     (float) getObject().getPosition().getZ()
             );
-            PxTransform transform = new PxTransform(vec3);
+            PxQuat quat = new PxQuat(
+                    (float) getObject().getQuaternionRotation().getX(),
+                    (float) getObject().getQuaternionRotation().getY(),
+                    (float) getObject().getQuaternionRotation().getZ(),
+                    (float) getObject().getQuaternionRotation().getW()
+            );
+            PxTransform transform = new PxTransform(vec3, quat);
             rigidDynamic.setKinematicTarget(transform);
             vec3.destroy();
+            quat.destroy();
             transform.destroy();
         }
 
@@ -563,8 +642,9 @@ public class Vehicle extends ObjectComponent {
     public void onPhysicsUpdate() {
         PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
         PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
-        getObject().setPosition(new TransformSet(vec3.getX(), vec3.getY(), vec3.getZ()));
+        getObject().setPosition(new TransformSet(vec3.getX(), vec3.getY() + getObject().getSizeY() * 1.5 + 1.35, vec3.getZ()));
         getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
+        System.out.println(vehicle.getEngineDriveState().getEngineState().getRotationSpeed());
     }
 
 }

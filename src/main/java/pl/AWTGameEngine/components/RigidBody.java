@@ -4,7 +4,10 @@ import physx.common.PxIDENTITYEnum;
 import physx.common.PxQuat;
 import physx.common.PxTransform;
 import physx.common.PxVec3;
+import physx.cooking.PxConvexMeshDesc;
 import physx.geometry.PxBoxGeometry;
+import physx.geometry.PxConvexMesh;
+import physx.geometry.PxConvexMeshGeometry;
 import physx.physics.*;
 import pl.AWTGameEngine.annotations.ComponentFX;
 import pl.AWTGameEngine.annotations.ComponentGL;
@@ -73,9 +76,20 @@ public abstract class RigidBody extends ObjectComponent {
     }
 
     public void updateSize(TransformSet size) {
-        PxVec3 newVector = new PxVec3((float) size.getX(), (float) size.getY(), (float) size.getZ());
-        boxGeometry.setHalfExtents(newVector);
-        newVector.destroy();
+//        PxVec3 newVector = new PxVec3((float) size.getX(), (float) size.getY(), (float) size.getZ());
+//        boxGeometry.setHalfExtents(newVector);
+//        newVector.destroy();
+    }
+
+    public void updateRotation() {
+        PxQuat newQuat = new PxQuat(
+                (float) getObject().getQuaternionRotation().getX(),
+                (float) getObject().getQuaternionRotation().getY(),
+                (float) getObject().getQuaternionRotation().getZ(),
+                (float) getObject().getQuaternionRotation().getW()
+        );
+        pose.setQ(newQuat);
+        newQuat.destroy();
     }
 
     public abstract void physicsUpdate();
@@ -217,7 +231,7 @@ public abstract class RigidBody extends ObjectComponent {
 
     @Override
     public boolean onUpdateRotation(double newX, double newY, double newZ) {
-        //todo
+        updateRotation();
         return true;
     }
 

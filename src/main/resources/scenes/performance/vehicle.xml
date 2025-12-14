@@ -2,6 +2,8 @@
 
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />
+        <MovementFX _package="pl.AWTGameEngine.custom" />
+        <CameraFX />
     </object>
 
     <object id="glTextures">
@@ -13,9 +15,10 @@
         <RigidBody.Static />
     </object>
 
-    <object id="vehicle" x="100" y="100" z="100" size="10,10,20">
+    <object id="vehicle" x="0" y="50" z="0" size="10,10,20">
         <Box3D glTexture="beaver" />
         <Vehicle />
+        <Vehicle.Engine />
         <Vehicle.Gearbox />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
@@ -23,8 +26,20 @@
         <Vehicle.Wheel />
         <Vehicle.Collider />
     </object>
-s
-    <object id="box" x="20" y="20" z="0" size="10,10,10">
+
+    <object id="box0" x="30" y="-80" z="0" size="10,10,10">
+        <Box3D glTexture="beaver" />
+        <RigidBody.Dynamic />
+    </object>
+    <object id="box1" x="30" y="-60" z="0" size="10,10,10">
+        <Box3D glTexture="beaver" />
+        <RigidBody.Dynamic />
+    </object>
+    <object id="box2" x="0" y="-80" z="30" size="10,10,10">
+        <Box3D glTexture="beaver" />
+        <RigidBody.Dynamic />
+    </object>
+    <object id="box3" x="0" y="-60" z="30" size="10,10,10">
         <Box3D glTexture="beaver" />
         <RigidBody.Dynamic />
     </object>

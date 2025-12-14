@@ -15,4 +15,14 @@
         <Box3D />
         <RigidBody.Static />
     </object>
+    <object id="vehicle" x="0" y="50" z="0" size="10,10,20">
+        <Box3D glTexture="beaver" />
+        <Vehicle />
+        <Vehicle.Gearbox />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <Vehicle.Collider />
+    </object>
 </scene>
