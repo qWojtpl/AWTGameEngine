@@ -55,6 +55,10 @@ public abstract class RigidBody extends ObjectComponent {
         material.release();
     }
 
+    public PxRigidActor getPxActor() {
+        return this.shape.getActor();
+    }
+
     public double getMass() {
         return this.mass;
     }

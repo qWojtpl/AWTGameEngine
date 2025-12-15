@@ -15,18 +15,6 @@
         <RigidBody.Static />
     </object>
 
-    <object id="vehicle" x="0" y="50" z="0" size="10,10,20">
-        <Box3D glTexture="beaver" />
-        <Vehicle />
-        <Vehicle.Engine />
-        <Vehicle.Gearbox />
-        <Vehicle.Wheel />
-        <Vehicle.Wheel />
-        <Vehicle.Wheel />
-        <Vehicle.Wheel />
-        <RigidBody.Kinematic />
-    </object>
-
     <object id="box0" x="30" y="-80" z="0" size="10,10,10">
         <Box3D glTexture="beaver" />
         <RigidBody.Dynamic />
@@ -51,6 +39,19 @@
     <object id="box5" x="30" y="-60" z="30" size="10,10,10">
         <Box3D glTexture="beaver" />
         <RigidBody.Dynamic />
+    </object>
+
+    <object id="vehicle" x="0" y="50" z="0" size="10,10,20">
+        <Box3D glTexture="beaver" />
+        <Vehicle />
+        <Vehicle.Engine />
+        <Vehicle.Gearbox />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <RigidBody.Kinematic />
+        <Joint.Distance reference="box0" />
     </object>
 
 </scene>
