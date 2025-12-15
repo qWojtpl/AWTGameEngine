@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 public class ScreenShooter {
 
     public static Sprite takeScreenshot(PanelObject panel) {
-        return new Sprite("ScreenShoter", createImage(panel));
+        return new Sprite("ScreenShooter", createImage(panel));
     }
 
     public static BufferedImage createImage(PanelObject panel) {
