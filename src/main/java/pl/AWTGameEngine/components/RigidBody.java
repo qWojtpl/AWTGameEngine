@@ -4,12 +4,12 @@ import physx.common.PxIDENTITYEnum;
 import physx.common.PxQuat;
 import physx.common.PxTransform;
 import physx.common.PxVec3;
+import physx.cooking.PxConvexMeshDesc;
 import physx.geometry.PxBoxGeometry;
+import physx.geometry.PxConvexMesh;
+import physx.geometry.PxConvexMeshGeometry;
 import physx.physics.*;
-import pl.AWTGameEngine.annotations.ComponentFX;
-import pl.AWTGameEngine.annotations.ComponentGL;
-import pl.AWTGameEngine.annotations.ConflictsWith;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.objects.GameObject;
@@ -73,9 +73,20 @@ public abstract class RigidBody extends ObjectComponent {
     }
 
     public void updateSize(TransformSet size) {
-        PxVec3 newVector = new PxVec3((float) size.getX() / 2, (float) size.getY() / 2, (float) size.getZ() / 2);
-        boxGeometry.setHalfExtents(newVector);
-        newVector.destroy();
+//        PxVec3 newVector = new PxVec3((float) size.getX(), (float) size.getY(), (float) size.getZ());
+//        boxGeometry.setHalfExtents(newVector);
+//        newVector.destroy();
+    }
+
+    public void updateRotation() {
+        PxQuat newQuat = new PxQuat(
+                (float) getObject().getQuaternionRotation().getX(),
+                (float) getObject().getQuaternionRotation().getY(),
+                (float) getObject().getQuaternionRotation().getZ(),
+                (float) getObject().getQuaternionRotation().getW()
+        );
+        pose.setQ(newQuat);
+        newQuat.destroy();
     }
 
     public abstract void physicsUpdate();
@@ -98,10 +109,13 @@ public abstract class RigidBody extends ObjectComponent {
     @ComponentFX
     @ComponentGL
     @Unique
-    @ConflictsWith(RigidBody.Static.class)
+    @Conflicts({
+            @ConflictsWith(RigidBody.Static.class),
+            @ConflictsWith(RigidBody.Kinematic.class)
+    })
     public static class Dynamic extends RigidBody {
 
-        private PxRigidDynamic rigidDynamic;
+        protected PxRigidDynamic rigidDynamic;
 
         private boolean disableGravity = false;
 
@@ -122,6 +136,7 @@ public abstract class RigidBody extends ObjectComponent {
         @Override
         public void destroy() {
             rigidDynamic.detachShape(shape);
+            releaseObjects();
             physXManager.getPxScene().removeActor(rigidDynamic);
             rigidDynamic.release();
         }
@@ -153,10 +168,13 @@ public abstract class RigidBody extends ObjectComponent {
     @ComponentFX
     @ComponentGL
     @Unique
-    @ConflictsWith(RigidBody.Dynamic.class)
+    @Conflicts({
+            @ConflictsWith(RigidBody.Dynamic.class),
+            @ConflictsWith(RigidBody.Kinematic.class)
+    })
     public static class Static extends RigidBody {
 
-        private PxRigidStatic rigidStatic;
+        protected PxRigidStatic rigidStatic;
 
         public Static(GameObject object) {
             super(object);
@@ -173,6 +191,7 @@ public abstract class RigidBody extends ObjectComponent {
         @Override
         public void destroy() {
             rigidStatic.detachShape(shape);
+            releaseObjects();
             physXManager.getPxScene().removeActor(rigidStatic);
             rigidStatic.release();
         }
@@ -180,6 +199,47 @@ public abstract class RigidBody extends ObjectComponent {
         @Override
         public void physicsUpdate() {
             updateCachedPositions(rigidStatic.getGlobalPose().getP(), rigidStatic.getGlobalPose().getQ());
+        }
+
+    }
+
+    @ComponentFX
+    @ComponentGL
+    @Unique
+    @Conflicts({
+            @ConflictsWith(RigidBody.Dynamic.class),
+            @ConflictsWith(RigidBody.Static.class)
+    })
+    public static class Kinematic extends RigidBody.Dynamic {
+
+        public Kinematic(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void initialize() {
+            super.initialize();
+            rigidDynamic.setRigidBodyFlag(PxRigidBodyFlagEnum.eKINEMATIC, true);
+        }
+
+        @Override
+        public void physicsUpdate() {
+            PxVec3 vec3 = new PxVec3(
+                    (float) getObject().getPosition().getX(),
+                    (float) getObject().getPosition().getY(),
+                    (float) getObject().getPosition().getZ()
+            );
+            PxQuat quat = new PxQuat(
+                    (float) getObject().getQuaternionRotation().getX(),
+                    (float) getObject().getQuaternionRotation().getY(),
+                    (float) getObject().getQuaternionRotation().getZ(),
+                    (float) getObject().getQuaternionRotation().getW()
+            );
+            PxTransform transform = new PxTransform(vec3, quat);
+            rigidDynamic.setKinematicTarget(transform);
+            vec3.destroy();
+            quat.destroy();
+            transform.destroy();
         }
 
     }
@@ -215,7 +275,7 @@ public abstract class RigidBody extends ObjectComponent {
 
     @Override
     public boolean onUpdateRotation(double newX, double newY, double newZ) {
-        //todo
+        updateRotation();
         return true;
     }
 

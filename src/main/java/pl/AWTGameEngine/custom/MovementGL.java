@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.custom;
 
+import physx.vehicle2.EngineDriveVehicleEnum;
 import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.annotations.ComponentMeta;
 import pl.AWTGameEngine.annotations.FromXML;
@@ -87,7 +88,9 @@ public class MovementGL extends ObjectComponent {
             dy = 0;
         }
 
-        getCamera().setPosition(new TransformSet(getCamera().getX() + dx, getCamera().getY() + dy, getCamera().getZ() + dz));
+        TransformSet position = new TransformSet(getCamera().getX() + dx, getCamera().getY() + dy, getCamera().getZ() + dz);
+        getCamera().setPosition(position);
+        getObject().setPosition(position);
     }
 
     private void handleRotation() {
@@ -112,7 +115,9 @@ public class MovementGL extends ObjectComponent {
             newRotationX = -90;
         }
 
-        getCamera().setRotation(new TransformSet(newRotationX, newRotationY, 0));
+        TransformSet rotation = new TransformSet(newRotationX, newRotationY, 30);
+        getCamera().setRotation(rotation);
+        getObject().setRotation(rotation);
     }
 
     private void moveMouse() {

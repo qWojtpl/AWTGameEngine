@@ -2,7 +2,12 @@ package pl.AWTGameEngine.engine;
 
 import physx.PxTopLevelFunctions;
 import physx.common.*;
+import physx.cooking.PxCookingParams;
 import physx.physics.*;
+import pl.AWTGameEngine.components.Vehicle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class PhysXManager {
 
@@ -13,6 +18,7 @@ public final class PhysXManager {
     private final PxDefaultErrorCallback errorCb;
     private final PxFoundation foundation;
     private final PxTolerancesScale tolerances;
+    private final PxCookingParams cookingParams;
     private final PxPhysics physics;
     private final PxDefaultCpuDispatcher cpuDispatcher;
     private final PxVec3 gravityVector;
@@ -20,11 +26,14 @@ public final class PhysXManager {
     private PxSceneDesc sceneDesc;
     private PxScene scene;
 
+    private final List<Vehicle> vehicles = new ArrayList<>();
+
     PhysXManager() {
         allocator = new PxDefaultAllocator();
         errorCb = new PxDefaultErrorCallback();
         foundation = PxTopLevelFunctions.CreateFoundation(VERSION, allocator, errorCb);
         tolerances = new PxTolerancesScale();
+        cookingParams = new PxCookingParams(tolerances);
         physics = PxTopLevelFunctions.CreatePhysics(VERSION, foundation, tolerances);
         cpuDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(NUM_THREADS);
         gravityVector = new PxVec3(0f, -9.807f, 0f);
@@ -42,8 +51,16 @@ public final class PhysXManager {
     }
 
     public void simulateFrame(double fps) {
-        getPxScene().simulate(1f/((float) fps / 6));
+        float step = 1f / ((float) fps / 6);
+        for(Vehicle vehicle : vehicles) {
+            vehicle.getPxVehicle().step(step, vehicle.getContext());
+        }
+        getPxScene().simulate(step);
         getPxScene().fetchResults(true);
+    }
+
+    public void registerVehicle(Vehicle vehicle) {
+        vehicles.add(vehicle);
     }
 
     private String getVersionString() {
@@ -64,6 +81,10 @@ public final class PhysXManager {
 
     public PxShapeFlags getShapeFlags() {
         return this.shapeFlags;
+    }
+
+    public PxCookingParams getCookingParams() {
+        return this.cookingParams;
     }
 
     public void cleanup() {

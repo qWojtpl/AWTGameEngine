@@ -6,7 +6,7 @@ import pl.AWTGameEngine.windows.Window;
 public class RenderLoop extends BaseLoop {
 
     public RenderLoop(Window window) {
-        super(window, "RenderLoop", false);
+        super(window, "RenderLoop");
     }
 
     @Override

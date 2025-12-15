@@ -16,3 +16,4 @@ projects/*
 !/README.md
 dependency-reduced-pom.xml
 /scenebuilder/
+/src/main/resources/hdr_sprites/
