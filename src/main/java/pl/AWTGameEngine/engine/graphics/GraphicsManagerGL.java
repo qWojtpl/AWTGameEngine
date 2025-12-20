@@ -1,14 +1,15 @@
 package pl.AWTGameEngine.engine.graphics;
 
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.util.texture.Texture;
-import pl.AWTGameEngine.engine.helpers.RotationHelper;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL4;
+import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.objects.TransformSet;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,86 +18,114 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     private final PanelGL panelGL;
     private final ConcurrentHashMap<String, RenderOptions> renderables = new ConcurrentHashMap<>();
+    private int vao;
+    private int vbo;
 
     public GraphicsManagerGL(PanelGL panelGL) {
         this.panelGL = panelGL;
     }
 
-    public void drawScene(GL2 gl) {
-        List<RenderOptions> renderableList = new ArrayList<>(renderables.values());
-        for (RenderOptions options : renderableList) {
-//            if(options.getPosition().distanceTo(new TransformSet(panelGL.getCamera().getX(), panelGL.getCamera().getY(), panelGL.getCamera().getZ())) > 2000) {
-//                continue;
-//            }
-            gl.glPushMatrix();
-            gl.glTranslated(options.getPosition().getX(), options.getPosition().getY(), options.getPosition().getZ());
-            double[] axis = RotationHelper.quaternionToAxisAngle(
-                    options.getQuaternionRotation().getX(),
-                    options.getQuaternionRotation().getY(),
-                    options.getQuaternionRotation().getZ(),
-                    options.getQuaternionRotation().getW()
-            );
-            gl.glRotated(axis[0], axis[1], axis[2], axis[3]);
-            gl.glScaled(options.getSize().getX(), options.getSize().getY(), options.getSize().getZ());
-            if (ShapeType.BOX.equals(options.getShapeType())) {
-                drawBox(gl, options);
-            }
-            gl.glPopMatrix();
-        }
+    public void init(GL4 gl) {
+        float[] vertices = {
+                // pos              // uv
+                // front
+                -1, -1,  1,  0, 1,
+                1, -1,  1,  1, 1,
+                1,  1,  1,  1, 0,
+                -1, -1,  1,  0, 1,
+                1,  1,  1,  1, 0,
+                -1,  1,  1,  0, 0,
+
+                // back
+                -1, -1, -1,  1, 1,
+                -1,  1, -1,  1, 0,
+                1,  1, -1,  0, 0,
+                -1, -1, -1,  1, 1,
+                1,  1, -1,  0, 0,
+                1, -1, -1,  0, 1,
+
+                // left
+                -1, -1, -1,  0, 1,
+                -1, -1,  1,  1, 1,
+                -1,  1,  1,  1, 0,
+                -1, -1, -1,  0, 1,
+                -1,  1,  1,  1, 0,
+                -1,  1, -1,  0, 0,
+
+                // right
+                1, -1, -1,  1, 1,
+                1,  1, -1,  1, 0,
+                1,  1,  1,  0, 0,
+                1, -1, -1,  1, 1,
+                1,  1,  1,  0, 0,
+                1, -1,  1,  0, 1,
+
+                // top
+                -1,  1, -1,  0, 0,
+                -1,  1,  1,  0, 1,
+                1,  1,  1,  1, 1,
+                -1,  1, -1,  0, 0,
+                1,  1,  1,  1, 1,
+                1,  1, -1,  1, 0,
+
+                // bottom
+                -1, -1, -1,  1, 0,
+                1, -1, -1,  0, 0,
+                1, -1,  1,  0, 1,
+                -1, -1, -1,  1, 0,
+                1, -1,  1,  0, 1,
+                -1, -1,  1,  1, 1
+        };
+
+        int[] tmp = new int[1];
+
+        gl.glGenVertexArrays(1, tmp, 0);
+        vao = tmp[0];
+        gl.glBindVertexArray(vao);
+
+        gl.glGenBuffers(1, tmp, 0);
+        vbo = tmp[0];
+        gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vbo);
+        gl.glBufferData(GL.GL_ARRAY_BUFFER, vertices.length * Float.BYTES,
+                FloatBuffer.wrap(vertices), GL.GL_STATIC_DRAW);
+
+        gl.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 5 * Float.BYTES, 0);
+        gl.glEnableVertexAttribArray(0);
+
+        gl.glVertexAttribPointer(1, 2, GL.GL_FLOAT, false, 5 * Float.BYTES, 3 * Float.BYTES);
+        gl.glEnableVertexAttribArray(1);
+
+        gl.glBindVertexArray(0);
     }
 
-    private void drawBox(GL2 gl, RenderOptions renderOptions) {
+    public void drawScene(GL4 gl, int program, float[] viewProj) {
 
-        if(renderOptions.getGlTexture() != null) {
-            Texture texture = panelGL.getTexture(renderOptions.getGlTexture());
-            texture.enable(gl);
-            texture.bind(gl);
+        gl.glBindVertexArray(vao);
+
+        int modelLoc = gl.glGetUniformLocation(program, "model");
+        int vpLoc = gl.glGetUniformLocation(program, "viewProj");
+
+        gl.glUniformMatrix4fv(vpLoc, 1, false, viewProj, 0);
+
+        List<RenderOptions> renderableList = new ArrayList<>(renderables.values());
+        for (RenderOptions ro : renderableList) {
+
+            float[] model = MatrixHelper.composeModelMatrix(
+                    ro.getPosition(),
+                    ro.getQuaternionRotation(),
+                    ro.getSize()
+            );
+
+            gl.glUniformMatrix4fv(modelLoc, 1, false, model, 0);
+
+            if (ro.getGlTexture() != null) {
+                panelGL.getTexture(ro.getGlTexture()).bind(gl);
+            }
+
+            gl.glDrawArrays(GL.GL_TRIANGLES, 0, 36);
         }
 
-        gl.glColor3f(1f, 1f, 1f);
-        gl.glBegin(GL2.GL_QUADS);
-
-        // Front
-        gl.glTexCoord2f(0f, 1f); gl.glVertex3f(-1, -1,  1);
-        gl.glTexCoord2f(1f, 1f); gl.glVertex3f( 1, -1,  1);
-        gl.glTexCoord2f(1f, 0f); gl.glVertex3f( 1,  1,  1);
-        gl.glTexCoord2f(0f, 0f); gl.glVertex3f(-1,  1,  1);
-
-        // Back
-        gl.glTexCoord2f(1f, 1f); gl.glVertex3f(-1, -1, -1);
-        gl.glTexCoord2f(1f, 0f); gl.glVertex3f(-1,  1, -1);
-        gl.glTexCoord2f(0f, 0f); gl.glVertex3f( 1,  1, -1);
-        gl.glTexCoord2f(0f, 1f); gl.glVertex3f( 1, -1, -1);
-
-        // Left
-        gl.glTexCoord2f(1f, 1f); gl.glVertex3f(-1, -1, -1);
-        gl.glTexCoord2f(0f, 1f); gl.glVertex3f(-1, -1,  1);
-        gl.glTexCoord2f(0f, 0f); gl.glVertex3f(-1,  1,  1);
-        gl.glTexCoord2f(1f, 0f); gl.glVertex3f(-1,  1, -1);
-
-        // Right
-        gl.glTexCoord2f(0f, 1f); gl.glVertex3f(1, -1, -1);
-        gl.glTexCoord2f(1f, 1f); gl.glVertex3f(1,  1, -1);
-        gl.glTexCoord2f(1f, 0f); gl.glVertex3f(1,  1,  1);
-        gl.glTexCoord2f(0f, 0f); gl.glVertex3f(1, -1,  1);
-
-        // Top
-        gl.glTexCoord2f(0f, 0f); gl.glVertex3f(-1, 1, -1);
-        gl.glTexCoord2f(0f, 1f); gl.glVertex3f(-1, 1,  1);
-        gl.glTexCoord2f(1f, 1f); gl.glVertex3f( 1, 1,  1);
-        gl.glTexCoord2f(1f, 0f); gl.glVertex3f( 1, 1, -1);
-
-        // Bottom
-        gl.glTexCoord2f(1f, 0f); gl.glVertex3f(-1, -1, -1);
-        gl.glTexCoord2f(0f, 0f); gl.glVertex3f( 1, -1, -1);
-        gl.glTexCoord2f(0f, 1f); gl.glVertex3f( 1, -1,  1);
-        gl.glTexCoord2f(1f, 1f); gl.glVertex3f(-1, -1,  1);
-
-        gl.glEnd();
-
-        if(renderOptions.getGlTexture() != null) {
-            panelGL.getTexture(renderOptions.getGlTexture()).disable(gl);
-        }
+        gl.glBindVertexArray(0);
     }
 
     @Override

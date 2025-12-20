@@ -7,7 +7,7 @@ import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
-import pl.AWTGameEngine.engine.helpers.RotationHelper;
+import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.scenes.Scene;
@@ -42,7 +42,7 @@ public class OpenGLInitializer implements GLEventListener {
 
     @Override
     public void init(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
+        GL4 gl = drawable.getGL().getGL4();
 
         try {
             program = createProgram(gl, "shader");
@@ -63,68 +63,58 @@ public class OpenGLInitializer implements GLEventListener {
         prepareTextures.clear();
 
         gl.setSwapInterval(0);
-        gl.glEnable(GL2.GL_TEXTURE_2D);
+        gl.glEnable(GL4.GL_TEXTURE_2D);
         gl.glEnable(GL.GL_BLEND);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         gl.glDepthFunc(GL.GL_LEQUAL);
-        gl.glShadeModel(GL2.GL_SMOOTH);
 
         Thread.currentThread().setName("RenderLoop-opengl");
+        graphicsManagerGL.init(gl);
+        Logger.info("OpenGL initialized (GL4)");
     }
 
     @Override
     public void dispose(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
+        GL4 gl = drawable.getGL().getGL4();
         gl.glDeleteProgram(program);
     }
 
     @Override
     public void display(GLAutoDrawable drawable) {
-
-        final GL2 gl = drawable.getGL().getGL2();
+        GL4 gl = drawable.getGL().getGL4();
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        gl.glLoadIdentity();
-
         gl.glUseProgram(program);
 
-        if(window.getCurrentScene() == null) {
-            return;
+        float[] projection = MatrixHelper.perspective(
+                60f,
+                window.getWidth() / (float) window.getHeight(),
+                0.1f,
+                10000f
+        );
+
+        float[] view = MatrixHelper.lookAt(camera);
+        float[] viewProj = MatrixHelper.mul(projection, view);
+
+        for (ObjectComponent c :
+                scene.getSceneEventHandler()
+                        .getComponents("on3DRenderRequest#GraphicsManager3D")) {
+            c.on3DRenderRequest(graphicsManagerGL);
         }
 
-        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("on3DRenderRequest#GraphicsManager3D")) {
-            component.on3DRenderRequest(graphicsManagerGL);
-        }
-
-        double[] lookAt = RotationHelper.rotationToVectorLookAt(
-                camera.getX(), camera.getY(), camera.getZ(),
-                camera.getRotation().getX(),
-                camera.getRotation().getY(),
-                camera.getRotation().getZ());
-
-        glu.gluLookAt(camera.getX(), camera.getY(), camera.getZ(), lookAt[0], lookAt[1], lookAt[2], 0, 1.0f, 0);
-
-        graphicsManagerGL.drawScene(gl);
+        graphicsManagerGL.drawScene(gl, program, viewProj);
         gl.glUseProgram(0);
     }
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        final GL2 gl = drawable.getGL().getGL2();
-        if (height <= 0) height = 1;
-        final float aspect = (float) width / height;
-
-        gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glLoadIdentity();
-        glu.gluPerspective(30, aspect, 1.0, 10000.0);
-
-        gl.glMatrixMode(GL2.GL_MODELVIEW);
-        gl.glLoadIdentity();
+        final GL4 gl = drawable.getGL().getGL4();
+        gl.glViewport(0, 0, width, height);
     }
 
-    private int createProgram(GL2 gl, String shaderName) {
-        int vs = compileShader(gl, GL2.GL_VERTEX_SHADER, getShaderFile(shaderName + ".vert"));
-        int fs = compileShader(gl, GL2.GL_FRAGMENT_SHADER, getShaderFile(shaderName + ".frag"));
+    private int createProgram(GL4 gl, String shaderName) {
+        int vs = compileShader(gl, GL4.GL_VERTEX_SHADER, getShaderFile(shaderName + ".vert"));
+        int fs = compileShader(gl, GL4.GL_FRAGMENT_SHADER, getShaderFile(shaderName + ".frag"));
 
         int program = gl.glCreateProgram();
         gl.glAttachShader(program, vs);
@@ -132,7 +122,7 @@ public class OpenGLInitializer implements GLEventListener {
         gl.glLinkProgram(program);
 
         int[] status = new int[1];
-        gl.glGetProgramiv(program, GL2.GL_LINK_STATUS, status, 0);
+        gl.glGetProgramiv(program, GL4.GL_LINK_STATUS, status, 0);
         if (status[0] == 0) {
             throw new RuntimeException(getProgramLog(gl, program));
         }
@@ -146,26 +136,26 @@ public class OpenGLInitializer implements GLEventListener {
         return String.join("\n", Dependencies.getResourceManager().getResource("shaders/" + fileName));
     }
 
-    private int compileShader(GL2 gl, int type, String src) {
+    private int compileShader(GL4 gl, int type, String src) {
         int s = gl.glCreateShader(type);
         gl.glShaderSource(s, 1, new String[]{src}, new int[]{src.length()}, 0);
         gl.glCompileShader(s);
 
         int[] status = new int[1];
-        gl.glGetShaderiv(s, GL2.GL_COMPILE_STATUS, status, 0);
+        gl.glGetShaderiv(s, GL4.GL_COMPILE_STATUS, status, 0);
         if(status[0] == 0) {
             throw new RuntimeException(getShaderLog(gl, s));
         }
         return s;
     }
 
-    private String getShaderLog(GL2 gl, int s) {
+    private String getShaderLog(GL4 gl, int s) {
         byte[] buf = new byte[1024];
         gl.glGetShaderInfoLog(s, buf.length, null, 0, buf, 0);
         return new String(buf);
     }
 
-    private String getProgramLog(GL2 gl, int p) {
+    private String getProgramLog(GL4 gl, int p) {
         byte[] buf = new byte[1024];
         gl.glGetProgramInfoLog(p, buf.length, null, 0, buf, 0);
         return new String(buf);
