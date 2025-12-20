@@ -4,6 +4,7 @@ import com.jogamp.opengl.*;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
@@ -24,6 +25,7 @@ public class OpenGLInitializer implements GLEventListener {
     private final HashMap<String, Sprite> prepareTextures;
     private final HashMap<String, Texture> textures;
     private final GLU glu = new GLU();
+    private int program;
 
     public OpenGLInitializer(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL, HashMap<String, Sprite> prepareTextures, HashMap<String, Texture> textures) {
         this.scene = scene;
@@ -35,9 +37,21 @@ public class OpenGLInitializer implements GLEventListener {
         this.textures = textures;
     }
 
+    int pixelSizeLoc;
+    int resLoc;
+
     @Override
     public void init(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
+
+        try {
+            program = createProgram(gl, "shader");
+        } catch(Exception e) {
+            Logger.exception("Cannot create GL program", e);
+        }
+
+        pixelSizeLoc =gl.glGetUniformLocation(program, "pixelSize");
+        resLoc = gl.glGetUniformLocation(program, "resolution");
 
         gl.glClearColor(0.192156863f, 0.337254902f, 0.474509804f, 1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
@@ -60,6 +74,8 @@ public class OpenGLInitializer implements GLEventListener {
 
     @Override
     public void dispose(GLAutoDrawable drawable) {
+        GL2 gl = drawable.getGL().getGL2();
+        gl.glDeleteProgram(program);
     }
 
     @Override
@@ -69,6 +85,8 @@ public class OpenGLInitializer implements GLEventListener {
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
+
+        gl.glUseProgram(program);
 
         if(window.getCurrentScene() == null) {
             return;
@@ -87,6 +105,7 @@ public class OpenGLInitializer implements GLEventListener {
         glu.gluLookAt(camera.getX(), camera.getY(), camera.getZ(), lookAt[0], lookAt[1], lookAt[2], 0, 1.0f, 0);
 
         graphicsManagerGL.drawScene(gl);
+        gl.glUseProgram(0);
     }
 
     @Override
@@ -101,6 +120,55 @@ public class OpenGLInitializer implements GLEventListener {
 
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
+    }
+
+    private int createProgram(GL2 gl, String shaderName) {
+        int vs = compileShader(gl, GL2.GL_VERTEX_SHADER, getShaderFile(shaderName + ".vert"));
+        int fs = compileShader(gl, GL2.GL_FRAGMENT_SHADER, getShaderFile(shaderName + ".frag"));
+
+        int program = gl.glCreateProgram();
+        gl.glAttachShader(program, vs);
+        gl.glAttachShader(program, fs);
+        gl.glLinkProgram(program);
+
+        int[] status = new int[1];
+        gl.glGetProgramiv(program, GL2.GL_LINK_STATUS, status, 0);
+        if (status[0] == 0) {
+            throw new RuntimeException(getProgramLog(gl, program));
+        }
+
+        gl.glDeleteShader(vs);
+        gl.glDeleteShader(fs);
+        return program;
+    }
+
+    private String getShaderFile(String fileName) {
+        return String.join("\n", Dependencies.getResourceManager().getResource("shaders/" + fileName));
+    }
+
+    private int compileShader(GL2 gl, int type, String src) {
+        int s = gl.glCreateShader(type);
+        gl.glShaderSource(s, 1, new String[]{src}, new int[]{src.length()}, 0);
+        gl.glCompileShader(s);
+
+        int[] status = new int[1];
+        gl.glGetShaderiv(s, GL2.GL_COMPILE_STATUS, status, 0);
+        if(status[0] == 0) {
+            throw new RuntimeException(getShaderLog(gl, s));
+        }
+        return s;
+    }
+
+    private String getShaderLog(GL2 gl, int s) {
+        byte[] buf = new byte[1024];
+        gl.glGetShaderInfoLog(s, buf.length, null, 0, buf, 0);
+        return new String(buf);
+    }
+
+    private String getProgramLog(GL2 gl, int p) {
+        byte[] buf = new byte[1024];
+        gl.glGetProgramInfoLog(p, buf.length, null, 0, buf, 0);
+        return new String(buf);
     }
 
 }
