@@ -1,0 +1,9 @@
+<scene title="Editor - Select a project" updateFPS="10" renderFPS="10" physicsFPS="1" sameSize="true">
+
+    <object id="view" x="960" y="640" size="1920,1280">
+        <ProjectSelectorView _package="pl.AWTGameEngineEditor.components" />
+    </object>
+
+    <styles source="webview/editor/editor.css" />
+
+</scene>

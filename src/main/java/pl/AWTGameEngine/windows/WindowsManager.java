@@ -36,7 +36,10 @@ public class WindowsManager {
         if (windows.isEmpty()) {
             defaultFont = window.getFont();
         }
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setUndecorated(appProperties.getPropertyAsBoolean("undecorated"));
+        if(windows.isEmpty()) {
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
         window.setSceneLoader(new SceneLoader(window));
 
         window.setTitle(appProperties.getProperty("title"));
