@@ -3,6 +3,7 @@ package pl.AWTGameEngine.scenes;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.panels.PanelObject;
+import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -135,6 +136,9 @@ public class Scene {
     }
 
     public void triggerAfterLoad() {
+        if(getPanel() instanceof WebPanel) {
+            ((WebPanel) getPanel()).loadWebView();
+        }
         int c = loadAfterLoad.keySet().size();
         for(String path : loadAfterLoad.keySet()) {
             getWindow().getSceneLoader().loadSceneFile(path, loadAfterLoad.get(path), true);

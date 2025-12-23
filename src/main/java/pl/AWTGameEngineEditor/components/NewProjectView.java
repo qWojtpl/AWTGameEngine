@@ -12,8 +12,7 @@ import pl.AWTGameEngine.objects.GameObject;
 @WebComponent
 public class NewProjectView extends HTMLComponent {
 
-    private boolean declared = false;
-    private boolean goBackLoading = false;
+    private boolean initialized = false;
 
     public NewProjectView(GameObject object) {
         super(object);
@@ -21,23 +20,27 @@ public class NewProjectView extends HTMLComponent {
 
     @Override
     public void onAddComponent() {
-        //getWindow().setResizable(false);
+        getWindow().setResizable(false);
         getWindow().setSameSize(false);
         getWindow().setSize(300, 500);
     }
 
     @Override
     public void onUpdate() {
+        if(!initialized) {
+            return;
+        }
         WebGraphicsManager manager = ((WebPanel) getObject().getPanel()).getGraphicsManager();
         if(manager != null) {
-            Platform.runLater(() -> {
-                String name = String.valueOf(manager.getWebView().getEngine().executeScript("document.getElementById('x-project-name').value"));
-            });
+            System.out.println(manager.executeGetResult("document.getElementById('x-project-name').value"));
         }
     }
 
     @Override
     public String getRenderString() {
+        if(!initialized) {
+            initialized = true;
+        }
         return String.join("\n", Dependencies.getResourceManager().getResource("webview/editor/newProject.html"));
     }
 

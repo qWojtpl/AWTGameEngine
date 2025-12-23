@@ -4,6 +4,14 @@
         <ProjectSelectorView _package="pl.AWTGameEngineEditor.components" />
     </object>
 
+    <object id="projects" x="960" y="575" size="1920,750">
+        <FlexDisplay />
+    </object>
+
+    <object id="noProjects" x="960" y="575" size="100,100">
+        <WebText pattern="No projects available..." color="rgb(255,255,255)" size="28" />
+    </object>
+
     <styles source="webview/editor/editor.css" />
 
 </scene>

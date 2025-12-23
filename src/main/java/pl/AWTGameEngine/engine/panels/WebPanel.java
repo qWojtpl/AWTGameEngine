@@ -59,28 +59,29 @@ public class WebPanel extends JFXPanel implements PanelObject {
             });
 
             setScene(fxScene);
-            loadWebView();
         });
 
         setMouseListener(new MouseListener(window));
     }
 
-    private void loadWebView() {
-        Logger.info("Loading WebView file...");
-        StringBuilder htmlString = new StringBuilder();
-        for(String line : Dependencies.getResourceManager().getResource(Dependencies.getAppProperties().getProperty("webViewPath") + "webview.html")) {
-            if(line.contains("@{CUSTOM-USER-STYLES}")) {
-                htmlString.append(scene.getCustomStyles());
-                continue;
+    public void loadWebView() {
+        Platform.runLater(() -> {
+            Logger.info("Loading WebView file...");
+            StringBuilder htmlString = new StringBuilder();
+            for(String line : Dependencies.getResourceManager().getResource(Dependencies.getAppProperties().getProperty("webViewPath") + "webview.html")) {
+                if(line.contains("@{CUSTOM-USER-STYLES}")) {
+                    htmlString.append(scene.getCustomStyles());
+                    continue;
+                }
+                htmlString.append(line);
             }
-            htmlString.append(line);
-        }
-        Logger.info("WebView file loaded.");
-        webView.getEngine().setJavaScriptEnabled(true);
-        webView.contextMenuEnabledProperty().setValue(false);
-        webView.getEngine().loadContent(htmlString.toString());
-        graphicsManager = new WebGraphicsManager(webView);
-        Logger.info("WebView loaded.");
+            Logger.info("WebView file loaded.");
+            webView.getEngine().setJavaScriptEnabled(true);
+            webView.contextMenuEnabledProperty().setValue(false);
+            webView.getEngine().loadContent(htmlString.toString());
+            graphicsManager = new WebGraphicsManager(webView);
+            Logger.info("WebView loaded.");
+        });
     }
 
     @Override

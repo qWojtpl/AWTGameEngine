@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.Unique;
 import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.components.FlexDisplay;
 import pl.AWTGameEngine.components.base.HTMLComponent;
 import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -17,6 +18,8 @@ import pl.AWTGameEngineEditor.managers.EditorProjectManager;
 public class ProjectSelectorView extends HTMLComponent {
 
     private final EditorProjectManager editorProjectManager = EditorProjectManager.getInstance();
+
+    private FlexDisplay projectsFlexDisplay;
 
     private boolean declared = false;
     private Window newProjectWindow = null;
@@ -44,13 +47,18 @@ public class ProjectSelectorView extends HTMLComponent {
                 manager.declareVariable("createNewProjectClick", "false");
                 declared = true;
             }
-            Platform.runLater(() -> {
-                String selected = String.valueOf(manager.getWebView().getEngine().executeScript("createNewProjectClick"));
-                if(selected.equals("true")) {
-                    loadNewProject();
-                    declared = false;
-                }
-            });
+            String selected = manager.executeGetResult("createNewProjectClick");
+            if(selected.equals("true")) {
+                loadNewProject();
+                declared = false;
+            }
+        }
+        if(projectsFlexDisplay == null) {
+            projectsFlexDisplay = (FlexDisplay) getScene().getGameObjectByName("projects").getComponentByClass(FlexDisplay.class);
+            if(editorProjectManager.getEditorProjects().isEmpty()) {
+                projectsFlexDisplay.setItems("noProjects");
+                projectsFlexDisplay.onAddComponent();
+            }
         }
     }
 
