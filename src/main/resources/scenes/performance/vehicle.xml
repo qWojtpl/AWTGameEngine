@@ -7,11 +7,12 @@
     </object>
 
     <object id="glTextures">
-        <PrepareGLTexture name="beaver" spriteSource="sprites/beaver.jpg" submit="true" />
+        <PrepareGLTexture name="beaver" spriteSource="sprites/beaver.jpg" />
+        <PrepareGLTexture name="glass" spriteSource="hdr_sprites/glass.png" submit="true" />
     </object>
 
     <object id="floor" x="500" y="-100" z="-500" size="1000,10,1000">
-        <Box3D />
+        <Box3D glTexture="glass" />
         <RigidBody.Static />
     </object>
 
@@ -51,7 +52,7 @@
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <RigidBody.Kinematic />
-        <Joint.Distance reference="box0" />
+        <Joint.Revolute reference="box0" />
     </object>
 
 </scene>

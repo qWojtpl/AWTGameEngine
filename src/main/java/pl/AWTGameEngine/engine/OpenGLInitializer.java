@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.engine;
 
 import com.jogamp.opengl.*;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import pl.AWTGameEngine.Dependencies;
@@ -24,7 +23,6 @@ public class OpenGLInitializer implements GLEventListener {
     private final GraphicsManagerGL graphicsManagerGL;
     private final HashMap<String, Sprite> prepareTextures;
     private final HashMap<String, Texture> textures;
-    private final GLU glu = new GLU();
     private int program;
 
     public OpenGLInitializer(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL, HashMap<String, Sprite> prepareTextures, HashMap<String, Texture> textures) {
@@ -70,7 +68,6 @@ public class OpenGLInitializer implements GLEventListener {
 
         Thread.currentThread().setName("RenderLoop-opengl");
         graphicsManagerGL.init(gl);
-        Logger.info("OpenGL initialized (GL4)");
     }
 
     @Override

@@ -3,6 +3,9 @@ package pl.AWTGameEngine.components;
 import physx.PxTopLevelFunctions;
 import physx.extensions.PxDistanceJoint;
 import physx.extensions.PxDistanceJointFlagEnum;
+import physx.extensions.PxRevoluteJoint;
+import physx.physics.PxArticulationJointReducedCoordinate;
+import physx.physics.PxArticulationLink;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
@@ -79,5 +82,65 @@ public abstract class Joint extends ObjectComponent {
         }
 
     }
+
+    @ComponentGL
+    @ComponentFX
+    public static class Revolute extends Joint {
+
+        private PxRevoluteJoint joint;
+
+        public Revolute(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void createJoint() {
+            joint = PxTopLevelFunctions.RevoluteJointCreate(
+                    physXManager.getPxPhysics(),
+                    firstBody.getPxActor(),
+                    firstBody.getPxActor().getGlobalPose(),
+                    secondBody.getPxActor(),
+                    secondBody.getPxActor().getGlobalPose()
+            );
+        }
+
+        public PxRevoluteJoint getJoint() {
+            return this.joint;
+        }
+
+        @FromXML
+        public void setReference(String identifier) {
+            super.setReference(identifier);
+        }
+
+    }
+
+    //todo
+//    @ComponentFX
+//    @ComponentGL
+//    public static class Articulation extends Joint {
+//
+//        private PxArticulationLink link;
+//        private PxArticulationJointReducedCoordinate joint;
+//
+//        public Articulation(GameObject object) {
+//            super(object);
+//        }
+//
+//        @Override
+//        public void createJoint() {
+//
+//            link = physXManager.getPxPhysics().createArticulationReducedCoordinate().createLink(null, firstBody.getPxActor().getGlobalPose());
+//            joint = link.getInboundJoint();
+//            joint.setChildPose(secondBody.getPxActor().getGlobalPose());
+//            physXManager.getPxScene().addArticulation(link.getArticulation());
+//        }
+//
+//        @FromXML
+//        public void setReference(String identifier) {
+//            super.setReference(identifier);
+//        }
+//
+//    }
 
 }
