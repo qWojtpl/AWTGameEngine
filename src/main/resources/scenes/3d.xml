@@ -8,31 +8,40 @@
         <CameraFX />
     </object>
     <object id="small1" position="0,1005,200" size="1,1,1">
-        <Box3D staticShape="false" color="rgba(255,0,0,125)" />
+        <Box3D color="rgba(255,0,0,125)" />
+        <RigidBody.Dynamic />
     </object>
     <object id="small2" position="0,1006,200" size="1,1,1">
-        <Box3D staticShape="false" color="rgba(255,0,0,125)" />
+        <Box3D color="rgba(255,0,0,125)" />
+        <RigidBody.Dynamic />
     </object>
     <object id="small3" position="0,1007,200" size="1,1,1">
         <Box3D staticShape="false" color="rgba(255,0,0,125)" />
+        <RigidBody.Dynamic />
     </object>
     <object id="box1" position="0,100,200" size="5,5,5">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" />
+        <Box3D spriteSource="sprites/beaver.jpg" />
+        <RigidBody.Dynamic />
     </object>
     <object id="box3" sizeX="5" sizeY="5" sizeZ="5" x="0" y="110" z="200">
-        <Box3D spriteSource="sprites/beaver.jpg" staticShape="false" mass="5" />
+        <Box3D spriteSource="sprites/beaver.jpg" />
+        <RigidBody.Dynamic />
     </object>
     <object id="box2" sizeX="5" sizeY="5" sizeZ="5" x="10" y="100" z="200">
-        <Box3D spriteSource="sprites/beaver2.png" staticShape="false" />
+        <Box3D spriteSource="sprites/beaver2.png" />
+        <RigidBody.Dynamic />
     </object>
     <object id="sphere1" sizeX="5" sizeY="5" sizeZ="5" x="0" y="110" z="200">
         <Sphere3D spriteSource="sprites/beaver.jpg" />
+        <RigidBody.Static />
     </object>
     <object id="cylinder1" sizeX="5" sizeY="5" sizeZ="5" x="10" y="110" z="200">
         <Cylinder3D spriteSource="sprites/beaver.jpg" />
+        <RigidBody.Static />
     </object>
     <object id="floor" sizeX="500" sizeY="10" sizeZ="500" x="-200" y="-100" z="200">
         <Box3D color="rgb(0,0,0)" />
+        <RigidBody.Static />
     </object>
     <object id="testModel" sizeX="1" sizeY="1" sizeZ="1" x="0" y="100" z="0">
 <!--        <Model3D modelPath="test" />-->
@@ -43,5 +52,6 @@
     <object id="mirrorCamera" position="-100,50,695" size="5,5,5" rotationY="180">
         <Cylinder3D spriteSource="sprites/beaver.jpg" />
         <MirrorTexture target="mirrorScreen" divider="10" _package="pl.AWTGameEngine.custom" />
+        <RigidBody.Static />
     </object>
 </scene>

@@ -2,6 +2,9 @@ package pl.AWTGameEngine.engine.graphics;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL4;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -18,6 +21,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     private final PanelGL panelGL;
     private final ConcurrentHashMap<String, RenderOptions> renderables = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Sprite, Texture> textures = new ConcurrentHashMap<>();
     private int vao;
     private int vbo;
 
@@ -118,8 +122,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
             gl.glUniformMatrix4fv(modelLoc, 1, false, model, 0);
 
-            if (ro.getGlTexture() != null) {
-                panelGL.getTexture(ro.getGlTexture()).bind(gl);
+            if (ro.getSprite() != null) {
+                if(textures.getOrDefault(ro.getSprite(), null) == null) {
+                    createTexture(ro.getSprite());
+                }
+                textures.get(ro.getSprite()).bind(gl);
             }
 
             gl.glDrawArrays(GL.GL_TRIANGLES, 0, 36);
@@ -143,7 +150,10 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     @Override
     public void createSphere(RenderOptions options) {
-
+        if(renderables.containsKey(options.getIdentifier())) {
+            return;
+        }
+        renderables.put(options.getIdentifier(), options);
     }
 
     @Override
@@ -197,9 +207,9 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         renderables.get(identifier).setColor(color);
     }
 
-    @Override
-    public void updateGlTexture(String identifier, ShapeType shape, String glTexture) {
-        renderables.get(identifier).setGlTexture(glTexture);
+    public void createTexture(Sprite sprite) {
+        Logger.info("Initializing texture from sprite " + sprite.getImagePath());
+        textures.put(sprite, AWTTextureIO.newTexture(panelGL.getGlProfile(), sprite.getImage(), true));
     }
 
 }

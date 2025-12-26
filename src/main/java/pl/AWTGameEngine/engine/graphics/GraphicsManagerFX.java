@@ -309,11 +309,6 @@ public class GraphicsManagerFX extends GraphicsManager3D {
         });
     }
 
-    @Override
-    public void updateGlTexture(String identifier, ShapeType shape, String glTexture) {
-
-    }
-
     private Node getNode(String identifier, ShapeType shape) {
         switch(shape) {
             case BOX, SPHERE, CYLINDER -> {

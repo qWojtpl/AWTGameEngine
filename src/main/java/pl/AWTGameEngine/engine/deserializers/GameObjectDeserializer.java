@@ -71,11 +71,11 @@ public class GameObjectDeserializer {
                     String value = childNode.getAttributes().item(j).getNodeValue();
                     String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
-                    if (clazz.getDeclaredMethod(methodName, String.class).isAnnotationPresent(FromXML.class)) {
-                        clazz.getDeclaredMethod(methodName, String.class).invoke(o, value);
+                    if (clazz.getMethod(methodName, String.class).isAnnotationPresent(FromXML.class)) {
+                        clazz.getMethod(methodName, String.class).invoke(o, value);
                     } else {
                         Logger.error("Tried to invoke " + methodName
-                                + " in serialization (" + className + "), but this method is not annotated as SerializationMethod");
+                                + " in serialization (" + className + "), but this method is not annotated as FromXML");
                     }
                 }
                 gameObject.addComponent(o);

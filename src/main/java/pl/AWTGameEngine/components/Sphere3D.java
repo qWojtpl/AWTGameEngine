@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
+import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 
 @ComponentFX
@@ -14,22 +15,31 @@ import pl.AWTGameEngine.objects.GameObject;
 })
 public class Sphere3D extends Base3DShape {
 
+    private final GraphicsManager3D graphicsManager3D;
+
     public Sphere3D(GameObject object) {
         super(object);
+        if(getPanel() instanceof PanelFX) {
+            graphicsManager3D = ((PanelFX) getPanel()).getGraphicsManager3D();
+        } else {
+            graphicsManager3D = ((PanelGL) getPanel()).getGraphicsManager3D();
+        }
     }
 
     @Override
     protected void createShape() {
-        ((PanelFX) getPanel()).getGraphicsManager3D().createSphere(new GraphicsManager3D.RenderOptions(
+        GraphicsManager3D.RenderOptions options = new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),
                 getObject().getRotation(),
                 getObject().getQuaternionRotation(),
                 getSprite(),
-                GraphicsManager3D.ShapeType.SPHERE,
+                GraphicsManager3D.ShapeType.BOX,
                 getColor()
-        ));
+        );
+
+        graphicsManager3D.createSphere(options);
         initialized = true;
     }
 

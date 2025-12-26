@@ -19,9 +19,6 @@ import pl.AWTGameEngine.windows.Window;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.nio.Buffer;
-import java.nio.IntBuffer;
 import java.util.HashMap;
 
 public class PanelGL extends JLayeredPane implements PanelObject {
@@ -124,20 +121,6 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         //todo
     }
 
-    public void prepareTexture(String name, Sprite sprite) {
-        prepareTextures.put(name, sprite);
-    }
-
-    public Texture getTexture(String name) {
-        return textures.getOrDefault(name, null);
-    }
-
-    public void submitInit() {
-        gljPanel.setFocusable(false);
-        add(gljPanel);
-        Logger.info("OpenGL initialized.");
-    }
-
     private void initOpenGL(int width, int height) {
         Logger.info("Initializing OpenGL...");
         profile = GLProfile.get(GLProfile.GL2);
@@ -146,7 +129,9 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         gljPanel = new GLJPanel(capabilities);
         gljPanel.setSize(width, height);
         gljPanel.addGLEventListener(new OpenGLInitializer(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D, prepareTextures, textures));
-        Logger.info("Waiting for textures...");
+        gljPanel.setFocusable(false);
+        add(gljPanel);
+        Logger.info("OpenGL initialized.");
     }
 
     private void initListeners() {
@@ -157,6 +142,10 @@ public class PanelGL extends JLayeredPane implements PanelObject {
     public void setSize(Dimension dimension) {
         super.setSize(dimension);
         gljPanel.setSize(dimension);
+    }
+
+    public GLProfile getGlProfile() {
+        return this.profile;
     }
 
 }

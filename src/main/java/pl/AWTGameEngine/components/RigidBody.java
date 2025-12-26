@@ -5,6 +5,7 @@ import physx.common.PxQuat;
 import physx.common.PxTransform;
 import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
+import physx.geometry.PxGeometry;
 import physx.physics.*;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -18,7 +19,7 @@ public abstract class RigidBody extends ObjectComponent {
     // PhysX
     protected final PhysXManager physXManager = PhysXManager.getInstance();
     protected PxMaterial material;
-    protected PxBoxGeometry boxGeometry;
+    protected PxGeometry geometry;
     protected PxShape shape;
     protected PxPhysics physics;
     protected final PxTransform pose = new PxTransform(PxIDENTITYEnum.PxIdentity);
@@ -32,15 +33,15 @@ public abstract class RigidBody extends ObjectComponent {
         super(object);
     }
 
-    public void initialize() {
+    protected void initialize() {
         physics = physXManager.getPxPhysics();
-        boxGeometry = new PxBoxGeometry(
+        geometry = new PxBoxGeometry(
                 (float) getObject().getSize().getX(),
                 (float) getObject().getSize().getY(),
                 (float) getObject().getSize().getZ()
         );
         material = physics.createMaterial(0.5f, 0.5f, 0.5f);
-        shape = physics.createShape(boxGeometry, material, true, physXManager.getShapeFlags());
+        shape = physics.createShape(geometry, material, true, physXManager.getShapeFlags());
         shape.setSimulationFilterData(filterData);
         updatePosition(getObject().getPosition());
     }
@@ -51,7 +52,7 @@ public abstract class RigidBody extends ObjectComponent {
         pose.destroy();
         filterData.destroy();
         shape.release();
-        boxGeometry.destroy();
+        geometry.destroy();
         material.release();
     }
 

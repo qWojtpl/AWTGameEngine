@@ -47,7 +47,7 @@ public class BoxSpawner extends ObjectComponent {
             object.setPosition(new TransformSet(0, 100 + (size * 2 + 4) * i, 0));
             RigidBody.Dynamic rigidBody = new RigidBody.Dynamic(object);
             Box3D box3D = new Box3D(object);
-            box3D.setGlTexture("beaver");
+            box3D.setSpriteSource("sprites/beaver.jpg");
             object.addComponent(box3D);
             object.addComponent(rigidBody);
         }

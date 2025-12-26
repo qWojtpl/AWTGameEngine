@@ -41,17 +41,8 @@ public class Box3D extends Base3DShape {
                 getColor()
         );
 
-        if(glTexture != null) {
-            options.setGlTexture(glTexture);
-        }
-
         graphicsManager3D.createBox(options);
         initialized = true;
-    }
-
-    @FromXML
-    public void setGlTexture(String texture) {
-        super.setGlTexture(texture);
     }
 
     @Override
