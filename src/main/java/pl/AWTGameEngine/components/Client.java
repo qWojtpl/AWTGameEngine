@@ -93,7 +93,7 @@ public class Client extends ObjectComponent {
                         Logger.info("\t\t-> Server assigned ID " + clientId + " for me.");
                         continue;
                     }
-                    System.out.println("Received: " + response);
+                    //System.out.println("Received: " + response);
                     NetMessageDeserializer.deserialize(getScene(), response, socket);
                 } catch (Exception e) {
                     Logger.exception("Cannot read a response (" + response + ")", e);

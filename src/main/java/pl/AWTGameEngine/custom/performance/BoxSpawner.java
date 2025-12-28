@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.ComponentFX;
 import pl.AWTGameEngine.annotations.ComponentGL;
 import pl.AWTGameEngine.components.Box3D;
 import pl.AWTGameEngine.components.RigidBody;
+import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;

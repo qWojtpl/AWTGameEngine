@@ -1,5 +1,8 @@
 package pl.AWTGameEngine.objects;
 
+import physx.common.PxQuat;
+import physx.common.PxVec3;
+
 public class QuaternionTransformSet {
 
     private double x;
@@ -60,6 +63,10 @@ public class QuaternionTransformSet {
     @Override
     public String toString() {
         return "QuaternionTransformSet[x=" + x + ",y=" + y + ",z=" + z + ",w=" + w + "]";
+    }
+
+    public static QuaternionTransformSet fromPhysX(PxQuat pxQuat) {
+        return new QuaternionTransformSet(pxQuat.getX(), pxQuat.getY(), pxQuat.getZ(), pxQuat.getW());
     }
 
 }

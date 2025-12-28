@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.objects;
 
+import physx.common.PxVec3;
 import pl.AWTGameEngine.annotations.Platform3D;
 
 public class TransformSet {
@@ -110,6 +111,10 @@ public class TransformSet {
             return false;
         }
         return this.x == transformSet.getX() && this.y == transformSet.getY() && this.z == transformSet.getZ();
+    }
+
+    public static TransformSet fromPhysX(PxVec3 pxVec3) {
+        return new TransformSet(pxVec3.getX(), pxVec3.getY(), pxVec3.getZ());
     }
 
 }

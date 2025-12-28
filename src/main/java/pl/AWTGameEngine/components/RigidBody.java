@@ -93,19 +93,23 @@ public abstract class RigidBody extends ObjectComponent {
 
     public abstract void physicsUpdate();
 
+    public abstract void sleep();
+
     protected void updateCachedPositions(PxVec3 position, PxQuat rotation) {
+        boolean putToSleep = true;
         if(position.getX() != getObject().getPosition().getX() || position.getY() != getObject().getPosition().getY() || position.getZ() != getObject().getPosition().getZ()) {
-            getObject().setPosition(new TransformSet(
-                    position.getX(),
-                    position.getY(),
-                    position.getZ()
-            ));
+            getObject().setPosition(TransformSet.fromPhysX(position));
+            putToSleep = false;
         }
         if(rotation.getX() != cachedRotation.getX() || rotation.getY() != cachedRotation.getY() ||
                 rotation.getZ() != cachedRotation.getZ() || rotation.getW() != cachedRotation.getW()) {
-            cachedRotation = new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW());
-            getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
+            cachedRotation = QuaternionTransformSet.fromPhysX(rotation);
+            getObject().setQuaternionRotation(QuaternionTransformSet.fromPhysX(rotation));
+            putToSleep = false;
         }
+        if(putToSleep) {{
+            sleep();
+        }}
     }
 
     @ComponentFX
@@ -120,6 +124,10 @@ public abstract class RigidBody extends ObjectComponent {
         protected PxRigidDynamic rigidDynamic;
 
         private boolean disableGravity = false;
+
+        // Sleep
+        private byte sleepCounter = 0;
+        private byte sleepThreshold = 60;
 
         public Dynamic(GameObject object) {
             super(object);
@@ -145,7 +153,17 @@ public abstract class RigidBody extends ObjectComponent {
 
         @Override
         public void physicsUpdate() {
+            if(rigidDynamic.isSleeping()) {
+                return;
+            }
             updateCachedPositions(rigidDynamic.getGlobalPose().getP(), rigidDynamic.getGlobalPose().getQ());
+        }
+
+        @Override
+        public void sleep() {
+            if(sleepCounter >= sleepThreshold++) {
+                rigidDynamic.putToSleep();
+            }
         }
 
         public void addForce(TransformSet force) {
@@ -201,6 +219,11 @@ public abstract class RigidBody extends ObjectComponent {
         @Override
         public void physicsUpdate() {
             updateCachedPositions(rigidStatic.getGlobalPose().getP(), rigidStatic.getGlobalPose().getQ());
+        }
+
+        @Override
+        public void sleep() {
+
         }
 
     }

@@ -199,7 +199,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     @Override
     public void updateSprite(String identifier, ShapeType shape, Sprite sprite) {
-
+        renderables.get(identifier).setSprite(sprite);
     }
 
     @Override
