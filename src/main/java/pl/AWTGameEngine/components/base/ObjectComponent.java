@@ -166,13 +166,8 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
-    public boolean onUpdateRotation(double newX, double newY,  double newZ) {
-        return true;
-    }
+    public void onUpdateRotation() {
 
-    @EventMethod
-    public boolean onUpdateRotation(double newX, double newY, double newZ, double newW) {
-        return true;
     }
 
     @EventMethod

@@ -9,6 +9,7 @@ import physx.geometry.PxGeometry;
 import physx.physics.*;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
@@ -40,7 +41,8 @@ public abstract class RigidBody extends ObjectComponent {
                 (float) getObject().getSize().getY(),
                 (float) getObject().getSize().getZ()
         );
-        material = physics.createMaterial(0.5f, 0.5f, 0.5f);
+//        material = physics.createMaterial(0.5f, 0.5f, 0.5f);
+        material = physXManager.getDefaultMaterial();
         shape = physics.createShape(geometry, material, true, physXManager.getShapeFlags());
         shape.setSimulationFilterData(filterData);
         updatePosition(getObject().getPosition());
@@ -93,23 +95,15 @@ public abstract class RigidBody extends ObjectComponent {
 
     public abstract void physicsUpdate();
 
-    public abstract void sleep();
-
     protected void updateCachedPositions(PxVec3 position, PxQuat rotation) {
-        boolean putToSleep = true;
         if(position.getX() != getObject().getPosition().getX() || position.getY() != getObject().getPosition().getY() || position.getZ() != getObject().getPosition().getZ()) {
-            getObject().setPosition(TransformSet.fromPhysX(position));
-            putToSleep = false;
+            getObject().setPosition(TransformSet.fromPhysX(position)/*, this*/);
         }
         if(rotation.getX() != cachedRotation.getX() || rotation.getY() != cachedRotation.getY() ||
                 rotation.getZ() != cachedRotation.getZ() || rotation.getW() != cachedRotation.getW()) {
             cachedRotation = QuaternionTransformSet.fromPhysX(rotation);
-            getObject().setQuaternionRotation(QuaternionTransformSet.fromPhysX(rotation));
-            putToSleep = false;
+            getObject().setQuaternionRotation(QuaternionTransformSet.fromPhysX(rotation), this);
         }
-        if(putToSleep) {{
-            sleep();
-        }}
     }
 
     @ComponentFX
@@ -125,10 +119,6 @@ public abstract class RigidBody extends ObjectComponent {
 
         private boolean disableGravity = false;
 
-        // Sleep
-        private byte sleepCounter = 0;
-        private byte sleepThreshold = 60;
-
         public Dynamic(GameObject object) {
             super(object);
         }
@@ -139,6 +129,9 @@ public abstract class RigidBody extends ObjectComponent {
             rigidDynamic = physics.createRigidDynamic(pose);
             rigidDynamic.attachShape(shape);
             rigidDynamic.setMass((float) mass);
+            rigidDynamic.setSleepThreshold(0.05f);
+            rigidDynamic.setWakeCounter(0.1f);
+            rigidDynamic.setSolverIterationCounts(4, 1);
             setDisableGravity(disableGravity);
             physXManager.getPxScene().addActor(rigidDynamic);
         }
@@ -153,17 +146,7 @@ public abstract class RigidBody extends ObjectComponent {
 
         @Override
         public void physicsUpdate() {
-            if(rigidDynamic.isSleeping()) {
-                return;
-            }
             updateCachedPositions(rigidDynamic.getGlobalPose().getP(), rigidDynamic.getGlobalPose().getQ());
-        }
-
-        @Override
-        public void sleep() {
-            if(sleepCounter >= sleepThreshold++) {
-                rigidDynamic.putToSleep();
-            }
         }
 
         public void addForce(TransformSet force) {
@@ -219,11 +202,6 @@ public abstract class RigidBody extends ObjectComponent {
         @Override
         public void physicsUpdate() {
             updateCachedPositions(rigidStatic.getGlobalPose().getP(), rigidStatic.getGlobalPose().getQ());
-        }
-
-        @Override
-        public void sleep() {
-
         }
 
     }
@@ -299,9 +277,8 @@ public abstract class RigidBody extends ObjectComponent {
     }
 
     @Override
-    public boolean onUpdateRotation(double newX, double newY, double newZ) {
+    public void onUpdateRotation() {
         updateRotation();
-        return true;
     }
 
 }

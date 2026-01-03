@@ -12,7 +12,7 @@ import java.util.List;
 public final class PhysXManager {
 
     private static PhysXManager INSTANCE;
-    private final static int NUM_THREADS = 4;
+    private final static int NUM_THREADS = 8;
     private final static int VERSION = PxTopLevelFunctions.getPHYSICS_VERSION();
     private final PxDefaultAllocator allocator;
     private final PxDefaultErrorCallback errorCb;
@@ -25,6 +25,8 @@ public final class PhysXManager {
     private final PxShapeFlags shapeFlags;
     private PxSceneDesc sceneDesc;
     private PxScene scene;
+
+    private PxMaterial defaultMaterial;
 
     private final List<Vehicle> vehicles = new ArrayList<>();
 
@@ -47,7 +49,9 @@ public final class PhysXManager {
         sceneDesc.setGravity(gravityVector);
         sceneDesc.setCpuDispatcher(cpuDispatcher);
         sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
+        sceneDesc.setSolverType(PxSolverTypeEnum.ePGS);
         scene = physics.createScene(sceneDesc);
+        defaultMaterial = physics.createMaterial(0.5f, 0.5f, 0.5f);
     }
 
     public void simulateFrame(double fps) {
@@ -87,7 +91,12 @@ public final class PhysXManager {
         return this.cookingParams;
     }
 
+    public PxMaterial getDefaultMaterial() {
+        return this.defaultMaterial;
+    }
+
     public void cleanup() {
+        defaultMaterial.destroy();
         shapeFlags.destroy();
         sceneDesc.destroy();
         scene.release();

@@ -73,9 +73,8 @@ public class Box3D extends Base3DShape {
     }
 
     @Override
-    public boolean onUpdateRotation(double newX, double newY, double newZ) {
+    public void onUpdateRotation() {
         updateRotation = true;
-        return true;
     }
 
     @Override

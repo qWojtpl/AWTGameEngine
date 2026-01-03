@@ -237,10 +237,27 @@ public class GameObject {
     }
 
     public TransformSet getRotation() {
+        if(this.rotation == null) {
+            double[] pos = RotationHelper.quaternionToEulerXYZ(
+                    quaternionRotation.getX(),
+                    quaternionRotation.getY(),
+                    quaternionRotation.getZ(),
+                    quaternionRotation.getW()
+            );
+            this.rotation = new TransformSet(pos[0], pos[1], pos[2]);
+        }
         return this.rotation.clone();
     }
 
     public QuaternionTransformSet getQuaternionRotation() {
+        if(this.quaternionRotation == null) {
+            double[] pos = RotationHelper.xyzEulerToQuaternion(
+                    rotation.getX(),
+                    rotation.getY(),
+                    rotation.getZ()
+            );
+            this.quaternionRotation = new QuaternionTransformSet(pos[0], pos[1], pos[2], pos[3]);
+        }
         return this.quaternionRotation;
     }
 
@@ -339,21 +356,26 @@ public class GameObject {
 
     public void setRotation(TransformSet transform) {
         this.rotation = transform.clone();
-        double[] pos = RotationHelper.xyzEulerToQuaternion(transform.getX(), transform.getY(), transform.getZ());
-        this.quaternionRotation = new QuaternionTransformSet(pos[0], pos[1], pos[2], pos[3]);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
-            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
+        this.quaternionRotation = null;
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation")) {
+            component.onUpdateRotation();
         }
     }
 
-    public void setQuaternionRotation(QuaternionTransformSet transform) {
+    public void setQuaternionRotation(QuaternionTransformSet transform, ObjectComponent blockNotify) {
+        this.rotation = null;
         this.quaternionRotation = transform.clone();
-        double[] pos = RotationHelper.quaternionToEulerXYZ(transform.getX(), transform.getY(), transform.getZ(), transform.getW());
-        this.rotation = new TransformSet(pos[0], pos[1], pos[2]);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation#double#double#double")) {
-            component.onUpdateRotation(this.rotation.getX(), this.rotation.getY(), this.rotation.getZ());
+        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation")) {
+            if(component.equals(blockNotify)) {
+                continue;
+            }
+            component.onUpdateRotation();
         }
     }
+    
+    public void setQuaternionRotation(QuaternionTransformSet transform) {
+        setQuaternionRotation(transform, null);
+    } 
 
     public void setSizeX(double x) {
         this.size.setX(x);

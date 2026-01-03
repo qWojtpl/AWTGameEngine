@@ -38,6 +38,12 @@
         <RigidBody.Dynamic />
     </object>
 
+    <object id="box6" x="50" y="-80" z="50" size="10,10,100">
+        <Box3D spriteSource="sprites/beaver.jpg" />
+        <RigidBody.Kinematic />
+        <SpinningObject _package="pl.AWTGameEngine.custom.performance" />
+    </object>
+
     <object id="vehicle" x="0" y="50" z="0" size="10,10,20">
         <Box3D spriteSource="sprites/beaver.jpg" />
         <Vehicle />

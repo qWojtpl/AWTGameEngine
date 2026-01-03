@@ -71,16 +71,15 @@ public class CameraFX extends ObjectComponent {
     }
 
     @Override
-    public boolean onUpdateRotation(double newX, double newY, double newZ) {
+    public void onUpdateRotation() {
         Platform.runLater(() -> {
             cameraPitch.setRotationAxis(Rotate.X_AXIS);
-            cameraPitch.setRotate(newX);
+            cameraPitch.setRotate(getObject().getRotation().getX());
             cameraYaw.setRotationAxis(Rotate.Y_AXIS);
-            cameraYaw.setRotate(newY);
+            cameraYaw.setRotate(getObject().getRotation().getY());
             perspectiveCamera.setRotationAxis(Rotate.Z_AXIS);
-            perspectiveCamera.setRotate(newZ);
+            perspectiveCamera.setRotate(getObject().getRotation().getZ());
         });
-        return true;
     }
 
     public PerspectiveCamera getPerspectiveCamera() {
