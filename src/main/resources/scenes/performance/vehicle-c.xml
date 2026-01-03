@@ -1,0 +1,10 @@
+<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="360">
+
+    <object id="player">
+        <MovementGL _package="pl.AWTGameEngine.custom" />
+        <MovementFX _package="pl.AWTGameEngine.custom" />
+        <CameraFX />
+        <Client autoConnect="127.0.0.1:5555" />
+    </object>
+
+</scene>

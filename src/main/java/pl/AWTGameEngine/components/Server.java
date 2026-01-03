@@ -95,7 +95,7 @@ public class Server extends ObjectComponent {
                 continue;
             }
             NetBlock block = component.onSynchronize();
-            if(block.getIdentifier() != null) {
+            if(block.getIdentifier() != null && block.getComponent() != null) {
                 blocks.add(block);
             }
         }

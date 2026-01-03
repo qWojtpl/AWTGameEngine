@@ -1,10 +1,12 @@
 package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.annotations.EventMethod;
 import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
 import pl.AWTGameEngine.objects.Sprite;
 
 public abstract class Base3DShape extends ObjectComponent {
@@ -107,6 +109,16 @@ public abstract class Base3DShape extends ObjectComponent {
     @FromXML
     public void setColor(String color) {
         setColor(new ColorObject(color));
+    }
+
+    @Override
+    public NetBlock onSynchronize() {
+        return new NetBlock(getObject().getIdentifier(), this.getClass().getName(), getSprite().getImagePath());
+    }
+
+    @Override
+    public void onSynchronizeReceived(String data) {
+        setSpriteSource(data);
     }
 
 }

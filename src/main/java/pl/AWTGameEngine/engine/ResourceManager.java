@@ -82,6 +82,7 @@ public class ResourceManager {
     }
 
     public Sprite getResourceAsSprite(String name) {
+        String realPath = name;
         name = getResourceName(name);
         if(spriteResources.containsKey(name)) {
             return spriteResources.get(name);
@@ -93,7 +94,7 @@ public class ResourceManager {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
             BufferedImage img = ImageIO.read(stream);
-            Sprite sprite = new Sprite(name, img);
+            Sprite sprite = new Sprite(realPath, img);
             spriteResources.put(name, sprite);
             stream.close();
             return sprite;

@@ -30,7 +30,6 @@ public class NetMessageDeserializer {
                 }
                 Logger.warning(split[0] + " object not found, creating a new one...");
                 object = scene.createGameObject(split[0]);
-                object.setPanel(scene.getPanel());
                 if(server != null) {
                     object.setNetOwner(server.getClientId(client));
                     Logger.warning("Assigned ownership of " + split[0] + " to client " + server.getClientId(client));

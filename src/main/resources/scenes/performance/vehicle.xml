@@ -4,6 +4,7 @@
         <MovementGL _package="pl.AWTGameEngine.custom" />
         <MovementFX _package="pl.AWTGameEngine.custom" />
         <CameraFX />
+        <Server />
     </object>
 
     <object id="floor" x="500" y="-100" z="-500" size="1000,10,1000">
