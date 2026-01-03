@@ -9,7 +9,6 @@ import physx.geometry.PxGeometry;
 import physx.physics.*;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;

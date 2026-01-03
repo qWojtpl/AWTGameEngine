@@ -2,6 +2,7 @@ package pl.AWTGameEngine.custom.performance;
 
 import pl.AWTGameEngine.annotations.ComponentFX;
 import pl.AWTGameEngine.annotations.ComponentGL;
+import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -9,7 +10,7 @@ import pl.AWTGameEngine.objects.GameObject;
 @ComponentFX
 public class SpinningObject extends ObjectComponent {
 
-    private int speed = 10;
+    private double speed = 10;
 
     public SpinningObject(GameObject object) {
         super(object);
@@ -19,6 +20,15 @@ public class SpinningObject extends ObjectComponent {
     public void onUpdate() {
         getObject().setRotation(getObject().getRotation().clone().setX(getObject().getRotation().getX() + speed));
         getObject().setPosition(getObject().getPosition().clone());
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    @FromXML
+    public void setSpeed(String speed) {
+        setSpeed(Double.parseDouble(speed));
     }
 
 }
