@@ -58,7 +58,7 @@ public class Client extends ObjectComponent {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             handleConnection();
             Logger.info("Connected.");
-            requestGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100));
+            requestGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100), new TransformSet());
             requestComponent("player{id}", "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)");
             requestComponent("player{id}", "pl.AWTGameEngine.custom.Movement2D", "discover");
         } catch (IOException e) {
@@ -96,6 +96,11 @@ public class Client extends ObjectComponent {
                     //System.out.println("Received: " + response);
                     NetMessageDeserializer.deserialize(getScene(), response, socket);
                 } catch (Exception e) {
+                    if(response.isEmpty()) {
+                        Logger.error("Server closed a connection.");
+                        disconnect();
+                        return;
+                    }
                     Logger.exception("Cannot read a response (" + response + ")", e);
                 }
             }
@@ -146,9 +151,9 @@ public class Client extends ObjectComponent {
         }
     }
 
-    public void requestGameObject(String identifier, TransformSet position, TransformSet size) {
+    public void requestGameObject(String identifier, TransformSet position, TransformSet size, TransformSet rotation) {
         Logger.info("Requesting object...");
-        sendNetBlock(new NetBlock(identifier, position, size, clientId));
+        sendNetBlock(new NetBlock(identifier, null, position, size, rotation, clientId));
     }
 
     public void requestComponent(String identifier, String component, String data) {

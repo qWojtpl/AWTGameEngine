@@ -78,7 +78,8 @@ public class TransformSet {
                 .replace("y=", "")
                 .replace("z=", "")
                 .replaceAll("\\[", "")
-                .replaceAll("]", ""));
+                .replaceAll("]", "")
+                .replaceAll("TransformSet", ""));
         return this;
     }
 

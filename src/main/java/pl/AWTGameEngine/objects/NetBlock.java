@@ -1,10 +1,13 @@
 package pl.AWTGameEngine.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NetBlock {
 
     private final String identifier;
     private final String component;
-    private final String data;
+    private String data;
 
     public NetBlock() {
         this.identifier = null;
@@ -18,10 +21,10 @@ public class NetBlock {
         this.data = data;
     }
 
-    public NetBlock(String identifier, TransformSet position, TransformSet size, int netOwner) {
+    public NetBlock(String identifier, String component, Object... data) {
         this.identifier = identifier;
-        this.component = null;
-        this.data = position.toString() + size + "╚" + netOwner;
+        this.component = component;
+        formData(data);
     }
 
     public String getIdentifier() {
@@ -34,6 +37,14 @@ public class NetBlock {
 
     public String getData() {
         return this.data;
+    }
+
+    private void formData(Object... objects) {
+        final List<String> stringList = new ArrayList<>();
+        for(Object o : objects) {
+            stringList.add(o.toString());
+        }
+        this.data = String.join("╚", stringList);
     }
 
     public String formMessage() {

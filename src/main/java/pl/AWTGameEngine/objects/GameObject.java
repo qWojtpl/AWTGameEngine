@@ -19,6 +19,7 @@ public class GameObject {
     private TransformSet rotation = new TransformSet(0, 0, 0);
     private TransformSet netCachedPosition = null;
     private TransformSet netCachedSize = null;
+    private QuaternionTransformSet netCachedRotation = null;
     private int netOwner = -1;
     private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
@@ -439,43 +440,56 @@ public class GameObject {
     }
 
     public final NetBlock onPositionSynchronize() {
-        if(getPosition().equals(netCachedPosition) && getSize().equals(netCachedSize)) {
+        if(getPosition().equals(netCachedPosition) && getSize().equals(netCachedSize) && getQuaternionRotation().equals(netCachedRotation)) {
             return new NetBlock();
         }
         netCachedPosition = getPosition();
         netCachedSize = getSize();
+        netCachedRotation = getQuaternionRotation();
         return new NetBlock(
                 getIdentifier(),
+                null, // null component points to GameObject synchronization
                 getPosition(),
                 getSize(),
+                getQuaternionRotation(),
                 netOwner
         );
     }
 
     public final void onPositionSynchronizeReceived(String data, boolean server) {
-        String[] ownerSplit = data.split("╚");
-        String[] split = ownerSplit[0].split("\\[TransformSet");
-        TransformSet newPosition = new TransformSet().deserializeFromToString(split[1]);
-        TransformSet newSize = new TransformSet().deserializeFromToString(split[2]);
-        if(newPosition.equals(netCachedPosition) && newSize.equals(netCachedSize)) {
-            return;
+        String[] split = data.split("╚");
+        TransformSet newPosition = new TransformSet().deserializeFromToString(split[0]);
+        TransformSet newSize = new TransformSet().deserializeFromToString(split[1]);
+        QuaternionTransformSet newRotation = new QuaternionTransformSet().deserializeFromToString(split[2]);
+        if(!newPosition.equals(netCachedPosition)) {
+            // (cl) create -> (srv) received -> (srv) send new -> server don't want a cache to exist in onPositionSynchronize,
+            // because it would be blocked, so if it's a new object, cache won't be initialized here
+            if(netCachedPosition != null) {
+                netCachedPosition = newPosition;
+            }
+            setPosition(newPosition);
         }
-        // (cl) create -> (srv) received -> (srv) send new -> server don't want a cache to exist in onPositionSynchronize,
-        // because it would be blocked, so if it's a new object, cache won't be initialized here
-        if(netCachedPosition != null) {
-            netCachedPosition = newPosition;
-            netCachedSize = newSize;
+        if(!newSize.equals(netCachedSize)) {
+            if(netCachedSize != null) {
+                netCachedSize = newSize;
+            }
+            setSize(newSize);
         }
-        setPosition(newPosition);
-        setSize(newSize);
+        if(!newRotation.equals(netCachedRotation)) {
+            if(netCachedRotation != null) {
+                netCachedRotation = newRotation;
+            }
+            setQuaternionRotation(newRotation);
+        }
         if(!server) {
-            setNetOwner(Integer.parseInt(ownerSplit[1]));
+            setNetOwner(Integer.parseInt(split[3]));
         }
     }
 
     public void clearNetCache() {
         netCachedPosition = null;
         netCachedSize = null;
+        netCachedRotation = null;
     }
 
 }

@@ -53,7 +53,7 @@ public class NetMessageDeserializer {
                 Logger.warning(split[0] + " object doesn't have component " + split[1] + ", adding a new one...");
                 component = clazz.getConstructor(GameObject.class).newInstance(object);
                 object.addComponent(component);
-            }
+            };
             component.onSynchronizeReceived(split[2]);
         } catch(Exception e) {
             Logger.exception("Cannot deserialize message", e);

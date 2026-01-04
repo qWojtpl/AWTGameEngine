@@ -24,6 +24,7 @@ public class MovementGL extends ObjectComponent {
     private Robot robot;
     private boolean noclip = true;
     private double speed = 10;
+    private boolean focused = true;
 
     public MovementGL(GameObject object) {
         super(object);
@@ -41,7 +42,12 @@ public class MovementGL extends ObjectComponent {
 
     @Override
     public void onUpdate() {
-        if(!getWindow().isFocused()) {
+
+        if(getKeyListener().hasPressedKey(27)) { // ESC
+            focused = !focused;
+        }
+
+        if(!getWindow().isFocused() || !focused) {
             return;
         }
 

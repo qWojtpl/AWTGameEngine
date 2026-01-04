@@ -1,14 +1,17 @@
 package pl.AWTGameEngine.objects;
 
 import physx.common.PxQuat;
-import physx.common.PxVec3;
 
 public class QuaternionTransformSet {
 
-    private double x;
-    private double y;
-    private double z;
-    private double w;
+    private double x = 0;
+    private double y = 0;
+    private double z = 0;
+    private double w = 0;
+
+    public QuaternionTransformSet() {
+
+    }
 
     public QuaternionTransformSet(double x, double y, double z, double w) {
         this.x = x;
@@ -58,6 +61,35 @@ public class QuaternionTransformSet {
 
     public QuaternionTransformSet clone() {
         return new QuaternionTransformSet(this.x, this.y, this.z, this.w);
+    }
+
+    public QuaternionTransformSet deserializeFromToString(String data) {
+        deserialize(data
+                .replace("x=", "")
+                .replace("y=", "")
+                .replace("z=", "")
+                .replace("w=", "")
+                .replaceAll("\\[", "")
+                .replaceAll("]", "")
+                .replaceAll("QuaternionTransformSet", ""));
+        return this;
+    }
+
+    public QuaternionTransformSet deserialize(String values) {
+        String[] split = values.split(",");
+        setX(Double.parseDouble(split[0]));
+        setY(Double.parseDouble(split[1]));
+        setZ(Double.parseDouble(split[2]));
+        setW(Double.parseDouble(split[3]));
+        return this;
+    }
+
+    public boolean equals(QuaternionTransformSet quaternionTransformSet) {
+        if(quaternionTransformSet == null) {
+            return false;
+        }
+        return this.x == quaternionTransformSet.getX() && this.y == quaternionTransformSet.getY() &&
+                this.z == quaternionTransformSet.getZ() && this.w == quaternionTransformSet.getW();
     }
 
     @Override
