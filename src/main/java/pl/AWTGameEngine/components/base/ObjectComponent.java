@@ -302,6 +302,11 @@ public abstract class ObjectComponent {
 
     }
 
+    @EventMethod
+    public void onNetUpdate() {
+
+    }
+
     public boolean canSynchronize() {
         return true;
     }

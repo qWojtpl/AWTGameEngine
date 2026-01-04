@@ -95,12 +95,11 @@ public class TransformSet {
         return this;
     }
 
-    //todo: wrong math
     public double distanceTo(TransformSet transformSet) {
-        double xR = Math.abs(this.x - transformSet.getX());
-        double yR = Math.abs(this.y - transformSet.getY());
-        double zR = Math.abs(this.z - transformSet.getZ());
-        return xR + yR + zR;
+        double xR = Math.pow(this.x - transformSet.getX(), 2);
+        double yR = Math.pow(this.y - transformSet.getY(), 2);
+        double zR = Math.pow(this.z - transformSet.getZ(), 2);
+        return Math.sqrt(xR + yR + zR);
     }
 
     public boolean isEmpty() {

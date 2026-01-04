@@ -3,10 +3,13 @@
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
 <!--    <scene source="scenes/screenshooter/filtered.xml" renderEngine="default" />-->
     <object id="player">
-        <MovementGL _package="pl.AWTGameEngine.custom" />
-        <CameraFX />
-        <MovementFX _package="pl.AWTGameEngine.custom" />
+<!--        <MovementGL _package="pl.AWTGameEngine.custom" />-->
+<!--        <CameraFX />-->
+<!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
+        <CameraFollow _package="pl.AWTGameEngine.custom" />
         <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />
+        <FPSMeter _package="pl.AWTGameEngine.custom.performance" />
+        <Server />
     </object>
     <object id="spin" x="20" y="-50" z="20" size="10,10,100">
         <Box3D spriteSource="sprites/beaver.jpg" />

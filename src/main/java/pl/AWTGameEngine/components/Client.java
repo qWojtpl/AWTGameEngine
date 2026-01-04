@@ -93,7 +93,6 @@ public class Client extends ObjectComponent {
                         Logger.info("\t\t-> Server assigned ID " + clientId + " for me.");
                         continue;
                     }
-                    //System.out.println("Received: " + response);
                     NetMessageDeserializer.deserialize(getScene(), response, socket);
                 } catch (Exception e) {
                     if(response.isEmpty()) {
@@ -117,7 +116,7 @@ public class Client extends ObjectComponent {
     }
 
     @Override
-    public void onUpdate() {
+    public void onNetUpdate() {
         List<NetBlock> blocks = new ArrayList<>();
         for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
             if(component.getObject().getNetOwner() != clientId) {

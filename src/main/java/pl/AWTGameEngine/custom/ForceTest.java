@@ -17,7 +17,7 @@ public class ForceTest extends ObjectComponent {
     public void onUpdate() {
         RigidBody.Dynamic rigidBody = (RigidBody.Dynamic) getScene().getGameObjectByName("box0").getComponentByClass(RigidBody.Dynamic.class);
         if(getKeyListener().hasPressedKey(69)) {
-            rigidBody.addForce(new TransformSet(0, 1, 0));
+            rigidBody.addForce(new TransformSet(0, 1, 0), 1);
         }
     }
 

@@ -6,6 +6,7 @@ import pl.AWTGameEngine.components.Box3D;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.custom.CameraFollow;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -21,18 +22,12 @@ public class BoxSpawner extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        spawnBoxes(500);
+        spawnBoxes(1);
     }
 
     @Override
     public void onEverySecond() {
-        System.out.println("Update FPS: " + getWindow().getUpdateLoop().getActualFps());
-        System.out.println("Render FPS: " + getWindow().getRenderLoop().getActualFps());
-        System.out.println("Physics FPS: " + getWindow().getPhysicsLoop().getActualFps());
-        if(getWindow().getUpdateLoop().getActualFps() > 1) {
-            System.out.println("Cubes: " + (getScene().getGameObjects().size() - 3)); // player, floor, textures
-        }
-        System.out.println("Current scene: " + getWindow().getCurrentScene().getName());
+        System.out.println("Cubes: " + (getScene().getGameObjects().size() - 3));
     }
 
     private void spawnBoxes(int count) {
@@ -52,12 +47,14 @@ public class BoxSpawner extends ObjectComponent {
             object.addComponent(box3D);
             object.addComponent(rigidBody);
         }
+        CameraFollow follow = (CameraFollow) (getObject().getComponentByClass(CameraFollow.class));
+        follow.setFollowObject("boxspawner-" + (boxCounter - 1));
     }
 
     @Override
     public void onPhysicsUpdate() {
         if(getKeyListener().hasPressedKey(69)) {
-            spawnBoxes(500);
+            spawnBoxes(1);
         }
     }
 

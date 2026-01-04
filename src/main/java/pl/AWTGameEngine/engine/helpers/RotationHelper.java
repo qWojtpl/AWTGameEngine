@@ -107,4 +107,19 @@ public class RotationHelper {
         return new double[]{lookAtX, lookAtY, lookAtZ};
     }
 
+    public static double[] lookAt(double objPosX, double objPosY, double objPosZ, double targetPosX, double targetPosY, double targetPosZ) {
+
+        double dx = targetPosX - objPosX;
+        double dy = targetPosY - objPosY;
+        double dz = targetPosZ - objPosZ;
+
+        double distXZ = Math.sqrt(dx * dx + dz * dz);
+        if (distXZ < 0.0001) distXZ = 0.0001;
+
+        double yaw = Math.toDegrees(Math.atan2(dx, -dz));
+        double pitch = Math.toDegrees(Math.atan2(dy, distXZ));
+
+        return new double[]{pitch, yaw, 0};
+    }
+
 }

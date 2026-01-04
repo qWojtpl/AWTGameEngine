@@ -22,6 +22,7 @@ public class FPSMeter extends ObjectComponent {
         System.out.println("Update FPS: " + getWindow().getUpdateLoop().getActualFps());
         System.out.println("Render FPS: " + getWindow().getRenderLoop().getActualFps());
         System.out.println("Physics FPS: " + getWindow().getPhysicsLoop().getActualFps());
+        System.out.println("Net FPS: " + getWindow().getNetLoop().getActualFps());
         System.out.println("Current scene: " + getWindow().getCurrentScene().getName());
     }
 

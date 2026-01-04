@@ -68,7 +68,7 @@ public class Server extends ObjectComponent {
     }
 
     @Override
-    public void onUpdate() {
+    public void onNetUpdate() {
         sendObjectsPosition();
         sendComponents();
     }
@@ -79,6 +79,8 @@ public class Server extends ObjectComponent {
             NetBlock block = object.onPositionSynchronize();
             if(block.getIdentifier() != null) {
                 blocks.add(block);
+            } else {
+                Logger.error("Incorrect NetBlock in " + object.getIdentifier());
             }
         }
         for(Socket socket : sockets) {
@@ -97,6 +99,8 @@ public class Server extends ObjectComponent {
             NetBlock block = component.onSynchronize();
             if(block.getIdentifier() != null && block.getComponent() != null) {
                 blocks.add(block);
+            } else {
+                Logger.error("Incorrect NetBlock in " + component.getObject().getIdentifier() + " in component " + component.getClass().getName());
             }
         }
         for(Socket socket : sockets) {
@@ -163,7 +167,6 @@ public class Server extends ObjectComponent {
                 if(message == null) {
                     continue;
                 }
-                //System.out.println("Received: " + message);
                 NetMessageDeserializer.deserialize(getScene(), message, clientSocket, this);
             } catch (IOException e) {
                 disconnect(clientSocket);
@@ -176,6 +179,7 @@ public class Server extends ObjectComponent {
             out.close();
             in.close();
             writers.remove(id);
+            Logger.info("Closed client " + id + " connection.");
         } catch(IOException e) {
             Logger.exception("Cannot close client " + id + " connection", e);
         }

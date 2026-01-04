@@ -1,4 +1,4 @@
-<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="360">
+<scene title="GL 3D Client" renderFPS="144" updateFPS="60" physicsFPS="360">
 
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />

@@ -169,6 +169,12 @@ public class Scene {
         }
     }
 
+    public void netUpdate() {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onNetUpdate")) {
+            component.onNetUpdate();
+        }
+    }
+
     public void updateSecond() {
         for(ObjectComponent component : sceneEventHandler.getComponents("onEverySecond")) {
             component.onEverySecond();

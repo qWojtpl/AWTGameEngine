@@ -6,6 +6,7 @@ import physx.common.PxTransform;
 import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
+import physx.geometry.PxSphereGeometry;
 import physx.physics.*;
 import pl.AWTGameEngine.annotations.*;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -148,8 +149,8 @@ public abstract class RigidBody extends ObjectComponent {
             updateCachedPositions(rigidDynamic.getGlobalPose().getP(), rigidDynamic.getGlobalPose().getQ());
         }
 
-        public void addForce(TransformSet force) {
-            PxVec3 vec3 = new PxVec3((float) force.getX(), (float) force.getY(), (float) force.getZ());
+        public void addForce(TransformSet vector, float force) {
+            PxVec3 vec3 = new PxVec3((float) vector.getX() * force, (float) vector.getY() * force, (float) vector.getZ() * force);
             rigidDynamic.addForce(vec3);
             vec3.destroy();
         }

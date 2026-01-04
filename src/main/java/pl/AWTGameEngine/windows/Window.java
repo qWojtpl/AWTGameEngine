@@ -25,6 +25,7 @@ public class Window extends JFrame {
     private BaseLoop renderLoop;
     private BaseLoop updateLoop;
     private BaseLoop physicsLoop;
+    private BaseLoop netLoop;
     private KeyListener keyListener;
     private WindowListener windowListener;
     private final HashMap<Scene, Boolean> scenes = new HashMap<>();
@@ -111,6 +112,10 @@ public class Window extends JFrame {
         return this.physicsLoop;
     }
 
+    public BaseLoop getNetLoop() {
+        return this.netLoop;
+    }
+
     public KeyListener getKeyListener() {
         return this.keyListener;
     }
@@ -170,6 +175,10 @@ public class Window extends JFrame {
 
     public void setPhysicsLoop(BaseLoop loop) {
         this.physicsLoop = loop;
+    }
+
+    public void setNetLoop(BaseLoop loop) {
+        this.netLoop = loop;
     }
 
     public void setKeyListener(KeyListener listener) {

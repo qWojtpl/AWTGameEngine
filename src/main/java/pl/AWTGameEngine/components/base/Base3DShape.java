@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.EventMethod;
 import pl.AWTGameEngine.annotations.FromXML;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -18,10 +17,8 @@ public abstract class Base3DShape extends ObjectComponent {
     protected boolean updateSize = false;
     protected boolean updateRotation = false;
     protected boolean updateSprite = false;
+    protected boolean netUpdateSprite = false;
     protected boolean updateColor = false;
-    private boolean staticShape = true;
-
-    private double mass = 0.03;
 
     public Base3DShape(GameObject object) {
         super(object);
@@ -61,29 +58,14 @@ public abstract class Base3DShape extends ObjectComponent {
         return this.sprite;
     }
 
-    public boolean isStaticShape() {
-        return this.staticShape;
-    }
-
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
         updateSprite = true;
-    }
-
-    public void setStaticShape(boolean staticShape) {
-        this.staticShape = staticShape;
-    }
-
-    public double getMass() {
-        return this.mass;
+        netUpdateSprite = true;
     }
 
     public ColorObject getColor() {
         return this.color;
-    }
-
-    public void setMass(double mass) {
-        this.mass = mass;
     }
 
     public void setColor(ColorObject color) {
@@ -97,28 +79,32 @@ public abstract class Base3DShape extends ObjectComponent {
     }
 
     @FromXML
-    public void setStaticShape(String staticShape) {
-        setStaticShape(Boolean.parseBoolean(staticShape));
-    }
-
-    @FromXML
-    public void setMass(String mass) {
-        setMass(Double.parseDouble(mass));
-    }
-
-    @FromXML
     public void setColor(String color) {
         setColor(new ColorObject(color));
     }
 
     @Override
+    public boolean canSynchronize() {
+        return netUpdateSprite;
+    }
+
+    @Override
     public NetBlock onSynchronize() {
+        netUpdateSprite = false;
+        if(getSprite() == null) {
+            return new NetBlock();
+        }
         return new NetBlock(getObject().getIdentifier(), this.getClass().getName(), getSprite().getImagePath());
     }
 
     @Override
     public void onSynchronizeReceived(String data) {
         setSpriteSource(data);
+    }
+
+    @Override
+    public void clearNetCache() {
+        netUpdateSprite = true;
     }
 
 }
