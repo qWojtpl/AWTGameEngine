@@ -39,39 +39,19 @@ public class WindowsManager {
         window.setTitle(appProperties.getProperty("title"));
 
         Sprite icon = Dependencies.getResourceManager().getResourceAsSprite(appProperties.getProperty("icon"));
-        if (icon != null) {
+        if(icon != null) {
             window.setIconImage(icon.getImage());
         }
 
         PhysXManager.getInstance();
 
-        BaseLoop updateLoop = new UpdateLoop(window);
-        updateLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));
-        window.setUpdateLoop(updateLoop);
-
-        BaseLoop renderLoop = new RenderLoop(window);
-        renderLoop.setTargetFps(appProperties.getPropertyAsInteger("renderFps"));
-        window.setRenderLoop(renderLoop);
-
-        BaseLoop physicsLoop = new PhysicsLoop(window);
-        physicsLoop.setTargetFps(appProperties.getPropertyAsInteger("physicsFps"));
-        window.setPhysicsLoop(physicsLoop);
-
-        BaseLoop netLoop = new NetLoop(window);
-        netLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));
-        window.setNetLoop(netLoop);
+        createLoops(window);
 
         window.init();
         window.getSceneLoader().loadSceneFile(scenePath, renderEngine, false);
         windows.add(window);
 
-        updateLoop.start();
-
-        if(!server) {
-            renderLoop.start();
-        }
-
-        physicsLoop.start();
+        startLoops(window, server);
 
         return window;
     }
@@ -95,4 +75,35 @@ public class WindowsManager {
     public void removeWindow(Window window) {
         windows.remove(window);
     }
+
+    private void createLoops(Window window) {
+        AppProperties appProperties = Dependencies.getAppProperties();
+        BaseLoop updateLoop = new UpdateLoop(window);
+        updateLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));
+        window.setUpdateLoop(updateLoop);
+
+        BaseLoop renderLoop = new RenderLoop(window);
+        renderLoop.setTargetFps(appProperties.getPropertyAsInteger("renderFps"));
+        window.setRenderLoop(renderLoop);
+
+        BaseLoop physicsLoop = new PhysicsLoop(window);
+        physicsLoop.setTargetFps(appProperties.getPropertyAsInteger("physicsFps"));
+        window.setPhysicsLoop(physicsLoop);
+
+        BaseLoop netLoop = new NetLoop(window);
+        netLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));
+        window.setNetLoop(netLoop);
+    }
+
+    private void startLoops(Window window, boolean server) {
+        window.getUpdateLoop().start();
+
+        if(!server) {
+            window.getRenderLoop().start();
+        }
+
+        window.getPhysicsLoop().start();
+        window.getNetLoop().start();
+    }
+
 }

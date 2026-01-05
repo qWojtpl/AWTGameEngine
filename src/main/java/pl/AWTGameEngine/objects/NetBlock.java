@@ -47,6 +47,10 @@ public class NetBlock {
         this.data = String.join("╚", stringList);
     }
 
+    public boolean isEmpty() {
+        return this.identifier == null && this.component == null && this.data == null;
+    }
+
     public String formMessage() {
         return getIdentifier() + ";" + getComponent() + ";" + getData();
     }

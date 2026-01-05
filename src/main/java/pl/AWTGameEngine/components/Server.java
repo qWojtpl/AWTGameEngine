@@ -77,6 +77,9 @@ public class Server extends ObjectComponent {
         List<NetBlock> blocks = new ArrayList<>();
         for(GameObject object : getScene().getGameObjects()) {
             NetBlock block = object.onPositionSynchronize();
+            if(block.isEmpty()) {
+                continue;
+            }
             if(block.getIdentifier() != null) {
                 blocks.add(block);
             } else {
@@ -97,6 +100,9 @@ public class Server extends ObjectComponent {
                 continue;
             }
             NetBlock block = component.onSynchronize();
+            if(block.isEmpty()) {
+                continue;
+            }
             if(block.getIdentifier() != null && block.getComponent() != null) {
                 blocks.add(block);
             } else {
