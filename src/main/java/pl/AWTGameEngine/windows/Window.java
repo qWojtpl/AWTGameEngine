@@ -73,9 +73,6 @@ public class Window extends JFrame {
         setWindowListener(new WindowListener(this));
         setLayeredPane(new JLayeredPane());
         addComponentListener(getWindowListener());
-        if (!serverWindow) {
-            setVisible(true);
-        }
     }
 
     public void updateRatio(int r1, int r2) {

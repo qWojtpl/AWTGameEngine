@@ -19,6 +19,8 @@ public class WindowsManager {
     private Window defaultWindow;
     private Font defaultFont;
 
+    private SplashScreenWindow splashScreenWindow;
+
     public Window createWindow(String scenePath) {
         return createWindow(scenePath, null);
     }
@@ -57,7 +59,14 @@ public class WindowsManager {
     }
 
     public void createDefaultWindow() {
+        splashScreenWindow = new SplashScreenWindow();
+        splashScreenWindow.init();
         defaultWindow = createWindow(Dependencies.getAppProperties().getProperty("main"));
+        if(!defaultWindow.isServerWindow()) {
+            defaultWindow.setVisible(true);
+        }
+        splashScreenWindow.close();
+        splashScreenWindow = null;
     }
 
     public Window getDefaultWindow() {
@@ -74,6 +83,10 @@ public class WindowsManager {
 
     public void removeWindow(Window window) {
         windows.remove(window);
+    }
+
+    public SplashScreenWindow getSplashScreenWindow() {
+        return this.splashScreenWindow;
     }
 
     private void createLoops(Window window) {
