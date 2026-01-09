@@ -245,6 +245,11 @@ public abstract class RigidBody extends ObjectComponent {
             transform.destroy();
         }
 
+        @Override
+        public void addForce(TransformSet vector, float force) {
+            throw new RuntimeException("Body must be non-kinematic. Kinematic add force may be implemented later.");
+        }
+
     }
 
     // Events

@@ -12,7 +12,8 @@ import java.util.HashMap;
 public class WebText extends HTMLComponent {
 
     private String pattern;
-    private int size;
+    private int size = 0;
+    private int padding = 0;
     private ColorObject color;
     private final HashMap<String, String> values = new HashMap<>();
 
@@ -56,13 +57,22 @@ public class WebText extends HTMLComponent {
         this.size = size;
     }
 
+    public void setPadding(int padding) {
+        this.padding = padding;
+    }
+
+    @FromXML
+    public void setPadding(String padding) {
+        setPadding(Integer.parseInt(padding));
+    }
+
     @Override
     public String getRenderString() {
         String text = pattern;
         for(String key : values.keySet()) {
             text = text.replace("{" + key + "}", values.get(key));
         }
-        return "<h1 style=\"color:" + this.color.serialize() + ";font-size:" + size + "px\">" + text + "</h1>";
+        return "<h1 style=\"color:" + this.color.serialize() + ";font-size:" + size + "px;padding:" + padding + "px\">" + text + "</h1>";
     }
 
 

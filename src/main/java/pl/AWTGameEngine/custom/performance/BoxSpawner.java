@@ -25,11 +25,6 @@ public class BoxSpawner extends ObjectComponent {
         spawnBoxes(1);
     }
 
-    @Override
-    public void onEverySecond() {
-        System.out.println("Cubes: " + (getScene().getGameObjects().size() - 3));
-    }
-
     private void spawnBoxes(int count) {
         int size = 10;
 //        for(int i = 0; i < boxCounter; i++) {
@@ -54,7 +49,7 @@ public class BoxSpawner extends ObjectComponent {
     @Override
     public void onPhysicsUpdate() {
         if(getKeyListener().hasPressedKey(69)) {
-            spawnBoxes(1);
+            spawnBoxes(100);
         }
     }
 

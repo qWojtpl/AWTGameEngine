@@ -1,10 +1,11 @@
 <!--todo renderFPS default value if not set-->
 <scene title="3D scene" renderFPS="144" updateFPS="144" physicsFPS="360">
     <object id="server">
-        <Client autoConnect="127.0.0.1:3308" />
+<!--        <Client autoConnect="127.0.0.1:3308" />-->
     </object>
     <object id="player">
-        <Movement3D _package="pl.AWTGameEngine.custom" />
+        <MovementFX _package="pl.AWTGameEngine.custom" />
+        <MovementGL _package="pl.AWTGameEngine.custom" />
         <CameraFX />
     </object>
     <object id="small1" position="0,1005,200" size="1,1,1">
@@ -16,7 +17,7 @@
         <RigidBody.Dynamic />
     </object>
     <object id="small3" position="0,1007,200" size="1,1,1">
-        <Box3D staticShape="false" color="rgba(255,0,0,125)" />
+        <Box3D color="rgba(255,0,0,125)" />
         <RigidBody.Dynamic />
     </object>
     <object id="box1" position="0,100,200" size="5,5,5">

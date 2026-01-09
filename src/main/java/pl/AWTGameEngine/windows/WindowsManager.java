@@ -55,18 +55,14 @@ public class WindowsManager {
 
         startLoops(window, server);
 
+        showWindow(window);
+
         return window;
     }
 
     public void createDefaultWindow() {
-        splashScreenWindow = new SplashScreenWindow();
-        splashScreenWindow.init();
+        showSplashScreen();
         defaultWindow = createWindow(Dependencies.getAppProperties().getProperty("main"));
-        if(!defaultWindow.isServerWindow()) {
-            defaultWindow.setVisible(true);
-        }
-        splashScreenWindow.close();
-        splashScreenWindow = null;
     }
 
     public Window getDefaultWindow() {
@@ -117,6 +113,21 @@ public class WindowsManager {
 
         window.getPhysicsLoop().start();
         window.getNetLoop().start();
+    }
+
+    private void showSplashScreen() {
+        splashScreenWindow = new SplashScreenWindow();
+        splashScreenWindow.init();
+    }
+
+    public void showWindow(Window window) {
+        if(!window.isServerWindow()) {
+            window.setVisible(true);
+        }
+        if(splashScreenWindow != null) {
+            splashScreenWindow.close();
+            splashScreenWindow = null;
+        }
     }
 
 }

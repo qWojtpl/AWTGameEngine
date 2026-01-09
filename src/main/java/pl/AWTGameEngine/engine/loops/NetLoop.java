@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.engine.loops;
 
-import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
