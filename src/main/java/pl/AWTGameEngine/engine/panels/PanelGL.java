@@ -91,10 +91,18 @@ public class PanelGL extends JLayeredPane implements PanelObject {
             return;
         }
 
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsPreUpdate")) {
+            component.onPhysicsPreUpdate();
+        }
+
         physXManager.simulateFrame(getWindow().getPhysicsLoop().getTargetFps());
 
         for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
             component.onPhysicsUpdate();
+        }
+
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsAfterUpdate")) {
+            component.onPhysicsAfterUpdate();
         }
     }
 

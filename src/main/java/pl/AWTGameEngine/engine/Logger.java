@@ -15,6 +15,8 @@ public class Logger {
     private static boolean logFile = false;
     private static boolean callerClass = false;
 
+    private static String lastLog = "";
+
     Logger() {
 
     }
@@ -35,6 +37,7 @@ public class Logger {
         if(Logger.level < level) {
             return;
         }
+        lastLog = message;
         String className = "";
         if(callerClass) {
             int stackTraceIndex = 2;
@@ -141,6 +144,10 @@ public class Logger {
             return "0" + number;
         }
         return number + "";
+    }
+
+    public static String getLastLog() {
+        return lastLog;
     }
 
     public enum ConsoleColor {

@@ -2,6 +2,7 @@ package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.TextRenderer;
+import pl.AWTGameEngine.engine.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class SplashScreenWindow extends JFrame {
 
     private final int width = 400;
     private final int height = 200;
-    private final int rows = 2;
+    private final int rows = 3;
     private final int columns = 3;
 
     public void init() {
@@ -31,24 +32,41 @@ public class SplashScreenWindow extends JFrame {
         setCursor(Cursor.WAIT_CURSOR);
         GridLayout grid = new GridLayout(rows, columns);
         setLayout(grid);
+        //
         addLabel("");
         addLabel("Loading", 20);
         addLabel("");
+        //
+        addLabel("");
+        JLabel logLabel = addLabel(Logger.getLastLog(), 10);
+        addLabel("");
+        //
         addLabel("");
         addLogo("/sprites/base/opengl_logo.png");
         addLabel("");
         setVisible(true);
+        new Thread(() -> {
+            while(isVisible()) {
+                logLabel.setText(Logger.getLastLog());
+                try {
+                    //noinspection BusyWait
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, "SPLASHSCREEN-LOG-LABEL").start();
     }
 
     public void close() {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
-    private void addLabel(String text) {
-        addLabel(text, 0);
+    private JLabel addLabel(String text) {
+        return addLabel(text, 0);
     }
 
-    private void addLabel(String text, float fontSize) {
+    private JLabel addLabel(String text, float fontSize) {
         JLabel label = new JLabel(text);
         if(fontSize != 0) {
             label.setFont(label.getFont().deriveFont(fontSize));
@@ -57,6 +75,7 @@ public class SplashScreenWindow extends JFrame {
         label.setVerticalAlignment(SwingConstants.CENTER);
         label.setSize(width / columns, height / rows);
         add(label);
+        return label;
     }
 
     private void addLogo(String source) {

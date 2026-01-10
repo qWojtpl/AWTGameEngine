@@ -59,10 +59,18 @@ public class DefaultPanel extends JPanel implements PanelObject {
             return;
         }
 
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsPreUpdate")) {
+            component.onPhysicsPreUpdate();
+        }
+
         PhysXManager.getInstance().simulateFrame(getWindow().getPhysicsLoop().getTargetFps());
 
         for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
             component.onPhysicsUpdate();
+        }
+
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsAfterUpdate")) {
+            component.onPhysicsAfterUpdate();
         }
     }
     @Override

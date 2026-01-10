@@ -86,9 +86,18 @@ public class PanelFX extends JFXPanel implements PanelObject {
 
     @Override
     public void updatePhysics() {
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsPreUpdate")) {
+            component.onPhysicsPreUpdate();
+        }
+
         physXManager.simulateFrame(getWindow().getPhysicsLoop().getTargetFps());
-        for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onPhysicsUpdate")) {
+
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
             component.onPhysicsUpdate();
+        }
+
+        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsAfterUpdate")) {
+            component.onPhysicsAfterUpdate();
         }
     }
 
