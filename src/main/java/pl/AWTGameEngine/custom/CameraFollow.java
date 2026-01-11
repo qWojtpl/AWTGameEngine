@@ -21,7 +21,7 @@ public class CameraFollow extends ObjectComponent {
     }
 
     @Override
-    public void onPhysicsAfterUpdate() {
+    public void onPhysicsUpdate() {
         if(followObject == null) {
             return;
         }

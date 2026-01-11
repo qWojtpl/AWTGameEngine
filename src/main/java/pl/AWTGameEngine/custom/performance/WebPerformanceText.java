@@ -17,7 +17,7 @@ public class WebPerformanceText extends WebText {
         setSize(18);
         setPadding(20);
         setColor("rgb(16,16,16)");
-        setPattern("Update FPS: {updateFPS}<br>Render FPS: {renderFPS}<br>Physics FPS: {physicsFPS}<br>Net FPS: {netFPS}<br>Objects: {objects}");
+        setPattern("Update FPS: {updateFPS}<br>Render FPS: {renderFPS}<br>Physics FPS: {physicsFPS}<br>Net FPS: {netFPS}<br>Objects: {objects}<br>Total threads: {threads}");
     }
 
     @Override
@@ -27,6 +27,7 @@ public class WebPerformanceText extends WebText {
         setValue("physicsFPS", getFpsString(getWindow().getPhysicsLoop()));
         setValue("netFPS", getFpsString(getWindow().getNetLoop()));
         setValue("objects", getWindow().getCurrentScene().getGameObjects().size() + "");
+        setValue("threads", Thread.getAllStackTraces().size() + "");
     }
 
     private String getFpsString(BaseLoop loop) {

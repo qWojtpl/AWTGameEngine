@@ -8,6 +8,8 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.NetBlock;
 import pl.AWTGameEngine.objects.Sprite;
 
+import java.util.Objects;
+
 public abstract class Base3DShape extends ObjectComponent {
 
     protected Sprite sprite;
@@ -22,6 +24,7 @@ public abstract class Base3DShape extends ObjectComponent {
 
     public Base3DShape(GameObject object) {
         super(object);
+        setSpriteSource("sprites/default.jpg");
     }
 
     protected abstract void createShape();
@@ -59,6 +62,7 @@ public abstract class Base3DShape extends ObjectComponent {
     }
 
     public void setSprite(Sprite sprite) {
+        Objects.requireNonNull(sprite);
         this.sprite = sprite;
         updateSprite = true;
         netUpdateSprite = true;
