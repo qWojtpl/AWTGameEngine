@@ -15,6 +15,7 @@ import pl.AWTGameEngine.objects.TransformSet;
 public class BoxSpawner extends ObjectComponent {
 
     private int boxCounter = 0;
+    private GameObject lastObject;
 
     public BoxSpawner(GameObject object) {
         super(object);
@@ -42,8 +43,11 @@ public class BoxSpawner extends ObjectComponent {
             object.addComponent(box3D);
             object.addComponent(rigidBody);
         }
-        CameraFollow follow = (CameraFollow) (getObject().getComponentByClass(CameraFollow.class));
-        follow.setFollowObject("boxspawner-" + (boxCounter - 1));
+        if(lastObject != null) {
+            lastObject.removeComponent(lastObject.getComponentByClass(CameraFollow.class));
+        }
+        lastObject = getScene().getGameObjectByName("boxspawner-" + (boxCounter - 1));
+        lastObject.addComponent(new CameraFollow(lastObject));
     }
 
     @Override

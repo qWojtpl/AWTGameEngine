@@ -34,6 +34,11 @@ public class WebPanel extends JFXPanel implements PanelObject {
         setBackground(Color.BLACK);
 
         this.camera = new Camera(this);
+
+        if(window.isServerWindow()) {
+            return;
+        }
+
         Platform.runLater(() -> {
             this.webView = new WebView();
 

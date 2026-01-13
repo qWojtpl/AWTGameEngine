@@ -26,10 +26,8 @@ public class PanelGL extends JLayeredPane implements PanelObject {
     private final Scene scene;
     private final Window window;
     private final Camera camera;
-    private final GraphicsManager3D graphicsManager3D;
+    private GraphicsManager3D graphicsManager3D;
     private final PhysXManager physXManager;
-    private final HashMap<String, Sprite> prepareTextures = new HashMap<>();
-    private final HashMap<String, Texture> textures = new HashMap<>();
     private final BufferedImage printBuffer;
     private GLProfile profile;
     private GLCapabilities capabilities;
@@ -40,11 +38,13 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         this.scene = scene;
         this.window = scene.getWindow();
         this.camera = new Camera(this);
-        this.graphicsManager3D = new GraphicsManagerGL(this);
         this.physXManager = PhysXManager.getInstance();
-        initOpenGL(width, height);
+        if(!window.isServerWindow()) {
+            this.graphicsManager3D = new GraphicsManagerGL(this);
+            initOpenGL(width, height);
+            initListeners();
+        }
         printBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        initListeners();
     }
 
     @Override
@@ -113,6 +113,9 @@ public class PanelGL extends JLayeredPane implements PanelObject {
     }
 
     public void setMouseListener(MouseListener mouseListener) {
+        if(gljPanel == null) {
+            return;
+        }
         if (this.mouseListener != null) {
             gljPanel.removeMouseListener(this.mouseListener);
             gljPanel.removeMouseMotionListener(this.mouseListener);
@@ -131,12 +134,12 @@ public class PanelGL extends JLayeredPane implements PanelObject {
 
     private void initOpenGL(int width, int height) {
         Logger.info("Initializing OpenGL...");
-        profile = GLProfile.get(GLProfile.GL2);
+        profile = GLProfile.get(GLProfile.GL4bc);
         capabilities = new GLCapabilities(profile);
         capabilities.setDepthBits(24);
         gljPanel = new GLJPanel(capabilities);
         gljPanel.setSize(width, height);
-        gljPanel.addGLEventListener(new OpenGLInitializer(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D, prepareTextures, textures));
+        gljPanel.addGLEventListener(new OpenGLInitializer(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D));
         gljPanel.setFocusable(false);
         add(gljPanel);
         Logger.info("OpenGL initialized.");
@@ -149,7 +152,9 @@ public class PanelGL extends JLayeredPane implements PanelObject {
     @Override
     public void setSize(Dimension dimension) {
         super.setSize(dimension);
-        gljPanel.setSize(dimension);
+        if(gljPanel != null) {
+            gljPanel.setSize(dimension);
+        }
     }
 
     public GLProfile getGlProfile() {

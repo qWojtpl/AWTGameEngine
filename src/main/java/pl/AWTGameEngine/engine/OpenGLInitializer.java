@@ -21,18 +21,14 @@ public class OpenGLInitializer implements GLEventListener {
     private final Camera camera;
     private final GLProfile profile;
     private final GraphicsManagerGL graphicsManagerGL;
-    private final HashMap<String, Sprite> prepareTextures;
-    private final HashMap<String, Texture> textures;
     private int program;
 
-    public OpenGLInitializer(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL, HashMap<String, Sprite> prepareTextures, HashMap<String, Texture> textures) {
+    public OpenGLInitializer(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL) {
         this.scene = scene;
         this.window = scene.getWindow();
         this.camera = camera;
         this.profile = profile;
         this.graphicsManagerGL = graphicsManagerGL;
-        this.prepareTextures = prepareTextures;
-        this.textures = textures;
     }
 
     int pixelSizeLoc;
@@ -53,12 +49,6 @@ public class OpenGLInitializer implements GLEventListener {
 
         gl.glClearColor(0.192156863f, 0.337254902f, 0.474509804f, 1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
-
-        for(String name : prepareTextures.keySet()) {
-            textures.put(name, AWTTextureIO.newTexture(profile, prepareTextures.get(name).getImage(), true));
-        }
-
-        prepareTextures.clear();
 
         gl.setSwapInterval(0);
         gl.glEnable(GL4.GL_TEXTURE_2D);
@@ -83,6 +73,12 @@ public class OpenGLInitializer implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         gl.glUseProgram(program);
 
+        for (ObjectComponent c :
+                scene.getSceneEventHandler()
+                        .getComponents("on3DRenderRequest#GraphicsManager3D")) {
+            c.on3DRenderRequest(graphicsManagerGL);
+        }
+
         float[] projection = MatrixHelper.perspective(
                 60f,
                 window.getWidth() / (float) window.getHeight(),
@@ -92,12 +88,6 @@ public class OpenGLInitializer implements GLEventListener {
 
         float[] view = MatrixHelper.lookAt(camera);
         float[] viewProj = MatrixHelper.mul(projection, view);
-
-        for (ObjectComponent c :
-                scene.getSceneEventHandler()
-                        .getComponents("on3DRenderRequest#GraphicsManager3D")) {
-            c.on3DRenderRequest(graphicsManagerGL);
-        }
 
         graphicsManagerGL.drawScene(gl, program, viewProj);
         gl.glUseProgram(0);

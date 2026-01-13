@@ -30,6 +30,10 @@ public class Box3D extends Base3DShape {
     @Override
     protected void createShape() {
 
+        if(graphicsManager3D == null) {
+            return;
+        }
+
         GraphicsManager3D.RenderOptions options = new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
