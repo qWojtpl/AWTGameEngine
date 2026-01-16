@@ -11,8 +11,6 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 
-import java.awt.*;
-
 @ComponentFX
 @ComponentGL
 @Unique
@@ -21,6 +19,7 @@ public class CameraFollow extends ObjectComponent {
     private double radius = 200;
     private double verticalAngle = 30;
     private double horizontalAngle = 0;
+    private boolean rotateUsingMouse = true;
 
     public CameraFollow(GameObject object) {
         super(object);
@@ -60,6 +59,32 @@ public class CameraFollow extends ObjectComponent {
 
     @Override
     public void onUpdate() {
+        if(!rotateUsingMouse) {
+            return;
+        }
+        double mouseX = getMouseListener().getMouseScreenX();
+        double mouseY = getMouseListener().getMouseScreenY();
+        double[] center = getWindow().getScreenCenter();
+        double delta = mouseX - center[0];
+        boolean updateCamera = false;
+        if(delta != 0) {
+            horizontalAngle -= delta;
+            updateCamera = true;
+        }
+        delta = mouseY - center[1];
+        if(delta != 0) {
+            if(verticalAngle + delta < 0) {
+                verticalAngle = 0;
+            } else if(verticalAngle + delta >= 89.9) {
+                verticalAngle = 89.9;
+            } else {
+                verticalAngle += delta;
+            }
+            updateCamera = true;
+        }
+        if(updateCamera) {
+            updateCamera();
+        }
         getWindow().moveMouseToCenter();
     }
 
@@ -79,6 +104,10 @@ public class CameraFollow extends ObjectComponent {
 
     public double getVerticalAngle() {
         return this.verticalAngle;
+    }
+
+    public boolean isRotatingUsingMouse() {
+        return this.rotateUsingMouse;
     }
 
     public void setRadius(double radius) {
@@ -106,6 +135,15 @@ public class CameraFollow extends ObjectComponent {
     @FromXML
     public void setVerticalAngle(String angle) {
         setVerticalAngle(Integer.parseInt(angle));
+    }
+
+    public void setRotateUsingMouse(boolean rotate) {
+        this.rotateUsingMouse = rotate;
+    }
+
+    @FromXML
+    public void setRotateUsingMouse(String rotate) {
+        setRotateUsingMouse(Boolean.parseBoolean(rotate));
     }
 
 }
