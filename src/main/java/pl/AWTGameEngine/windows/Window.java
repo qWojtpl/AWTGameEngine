@@ -33,6 +33,9 @@ public class Window extends JFrame {
     private boolean fullScreen;
     private final Font font;
     private Cursor cursor;
+    private Robot robot;
+    private double screenWidth;
+    private double screenHeight;
 
     public Window(boolean serverWindow) {
         this.serverWindow = serverWindow;
@@ -43,6 +46,43 @@ public class Window extends JFrame {
                 appProperties.getPropertyAsInteger("fontSize")
         );
         getContentPane().setBackground(Color.BLACK);
+    }
+
+    public void moveMouseTo(double x, double y) {
+        if(!isFocused() || !isVisible()) {
+            return;
+        }
+        if(robot == null) {
+            initRobot();
+        }
+        robot.mouseMove((int) x, (int) y);
+    }
+
+    public void moveMouseToCenter() {
+        if(!isVisible()) {
+            return;
+        }
+        if(robot == null) {
+            initRobot();
+        }
+        double[] screenCenter = getScreenCenter();
+        moveMouseTo(screenCenter[0], screenCenter[1]);
+    }
+
+    public double[] getScreenCenter() {
+        return new double[]{screenWidth / 2, screenHeight / 2};
+    }
+
+    private void initRobot() {
+        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        try {
+            this.robot = new Robot(device);
+        } catch(Exception e) {
+            Logger.exception("Error while initializing mouse moving Robot", e);
+        }
+        Rectangle bounds = device.getConfigurations()[0].getBounds();
+        screenWidth = bounds.getWidth();
+        screenHeight = bounds.getHeight();
     }
 
     public void close() {

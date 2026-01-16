@@ -6,7 +6,7 @@ import pl.AWTGameEngine.components.base.HTMLComponent;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 @WebComponent
 public class WebText extends HTMLComponent {
@@ -15,7 +15,7 @@ public class WebText extends HTMLComponent {
     private int size = 0;
     private int padding = 0;
     private ColorObject color;
-    private final HashMap<String, String> values = new HashMap<>();
+    private final ConcurrentHashMap<String, String> values = new ConcurrentHashMap<>();
 
     public WebText(GameObject object) {
         super(object);

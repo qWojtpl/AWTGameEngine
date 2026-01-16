@@ -100,6 +100,7 @@ public class OpenGLInitializer implements GLEventListener {
     }
 
     private int createProgram(GL4 gl, String shaderName) {
+        Logger.info("Compiling shader: " + shaderName + "...");
         int vs = compileShader(gl, GL4.GL_VERTEX_SHADER, getShaderFile(shaderName + ".vert"));
         int fs = compileShader(gl, GL4.GL_FRAGMENT_SHADER, getShaderFile(shaderName + ".frag"));
 

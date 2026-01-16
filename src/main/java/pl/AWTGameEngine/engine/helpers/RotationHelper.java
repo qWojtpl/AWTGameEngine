@@ -122,4 +122,26 @@ public class RotationHelper {
         return new double[]{pitch, yaw, 0};
     }
 
+    /**
+     * Helper to provide radius rotation around the object.
+     * @param objPosX Object x
+     * @param objPosY Object y
+     * @param objPosZ Object z
+     * @param radius  Radius around the object
+     * @param verticalAngle Horizontal angle
+     * @param horizontalAngle Vertical angle
+     * @return Array of double with 3 values: calculated X, Y and Z for camera
+     */
+    public static double[] radiusLook(double objPosX, double objPosY, double objPosZ, double radius, double verticalAngle, double horizontalAngle) {
+
+        double theta = horizontalAngle * Math.PI / 180;
+        double phi = verticalAngle * Math.PI / 180;
+
+        double camX = objPosX + radius * Math.cos(phi) * Math.sin(theta);
+        double camY = objPosY + radius * Math.sin(phi);
+        double camZ = objPosZ + radius * Math.cos(phi) * Math.cos(theta);
+
+        return new double[]{camX, camY, camZ};
+    }
+
 }

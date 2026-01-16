@@ -19,25 +19,12 @@ import java.awt.*;
 )
 public class MovementGL extends ObjectComponent {
 
-    private final int CENTER_X;
-    private final int CENTER_Y;
-    private Robot robot;
     private boolean noclip = true;
     private double speed = 10;
     private boolean focused = true;
 
     public MovementGL(GameObject object) {
         super(object);
-        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        try {
-            this.robot = new Robot(device);
-        } catch(Exception e) {
-            Logger.exception("Error initializing MovementGL component", e);
-        }
-        Rectangle bounds = device.getConfigurations()[0].getBounds();
-        CENTER_X = (int) (bounds.getWidth() / 2);
-        CENTER_Y = (int) (bounds.getHeight() / 2);
-        moveMouse();
     }
 
     @Override
@@ -47,7 +34,7 @@ public class MovementGL extends ObjectComponent {
             focused = !focused;
         }
 
-        if(!getWindow().isFocused() || !focused) {
+        if(!focused) {
             return;
         }
 
@@ -103,14 +90,16 @@ public class MovementGL extends ObjectComponent {
         int mouseX = getMouseListener().getMouseScreenX();
         int mouseY = getMouseListener().getMouseScreenY();
 
-        int delta = CENTER_X - mouseX;
+        double[] screenCenter = getWindow().getScreenCenter();
+
+        int delta = (int) (screenCenter[0] - mouseX);
         if(delta != 0) {
             moveMouse();
         }
         double newRotationY = getCamera().getRotation().getY() + delta * -1;
         newRotationY = newRotationY % 360;
 
-        delta = CENTER_Y - mouseY;
+        delta = (int) (screenCenter[1] - mouseY);
         if(delta != 0) {
             moveMouse();
         }
@@ -127,7 +116,7 @@ public class MovementGL extends ObjectComponent {
     }
 
     private void moveMouse() {
-        robot.mouseMove(CENTER_X, CENTER_Y);
+        getWindow().moveMouseToCenter();
     }
 
     public boolean isNoclip() {
