@@ -62,6 +62,15 @@ public class EventHandler {
         return returnedEvents;
     }
 
+    public int getNumberOfRegisteredEvents() {
+        int c = 0;
+        HashMap<String, List<ObjectComponent>> registered = getRegisteredEvents();
+        for(String key : registered.keySet()) {
+            c += registered.get(key).size();
+        }
+        return c;
+    }
+
     public static boolean isMethodOverridden(final Method myMethod) {
         Class<?> declaringClass = myMethod.getDeclaringClass();
         if(declaringClass.equals(Object.class)) {
