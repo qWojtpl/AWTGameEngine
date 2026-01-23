@@ -1,6 +1,7 @@
 package pl.AWTGameEngine;
 
 import pl.AWTGameEngine.engine.AppProperties;
+import pl.AWTGameEngine.engine.Preferences;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.windows.WindowsManager;
 
@@ -9,6 +10,7 @@ public class Dependencies {
     private static WindowsManager windowsManager;
     private static AppProperties appProperties;
     private static ResourceManager resourceManager;
+    private static Preferences preferences;
 
     public static WindowsManager getWindowsManager() {
         if(windowsManager == null) {
@@ -31,6 +33,13 @@ public class Dependencies {
         return resourceManager;
     }
 
+    public static Preferences getPreferences() {
+        if(preferences == null) {
+            preferences = new Preferences();
+        }
+        return preferences;
+    }
+
     public static void setWindowsManager(WindowsManager windowsManager) {
         Dependencies.windowsManager = windowsManager;
     }
@@ -41,6 +50,10 @@ public class Dependencies {
 
     public static void setResourceManager(ResourceManager resourceManager) {
         Dependencies.resourceManager = resourceManager;
+    }
+
+    public static void setPreferences(Preferences preferences) {
+        Dependencies.preferences = preferences;
     }
 
 }

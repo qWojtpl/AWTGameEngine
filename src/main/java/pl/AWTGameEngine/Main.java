@@ -1,6 +1,7 @@
 package pl.AWTGameEngine;
 
 import pl.AWTGameEngine.engine.AppProperties;
+import pl.AWTGameEngine.engine.CommandConsole;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.scenes.SceneBuilder;
 
@@ -25,6 +26,8 @@ public class Main {
         Logger.info("Requesting default window...");
         Dependencies.getWindowsManager().createDefaultWindow();
         Logger.info("Started app.");
+        Dependencies.getPreferences();
+        CommandConsole.execute("preferences get -key test");
     }
 
     private static boolean isSceneBuilder(String[] args) {

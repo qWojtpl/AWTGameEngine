@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.scenes;
 
+import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.panels.PanelObject;
@@ -29,6 +30,7 @@ public class Scene {
         setSceneEventHandler(new EventHandler());
     }
 
+    @Command("name")
     public String getName() {
         return this.name;
     }

@@ -1,6 +1,8 @@
 package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.annotations.Command;
+import pl.AWTGameEngine.engine.CommandConsole;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.RenderEngine;
@@ -13,7 +15,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WindowsManager {
+@Command("wmanager")
+public class WindowsManager extends CommandConsole.ParentCommand {
 
     private final List<Window> windows = new ArrayList<>();
     private Window defaultWindow;
@@ -21,6 +24,7 @@ public class WindowsManager {
 
     private SplashScreenWindow splashScreenWindow;
 
+    @Command(value = "create", argumentNames = { "path" })
     public Window createWindow(String scenePath) {
         return createWindow(scenePath, null);
     }
@@ -60,11 +64,13 @@ public class WindowsManager {
         return window;
     }
 
+    @Command("createDefault")
     public void createDefaultWindow() {
         showSplashScreen();
         defaultWindow = createWindow(Dependencies.getAppProperties().getProperty("main"));
     }
 
+    @Command("default")
     public Window getDefaultWindow() {
         return defaultWindow;
     }
