@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.Command;
+import pl.AWTGameEngine.engine.helpers.TextUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -8,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class CommandConsole {
 
@@ -99,7 +101,7 @@ public class CommandConsole {
             try {
                 bobTheBuilder.append("\t");
                 bobTheBuilder.append(field.getName());
-                bobTheBuilder.append(getSpaces(field.getName(), 30));
+                bobTheBuilder.append(TextUtils.getSpaces(field.getName(), 30));
                 bobTheBuilder.append(field.get(object));
                 bobTheBuilder.append("\n");
             } catch (IllegalAccessException e) {
@@ -125,12 +127,17 @@ public class CommandConsole {
         commands.add(instance);
     }
 
-    private static String getSpaces(String word, int target) {
-        StringBuilder builder = new StringBuilder();
-        for(int i = word.length(); i < target; i++) {
-            builder.append(" ");
-        }
-        return builder.toString();
+    public static void runScanner() {
+        new Thread(() ->  {
+            while(true) {
+                Scanner scanner = new Scanner(System.in);
+                execute(scanner.nextLine());
+            }
+        }).start();
+    }
+
+    public static void pass() {
+        System.out.print("> ");
     }
 
     private static class ExecutableCommand {

@@ -26,8 +26,7 @@ public class Main {
         Logger.info("Requesting default window...");
         Dependencies.getWindowsManager().createDefaultWindow();
         Logger.info("Started app.");
-        Dependencies.getPreferences();
-        CommandConsole.execute("preferences get -key test");
+        CommandConsole.runScanner();
     }
 
     private static boolean isSceneBuilder(String[] args) {
