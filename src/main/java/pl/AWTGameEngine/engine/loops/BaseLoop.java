@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.engine.loops;
 
+import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.windows.Window;
 
 @SuppressWarnings("BusyWait")
@@ -54,6 +55,7 @@ public abstract class BaseLoop extends Thread {
         return this.window;
     }
 
+    @Command("targetFps")
     public double getTargetFps() {
         return this.targetFps;
     }
@@ -63,6 +65,7 @@ public abstract class BaseLoop extends Thread {
         actualFps = fps;
     }
 
+    @Command("actualFps")
     public double getActualFps() {
         return this.actualFps;
     }

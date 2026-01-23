@@ -5,6 +5,7 @@ import pl.AWTGameEngine.engine.helpers.TextUtils;
 import pl.AWTGameEngine.windows.Window;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class CommandConsole {
     private static final List<ParentCommand> commands = new ArrayList<>();
 
     public static void execute(String text) {
-        String[] pipes = text.split(" & ");
+        String[] pipes = text.split(" : ");
         String[] split = pipes[0].split(" ");
         String typedParentCommand = split[0];
         ParentCommand parentCommand = null;
@@ -105,16 +106,11 @@ public class CommandConsole {
         bobTheBuilder.append(object.getClass().getCanonicalName());
         bobTheBuilder.append("\n");
         for(Field field : object.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            try {
-                bobTheBuilder.append("\t");
-                bobTheBuilder.append(field.getName());
-                bobTheBuilder.append(TextUtils.getSpaces(field.getName(), 30));
-                bobTheBuilder.append(field.get(object));
-                bobTheBuilder.append("\n");
-            } catch (IllegalAccessException e) {
-                Logger.exception("Cannot get field", e);
-            }
+            bobTheBuilder.append("\t");
+            bobTheBuilder.append(field.getName());
+            bobTheBuilder.append(TextUtils.getSpaces(field.getName(), 30));
+            bobTheBuilder.append(TextUtils.wrap(getValue(field, object), 50, 30, "\t"));
+            bobTheBuilder.append("\n");
         }
         bobTheBuilder.append("-- Available commands:\n");
 
@@ -166,6 +162,19 @@ public class CommandConsole {
             executableCommands.add(executableCommand);
         }
         return executableCommands;
+    }
+
+    private static String getValue(Field field, Object object) {
+        try {
+            field.setAccessible(true);
+            Object value = field.get(object);
+            if(value == null) {
+                return "null";
+            }
+            return value.toString();
+        } catch(IllegalAccessException | InaccessibleObjectException e) {
+            return "?";
+        }
     }
 
     public static void runScanner() {

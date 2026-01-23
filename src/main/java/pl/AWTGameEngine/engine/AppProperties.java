@@ -1,12 +1,14 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.annotations.Command;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class AppProperties {
+@Command("props")
+public class AppProperties extends CommandConsole.ParentCommand {
 
     private final Properties properties;
     private final HashMap<String, Properties> customProperties = new HashMap<>();
@@ -28,6 +30,7 @@ public class AppProperties {
         return getStartupArguments().contains(argument);
     }
 
+    @Command(value = "get", argumentNames = "key")
     public String getProperty(String key) {
         return getProperty(key, properties);
     }

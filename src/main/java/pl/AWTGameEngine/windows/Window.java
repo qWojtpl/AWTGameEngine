@@ -138,18 +138,22 @@ public class Window extends JFrame {
         return panels;
     }
 
+    @Command("renderLoop")
     public BaseLoop getRenderLoop() {
         return this.renderLoop;
     }
 
+    @Command("updateLoop")
     public BaseLoop getUpdateLoop() {
         return this.updateLoop;
     }
 
+    @Command("physicsLoop")
     public BaseLoop getPhysicsLoop() {
         return this.physicsLoop;
     }
 
+    @Command("netLoop")
     public BaseLoop getNetLoop() {
         return this.netLoop;
     }
