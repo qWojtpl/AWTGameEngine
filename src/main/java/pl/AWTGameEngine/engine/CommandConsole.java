@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.helpers.TextUtils;
+import pl.AWTGameEngine.windows.Window;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +17,8 @@ public class CommandConsole {
     private static final List<ParentCommand> commands = new ArrayList<>();
 
     public static void execute(String text) {
-        String[] split = text.split(" ");
+        String[] pipes = text.split(" & ");
+        String[] split = pipes[0].split(" ");
         String typedParentCommand = split[0];
         ParentCommand parentCommand = null;
         for (ParentCommand cmd : commands) {
@@ -29,13 +31,23 @@ public class CommandConsole {
             Logger.error("Command " + typedParentCommand + " not found.");
             return;
         }
-        Object result = executeParent(parentCommand, split);
-        if(parentCommand.equals(result)) {
-            displayHelp(parentCommand);
-            return;
-        } else if(result != null) {
-            displayObject(result);
+        Object result = parentCommand;
+        for(int i = 0; i < pipes.length; i++) {
+            ParentCommand parentCommandToExecute;
+            if(result instanceof ParentCommand) {
+                parentCommandToExecute = (ParentCommand) result;
+            } else {
+                parentCommandToExecute = dynamicRegister(result);
+                pipes[i] = ". " + pipes[i];
+            }
+            Object newResult = executeParent(parentCommandToExecute, pipes[i].split(" "));
+            if(newResult == null) {
+                break;
+            } else {
+                result = newResult;
+            }
         }
+        displayObject(result);
     }
 
     public static Object executeParent(ParentCommand parentCommand, String[] split) {
@@ -51,7 +63,7 @@ public class CommandConsole {
             }
         }
         if(executableCommand == null) {
-            Logger.error("Subcommand " + typedCommand + " not found.");
+            Logger.error("Subcommand " + typedCommand + " in " + parentCommand.commandName + " not found.");
             return parentCommand;
         }
         String[] args = new String[executableCommand.arguments.size()];
@@ -73,6 +85,9 @@ public class CommandConsole {
             }
         }
         try {
+            if(parentCommand.realInstance != null) {
+                return executableCommand.method.invoke(parentCommand.realInstance, (Object[]) args);
+            }
             return executableCommand.method.invoke(parentCommand, (Object[]) args);
         } catch (IllegalAccessException | InvocationTargetException e) {
             Logger.exception("Cannot execute command", e);
@@ -80,15 +95,8 @@ public class CommandConsole {
         }
     }
 
-    public static void displayHelp(ParentCommand parentCommand) {
-        Logger.info(
-                parentCommand.commandName + "'s help page: " + "\n"
-                + "\t" + "\n"
-        );
-    }
-
     public static void displayObject(Object object) {
-        if(object instanceof String || object instanceof Number) {
+        if(object instanceof String || object instanceof Number || object instanceof Boolean) {
             Logger.info(object.toString());
             return;
         }
@@ -108,11 +116,44 @@ public class CommandConsole {
                 Logger.exception("Cannot get field", e);
             }
         }
+        bobTheBuilder.append("-- Available commands:\n");
+
+        for(Method method : object.getClass().getMethods()) {
+            if(!method.isAnnotationPresent(Command.class)) {
+                continue;
+            }
+            bobTheBuilder.append("\t");
+            Command command = method.getAnnotation(Command.class);
+            bobTheBuilder.append(command.value());
+            bobTheBuilder.append(TextUtils.getSpaces(command.value(), 30));
+            bobTheBuilder.append(String.join(",", command.argumentNames()));
+            bobTheBuilder.append("\n");
+        }
+
         Logger.info(bobTheBuilder.toString());
     }
 
     public static void register(String parentCommandName, ParentCommand instance) {
         instance.commandName = parentCommandName;
+        instance.executableCommands.addAll(initializeMethods(instance));
+        commands.add(instance);
+    }
+
+    public static ParentCommand dynamicRegister(Object object) {
+        ParentCommand command = new ParentCommand() {
+            @Override
+            public int hashCode() {
+                return super.hashCode();
+            }
+        };
+        command.commandName = object.getClass().getName();
+        command.executableCommands.addAll(initializeMethods(object));
+        command.realInstance = object;
+        return command;
+    }
+
+    private static List<ExecutableCommand> initializeMethods(Object instance) {
+        List<ExecutableCommand> executableCommands = new ArrayList<>();
         for(Method method : instance.getClass().getMethods()) {
             if(!method.isAnnotationPresent(Command.class)) {
                 continue;
@@ -122,9 +163,9 @@ public class CommandConsole {
             executableCommand.command = command.value();
             executableCommand.method = method;
             executableCommand.addArgument(command);
-            instance.executableCommands.add(executableCommand);
+            executableCommands.add(executableCommand);
         }
-        commands.add(instance);
+        return executableCommands;
     }
 
     public static void runScanner() {
@@ -156,6 +197,7 @@ public class CommandConsole {
 
         String commandName;
         List<ExecutableCommand> executableCommands = new ArrayList<>();
+        Object realInstance;
 
         public ParentCommand() {
             if(!getClass().isAnnotationPresent(Command.class)) {

@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
@@ -161,6 +162,7 @@ public class Window extends JFrame {
         return this.windowListener;
     }
 
+    @Command("currentScene")
     public Scene getCurrentScene() {
         for(Scene scene : scenes.keySet()) {
             if(scenes.get(scene)) {
