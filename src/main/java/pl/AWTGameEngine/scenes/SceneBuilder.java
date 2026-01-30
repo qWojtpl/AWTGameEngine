@@ -8,6 +8,8 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class SceneBuilder {
@@ -210,6 +212,43 @@ public class SceneBuilder {
 
     private static String getAddress() {
         return "x" + Long.toHexString(addressCounter++);
+    }
+
+    public static boolean isSceneBuilder(String[] args) {
+        boolean sceneBuilder = false;
+        boolean sceneBuilderMode = false;
+        boolean force = false;
+        List<String> buildArgs = new ArrayList<>();
+        for(String arg : args) {
+            if(arg.startsWith("-")) {
+                if(arg.equalsIgnoreCase("--build")) {
+                    sceneBuilder = true;
+                    if(!sceneBuilderMode) {
+                        sceneBuilderMode = true;
+                        Logger.info("Running in SceneBuilder mode!");
+                        Logger.warning("Please note: don't build scene every time while debugging/development. " +
+                                "Using SceneBuilder is intended to use it before release to provide faster loading.");
+                    }
+                    continue;
+                } else if(arg.equalsIgnoreCase("--force")) {
+                    force = true;
+                    sceneBuilder = false;
+                    continue;
+                }
+                sceneBuilder = false;
+                break;
+            } else if(sceneBuilder) {
+                buildArgs.add(arg);
+            }
+        }
+        if(!buildArgs.isEmpty()) {
+            Logger.info("Scenes to build today: " + String.join(", ", buildArgs));
+            for(String buildArg : buildArgs) {
+                SceneBuilder.build(buildArg, force);
+            }
+            Logger.info("SceneBuilder: Done.");
+        }
+        return sceneBuilderMode;
     }
 
 }

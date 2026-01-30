@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.scenes;
 
+import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.panels.PanelObject;
@@ -29,6 +30,7 @@ public class Scene {
         setSceneEventHandler(new EventHandler());
     }
 
+    @Command("name")
     public String getName() {
         return this.name;
     }
@@ -61,6 +63,7 @@ public class Scene {
         this.panel = panel;
     }
 
+    @Command(value = "create", argumentNames = "id")
     public GameObject createGameObject(String identifier) {
         GameObject go = new GameObject(identifier, this);
         try {
@@ -105,6 +108,7 @@ public class Scene {
         gameObjects.remove(object.getIdentifier());
     }
 
+    @Command(value = "get", argumentNames = "id")
     public GameObject getGameObjectByName(String identifier) {
         return gameObjects.getOrDefault(identifier, null);
     }

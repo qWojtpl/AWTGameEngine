@@ -1,13 +1,15 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.annotations.Command;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 
-public class Preferences {
+@Command("preferences")
+public class Preferences extends CommandConsole.ParentCommand {
 
     private final HashMap<String, String> preferences = new HashMap<>();
 
@@ -15,6 +17,7 @@ public class Preferences {
         loadPreferences();
     }
 
+    @Command(value = "save", argumentNames = { "key", "value" })
     public void savePreference(String key, String preference) {
         if(key == null) {
             key = "";
@@ -26,6 +29,7 @@ public class Preferences {
         writeToFile();
     }
 
+    @Command(value = "get", argumentNames = "key")
     public String getPreference(String key) {
         return preferences.getOrDefault(key, null);
     }

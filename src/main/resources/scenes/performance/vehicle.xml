@@ -55,7 +55,7 @@
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <RigidBody.Kinematic />
-        <CameraFollow followObject="vehicle" _package="pl.AWTGameEngine.custom" />
+        <CameraFollow />
     </object>
 
 </scene>

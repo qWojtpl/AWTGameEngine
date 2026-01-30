@@ -1,14 +1,13 @@
 package pl.AWTGameEngine.engine;
 
+import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.Sprite;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,6 +22,7 @@ public class ResourceManager {
     private final HashMap<String, URL> urlResources = new HashMap<>();
     private final List<AudioClip> audioClips = new ArrayList<>();
 
+    @Command(value = "copy", argumentNames = { "name", "path" })
     public void copyResource(String name, String path) {
         Logger.info("Copying resource: " + name + " to " + path);
         name = getResourceName(name);
@@ -81,6 +81,7 @@ public class ResourceManager {
         return null;
     }
 
+    @Command(value = "sprite", argumentNames = "name")
     public Sprite getResourceAsSprite(String name) {
         String realPath = name;
         name = getResourceName(name);

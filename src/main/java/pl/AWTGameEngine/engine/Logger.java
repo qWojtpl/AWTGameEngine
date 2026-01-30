@@ -1,6 +1,8 @@
 package pl.AWTGameEngine.engine;
 
+import org.w3c.dom.Text;
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.engine.helpers.TextUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -46,6 +48,7 @@ public class Logger {
             }
             String[] split = Thread.currentThread().getStackTrace()[stackTraceIndex].getClassName().split("\\.");
             className = " [" + split[split.length - 1] + "]";
+            className = TextUtils.getSpaces(className, 20) + className;
         }
         Calendar calendar = Calendar.getInstance();
         message = "[" +
@@ -69,7 +72,8 @@ public class Logger {
                 append = true;
             }
         }
-        System.out.print(color.value + message + ConsoleColor.RESET.value);
+        System.out.print("\r" + color.value + message + ConsoleColor.RESET.value);
+        CommandConsole.pass();
     }
 
     public static void exception(String message, Exception exception) {
