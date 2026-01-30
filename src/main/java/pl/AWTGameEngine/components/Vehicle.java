@@ -69,7 +69,7 @@ public class Vehicle extends ObjectComponent {
 
         setBaseParams(vehicle.getBaseParams());
         setPhysxIntegrationParams(vehicle.getPhysXParams(), vehicle.getBaseParams().getAxleDescription(), geometry);
-        setEngineDriveParams(vehicle.getEngineDriveParams(), vehicle.getBaseParams().getAxleDescription());
+        setEngineDriveParams(vehicle.getEngineDriveParams());
 
         vehicle.initialize(
                 physXManager.getPxPhysics(),
@@ -104,12 +104,6 @@ public class Vehicle extends ObjectComponent {
         vehicle.getCommandState().setThrottle(1f);
         vehicle.getCommandState().setNbBrakes(0);
         vehicle.getCommandState().setSteer(0.3f);
-
-    }
-
-    private void initializeBaseParams(BaseVehicleParams params) {
-
-
 
     }
 
@@ -313,7 +307,7 @@ public class Vehicle extends ObjectComponent {
 
     }
 
-    private void setEngineDriveParams(EngineDrivetrainParams engineDriveParams, PxVehicleAxleDescription axleDesc) {
+    private void setEngineDriveParams(EngineDrivetrainParams engineDriveParams) {
 
         //
         // most values taken from Physx/physx/snippets/media/vehicledata/EngineDrive.json

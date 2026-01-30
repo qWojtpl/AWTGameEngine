@@ -4,7 +4,7 @@
         <MovementGL _package="pl.AWTGameEngine.custom" />
         <MovementFX _package="pl.AWTGameEngine.custom" />
         <CameraFX />
-        <Client autoConnect="127.0.0.1:5555" />
+        <Client autoConnect="127.0.0.1:53780" />
     </object>
 
 </scene>

@@ -31,18 +31,18 @@ public class NetMessageDeserializer {
                 Logger.warning(split[0] + " object not found, creating a new one...");
                 object = scene.createGameObject(split[0]);
                 if(server != null) {
-                    object.setNetOwner(server.getClientId(client));
+                    object.getNet().setOwner(server.getClientId(client));
                     Logger.warning("Assigned ownership of " + split[0] + " to client " + server.getClientId(client));
                 }
             }
             if(server != null) {
-                if(object.getNetOwner() != server.getClientId(client)) {
+                if(object.getNet().getOwner() != server.getClientId(client)) {
                     Logger.error("Client " + server.getClientId(client) + " tried to change an object, but don't have permission for it.");
                     return;
                 }
             }
             if("null".equals(split[1]) || split[1] == null) { // object-related synchronization instead of component-related
-                object.onPositionSynchronizeReceived(split[2], server != null);
+                object.getNet().onPositionSynchronizeReceived(split[2], server != null);
                 return;
             }
             Class<? extends ObjectComponent> clazz = Class.forName(split[1])

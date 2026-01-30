@@ -119,7 +119,7 @@ public class Client extends ObjectComponent {
     public void onNetUpdate() {
         List<NetBlock> blocks = new ArrayList<>();
         for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
-            if(component.getObject().getNetOwner() != clientId) {
+            if(component.getObject().getNet().getOwner() != clientId) {
                 continue;
             }
             if(!component.canSynchronize()) {
@@ -137,10 +137,10 @@ public class Client extends ObjectComponent {
         //todo: UDP instead of TCP
         blocks.clear();
         for(GameObject object : getScene().getGameObjects()) {
-            if(object.getNetOwner() != clientId) {
+            if(object.getNet().getOwner() != clientId) {
                 continue;
             }
-            NetBlock block = object.onPositionSynchronize();
+            NetBlock block = object.getNet().onPositionSynchronize();
             if(block.getIdentifier() != null) {
                 blocks.add(block);
             }

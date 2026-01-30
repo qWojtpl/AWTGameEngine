@@ -16,13 +16,10 @@ public class GameObject {
     private final Scene scene;
     private boolean active = true;
     private TransformSet position = new TransformSet(0, 0, 0);
-    private TransformSet rotation = new TransformSet(0, 0, 0);
-    private TransformSet netCachedPosition = null;
-    private TransformSet netCachedSize = null;
-    private QuaternionTransformSet netCachedRotation = null;
-    private int netOwner = -1;
-    private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
+    private TransformSet rotation = new TransformSet(0, 0, 0);
+    private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
+    private Net net;
     private PanelObject panel;
     private final EventHandler eventHandler = new EventHandler();
     private final List<ObjectComponent> components = new ArrayList<>();
@@ -431,65 +428,81 @@ public class GameObject {
         this.panel = panel;
     }
 
-    public int getNetOwner() {
-        return this.netOwner;
-    }
-
-    public void setNetOwner(int id) {
-        this.netOwner = id;
-    }
-
-    public final NetBlock onPositionSynchronize() {
-        if(getPosition().equals(netCachedPosition) && getSize().equals(netCachedSize) && getQuaternionRotation().equals(netCachedRotation)) {
-            return new NetBlock();
+    public Net getNet() {
+        if(this.net == null) {
+            this.net = new Net();
         }
-        netCachedPosition = getPosition();
-        netCachedSize = getSize();
-        netCachedRotation = getQuaternionRotation();
-        return new NetBlock(
-                getIdentifier(),
-                null, // null component points to GameObject synchronization
-                getPosition(),
-                getSize(),
-                getQuaternionRotation(),
-                netOwner
-        );
+        return this.net;
     }
 
-    public final void onPositionSynchronizeReceived(String data, boolean server) {
-        String[] split = data.split("╚");
-        TransformSet newPosition = new TransformSet().deserializeFromToString(split[0]);
-        TransformSet newSize = new TransformSet().deserializeFromToString(split[1]);
-        QuaternionTransformSet newRotation = new QuaternionTransformSet().deserializeFromToString(split[2]);
-        if(!newPosition.equals(netCachedPosition)) {
-            // (cl) create -> (srv) received -> (srv) send new -> server don't want a cache to exist in onPositionSynchronize,
-            // because it would be blocked, so if it's a new object, cache won't be initialized here
-            if(netCachedPosition != null) {
-                netCachedPosition = newPosition;
+    public class Net {
+
+        private TransformSet cachedPosition = null;
+        private TransformSet cachedSize = null;
+        private QuaternionTransformSet cachedRotation = null;
+        private int owner = -1;
+
+        public final NetBlock onPositionSynchronize() {
+            if(getPosition().equals(cachedPosition) && getSize().equals(cachedSize) && getQuaternionRotation().equals(cachedRotation)) {
+                return new NetBlock();
             }
-            setPosition(newPosition);
+            cachedPosition = getPosition();
+            cachedSize = getSize();
+            cachedRotation = getQuaternionRotation();
+            return new NetBlock(
+                    getIdentifier(),
+                    null, // null component points to GameObject synchronization
+                    cachedPosition,
+                    cachedSize,
+                    cachedRotation,
+                    owner
+            );
         }
-        if(!newSize.equals(netCachedSize)) {
-            if(netCachedSize != null) {
-                netCachedSize = newSize;
-            }
-            setSize(newSize);
-        }
-        if(!newRotation.equals(netCachedRotation)) {
-            if(netCachedRotation != null) {
-                netCachedRotation = newRotation;
-            }
-            setQuaternionRotation(newRotation);
-        }
-        if(!server) {
-            setNetOwner(Integer.parseInt(split[3]));
-        }
-    }
 
-    public void clearNetCache() {
-        netCachedPosition = null;
-        netCachedSize = null;
-        netCachedRotation = null;
+        public final void onPositionSynchronizeReceived(String data, boolean server) {
+            String[] split = data.split("╚");
+            TransformSet newPosition = new TransformSet().deserializeFromToString(split[0]);
+            TransformSet newSize = new TransformSet().deserializeFromToString(split[1]);
+            QuaternionTransformSet newRotation = new QuaternionTransformSet().deserializeFromToString(split[2]);
+            if(!newPosition.equals(cachedPosition)) {
+                // (cl) create -> (srv) received -> (srv) send new -> server don't want a cache to exist in onPositionSynchronize,
+                // because it would be blocked, so if it's a new object, cache won't be initialized here
+                if(cachedPosition != null) {
+                    cachedPosition = newPosition;
+                }
+                setPosition(newPosition);
+            }
+            if(!newSize.equals(cachedSize)) {
+                if(cachedSize != null) {
+                    cachedSize = newSize;
+                }
+                setSize(newSize);
+            }
+            if(!newRotation.equals(cachedRotation)) {
+                if(cachedRotation != null) {
+                    cachedRotation = newRotation;
+                }
+                setQuaternionRotation(newRotation);
+            }
+            if(!server) {
+                setOwner(Integer.parseInt(split[3]));
+            }
+        }
+
+        public void clearCache() {
+            cachedPosition = null;
+            cachedSize = null;
+            cachedRotation = null;
+        }
+
+        public int getOwner() {
+            return this.owner;
+        }
+
+        public void setOwner(int owner) {
+            this.owner = owner;
+        }
+
     }
 
 }

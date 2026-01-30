@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.loops;
 
 import pl.AWTGameEngine.annotations.Command;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.windows.Window;
 
 @SuppressWarnings("BusyWait")
@@ -42,7 +43,12 @@ public abstract class BaseLoop extends Thread {
             } catch (InterruptedException ignored) {
                 break;
             }
-            iteration();
+            try {
+                iteration();
+            } catch(Exception e) {
+                Logger.exception("Unhandled exception caught while running an iteration of " + loopName, e);
+                break;
+            }
             actualFpsIterator++;
         }
     }

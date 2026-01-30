@@ -76,7 +76,7 @@ public class Server extends ObjectComponent {
     private void sendObjectsPosition() {
         List<NetBlock> blocks = new ArrayList<>();
         for(GameObject object : getScene().getGameObjects()) {
-            NetBlock block = object.onPositionSynchronize();
+            NetBlock block = object.getNet().onPositionSynchronize();
             if(block.isEmpty()) {
                 continue;
             }
@@ -156,7 +156,7 @@ public class Server extends ObjectComponent {
         // prepare objects to be sent to the client during next update
 
         for(GameObject object : getScene().getGameObjects()) {
-            object.clearNetCache();
+            object.getNet().clearCache();
         }
 
         for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {

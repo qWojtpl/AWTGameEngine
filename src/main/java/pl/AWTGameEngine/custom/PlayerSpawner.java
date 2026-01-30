@@ -26,7 +26,7 @@ public class PlayerSpawner extends ObjectComponent {
         GameObject object = getScene().createGameObject("cube" + clientId);
         object.setSize(new TransformSet(100, 100));
         object.setPosition(new TransformSet(300, 300));
-        object.setNetOwner(clientId);
+        object.getNet().setOwner(clientId);
         BlankRenderer blankRenderer = new BlankRenderer(object);
         blankRenderer.setColor("rgb(0,255,0)");
         object.addComponent(blankRenderer);

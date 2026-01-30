@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.engine;
 
-import org.w3c.dom.Text;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.helpers.TextUtils;
 
