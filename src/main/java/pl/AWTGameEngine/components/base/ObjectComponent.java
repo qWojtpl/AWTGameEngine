@@ -43,7 +43,7 @@ public abstract class ObjectComponent {
     }
 
     protected final Camera getCamera() {
-        return getObject().getPanel().getCamera();
+        return getObject().getScene().getPanel().getCamera();
     }
 
     protected final Window getWindow() {
@@ -52,10 +52,6 @@ public abstract class ObjectComponent {
 
     protected final Scene getScene() {
         return getObject().getScene();
-    }
-
-    protected final PanelObject getPanel() {
-        return getObject().getPanel();
     }
 
     protected final SceneLoader getSceneLoader() {
@@ -67,7 +63,7 @@ public abstract class ObjectComponent {
     }
 
     protected final RenderEngine getRenderEngine() {
-        return getObject().getPanel().getParentScene().getRenderEngine();
+        return getObject().getScene().getRenderEngine();
     }
 
     /**

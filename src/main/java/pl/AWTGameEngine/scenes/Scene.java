@@ -92,7 +92,6 @@ public class Scene {
             Logger.error(errorMsg);
             throw new RuntimeException(errorMsg);
         }
-        object.setPanel(panel);
         gameObjects.put(object.getIdentifier(), object);
     }
 

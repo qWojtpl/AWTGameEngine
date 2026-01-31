@@ -33,7 +33,7 @@ public class MirrorTexture extends ObjectComponent {
         if(target == null) {
             setTarget(getObject().getIdentifier());
         }
-        panel = (PanelFX) getPanel();
+        panel = (PanelFX) getScene().getPanel();
     }
 
     @Override

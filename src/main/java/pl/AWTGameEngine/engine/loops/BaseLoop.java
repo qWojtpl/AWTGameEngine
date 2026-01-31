@@ -12,6 +12,7 @@ public abstract class BaseLoop extends Thread {
     private double targetFps = 1;
     private double actualFps = 0;
     private double actualFpsIterator = 0;
+    private boolean killed = false;
 
     public BaseLoop(Window window, String loopName) {
         this.window = window;
@@ -22,7 +23,7 @@ public abstract class BaseLoop extends Thread {
     @Override
     public void run() {
         new Thread(() -> {
-            while (window.getWindowListener().isOpened()) {
+            while (window.getWindowListener().isOpened() && !killed) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {
@@ -33,7 +34,7 @@ public abstract class BaseLoop extends Thread {
                 everySecondIteration();
             }
         }, loopName + "-everySecond").start();
-        while(window.getWindowListener().isOpened()) {
+        while(window.getWindowListener().isOpened() && !killed) {
             try {
                 if(getTargetFps() != 0) {
                     if(getTargetFps() / 2 < getActualFps()) {
@@ -56,6 +57,11 @@ public abstract class BaseLoop extends Thread {
     protected abstract void iteration();
 
     protected abstract void everySecondIteration();
+
+    public void kill() {
+        Logger.warning(loopName + " was killed.");
+        this.killed = true;
+    }
 
     public Window getWindow() {
         return this.window;

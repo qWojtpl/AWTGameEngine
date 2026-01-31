@@ -19,10 +19,10 @@ public class Sphere3D extends Base3DShape {
 
     public Sphere3D(GameObject object) {
         super(object);
-        if(getPanel() instanceof PanelFX) {
-            graphicsManager3D = ((PanelFX) getPanel()).getGraphicsManager3D();
+        if(getScene().getPanel() instanceof PanelFX) {
+            graphicsManager3D = ((PanelFX) getScene().getPanel()).getGraphicsManager3D();
         } else {
-            graphicsManager3D = ((PanelGL) getPanel()).getGraphicsManager3D();
+            graphicsManager3D = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
         }
     }
 
@@ -45,7 +45,7 @@ public class Sphere3D extends Base3DShape {
 
     @Override
     protected void removeShape() {
-        ((PanelFX) getPanel()).getGraphicsManager3D().removeSphere(getObject().getIdentifier());
+        ((PanelFX) getScene().getPanel()).getGraphicsManager3D().removeSphere(getObject().getIdentifier());
     }
 
     @Override

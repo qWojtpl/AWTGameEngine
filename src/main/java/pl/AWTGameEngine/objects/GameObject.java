@@ -20,7 +20,6 @@ public class GameObject {
     private TransformSet rotation = new TransformSet(0, 0, 0);
     private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private Net net;
-    private PanelObject panel;
     private final EventHandler eventHandler = new EventHandler();
     private final List<ObjectComponent> components = new ArrayList<>();
 
@@ -279,10 +278,6 @@ public class GameObject {
         return this.size.clone();
     }
 
-    public PanelObject getPanel() {
-        return this.panel;
-    }
-
     public EventHandler getEventHandler() {
         return this.eventHandler;
     }
@@ -422,10 +417,6 @@ public class GameObject {
         for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
             component.onUpdateSize(this.size.getX(), this.size.getY(), this.size.getZ());
         }      
-    }
-
-    public void setPanel(PanelObject panel) {
-        this.panel = panel;
     }
 
     public Net getNet() {

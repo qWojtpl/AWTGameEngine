@@ -16,7 +16,7 @@ public class WebGraphicsManager {
     }
 
     public void updatePosition(GameObject object) {
-        Camera camera = object.getPanel().getCamera();
+        Camera camera = object.getScene().getPanel().getCamera();
         execute(String.format("setPosition(\"%s\", \"%s\", \"%s\");",
                 object.getIdentifier(),
                 camera.parseX(object, object.getX()),
@@ -24,7 +24,7 @@ public class WebGraphicsManager {
     }
 
     public void updateSize(GameObject object) {
-        Camera camera = object.getPanel().getCamera();
+        Camera camera = object.getScene().getPanel().getCamera();
         execute(String.format("setSize(\"%s\", \"%s\", \"%s\");",
                 object.getIdentifier(),
                 camera.parsePlainValue(object.getSizeX()),

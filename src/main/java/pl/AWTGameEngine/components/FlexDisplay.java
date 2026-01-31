@@ -24,16 +24,16 @@ public class FlexDisplay extends ObjectComponent {
     public void onAddComponent() {
         if(isWebRenderEngine()) {
             Platform.runLater(() -> {
-                ((WebPanel) getPanel()).getGraphicsManager().execute(
+                ((WebPanel) getScene().getPanel()).getGraphicsManager().execute(
                         String.format("setFlex(\"%s\");", getObject().getIdentifier()));
-                ((WebPanel) getPanel()).getGraphicsManager().execute(
+                ((WebPanel) getScene().getPanel()).getGraphicsManager().execute(
                         String.format("setFlexAlignItems(\"%s\", \"%s\");", getObject().getIdentifier(), "center"));
-                ((WebPanel) getPanel()).getGraphicsManager().execute(
+                ((WebPanel) getScene().getPanel()).getGraphicsManager().execute(
                         String.format("setFlexJustifyContent(\"%s\", \"%s\");", getObject().getIdentifier(), "center"));
-                ((WebPanel) getPanel()).getGraphicsManager().execute(
+                ((WebPanel) getScene().getPanel()).getGraphicsManager().execute(
                         String.format("setFlexGap(\"%s\", \"%s\");", getObject().getIdentifier(), "50"));
                 for(GameObject object : items) {
-                    ((WebPanel) getPanel()).getGraphicsManager().execute(
+                    ((WebPanel) getScene().getPanel()).getGraphicsManager().execute(
                             String.format("appendFlexChild(\"%s\", \"%s\");",
                                     getObject().getIdentifier(), object.getIdentifier()));
                 }

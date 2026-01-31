@@ -26,7 +26,7 @@ public class WebTextArea extends ObjectComponent {
         if(getKeyListener().getPressedKeys().isEmpty()) {
             return;
         }
-        WebGraphicsManager manager = ((WebPanel) getObject().getPanel()).getGraphicsManager();
+        WebGraphicsManager manager = ((WebPanel) getObject().getScene().getPanel()).getGraphicsManager();
         Platform.runLater(() -> {
             text = (String) manager.getWebView().getEngine().executeScript(
                     String.format("getInputValue(\"%s\");", getObject().getIdentifier()));

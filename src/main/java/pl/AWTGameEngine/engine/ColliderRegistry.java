@@ -34,7 +34,7 @@ public class ColliderRegistry {
         boolean colliding = false;
         List<GameObject> collided = new ArrayList<>();
         for(Collider c : colliders) {
-            if(!c.getObject().getPanel().equals(object.getPanel())) {
+            if(!c.getObject().getScene().getPanel().equals(object.getScene().getPanel())) {
                 continue;
             }
             if(!c.getObject().isActive()) {

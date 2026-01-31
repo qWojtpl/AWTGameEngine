@@ -19,7 +19,7 @@ public class Cylinder3D extends Base3DShape {
 
     @Override
     protected void createShape() {
-        ((PanelFX) getPanel()).getGraphicsManager3D().createCylinder(new GraphicsManager3D.RenderOptions(
+        ((PanelFX) getScene().getPanel()).getGraphicsManager3D().createCylinder(new GraphicsManager3D.RenderOptions(
                 getObject().getIdentifier(),
                 getObject().getPosition(),
                 getObject().getSize(),
@@ -34,7 +34,7 @@ public class Cylinder3D extends Base3DShape {
 
     @Override
     protected void removeShape() {
-        ((PanelFX) getPanel()).getGraphicsManager3D().removeCylinder(getObject().getIdentifier());
+        ((PanelFX) getScene().getPanel()).getGraphicsManager3D().removeCylinder(getObject().getIdentifier());
     }
 
     @Override

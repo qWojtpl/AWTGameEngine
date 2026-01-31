@@ -31,7 +31,7 @@ public class Model3D extends ObjectComponent {
     @Override
     public void onAddComponent() {
         getObject().getRotation().setZ(180);
-        ((PanelFX) getPanel()).getGraphicsManager3D().createCustomModel(
+        ((PanelFX) getScene().getPanel()).getGraphicsManager3D().createCustomModel(
                 new GraphicsManager3D.RenderOptions(
                         getObject().getIdentifier(),
                         getObject().getPosition(),
@@ -49,7 +49,7 @@ public class Model3D extends ObjectComponent {
 
     @Override
     public void onRemoveComponent() {
-        ((PanelFX) getPanel()).getGraphicsManager3D().removeCustomModel(getObject().getIdentifier());
+        ((PanelFX) getScene().getPanel()).getGraphicsManager3D().removeCustomModel(getObject().getIdentifier());
     }
 
     @FromXML

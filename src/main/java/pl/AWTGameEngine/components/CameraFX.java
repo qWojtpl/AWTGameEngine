@@ -30,7 +30,7 @@ public class CameraFX extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        this.panelFX = (PanelFX) getPanel();
+        this.panelFX = (PanelFX) getScene().getPanel();
 
         Platform.runLater(() -> {
             perspectiveCamera.setNearClip(nearClip);
