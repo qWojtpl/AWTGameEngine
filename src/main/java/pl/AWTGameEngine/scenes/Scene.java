@@ -184,6 +184,10 @@ public class Scene {
         }
     }
 
+    /**
+     If you want to save RigidBody objects (linear + angular velocity) then you should do it in PhysicsLoop
+     to ensure that the call won't be invoked during the simulation run.
+     */
     public void saveState(String path) {
         SceneStateSaver.saveState(path, this);
     }

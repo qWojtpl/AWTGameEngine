@@ -23,7 +23,9 @@ public class BoxSpawner extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        spawnBoxes(1);
+        if(boxCounter == 0) {
+            spawnBoxes(1);
+        }
     }
 
     private void spawnBoxes(int count) {

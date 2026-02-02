@@ -12,7 +12,10 @@ import pl.AWTGameEngine.annotations.components.management.ConflictsWith;
 import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
@@ -121,6 +124,8 @@ public abstract class RigidBody extends ObjectComponent {
         protected PxRigidDynamic rigidDynamic;
 
         private boolean disableGravity = false;
+        private TransformSet savedLinearVelocity = null;
+        private TransformSet savedAngularVelocity = null;
 
         public Dynamic(GameObject object) {
             super(object);
@@ -132,10 +137,21 @@ public abstract class RigidBody extends ObjectComponent {
             rigidDynamic = physics.createRigidDynamic(pose);
             rigidDynamic.attachShape(shape);
             rigidDynamic.setMass((float) mass);
+            //
             rigidDynamic.setSleepThreshold(0.05f);
             rigidDynamic.setWakeCounter(0.1f);
             rigidDynamic.setSolverIterationCounts(4, 1);
+            //
             setDisableGravity(disableGravity);
+            //
+            if(savedLinearVelocity != null) {
+                setLinearVelocity(savedLinearVelocity);
+                savedLinearVelocity = null;
+            }
+            if(savedAngularVelocity != null) {
+                setAngularVelocity(savedAngularVelocity);
+                savedAngularVelocity = null;
+            }
             physXManager.getPxScene().addActor(rigidDynamic);
         }
 
@@ -167,6 +183,46 @@ public abstract class RigidBody extends ObjectComponent {
 
         public boolean isGravityDisabled() {
             return this.disableGravity;
+        }
+
+        @SaveState(name = "linearVelocity")
+        public TransformSet getLinearVelocity() {
+            return TransformSet.fromPhysX(rigidDynamic.getLinearVelocity());
+        }
+
+        public void setLinearVelocity(TransformSet linearVelocity) {
+            if(rigidDynamic == null) {
+                this.savedLinearVelocity = linearVelocity;
+                return;
+            }
+            PxVec3 vec3 = new PxVec3((float) linearVelocity.getX(), (float) linearVelocity.getY(), (float) linearVelocity.getZ());
+            rigidDynamic.setLinearVelocity(vec3);
+            vec3.destroy();
+        }
+
+        @FromXML
+        public void setLinearVelocity(String linearVelocity) {
+            setLinearVelocity(new TransformSet().deserialize(linearVelocity));
+        }
+
+        @SaveState(name = "angularVelocity")
+        public TransformSet getAngularVelocity() {
+            return TransformSet.fromPhysX(rigidDynamic.getAngularVelocity());
+        }
+
+        public void setAngularVelocity(TransformSet angularVelocity) {
+            if(rigidDynamic == null) {
+                this.savedAngularVelocity = angularVelocity;
+                return;
+            }
+            PxVec3 vec3 = new PxVec3((float) angularVelocity.getX(), (float) angularVelocity.getY(), (float) angularVelocity.getZ());
+            rigidDynamic.setAngularVelocity(vec3);
+            vec3.destroy();
+        }
+
+        @FromXML
+        public void setAngularVelocity(String angularVelocity) {
+            setAngularVelocity(new TransformSet().deserialize(angularVelocity));
         }
 
     }
