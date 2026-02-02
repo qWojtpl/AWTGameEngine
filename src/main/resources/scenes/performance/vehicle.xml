@@ -1,10 +1,11 @@
-<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="360">
+<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="60">
 
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
 
     <object id="player">
         <MovementGL _package="pl.AWTGameEngine.custom" />
         <MovementFX _package="pl.AWTGameEngine.custom" />
+        <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
         <CameraFX />
         <Server port="53780" />
     </object>

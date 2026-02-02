@@ -3,6 +3,7 @@ package pl.AWTGameEngine.scenes;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -10,15 +11,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 
 public class SceneStateSaver {
 
-    public static void saveState(String path, Scene scene) {
+    public static void saveState(String path, Scene scene, boolean build) {
         Logger.info("Saving scene state...");
         List<GameObject> objects = scene.getGameObjects();
         StringBuilder bobTheBuilder = new StringBuilder();
         addSceneParams(scene, bobTheBuilder);
+        addNestedScenes(scene, bobTheBuilder);
         for(GameObject object : objects) {
             bobTheBuilder.append(saveObjectState(object));
         }
@@ -33,6 +36,7 @@ public class SceneStateSaver {
         } catch(IOException e) {
             Logger.exception("Cannot save scene state to file", e);
         }
+        SceneBuilder.build(path, true);
     }
 
     private static void addSceneParams(Scene scene, StringBuilder builder) {
@@ -49,6 +53,18 @@ public class SceneStateSaver {
         builder.append("\" fullscreen=\"");
         builder.append(scene.getWindow().isFullScreen());
         builder.append("\">");
+    }
+
+    private static void addNestedScenes(Scene scene, StringBuilder builder) {
+        HashMap<String, RenderEngine> loadAfterLoad = scene.getLoadAfterLoad();
+        for(String path : loadAfterLoad.keySet()) {
+            System.out.println(path);
+            builder.append("\n\t<scene source=\"");
+            builder.append(path);
+            builder.append("\" renderEngine=\"");
+            builder.append(loadAfterLoad.get(path));
+            builder.append("\" />");
+        }
     }
 
     private static String saveObjectState(GameObject object) {
@@ -80,15 +96,18 @@ public class SceneStateSaver {
                 continue;
             }
             SaveState saveState = method.getAnnotation(SaveState.class);
-            parameterBuilder.append(" ");
-            parameterBuilder.append(saveState.name());
-            parameterBuilder.append("=\"");
             try {
                 Object result = method.invoke(object);
                 String value = String.valueOf(result);
                 if(result instanceof TransformSet) {
                     value = ((TransformSet) result).toSimpleString();
+                    if(((TransformSet) result).isEmpty()) {
+                        continue;
+                    }
                 }
+                parameterBuilder.append(" ");
+                parameterBuilder.append(saveState.name());
+                parameterBuilder.append("=\"");
                 parameterBuilder.append(value.replace("\"", "\\\""));
             } catch (IllegalAccessException | InvocationTargetException e) {
                 Logger.exception("Cannot save " + name + "'s " + saveState.name() + " state", e);

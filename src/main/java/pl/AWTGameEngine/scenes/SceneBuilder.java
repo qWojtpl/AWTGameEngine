@@ -149,12 +149,33 @@ public class SceneBuilder {
             methodBuilder.append(address);
             methodBuilder.append("(Object scene, java.lang.reflect.Method sceneMethod) throws Exception {\n");
             appendMethodBody(methodBuilder, "Object " + address + " = sceneMethod.invoke(scene, \"" + identifier + "\")");
-            appendMethodBody(methodBuilder, createCall(address, "setX", "double.class", getValue(node, "x")));
-            appendMethodBody(methodBuilder, createCall(address, "setY", "double.class", getValue(node, "y")));
-            appendMethodBody(methodBuilder, createCall(address, "setZ", "double.class", getValue(node, "z")));
-            appendMethodBody(methodBuilder, createCall(address, "setSizeX", "double.class", getValue(node, "sizeX")));
-            appendMethodBody(methodBuilder, createCall(address, "setSizeY", "double.class", getValue(node, "sizeY")));
-            appendMethodBody(methodBuilder, createCall(address, "setSizeZ", "double.class", getValue(node, "sizeZ")));
+            //
+            String[] position;
+            if(getValue(node, "position").equals("0")) {
+                position = new String[3];
+                position[0] = getValue(node, "x");
+                position[1] = getValue(node, "y");
+                position[2] = getValue(node, "z");
+            } else {
+                position = getValue(node, "position").split(",");
+            }
+            appendMethodBody(methodBuilder, createCall(address, "setX", "double.class", position[0]));
+            appendMethodBody(methodBuilder, createCall(address, "setY", "double.class", position[1]));
+            appendMethodBody(methodBuilder, createCall(address, "setZ", "double.class", position[2]));
+            //
+            String[] size;
+            if(getValue(node, "size").equals("0")) {
+                size = new String[3];
+                size[0] = getValue(node, "sizeX");
+                size[1] = getValue(node, "sizeY");
+                size[2] = getValue(node, "sizeZ");
+            } else {
+                size = getValue(node, "size").split(",");
+            }
+            appendMethodBody(methodBuilder, createCall(address, "setSizeX", "double.class", size[0]));
+            appendMethodBody(methodBuilder, createCall(address, "setSizeY", "double.class", size[1]));
+            appendMethodBody(methodBuilder, createCall(address, "setSizeZ", "double.class", size[2]));
+            //
             for(int i = 0; i < node.getChildNodes().getLength(); i++) {
                 Node childNode = node.getChildNodes().item(i);
                 if(childNode.getNodeName().startsWith("#")) { // #comment or #text

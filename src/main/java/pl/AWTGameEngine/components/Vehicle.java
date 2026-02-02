@@ -600,6 +600,9 @@ public class Vehicle extends ObjectComponent {
 
     @Override
     public void onPhysicsUpdate() {
+        if(vehicle.getPhysXState().getPhysxActor().getRigidBody() == null) {
+            return;
+        }
         PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
         PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
         getObject().setPosition(new TransformSet(vec3.getX(), vec3.getY() + getObject().getSizeY() * 1.5 + 1.35, vec3.getZ()));

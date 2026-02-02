@@ -144,8 +144,11 @@ public class Scene {
         }
         if(c > 0) {
             getWindow().setCurrentScene(this);
-            loadAfterLoad.clear();
         }
+    }
+
+    public HashMap<String, RenderEngine> getLoadAfterLoad() {
+        return new HashMap<>(loadAfterLoad);
     }
 
     public PanelObject getPanel() {
@@ -188,8 +191,8 @@ public class Scene {
      If you want to save RigidBody objects (linear + angular velocity) then you should do it in PhysicsLoop
      to ensure that the call won't be invoked during the simulation run.
      */
-    public void saveState(String path) {
-        SceneStateSaver.saveState(path, this);
+    public void saveState(String path, boolean build) {
+        SceneStateSaver.saveState(path, this, build);
     }
 
 }
