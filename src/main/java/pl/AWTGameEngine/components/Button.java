@@ -1,9 +1,8 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.FromXML;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -75,12 +74,10 @@ public class Button extends ObjectComponent {
         return this.textRenderer;
     }
 
-    @SerializationGetter
     public String getText() {
         return textRenderer.getText();
     }
 
-    @SerializationGetter
     public float getSize() {
         return textRenderer.getSize();
     }
@@ -101,27 +98,22 @@ public class Button extends ObjectComponent {
         return this.highlightTextColor;
     }
 
-    @SerializationGetter
     public String getBackgroundColor() {
         return this.backgroundColor.serialize();
     }
 
-    @SerializationGetter
     public String getHighlightColor() {
         return this.highlightColor.serialize();
     }
 
-    @SerializationGetter
     public String getTextColor() {
         return this.textColor.serialize();
     }
 
-    @SerializationGetter
     public String getHighlightTextColor() {
         return this.highlightTextColor.serialize();
     }
 
-    @SerializationGetter
     public Action getAction() {
         return this.action;
     }

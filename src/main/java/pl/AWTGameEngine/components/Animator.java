@@ -2,6 +2,10 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.*;
+import pl.AWTGameEngine.annotations.components.management.Unique;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Sprite;
@@ -48,7 +52,6 @@ public class Animator extends ObjectComponent {
         }
     }
 
-    @SerializationGetter
     public boolean isLoop() {
         return this.loop;
     }

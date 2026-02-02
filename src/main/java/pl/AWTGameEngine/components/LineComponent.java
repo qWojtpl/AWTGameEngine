@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.FromXML;
+import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
@@ -35,12 +34,10 @@ public class LineComponent extends ObjectComponent {
         return this.color;
     }
 
-    @SerializationGetter
     public String getColor() {
         return this.color.serialize();
     }
 
-    @SerializationGetter
     public float getThickness() {
         return this.thickness;
     }

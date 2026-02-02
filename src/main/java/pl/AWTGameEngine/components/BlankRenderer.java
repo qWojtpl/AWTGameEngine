@@ -1,9 +1,8 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.FromXML;
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -44,7 +43,6 @@ public class BlankRenderer extends ObjectComponent {
         return this.color;
     }
 
-    @SerializationGetter
     public String getColor() {
         return this.color.serialize();
     }

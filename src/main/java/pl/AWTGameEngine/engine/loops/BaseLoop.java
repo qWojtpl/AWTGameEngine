@@ -31,7 +31,13 @@ public abstract class BaseLoop extends Thread {
                 }
                 actualFps = actualFpsIterator;
                 actualFpsIterator = 0;
-                everySecondIteration();
+                try {
+                    everySecondIteration();
+                } catch(Exception e) {
+                    Logger.exception("Unhandled exception caught while running an every-second iteration of " + loopName, e);
+                    kill();
+                    break;
+                }
             }
         }, loopName + "-everySecond").start();
         while(window.getWindowListener().isOpened() && !killed) {
@@ -48,6 +54,7 @@ public abstract class BaseLoop extends Thread {
                 iteration();
             } catch(Exception e) {
                 Logger.exception("Unhandled exception caught while running an iteration of " + loopName, e);
+                kill();
                 break;
             }
             actualFpsIterator++;

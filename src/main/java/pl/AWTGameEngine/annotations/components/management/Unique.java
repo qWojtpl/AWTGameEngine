@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.annotations;
+package pl.AWTGameEngine.annotations.components.management;
 
 import java.lang.annotation.*;
 

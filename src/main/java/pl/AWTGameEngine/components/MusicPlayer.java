@@ -1,10 +1,9 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.FromXML;
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.AudioClip;
@@ -88,17 +87,14 @@ public class MusicPlayer extends ObjectComponent {
         return this.audioClip;
     }
 
-    @SerializationGetter
     public String getSourcePath() {
         return this.audioClip.getAudioClipPath();
     }
 
-    @SerializationGetter
     public boolean isAutoPlay() {
         return this.autoPlay;
     }
 
-    @SerializationGetter
     public int getLoopCount() {
         return this.loopCount;
     }

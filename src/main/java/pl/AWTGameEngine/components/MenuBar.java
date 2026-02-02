@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.FromXML;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 

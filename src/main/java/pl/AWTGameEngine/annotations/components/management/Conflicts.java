@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.annotations;
+package pl.AWTGameEngine.annotations.components.management;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface WebComponent {
+public @interface Conflicts {
+
+    ConflictsWith[] value();
+
 }

@@ -4,7 +4,6 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
-import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.scenes.Scene;
 
 import java.util.*;

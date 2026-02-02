@@ -1,9 +1,8 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.FromXML;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -237,7 +236,6 @@ public class TextArea extends ObjectComponent {
         return rendered.toString();
     }
 
-    @SerializationGetter
     public String getText() {
         return this.text;
     }
@@ -246,12 +244,10 @@ public class TextArea extends ObjectComponent {
         return this.textRenderer;
     }
 
-    @SerializationGetter
     public boolean isFocused() {
         return this.focused;
     }
 
-    @SerializationGetter
     public boolean isDisabled() {
         return this.disabled;
     }
@@ -264,7 +260,6 @@ public class TextArea extends ObjectComponent {
         return this.regex;
     }
 
-    @SerializationGetter
     public String getRegexPattern() {
         for(RegexPattern pattern : RegexPattern.values()) {
             if(pattern.getPattern().equals(regex)) {

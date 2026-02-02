@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.annotations;
+package pl.AWTGameEngine.annotations.components.management;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
 
@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface ConflictsWith {
+public @interface Requires {
 
     Class<? extends ObjectComponent> value();
 

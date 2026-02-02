@@ -1,8 +1,8 @@
 package pl.AWTGameEngine.components;
 
 import javafx.application.Platform;
-import pl.AWTGameEngine.annotations.FromXML;
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.panels.WebPanel;

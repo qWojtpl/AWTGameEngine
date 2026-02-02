@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.objects;
 
 import physx.common.PxVec3;
-import pl.AWTGameEngine.annotations.Platform3D;
 
 public class TransformSet {
 
@@ -46,7 +45,6 @@ public class TransformSet {
         return this.y;
     }
 
-    @Platform3D
     public double getZ() {
         return this.z;
     }
@@ -61,7 +59,6 @@ public class TransformSet {
         return this;
     }
 
-    @Platform3D
     public TransformSet setZ(double z) {
         this.z = z;
         return this;

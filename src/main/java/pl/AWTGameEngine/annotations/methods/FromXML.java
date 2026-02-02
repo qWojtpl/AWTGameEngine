@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.annotations;
+package pl.AWTGameEngine.annotations.methods;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,6 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface DefaultComponent {
+@Target({ElementType.METHOD})
+public @interface FromXML {
 }

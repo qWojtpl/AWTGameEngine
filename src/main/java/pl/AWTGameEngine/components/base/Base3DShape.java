@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.FromXML;
+import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;

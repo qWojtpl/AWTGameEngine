@@ -1,9 +1,8 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.FromXML;
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -70,7 +69,6 @@ public class TextRenderer extends ObjectComponent {
         }
     }
 
-    @SerializationGetter
     public String getText() {
         return this.text;
     }
@@ -83,17 +81,14 @@ public class TextRenderer extends ObjectComponent {
         return this.color.serialize();
     }
 
-    @SerializationGetter
     public float getSize() {
         return this.size;
     }
 
-    @SerializationGetter
     public HorizontalAlign getHorizontalAlign() {
         return this.horizontal;
     }
 
-    @SerializationGetter
     public VerticalAlign getVerticalAlign() {
         return this.vertical;
     }

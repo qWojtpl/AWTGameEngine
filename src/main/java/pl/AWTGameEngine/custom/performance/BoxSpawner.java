@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.custom.performance;
 
-import pl.AWTGameEngine.annotations.ComponentFX;
-import pl.AWTGameEngine.annotations.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.ComponentFX;
+import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.components.Box3D;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;

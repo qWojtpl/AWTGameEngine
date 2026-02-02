@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.annotations.EventMethod;
+import pl.AWTGameEngine.annotations.methods.EventMethod;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 

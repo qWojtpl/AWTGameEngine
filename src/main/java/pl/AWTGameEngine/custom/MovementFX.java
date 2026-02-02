@@ -1,12 +1,11 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.annotations.*;
+import pl.AWTGameEngine.annotations.components.ComponentMeta;
+import pl.AWTGameEngine.annotations.components.types.ComponentFX;
+import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
-
-import java.awt.*;
 
 @ComponentFX
 @ComponentMeta(

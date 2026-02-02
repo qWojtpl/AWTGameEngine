@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.HTMLComponent;
 import pl.AWTGameEngine.objects.GameObject;
 

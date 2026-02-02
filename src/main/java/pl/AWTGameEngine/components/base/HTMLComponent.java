@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.components.base;
 
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
 

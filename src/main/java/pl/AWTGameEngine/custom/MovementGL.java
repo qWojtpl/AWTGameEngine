@@ -1,15 +1,11 @@
 package pl.AWTGameEngine.custom;
 
-import physx.vehicle2.EngineDriveVehicleEnum;
-import pl.AWTGameEngine.annotations.ComponentGL;
-import pl.AWTGameEngine.annotations.ComponentMeta;
-import pl.AWTGameEngine.annotations.FromXML;
+import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.ComponentMeta;
+import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
-
-import java.awt.*;
 
 @ComponentGL
 @ComponentMeta(

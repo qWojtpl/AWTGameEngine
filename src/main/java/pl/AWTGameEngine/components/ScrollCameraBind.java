@@ -1,9 +1,8 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.FromXML;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -39,12 +38,10 @@ public class ScrollCameraBind extends ObjectComponent {
         }
     }
 
-    @SerializationGetter
     public int getMaxValue() {
         return this.maxValue;
     }
 
-    @SerializationGetter
     public double getWheelSpeed() {
         return this.wheelSpeed;
     }

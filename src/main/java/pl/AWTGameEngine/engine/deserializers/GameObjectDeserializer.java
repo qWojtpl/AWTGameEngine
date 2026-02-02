@@ -2,7 +2,7 @@ package pl.AWTGameEngine.engine.deserializers;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import pl.AWTGameEngine.annotations.FromXML;
+import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;

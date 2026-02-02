@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.WebComponent;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.BlankRenderer;
 import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.components.base.ObjectComponent;

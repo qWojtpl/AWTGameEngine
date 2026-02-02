@@ -2,6 +2,10 @@ package pl.AWTGameEngine.components;
 
 import javafx.application.Platform;
 import pl.AWTGameEngine.annotations.*;
+import pl.AWTGameEngine.annotations.components.management.Conflicts;
+import pl.AWTGameEngine.annotations.components.management.ConflictsWith;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.panels.WebPanel;
@@ -44,7 +48,6 @@ public class WebTextArea extends ObjectComponent {
         propertyChanged = false;
     }
 
-    @SerializationGetter
     public String getText() {
         return this.text;
     }

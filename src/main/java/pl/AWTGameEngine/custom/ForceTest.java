@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.annotations.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;

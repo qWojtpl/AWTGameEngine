@@ -1,9 +1,8 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.DefaultComponent;
-import pl.AWTGameEngine.annotations.SerializationGetter;
-import pl.AWTGameEngine.annotations.FromXML;
-import pl.AWTGameEngine.annotations.Unique;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -137,7 +136,6 @@ public class ScrollComponent extends ObjectComponent {
         return this.selected;
     }
 
-    @SerializationGetter
     public int getScrollSize() {
         return this.scrollSize;
     }
@@ -154,22 +152,18 @@ public class ScrollComponent extends ObjectComponent {
         return this.selectedScrollColor;
     }
 
-    @SerializationGetter
     public String getBackgroundColor() {
         return this.background.getColorObject().serialize();
     }
 
-    @SerializationGetter
     public String getScrollColor() {
         return this.scrollColor.serialize();
     }
 
-    @SerializationGetter
     public String getSelectedScrollColor() {
         return this.selectedScrollColor.serialize();
     }
 
-    @SerializationGetter
     public boolean isHorizontal() {
         return this.horizontal;
     }

@@ -1,6 +1,10 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.*;
+import pl.AWTGameEngine.annotations.components.management.Conflicts;
+import pl.AWTGameEngine.annotations.components.management.ConflictsWith;
+import pl.AWTGameEngine.annotations.components.management.Unique;
+import pl.AWTGameEngine.annotations.components.types.ComponentFX;
+import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
