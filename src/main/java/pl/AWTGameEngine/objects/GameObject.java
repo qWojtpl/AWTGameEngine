@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.objects;
 
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.WebHandler;
 import pl.AWTGameEngine.engine.*;
@@ -182,6 +183,7 @@ public class GameObject {
         return true;
     }
 
+    @SaveState(name = "id")
     public String getIdentifier() {
         return this.identifier;
     }
@@ -228,10 +230,12 @@ public class GameObject {
         return this.position.getZ();
     }
 
+    @SaveState(name = "position")
     public TransformSet getPosition() {
         return this.position.clone();
     }
 
+    @SaveState(name = "rotation")
     public TransformSet getRotation() {
         if(this.rotation == null) {
             double[] pos = RotationHelper.quaternionToEulerXYZ(

@@ -184,4 +184,8 @@ public class Scene {
         }
     }
 
+    public void saveState(String path) {
+        SceneStateSaver.saveState(path, this);
+    }
+
 }

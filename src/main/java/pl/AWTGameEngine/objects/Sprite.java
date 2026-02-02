@@ -109,4 +109,9 @@ public class Sprite {
         return returnable;
     }
 
+    @Override
+    public String toString() {
+        return this.imagePath;
+    }
+
 }

@@ -2,6 +2,7 @@ package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
@@ -57,6 +58,7 @@ public abstract class Base3DShape extends ObjectComponent {
         }
     }
 
+    @SaveState(name = "spriteSource")
     public Sprite getSprite() {
         return this.sprite;
     }

@@ -69,6 +69,10 @@ public class TransformSet {
         return "[TransformSet[x=" + x + ",y=" + y + ",z=" + z + "]]";
     }
 
+    public String toSimpleString() {
+        return x + "," + y + "," + z;
+    }
+
     public TransformSet deserializeFromToString(String data) {
         deserialize(data
                 .replace("x=", "")
