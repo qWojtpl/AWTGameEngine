@@ -277,6 +277,7 @@ public class GameObject {
         return this.size.getY();
     }
 
+    @SaveState(name = "size")
     public TransformSet getSize() {
         return this.size.clone();
     }

@@ -6,6 +6,8 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -16,24 +18,47 @@ public class SceneStateSaver {
         Logger.info("Saving scene state...");
         List<GameObject> objects = scene.getGameObjects();
         StringBuilder bobTheBuilder = new StringBuilder();
+        addSceneParams(scene, bobTheBuilder);
         for(GameObject object : objects) {
             bobTheBuilder.append(saveObjectState(object));
         }
+        bobTheBuilder.append("\n</scene>");
         Logger.info("Saved scene state to: " + (path == null ? "LOGGER" : path));
         if(path == null) {
             Logger.info(bobTheBuilder.toString());
+            return;
         }
-        //todo: save to file
+        try(FileWriter writer = new FileWriter(path, false)) {
+            writer.write(bobTheBuilder.toString());
+        } catch(IOException e) {
+            Logger.exception("Cannot save scene state to file", e);
+        }
+    }
+
+    private static void addSceneParams(Scene scene, StringBuilder builder) {
+        builder.append("<scene title=\"");
+        builder.append(scene.getWindow().getTitle());
+        builder.append("\" renderFPS=\"");
+        builder.append((int) scene.getWindow().getRenderLoop().getTargetFps());
+        builder.append("\" updateFPS=\"");
+        builder.append((int) scene.getWindow().getUpdateLoop().getTargetFps());
+        builder.append("\" physicsFPS=\"");
+        builder.append((int) scene.getWindow().getPhysicsLoop().getTargetFps());
+        builder.append("\" sameSize=\"");
+        builder.append(scene.getWindow().isSameSize());
+        builder.append("\" fullscreen=\"");
+        builder.append(scene.getWindow().isFullScreen());
+        builder.append("\">");
     }
 
     private static String saveObjectState(GameObject object) {
         StringBuilder objectBuilder = new StringBuilder();
-        objectBuilder.append("\n<object");
+        objectBuilder.append("\n\t<object");
         objectBuilder.append(getParameters(object, object.getIdentifier()));
         objectBuilder.append(">\n");
         List<ObjectComponent> components = object.getComponents();
         for(ObjectComponent component : components) {
-            objectBuilder.append("\t");
+            objectBuilder.append("\t\t");
             objectBuilder.append("<");
             objectBuilder.append(component.getClass().getCanonicalName().replace(component.getClass().getPackageName() + ".", ""));
             objectBuilder.append(getParameters(component, component.getComponentName()));
@@ -44,7 +69,7 @@ public class SceneStateSaver {
             }
             objectBuilder.append(" />\n");
         }
-        objectBuilder.append("</object>");
+        objectBuilder.append("\t</object>");
         return objectBuilder.toString();
     }
 

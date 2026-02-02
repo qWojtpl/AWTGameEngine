@@ -17,3 +17,4 @@ projects/*
 dependency-reduced-pom.xml
 /scenebuilder/
 /src/main/resources/hdr_sprites/
+saved_state.xml

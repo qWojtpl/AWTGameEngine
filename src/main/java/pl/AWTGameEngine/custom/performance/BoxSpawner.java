@@ -2,6 +2,8 @@ package pl.AWTGameEngine.custom.performance;
 
 import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.Box3D;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -14,7 +16,6 @@ import pl.AWTGameEngine.objects.TransformSet;
 public class BoxSpawner extends ObjectComponent {
 
     private int boxCounter = 0;
-    private GameObject lastObject;
 
     public BoxSpawner(GameObject object) {
         super(object);
@@ -32,6 +33,7 @@ public class BoxSpawner extends ObjectComponent {
 //            RigidBody.Dynamic rigidBody = (RigidBody.Dynamic) object.getComponentByClass(RigidBody.Dynamic.class);
 //            rigidBody.addForce(new TransformSet(0, 10, 0));
 //        }
+        GameObject lastObject = getScene().getGameObjectByName("boxspawner-" + (boxCounter - 1));
         for(int i = 0; i < count; i++) {
             GameObject object = getScene().createGameObject("boxspawner-" + boxCounter++);
             object.setSize(new TransformSet(size, size, size));
@@ -54,6 +56,20 @@ public class BoxSpawner extends ObjectComponent {
         if(getKeyListener().hasPressedKey(69)) {
             spawnBoxes(100);
         }
+    }
+
+    @SaveState(name = "iterator")
+    public int getIterator() {
+        return this.boxCounter;
+    }
+
+    public void setIterator(int iterator) {
+        this.boxCounter = iterator;
+    }
+
+    @FromXML
+    public void setIterator(String iterator) {
+        setIterator(Integer.parseInt(iterator));
     }
 
 }
