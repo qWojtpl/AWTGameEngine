@@ -39,6 +39,7 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         this.window = scene.getWindow();
         this.camera = new Camera(this);
         this.physXManager = PhysXManager.getInstance();
+        physXManager.createScene(scene);
         if(!window.isServerWindow()) {
             this.graphicsManager3D = new GraphicsManagerGL(this);
             initOpenGL(width, height);
@@ -95,7 +96,7 @@ public class PanelGL extends JLayeredPane implements PanelObject {
             component.onPhysicsPreUpdate();
         }
 
-        physXManager.simulateFrame(getWindow().getPhysicsLoop().getTargetFps());
+        physXManager.simulateFrame(scene, getWindow().getPhysicsLoop().getTargetFps());
 
         for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
             component.onPhysicsUpdate();

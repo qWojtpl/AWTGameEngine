@@ -152,14 +152,14 @@ public abstract class RigidBody extends ObjectComponent {
                 setAngularVelocity(savedAngularVelocity);
                 savedAngularVelocity = null;
             }
-            physXManager.getPxScene().addActor(rigidDynamic);
+            physXManager.getPxScene(getScene()).addActor(rigidDynamic);
         }
 
         @Override
         public void destroy() {
             rigidDynamic.detachShape(shape);
             releaseObjects();
-            physXManager.getPxScene().removeActor(rigidDynamic);
+            physXManager.getPxScene(getScene()).removeActor(rigidDynamic);
             rigidDynamic.release();
         }
 
@@ -247,14 +247,14 @@ public abstract class RigidBody extends ObjectComponent {
             super.initialize();
             rigidStatic = physics.createRigidStatic(pose);
             rigidStatic.attachShape(shape);
-            physXManager.getPxScene().addActor(rigidStatic);
+            physXManager.getPxScene(getScene()).addActor(rigidStatic);
         }
 
         @Override
         public void destroy() {
             rigidStatic.detachShape(shape);
             releaseObjects();
-            physXManager.getPxScene().removeActor(rigidStatic);
+            physXManager.getPxScene(getScene()).removeActor(rigidStatic);
             rigidStatic.release();
         }
 

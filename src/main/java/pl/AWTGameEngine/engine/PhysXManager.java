@@ -5,8 +5,10 @@ import physx.common.*;
 import physx.cooking.PxCookingParams;
 import physx.physics.*;
 import pl.AWTGameEngine.components.Vehicle;
+import pl.AWTGameEngine.scenes.Scene;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public final class PhysXManager {
@@ -23,12 +25,8 @@ public final class PhysXManager {
     private final PxDefaultCpuDispatcher cpuDispatcher;
     private final PxVec3 gravityVector;
     private final PxShapeFlags shapeFlags;
-    private PxSceneDesc sceneDesc;
-    private PxScene scene;
-
+    private HashMap<Scene, PhysXScene> scenes = new HashMap<>();
     private PxMaterial defaultMaterial;
-
-    private final List<Vehicle> vehicles = new ArrayList<>();
 
     PhysXManager() {
         allocator = new PxDefaultAllocator();
@@ -44,27 +42,27 @@ public final class PhysXManager {
 
     public void init() {
         Logger.info("PhysX loaded, version " + getVersionString());
-
-        sceneDesc = new PxSceneDesc(tolerances);
-        sceneDesc.setGravity(gravityVector);
-        sceneDesc.setCpuDispatcher(cpuDispatcher);
-        sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
-        sceneDesc.setSolverType(PxSolverTypeEnum.ePGS);
-        scene = physics.createScene(sceneDesc);
         defaultMaterial = physics.createMaterial(0.5f, 0.5f, 0.5f);
     }
 
-    public void simulateFrame(double fps) {
-        float step = 1f / ((float) fps / 6);
-        for(Vehicle vehicle : vehicles) {
-            vehicle.getPxVehicle().step(step, vehicle.getContext());
-        }
-        getPxScene().simulate(step);
-        getPxScene().fetchResults(true);
+    public void createScene(Scene scene) {
+        PhysXScene physXScene = new PhysXScene();
+        physXScene.init();
+        scenes.putIfAbsent(scene, physXScene);
     }
 
-    public void registerVehicle(Vehicle vehicle) {
-        vehicles.add(vehicle);
+    public void simulateFrame(Scene scene, double fps) {
+        float step = 1f / ((float) fps / 6);
+        PhysXScene physXScene = scenes.get(scene);
+        for(Vehicle vehicle : physXScene.vehicles) {
+            vehicle.getPxVehicle().step(step, vehicle.getContext());
+        }
+        physXScene.pxScene.simulate(step);
+        physXScene.pxScene.fetchResults(true);
+    }
+
+    public void registerVehicle(Scene scene, Vehicle vehicle) {
+        scenes.get(scene).vehicles.add(vehicle);
     }
 
     private String getVersionString() {
@@ -79,8 +77,8 @@ public final class PhysXManager {
         return this.physics;
     }
 
-    public PxScene getPxScene() {
-        return this.scene;
+    public PxScene getPxScene(Scene scene) {
+        return this.scenes.get(scene).pxScene;
     }
 
     public PxShapeFlags getShapeFlags() {
@@ -98,8 +96,9 @@ public final class PhysXManager {
     public void cleanup() {
         defaultMaterial.destroy();
         shapeFlags.destroy();
-        sceneDesc.destroy();
-        scene.release();
+        for(PhysXScene physXScene : scenes.values()) {
+            physXScene.destroy();
+        }
         gravityVector.destroy();
         cpuDispatcher.destroy();
         physics.destroy();
@@ -115,6 +114,28 @@ public final class PhysXManager {
             INSTANCE.init();
         }
         return INSTANCE;
+    }
+
+    class PhysXScene {
+
+        private PxScene pxScene;
+        private PxSceneDesc pxSceneDesc;
+        private final List<Vehicle> vehicles = new ArrayList<>();
+
+        public void init() {
+            pxSceneDesc = new PxSceneDesc(tolerances);
+            pxSceneDesc.setGravity(gravityVector);
+            pxSceneDesc.setCpuDispatcher(cpuDispatcher);
+            pxSceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
+            pxSceneDesc.setSolverType(PxSolverTypeEnum.ePGS);
+            pxScene = physics.createScene(pxSceneDesc);
+        }
+
+        public void destroy() {
+            pxSceneDesc.destroy();
+            pxScene.release();
+        }
+
     }
 
 }

@@ -35,6 +35,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
         this.rootGroup = new Group(new AmbientLight());
         this.fxScene = new javafx.scene.Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
         physXManager.init();
+        physXManager.createScene(scene);
         initListeners();
         setScene(fxScene);
         fxScene.setFill(Color.LIGHTGRAY);
@@ -90,7 +91,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
             component.onPhysicsPreUpdate();
         }
 
-        physXManager.simulateFrame(getWindow().getPhysicsLoop().getTargetFps());
+        physXManager.simulateFrame(scene, getWindow().getPhysicsLoop().getTargetFps());
 
         for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
             component.onPhysicsUpdate();

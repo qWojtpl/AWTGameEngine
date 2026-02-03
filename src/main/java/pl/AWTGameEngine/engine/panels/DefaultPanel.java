@@ -27,6 +27,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
         this.window = scene.getWindow();
         this.scene = scene;
         this.camera = new Camera(this);
+        PhysXManager.getInstance().createScene(scene);
         setMouseListener(new MouseListener(window));
     }
 
@@ -63,7 +64,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
             component.onPhysicsPreUpdate();
         }
 
-        PhysXManager.getInstance().simulateFrame(getWindow().getPhysicsLoop().getTargetFps());
+        PhysXManager.getInstance().simulateFrame(scene, getWindow().getPhysicsLoop().getTargetFps());
 
         for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
             component.onPhysicsUpdate();

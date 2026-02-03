@@ -16,7 +16,6 @@ import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
-import java.awt.event.KeyAdapter;
 
 public class WebPanel extends JFXPanel implements PanelObject {
 
@@ -34,6 +33,8 @@ public class WebPanel extends JFXPanel implements PanelObject {
         setBackground(Color.BLACK);
 
         this.camera = new Camera(this);
+
+        PhysXManager.getInstance().createScene(scene);
 
         if(window.isServerWindow()) {
             return;
@@ -111,7 +112,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
             component.onPhysicsPreUpdate();
         }
 
-        PhysXManager.getInstance().simulateFrame(getWindow().getPhysicsLoop().getTargetFps());
+        PhysXManager.getInstance().simulateFrame(scene, getWindow().getPhysicsLoop().getTargetFps());
 
         for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
             component.onPhysicsUpdate();

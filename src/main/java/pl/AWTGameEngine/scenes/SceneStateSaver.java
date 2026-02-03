@@ -36,7 +36,9 @@ public class SceneStateSaver {
         } catch(IOException e) {
             Logger.exception("Cannot save scene state to file", e);
         }
-        SceneBuilder.build(path, true);
+        if(build) {
+            SceneBuilder.build(path, true);
+        }
     }
 
     private static void addSceneParams(Scene scene, StringBuilder builder) {
