@@ -202,7 +202,9 @@ public class SceneBuilder {
 
                 appendMethodBody(methodBuilder, createCall(address, "addComponent", componentAddress));
             }
+            appendMethodBody(methodBuilder, createCall(address, "triggerSerializationFinish"));
             methodBuilder.append("\t}\n\n");
+            //todo: nested scenes
         }
     }
 
@@ -223,10 +225,43 @@ public class SceneBuilder {
         fileBuilder.append(";\n");
     }
 
+    /**
+     * Use this method to create call to method when method doesn't have any parameters
+     * @param object Object address to invoke the method on
+     * @param field  Method to invoke name
+     * @return       Created call
+     */
+    private static String createCall(String object, String field) {
+        return object + ".getClass().getMethod(\"" + field + "\").invoke(" + object + ")";
+    }
+
+    /**
+     * Use this method to create call to method when the parameter is
+     * a reference to object with custom class, e.g. ObjectComponent
+     * @param object Object address to invoke the method on
+     * @param field  Method to invoke name
+     * @param value  Address of object with custom class
+     * @return       Created call
+     */
     private static String createCall(String object, String field, String value) {
         return "Arrays.stream(" + object + ".getClass().getMethods()).filter(method -> method.getName().equals(" + "\"" + field + "\"" + ")).findFirst().orElseThrow(() -> new NoSuchMethodException()).invoke(" + object + (value != null ? ", " + value : "") + ")";
     }
 
+    /**
+     * Use this method to create call to method when the parameter can be
+     * written as a string. Remember, if the field type is a String.class, you have to use
+     * additional quotation marks inside the value string, as shown in the example.
+     * <pre>
+     *     createCall("x14", "setSizeX", "double.class", "30");
+     *     createCall("x14", "multipleParameters", "double.class, double.class", "30.0, 25.5");
+     *     createCall("x14", "setIdentifier", "String.class", "\"myIdentifier\"");
+     * </pre>
+     * @param object    Object address to invoke the method on
+     * @param field     Method to invoke name
+     * @param fieldType Type of field, e.g. "double.class"
+     * @param value     Method parameter(s)
+     * @return          Created call
+     */
     private static String createCall(String object, String field, String fieldType, String value) {
         return object + ".getClass().getMethod(\"" + field + "\", " + fieldType + ").invoke(" + object + (value != null ? ", " + value : "") + ")";
     }

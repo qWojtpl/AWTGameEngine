@@ -15,9 +15,7 @@ public class GameObjectDeserializer {
     public static void deserialize(GameObject gameObject, Node data) {
         deserializeObjectAttributes(gameObject, data);
         deserializeObjectComponents(gameObject, data);
-        for(ObjectComponent component : gameObject.getEventHandler().getComponents("onSerializationFinish")) {
-            component.onSerializationFinish();
-        }
+        gameObject.triggerSerializationFinish();
     }
 
     private static void deserializeObjectAttributes(GameObject object, Node node) {

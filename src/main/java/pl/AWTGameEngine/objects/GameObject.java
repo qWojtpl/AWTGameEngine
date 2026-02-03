@@ -111,6 +111,12 @@ public class GameObject {
         return getComponentsByClass(component).isEmpty();
     }
 
+    public void triggerSerializationFinish() {
+        for(ObjectComponent component : eventHandler.getComponents("onSerializationFinish")) {
+            component.onSerializationFinish();
+        }
+    }
+
     public void moveX(double x) {
         double delta = x - this.position.getX();
         if(delta == 0) {
