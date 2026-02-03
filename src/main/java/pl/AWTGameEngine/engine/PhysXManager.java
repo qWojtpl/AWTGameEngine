@@ -51,6 +51,11 @@ public final class PhysXManager {
         scenes.putIfAbsent(scene, physXScene);
     }
 
+    public void removeScene(Scene scene) {
+        scenes.get(scene).destroy();
+        scenes.remove(scene);
+    }
+
     public void simulateFrame(Scene scene, double fps) {
         float step = 1f / ((float) fps / 6);
         PhysXScene physXScene = scenes.get(scene);

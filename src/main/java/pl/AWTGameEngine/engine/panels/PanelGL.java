@@ -109,7 +109,7 @@ public class PanelGL extends JLayeredPane implements PanelObject {
 
     @Override
     public void unload() {
-        physXManager.cleanup();
+        PhysXManager.getInstance().removeScene(scene);
         window.remove(this);
     }
 

@@ -104,7 +104,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
 
     @Override
     public void unload() {
-        physXManager.cleanup();
+        PhysXManager.getInstance().removeScene(scene);
         setScene(null);
         window.remove(this);
     }

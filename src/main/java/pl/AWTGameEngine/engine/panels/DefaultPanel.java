@@ -76,6 +76,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
     }
     @Override
     public void unload() {
+        PhysXManager.getInstance().removeScene(scene);
         window.remove(this);
     }
 
