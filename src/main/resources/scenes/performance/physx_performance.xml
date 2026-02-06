@@ -9,11 +9,13 @@
         <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
         <Server />
+        <MusicPlayer sourcePath="audio/swingin.wav" />
     </object>
     <object id="spin" x="20" y="-50" z="20" size="10,10,100">
         <Box3D spriteSource="sprites/beaver.jpg" />
         <RigidBody.Kinematic />
         <SpinningObject speed="30" _package="pl.AWTGameEngine.custom.performance" />
+<!--        <SoundSource clipSource="audio/dominique.wav" />-->
     </object>
     <object id="floor" sizeX="20000" sizeY="20" sizeZ="20000" x="-1000" y="-100" z="-1000">
         <Box3D />

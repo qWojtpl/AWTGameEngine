@@ -73,10 +73,15 @@ public class OpenGLInitializer implements GLEventListener {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         gl.glUseProgram(program);
 
-        for (ObjectComponent c :
-                scene.getSceneEventHandler()
-                        .getComponents("on3DRenderRequest#GraphicsManager3D")) {
-            c.on3DRenderRequest(graphicsManagerGL);
+        try {
+            for (ObjectComponent c :
+                    scene.getSceneEventHandler()
+                            .getComponents("on3DRenderRequest#GraphicsManager3D")) {
+                c.on3DRenderRequest(graphicsManagerGL);
+            }
+        } catch(Exception e) {
+            Logger.exception("Unhandled exception caught while running an iteration of OpenGL 3D render request", e);
+            return;
         }
 
         float[] projection = MatrixHelper.perspective(

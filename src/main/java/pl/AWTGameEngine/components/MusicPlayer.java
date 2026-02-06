@@ -1,6 +1,8 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.annotations.components.types.ComponentFX;
+import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
@@ -9,14 +11,13 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.GameObject;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.*;
 import java.io.IOException;
 
 @DefaultComponent
 @WebComponent
+@ComponentGL
+@ComponentFX
 public class MusicPlayer extends ObjectComponent {
 
     private Clip clip;
@@ -60,7 +61,7 @@ public class MusicPlayer extends ObjectComponent {
             if(autoPlay) {
                 play();
             }
-        } catch(LineUnavailableException | IOException e) {
+        } catch(Exception e) {
             Logger.exception("Line is unavailable", e);
         }
     }

@@ -15,7 +15,6 @@ import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
@@ -30,7 +29,7 @@ public abstract class RigidBody extends ObjectComponent {
     protected PxShape shape;
     protected PxPhysics physics;
     protected final PxTransform pose = new PxTransform(PxIDENTITYEnum.PxIdentity);
-    protected final PxFilterData filterData = new PxFilterData(1, 1, 0, 0);
+    protected final PxFilterData filterData = new PxFilterData(1, -1, PxPairFlagEnum.eNOTIFY_TOUCH_FOUND.value | PxPairFlagEnum.eNOTIFY_TOUCH_LOST.value | PxPairFlagEnum.eNOTIFY_CONTACT_POINTS.value, 0);
 
     // Internal variables
     protected double mass = 0.03;
@@ -135,6 +134,7 @@ public abstract class RigidBody extends ObjectComponent {
         public void initialize() {
             super.initialize();
             rigidDynamic = physics.createRigidDynamic(pose);
+            rigidDynamic.setName(getObject().getIdentifier());
             rigidDynamic.attachShape(shape);
             rigidDynamic.setMass((float) mass);
             //
@@ -246,6 +246,7 @@ public abstract class RigidBody extends ObjectComponent {
         public void initialize() {
             super.initialize();
             rigidStatic = physics.createRigidStatic(pose);
+            rigidStatic.setName(getObject().getIdentifier());
             rigidStatic.attachShape(shape);
             physXManager.getPxScene(getScene()).addActor(rigidStatic);
         }

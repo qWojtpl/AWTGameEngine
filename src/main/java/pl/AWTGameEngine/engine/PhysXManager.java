@@ -25,7 +25,7 @@ public final class PhysXManager {
     private final PxDefaultCpuDispatcher cpuDispatcher;
     private final PxVec3 gravityVector;
     private final PxShapeFlags shapeFlags;
-    private HashMap<Scene, PhysXScene> scenes = new HashMap<>();
+    private final HashMap<Scene, PhysXScene> scenes = new HashMap<>();
     private PxMaterial defaultMaterial;
 
     PhysXManager() {
@@ -46,7 +46,7 @@ public final class PhysXManager {
     }
 
     public void createScene(Scene scene) {
-        PhysXScene physXScene = new PhysXScene();
+        PhysXScene physXScene = new PhysXScene(scene);
         physXScene.init();
         scenes.putIfAbsent(scene, physXScene);
     }
@@ -84,6 +84,10 @@ public final class PhysXManager {
 
     public PxScene getPxScene(Scene scene) {
         return this.scenes.get(scene).pxScene;
+    }
+
+    public CollisionManager getCollisionManager(Scene scene) {
+        return this.scenes.get(scene).collisionManager;
     }
 
     public PxShapeFlags getShapeFlags() {
@@ -125,7 +129,12 @@ public final class PhysXManager {
 
         private PxScene pxScene;
         private PxSceneDesc pxSceneDesc;
+        private final CollisionManager collisionManager;
         private final List<Vehicle> vehicles = new ArrayList<>();
+
+        public PhysXScene(Scene scene) {
+            collisionManager = new CollisionManager(scene);
+        }
 
         public void init() {
             pxSceneDesc = new PxSceneDesc(tolerances);
@@ -133,6 +142,7 @@ public final class PhysXManager {
             pxSceneDesc.setCpuDispatcher(cpuDispatcher);
             pxSceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
             pxSceneDesc.setSolverType(PxSolverTypeEnum.ePGS);
+            pxSceneDesc.setSimulationEventCallback(collisionManager);
             pxScene = physics.createScene(pxSceneDesc);
         }
 

@@ -10,6 +10,7 @@ import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.EventMethod;
+import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.RenderEngine;
@@ -18,12 +19,12 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
-import pl.AWTGameEngine.objects.Camera;
-import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.Window;
+
+import java.util.List;
 
 public abstract class ObjectComponent {
 
@@ -226,6 +227,11 @@ public abstract class ObjectComponent {
      */
     @EventMethod
     public void onCollide(GameObject object) {
+
+    }
+
+    @EventMethod
+    public void onCollide(RigidBody collisionObject, List<ContactPoint> contactPoints) {
 
     }
 
