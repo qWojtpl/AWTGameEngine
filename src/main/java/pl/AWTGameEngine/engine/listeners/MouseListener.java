@@ -9,13 +9,11 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-public class MouseListener implements
-        java.awt.event.MouseListener,
-        java.awt.event.MouseMotionListener,
-        java.awt.event.MouseWheelListener {
+public class MouseListener {
 
     private final Window window;
     private int mouseX;
@@ -33,18 +31,12 @@ public class MouseListener implements
     private MouseEvent moveEvent;
     private MouseWheelEvent mouseWheelEvent;
 
-    private static MouseListener currentInstance;
+    private AWTListener awtListener;
 
     public MouseListener(Window window) {
         this.window = window;
-        currentInstance = this;
     }
 
-    public static MouseListener getInstance() {
-        return currentInstance;
-    }
-
-    @Override
     public void mouseClicked(MouseEvent e) {
         clickEvent = e;
         for(Scene scene : window.getScenes()) {
@@ -67,43 +59,39 @@ public class MouseListener implements
         }
     }
 
-    @Override
     public void mousePressed(MouseEvent e) {
         pressEvent = e;
     }
 
-    @Override
     public void mouseReleased(MouseEvent e) {
         releaseEvent = e;
     }
 
-    @Override
     public void mouseEntered(MouseEvent e) {
         enterEvent = e;
     }
 
-    @Override
     public void mouseExited(MouseEvent e) {
         exitEvent = e;
     }
 
-    @Override
     public void mouseDragged(MouseEvent e) {
         dragEvent = e;
         updatePosition(e);
     }
 
-    @Override
     public void mouseMoved(MouseEvent e) {
         updatePosition(e);
     }
 
-    @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         mouseWheelEvent = e;
     }
 
     public void updatePosition(MouseEvent e) {
+        if(window.getCurrentScene() == null) {
+            return;
+        }
         Camera camera = window.getCurrentScene().getPanel().getCamera();
         mouseX = (int) (e.getX() / camera.getMultiplier() + camera.getX());
         mouseY = (int) (e.getY() / camera.getMultiplier() + camera.getY());
@@ -123,6 +111,38 @@ public class MouseListener implements
         dragEvent = null;
         moveEvent = null;
         mouseWheelEvent = null;
+    }
+
+    public void adaptAWTEvent(AWTEvent event) {
+        if(event instanceof MouseWheelEvent e) {
+            mouseWheelMoved(e);
+            return;
+        }
+
+        if(!(event instanceof MouseEvent e)) {
+            return;
+        }
+
+        switch(e.getID()) {
+            case MouseEvent.MOUSE_CLICKED -> mouseClicked(e);
+            case MouseEvent.MOUSE_PRESSED -> mousePressed(e);
+            case MouseEvent.MOUSE_RELEASED -> mouseReleased(e);
+            case MouseEvent.MOUSE_ENTERED -> mouseEntered(e);
+            case MouseEvent.MOUSE_EXITED -> mouseExited(e);
+            case MouseEvent.MOUSE_DRAGGED -> mouseDragged(e);
+            case MouseEvent.MOUSE_MOVED -> mouseMoved(e);
+        }
+    }
+
+    public AWTListener getAWTListener() {
+        return this.awtListener;
+    }
+
+    public void setAWTListener(AWTListener listener) {
+        if(!this.equals(listener.getTarget())) {
+            throw new RuntimeException("AWTListener target is wrong.");
+        }
+        this.awtListener = listener;
     }
 
     /**

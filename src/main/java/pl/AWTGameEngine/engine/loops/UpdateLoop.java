@@ -16,8 +16,8 @@ public class UpdateLoop extends BaseLoop {
             for(Scene scene : window.getScenes()) {
                 scene.update();
             }
-            if(MouseListener.getInstance() != null) {
-                MouseListener.getInstance().refresh();
+            if(window.getMouseListener() != null) {
+                window.getMouseListener().refresh();
             }
         }
     }

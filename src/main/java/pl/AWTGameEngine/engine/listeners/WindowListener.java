@@ -32,6 +32,7 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
             window.unloadScenes();
             PhysXManager.getInstance().cleanup();
             Logger.info("Stopped app.");
+            System.exit(0);
         }
     }
 
@@ -63,11 +64,12 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
                 component.onWindowResize(newWidth, newHeight);
             }
         }
+        window.updateDialogs();
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
-
+        window.updateDialogs();
     }
 
     @Override

@@ -83,7 +83,7 @@ public class Camera {
         if(!panel.getWindow().isSameSize()) {
             return 1;
         }
-        return ((float) panel.getSize().getWidth() / panel.getWindow().getBaseWidth());
+        return ((float) panel.getWindow().getWidth() / panel.getWindow().getBaseWidth());
     }
 
     public void setX(double x) {

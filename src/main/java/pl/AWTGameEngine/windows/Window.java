@@ -3,6 +3,7 @@ package pl.AWTGameEngine.windows;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.*;
+import pl.AWTGameEngine.engine.listeners.AWTListener;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
@@ -12,13 +13,15 @@ import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
 import javax.swing.*;
+import javax.tools.Tool;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Window extends JFrame {
+public class Window extends Frame {
 
     private final boolean serverWindow;
     private boolean sameSize = false;
@@ -27,6 +30,7 @@ public class Window extends JFrame {
     private BaseLoop updateLoop;
     private BaseLoop physicsLoop;
     private BaseLoop netLoop;
+    private MouseListener mouseListener;
     private KeyListener keyListener;
     private WindowListener windowListener;
     private final HashMap<Scene, Boolean> scenes = new HashMap<>();
@@ -37,6 +41,7 @@ public class Window extends JFrame {
     private Robot robot;
     private double screenWidth;
     private double screenHeight;
+    private List<Dialog> dialogs = new ArrayList<>();
 
     public Window(boolean serverWindow) {
         this.serverWindow = serverWindow;
@@ -46,7 +51,7 @@ public class Window extends JFrame {
                 Font.PLAIN,
                 appProperties.getPropertyAsInteger("fontSize")
         );
-        getContentPane().setBackground(Color.BLACK);
+        setBackground(Color.BLACK);
     }
 
     public void moveMouseTo(double x, double y) {
@@ -110,9 +115,9 @@ public class Window extends JFrame {
         }
         setSize(getBaseWidth(), getBaseHeight());
         setLocationRelativeTo(null);
+        setMouseListener(new MouseListener(this));
         setKeyListener(new KeyListener(this));
         setWindowListener(new WindowListener(this));
-        setLayeredPane(new JLayeredPane());
         addComponentListener(getWindowListener());
     }
 
@@ -156,6 +161,10 @@ public class Window extends JFrame {
     @Command("netLoop")
     public BaseLoop getNetLoop() {
         return this.netLoop;
+    }
+
+    public MouseListener getMouseListener() {
+        return this.mouseListener;
     }
 
     public KeyListener getKeyListener() {
@@ -208,6 +217,10 @@ public class Window extends JFrame {
         return this.cursor;
     }
 
+    public List<Dialog> getDialogs() {
+        return new ArrayList<>(dialogs);
+    }
+
     public void setRenderLoop(BaseLoop loop) {
         this.renderLoop = loop;
     }
@@ -223,6 +236,21 @@ public class Window extends JFrame {
     public void setNetLoop(BaseLoop loop) {
         this.netLoop = loop;
     }
+
+    public void setMouseListener(MouseListener listener) {
+        if(this.mouseListener != null) {
+            Toolkit.getDefaultToolkit().removeAWTEventListener(mouseListener.getAWTListener());
+        }
+        this.mouseListener = listener;
+        AWTListener awtListener = new AWTListener(mouseListener);
+        mouseListener.setAWTListener(awtListener);
+        Toolkit.getDefaultToolkit().addAWTEventListener(awtListener,
+                AWTEvent.MOUSE_EVENT_MASK |
+                        AWTEvent.MOUSE_MOTION_EVENT_MASK |
+                        AWTEvent.MOUSE_WHEEL_EVENT_MASK
+        );
+    }
+
 
     public void setKeyListener(KeyListener listener) {
         if (this.keyListener != null) {
@@ -246,19 +274,68 @@ public class Window extends JFrame {
 
     public void addScene(Scene scene) {
         scenes.putIfAbsent(scene, scenes.isEmpty());
+        if(dialogs.size() != scenes.keySet().size() - 1) {
+            Dialog dialog = new Dialog(this, false);
+            dialog.setUndecorated(true);
+            dialog.setBackground(new Color(100, 0, 0));
+            dialog.setVisible(true);
+            dialog.setFocusable(false);
+            dialogs.add(dialog);
+            updateDialogs();
+        }
+    }
+
+    public void updateDialogs() {
+        for(Dialog d : dialogs) {
+            if(getWidth() == 0 || getHeight() == 0) {
+                d.setBounds(getX(), getY(), getBaseWidth(), getBaseHeight());
+            } else {
+                d.setBackground(new Color(0, 0, 0, 0));
+                d.setBounds(getX() + getInsets().left, getY() + getInsets().top, getWidth(), getHeight());
+            }
+        }
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        updateDialogs();
     }
 
     public void setCurrentScene(Scene newCurrentScene) {
         if(scenes.getOrDefault(newCurrentScene, null) == null) {
             throw new RuntimeException("Scene must be owned by this window!");
         }
-        for(Scene scene : new ArrayList<>(scenes.keySet())) {
+        int i = 0;
+        removeAll();
+        List<Scene> sceneList = new ArrayList<>(scenes.keySet());
+        for(Scene scene : sceneList) {
             scenes.replace(scene, scene.equals(newCurrentScene));
             scene.getPanel().setOpaque(scene.equals(newCurrentScene));
             if(scene.equals(newCurrentScene) && scenes.keySet().size() > 1) {
-                scene.getPanel().setMouseListener(null);
+                if(scene.getPanel() instanceof PanelGL) {
+                    add(((PanelGL) scene.getPanel()).getGljPanel());
+                    ((PanelGL) scene.getPanel()).getGljPanel().setFocusable(false);
+                    requestFocusInWindow();
+                } else {
+                    add((Component) scene.getPanel());
+                    ((Component) scene.getPanel()).setFocusable(false);
+                    requestFocusInWindow();
+                }
             } else {
-                scene.getPanel().setMouseListener(new MouseListener(this));
+                if(scenes.keySet().size() > 1) {
+                    dialogs.get(i).removeAll();
+                    dialogs.get(i++).add((Component) scene.getPanel());
+                } else {
+                    scene.getPanel().setSize(new Dimension(getWidth(), getHeight()));
+                    if(scene.getPanel() instanceof PanelGL) {
+                        add(((PanelGL) scene.getPanel()).getGljPanel());
+                        ((PanelGL) scene.getPanel()).setFocusable(false);
+                    } else {
+                        add((Component) scene.getPanel());
+                        ((Component) scene.getPanel()).setFocusable(false);
+                    }
+                }
             }
         }
     }

@@ -18,7 +18,6 @@ public interface PanelObject {
     void updatePhysics();
     void setSize(Dimension dimension);
     void setPreferredSize(Dimension dimension);
-    void setMouseListener(MouseListener listener);
     Dimension getSize();
     void setCursor(Cursor cursor);
     void setOpaque(boolean opaque);

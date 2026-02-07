@@ -8,7 +8,6 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFX;
-import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
@@ -24,7 +23,6 @@ public class PanelFX extends JFXPanel implements PanelObject {
     private final PhysXManager physXManager;
     private final javafx.scene.Group rootGroup;
     private final javafx.scene.Scene fxScene;
-    private MouseListener mouseListener;
 
     public PanelFX(Scene scene, int width, int height) {
         this.scene = scene;
@@ -109,20 +107,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
         window.remove(this);
     }
 
-    public void setMouseListener(MouseListener mouseListener) {
-        if (this.mouseListener != null) {
-            removeMouseListener(this.mouseListener);
-            removeMouseMotionListener(this.mouseListener);
-            removeMouseWheelListener(this.mouseListener);
-        }
-        this.mouseListener = mouseListener;
-        addMouseListener(mouseListener);
-        addMouseMotionListener(mouseListener);
-        addMouseWheelListener(mouseListener);
-    }
-
     private void initListeners() {
-        setMouseListener(new MouseListener(window));
         fxScene.addEventHandler(KeyEvent.KEY_PRESSED, (event) -> {
             getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
         });

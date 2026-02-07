@@ -10,7 +10,6 @@ import pl.AWTGameEngine.engine.loops.*;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         if (windows.isEmpty()) {
             defaultFont = window.getFont();
         }
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         window.setSceneLoader(new SceneLoader(window));
 
         window.setTitle(appProperties.getProperty("title"));

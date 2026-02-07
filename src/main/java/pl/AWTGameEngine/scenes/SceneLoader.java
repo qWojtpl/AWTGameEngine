@@ -118,19 +118,14 @@ public class SceneLoader {
 
     public PanelObject createPanel(Scene scene, RenderEngine renderEngine) {
         PanelObject panel = null;
-        int index = scene.getWindow().getScenes().size();
         if (RenderEngine.DEFAULT.equals(renderEngine)) {
             panel = new DefaultPanel(scene);
-            window.getLayeredPane().add((DefaultPanel) panel, Integer.valueOf(index));
         } else if (RenderEngine.WEB.equals(renderEngine)) {
             panel = new WebPanel(scene);
-            window.getLayeredPane().add((WebPanel) panel, Integer.valueOf(index));
         } else if (RenderEngine.FX3D.equals(renderEngine)) {
             panel = new PanelFX(scene, scene.getWindow().getBaseWidth(), scene.getWindow().getBaseHeight());
-            window.getLayeredPane().add((PanelFX) panel, Integer.valueOf(index));
         } else if (RenderEngine.OPENGL.equals(renderEngine)) {
             panel = new PanelGL(scene, scene.getWindow().getBaseWidth(), scene.getWindow().getBaseHeight());
-            window.getLayeredPane().add((PanelGL) panel, Integer.valueOf(index));
         }
         assert panel != null;
         panel.setSize(new Dimension(scene.getWindow().getBaseWidth(), scene.getWindow().getBaseHeight()));

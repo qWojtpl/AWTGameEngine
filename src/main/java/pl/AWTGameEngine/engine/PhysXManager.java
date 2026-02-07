@@ -57,8 +57,11 @@ public final class PhysXManager {
     }
 
     public void simulateFrame(Scene scene, double fps) {
-        float step = 1f / ((float) fps / 6);
         PhysXScene physXScene = scenes.get(scene);
+        if(physXScene == null) {
+            return;
+        }
+        float step = 1f / ((float) fps / 6);
         for(Vehicle vehicle : physXScene.vehicles) {
             vehicle.getPxVehicle().step(step, vehicle.getContext());
         }

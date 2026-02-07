@@ -2,26 +2,20 @@ package pl.AWTGameEngine.engine.panels;
 
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
-import com.jogamp.opengl.awt.GLJPanel;
-import com.jogamp.opengl.util.texture.Texture;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.OpenGLInitializer;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
-import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
-import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 
-public class PanelGL extends JLayeredPane implements PanelObject {
+public class PanelGL extends Panel implements PanelObject {
 
     private final Scene scene;
     private final Window window;
@@ -31,8 +25,7 @@ public class PanelGL extends JLayeredPane implements PanelObject {
     private final BufferedImage printBuffer;
     private GLProfile profile;
     private GLCapabilities capabilities;
-    private GLJPanel gljPanel;
-    private MouseListener mouseListener;
+    private GLCanvas gljPanel;
 
     public PanelGL(Scene scene, int width, int height) {
         this.scene = scene;
@@ -43,7 +36,6 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         if(!window.isServerWindow()) {
             this.graphicsManager3D = new GraphicsManagerGL(this);
             initOpenGL(width, height);
-            initListeners();
         }
         printBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     }
@@ -51,6 +43,11 @@ public class PanelGL extends JLayeredPane implements PanelObject {
     @Override
     public Scene getParentScene() {
         return this.scene;
+    }
+
+    @Override
+    public Component add(Component comp) {
+        return null;
     }
 
     @Override
@@ -71,7 +68,7 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         return this.physXManager;
     }
 
-    public GLJPanel getGljPanel() {
+    public GLCanvas getGljPanel() {
         return this.gljPanel;
     }
 
@@ -110,22 +107,22 @@ public class PanelGL extends JLayeredPane implements PanelObject {
     @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
-        window.remove(this);
+        window.remove(gljPanel);
     }
 
-    public void setMouseListener(MouseListener mouseListener) {
-        if(gljPanel == null) {
-            return;
-        }
-        if (this.mouseListener != null) {
-            gljPanel.removeMouseListener(this.mouseListener);
-            gljPanel.removeMouseMotionListener(this.mouseListener);
-            gljPanel.removeMouseWheelListener(this.mouseListener);
-        }
-        this.mouseListener = mouseListener;
-        gljPanel.addMouseListener(mouseListener);
-        gljPanel.addMouseMotionListener(mouseListener);
-        gljPanel.addMouseWheelListener(mouseListener);
+    @Override
+    public Dimension getSize() {
+        return new Dimension(getWindow().getWidth(), getWindow().getHeight());
+    }
+
+    @Override
+    public void setCursor(Cursor cursor) {
+
+    }
+
+    @Override
+    public void setOpaque(boolean opaque) {
+
     }
 
     @Override
@@ -138,24 +135,24 @@ public class PanelGL extends JLayeredPane implements PanelObject {
         profile = GLProfile.get(GLProfile.GL4bc);
         capabilities = new GLCapabilities(profile);
         capabilities.setDepthBits(24);
-        gljPanel = new GLJPanel(capabilities);
+        gljPanel = new GLCanvas(capabilities);
         gljPanel.setSize(width, height);
         gljPanel.addGLEventListener(new OpenGLInitializer(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D));
         gljPanel.setFocusable(false);
-        add(gljPanel);
         Logger.info("OpenGL initialized.");
-    }
-
-    private void initListeners() {
-        setMouseListener(new MouseListener(window));
     }
 
     @Override
     public void setSize(Dimension dimension) {
-        super.setSize(dimension);
+//        super.setSize(dimension);
         if(gljPanel != null) {
             gljPanel.setSize(dimension);
         }
+    }
+
+    @Override
+    public void setPreferredSize(Dimension dimension) {
+
     }
 
     public GLProfile getGlProfile() {

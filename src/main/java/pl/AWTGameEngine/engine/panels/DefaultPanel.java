@@ -1,10 +1,8 @@
 package pl.AWTGameEngine.engine.panels;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
-import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
@@ -18,7 +16,6 @@ public class DefaultPanel extends JPanel implements PanelObject {
     private final Scene scene;
     private final Camera camera;
     private final GraphicsManager graphicsManager = new GraphicsManager();
-    private MouseListener mouseListener;
 
     public DefaultPanel(Scene scene) {
         super();
@@ -28,7 +25,6 @@ public class DefaultPanel extends JPanel implements PanelObject {
         this.scene = scene;
         this.camera = new Camera(this);
         PhysXManager.getInstance().createScene(scene);
-        setMouseListener(new MouseListener(window));
     }
 
     @Override
@@ -95,18 +91,6 @@ public class DefaultPanel extends JPanel implements PanelObject {
 
     public GraphicsManager getGraphicsManager() {
         return this.graphicsManager;
-    }
-
-    public void setMouseListener(MouseListener mouseListener) {
-        if(this.mouseListener != null) {
-            removeMouseListener(this.mouseListener);
-            removeMouseMotionListener(this.mouseListener);
-            removeMouseWheelListener(this.mouseListener);
-        }
-        this.mouseListener = mouseListener;
-        addMouseListener(mouseListener);
-        addMouseMotionListener(mouseListener);
-        addMouseWheelListener(mouseListener);
     }
 
     @Override

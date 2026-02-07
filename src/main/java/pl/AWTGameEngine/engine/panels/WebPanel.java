@@ -2,15 +2,12 @@ package pl.AWTGameEngine.engine.panels;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.event.Event;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
-import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
@@ -24,7 +21,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
     private WebView webView;
     private final Camera camera;
     private WebGraphicsManager graphicsManager;
-    private MouseListener mouseListener;
 
     public WebPanel(Scene scene) {
         this.scene = scene;
@@ -68,7 +64,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
             loadWebView();
         });
 
-        setMouseListener(new MouseListener(window));
     }
 
     private void loadWebView() {
@@ -149,18 +144,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
     public WebGraphicsManager getGraphicsManager() {
         return this.graphicsManager;
-    }
-
-    public void setMouseListener(MouseListener mouseListener) {
-        if (this.mouseListener != null) {
-            removeMouseListener(this.mouseListener);
-            removeMouseMotionListener(this.mouseListener);
-            removeMouseWheelListener(this.mouseListener);
-        }
-        this.mouseListener = mouseListener;
-        addMouseListener(mouseListener);
-        addMouseMotionListener(mouseListener);
-        addMouseWheelListener(mouseListener);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package pl.AWTGameEngine.windows;
 
-import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.components.TextRenderer;
 import pl.AWTGameEngine.engine.Logger;
 
 import javax.imageio.ImageIO;

@@ -27,7 +27,6 @@ public class MenuBar extends ObjectComponent {
     @Override
     public void onRemoveComponent() {
         getWindow().setMenuBar(null);
-        getWindow().setJMenuBar(null);
     }
 
     @FromXML
@@ -69,7 +68,6 @@ public class MenuBar extends ObjectComponent {
 
     public void updateWindow() {
         menuBar.setFont(getWindow().getFont());
-        getWindow().setJMenuBar(menuBar);
     }
 
     public void initBar() {
