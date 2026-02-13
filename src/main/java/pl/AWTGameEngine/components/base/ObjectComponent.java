@@ -291,12 +291,12 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
-    public void onClientConnect(Server server, int clientId) {
+    public void onClientConnect(Server server, ConnectedClient client) {
 
     }
 
     @EventMethod
-    public void onClientDisconnect(Server server, int clientId) {
+    public void onClientDisconnect(Server server, ConnectedClient client) {
 
     }
 

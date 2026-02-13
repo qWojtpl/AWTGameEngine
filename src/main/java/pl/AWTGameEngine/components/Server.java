@@ -8,6 +8,7 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.NetMessageDeserializer;
+import pl.AWTGameEngine.objects.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.NetBlock;
 
@@ -36,9 +37,7 @@ public class Server extends ObjectComponent {
     private DatagramSocket udpSocket;
 
     // clients
-    private final List<Socket> sockets = new ArrayList<>();
-    private final HashMap<Socket, Integer> clientIds = new HashMap<>();
-    private final HashMap<Integer, PrintWriter> writers = new HashMap<>();
+    private final HashMap<Integer, ConnectedClient> connectedClients = new HashMap<>();
     private int currentId = 0;
 
     public Server(GameObject object) {
@@ -59,10 +58,10 @@ public class Server extends ObjectComponent {
 
     @Override
     public void onRemoveComponent() {
+        Logger.info("Closing server...");
         try {
-            for(Socket s : new ArrayList<>(sockets)) {
-                s.close();
-                sockets.remove(s);
+            for(ConnectedClient client : new ArrayList<>(connectedClients.values())) {
+                disconnect(client);
             }
             Logger.info("Server closed.");
             tcpSocket.close();
@@ -90,9 +89,9 @@ public class Server extends ObjectComponent {
                 Logger.error("Incorrect NetBlock in " + object.getIdentifier());
             }
         }
-        for(Socket socket : sockets) {
+        for(ConnectedClient client : connectedClients.values()) {
             for(NetBlock block : blocks) {
-                sendTCPMessage(socket, block.formMessage());
+                client.sendMessage(block.formMessage());
             }
         }
     }
@@ -113,9 +112,9 @@ public class Server extends ObjectComponent {
                 Logger.error("Incorrect NetBlock in " + component.getObject().getIdentifier() + " in component " + component.getClass().getName());
             }
         }
-        for(Socket socket : sockets) {
+        for(ConnectedClient client : connectedClients.values()) {
             for(NetBlock block : blocks) {
-                sendTCPMessage(socket, block.formMessage());
+                client.sendMessage(block.formMessage());
             }
         }
     }
@@ -124,37 +123,28 @@ public class Server extends ObjectComponent {
         while(!tcpSocket.isClosed()) {
             try {
                 Socket clientSocket = tcpSocket.accept();
-                new Thread(() -> handleConnection(clientSocket), "SERVER-CLIENT-" + (sockets.size() + 1)).start();
+                new Thread(() -> handleConnection(clientSocket), "SERVER-CLIENT-" + (connectedClients.size() + 1)).start();
             } catch (IOException e) {
                 Logger.exception("Server TCP exception", e);
             }
         }
     }
 
-    private void sendTCPMessage(Socket client, String message) {
-        //System.out.println("Sent: " + message);
-        writers.get(getClientId(client)).println(message);
-    }
-
     private void handleConnection(Socket clientSocket) {
         int id = currentId++;
-        clientIds.put(clientSocket, id);
         Logger.info("Client " + getClientAddress(clientSocket) + " connected.");
         Logger.info("\t\t-> Assigned new client to ID " + id);
 
-        PrintWriter out;
-        BufferedReader in;
+        ConnectedClient connectedClient;
         try {
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            writers.put(id, out);
-            out.println(id); // send id to a client
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            connectedClient = new ConnectedClient(id, clientSocket);
+            connectedClient.sendInitMessage();
         } catch (IOException e) {
             Logger.exception("Error while initializing client connection with ID " + id, e);
             return;
         }
 
-        sockets.add(clientSocket);
+        connectedClients.put(id, connectedClient);
         Logger.info("\t\t-> Established connection.");
 
         // prepare objects to be sent to the client during next update
@@ -167,28 +157,27 @@ public class Server extends ObjectComponent {
             component.clearNetCache();
         }
 
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#int")) {
-            component.onClientConnect(this, id);
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#ConnectedClient")) {
+            component.onClientConnect(this, connectedClient);
         }
 
-        while (clientSocket.isConnected()) {
+        while (connectedClient.getSocket().isConnected()) {
             try {
-                String message = in.readLine();
+                String message = connectedClient.getBufferedReader().readLine();
                 if(message == null) {
                     continue;
                 }
-                NetMessageDeserializer.deserialize(getScene(), message, clientSocket, this);
+                NetMessageDeserializer.deserialize(getScene(), message, connectedClient, this);
             } catch (IOException e) {
-                disconnect(clientSocket);
+                disconnect(connectedClient);
                 Logger.exception("Exception while receiving a message. Had to disconnect a client.", e);
                 break;
             }
         }
 
         try {
-            out.close();
-            in.close();
-            writers.remove(id);
+            connectedClient.close();
+            connectedClients.remove(id);
             Logger.info("Closed client " + id + " connection.");
         } catch(IOException e) {
             Logger.exception("Cannot close client " + id + " connection", e);
@@ -196,20 +185,20 @@ public class Server extends ObjectComponent {
     }
 
     private void onUDPThreadUpdate() {
-        while(!udpSocket.isClosed()) {
+/*        while(!udpSocket.isClosed()) {
 
-        }
+        }*/
     }
 
-    public void disconnect(Socket clientSocket) {
+    public void disconnect(ConnectedClient client) {
         try {
-            Logger.info("Client " + getClientAddress(clientSocket) +
-                    " (ID " + clientIds.get(clientSocket) + ") disconnected.");
+            Logger.info("Client " + getClientAddress(client.getSocket()) +
+                    " (ID " + client.getId() + ") disconnected.");
             for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#int")) {
-                component.onClientDisconnect(this, clientIds.get(clientSocket));
+                component.onClientDisconnect(this, client);
             }
-            clientSocket.close();
-            sockets.remove(clientSocket);
+            client.close();
+            connectedClients.remove(client.getId());
         } catch(IOException e) {
             Logger.exception("Cannot disconnect client", e);
         }
@@ -229,8 +218,8 @@ public class Server extends ObjectComponent {
         }
     }
 
-    public int getClientId(Socket client) {
-        return clientIds.get(client);
+    public ConnectedClient getClientById(int id) {
+        return this.connectedClients.getOrDefault(id, null);
     }
 
     public boolean canClientsRequestObject() {

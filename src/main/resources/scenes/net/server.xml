@@ -7,10 +7,4 @@
         <BlankRenderer color="red" />
         <Movement2D _package="pl.AWTGameEngine.custom" />
     </object>
-    <object id="mirror" x="500" y="500" sizeX="128" sizeY="96">
-        <SpriteRenderer />
-    </object>
-    <object id="filter">
-        <Filter targetId="mirror" _package="pl.AWTGameEngine.custom" />
-    </object>
 </scene>
