@@ -133,6 +133,10 @@ public class Scene {
         }
     }
 
+    public void loadAfterLoad(String source, String renderEngine) {
+        loadAfterLoad(source, RenderEngine.valueOf(renderEngine.toUpperCase()));
+    }
+
     public void loadAfterLoad(String source, RenderEngine renderEngine) {
         loadAfterLoad.put(source, renderEngine);
     }

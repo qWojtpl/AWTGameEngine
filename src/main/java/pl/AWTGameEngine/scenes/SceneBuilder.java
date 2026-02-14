@@ -34,7 +34,7 @@ public class SceneBuilder {
 
             appendOptions(fileBuilder, options);
             StringBuilder methodBuilder = new StringBuilder();
-            appendObjects(fileBuilder, methodBuilder, sceneLoader.getSceneData(document));
+            appendChildren(fileBuilder, methodBuilder, sceneLoader.getSceneData(document));
             fileBuilder.append("\t}\n");
             fileBuilder.append(methodBuilder);
             fileBuilder.append("}");
@@ -121,7 +121,7 @@ public class SceneBuilder {
         appendMethodBody(fileBuilder, createCall("window", "setSameSize", "boolean.class", String.valueOf(options.isSameSize())));
     }
 
-    private static void appendObjects(StringBuilder fileBuilder, StringBuilder methodBuilder, NodeList sceneData) {
+    private static void appendChildren(StringBuilder fileBuilder, StringBuilder methodBuilder, NodeList sceneData) {
         appendMethodBody(fileBuilder, "/* Objects */");
         appendMethodBody(fileBuilder, "java.lang.reflect.Method createGameObjectMethod = scene.getClass().getMethod(\"createGameObject\", String.class)");
         for(int i = 0; i < sceneData.getLength(); i++) {
@@ -134,78 +134,92 @@ public class SceneBuilder {
 
     private static void initNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
         String nodeName = node.getNodeName().toLowerCase();
-        if("object".equals(nodeName)) {
+        switch(nodeName) {
+            case "object" -> initObjectNode(fileBuilder, methodBuilder, node);
+            case "styles" -> initStyleNode(fileBuilder, methodBuilder, node);
+            case "scene" -> initNestedSceneNode(fileBuilder, methodBuilder, node);
+            default -> Logger.warning("Unrecognized node name: " + nodeName);
+        }
+    }
 
-            String identifier;
-            try {
-                identifier = node.getAttributes().getNamedItem("id").getNodeValue();
-            } catch (Exception e) {
-                Logger.exception("Object doesn't have an identifier.", e);
-                return;
+    private static void initObjectNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
+        String identifier;
+        try {
+            identifier = node.getAttributes().getNamedItem("id").getNodeValue();
+        } catch (Exception e) {
+            Logger.exception("Object doesn't have an identifier.", e);
+            return;
+        }
+        String address = getAddress();
+        appendMethodBody(fileBuilder, address + "(scene, createGameObjectMethod)");
+        methodBuilder.append("\tprivate static void ");
+        methodBuilder.append(address);
+        methodBuilder.append("(Object scene, java.lang.reflect.Method sceneMethod) throws Exception {\n");
+        appendMethodBody(methodBuilder, "Object " + address + " = sceneMethod.invoke(scene, \"" + identifier + "\")");
+        //
+        String[] position;
+        if(getValue(node, "position").equals("0")) {
+            position = new String[3];
+            position[0] = getValue(node, "x");
+            position[1] = getValue(node, "y");
+            position[2] = getValue(node, "z");
+        } else {
+            position = getValue(node, "position").split(",");
+        }
+        appendMethodBody(methodBuilder, createCall(address, "setX", "double.class", position[0]));
+        appendMethodBody(methodBuilder, createCall(address, "setY", "double.class", position[1]));
+        appendMethodBody(methodBuilder, createCall(address, "setZ", "double.class", position[2]));
+        //
+        String[] size;
+        if(getValue(node, "size").equals("0")) {
+            size = new String[3];
+            size[0] = getValue(node, "sizeX");
+            size[1] = getValue(node, "sizeY");
+            size[2] = getValue(node, "sizeZ");
+        } else {
+            size = getValue(node, "size").split(",");
+        }
+        appendMethodBody(methodBuilder, createCall(address, "setSizeX", "double.class", size[0]));
+        appendMethodBody(methodBuilder, createCall(address, "setSizeY", "double.class", size[1]));
+        appendMethodBody(methodBuilder, createCall(address, "setSizeZ", "double.class", size[2]));
+        //
+        for(int i = 0; i < node.getChildNodes().getLength(); i++) {
+            Node childNode = node.getChildNodes().item(i);
+            if(childNode.getNodeName().startsWith("#")) { // #comment or #text
+                continue;
             }
-            String address = getAddress();
-            appendMethodBody(fileBuilder, address + "(scene, createGameObjectMethod)");
-            methodBuilder.append("\tprivate static void ");
-            methodBuilder.append(address);
-            methodBuilder.append("(Object scene, java.lang.reflect.Method sceneMethod) throws Exception {\n");
-            appendMethodBody(methodBuilder, "Object " + address + " = sceneMethod.invoke(scene, \"" + identifier + "\")");
-            //
-            String[] position;
-            if(getValue(node, "position").equals("0")) {
-                position = new String[3];
-                position[0] = getValue(node, "x");
-                position[1] = getValue(node, "y");
-                position[2] = getValue(node, "z");
-            } else {
-                position = getValue(node, "position").split(",");
+            String componentAddress = getAddress();
+            String pckg = "pl.AWTGameEngine.components";
+            if(childNode.getAttributes().getNamedItem("_package") != null) {
+                pckg = childNode.getAttributes().getNamedItem("_package").getNodeValue();
             }
-            appendMethodBody(methodBuilder, createCall(address, "setX", "double.class", position[0]));
-            appendMethodBody(methodBuilder, createCall(address, "setY", "double.class", position[1]));
-            appendMethodBody(methodBuilder, createCall(address, "setZ", "double.class", position[2]));
-            //
-            String[] size;
-            if(getValue(node, "size").equals("0")) {
-                size = new String[3];
-                size[0] = getValue(node, "sizeX");
-                size[1] = getValue(node, "sizeY");
-                size[2] = getValue(node, "sizeZ");
-            } else {
-                size = getValue(node, "size").split(",");
-            }
-            appendMethodBody(methodBuilder, createCall(address, "setSizeX", "double.class", size[0]));
-            appendMethodBody(methodBuilder, createCall(address, "setSizeY", "double.class", size[1]));
-            appendMethodBody(methodBuilder, createCall(address, "setSizeZ", "double.class", size[2]));
-            //
-            for(int i = 0; i < node.getChildNodes().getLength(); i++) {
-                Node childNode = node.getChildNodes().item(i);
-                if(childNode.getNodeName().startsWith("#")) { // #comment or #text
+            pckg = pckg + "." + childNode.getNodeName().replace(".", "$");
+            appendMethodBody(methodBuilder, "Object " + componentAddress + " = Class.forName(\"" + pckg + "\").getConstructors()[0].newInstance(" + address + ")");
+
+            for(int j = 0; j < childNode.getAttributes().getLength(); j++) {
+                Node attribute = childNode.getAttributes().item(j);
+                if(attribute.getNodeName().equals("_package")) {
                     continue;
                 }
-                String componentAddress = getAddress();
-                String pckg = "pl.AWTGameEngine.components";
-                if(childNode.getAttributes().getNamedItem("_package") != null) {
-                    pckg = childNode.getAttributes().getNamedItem("_package").getNodeValue();
-                }
-                pckg = pckg + "." + childNode.getNodeName().replace(".", "$");
-                appendMethodBody(methodBuilder, "Object " + componentAddress + " = Class.forName(\"" + pckg + "\").getConstructors()[0].newInstance(" + address + ")");
-
-                for(int j = 0; j < childNode.getAttributes().getLength(); j++) {
-                    Node attribute = childNode.getAttributes().item(j);
-                    if(attribute.getNodeName().equals("_package")) {
-                        continue;
-                    }
-                    String[] split = attribute.getNodeName().split("");
-                    split[0] = split[0].toUpperCase();
-                    String attributeName = String.join("", split);
-                    appendMethodBody(methodBuilder, createCall(componentAddress, "set" + attributeName, "String.class", "\"" + attribute.getNodeValue() + "\""));
-                }
-
-                appendMethodBody(methodBuilder, createCall(address, "addComponent", componentAddress));
+                String[] split = attribute.getNodeName().split("");
+                split[0] = split[0].toUpperCase();
+                String attributeName = String.join("", split);
+                appendMethodBody(methodBuilder, createCall(componentAddress, "set" + attributeName, "String.class", "\"" + attribute.getNodeValue() + "\""));
             }
-            appendMethodBody(methodBuilder, createCall(address, "triggerSerializationFinish"));
-            methodBuilder.append("\t}\n\n");
-            //todo: nested scenes
+
+            appendMethodBody(methodBuilder, createCall(address, "addComponent", componentAddress));
         }
+        appendMethodBody(methodBuilder, createCall(address, "triggerSerializationFinish"));
+        methodBuilder.append("\t}\n\n");
+    }
+
+    private static void initStyleNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
+        //todo: styles from file
+        appendMethodBody(fileBuilder, createCall("scene", "setCustomStyles", "String.class", "\"" + node.getTextContent().replace("\n", "\\n") + "\""));
+    }
+
+    private static void initNestedSceneNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
+        appendMethodBody(fileBuilder, createCall("scene", "loadAfterLoad", "String.class, String.class", "\"" + getValue(node, "source") + "\", \"" + getValue(node, "renderEngine") + "\""));
     }
 
     private static String getValue(Node node, String name) {

@@ -1,5 +1,5 @@
 <scene title="Default rendering scene" renderFPS="60" updateFPS="60" physicsFPS="60" sameSize="true">
-    <scene source="scenes/web.xml" renderEngine="web" />
+    <scene source="./scenebuilder/web_i_xml.class" renderEngine="web" />
     <object id="test" x="0" y="100" sizeX="480" sizeY="100">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
     </object>

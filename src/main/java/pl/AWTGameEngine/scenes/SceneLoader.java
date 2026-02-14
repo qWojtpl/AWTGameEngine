@@ -107,6 +107,8 @@ public class SceneLoader {
                 Class<?> cls = cl.loadClass(className);
                 Object object = cls.getConstructor().newInstance();
                 object.getClass().getMethod("load", Object.class, Object.class).invoke(object, window, newScene);
+                Logger.info("Scene " + scenePath + " loaded.");
+                newScene.triggerAfterLoad();
             }
 
         } catch (InvocationTargetException e) {
