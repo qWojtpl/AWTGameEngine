@@ -7,16 +7,13 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.deserializers.NetMessageDeserializer;
+import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
 import pl.AWTGameEngine.objects.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.NetBlock;
 import pl.AWTGameEngine.objects.TransformSet;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +90,7 @@ public class Client extends ObjectComponent {
                         Logger.info("\t\t-> Server assigned ID " + connectedClient.getId() + " for me.");
                         continue;
                     }
-                    NetMessageDeserializer.deserialize(getScene(), response, connectedClient);
+                    NetDeserializer.deserialize(getScene(), response, connectedClient);
                 } catch (Exception e) {
                     if(response.isEmpty()) {
                         Logger.error("Server closed a connection.");
@@ -104,10 +101,6 @@ public class Client extends ObjectComponent {
                 }
             }
         }, "CLIENT-MESSAGE").start();
-    }
-
-    private void sendNetBlock(NetBlock netBlock) {
-        connectedClient.sendMessage(netBlock.formMessage());
     }
 
     @Override
@@ -126,7 +119,7 @@ public class Client extends ObjectComponent {
             }
         }
         for(NetBlock block : blocks) {
-            sendNetBlock(block);
+            connectedClient.sendBlock(block);
         }
         // synchronize position
         //todo: UDP instead of TCP
@@ -141,18 +134,18 @@ public class Client extends ObjectComponent {
             }
         }
         for(NetBlock block : blocks) {
-            sendNetBlock(block);
+            connectedClient.sendBlock(block);
         }
     }
 
     public void requestGameObject(String identifier, TransformSet position, TransformSet size, TransformSet rotation) {
         Logger.info("Requesting object...");
-        sendNetBlock(new NetBlock(identifier, null, position, size, rotation, connectedClient.getId()));
+        connectedClient.sendBlock(new NetBlock(identifier, null, position, size, rotation, connectedClient.getId()));
     }
 
     public void requestComponent(String identifier, String component, String data) {
         Logger.info("Requesting component...");
-        sendNetBlock(new NetBlock(identifier, component, data));
+        connectedClient.sendBlock(new NetBlock(identifier, component, data));
     }
 
     @FromXML

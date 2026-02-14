@@ -20,6 +20,24 @@ public class ConnectedClient {
         this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
+    public void sendInitMessage() {
+        sendMessage(String.valueOf(id));
+    }
+
+    public void sendMessage(String message) {
+        printWriter.println(message);
+    }
+
+    public void sendBlock(NetBlock block) {
+        sendMessage(block.formMessage());
+    }
+
+    public void close() throws IOException {
+        printWriter.close();
+        bufferedReader.close();
+        socket.close();
+    }
+
     public int getId() {
         return this.id;
     }
@@ -38,20 +56,6 @@ public class ConnectedClient {
 
     public void updateId(int id) {
         this.id = id;
-    }
-
-    public void sendInitMessage() {
-        sendMessage(String.valueOf(id));
-    }
-
-    public void sendMessage(String message) {
-        printWriter.println(message);
-    }
-
-    public void close() throws IOException {
-        printWriter.close();
-        bufferedReader.close();
-        socket.close();
     }
 
 }

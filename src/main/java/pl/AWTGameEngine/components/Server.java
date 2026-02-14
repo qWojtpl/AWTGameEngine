@@ -7,15 +7,12 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.deserializers.NetMessageDeserializer;
+import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
 import pl.AWTGameEngine.objects.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.NetBlock;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
@@ -91,7 +88,7 @@ public class Server extends ObjectComponent {
         }
         for(ConnectedClient client : connectedClients.values()) {
             for(NetBlock block : blocks) {
-                client.sendMessage(block.formMessage());
+                client.sendBlock(block);
             }
         }
     }
@@ -114,7 +111,7 @@ public class Server extends ObjectComponent {
         }
         for(ConnectedClient client : connectedClients.values()) {
             for(NetBlock block : blocks) {
-                client.sendMessage(block.formMessage());
+                client.sendBlock(block);
             }
         }
     }
@@ -167,21 +164,15 @@ public class Server extends ObjectComponent {
                 if(message == null) {
                     continue;
                 }
-                NetMessageDeserializer.deserialize(getScene(), message, connectedClient, this);
+                NetDeserializer.deserialize(getScene(), message, connectedClient, this);
             } catch (IOException e) {
                 disconnect(connectedClient);
                 Logger.exception("Exception while receiving a message. Had to disconnect a client.", e);
-                break;
+                return;
             }
         }
 
-        try {
-            connectedClient.close();
-            connectedClients.remove(id);
-            Logger.info("Closed client " + id + " connection.");
-        } catch(IOException e) {
-            Logger.exception("Cannot close client " + id + " connection", e);
-        }
+        disconnect(connectedClient);
     }
 
     private void onUDPThreadUpdate() {
@@ -194,7 +185,7 @@ public class Server extends ObjectComponent {
         try {
             Logger.info("Client " + getClientAddress(client.getSocket()) +
                     " (ID " + client.getId() + ") disconnected.");
-            for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#int")) {
+            for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#ConnectedClient")) {
                 component.onClientDisconnect(this, client);
             }
             client.close();
