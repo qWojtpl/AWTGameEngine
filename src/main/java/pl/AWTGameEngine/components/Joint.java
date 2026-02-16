@@ -31,10 +31,12 @@ public abstract class Joint extends ObjectComponent {
 
     @Override
     public void onRemoveComponent() {
-
+        removeJoint();
     }
 
     public abstract void createJoint();
+
+    public abstract void removeJoint();
 
     public RigidBody getReference() {
         return this.secondBody;
@@ -72,6 +74,14 @@ public abstract class Joint extends ObjectComponent {
             joint.setDistanceJointFlag(PxDistanceJointFlagEnum.eMIN_DISTANCE_ENABLED, true);
         }
 
+        @Override
+        public void removeJoint() {
+            if(joint == null) {
+                return;
+            }
+            joint.release();
+        }
+
         public PxDistanceJoint getJoint() {
             return this.joint;
         }
@@ -102,6 +112,14 @@ public abstract class Joint extends ObjectComponent {
                     secondBody.getPxActor(),
                     secondBody.getPxActor().getGlobalPose()
             );
+        }
+
+        @Override
+        public void removeJoint() {
+            if(joint == null) {
+                return;
+            }
+            joint.release();
         }
 
         public PxRevoluteJoint getJoint() {

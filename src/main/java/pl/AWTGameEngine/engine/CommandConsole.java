@@ -2,7 +2,6 @@ package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.helpers.TextUtils;
-import pl.AWTGameEngine.windows.Window;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;

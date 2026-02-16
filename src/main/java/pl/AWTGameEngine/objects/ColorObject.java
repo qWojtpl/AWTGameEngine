@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.objects;
 
+import pl.AWTGameEngine.engine.Logger;
+
 import java.awt.*;
 import java.lang.reflect.Field;
 
@@ -140,7 +142,7 @@ public class ColorObject {
                 try {
                     Thread.sleep((long) interval);
                 } catch(InterruptedException e) {
-                    e.printStackTrace();
+                    Logger.exception("Error while running a color alpha transient", e);
                 }
                 if(alpha > newAlpha) {
                     alpha--;

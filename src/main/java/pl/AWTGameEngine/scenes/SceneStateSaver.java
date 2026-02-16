@@ -25,6 +25,7 @@ public class SceneStateSaver {
         for(GameObject object : objects) {
             bobTheBuilder.append(saveObjectState(object));
         }
+        addStyles(scene, bobTheBuilder);
         bobTheBuilder.append("\n</scene>");
         Logger.info("Saved scene state to: " + (path == null ? "LOGGER" : path));
         if(path == null) {
@@ -60,13 +61,19 @@ public class SceneStateSaver {
     private static void addNestedScenes(Scene scene, StringBuilder builder) {
         HashMap<String, RenderEngine> loadAfterLoad = scene.getLoadAfterLoad();
         for(String path : loadAfterLoad.keySet()) {
-            System.out.println(path);
             builder.append("\n\t<scene source=\"");
             builder.append(path);
             builder.append("\" renderEngine=\"");
             builder.append(loadAfterLoad.get(path));
             builder.append("\" />");
         }
+    }
+
+    private static void addStyles(Scene scene, StringBuilder builder) {
+        //todo: styles from file
+        builder.append("\n\t<styles>\n");
+        builder.append(scene.getCustomStyles());
+        builder.append("\n\t</styles>");
     }
 
     private static String saveObjectState(GameObject object) {

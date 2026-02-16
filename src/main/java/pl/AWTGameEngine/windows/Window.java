@@ -12,10 +12,7 @@ import pl.AWTGameEngine.engine.panels.*;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
-import javax.swing.*;
-import javax.tools.Tool;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +38,7 @@ public class Window extends Frame {
     private Robot robot;
     private double screenWidth;
     private double screenHeight;
-    private List<Dialog> dialogs = new ArrayList<>();
+    private final List<Dialog> dialogs = new ArrayList<>();
 
     public Window(boolean serverWindow) {
         this.serverWindow = serverWindow;
