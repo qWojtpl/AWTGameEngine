@@ -12,6 +12,8 @@ import pl.AWTGameEngine.annotations.components.management.ConflictsWith;
 import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -41,11 +43,7 @@ public abstract class RigidBody extends ObjectComponent {
 
     protected void initialize() {
         physics = physXManager.getPxPhysics();
-        geometry = new PxBoxGeometry(
-                (float) getObject().getSize().getX(),
-                (float) getObject().getSize().getY(),
-                (float) getObject().getSize().getZ()
-        );
+        createGeometry();
 //        material = physics.createMaterial(0.5f, 0.5f, 0.5f);
         material = physXManager.getDefaultMaterial();
         shape = physics.createShape(geometry, material, true, physXManager.getShapeFlags());
@@ -73,6 +71,14 @@ public abstract class RigidBody extends ObjectComponent {
 
     public void setMass(double mass) {
         this.mass = mass;
+    }
+
+    protected void createGeometry() {
+        geometry = new PxBoxGeometry(
+                (float) getObject().getSize().getX(),
+                (float) getObject().getSize().getY(),
+                (float) getObject().getSize().getZ()
+        );
     }
 
     public void updatePosition(TransformSet position) {
@@ -308,6 +314,79 @@ public abstract class RigidBody extends ObjectComponent {
         @Override
         public void addForce(TransformSet vector, float force) {
             throw new RuntimeException("Body must be non-kinematic. Kinematic add force may be implemented later.");
+        }
+
+    }
+
+    @DefaultComponent
+    @WebComponent
+    public static class TopDown extends Dynamic {
+
+        public TopDown(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void initialize() {
+            super.initialize();
+            PxVec3 vector = new PxVec3(0, 0, 0);
+            rigidDynamic.setMassSpaceInertiaTensor(vector); // disable rotation
+            vector.destroy();
+        }
+
+        @Override
+        public void createGeometry() {
+            geometry = new PxBoxGeometry(
+                    (float) getObject().getSize().getX() / 2,
+                    (float) getObject().getSize().getZ() / 2,
+                    (float) getObject().getSize().getY() / 2
+            );
+        }
+
+        @Override
+        public void physicsUpdate() {
+            PxVec3 vec3 = rigidDynamic.getGlobalPose().getP();
+            PxVec3 newVec = new PxVec3(vec3.getX(), vec3.getZ(), vec3.getY());
+            updateCachedPositions(newVec, rigidDynamic.getGlobalPose().getQ());
+            newVec.destroy();
+        }
+
+        @Override
+        public void updatePosition(TransformSet position) {
+            PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
+            pose.setP(vec3);
+            vec3.destroy();
+        }
+
+        @Override
+        public void addForce(TransformSet vector, float force) {
+            super.addForce(new TransformSet(vector.getX(), vector.getZ(), vector.getY()), force);
+        }
+
+    }
+
+    @DefaultComponent
+    @WebComponent
+    public static class TopDownStatic extends Static {
+
+        public TopDownStatic(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void createGeometry() {
+            geometry = new PxBoxGeometry(
+                    (float) getObject().getSize().getX() / 2,
+                    (float) getObject().getSize().getZ() / 2,
+                    (float) getObject().getSize().getY() / 2
+            );
+        }
+
+        @Override
+        public void updatePosition(TransformSet position) {
+            PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
+            pose.setP(vec3);
+            vec3.destroy();
         }
 
     }
