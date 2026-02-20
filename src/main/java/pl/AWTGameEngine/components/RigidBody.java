@@ -341,7 +341,7 @@ public abstract class RigidBody extends ObjectComponent {
             public void createGeometry() {
                 geometry = new PxBoxGeometry(
                         (float) getObject().getSize().getX() / 2,
-                        (float) getObject().getSize().getZ() / 2,
+                        5,
                         (float) getObject().getSize().getY() / 2
                 );
             }
@@ -349,14 +349,14 @@ public abstract class RigidBody extends ObjectComponent {
             @Override
             public void physicsUpdate() {
                 PxVec3 vec3 = rigidDynamic.getGlobalPose().getP();
-                PxVec3 newVec = new PxVec3(vec3.getX(), vec3.getZ(), vec3.getY());
+                PxVec3 newVec = new PxVec3(vec3.getX(), vec3.getZ(), 5);
                 updateCachedPositions(newVec, rigidDynamic.getGlobalPose().getQ());
                 newVec.destroy();
             }
 
             @Override
             public void updatePosition(TransformSet position) {
-                PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
+                PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), 5);
                 pose.setP(vec3);
                 vec3.destroy();
             }
@@ -365,12 +365,15 @@ public abstract class RigidBody extends ObjectComponent {
             public void addForce(TransformSet vector, float force) {
                 super.addForce(new TransformSet(vector.getX(), vector.getZ(), vector.getY()), force);
             }
+
         }
 
         @DefaultComponent
         @WebComponent
         @ComponentGL
         public static class Static extends RigidBody.Static {
+
+            private int layer = 0;
 
             public Static(GameObject object) {
                 super(object);
@@ -380,17 +383,32 @@ public abstract class RigidBody extends ObjectComponent {
             public void createGeometry() {
                 geometry = new PxBoxGeometry(
                         (float) getObject().getSize().getX() / 2,
-                        (float) getObject().getSize().getZ() / 2,
+                        5,
                         (float) getObject().getSize().getY() / 2
                 );
             }
 
             @Override
             public void updatePosition(TransformSet position) {
-                PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
+                PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), layer * 5);
                 pose.setP(vec3);
                 vec3.destroy();
             }
+
+            @SaveState(name = "layer")
+            public int getLayer() {
+                return this.layer;
+            }
+
+            public void setLayer(int layer) {
+                this.layer = layer;
+            }
+
+            @FromXML
+            public void setLayer(String layer) {
+                setLayer(Integer.parseInt(layer));
+            }
+
         }
 
         @DefaultComponent

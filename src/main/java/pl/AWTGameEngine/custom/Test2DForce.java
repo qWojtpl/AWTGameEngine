@@ -24,10 +24,20 @@ public class Test2DForce extends ObjectComponent {
 
     @Override
     public void onPhysicsUpdate() {
-        if(getKeyListener().hasPressedKey(80)) {
-            rigidBody.addForce(new TransformSet(1, 0, 0), 1);
+        TransformSet vector = new TransformSet();
+        if(getKeyListener().hasPressedKey(87)) { // W
+            vector = new TransformSet(0, -1, 0);
         }
-//        getObject().setX(getObject().getX() + 2);
+        if(getKeyListener().hasPressedKey(65)) { // A
+            vector = new TransformSet(-1, 0, 0);
+        }
+        if(getKeyListener().hasPressedKey(83)) { // S
+            vector = new TransformSet(0, 1, 0);
+        }
+        if(getKeyListener().hasPressedKey(68)) { // D
+            vector = new TransformSet(1, 0, 0);
+        }
+        rigidBody.addForce(vector, 1);
     }
 
 }
