@@ -63,16 +63,22 @@ public class GameObject {
             return;
         }
         if(component.hasRequiredClass()) {
-            Class<? extends ObjectComponent> requiredClass = component.getRequiredClass();
+            Class<? extends ObjectComponent>[] requiredClasses = component.getRequiredClass();
+            List<String> requiredClassesString = new ArrayList<>();
+            assert requiredClasses != null;
             boolean found = false;
-            for(ObjectComponent c : components) {
-                if(c.getClass().isInstance(requiredClass) || c.getClass().equals(requiredClass)) {
-                    found = true;
-                    break;
+            for(Class<? extends ObjectComponent> requiredClass : requiredClasses) {
+                requiredClassesString.add(requiredClasses.getClass().getName());
+                for (ObjectComponent c : components) {
+                    if (c.getClass().isInstance(requiredClass) || c.getClass().equals(requiredClass)) {
+                        found = true;
+                        break;
+                    }
                 }
             }
             if(!found) {
-                Logger.error("Cannot add component " + component.getClass().getName() + ", because it requires " + requiredClass + " component!");
+                Logger.error("Cannot add component " + component.getClass().getName() + ", because it requires "
+                        + String.join(" or ", requiredClassesString) + " component!");
                 return;
             }
         }

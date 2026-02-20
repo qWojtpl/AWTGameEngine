@@ -1,10 +1,7 @@
 package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.annotations.components.ComponentMeta;
-import pl.AWTGameEngine.annotations.components.management.Conflicts;
-import pl.AWTGameEngine.annotations.components.management.ConflictsWith;
-import pl.AWTGameEngine.annotations.components.management.Requires;
-import pl.AWTGameEngine.annotations.components.management.Unique;
+import pl.AWTGameEngine.annotations.components.management.*;
 import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
@@ -338,11 +335,17 @@ public abstract class ObjectComponent {
     }
 
     public final boolean hasRequiredClass() {
-        return this.getClass().isAnnotationPresent(Requires.class);
+        return this.getClass().isAnnotationPresent(Requires.class)
+                || this.getClass().isAnnotationPresent(RequiresOneOf.class);
     }
 
-    public final Class<? extends ObjectComponent> getRequiredClass() {
-        return this.getClass().getAnnotation(Requires.class).value();
+    public final Class<? extends ObjectComponent>[] getRequiredClass() {
+        if(this.getClass().isAnnotationPresent(Requires.class)) {
+            return new Class[]{this.getClass().getAnnotation(Requires.class).value()};
+        } else if(this.getClass().isAnnotationPresent(RequiresOneOf.class)) {
+            return this.getClass().getAnnotation(RequiresOneOf.class).value();
+        }
+        return null;
     }
 
     public final boolean conflictsWith(Class<? extends ObjectComponent> component) {
