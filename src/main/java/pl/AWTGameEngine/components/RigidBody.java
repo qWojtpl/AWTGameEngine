@@ -383,14 +383,14 @@ public abstract class RigidBody extends ObjectComponent {
             public void createGeometry() {
                 geometry = new PxBoxGeometry(
                         (float) getObject().getSize().getX() / 2,
-                        5,
+                        (float) 5 / 2,
                         (float) getObject().getSize().getY() / 2
                 );
             }
 
             @Override
             public void updatePosition(TransformSet position) {
-                PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), layer * 5);
+                PxVec3 vec3 = new PxVec3((float) position.getX(), layer * 5, (float) position.getZ());
                 pose.setP(vec3);
                 vec3.destroy();
             }
