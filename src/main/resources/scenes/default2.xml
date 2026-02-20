@@ -1,11 +1,15 @@
-<scene title="Default2 rendering scene" renderFPS="60" updateFPS="60" physicsFPS="60" sameSize="true">
-    <object id="floor" x="0" y="0" z="0" sizeX="1000" sizeY="1000" sizeZ="1">
-        <RigidBody.TopDownStatic />
+<scene title="Default2 rendering scene" renderFPS="60" updateFPS="60" physicsFPS="360" sameSize="true">
+    <object id="floor" x="0" y="0" z="0" sizeX="10000" sizeY="10000" sizeZ="100">
+        <RigidBody.TopDown.Static />
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
     </object>
-    <object id="test" x="0" y="0" z="2" sizeX="100" sizeY="100" sizeZ="1">
+    <object id="test" x="0" y="0" z="115" sizeX="100" sizeZ="5" sizeY="100">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
-        <RigidBody.TopDown />
+        <RigidBody.TopDown.Dynamic />
         <Test2DForce _package="pl.AWTGameEngine.custom" />
+    </object>
+    <object id="test2" x="200" y="0" z="115" sizeX="100" sizeZ="5" sizeY="100">
+        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <RigidBody.TopDown.Dynamic />
     </object>
 </scene>

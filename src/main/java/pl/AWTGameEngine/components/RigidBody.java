@@ -146,7 +146,7 @@ public abstract class RigidBody extends ObjectComponent {
             //
             rigidDynamic.setSleepThreshold(0.05f);
             rigidDynamic.setWakeCounter(0.1f);
-            rigidDynamic.setSolverIterationCounts(4, 1);
+            rigidDynamic.setSolverIterationCounts(20, 8);
             //
             setDisableGravity(disableGravity);
             //
@@ -318,75 +318,112 @@ public abstract class RigidBody extends ObjectComponent {
 
     }
 
-    @DefaultComponent
-    @WebComponent
-    public static class TopDown extends Dynamic {
+    public abstract static class TopDown {
 
-        public TopDown(GameObject object) {
-            super(object);
+        @DefaultComponent
+        @WebComponent
+        @ComponentGL
+        public static class Dynamic extends RigidBody.Dynamic {
+
+            public Dynamic(GameObject object) {
+                super(object);
+            }
+
+            @Override
+            public void initialize() {
+                super.initialize();
+                PxVec3 vector = new PxVec3(0, 0, 0);
+                rigidDynamic.setMassSpaceInertiaTensor(vector); // disable rotation
+                vector.destroy();
+            }
+
+            @Override
+            public void createGeometry() {
+                geometry = new PxBoxGeometry(
+                        (float) getObject().getSize().getX() / 2,
+                        (float) getObject().getSize().getZ() / 2,
+                        (float) getObject().getSize().getY() / 2
+                );
+            }
+
+            @Override
+            public void physicsUpdate() {
+                PxVec3 vec3 = rigidDynamic.getGlobalPose().getP();
+                PxVec3 newVec = new PxVec3(vec3.getX(), vec3.getZ(), vec3.getY());
+                updateCachedPositions(newVec, rigidDynamic.getGlobalPose().getQ());
+                newVec.destroy();
+            }
+
+            @Override
+            public void updatePosition(TransformSet position) {
+                PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
+                pose.setP(vec3);
+                vec3.destroy();
+            }
+
+            @Override
+            public void addForce(TransformSet vector, float force) {
+                super.addForce(new TransformSet(vector.getX(), vector.getZ(), vector.getY()), force);
+            }
         }
 
-        @Override
-        public void initialize() {
-            super.initialize();
-            PxVec3 vector = new PxVec3(0, 0, 0);
-            rigidDynamic.setMassSpaceInertiaTensor(vector); // disable rotation
-            vector.destroy();
+        @DefaultComponent
+        @WebComponent
+        @ComponentGL
+        public static class Static extends RigidBody.Static {
+
+            public Static(GameObject object) {
+                super(object);
+            }
+
+            @Override
+            public void createGeometry() {
+                geometry = new PxBoxGeometry(
+                        (float) getObject().getSize().getX() / 2,
+                        (float) getObject().getSize().getZ() / 2,
+                        (float) getObject().getSize().getY() / 2
+                );
+            }
+
+            @Override
+            public void updatePosition(TransformSet position) {
+                PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
+                pose.setP(vec3);
+                vec3.destroy();
+            }
         }
 
-        @Override
-        public void createGeometry() {
-            geometry = new PxBoxGeometry(
-                    (float) getObject().getSize().getX() / 2,
-                    (float) getObject().getSize().getZ() / 2,
-                    (float) getObject().getSize().getY() / 2
-            );
-        }
+        @DefaultComponent
+        @WebComponent
+        @ComponentGL
+        public static class Kinematic extends RigidBody.Kinematic {
 
-        @Override
-        public void physicsUpdate() {
-            PxVec3 vec3 = rigidDynamic.getGlobalPose().getP();
-            PxVec3 newVec = new PxVec3(vec3.getX(), vec3.getZ(), vec3.getY());
-            updateCachedPositions(newVec, rigidDynamic.getGlobalPose().getQ());
-            newVec.destroy();
-        }
+            public Kinematic(GameObject object) {
+                super(object);
+            }
 
-        @Override
-        public void updatePosition(TransformSet position) {
-            PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
-            pose.setP(vec3);
-            vec3.destroy();
-        }
+            @Override
+            public void physicsUpdate() {
+                PxVec3 vec3 = new PxVec3(
+                        (float) getObject().getPosition().getX(),
+                        (float) getObject().getPosition().getZ(),
+                        (float) getObject().getPosition().getY()
+                );
+                PxQuat rotation = new PxQuat(0, 0, 0, 0);
+                PxTransform transform = new PxTransform(vec3, rotation);
+                rigidDynamic.setKinematicTarget(transform);
+                vec3.destroy();
+                rotation.destroy();
+                transform.destroy();
+            }
 
-        @Override
-        public void addForce(TransformSet vector, float force) {
-            super.addForce(new TransformSet(vector.getX(), vector.getZ(), vector.getY()), force);
-        }
+            @Override
+            public void updatePosition(TransformSet position) {
+                PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
+                pose.setP(vec3);
+                vec3.destroy();
+            }
 
-    }
-
-    @DefaultComponent
-    @WebComponent
-    public static class TopDownStatic extends Static {
-
-        public TopDownStatic(GameObject object) {
-            super(object);
-        }
-
-        @Override
-        public void createGeometry() {
-            geometry = new PxBoxGeometry(
-                    (float) getObject().getSize().getX() / 2,
-                    (float) getObject().getSize().getZ() / 2,
-                    (float) getObject().getSize().getY() / 2
-            );
-        }
-
-        @Override
-        public void updatePosition(TransformSet position) {
-            PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
-            pose.setP(vec3);
-            vec3.destroy();
         }
 
     }
