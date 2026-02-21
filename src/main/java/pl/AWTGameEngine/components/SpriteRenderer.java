@@ -38,8 +38,8 @@ public class SpriteRenderer extends ObjectComponent {
                 getCamera().parsePlainValue(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
                         .setRotation(getObject().getRotation().getX())
-                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
-                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
+                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getY()))
                         .setContext(getObject())
         );
     }

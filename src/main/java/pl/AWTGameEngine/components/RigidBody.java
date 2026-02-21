@@ -332,7 +332,7 @@ public abstract class RigidBody extends ObjectComponent {
             @Override
             public void initialize() {
                 super.initialize();
-                PxVec3 vector = new PxVec3(0, 0, 0);
+                PxVec3 vector = new PxVec3(0, 1, 0);
                 rigidDynamic.setMassSpaceInertiaTensor(vector); // disable rotation
                 vector.destroy();
             }
@@ -364,6 +364,23 @@ public abstract class RigidBody extends ObjectComponent {
             @Override
             public void addForce(TransformSet vector, float force) {
                 super.addForce(new TransformSet(vector.getX(), vector.getZ(), vector.getY()), force);
+            }
+
+            @Override
+            protected void updateCachedPositions(PxVec3 position, PxQuat rotation) {
+                if(position.getX() != getObject().getPosition().getX() || position.getY() != getObject().getPosition().getY() || position.getZ() != getObject().getPosition().getZ()) {
+                    getObject().setPosition(TransformSet.fromPhysX(position)/*, this*/);
+                }
+                float y = rotation.getY();
+                float w = rotation.getW();
+
+                float norm = (float) Math.sqrt(y * y + w * w);
+                y /= norm;
+                w /= norm;
+
+                double yaw = 2.0 * Math.atan2(y, w);
+
+                getObject().setRotation(new TransformSet(-Math.toDegrees(yaw), 0, 0));
             }
 
         }

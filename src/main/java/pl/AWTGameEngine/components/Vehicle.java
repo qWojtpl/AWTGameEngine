@@ -8,10 +8,10 @@ import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.physics.*;
 import physx.vehicle2.*;
-import pl.AWTGameEngine.annotations.components.management.Requires;
-import pl.AWTGameEngine.annotations.components.management.Unique;
+import pl.AWTGameEngine.annotations.components.management.*;
 import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
@@ -29,7 +29,7 @@ import java.util.List;
 public class Vehicle extends ObjectComponent {
 
     private final PhysXManager physXManager = PhysXManager.getInstance();
-    private final EngineDriveVehicle vehicle = new EngineDriveVehicle();
+    protected final EngineDriveVehicle vehicle = new EngineDriveVehicle();
     private final PxVehiclePhysXSimulationContext context = new PxVehiclePhysXSimulationContext();
 
     private Engine engine;
@@ -380,9 +380,10 @@ public class Vehicle extends ObjectComponent {
         vehicle.destroy();
     }
 
-    @Requires(Vehicle.class)
+    @RequiresOneOf(Vehicle.class)
     @ComponentGL
     @ComponentFX
+    @DefaultComponent
     public static class Wheel extends VehicleComponent {
 
         public Wheel(GameObject object) {
@@ -423,6 +424,7 @@ public class Vehicle extends ObjectComponent {
     @Requires(Vehicle.class)
     @ComponentGL
     @ComponentFX
+    @DefaultComponent
     @Unique
     public static class Engine extends VehicleComponent {
 
@@ -469,6 +471,7 @@ public class Vehicle extends ObjectComponent {
     @Requires(Vehicle.class)
     @ComponentGL
     @ComponentFX
+    @DefaultComponent
     @Unique
     public static class Gearbox extends VehicleComponent {
 
@@ -586,6 +589,14 @@ public class Vehicle extends ObjectComponent {
 
     }
 
+    protected void updateWorldPositions() {
+        PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
+        PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
+        getObject().setPosition(new TransformSet(vec3.getX(), vec3.getY() + getObject().getSizeY() * 1.5 + 1.35, vec3.getZ()));
+        getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
+//        System.out.println(vehicle.getEngineDriveState().getEngineState().getRotationSpeed());
+    }
+
     // Events
 
     @Override
@@ -603,11 +614,7 @@ public class Vehicle extends ObjectComponent {
         if(vehicle.getPhysXState().getPhysxActor().getRigidBody() == null) {
             return;
         }
-        PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
-        PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
-        getObject().setPosition(new TransformSet(vec3.getX(), vec3.getY() + getObject().getSizeY() * 1.5 + 1.35, vec3.getZ()));
-        getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
-        //System.out.println(vehicle.getEngineDriveState().getEngineState().getRotationSpeed());
+        updateWorldPositions();
     }
 
 }

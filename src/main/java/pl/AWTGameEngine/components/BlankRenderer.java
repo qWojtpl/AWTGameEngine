@@ -34,8 +34,8 @@ public class BlankRenderer extends ObjectComponent {
                 new GraphicsManager.RenderOptions()
                         .setColor(color.getColor())
                         .setRotation(getObject().getRotation().getX())
-                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
-                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
+                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getX()))
         );
     }
 
