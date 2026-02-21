@@ -2,6 +2,7 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
@@ -9,6 +10,7 @@ import pl.AWTGameEngine.objects.TransformSet;
 
 @DefaultComponent
 @ComponentGL
+@WebComponent
 public class Test2DForce extends ObjectComponent {
 
     private RigidBody.Dynamic rigidBody;

@@ -23,6 +23,7 @@
         Object {
             position: absolute;
             white-space: nowrap;
+            transform: translate(-50%,-50%);
         }
 
         @{CUSTOM-USER-STYLES}
@@ -52,7 +53,7 @@
 
         function setRotation(identifier, rotation) {
             let object = getObject(identifier);
-            object.style.transform = "rotate(" + rotation + "deg) translate(-50%,-50%)";
+            object.style.transform = "translate(-50%,-50%) rotate(" + rotation + "deg)";
         }
 
         /*    IMAGE, COLOR, BORDER    */

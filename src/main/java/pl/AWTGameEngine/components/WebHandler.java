@@ -48,9 +48,8 @@ public class WebHandler extends ObjectComponent {
     }
 
     @Override
-    public boolean onUpdateRotation(double newRotation) {
+    public void onUpdateRotation() {
         updateRotation = true;
-        return true;
     }
 
     @Override

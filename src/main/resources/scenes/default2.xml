@@ -1,5 +1,5 @@
 <scene title="Default2 rendering scene" renderFPS="60" updateFPS="60" physicsFPS="360" sameSize="true">
-    <object id="floor" x="0" y="0" sizeX="10000" sizeY="10000">
+    <object id="floor" x="960" y="500" sizeX="1920" sizeY="1080">
         <RigidBody.TopDown.Static layer="0" />
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
     </object>

@@ -405,11 +405,21 @@ public abstract class RigidBody extends ObjectComponent {
                 );
             }
 
+
+
             @Override
             public void updatePosition(TransformSet position) {
-                PxVec3 vec3 = new PxVec3((float) position.getX(), layer * 5, (float) position.getZ());
+                PxVec3 vec3 = new PxVec3((float) position.getX(), layer * 5, (float) position.getY());
                 pose.setP(vec3);
                 vec3.destroy();
+            }
+
+            @Override
+            public void physicsUpdate() {
+                PxVec3 position = rigidStatic.getGlobalPose().getP();
+                PxVec3 newVec = new PxVec3(position.getX(), position.getZ(), position.getY());
+                updateCachedPositions(newVec, rigidStatic.getGlobalPose().getQ());
+                newVec.destroy();
             }
 
             @SaveState(name = "layer")
