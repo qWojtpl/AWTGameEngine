@@ -1,16 +1,21 @@
-<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="60">
+<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="360">
 
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
 
     <object id="player">
-        <MovementGL _package="pl.AWTGameEngine.custom" />
-        <MovementFX _package="pl.AWTGameEngine.custom" />
+<!--        <MovementGL _package="pl.AWTGameEngine.custom" />-->
+<!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
         <CameraFX />
         <Server port="53780" />
     </object>
 
-    <object id="floor" x="500" y="-100" z="-500" size="1000,10,1000">
+    <object id="floor" x="500" y="-100" z="-500" size="1000,10,10000">
+        <Box3D spriteSource="hdr_sprites/glass.png" />
+        <RigidBody.Static />
+    </object>
+
+    <object id="floor2" x="500" y="-100" z="-500" size="100,10,100">
         <Box3D spriteSource="hdr_sprites/glass.png" />
         <RigidBody.Static />
     </object>
@@ -51,14 +56,15 @@
     <object id="vehicle" x="0" y="50" z="0" size="10,10,20">
         <Box3D spriteSource="sprites/beaver.jpg" />
         <Vehicle />
-        <Vehicle.Engine />
-        <Vehicle.Gearbox />
+        <Vehicle.Engine peakTorque="1800" maxRPM="12000" idleRPM="1200" />
+        <Vehicle.Gearbox gearRatios="-4,0,4,2,1.5,1.1,1,0.8,0.7,0.3" />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <RigidBody.Kinematic />
         <CameraFollow />
+        <VehicleSteer _package="pl.AWTGameEngine.custom" />
     </object>
 
 </scene>

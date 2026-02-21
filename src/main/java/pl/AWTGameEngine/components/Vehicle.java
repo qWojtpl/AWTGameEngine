@@ -13,6 +13,7 @@ import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
@@ -39,6 +40,14 @@ public class Vehicle extends ObjectComponent {
 
     public Vehicle(GameObject object) {
         super(object);
+    }
+
+    public float RPMtoOmega(float rpm) {
+        return rpm * (2f * (float) Math.PI) / 60f;
+    }
+
+    public float omegaToRPM(float omega) {
+        return omega * 60f / (2f * (float) Math.PI);
     }
 
     private void setEngine(Engine engine) {
@@ -168,7 +177,7 @@ public class Vehicle extends ObjectComponent {
         }
 
         var steerResponse = baseParams.getSteerResponseParams();
-        steerResponse.setMaxResponse(0.5f);
+        steerResponse.setMaxResponse(0.25f);
         for (int i = 0; i < 4; i++) {
             steerResponse.setWheelResponseMultipliers(i, i < 2 ? 1f : 0f);
         }
@@ -230,12 +239,12 @@ public class Vehicle extends ObjectComponent {
             suspension.setSuspensionAttachment(suspensionAttachmentPoses.get(i));
             suspension.setSuspensionTravelDir(suspensionTravelDir);
             suspension.setWheelAttachment(wheelAttachmentPose);
-            suspension.setSuspensionTravelDist(1f/*(float) (getObject().getSizeY() + wheelRadius)*/);
+            suspension.setSuspensionTravelDist(0.3f/*(float) (getObject().getSizeY() + wheelRadius)*/);
         }
 
         var suspensionCalc = baseParams.getSuspensionStateCalculationParams();
         suspensionCalc.setSuspensionJounceCalculationType(PxVehicleSuspensionJounceCalculationTypeEnum.eSWEEP);
-        suspensionCalc.setLimitSuspensionExpansionVelocity(false);
+        suspensionCalc.setLimitSuspensionExpansionVelocity(true);
 
         var forceAppPoint = new PxVec3(0f, 0f, -0.11f);
         for (int i = 0; i < 4; i++) {
@@ -248,8 +257,8 @@ public class Vehicle extends ObjectComponent {
 
         for (int i = 0; i < 4; i++) {
             var suspensionForce = baseParams.getSuspensionForceParams(i);
-            float naturalFrequency = 7f;
-            float dampingRatio = 1.0f;
+            float naturalFrequency = 6f;
+            float dampingRatio = 1.8f;
 
             float sprungMass = mass / 4f;
             float stiffness = naturalFrequency * naturalFrequency * sprungMass;
@@ -263,16 +272,16 @@ public class Vehicle extends ObjectComponent {
         for (int i = 0; i < 4; i++) {
             var tireForce = baseParams.getTireForceParams(i);
             tireForce.setLongStiff(25_000f);
-            tireForce.setLatStiffX(0.01f);
-            tireForce.setLatStiffY(120_000f);
+            tireForce.setLatStiffX(3f);
+            tireForce.setLatStiffY(200_000f);
             tireForce.setCamberStiff(0f);
             tireForce.setRestLoad(5500f);
-            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 0, 0, 0f);
-            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 0, 1, 1f);
-            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 1, 0, 0.1f);
-            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 1, 1, 1f);
-            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 2, 0, 1f);
-            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 2, 1, 1f);
+            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 0, 0, 1.2f);
+            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 0, 1, 1.2f);
+            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 1, 0, 1.1f);
+            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 1, 1, 1.1f);
+            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 2, 0, 0.9f);
+            PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 2, 1, 0.9f);
 
             PxVehicleTireForceParamsExt.setLoadFilter(tireForce, 0, 0, 0f);
             PxVehicleTireForceParamsExt.setLoadFilter(tireForce, 0, 1, 0.23f);
@@ -339,7 +348,7 @@ public class Vehicle extends ObjectComponent {
         autobox.setDownRatios(4, 0.5f);
         autobox.setDownRatios(5, 0.5f);
         autobox.setDownRatios(6, 0.5f);
-        autobox.setLatency(2f);
+        autobox.setLatency(0.5f);
 
         engineDriveParams.getClutchCommandResponseParams().setMaxResponse(10f);
 
@@ -435,7 +444,9 @@ public class Vehicle extends ObjectComponent {
     @Unique
     public static class Engine extends VehicleComponent {
 
-        private float peakTorque = 200f;
+        private float peakTorque = 600f;
+        private float idleRPM = 800f;
+        private float maxRPM = 8400f;
 
         public Engine(GameObject object) {
             super(object);
@@ -453,15 +464,26 @@ public class Vehicle extends ObjectComponent {
             engine.getTorqueCurve().addPair(1f, 1f);
             engine.setMoi(1f);
             engine.setPeakTorque(peakTorque);
-            engine.setIdleOmega(0);
-            engine.setMaxOmega(8600f);
+            engine.setIdleOmega(vehicle.RPMtoOmega(idleRPM));
+            engine.setMaxOmega(vehicle.RPMtoOmega(maxRPM));
             engine.setDampingRateFullThrottle(0.15f);
             engine.setDampingRateZeroThrottleClutchEngaged(2f);
             engine.setDampingRateZeroThrottleClutchDisengaged(0.35f);
         }
 
+        @SaveState(name = "peakTorque")
         public float getPeakTorque() {
             return this.peakTorque;
+        }
+
+        @SaveState(name = "idleRPM")
+        public float getIdleRPM() {
+            return this.idleRPM;
+        }
+
+        @SaveState(name = "maxRPM")
+        public float getMaxRPM() {
+            return this.maxRPM;
         }
 
         public void setPeakTorque(float peakTorque) {
@@ -471,6 +493,24 @@ public class Vehicle extends ObjectComponent {
         @FromXML
         public void setPeakTorque(String peakTorque) {
             setPeakTorque(Float.parseFloat(peakTorque));
+        }
+
+        public void setIdleRPM(float idleRPM) {
+            this.idleRPM = idleRPM;
+        }
+
+        @FromXML
+        public void setIdleRPM(String idleRPM) {
+            setIdleRPM(Float.parseFloat(idleRPM));
+        }
+
+        public void setMaxRPM(float maxRPM) {
+            this.maxRPM = maxRPM;
+        }
+
+        @FromXML
+        public void setMaxRPM(String maxRPM) {
+            setMaxRPM(Float.parseFloat(maxRPM));
         }
 
     }
@@ -515,6 +555,15 @@ public class Vehicle extends ObjectComponent {
             if(initialized) {
                 throw new RuntimeException("Gearbox already initialized.");
             }
+        }
+
+        @SaveState(name = "gearRatios")
+        public String getGearRatiosAsString() {
+            List<String> ratios = new ArrayList<>();
+            for(Float f : gearRatios) {
+                ratios.add(f.toString());
+            }
+            return String.join(",", ratios);
         }
 
         public void setGearboxType(GearboxType gearboxType) {

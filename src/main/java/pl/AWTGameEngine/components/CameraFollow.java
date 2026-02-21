@@ -52,7 +52,7 @@ public class CameraFollow extends ObjectComponent {
             forceX /= len;
             forceY /= len;
             forceZ /= len;
-            dynamic.addForce(new TransformSet(forceX, 0, forceZ), 10);
+//            dynamic.addForce(new TransformSet(forceX, 0, forceZ), 10);
         }
     }
 
