@@ -1,4 +1,4 @@
-<scene title="Default2 rendering scene" renderFPS="60" updateFPS="60" physicsFPS="360" sameSize="true">
+<scene title="Default2 rendering scene" renderFPS="60" updateFPS="30" physicsFPS="360" sameSize="true">
     <object id="floor" x="960" y="500" sizeX="1920" sizeY="1080">
         <RigidBody.TopDown.Static layer="0" />
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
@@ -6,7 +6,7 @@
     <object id="test" x="0" y="0" sizeX="100" sizeY="100">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
         <RigidBody.TopDown.Dynamic />
-        <Test2DForce _package="pl.AWTGameEngine.custom" />
+<!--        <Test2DForce _package="pl.AWTGameEngine.custom" />-->
     </object>
     <object id="test2" x="200" y="50" sizeX="100" sizeY="100">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
@@ -15,5 +15,16 @@
     <object id="test3" x="500" y="50" sizeX="100" sizeY="100">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
         <RigidBody.TopDown.Static layer="1" />
+    </object>
+    <object id="vehicle" x="500" y="500" sizeX="50" sizeY="100">
+        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <Vehicle.TopDown />
+        <Vehicle.Engine />
+        <Vehicle.Gearbox />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <Vehicle.Wheel />
+        <TopDownVehicleSteer _package="pl.AWTGameEngine.custom" />
     </object>
 </scene>

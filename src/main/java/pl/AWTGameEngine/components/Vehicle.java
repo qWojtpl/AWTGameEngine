@@ -15,6 +15,7 @@ import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.TransformSet;
@@ -82,8 +83,10 @@ public class Vehicle extends ObjectComponent {
                 EngineDriveVehicleEnum.eDIFFTYPE_MULTIWHEELDRIVE
         );
 
+        TransformSet initializationPose = getVehicleInitializationPose();
+
         var vehiclePose = new PxTransform(
-                new PxVec3((float) getObject().getPosition().getX(), (float) getObject().getPosition().getY(), (float) getObject().getPosition().getZ()),
+                new PxVec3((float) initializationPose.getX(), (float) initializationPose.getY(), (float) initializationPose.getZ()),
                 new PxQuat(PxIDENTITYEnum.PxIdentity));
 
         vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(vehiclePose);
@@ -109,6 +112,10 @@ public class Vehicle extends ObjectComponent {
         vehicle.getCommandState().setNbBrakes(0);
         vehicle.getCommandState().setSteer(0.3f);
 
+    }
+
+    protected TransformSet getVehicleInitializationPose() {
+        return getObject().getPosition();
     }
 
     private void setBaseParams(BaseVehicleParams baseParams) {
@@ -380,7 +387,7 @@ public class Vehicle extends ObjectComponent {
         vehicle.destroy();
     }
 
-    @RequiresOneOf(Vehicle.class)
+    @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
     @ComponentGL
     @ComponentFX
     @DefaultComponent
@@ -421,14 +428,14 @@ public class Vehicle extends ObjectComponent {
 
     }
 
-    @Requires(Vehicle.class)
+    @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
     @ComponentGL
     @ComponentFX
     @DefaultComponent
     @Unique
     public static class Engine extends VehicleComponent {
 
-        private float peakTorque = 500f;
+        private float peakTorque = 200f;
 
         public Engine(GameObject object) {
             super(object);
@@ -468,7 +475,7 @@ public class Vehicle extends ObjectComponent {
 
     }
 
-    @Requires(Vehicle.class)
+    @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
     @ComponentGL
     @ComponentFX
     @DefaultComponent
@@ -615,6 +622,28 @@ public class Vehicle extends ObjectComponent {
             return;
         }
         updateWorldPositions();
+    }
+
+    @DefaultComponent
+    public static class TopDown extends Vehicle {
+
+        public TopDown(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        protected void updateWorldPositions() {
+            PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
+            PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
+            getObject().setPosition(new TransformSet(vec3.getX(), vec3.getZ(), 10));
+            getObject().setRotation(new TransformSet(RotationHelper.quaternionToYaw(rotation.getY(), rotation.getW()), 0, 0));
+        }
+
+        @Override
+        protected TransformSet getVehicleInitializationPose() {
+            return new TransformSet(getObject().getX(), 10, getObject().getY());
+        }
+
     }
 
 }

@@ -89,6 +89,16 @@ public class RotationHelper {
         return new double[] { angleDeg, axisX, axisY, axisZ };
     }
 
+    public static double quaternionToYaw(double y, double w) {
+        float norm = (float) Math.sqrt(y * y + w * w);
+        y /= norm;
+        w /= norm;
+
+        double yaw = 2.0 * Math.atan2(y, w);
+
+        return -Math.toDegrees(yaw);
+    }
+
     public static double[] rotationToVectorLookAt(double px, double py, double pz, double rx, double ry, double rz) {
         if (rx > 89.9f) {
             rx = 89.9f;

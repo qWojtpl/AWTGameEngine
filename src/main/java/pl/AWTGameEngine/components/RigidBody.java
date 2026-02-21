@@ -18,6 +18,7 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.TransformSet;
@@ -106,10 +107,13 @@ public abstract class RigidBody extends ObjectComponent {
 
     public abstract void physicsUpdate();
 
-    protected void updateCachedPositions(PxVec3 position, PxQuat rotation) {
+    protected void updateCachedPosition(PxVec3 position) {
         if(position.getX() != getObject().getPosition().getX() || position.getY() != getObject().getPosition().getY() || position.getZ() != getObject().getPosition().getZ()) {
             getObject().setPosition(TransformSet.fromPhysX(position)/*, this*/);
         }
+    }
+
+    protected void updateCachedRotation(PxQuat rotation) {
         if(rotation.getX() != cachedRotation.getX() || rotation.getY() != cachedRotation.getY() ||
                 rotation.getZ() != cachedRotation.getZ() || rotation.getW() != cachedRotation.getW()) {
             cachedRotation = QuaternionTransformSet.fromPhysX(rotation);
@@ -171,7 +175,8 @@ public abstract class RigidBody extends ObjectComponent {
 
         @Override
         public void physicsUpdate() {
-            updateCachedPositions(rigidDynamic.getGlobalPose().getP(), rigidDynamic.getGlobalPose().getQ());
+            updateCachedPosition(rigidDynamic.getGlobalPose().getP());
+            updateCachedRotation(rigidDynamic.getGlobalPose().getQ());
         }
 
         public void addForce(TransformSet vector, float force) {
@@ -267,7 +272,8 @@ public abstract class RigidBody extends ObjectComponent {
 
         @Override
         public void physicsUpdate() {
-            updateCachedPositions(rigidStatic.getGlobalPose().getP(), rigidStatic.getGlobalPose().getQ());
+            updateCachedPosition(rigidStatic.getGlobalPose().getP());
+            updateCachedRotation(rigidStatic.getGlobalPose().getQ());
         }
 
     }
@@ -350,7 +356,8 @@ public abstract class RigidBody extends ObjectComponent {
             public void physicsUpdate() {
                 PxVec3 vec3 = rigidDynamic.getGlobalPose().getP();
                 PxVec3 newVec = new PxVec3(vec3.getX(), vec3.getZ(), 5);
-                updateCachedPositions(newVec, rigidDynamic.getGlobalPose().getQ());
+                updateCachedPosition(newVec);
+                updateCachedRotation(rigidDynamic.getGlobalPose().getQ());
                 newVec.destroy();
             }
 
@@ -367,20 +374,8 @@ public abstract class RigidBody extends ObjectComponent {
             }
 
             @Override
-            protected void updateCachedPositions(PxVec3 position, PxQuat rotation) {
-                if(position.getX() != getObject().getPosition().getX() || position.getY() != getObject().getPosition().getY() || position.getZ() != getObject().getPosition().getZ()) {
-                    getObject().setPosition(TransformSet.fromPhysX(position)/*, this*/);
-                }
-                float y = rotation.getY();
-                float w = rotation.getW();
-
-                float norm = (float) Math.sqrt(y * y + w * w);
-                y /= norm;
-                w /= norm;
-
-                double yaw = 2.0 * Math.atan2(y, w);
-
-                getObject().setRotation(new TransformSet(-Math.toDegrees(yaw), 0, 0));
+            protected void updateCachedRotation(PxQuat rotation) {
+                getObject().setRotation(new TransformSet(RotationHelper.quaternionToYaw(rotation.getY(), rotation.getW()), 0, 0));
             }
 
         }
@@ -418,7 +413,8 @@ public abstract class RigidBody extends ObjectComponent {
             public void physicsUpdate() {
                 PxVec3 position = rigidStatic.getGlobalPose().getP();
                 PxVec3 newVec = new PxVec3(position.getX(), position.getZ(), position.getY());
-                updateCachedPositions(newVec, rigidStatic.getGlobalPose().getQ());
+                updateCachedPosition(newVec);
+                updateCachedRotation(rigidStatic.getGlobalPose().getQ());
                 newVec.destroy();
             }
 

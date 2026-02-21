@@ -51,7 +51,7 @@ public class GameObject {
                         " cannot be added to " + identifier + " because is not marked as ComponentFX");
                 return;
             }
-        }  else if(RenderEngine.OPENGL.equals(renderEngine)) {
+        } else if(RenderEngine.OPENGL.equals(renderEngine)) {
             if(!component.isGLComponent()) {
                 Logger.error("Component " + component.getComponentName() +
                         " cannot be added to " + identifier + " because is not marked as ComponentGL");
@@ -68,7 +68,7 @@ public class GameObject {
             assert requiredClasses != null;
             boolean found = false;
             for(Class<? extends ObjectComponent> requiredClass : requiredClasses) {
-                requiredClassesString.add(requiredClasses.getClass().getName());
+                requiredClassesString.add(requiredClass.getSimpleName());
                 for (ObjectComponent c : components) {
                     if (c.getClass().isInstance(requiredClass) || c.getClass().equals(requiredClass)) {
                         found = true;
