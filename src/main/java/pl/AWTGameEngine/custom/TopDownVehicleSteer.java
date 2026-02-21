@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.Vehicle;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.KeyCode;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 
@@ -26,27 +27,19 @@ public class TopDownVehicleSteer extends ObjectComponent {
 
     @Override
     public void onUpdate() {
-        if(getKeyListener().hasPressedKey(87)) { // W
-            torque += 0.01f;
-        }
-        if(getKeyListener().hasPressedKey(65)) { // A
-            steer -= 0.01f;
-        }
-        if(getKeyListener().hasPressedKey(83)) { // S
-            torque -= 0.01f;
-        }
-        if(getKeyListener().hasPressedKey(68)) { // D
-            steer += 0.01f;
-        }
-        if(torque > 1) {
+        torque = 0;
+        steer = 0;
+        if(getKeyListener().hasPressedKey(KeyCode.W.value)) {
             torque = 1;
-        } else if(torque < 0) {
-            torque = 0;
         }
-        if(steer > 1) {
-            steer = 1;
-        } else if(steer < -1) {
+        if(getKeyListener().hasPressedKey(KeyCode.A.value)) {
             steer = -1;
+        }
+        if(getKeyListener().hasPressedKey(KeyCode.S.value)) {
+            torque = -1;
+        }
+        if(getKeyListener().hasPressedKey(KeyCode.D.value)) {
+            steer = 1;
         }
     }
 
