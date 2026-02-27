@@ -55,10 +55,9 @@ public class Client extends NetComponent {
         try {
             this.connectedClient = new ConnectedClient(-1, new Socket(ip, port));
             handleConnection();
-            Logger.info("Connected.");
-            requestGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100), new TransformSet());
-            requestComponent("player{id}", "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)");
-            requestComponent("player{id}", "pl.AWTGameEngine.custom.Movement2D", "discover");
+//            requestGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100), new TransformSet());
+//            requestComponent("player{id}", "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)");
+//            requestComponent("player{id}", "pl.AWTGameEngine.custom.Movement2D", "discover");
         } catch (IOException e) {
             Logger.exception("Cannot connect to " + address, e);
         }
@@ -87,8 +86,18 @@ public class Client extends NetComponent {
                         continue;
                     }
                     if(connectedClient.getId() == -1) {
-                        connectedClient.updateId(Integer.parseInt(response)); // first response is an id
+                        int id;
+                        try {
+                            id = Integer.parseInt(response);
+                        } catch(NumberFormatException e) {
+                            Logger.error("Cannot connect to server: " + response);
+                            connectedClient.getSocket().close();
+                            connectedClient = null;
+                            return;
+                        }
+                        connectedClient.updateId(id); // first response is an id
                         Logger.info("\t\t-> Server assigned ID " + connectedClient.getId() + " for me.");
+                        Logger.info("Connected.");
                         continue;
                     }
                     NetDeserializer.deserialize(getScene(), response, connectedClient);
@@ -106,6 +115,9 @@ public class Client extends NetComponent {
 
     @Override
     public void onNetUpdate() {
+        if(this.connectedClient == null) {
+            return;
+        }
         List<NetBlock> blocks = new ArrayList<>();
         for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
             NetComponent netComponent = (NetComponent) component;

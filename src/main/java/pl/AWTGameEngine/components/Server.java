@@ -29,6 +29,7 @@ import java.util.List;
 public class Server extends NetComponent {
 
     private int port = 5555;
+    private int maxClients = 1;
     private final Thread tcpThread = new Thread(this::acceptClient);
     private final Thread udpThread = new Thread(this::onUDPThreadUpdate);
     private ServerSocket tcpSocket;
@@ -130,6 +131,12 @@ public class Server extends NetComponent {
     }
 
     private void handleConnection(Socket clientSocket) {
+
+        if(connectedClients.size() >= maxClients) {
+            joinDisconnect(clientSocket, "Max client limit reached. (" + maxClients + "/" + maxClients + "). Try again later.");
+            return;
+        }
+
         int id = currentId++;
         Logger.info("Client " + getClientAddress(clientSocket) + " connected.");
         Logger.info("\t\t-> Assigned new client to ID " + id);
@@ -197,6 +204,16 @@ public class Server extends NetComponent {
         }
     }
 
+    public void joinDisconnect(Socket socket, String message) {
+        try {
+            ConnectedClient temp = new ConnectedClient(-1, socket);
+            temp.sendMessage(message);
+            temp.close();
+        } catch(IOException e) {
+            Logger.exception("Cannot join-disconnect client", e);
+        }
+    }
+
     private String getClientAddress(Socket clientSocket) {
         return clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort();
     }
@@ -224,9 +241,18 @@ public class Server extends NetComponent {
         this.port = Integer.parseInt(port);
     }
 
+    public int getMaxClients() {
+        return this.maxClients;
+    }
+
+    public void setMaxClients(int clients) {
+        clients = Math.abs(clients);
+        this.maxClients = clients;
+    }
+
     @FromXML
     public void setMaxClients(String clients) {
-
+        setMaxClients(Integer.parseInt(clients));
     }
 
 }
