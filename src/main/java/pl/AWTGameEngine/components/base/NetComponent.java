@@ -6,6 +6,8 @@ import pl.AWTGameEngine.objects.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.NetBlock;
 
+import java.net.Socket;
+
 /**
  * NetComponent is a class which inherits from ObjectComponent
  * and contains events which are common for components which
@@ -25,6 +27,17 @@ public abstract class NetComponent extends ObjectComponent {
     @EventMethod
     public void onClientDisconnect(Server server, ConnectedClient client) {
 
+    }
+
+    /**
+     * Event is fired when client tries to connect and after max client check is fired.
+     * Return null to let the client in, or return a string, to send a message to the client.
+     * @param socket - Client socket
+     * @return null or join-disconnect message
+     */
+    @EventMethod
+    public String onClientTryToConnect(Socket socket) {
+        return null;
     }
 
     /**

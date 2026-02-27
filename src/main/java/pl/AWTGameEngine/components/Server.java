@@ -137,6 +137,14 @@ public class Server extends NetComponent {
             return;
         }
 
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientTryToConnect#Socket")) {
+            String message = ((NetComponent) component).onClientTryToConnect(clientSocket);
+            if(message != null) {
+                joinDisconnect(clientSocket, message);
+                return;
+            }
+        }
+
         int id = currentId++;
         Logger.info("Client " + getClientAddress(clientSocket) + " connected.");
         Logger.info("\t\t-> Assigned new client to ID " + id);
