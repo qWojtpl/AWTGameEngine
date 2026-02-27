@@ -288,45 +288,7 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
-    public void onClientConnect(Server server, ConnectedClient client) {
-
-    }
-
-    @EventMethod
-    public void onClientDisconnect(Server server, ConnectedClient client) {
-
-    }
-
-    @EventMethod
     public void onSerializationFinish() {
-
-    }
-
-    /**
-     * Object synchronize is over a TCP connection to ensure that component will be updated.
-     * onSynchronize event is executed only on server side.
-     * @return NetBlock
-     */
-    @EventMethod
-    public NetBlock onSynchronize() {
-        return new NetBlock();
-    }
-
-    @EventMethod
-    public void onSynchronizeReceived(String data) {
-
-    }
-
-    @EventMethod
-    public void onNetUpdate() {
-
-    }
-
-    public boolean canSynchronize() {
-        return true;
-    }
-
-    public void clearNetCache() {
 
     }
 

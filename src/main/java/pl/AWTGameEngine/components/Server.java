@@ -5,6 +5,7 @@ import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
@@ -25,7 +26,7 @@ import java.util.List;
 @ComponentGL
 @DefaultComponent
 @WebComponent
-public class Server extends ObjectComponent {
+public class Server extends NetComponent {
 
     private int port = 5555;
     private final Thread tcpThread = new Thread(this::acceptClient);
@@ -96,10 +97,11 @@ public class Server extends ObjectComponent {
     private void sendComponents() {
         List<NetBlock> blocks = new ArrayList<>();
         for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
-            if(!component.canSynchronize()) {
+            NetComponent netComponent = (NetComponent) component;
+            if(!netComponent.canSynchronize()) {
                 continue;
             }
-            NetBlock block = component.onSynchronize();
+            NetBlock block = netComponent.onSynchronize();
             if(block.isEmpty()) {
                 continue;
             }
@@ -151,11 +153,11 @@ public class Server extends ObjectComponent {
         }
 
         for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
-            component.clearNetCache();
+            ((NetComponent) component).clearNetCache();
         }
 
         for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#ConnectedClient")) {
-            component.onClientConnect(this, connectedClient);
+            ((NetComponent) component).onClientConnect(this, connectedClient);
         }
 
         while (connectedClient.getSocket().isConnected()) {
@@ -186,7 +188,7 @@ public class Server extends ObjectComponent {
             Logger.info("Client " + getClientAddress(client.getSocket()) +
                     " (ID " + client.getId() + ") disconnected.");
             for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#ConnectedClient")) {
-                component.onClientDisconnect(this, client);
+                ((NetComponent) component).onClientDisconnect(this, client);
             }
             client.close();
             connectedClients.remove(client.getId());

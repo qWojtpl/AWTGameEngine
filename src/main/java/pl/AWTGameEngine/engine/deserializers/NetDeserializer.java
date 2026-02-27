@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.deserializers;
 
 import pl.AWTGameEngine.components.Server;
+import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.ConnectedClient;
@@ -39,7 +40,9 @@ public class NetDeserializer {
                 return;
             }
             // synchronize component
-            component.onSynchronizeReceived(data);
+            if(component instanceof NetComponent) {
+                ((NetComponent) component).onSynchronizeReceived(data);
+            }
         } catch(Exception e) {
             Logger.exception("Cannot deserialize message", e);
         }

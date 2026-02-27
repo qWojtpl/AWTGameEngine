@@ -4,7 +4,7 @@ import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.BlankRenderer;
 import pl.AWTGameEngine.components.Server;
-import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 @DefaultComponent
 @WebComponent
-public class PlayerSpawner extends ObjectComponent {
+public class PlayerSpawner extends NetComponent {
 
     private final HashMap<Integer, GameObject> playerObjects = new HashMap<>();
 

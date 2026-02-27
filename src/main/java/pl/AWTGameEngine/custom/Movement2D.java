@@ -2,13 +2,14 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.NetBlock;
 
 @DefaultComponent
 @WebComponent
-public class Movement2D extends ObjectComponent {
+public class Movement2D extends NetComponent {
 
     private final double speed = 4;
     private boolean netDiscovered = false;

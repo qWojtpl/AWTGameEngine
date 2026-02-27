@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -14,7 +15,7 @@ import java.text.MessageFormat;
 
 @DefaultComponent
 @WebComponent
-public class BlankRenderer extends ObjectComponent {
+public class BlankRenderer extends NetComponent {
 
     private ColorObject color = new ColorObject();
     private boolean changedColor = false;

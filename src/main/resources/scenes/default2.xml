@@ -16,15 +16,15 @@
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
         <RigidBody.TopDown.Static layer="1" />
     </object>
-    <object id="vehicle" x="500" y="500" sizeX="50" sizeY="100">
+    <object id="vehicle" x="500" y="0" sizeX="100" sizeY="150">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
         <Vehicle.TopDown />
-        <Vehicle.Engine />
-        <Vehicle.Gearbox />
+        <Vehicle.Engine peakTorque="18000" maxRPM="120000" idleRPM="1200" />
+        <Vehicle.Gearbox gearRatios="-4,0,4,2,1.5,1.1,1,0.8,0.7,0.3" />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
         <Vehicle.Wheel />
-        <TopDownVehicleSteer _package="pl.AWTGameEngine.custom" />
+        <VehicleSteer _package="pl.AWTGameEngine.custom" />
     </object>
 </scene>

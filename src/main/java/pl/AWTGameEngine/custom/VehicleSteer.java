@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.custom;
 
+import physx.common.PxVec3;
 import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
@@ -42,7 +43,7 @@ public class VehicleSteer extends ObjectComponent {
             steer = 0.4f;
         }
         if(getKeyListener().hasPressedKey(KeyCode.S.value)) {
-            brake = 4;
+            brake = 5;
         }
         if(getKeyListener().hasPressedKey(KeyCode.D.value)) {
             steer = -0.4f;

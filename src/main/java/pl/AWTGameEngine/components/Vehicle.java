@@ -75,10 +75,7 @@ public class Vehicle extends ObjectComponent {
     }
 
     private void initialize() {
-        PxGeometry geometry = new PxBoxGeometry(
-                (float) getObject().getSize().getX(),
-                (float) getObject().getSize().getY(),
-                (float) getObject().getSize().getZ());
+        PxGeometry geometry = createGeometry();
 //        initializeBaseParams(vehicle.getBaseParams());
 
         setBaseParams(vehicle.getBaseParams());
@@ -121,6 +118,13 @@ public class Vehicle extends ObjectComponent {
         vehicle.getCommandState().setNbBrakes(0);
         vehicle.getCommandState().setSteer(0.3f);
 
+    }
+
+    protected PxGeometry createGeometry() {
+        return new PxBoxGeometry(
+                (float) getObject().getSize().getX(),
+                (float) getObject().getSize().getY(),
+                (float) getObject().getSize().getZ());
     }
 
     protected TransformSet getVehicleInitializationPose() {
@@ -686,6 +690,14 @@ public class Vehicle extends ObjectComponent {
             PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
             getObject().setPosition(new TransformSet(vec3.getX(), vec3.getZ(), 10));
             getObject().setRotation(new TransformSet(RotationHelper.quaternionToYaw(rotation.getY(), rotation.getW()), 0, 0));
+        }
+
+        protected PxGeometry createGeometry() {
+            return new PxBoxGeometry(
+                    (float) getObject().getSize().getX(),
+                    (float) 5 / 2,
+                    (float) getObject().getSize().getY()
+            );
         }
 
         @Override

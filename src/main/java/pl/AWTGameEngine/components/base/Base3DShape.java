@@ -11,7 +11,7 @@ import pl.AWTGameEngine.objects.Sprite;
 
 import java.util.Objects;
 
-public abstract class Base3DShape extends ObjectComponent {
+public abstract class Base3DShape extends NetComponent {
 
     protected Sprite sprite;
     protected ColorObject color;
