@@ -5,6 +5,7 @@ import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
@@ -44,7 +45,7 @@ public class Server extends NetComponent {
     }
 
     @Override
-    public void onAddComponent() {
+    public void onSerializationFinish() {
         try {
             Logger.info("Starting server on port " + port + "...");
             this.tcpSocket = new ServerSocket(port);
@@ -175,17 +176,15 @@ public class Server extends NetComponent {
             ((NetComponent) component).onClientConnect(this, connectedClient);
         }
 
-        while (connectedClient.getSocket().isConnected()) {
+        while(connectedClient.getSocket().isConnected()) {
             try {
                 String message = connectedClient.getBufferedReader().readLine();
                 if(message == null) {
                     continue;
                 }
                 NetDeserializer.deserialize(getScene(), message, connectedClient, this);
-            } catch (IOException e) {
-                disconnect(connectedClient);
-                Logger.exception("Exception while receiving a message. Had to disconnect a client.", e);
-                return;
+            } catch(IOException e) {
+                break;
             }
         }
 
@@ -212,11 +211,12 @@ public class Server extends NetComponent {
         }
     }
 
-    public void joinDisconnect(Socket socket, String message) {
+    private void joinDisconnect(Socket socket, String message) {
         try {
             ConnectedClient temp = new ConnectedClient(-1, socket);
             temp.sendMessage(message);
             temp.close();
+            Logger.info("Client " + getClientAddress(socket) + " tried to connect, but had to disconnect him because: " + message);
         } catch(IOException e) {
             Logger.exception("Cannot join-disconnect client", e);
         }
@@ -244,13 +244,23 @@ public class Server extends NetComponent {
         return false;
     }
 
-    @FromXML
-    public void setPort(String port) {
-        this.port = Integer.parseInt(port);
+    @SaveState(name = "port")
+    public int getPort() {
+        return this.port;
     }
 
+    @SaveState(name = "maxClients")
     public int getMaxClients() {
         return this.maxClients;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    @FromXML
+    public void setPort(String port) {
+        setPort(Integer.parseInt(port));
     }
 
     public void setMaxClients(int clients) {

@@ -2,6 +2,7 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.components.Client;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
@@ -16,6 +17,19 @@ public class Movement2D extends NetComponent {
 
     public Movement2D(GameObject object) {
         super(object);
+    }
+
+    @Override
+    public void onAddComponent() {
+        if(getScene().getGameObjectByName("client") == null) {
+            return;
+        }
+
+        Client client = (Client) getScene().getGameObjectByName("client").getComponentByClass(Client.class);
+
+        if(getObject().getNet().getOwner() != client.getConnectedClient().getId()) {
+            getObject().removeComponent(this);
+        }
     }
 
     @Override

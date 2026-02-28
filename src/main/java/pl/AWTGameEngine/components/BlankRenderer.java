@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
@@ -36,7 +37,7 @@ public class BlankRenderer extends NetComponent {
                         .setColor(color.getColor())
                         .setRotation(getObject().getRotation().getX())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getX()))
-                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getY()))
         );
     }
 
@@ -44,6 +45,7 @@ public class BlankRenderer extends NetComponent {
         return this.color;
     }
 
+    @SaveState(name = "color")
     public String getColor() {
         return this.color.serialize();
     }
@@ -85,17 +87,12 @@ public class BlankRenderer extends NetComponent {
 
     @Override
     public boolean canSynchronize() {
-        //todo: bugged
-        return true;
-//        if(netColorChanged) {
-//            netColorChanged = false;
-//            return true;
-//        }
-//        return false;
+        return netColorChanged;
     }
 
     @Override
     public NetBlock onSynchronize() {
+        netColorChanged = false;
         return new NetBlock(
                 getObject().getIdentifier(),
                 this.getClass().getName(),

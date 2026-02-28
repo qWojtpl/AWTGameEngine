@@ -31,6 +31,7 @@ public abstract class NetComponent extends ObjectComponent {
 
     /**
      * Event is fired when client tries to connect and after max client check is fired.
+     * You can check authentication, blacklist or whitelist here.
      * Return null to let the client in, or return a string, to send a message to the client.
      * @param socket - Client socket
      * @return null or join-disconnect message

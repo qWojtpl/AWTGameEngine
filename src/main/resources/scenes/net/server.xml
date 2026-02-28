@@ -1,4 +1,5 @@
 <scene title="Net demo (server)" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+    <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="WEB" />
     <object id="server">
         <Server port="5555" />
         <PlayerSpawner _package="pl.AWTGameEngine.custom" />

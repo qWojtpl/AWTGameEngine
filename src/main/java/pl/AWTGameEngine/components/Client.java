@@ -162,6 +162,10 @@ public class Client extends NetComponent {
         connectedClient.sendBlock(new NetBlock(identifier, component, data));
     }
 
+    public ConnectedClient getConnectedClient() {
+        return this.connectedClient;
+    }
+
     @FromXML
     public void setAutoConnect(String address) {
         this.autoConnectAddress = address;
