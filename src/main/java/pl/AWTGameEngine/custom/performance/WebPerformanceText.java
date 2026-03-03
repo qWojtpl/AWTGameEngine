@@ -17,7 +17,16 @@ public class WebPerformanceText extends WebText {
         setSize(18);
         setPadding(20);
         setColor("rgb(16,16,16)");
-        setPattern("Update FPS: {updateFPS}<br>Render FPS: {renderFPS}<br>Physics FPS: {physicsFPS}<br>Net FPS: {netFPS}<br>Objects: {objects}<br>Total threads: {threads}<br>Registered global events: {events}");
+        setCustomStyles("border:1px solid black;border-radius:5px;width:fit-content!important;");
+        setPattern(
+                "Update FPS: {updateFPS}" +
+                "<br>Render FPS: {renderFPS}" +
+                "<br>Physics FPS: {physicsFPS}" +
+                "<br>Net FPS: {netFPS}" +
+                "<br>Objects: {objects}" +
+                "<br>Total threads: {threads}" +
+                "<br>Registered global events: {events}"
+        );
     }
 
     @Override

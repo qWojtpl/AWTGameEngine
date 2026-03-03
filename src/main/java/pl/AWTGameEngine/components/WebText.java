@@ -15,6 +15,7 @@ public class WebText extends HTMLComponent {
     private int size = 0;
     private int padding = 0;
     private ColorObject color;
+    private String customStyles = "";
     private final ConcurrentHashMap<String, String> values = new ConcurrentHashMap<>();
 
     public WebText(GameObject object) {
@@ -66,13 +67,19 @@ public class WebText extends HTMLComponent {
         setPadding(Integer.parseInt(padding));
     }
 
+    @FromXML
+    public void setCustomStyles(String customStyles) {
+        this.customStyles = customStyles;
+    }
+
     @Override
     public String getRenderString() {
         String text = pattern;
         for(String key : values.keySet()) {
             text = text.replace("{" + key + "}", values.get(key));
         }
-        return "<h1 style=\"color:" + this.color.serialize() + ";font-size:" + size + "px;padding:" + padding + "px\">" + text + "</h1>";
+        return "<p style=\"color:" + this.color.serialize() + ";font-size:" + size + "px;padding:" + padding + "px;" + customStyles + "\">" + text +
+                "</p>";
     }
 
 
