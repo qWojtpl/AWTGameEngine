@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.Command;
+import pl.AWTGameEngine.exceptions.ResourceControlException;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.Sprite;
 
@@ -10,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,10 +19,15 @@ import java.util.List;
 
 public class ResourceManager {
 
+    private final Path BASE_DIR = Paths.get(System.getProperty("user.dir") + "/data/");
     private final HashMap<String, List<String>> resources = new HashMap<>();
     private final HashMap<String, Sprite> spriteResources = new HashMap<>();
     private final HashMap<String, URL> urlResources = new HashMap<>();
     private final List<AudioClip> audioClips = new ArrayList<>();
+
+    public ResourceManager() {
+        new File("./data").mkdir();
+    }
 
     @Command(value = "copy", argumentNames = { "name", "path" })
     public void copyResource(String name, String path) {
@@ -183,7 +190,40 @@ public class ResourceManager {
         if(path.startsWith("/")) {
             return ResourceManager.class.getResourceAsStream(path);
         }
-        return Files.newInputStream(Paths.get(path));
+
+        return Files.newInputStream(resolvePath(path));
+    }
+
+    public FileWriter getWriter(String path, boolean append) throws IOException {
+        final Path resolvedPath = resolvePath(path);
+        final File file = new File(resolvedPath.toUri());
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch(IOException e) {
+                Logger.exception("Cannot create file to get a writer in " + path, e);
+            }
+        }
+        return new FileWriter(file, append);
+    }
+
+    private Path resolvePath(String path) {
+        if(!BASE_DIR.isAbsolute()) {
+            throw new ResourceControlException("Base dir is not absolute.");
+        }
+
+        final Path resourcePath = Paths.get(path);
+        if(resourcePath.isAbsolute()) {
+            throw new ResourceControlException("Path " + path + " is absolute.");
+        }
+
+        final Path resolvedPath = BASE_DIR.resolve(resourcePath).normalize();
+
+        if(!resolvedPath.startsWith(BASE_DIR)) {
+            throw new ResourceControlException("Path " + path + " escapes the base directory!");
+        }
+
+        return resolvedPath;
     }
 
     public void clearResources() {

@@ -1,18 +1,13 @@
 package pl.AWTGameEngine.engine;
 
 import com.jogamp.opengl.*;
-import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.objects.Camera;
-import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
-
-import java.util.HashMap;
 
 public class OpenGLInitializer implements GLEventListener {
 

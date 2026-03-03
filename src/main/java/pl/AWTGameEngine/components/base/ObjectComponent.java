@@ -8,7 +8,6 @@ import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.EventMethod;
 import pl.AWTGameEngine.components.RigidBody;
-import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;

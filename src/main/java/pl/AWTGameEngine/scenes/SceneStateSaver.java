@@ -1,5 +1,6 @@
 package pl.AWTGameEngine.scenes;
 
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
@@ -32,7 +33,7 @@ public class SceneStateSaver {
             Logger.info(bobTheBuilder.toString());
             return;
         }
-        try(FileWriter writer = new FileWriter(path, false)) {
+        try(FileWriter writer = Dependencies.getResourceManager().getWriter(path, false)) {
             writer.write(bobTheBuilder.toString());
         } catch(IOException e) {
             Logger.exception("Cannot save scene state to file", e);

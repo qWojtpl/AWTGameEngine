@@ -43,7 +43,7 @@ public class Preferences extends CommandConsole.ParentCommand {
         try {
             boolean append = false;
             for(String key : preferences.keySet()) {
-                FileWriter writer = new FileWriter(getPreferencesFile(), append);
+                FileWriter writer = Dependencies.getResourceManager().getWriter("preferences.bin", append);
                 if(!append) {
                     append = true;
                 }
@@ -68,7 +68,7 @@ public class Preferences extends CommandConsole.ParentCommand {
     public void loadPreferences() {
         preferences.clear();
         try {
-            List<String> fileContent = Files.readAllLines(getPreferencesFile().toPath());
+            List<String> fileContent = Dependencies.getResourceManager().getResource("./preferences.bin");
             String key = null;
             for(String line : fileContent) {
                 StringBuilder newLine = new StringBuilder();
@@ -85,16 +85,6 @@ public class Preferences extends CommandConsole.ParentCommand {
         } catch(Exception e) {
             Logger.exception("Cannot read preferences file.", e);
         }
-    }
-
-    public File getPreferencesFile() {
-        File file = new File("preferences.bin");
-        try {
-            file.createNewFile();
-        } catch(IOException e) {
-            Logger.exception("Can't create preferences file", e);
-        }
-        return file;
     }
 
 }

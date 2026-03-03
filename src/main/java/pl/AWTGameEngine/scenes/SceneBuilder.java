@@ -41,10 +41,10 @@ public class SceneBuilder {
 
             Logger.info("Creating file...");
 
-            File directory = new File("./scenebuilder/");
+            File directory = new File("./data/scenebuilder/");
             directory.mkdir();
 
-            File file = new File("./scenebuilder/" + getFileName(path) + ".java");
+            File file = new File("./data/scenebuilder/" + getFileName(path) + ".java");
             boolean b = file.createNewFile();
             if(!b && !force) {
                 Logger.warning("Scene file with this name already exists. Do you wish to continue? (Y/n)");
@@ -55,7 +55,7 @@ public class SceneBuilder {
                 }
             }
 
-            try(FileWriter writer = new FileWriter(file)) {
+            try(FileWriter writer = Dependencies.getResourceManager().getWriter("./scenebuilder/" + getFileName(path) + ".java", false)) {
                 writer.write(fileBuilder.toString());
             }
 
