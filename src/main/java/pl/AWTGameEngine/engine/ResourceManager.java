@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ResourceManager {
+@Command("res")
+public class ResourceManager extends CommandConsole.ParentCommand {
 
     private final Path BASE_DIR = Paths.get(System.getProperty("user.dir") + "/data/");
     private final HashMap<String, List<String>> resources = new HashMap<>();
@@ -38,14 +39,8 @@ public class ResourceManager {
             if(stream == null) {
                 throw new Exception("Stream is null. Cannot find this resource.");
             }
-            File newFile = new File(path);
-            String[] dirSplit = path.split("/");
-            String currentDir = "";
-            for(int i = 0; i < dirSplit.length - 1; i++) {
-                currentDir += dirSplit[i] + "/";
-                File directory = new File(currentDir);
-                directory.mkdir();
-            }
+            Path resolvedPath = resolvePath(path);
+            File newFile = new File(resolvedPath.toUri());
             if(!newFile.exists()) {
                 newFile.createNewFile();
             }
