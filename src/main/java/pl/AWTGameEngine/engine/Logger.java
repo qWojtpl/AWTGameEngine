@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.logging.*;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class Logger {
@@ -151,6 +152,24 @@ public class Logger {
 
     public static String getLastLog() {
         return lastLog;
+    }
+
+    public static void redirectJULLogger() {
+        LogManager.getLogManager().reset();
+        java.util.logging.Logger rootLogger = java.util.logging.Logger.getLogger("");
+
+        rootLogger.addHandler(new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                Logger.info(ConsoleColor.CYAN.value + "[JUL] " + ConsoleColor.RESET.value + record.getMessage());
+            }
+
+            @Override
+            public void flush() {}
+
+            @Override
+            public void close() throws SecurityException {}
+        });
     }
 
     public enum ConsoleColor {

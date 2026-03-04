@@ -18,6 +18,7 @@ public class Main {
         Logger.setLevel(appProperties.getPropertyAsInteger("logLevel"));
         Logger.setLogFile(appProperties.getPropertyAsBoolean("logFile"));
         Logger.setCallerClass(appProperties.getPropertyAsBoolean("logCallerClass"));
+        Logger.redirectJULLogger();
         if(SceneBuilder.isSceneBuilder(args)) {
             return;
         }
