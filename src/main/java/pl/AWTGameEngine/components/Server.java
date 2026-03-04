@@ -126,7 +126,9 @@ public class Server extends NetComponent {
                 Socket clientSocket = tcpSocket.accept();
                 new Thread(() -> handleConnection(clientSocket), "SERVER-CLIENT-" + (connectedClients.size() + 1)).start();
             } catch (IOException e) {
-                Logger.exception("Server TCP exception", e);
+                if(!tcpSocket.isClosed()) {
+                    Logger.exception("Server TCP exception", e);
+                }
             }
         }
     }
@@ -134,7 +136,7 @@ public class Server extends NetComponent {
     private void handleConnection(Socket clientSocket) {
 
         if(connectedClients.size() >= maxClients) {
-            joinDisconnect(clientSocket, "Max client limit reached. (" + maxClients + "/" + maxClients + "). Try again later.");
+            joinDisconnect(clientSocket, "Max client limit reached. (" + maxClients + "/" + maxClients + ").");
             return;
         }
 

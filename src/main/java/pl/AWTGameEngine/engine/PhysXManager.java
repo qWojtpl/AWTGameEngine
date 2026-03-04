@@ -106,15 +106,16 @@ public final class PhysXManager {
     }
 
     public void cleanup() {
-        defaultMaterial.destroy();
-        shapeFlags.destroy();
         for(PhysXScene physXScene : scenes.values()) {
             physXScene.destroy();
         }
-        gravityVector.destroy();
+        defaultMaterial.release();
         cpuDispatcher.destroy();
-        physics.destroy();
+        physics.release();
+        cookingParams.destroy();
         tolerances.destroy();
+        gravityVector.destroy();
+        shapeFlags.destroy();
         foundation.release();
         errorCb.destroy();
         allocator.destroy();
@@ -150,8 +151,8 @@ public final class PhysXManager {
         }
 
         public void destroy() {
-            pxSceneDesc.destroy();
             pxScene.release();
+            pxSceneDesc.destroy();
         }
 
     }

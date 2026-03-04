@@ -59,7 +59,9 @@ public abstract class RigidBody extends ObjectComponent {
         filterData.destroy();
         shape.release();
         geometry.destroy();
-        material.release();
+        if(!material.equals(physXManager.getDefaultMaterial())) {
+            material.release();
+        }
     }
 
     public PxRigidActor getPxActor() {
