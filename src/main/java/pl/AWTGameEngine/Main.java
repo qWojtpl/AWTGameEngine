@@ -3,7 +3,6 @@ package pl.AWTGameEngine;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.CommandConsole;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.Preferences;
 import pl.AWTGameEngine.scenes.SceneBuilder;
 
 public class Main {

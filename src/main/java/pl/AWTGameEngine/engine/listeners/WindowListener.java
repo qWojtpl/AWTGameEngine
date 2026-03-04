@@ -29,10 +29,15 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
         WindowsManager windowsManager = Dependencies.getWindowsManager();
         windowsManager.removeWindow(window);
         if(window.equals(windowsManager.getDefaultWindow())) {
-            window.unloadScenes();
-            PhysXManager.getInstance().cleanup();
-            Logger.info("Stopped app.");
-            System.exit(0);
+            // kill physics loop, because remove actor operation
+            // can't be executed while simulation is running,
+            // so we need to wait for PhysicsLoop to end a simulation.
+            window.getPhysicsLoop().kill(() -> {
+                window.unloadScenes();
+                PhysXManager.getInstance().cleanup();
+                Logger.info("Stopped app.");
+                System.exit(0);
+            });
         }
     }
 

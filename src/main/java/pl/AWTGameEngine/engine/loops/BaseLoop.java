@@ -13,6 +13,7 @@ public abstract class BaseLoop extends Thread {
     private double actualFps = 0;
     private double actualFpsIterator = 0;
     private boolean killed = false;
+    private Runnable killOperation;
 
     public BaseLoop(Window window, String loopName) {
         this.window = window;
@@ -59,6 +60,10 @@ public abstract class BaseLoop extends Thread {
             }
             actualFpsIterator++;
         }
+        if(killOperation != null) {
+            killOperation.run();
+            killOperation = null;
+        }
     }
 
     protected abstract void iteration();
@@ -67,6 +72,11 @@ public abstract class BaseLoop extends Thread {
 
     public void kill() {
         Logger.warning(loopName + " was killed.");
+        this.killed = true;
+    }
+
+    public void kill(Runnable operation) {
+        killOperation = operation;
         this.killed = true;
     }
 
