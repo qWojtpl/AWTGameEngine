@@ -40,6 +40,7 @@ public class Model3D extends ObjectComponent {
                         getObject().getQuaternionRotation(),
                         getSprite(),
                         GraphicsManager3D.ShapeType.MODEL,
+                        null,
                         null
                 ),
                 modelPath

@@ -46,6 +46,7 @@ public class Box3D extends Base3DShape {
                 getObject().getQuaternionRotation(),
                 getSprite(),
                 GraphicsManager3D.ShapeType.BOX,
+                getShader(),
                 getColor()
         );
 

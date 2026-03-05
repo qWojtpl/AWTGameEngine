@@ -102,14 +102,9 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         gl.glBindVertexArray(0);
     }
 
-    public void drawScene(GL4 gl, int program, float[] viewProj) {
+    public void drawScene(GL4 gl, float[] viewProj) {
 
         gl.glBindVertexArray(vao);
-
-        int modelLoc = gl.glGetUniformLocation(program, "model");
-        int vpLoc = gl.glGetUniformLocation(program, "viewProj");
-
-        gl.glUniformMatrix4fv(vpLoc, 1, false, viewProj, 0);
 
         List<RenderOptions> renderableList = new ArrayList<>(renderables.values());
         for (RenderOptions ro : renderableList) {
@@ -120,6 +115,14 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                     ro.getSize()
             );
 
+            int program = panelGL.getInitializer().getProgram(gl, ro.getShader());
+
+            gl.glUseProgram(program);
+
+            int modelLoc = gl.glGetUniformLocation(program, "model");
+            int vpLoc = gl.glGetUniformLocation(program, "viewProj");
+
+            gl.glUniformMatrix4fv(vpLoc, 1, false, viewProj, 0);
             gl.glUniformMatrix4fv(modelLoc, 1, false, model, 0);
 
             if (ro.getSprite() != null) {
@@ -200,6 +203,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     @Override
     public void updateSprite(String identifier, ShapeType shape, Sprite sprite) {
         renderables.get(identifier).setSprite(sprite);
+    }
+
+    @Override
+    public void updateShader(String identifier, ShapeType shape, String shader) {
+        renderables.get(identifier).setShader(shader);
     }
 
     @Override

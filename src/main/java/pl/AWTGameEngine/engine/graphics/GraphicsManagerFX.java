@@ -292,6 +292,11 @@ public class GraphicsManagerFX extends GraphicsManager3D {
         });
     }
 
+    @Override
+    public void updateShader(String identifier, ShapeType shape, String shader) {
+
+    }
+
 
     @Override
     public void updateColor(String identifier, ShapeType shape, ColorObject color) {

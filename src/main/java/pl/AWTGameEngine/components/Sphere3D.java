@@ -39,6 +39,7 @@ public class Sphere3D extends Base3DShape {
                 getObject().getQuaternionRotation(),
                 getSprite(),
                 GraphicsManager3D.ShapeType.BOX,
+                null,
                 getColor()
         );
 

@@ -26,6 +26,7 @@ public class PanelGL extends Panel implements PanelObject {
     private GLProfile profile;
     private GLCapabilities capabilities;
     private GLCanvas gljPanel;
+    private OpenGLInitializer initializer;
 
     public PanelGL(Scene scene, int width, int height) {
         this.scene = scene;
@@ -70,6 +71,10 @@ public class PanelGL extends Panel implements PanelObject {
 
     public GLCanvas getGljPanel() {
         return this.gljPanel;
+    }
+
+    public OpenGLInitializer getInitializer() {
+        return this.initializer;
     }
 
     @Override
@@ -137,7 +142,8 @@ public class PanelGL extends Panel implements PanelObject {
         capabilities.setDepthBits(24);
         gljPanel = new GLCanvas(capabilities);
         gljPanel.setSize(width, height);
-        gljPanel.addGLEventListener(new OpenGLInitializer(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D));
+        initializer = new OpenGLInitializer(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D);
+        gljPanel.addGLEventListener(initializer);
         gljPanel.setFocusable(false);
         Logger.info("OpenGL initialized.");
     }

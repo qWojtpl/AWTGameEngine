@@ -29,6 +29,7 @@ public class Cylinder3D extends Base3DShape {
                 getObject().getQuaternionRotation(),
                 getSprite(),
                 GraphicsManager3D.ShapeType.CYLINDER,
+                null,
                 getColor())
         );
         initialized = true;

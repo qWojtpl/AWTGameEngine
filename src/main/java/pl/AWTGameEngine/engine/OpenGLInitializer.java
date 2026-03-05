@@ -9,6 +9,8 @@ import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
+import java.util.HashMap;
+
 public class OpenGLInitializer implements GLEventListener {
 
     private final Scene scene;
@@ -16,7 +18,7 @@ public class OpenGLInitializer implements GLEventListener {
     private final Camera camera;
     private final GLProfile profile;
     private final GraphicsManagerGL graphicsManagerGL;
-    private int program;
+    private final HashMap<String, Integer> programs = new HashMap<>();
 
     public OpenGLInitializer(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL) {
         this.scene = scene;
@@ -32,15 +34,6 @@ public class OpenGLInitializer implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();
-
-        try {
-            program = createProgram(gl, "shader");
-        } catch(Exception e) {
-            Logger.exception("Cannot create GL program", e);
-        }
-
-        pixelSizeLoc =gl.glGetUniformLocation(program, "pixelSize");
-        resLoc = gl.glGetUniformLocation(program, "resolution");
 
         gl.glClearColor(0.192156863f, 0.337254902f, 0.474509804f, 1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
@@ -58,7 +51,9 @@ public class OpenGLInitializer implements GLEventListener {
     @Override
     public void dispose(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();
-        gl.glDeleteProgram(program);
+        for(int program : programs.values()) {
+            gl.glDeleteProgram(program);
+        }
     }
 
     @Override
@@ -66,7 +61,6 @@ public class OpenGLInitializer implements GLEventListener {
         GL4 gl = drawable.getGL().getGL4();
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        gl.glUseProgram(program);
 
         try {
             for (ObjectComponent c :
@@ -89,7 +83,7 @@ public class OpenGLInitializer implements GLEventListener {
         float[] view = MatrixHelper.lookAt(camera);
         float[] viewProj = MatrixHelper.mul(projection, view);
 
-        graphicsManagerGL.drawScene(gl, program, viewProj);
+        graphicsManagerGL.drawScene(gl, viewProj);
         gl.glUseProgram(0);
     }
 
@@ -120,8 +114,17 @@ public class OpenGLInitializer implements GLEventListener {
         return program;
     }
 
+    public int getProgram(GL4 gl, String shaderName) {
+        if(!programs.containsKey(shaderName)) {
+            int newProgram = createProgram(gl, shaderName);
+            programs.put(shaderName, newProgram);
+            return newProgram;
+        }
+        return programs.get(shaderName);
+    }
+
     private String getShaderFile(String fileName) {
-        return String.join("\n", Dependencies.getResourceManager().getResource("shaders/" + fileName));
+        return String.join("\n", Dependencies.getResourceManager().getResource(fileName));
     }
 
     private int compileShader(GL4 gl, int type, String src) {

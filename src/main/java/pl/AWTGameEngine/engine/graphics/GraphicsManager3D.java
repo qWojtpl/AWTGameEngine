@@ -32,6 +32,8 @@ public abstract class GraphicsManager3D {
 
     public abstract void updateSprite(String identifier, ShapeType shape, Sprite sprite);
 
+    public abstract void updateShader(String identifier, ShapeType shape, String shader);
+
     public abstract void updateColor(String identifier, ShapeType shape, ColorObject color);
 
     public enum ShapeType {
@@ -52,12 +54,13 @@ public abstract class GraphicsManager3D {
         private ColorObject color;
         private ShapeType shapeType;
         private boolean frontCullFace = false;
+        private String shader;
 
         public RenderOptions(String identifier) {
             this.identifier = identifier;
         }
 
-        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, QuaternionTransformSet quaternionRotation, Sprite sprite, ShapeType shapeType, ColorObject color) {
+        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, QuaternionTransformSet quaternionRotation, Sprite sprite, ShapeType shapeType, String shader, ColorObject color) {
             this.identifier = identifier;
             this.position = position;
             this.size = size;
@@ -68,7 +71,7 @@ public abstract class GraphicsManager3D {
             this.shapeType = shapeType;
         }
 
-        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, QuaternionTransformSet quaternionRotation, Sprite sprite, ShapeType shapeType, ColorObject color, boolean frontCullFace) {
+        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, QuaternionTransformSet quaternionRotation, Sprite sprite, ShapeType shapeType, String shader, ColorObject color, boolean frontCullFace) {
             this.identifier = identifier;
             this.position = position;
             this.size = size;
@@ -112,6 +115,10 @@ public abstract class GraphicsManager3D {
             return this.shapeType;
         }
 
+        public String getShader() {
+            return this.shader;
+        }
+
         public boolean isFrontCullFace() {
             return frontCullFace;
         }
@@ -138,6 +145,10 @@ public abstract class GraphicsManager3D {
 
         public void setColor(ColorObject color) {
             this.color = color;
+        }
+
+        public void setShader(String shader) {
+            this.shader = shader;
         }
 
         public void setFrontCullFace(boolean frontCullFace) {

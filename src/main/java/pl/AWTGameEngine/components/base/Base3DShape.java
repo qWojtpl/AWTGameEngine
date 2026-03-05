@@ -15,6 +15,7 @@ public abstract class Base3DShape extends NetComponent {
 
     protected Sprite sprite;
     protected ColorObject color;
+    protected String shader;
     protected boolean initialized = false;
     protected boolean updatePosition = false;
     protected boolean updateSize = false;
@@ -22,10 +23,12 @@ public abstract class Base3DShape extends NetComponent {
     protected boolean updateSprite = false;
     protected boolean netUpdateSprite = false;
     protected boolean updateColor = false;
+    protected boolean updateShader = false;
 
     public Base3DShape(GameObject object) {
         super(object);
         setSpriteSource("sprites/default.jpg");
+        setShader("shaders/shader");
     }
 
     protected abstract void createShape();
@@ -52,6 +55,10 @@ public abstract class Base3DShape extends NetComponent {
             g.updateSprite(getObject().getIdentifier(), shapeType, sprite);
             updateSprite = false;
         }
+        if(updateShader) {
+            g.updateShader(getObject().getIdentifier(), shapeType, shader);
+            updateShader = false;
+        }
         if(updateColor) {
             g.updateColor(getObject().getIdentifier(), shapeType, color);
             updateColor = false;
@@ -77,6 +84,17 @@ public abstract class Base3DShape extends NetComponent {
     public void setColor(ColorObject color) {
         this.color = color;
         updateColor = true;
+    }
+
+    @SaveState(name = "shader")
+    public String getShader() {
+        return this.shader;
+    }
+
+    @FromXML
+    public void setShader(String shader) {
+        this.shader = shader;
+        updateShader = true;
     }
 
     @FromXML
