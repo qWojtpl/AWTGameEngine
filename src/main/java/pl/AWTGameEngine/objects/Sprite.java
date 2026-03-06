@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.objects;
 
 import javafx.scene.image.WritableImage;
+import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.helpers.ImageHelper;
 
@@ -85,6 +86,7 @@ public class Sprite {
         return this;
     }
 
+    @Command(value = "base64")
     public String getImageBase64() {
         return getImageBase64(false);
     }

@@ -105,11 +105,6 @@ public class Window extends Frame {
     }
 
     public void init() {
-        if (isFullScreen() && !serverWindow) {
-            setUndecorated(true);
-            GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-            device.setFullScreenWindow(this);
-        }
         setSize(getBaseWidth(), getBaseHeight());
         setLocationRelativeTo(null);
         setMouseListener(new MouseListener(this));
@@ -277,6 +272,7 @@ public class Window extends Frame {
             dialog.setBackground(new Color(100, 0, 0));
             dialog.setVisible(true);
             dialog.setFocusable(false);
+            dialog.setAlwaysOnTop(true);
             dialogs.add(dialog);
             updateDialogs();
         }
@@ -342,7 +338,17 @@ public class Window extends Frame {
     }
 
     public void setFullScreen(boolean fullScreen) {
+        if(fullScreen == this.fullScreen) {
+            return;
+        }
         this.fullScreen = fullScreen;
+        setUndecorated(fullScreen);
+        if(fullScreen) {
+            setExtendedState(Frame.MAXIMIZED_BOTH);
+        } else {
+            setExtendedState(Frame.NORMAL);
+        }
+        setVisible(true);
     }
 
     @Override
