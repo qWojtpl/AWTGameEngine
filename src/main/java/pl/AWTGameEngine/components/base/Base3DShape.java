@@ -15,7 +15,7 @@ public abstract class Base3DShape extends NetComponent {
 
     protected Sprite sprite;
     protected ColorObject color;
-    protected String shader;
+    protected String shader = "shaders/shader";
     protected boolean initialized = false;
     protected boolean updatePosition = false;
     protected boolean updateSize = false;
@@ -28,7 +28,6 @@ public abstract class Base3DShape extends NetComponent {
     public Base3DShape(GameObject object) {
         super(object);
         setSpriteSource("sprites/default.jpg");
-        setShader("shaders/shader");
     }
 
     protected abstract void createShape();

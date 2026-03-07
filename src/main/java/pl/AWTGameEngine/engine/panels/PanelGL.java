@@ -89,27 +89,6 @@ public class PanelGL extends Panel implements PanelObject {
     }
 
     @Override
-    public void updatePhysics() {
-        if(getWindow().getCurrentScene() == null) {
-            return;
-        }
-
-        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsPreUpdate")) {
-            component.onPhysicsPreUpdate();
-        }
-
-        physXManager.simulateFrame(scene, getWindow().getPhysicsLoop().getTargetFps());
-
-        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
-            component.onPhysicsUpdate();
-        }
-
-        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsAfterUpdate")) {
-            component.onPhysicsAfterUpdate();
-        }
-    }
-
-    @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
         window.remove(gljPanel);

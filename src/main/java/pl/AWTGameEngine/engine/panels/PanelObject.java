@@ -15,7 +15,6 @@ public interface PanelObject {
     Component add(Component comp);
     void unload();
     void updateRender();
-    void updatePhysics();
     void setSize(Dimension dimension);
     void setPreferredSize(Dimension dimension);
     Dimension getSize();

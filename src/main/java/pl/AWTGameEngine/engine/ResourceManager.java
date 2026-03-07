@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.Command;
-import pl.AWTGameEngine.exceptions.ResourceControlException;
+import pl.AWTGameEngine.exceptions.ResourceSecurityException;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.Sprite;
 
@@ -204,18 +204,18 @@ public class ResourceManager extends CommandConsole.ParentCommand {
 
     private Path resolvePath(String path) {
         if(!BASE_DIR.isAbsolute()) {
-            throw new ResourceControlException("Base dir is not absolute.");
+            throw new ResourceSecurityException("Base dir is not absolute.");
         }
 
         final Path resourcePath = Paths.get(path);
         if(resourcePath.isAbsolute()) {
-            throw new ResourceControlException("Path " + path + " is absolute.");
+            throw new ResourceSecurityException("Path " + path + " is absolute.");
         }
 
         final Path resolvedPath = BASE_DIR.resolve(resourcePath).normalize();
 
         if(!resolvedPath.startsWith(BASE_DIR)) {
-            throw new ResourceControlException("Path " + path + " escapes the base directory!");
+            throw new ResourceSecurityException("Path " + path + " escapes the base directory!");
         }
 
         return resolvedPath;

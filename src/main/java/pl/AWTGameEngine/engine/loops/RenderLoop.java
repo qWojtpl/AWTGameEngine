@@ -3,6 +3,8 @@ package pl.AWTGameEngine.engine.loops;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.windows.Window;
 
+import java.util.ArrayList;
+
 public class RenderLoop extends BaseLoop {
 
     public RenderLoop(Window window) {
@@ -11,10 +13,8 @@ public class RenderLoop extends BaseLoop {
 
     @Override
     public void iteration() {
-        if(window.getCurrentScene() != null) {
-            for(PanelObject panel : window.getPanels()) {
-                panel.updateRender();
-            }
+        for(PanelObject panel : new ArrayList<>(window.getPanels())) {
+            panel.updateRender();
         }
     }
 

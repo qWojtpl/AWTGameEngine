@@ -28,9 +28,6 @@ public class OpenGLInitializer implements GLEventListener {
         this.graphicsManagerGL = graphicsManagerGL;
     }
 
-    int pixelSizeLoc;
-    int resLoc;
-
     @Override
     public void init(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();

@@ -3,6 +3,8 @@ package pl.AWTGameEngine.engine.loops;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
+import java.util.ArrayList;
+
 public class NetLoop extends BaseLoop {
 
     public NetLoop(Window window) {
@@ -11,10 +13,8 @@ public class NetLoop extends BaseLoop {
 
     @Override
     protected void iteration() {
-        if(window.getCurrentScene() != null) {
-            for(Scene scene : window.getScenes()) {
-                scene.netUpdate();
-            }
+        for(Scene scene : new ArrayList<>(window.getScenes())) {
+            scene.netUpdate();
         }
     }
 

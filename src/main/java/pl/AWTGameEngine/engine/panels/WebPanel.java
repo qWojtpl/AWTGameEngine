@@ -98,27 +98,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
     }
 
     @Override
-    public void updatePhysics() {
-        if(getWindow().getCurrentScene() == null) {
-            return;
-        }
-
-        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsPreUpdate")) {
-            component.onPhysicsPreUpdate();
-        }
-
-        PhysXManager.getInstance().simulateFrame(scene, getWindow().getPhysicsLoop().getTargetFps());
-
-        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsUpdate")) {
-            component.onPhysicsUpdate();
-        }
-
-        for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onPhysicsAfterUpdate")) {
-            component.onPhysicsAfterUpdate();
-        }
-    }
-
-    @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
         setScene(null);

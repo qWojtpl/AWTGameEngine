@@ -67,6 +67,7 @@ public abstract class GraphicsManager3D {
             this.rotation = rotation;
             this.quaternionRotation = quaternionRotation;
             this.sprite = sprite;
+            this.shader = shader;
             this.color = color;
             this.shapeType = shapeType;
         }
@@ -78,6 +79,7 @@ public abstract class GraphicsManager3D {
             this.rotation = rotation;
             this.quaternionRotation = quaternionRotation;
             this.sprite = sprite;
+            this.shader = shader;
             this.color = color;
             this.shapeType = shapeType;
             this.frontCullFace = frontCullFace;

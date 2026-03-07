@@ -180,6 +180,22 @@ public class Scene {
         }
     }
 
+    public void physicsUpdate() {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onPhysicsPreUpdate")) {
+            component.onPhysicsPreUpdate();
+        }
+
+        PhysXManager.getInstance().simulateFrame(this, getWindow().getPhysicsLoop().getTargetFps());
+
+        for(ObjectComponent component : sceneEventHandler.getComponents("onPhysicsUpdate")) {
+            component.onPhysicsUpdate();
+        }
+
+        for(ObjectComponent component : sceneEventHandler.getComponents("onPhysicsAfterUpdate")) {
+            component.onPhysicsAfterUpdate();
+        }
+    }
+
     public void netUpdate() {
         for(ObjectComponent component : sceneEventHandler.getComponents("onNetUpdate")) {
             ((NetComponent) component).onNetUpdate();
