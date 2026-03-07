@@ -5,7 +5,7 @@ import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.CommandConsole;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.PhysXManager;
-import pl.AWTGameEngine.engine.RenderEngine;
+import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.loops.*;
 import pl.AWTGameEngine.objects.Sprite;
 import pl.AWTGameEngine.scenes.SceneLoader;

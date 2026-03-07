@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.engine;
+package pl.AWTGameEngine.engine.enums;
 
 /**
  * Source: <a href="https://stackoverflow.com/questions/15313469/java-keyboard-keycodes-list">StackOverflow</a>

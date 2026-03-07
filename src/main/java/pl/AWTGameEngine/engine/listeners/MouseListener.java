@@ -1,9 +1,7 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.RenderEngine;
-import pl.AWTGameEngine.engine.panels.PanelObject;
+import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.Scene;

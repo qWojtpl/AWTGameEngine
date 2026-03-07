@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.engine.deserializers;
 
-import pl.AWTGameEngine.engine.RenderEngine;
+import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.scenes.Scene;
 
 public class NestedSceneDeserializer {

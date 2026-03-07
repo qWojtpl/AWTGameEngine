@@ -9,7 +9,7 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.EventMethod;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.engine.ColliderRegistry;
-import pl.AWTGameEngine.engine.RenderEngine;
+import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
