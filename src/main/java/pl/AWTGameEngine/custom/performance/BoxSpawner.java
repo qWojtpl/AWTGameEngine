@@ -37,14 +37,12 @@ public class BoxSpawner extends ObjectComponent {
 //        }
         GameObject lastObject = getScene().getGameObjectByName("boxspawner-" + (boxCounter - 1));
         for(int i = 0; i < count; i++) {
-            GameObject object = getScene().createGameObject("boxspawner-" + boxCounter++);
-            object.setSize(new TransformSet(size, size, size));
-            object.setPosition(new TransformSet(0, 100 + (size * 2 + 4) * i, 0));
-            RigidBody.Dynamic rigidBody = new RigidBody.Dynamic(object);
-            Box3D box3D = new Box3D(object);
-            box3D.setSpriteSource("sprites/beaver.jpg");
-            object.addComponent(box3D);
-            object.addComponent(rigidBody);
+            getScene().createGameObjectFromPrefab(
+                    "boxspawner-" + boxCounter++,
+                    "box",
+                    new TransformSet(0, 100 + (size * 2 + 4) * i, 0),
+                    new TransformSet(size, size, size)
+            );
         }
         if(lastObject != null) {
             lastObject.removeComponent(lastObject.getComponentByClass(CameraFollow.class));

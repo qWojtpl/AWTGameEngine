@@ -273,7 +273,6 @@ public class Window extends Frame {
             dialog.setBackground(new Color(100, 0, 0));
             dialog.setVisible(true);
             dialog.setFocusable(false);
-            dialog.setAlwaysOnTop(true);
             dialogs.add(dialog);
             updateDialogs();
         }

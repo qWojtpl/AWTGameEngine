@@ -202,56 +202,78 @@ public class SceneLoader {
 
     private void initNode(Scene scene, Node node) {
         String nodeName = node.getNodeName().toLowerCase();
-        if("object".equals(nodeName)) {
-            String identifier;
-            try {
-                identifier = node.getAttributes().getNamedItem("id").getNodeValue();
-            } catch(Exception e) {
-                Logger.exception("Object doesn't have an identifier.", e);
-                return;
-            }
-            GameObject object = scene.createGameObject(identifier);
-            if(object == null) {
-                Logger.warning("Cannot initialize object with identifier " + identifier + ", skipping its children!");
-                return;
-            }
-            GameObjectDeserializer.deserialize(object, node);
-            for(int i = 0; i < node.getChildNodes().getLength(); i++) {
-                if(node.getChildNodes().item(i).getNodeName().equals("object")) {
-                    Logger.error("Cannot initialize object with identifier " +
-                            node.getChildNodes().item(i).getAttributes().getNamedItem("id").getNodeValue() +
-                            ". You can't nest object in another object. Use group instead.");
-                }
-            }
-        } else if("styles".equals(nodeName)) {
-            String source = "";
-            try {
-                source = node.getAttributes().getNamedItem("source").getNodeValue();
-            } catch(Exception e) {
-                Logger.warning("You can use CSS from external source using SOURCE attribute.");
-            }
-            if(source == null || source.isEmpty()) {
-                StyleDeserializer.deserialize(scene, node);
-            } else {
-                if(!node.getTextContent().isEmpty()) {
-                    Logger.warning("Please note - if you're using CSS with external source, you cannot nest another CSS inside. Use additional tag.");
-                }
-                StyleDeserializer.deserialize(scene, source);
-            }
-        } else if("scene".equals(nodeName)) {
-            String source = "";
-            String renderEngine = "";
-            try {
-                source = node.getAttributes().getNamedItem("source").getNodeValue();
-                renderEngine = node.getAttributes().getNamedItem("renderEngine").getNodeValue();
-            } catch(Exception e) {
-                Logger.warning("Nested scene source is empty.");
-            }
-            if(source != null && !source.isEmpty()) {
-                NestedSceneDeserializer.deserialize(scene, source,
-                        renderEngine.isEmpty() ? Dependencies.getAppProperties().getProperty("renderEngine") : renderEngine);
+        switch (nodeName) {
+            case "object"   -> initObjectNode(scene, node);
+            case "styles"   -> initStylesNode(scene, node);
+            case "scene"    -> initSceneNode(scene, node);
+            case "prefab"   -> initPrefabNode(scene, node);
+        }
+    }
+
+    private void initObjectNode(Scene scene, Node node) {
+        String identifier;
+        try {
+            identifier = node.getAttributes().getNamedItem("id").getNodeValue();
+        } catch(Exception e) {
+            Logger.exception("Object doesn't have an identifier.", e);
+            return;
+        }
+        GameObject object = scene.createGameObject(identifier);
+        if(object == null) {
+            Logger.warning("Cannot initialize object with identifier " + identifier + ", skipping its children!");
+            return;
+        }
+        GameObjectDeserializer.deserialize(object, node);
+        for(int i = 0; i < node.getChildNodes().getLength(); i++) {
+            if(node.getChildNodes().item(i).getNodeName().equals("object")) {
+                Logger.error("Cannot initialize object with identifier " +
+                        node.getChildNodes().item(i).getAttributes().getNamedItem("id").getNodeValue() +
+                        ". You can't nest object in another object. Use group instead.");
             }
         }
+    }
+
+    private void initStylesNode(Scene scene, Node node) {
+        String source = "";
+        try {
+            source = node.getAttributes().getNamedItem("source").getNodeValue();
+        } catch(Exception e) {
+            Logger.warning("You can use CSS from external source using SOURCE attribute.");
+        }
+        if(source == null || source.isEmpty()) {
+            StyleDeserializer.deserialize(scene, node);
+        } else {
+            if(!node.getTextContent().isEmpty()) {
+                Logger.warning("Please note - if you're using CSS with external source, you cannot nest another CSS inside. Use additional tag.");
+            }
+            StyleDeserializer.deserialize(scene, source);
+        }
+    }
+
+    private void initSceneNode(Scene scene, Node node) {
+        String source = "";
+        String renderEngine = "";
+        try {
+            source = node.getAttributes().getNamedItem("source").getNodeValue();
+            renderEngine = node.getAttributes().getNamedItem("renderEngine").getNodeValue();
+        } catch(Exception e) {
+            Logger.warning("Nested scene source is empty.");
+        }
+        if(source != null && !source.isEmpty()) {
+            NestedSceneDeserializer.deserialize(scene, source,
+                    renderEngine.isEmpty() ? Dependencies.getAppProperties().getProperty("renderEngine") : renderEngine);
+        }
+    }
+
+    private void initPrefabNode(Scene scene, Node node) {
+        String identifier;
+        try {
+            identifier = node.getAttributes().getNamedItem("id").getNodeValue();
+        } catch(Exception e) {
+            Logger.exception("Prefab doesn't have an identifier.", e);
+            return;
+        }
+        PrefabDeserializer.deserialize(identifier, scene, node);
     }
 
     public Window getWindow() {

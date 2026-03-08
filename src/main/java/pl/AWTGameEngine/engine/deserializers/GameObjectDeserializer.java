@@ -122,7 +122,7 @@ public class GameObjectDeserializer {
         Logger.error("Error while deserializing GameObject " + identifier + component);
     }
 
-    private static String getValue(Node node, String name) {
+    public static String getValue(Node node, String name) {
         if(node.getAttributes() == null) {
             return "0";
         }

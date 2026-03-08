@@ -4,9 +4,12 @@ import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
+import pl.AWTGameEngine.engine.deserializers.PrefabDeserializer;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.Prefab;
+import pl.AWTGameEngine.objects.TransformSet;
 import pl.AWTGameEngine.windows.Window;
 
 import java.util.*;
@@ -16,6 +19,7 @@ public class Scene {
 
     private final String name;
     private final ConcurrentHashMap<String, GameObject> gameObjects = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Prefab> prefabs = new ConcurrentHashMap<>();
     private final Window window;
     private final RenderEngine renderEngine;
     private PanelObject panel;
@@ -53,6 +57,25 @@ public class Scene {
 
     public void setPanel(PanelObject panel) {
         this.panel = panel;
+    }
+
+    public void addPrefab(Prefab prefab) {
+        if(prefabs.containsKey(prefab.getIdentifier())) {
+            throw new RuntimeException("Prefab with identifier " + prefab.getIdentifier() + " already exists.");
+        }
+        this.prefabs.put(prefab.getIdentifier(), prefab);
+    }
+
+    public GameObject createGameObjectFromPrefab(String identifier, String prefabIdentifier, TransformSet position, TransformSet size) {
+        return createGameObjectFromPrefab(identifier, getPrefab(prefabIdentifier), position, size);
+    }
+
+    public GameObject createGameObjectFromPrefab(String identifier, Prefab prefab, TransformSet position, TransformSet size) {
+        GameObject object = createGameObject(identifier);
+        object.setPosition(position);
+        object.setSize(size);
+        PrefabDeserializer.injectPrefab(prefab, object);
+        return object;
     }
 
     @Command(value = "create", argumentNames = "id")
@@ -97,6 +120,10 @@ public class Scene {
             }
         }
         gameObjects.remove(object.getIdentifier());
+    }
+
+    public Prefab getPrefab(String prefabIdentifier) {
+        return this.prefabs.getOrDefault(prefabIdentifier, null);
     }
 
     @Command(value = "get", argumentNames = "id")
