@@ -74,7 +74,7 @@ public class Scene {
         GameObject object = createGameObject(identifier);
         object.setPosition(position);
         object.setSize(size);
-        PrefabDeserializer.injectPrefab(prefab, object);
+        PrefabDeserializer.injectPrefab(prefab, object, true);
         return object;
     }
 

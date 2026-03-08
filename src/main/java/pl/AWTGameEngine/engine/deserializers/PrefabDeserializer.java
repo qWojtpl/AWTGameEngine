@@ -85,7 +85,7 @@ public class PrefabDeserializer {
         Logger.error("Error while deserializing Prefab " + identifier + component);
     }
 
-    public static void injectPrefab(Prefab prefab, GameObject object) {
+    public static void injectPrefab(Prefab prefab, GameObject object, boolean triggerSerializationFinish) {
         try {
             for(Prefab.PrefabComponent prefabComponent : prefab.getComponents()) {
                 ObjectComponent objectComponent = prefabComponent.getComponentClass().getConstructor(GameObject.class).newInstance(object);
@@ -98,7 +98,9 @@ public class PrefabDeserializer {
                 }
                 object.addComponent(objectComponent);
             }
-            object.triggerSerializationFinish();
+            if(triggerSerializationFinish) {
+                object.triggerSerializationFinish();
+            }
         } catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             Logger.exception("Cannot inject prefab " + prefab.getIdentifier() + " to object " + object.getIdentifier(), e);
         }
