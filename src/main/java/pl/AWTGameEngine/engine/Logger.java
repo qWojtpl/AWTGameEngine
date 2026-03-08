@@ -77,7 +77,7 @@ public class Logger {
     }
 
     public static void exception(String message, Exception exception) {
-        message += "\n" + exception.getMessage();
+        message += "\n" + exception.getClass().getSimpleName() + ": " + exception.getMessage();
         StringBuilder messageBuilder = new StringBuilder(message);
         for(StackTraceElement element : exception.getStackTrace()) {
             messageBuilder.append("\n\t");

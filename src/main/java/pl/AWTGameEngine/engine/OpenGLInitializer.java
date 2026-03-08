@@ -5,6 +5,7 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
+import pl.AWTGameEngine.exceptions.ShaderCompileException;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
@@ -103,7 +104,7 @@ public class OpenGLInitializer implements GLEventListener {
         int[] status = new int[1];
         gl.glGetProgramiv(program, GL4.GL_LINK_STATUS, status, 0);
         if (status[0] == 0) {
-            throw new RuntimeException(getProgramLog(gl, program));
+            throw new ShaderCompileException(getProgramLog(gl, program));
         }
 
         gl.glDeleteShader(vs);
@@ -132,7 +133,7 @@ public class OpenGLInitializer implements GLEventListener {
         int[] status = new int[1];
         gl.glGetShaderiv(s, GL4.GL_COMPILE_STATUS, status, 0);
         if(status[0] == 0) {
-            throw new RuntimeException(getShaderLog(gl, s));
+            throw new ShaderCompileException(getShaderLog(gl, s));
         }
         return s;
     }

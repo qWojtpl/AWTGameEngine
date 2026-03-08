@@ -1,21 +1,21 @@
 <!-- To be honest, don't event try to run this performance on JFX render engine  -->
 <scene title="PhysX Performance test" renderFPS="0" updateFPS="60" physicsFPS="60" fullscreen="true" sameSize="true">
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
-<!--    <scene source="scenes/screenshooter/filtered.xml" renderEngine="default" />-->
+    <!--    <scene source="scenes/screenshooter/filtered.xml" renderEngine="default" />-->
     <object id="player">
-<!--        <MovementGL _package="pl.AWTGameEngine.custom" />-->
-<!--        <CameraFX />-->
-<!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
+        <!--        <MovementGL _package="pl.AWTGameEngine.custom" />-->
+        <!--        <CameraFX />-->
+        <!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
         <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
         <Server />
-<!--        <MusicPlayer sourcePath="audio/swingin.wav" />-->
+        <!--        <MusicPlayer sourcePath="audio/swingin.wav" />-->
     </object>
     <object id="spin" x="20" y="-50" z="20" size="10,10,100">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D spriteSource="C:\sprites\beaver.jpg" />
         <RigidBody.Kinematic />
         <SpinningObject speed="30" _package="pl.AWTGameEngine.custom.performance" />
-<!--        <SoundSource clipSource="audio/dominique.wav" />-->
+        <!--        <SoundSource clipSource="audio/dominique.wav" />-->
     </object>
     <object id="floor" sizeX="20000" sizeY="20" sizeZ="20000" x="-1000" y="-100" z="-1000">
         <Box3D />

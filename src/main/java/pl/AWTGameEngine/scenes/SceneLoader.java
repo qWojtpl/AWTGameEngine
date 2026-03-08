@@ -10,6 +10,7 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.deserializers.*;
 import pl.AWTGameEngine.engine.panels.*;
+import pl.AWTGameEngine.exceptions.scenes.SceneDataException;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.windows.Window;
 
@@ -77,7 +78,7 @@ public class SceneLoader {
             }
             NodeList data = getSceneData(document);
             if(data == null) {
-                throw new RuntimeException("No scene data found.");
+                throw new SceneDataException();
             }
             attachSceneData(newScene, data);
         } catch(Exception e) {

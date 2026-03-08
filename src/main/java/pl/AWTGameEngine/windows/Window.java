@@ -9,6 +9,7 @@ import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.engine.listeners.WindowListener;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.panels.*;
+import pl.AWTGameEngine.exceptions.scenes.SceneOwnershipException;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
@@ -297,7 +298,7 @@ public class Window extends Frame {
 
     public void setCurrentScene(Scene newCurrentScene) {
         if(scenes.getOrDefault(newCurrentScene, null) == null) {
-            throw new RuntimeException("Scene must be owned by this window!");
+            throw new SceneOwnershipException();
         }
         int i = 0;
         removeAll();

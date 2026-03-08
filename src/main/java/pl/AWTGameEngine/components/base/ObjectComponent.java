@@ -8,7 +8,6 @@ import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.EventMethod;
 import pl.AWTGameEngine.components.RigidBody;
-import pl.AWTGameEngine.engine.ColliderRegistry;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
@@ -40,10 +39,6 @@ public abstract class ObjectComponent {
 
     protected final MouseListener getMouseListener() {
         return getWindow().getMouseListener();
-    }
-
-    protected final ColliderRegistry getColliderRegistry() {
-        return getScene().getColliderRegistry();
     }
 
     protected final Camera getCamera() {

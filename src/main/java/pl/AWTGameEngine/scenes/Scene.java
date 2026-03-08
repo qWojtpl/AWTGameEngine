@@ -19,7 +19,6 @@ public class Scene {
     private final Window window;
     private final RenderEngine renderEngine;
     private PanelObject panel;
-    private ColliderRegistry colliderRegistry;
     private EventHandler sceneEventHandler;
     private String customStyles = "";
     private final HashMap<String, RenderEngine> loadAfterLoad = new HashMap<>();
@@ -28,7 +27,6 @@ public class Scene {
         this.name = name;
         this.window = window;
         this.renderEngine = renderEngine;
-        setColliderRegistry(new ColliderRegistry());
         setSceneEventHandler(new EventHandler());
     }
 
@@ -37,20 +35,12 @@ public class Scene {
         return this.name;
     }
 
-    public ColliderRegistry getColliderRegistry() {
-        return this.colliderRegistry;
-    }
-
     public EventHandler getSceneEventHandler() {
         return this.sceneEventHandler;
     }
 
     public String getCustomStyles() {
         return this.customStyles;
-    }
-
-    public void setColliderRegistry(ColliderRegistry registry) {
-        this.colliderRegistry = registry;
     }
 
     public void setSceneEventHandler(EventHandler sceneEventHandler) {

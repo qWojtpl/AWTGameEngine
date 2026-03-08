@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.exceptions.JavaBuildException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -71,8 +72,9 @@ public class SceneBuilder {
                     InputStreamReader(process.getErrorStream()));
 
             boolean errors = false;
-            String message = null;
-            while ((message = stdError.readLine()) != null) {
+            List<String> errorList = new ArrayList<>();
+            String message;
+            while((message = stdError.readLine()) != null) {
                 Logger.error(message);
                 errors = true;
             }
@@ -80,7 +82,7 @@ public class SceneBuilder {
             process.waitFor();
 
             if(errors) {
-                throw new RuntimeException("Java build ended with errors.");
+                throw new JavaBuildException(errorList);
             } else {
                 Logger.info("Scene " + path + " successfully built and saved in ./scenebuilder/" + getFileName(path) + ".class");
             }
