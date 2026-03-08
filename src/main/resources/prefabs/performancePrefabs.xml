@@ -1,0 +1,6 @@
+<prefabs>
+    <prefab id="box">
+        <Box3D spriteSource="sprites/beaver.jpg" />
+        <RigidBody.Dynamic />
+    </prefab>
+</prefabs>

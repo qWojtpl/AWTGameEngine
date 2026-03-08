@@ -16,6 +16,9 @@ public class Prefab {
     }
 
     public void addComponent(PrefabComponent prefabComponent) {
+        if(!this.equals(prefabComponent.getPrefab())) {
+            throw new RuntimeException("PrefabComponent is not owned by this prefab!");
+        }
         components.add(prefabComponent);
     }
 

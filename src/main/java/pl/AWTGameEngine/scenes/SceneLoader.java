@@ -18,6 +18,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -207,6 +208,7 @@ public class SceneLoader {
             case "styles"   -> initStylesNode(scene, node);
             case "scene"    -> initSceneNode(scene, node);
             case "prefab"   -> initPrefabNode(scene, node);
+            case "prefabs"  -> initPrefabListNode(scene, node);
         }
     }
 
@@ -274,6 +276,28 @@ public class SceneLoader {
             return;
         }
         PrefabDeserializer.deserialize(identifier, scene, node);
+    }
+
+    private void initPrefabListNode(Scene scene, Node node) {
+        String source;
+        try {
+            source = node.getAttributes().getNamedItem("source").getNodeValue();
+        } catch(Exception e) {
+            Logger.exception("Prefab list doesn't have a source.", e);
+            return;
+        }
+        try(InputStream sceneStream = Dependencies.getResourceManager().getResourceAsStream(source)) {
+            Document document = getDocument(sceneStream);
+            NodeList prefabsData = document.getElementsByTagName("prefabs").item(0).getChildNodes();
+            for(int i = 0; i < prefabsData.getLength(); i++) {
+                if(prefabsData.item(i).getNodeName().startsWith("#")) {
+                    continue;
+                }
+                initPrefabNode(scene, prefabsData.item(i));
+            }
+        } catch(Exception e) {
+            Logger.exception("Cannot get prefab list from external source.", e);
+        }
     }
 
     public Window getWindow() {
