@@ -6,6 +6,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.Prefab;
 import pl.AWTGameEngine.objects.TransformSet;
 
 import java.io.FileWriter;
@@ -13,7 +14,9 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SceneStateSaver {
 
@@ -23,6 +26,7 @@ public class SceneStateSaver {
         StringBuilder bobTheBuilder = new StringBuilder();
         addSceneParams(scene, bobTheBuilder);
         addNestedScenes(scene, bobTheBuilder);
+        addPrefabs(scene, bobTheBuilder);
         for(GameObject object : objects) {
             bobTheBuilder.append(saveObjectState(object));
         }
@@ -72,9 +76,40 @@ public class SceneStateSaver {
 
     private static void addStyles(Scene scene, StringBuilder builder) {
         //todo: styles from file
-        builder.append("\n\t<styles>\n");
-        builder.append(scene.getCustomStyles());
-        builder.append("\n\t</styles>");
+        if(scene.getCustomStyles().isEmpty()) {
+            return;
+        }
+        builder.append("\n\t<styles>\n").append(scene.getCustomStyles()).append("\n\t</styles>");
+    }
+
+    private static void addPrefabs(Scene scene, StringBuilder builder) {
+        Set<String> externalPaths = new HashSet<>();
+        for(Prefab prefab : scene.getPrefabs()) {
+            if(prefab.getExternalPrefabPath() == null) {
+                builder.append("\n\t<prefab id=\"").append(prefab.getIdentifier()).append("\">");
+                for(Prefab.PrefabComponent prefabComponent : prefab.getComponents()) {
+                    builder.append("\n\t\t<");
+                    builder.append(prefabComponent.getComponentClass().getCanonicalName().replace(prefabComponent.getComponentClass().getPackageName() + ".", ""));
+                    for(String methodName : prefabComponent.getValues().keySet()) {
+                        String fieldName = methodName.replaceFirst("set", "");
+                        fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
+                        builder.append(" ").append(fieldName).append("=\"").append(prefabComponent.getValues().get(methodName)).append("\"");
+                    }
+                    if(!prefabComponent.getComponentClass().getPackageName().equals("pl.AWTGameEngine.components")) {
+                        builder.append(" _package=\"");
+                        builder.append(prefabComponent.getComponentClass().getPackageName());
+                        builder.append("\"");
+                    }
+                    builder.append(" />");
+                }
+                builder.append("\n\t</prefab>");
+            } else {
+                externalPaths.add(prefab.getExternalPrefabPath());
+            }
+        }
+        for(String externalPath : externalPaths) {
+            builder.append("\n\t<prefabs source=\"").append(externalPath).append("\" />");
+        }
     }
 
     private static String saveObjectState(GameObject object) {

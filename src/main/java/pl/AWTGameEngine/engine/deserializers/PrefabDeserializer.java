@@ -17,8 +17,8 @@ import static pl.AWTGameEngine.engine.deserializers.GameObjectDeserializer.getVa
 
 public class PrefabDeserializer {
 
-    public static void deserialize(String prefabIdentifier, Scene scene, Node node) {
-        Prefab prefab = new Prefab(prefabIdentifier);
+    public static void deserialize(String prefabIdentifier, Scene scene, Node node, String externalPrefabPath) {
+        Prefab prefab = new Prefab(prefabIdentifier, externalPrefabPath);
         deserializePrefabComponents(prefab, node);
         scene.addPrefab(prefab);
     }

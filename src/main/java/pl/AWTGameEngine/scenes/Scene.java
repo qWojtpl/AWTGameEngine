@@ -126,6 +126,10 @@ public class Scene {
         return this.prefabs.getOrDefault(prefabIdentifier, null);
     }
 
+    public List<Prefab> getPrefabs() {
+        return new ArrayList<>(this.prefabs.values());
+    }
+
     @Command(value = "get", argumentNames = "id")
     public GameObject getGameObjectByName(String identifier) {
         return gameObjects.getOrDefault(identifier, null);

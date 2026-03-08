@@ -203,12 +203,13 @@ public class SceneLoader {
 
     private void initNode(Scene scene, Node node) {
         String nodeName = node.getNodeName().toLowerCase();
-        switch (nodeName) {
+        switch(nodeName) {
             case "object"   -> initObjectNode(scene, node);
             case "styles"   -> initStylesNode(scene, node);
             case "scene"    -> initSceneNode(scene, node);
-            case "prefab"   -> initPrefabNode(scene, node);
+            case "prefab"   -> initPrefabNode(scene, node, null);
             case "prefabs"  -> initPrefabListNode(scene, node);
+            default         -> Logger.warning("Unrecognized node name: " + nodeName);
         }
     }
 
@@ -267,7 +268,7 @@ public class SceneLoader {
         }
     }
 
-    private void initPrefabNode(Scene scene, Node node) {
+    private void initPrefabNode(Scene scene, Node node, String externalPath) {
         String identifier;
         try {
             identifier = node.getAttributes().getNamedItem("id").getNodeValue();
@@ -275,7 +276,7 @@ public class SceneLoader {
             Logger.exception("Prefab doesn't have an identifier.", e);
             return;
         }
-        PrefabDeserializer.deserialize(identifier, scene, node);
+        PrefabDeserializer.deserialize(identifier, scene, node, externalPath);
     }
 
     private void initPrefabListNode(Scene scene, Node node) {
@@ -293,7 +294,7 @@ public class SceneLoader {
                 if(prefabsData.item(i).getNodeName().startsWith("#")) {
                     continue;
                 }
-                initPrefabNode(scene, prefabsData.item(i));
+                initPrefabNode(scene, prefabsData.item(i), source);
             }
         } catch(Exception e) {
             Logger.exception("Cannot get prefab list from external source.", e);

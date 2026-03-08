@@ -10,9 +10,11 @@ public class Prefab {
 
     private final String identifier;
     private final List<PrefabComponent> components = new ArrayList<>();
+    private final String externalPrefabPath;
 
-    public Prefab(String identifier) {
+    public Prefab(String identifier, String externalPrefabPath) {
         this.identifier = identifier;
+        this.externalPrefabPath = externalPrefabPath;
     }
 
     public void addComponent(PrefabComponent prefabComponent) {
@@ -28,6 +30,10 @@ public class Prefab {
 
     public List<PrefabComponent> getComponents() {
         return new ArrayList<>(this.components);
+    }
+
+    public String getExternalPrefabPath() {
+        return this.externalPrefabPath;
     }
 
     public static class PrefabComponent {
