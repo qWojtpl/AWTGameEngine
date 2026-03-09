@@ -92,6 +92,10 @@ public class QuaternionTransformSet {
                 this.z == quaternionTransformSet.getZ() && this.w == quaternionTransformSet.getW();
     }
 
+    public boolean isEmpty() {
+        return this.x == 0 && this.y == 0 && this.z == 0 && this.w == 0;
+    }
+
     @Override
     public String toString() {
         return "QuaternionTransformSet[x=" + x + ",y=" + y + ",z=" + z + ",w=" + w + "]";

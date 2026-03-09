@@ -26,6 +26,7 @@ public class Prefab extends NetComponent {
     @Override
     public void onAddComponent() {
         PrefabDeserializer.injectPrefab(getScene().getPrefab(prefabName), getObject(), false);
+        getObject().removeComponent(this);
     }
 
     @SaveState(name = "prefabName")

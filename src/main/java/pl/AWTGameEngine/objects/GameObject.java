@@ -18,8 +18,8 @@ public class GameObject {
     private boolean active = true;
     private TransformSet position = new TransformSet(0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
-    private TransformSet rotation = new TransformSet(0, 0, 0);
-    private QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
+    private final TransformSet rotation = new TransformSet(0, 0, 0);
+    private final QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private Net net;
     private final EventHandler eventHandler = new EventHandler();
     private final List<ObjectComponent> components = new ArrayList<>();
@@ -250,28 +250,41 @@ public class GameObject {
 
     @SaveState(name = "rotation")
     public TransformSet getRotation() {
-        if(this.rotation == null) {
-            double[] pos = RotationHelper.quaternionToEulerXYZ(
-                    quaternionRotation.getX(),
-                    quaternionRotation.getY(),
-                    quaternionRotation.getZ(),
-                    quaternionRotation.getW()
-            );
-            this.rotation = new TransformSet(pos[0], pos[1], pos[2]);
+        synchronized(this.rotation) {
+            synchronized(this.quaternionRotation) {
+                if(this.rotation.isEmpty() && !this.quaternionRotation.isEmpty()) {
+                    double[] pos = RotationHelper.quaternionToEulerXYZ(
+                            quaternionRotation.getX(),
+                            quaternionRotation.getY(),
+                            quaternionRotation.getZ(),
+                            quaternionRotation.getW()
+                    );
+                    this.rotation.setX(pos[0]);
+                    this.rotation.setY(pos[1]);
+                    this.rotation.setZ(pos[2]);
+                }
+                return this.rotation.clone();
+            }
         }
-        return this.rotation.clone();
     }
 
     public QuaternionTransformSet getQuaternionRotation() {
-        if(this.quaternionRotation == null) {
-            double[] pos = RotationHelper.xyzEulerToQuaternion(
-                    rotation.getX(),
-                    rotation.getY(),
-                    rotation.getZ()
-            );
-            this.quaternionRotation = new QuaternionTransformSet(pos[0], pos[1], pos[2], pos[3]);
+        synchronized(this.rotation) {
+            synchronized(this.quaternionRotation) {
+                if(this.quaternionRotation.isEmpty() && !this.rotation.isEmpty()) {
+                    double[] pos = RotationHelper.xyzEulerToQuaternion(
+                            rotation.getX(),
+                            rotation.getY(),
+                            rotation.getZ()
+                    );
+                    this.quaternionRotation.setX(pos[0]);
+                    this.quaternionRotation.setY(pos[1]);
+                    this.quaternionRotation.setZ(pos[2]);
+                    this.quaternionRotation.setW(pos[3]);
+                }
+                return this.quaternionRotation;
+            }
         }
-        return this.quaternionRotation;
     }
 
     public double getCenterX() {
@@ -365,16 +378,21 @@ public class GameObject {
     }
 
     public void setRotation(TransformSet transform) {
-        this.rotation = transform.clone();
-        this.quaternionRotation = null;
+        this.rotation.setX(transform.getX());
+        this.rotation.setY(transform.getY());
+        this.rotation.setZ(transform.getZ());
+        this.quaternionRotation.clear();
         for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation")) {
             component.onUpdateRotation();
         }
     }
 
     public void setQuaternionRotation(QuaternionTransformSet transform, ObjectComponent blockNotify) {
-        this.rotation = null;
-        this.quaternionRotation = transform.clone();
+        this.rotation.clear();
+        this.quaternionRotation.setX(transform.getX());
+        this.quaternionRotation.setY(transform.getY());
+        this.quaternionRotation.setZ(transform.getZ());
+        this.quaternionRotation.setW(transform.getW());
         for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation")) {
             if(component.equals(blockNotify)) {
                 continue;
