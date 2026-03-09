@@ -70,11 +70,11 @@ public class VehicleSteer extends ObjectComponent {
             vehicle.getGearbox().setCurrentGear(currentGear + 1);
         }
 
-//        System.out.println("Torque: " + torque);
-//        System.out.println("Steer: " + steer);
-//        System.out.println("Gear: " + currentGear);
-//        System.out.println("RPM: " + rpm);
-//        System.out.println("Speed: " + speed);
+        System.out.println("Torque: " + torque);
+        System.out.println("Steer: " + steer);
+        System.out.println("Gear: " + currentGear);
+        System.out.println("RPM: " + rpm);
+        System.out.println("Speed: " + speed);
     }
 
 

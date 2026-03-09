@@ -1,25 +1,33 @@
 <scene title="Default2 rendering scene" renderFPS="60" updateFPS="30" physicsFPS="360" sameSize="true">
-    <object id="floor" x="960" y="500" sizeX="1920" sizeY="1080">
-        <RigidBody.TopDown.Static layer="0" />
+    <prefab id="box">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <RigidBody.TopDown.Dynamic />
+    </prefab>
+    <prefab id="floor">
+        <RigidBody.TopDown.Static layer="0" />
+        <SpriteRenderer spriteSource="sprites/base/opengl_logo.png" />
+    </prefab>
+    <prefab id="staticBox">
+        <SpriteRenderer spriteSource="sprites/beaver2.png" />
+        <RigidBody.TopDown.Static layer="1" />
+    </prefab>
+    <object id="floor" x="960" y="500" sizeX="1920" sizeY="1080">
+        <Prefab prefabName="floor" />
     </object>
     <object id="test" x="0" y="0" sizeX="100" sizeY="100">
-        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
-        <RigidBody.TopDown.Dynamic />
-<!--        <Test2DForce _package="pl.AWTGameEngine.custom" />-->
+        <Prefab prefabName="box" />
+        <Test2DForce _package="pl.AWTGameEngine.custom" />
     </object>
     <object id="test2" x="200" y="50" sizeX="100" sizeY="100">
-        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
-        <RigidBody.TopDown.Dynamic />
+        <Prefab prefabName="box" />
     </object>
     <object id="test3" x="500" y="50" sizeX="100" sizeY="100">
-        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
-        <RigidBody.TopDown.Static layer="1" />
+        <Prefab prefabName="staticBox" />
     </object>
-    <object id="vehicle" x="500" y="0" sizeX="100" sizeY="150">
+    <object id="vehicle" x="500" y="200" sizeX="100" sizeY="150">
         <SpriteRenderer spriteSource="sprites/beaver.jpg" />
         <Vehicle.TopDown />
-        <Vehicle.Engine peakTorque="18000" maxRPM="120000" idleRPM="1200" />
+        <Vehicle.Engine />
         <Vehicle.Gearbox gearRatios="-4,0,4,2,1.5,1.1,1,0.8,0.7,0.3" />
         <Vehicle.Wheel />
         <Vehicle.Wheel />

@@ -127,6 +127,10 @@ public class Vehicle extends ObjectComponent {
                 (float) getObject().getSize().getZ());
     }
 
+    protected TransformSet getVehicleSize() {
+        return getObject().getSize();
+    }
+
     protected TransformSet getVehicleInitializationPose() {
         return getObject().getPosition();
     }
@@ -158,9 +162,9 @@ public class Vehicle extends ObjectComponent {
         var rigidBody = baseParams.getRigidBodyParams();
         float mass = 870;
         rigidBody.setMass(mass);
-        double width  = getObject().getSize().getX();
-        double height = getObject().getSize().getY();
-        double length = getObject().getSize().getZ();
+        double width  = getVehicleSize().getX();
+        double height = getVehicleSize().getY();
+        double length = getVehicleSize().getZ();
 
         float moiX = (float)((1/12.0) * mass * (height*height + length*length));
         float moiY = (float)((1/12.0) * mass * (width*width + length*length));
@@ -195,9 +199,9 @@ public class Vehicle extends ObjectComponent {
 
         List<PxTransform> suspensionAttachmentPoses = new ArrayList<>();
 
-        float halfWidth  = (float) getObject().getSize().getX() / 2;
-        float halfHeight  = (float) getObject().getSize().getY() / 2;
-        float halfLength = (float) getObject().getSize().getZ() / 2;
+        float halfWidth  = (float) getVehicleSize().getX() / 2;
+        float halfHeight  = (float) getVehicleSize().getY() / 2;
+        float halfLength = (float) getVehicleSize().getZ() / 2;
         float wheelRadius = 0.35f;
         float yPos = halfHeight + wheelRadius;
 
@@ -315,7 +319,7 @@ public class Vehicle extends ObjectComponent {
 
         var actorCMassLocalPose = new PxTransform(vec3, quat);
 
-        vec3 = new PxVec3((float) (getObject().getSize().getX() / 2), (float) (getObject().getSize().getY() / 2 - 0.02), (float) getObject().getSize().getZ() / 2);
+        vec3 = new PxVec3((float) (getVehicleSize().getX() / 2), (float) (getVehicleSize().getY() / 2 - 0.02), (float) getVehicleSize().getZ() / 2);
         quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
 
         var actorShapeLocalPose = new PxTransform(vec3, quat);
@@ -654,7 +658,6 @@ public class Vehicle extends ObjectComponent {
         PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
         getObject().setPosition(new TransformSet(vec3.getX(), vec3.getY() + getObject().getSizeY() * 1.5 + 1.35, vec3.getZ()));
         getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
-//        System.out.println(vehicle.getEngineDriveState().getEngineState().getRotationSpeed());
     }
 
     // Events
@@ -698,6 +701,10 @@ public class Vehicle extends ObjectComponent {
                     (float) 5 / 2,
                     (float) getObject().getSize().getY()
             );
+        }
+
+        protected TransformSet getVehicleSize() {
+            return new TransformSet(getObject().getSize().getX(), (double) 5 / 2, getObject().getSize().getY());
         }
 
         @Override
