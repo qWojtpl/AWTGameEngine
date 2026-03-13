@@ -27,15 +27,15 @@ public class Border extends ObjectComponent {
             return;
         }
         g.drawRect(
-                getCamera().parseX(getObject(), getObject().getX()),
-                getCamera().parseY(getObject(), getObject().getY()),
+                getCamera().parseX(getObject(), getObject().getX() - getObject().getSizeX() / 2),
+                getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
                 getCamera().parsePlainValue(getObject().getSizeX()),
                 getCamera().parsePlainValue(getObject().getSizeY()),
                 new GraphicsManager.RenderOptions()
                         .setColor(color.getColor())
                         .setRotation(getObject().getRotation().getX())
-                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getCenterX()))
-                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getCenterY()))
+                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getY()))
         );
     }
 

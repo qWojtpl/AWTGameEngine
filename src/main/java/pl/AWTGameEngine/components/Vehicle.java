@@ -12,17 +12,20 @@ import pl.AWTGameEngine.annotations.components.management.*;
 import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
+import pl.AWTGameEngine.engine.helpers.VehicleHelper;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.TransformSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @ComponentFX
@@ -38,16 +41,10 @@ public class Vehicle extends ObjectComponent {
     private Gearbox gearbox;
     private final List<Wheel> wheels = new ArrayList<>();
 
+    private double mass = 870;
+
     public Vehicle(GameObject object) {
         super(object);
-    }
-
-    public float RPMtoOmega(float rpm) {
-        return rpm * (2f * (float) Math.PI) / 60f;
-    }
-
-    public float omegaToRPM(float omega) {
-        return omega * 60f / (2f * (float) Math.PI);
     }
 
     private void setEngine(Engine engine) {
@@ -74,6 +71,20 @@ public class Vehicle extends ObjectComponent {
         return new ArrayList<>(wheels);
     }
 
+    @SaveState(name = "mass")
+    public double getMass() {
+        return this.mass;
+    }
+
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
+
+    @FromXML
+    public void setMass(String mass) {
+        setMass(Double.parseDouble(mass));
+    }
+
     private void initialize() {
         PxGeometry geometry = createGeometry();
 //        initializeBaseParams(vehicle.getBaseParams());
@@ -85,7 +96,7 @@ public class Vehicle extends ObjectComponent {
         vehicle.initialize(
                 physXManager.getPxPhysics(),
                 physXManager.getCookingParams(),
-                physXManager.getPxPhysics().createMaterial(0.5f, 0.5f, 0.5f),
+                physXManager.getDefaultMaterial(),
                 EngineDriveVehicleEnum.eDIFFTYPE_MULTIWHEELDRIVE
         );
 
@@ -142,10 +153,13 @@ public class Vehicle extends ObjectComponent {
         //
 
         var axleDesc = baseParams.getAxleDescription();
-        axleDesc.setNbAxles(2);
-        axleDesc.setNbWheels(4);
-        axleDesc.setNbWheelsPerAxle(0, 2);
-        axleDesc.setNbWheelsPerAxle(1, 2);
+        axleDesc.setNbAxles(wheels.size() / 2);
+        axleDesc.setNbWheels(wheels.size());
+
+        for(int i = 0; i < wheels.size() / 2; i++) {
+            axleDesc.setNbWheelsPerAxle(i, wheels.size() / 2);
+        }
+
         axleDesc.setAxleToWheelIds(0, 0);
         axleDesc.setAxleToWheelIds(1, 2);
         for (int i = 0; i < 4; i++) {
@@ -160,8 +174,7 @@ public class Vehicle extends ObjectComponent {
         baseParams.getScale().setScale(1f);
 
         var rigidBody = baseParams.getRigidBodyParams();
-        float mass = 870;
-        rigidBody.setMass(mass);
+        rigidBody.setMass((float) mass);
         double width  = getVehicleSize().getX();
         double height = getVehicleSize().getY();
         double length = getVehicleSize().getZ();
@@ -268,7 +281,7 @@ public class Vehicle extends ObjectComponent {
             float naturalFrequency = 6f;
             float dampingRatio = 1.8f;
 
-            float sprungMass = mass / 4f;
+            float sprungMass = (float) mass / 4f;
             float stiffness = naturalFrequency * naturalFrequency * sprungMass;
             float damping = dampingRatio * 2f * (float) Math.sqrt(stiffness * sprungMass);
 
@@ -404,28 +417,6 @@ public class Vehicle extends ObjectComponent {
         vehicle.destroy();
     }
 
-    @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
-    @ComponentGL
-    @ComponentFX
-    @DefaultComponent
-    public static class Wheel extends VehicleComponent {
-
-        public Wheel(GameObject object) {
-            super(object);
-        }
-
-        @Override
-        public void onAddComponent() {
-            super.onAddComponent();
-            vehicle.registerWheel(this);
-        }
-
-        public void init() {
-
-        }
-
-    }
-
     private static class VehicleComponent extends ObjectComponent {
 
         protected Vehicle vehicle;
@@ -449,6 +440,7 @@ public class Vehicle extends ObjectComponent {
     @ComponentGL
     @ComponentFX
     @DefaultComponent
+    @WebComponent
     @Unique
     public static class Engine extends VehicleComponent {
 
@@ -472,8 +464,8 @@ public class Vehicle extends ObjectComponent {
             engine.getTorqueCurve().addPair(1f, 1f);
             engine.setMoi(1f);
             engine.setPeakTorque(peakTorque);
-            engine.setIdleOmega(vehicle.RPMtoOmega(idleRPM));
-            engine.setMaxOmega(vehicle.RPMtoOmega(maxRPM));
+            engine.setIdleOmega(VehicleHelper.RPMtoOmega(idleRPM));
+            engine.setMaxOmega(VehicleHelper.RPMtoOmega(maxRPM));
             engine.setDampingRateFullThrottle(0.15f);
             engine.setDampingRateZeroThrottleClutchEngaged(2f);
             engine.setDampingRateZeroThrottleClutchDisengaged(0.35f);
@@ -527,6 +519,7 @@ public class Vehicle extends ObjectComponent {
     @ComponentGL
     @ComponentFX
     @DefaultComponent
+    @WebComponent
     @Unique
     public static class Gearbox extends VehicleComponent {
 
@@ -653,6 +646,29 @@ public class Vehicle extends ObjectComponent {
 
     }
 
+    @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
+    @ComponentGL
+    @ComponentFX
+    @DefaultComponent
+    @WebComponent
+    public static class Wheel extends VehicleComponent {
+
+        public Wheel(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void onAddComponent() {
+            super.onAddComponent();
+            vehicle.registerWheel(this);
+        }
+
+        public void init() {
+
+        }
+
+    }
+
     protected void updateWorldPositions() {
         PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
         PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
@@ -681,6 +697,7 @@ public class Vehicle extends ObjectComponent {
     }
 
     @DefaultComponent
+    @WebComponent
     public static class TopDown extends Vehicle {
 
         public TopDown(GameObject object) {

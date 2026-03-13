@@ -64,7 +64,7 @@ public class GraphicsManager {
             return;
         }
         readOptions(renderOptions);
-        graphics.drawImage(image.getImage(), (int) x, (int) y, (int) width, (int) height, null);
+        graphics.drawImage(image.getImage(), (int) Math.ceil(x), (int) Math.ceil(y), (int) Math.ceil(width), (int) Math.ceil(height), null);
         rollBackOptions();
     }
 

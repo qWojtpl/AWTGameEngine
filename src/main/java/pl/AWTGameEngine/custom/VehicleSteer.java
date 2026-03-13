@@ -7,6 +7,7 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.Vehicle;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.enums.KeyCode;
+import pl.AWTGameEngine.engine.helpers.VehicleHelper;
 import pl.AWTGameEngine.objects.GameObject;
 
 @DefaultComponent
@@ -19,7 +20,7 @@ public class VehicleSteer extends ObjectComponent {
     private float torque = 0.3f;
     private int brake = 0;
     private float steer = 0;
-    private float steerSensitivity = 1f;
+    private float steerSensitivity = 2f;
 
     public VehicleSteer(GameObject object) {
         super(object);
@@ -62,7 +63,7 @@ public class VehicleSteer extends ObjectComponent {
             vehicle.getGearbox().setCurrentGear(2);
         }
         float omega = vehicle.getPxVehicle().getEngineDriveState().getEngineState().getRotationSpeed();
-        float rpm = vehicle.omegaToRPM(omega);
+        float rpm = VehicleHelper.omegaToRPM(omega);
 
         float speed = vehicle.getPxVehicle().getPhysXState().getPhysxActor().getRigidBody().getLinearVelocity().magnitude();
 
@@ -70,11 +71,11 @@ public class VehicleSteer extends ObjectComponent {
             vehicle.getGearbox().setCurrentGear(currentGear + 1);
         }
 
-        System.out.println("Torque: " + torque);
+/*        System.out.println("Torque: " + torque);
         System.out.println("Steer: " + steer);
         System.out.println("Gear: " + currentGear);
         System.out.println("RPM: " + rpm);
-        System.out.println("Speed: " + speed);
+        System.out.println("Speed: " + speed);*/
     }
 
 

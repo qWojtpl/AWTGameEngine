@@ -47,7 +47,7 @@ public class Camera {
     }
 
     public double getRelativeX(GameObject object) {
-        if(object.getComponentsByClass(Canvas.class).isEmpty()) {
+        if(!object.getComponentsByClass(Canvas.class).isEmpty()) {
             return 0;
         }
         return this.x;
@@ -58,7 +58,7 @@ public class Camera {
     }
 
     public double getRelativeY(GameObject object) {
-        if(object.getComponentsByClass(Canvas.class).isEmpty()) {
+        if(!object.getComponentsByClass(Canvas.class).isEmpty()) {
             return 0;
         }
         return this.y;
