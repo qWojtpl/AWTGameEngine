@@ -52,7 +52,7 @@ public class BoxSpawner extends ObjectComponent {
     }
 
     @Override
-    public void onPhysicsUpdate() {
+    public void onUpdate() {
         if(getKeyListener().hasPressedKey(69)) {
             spawnBoxes(100);
         }

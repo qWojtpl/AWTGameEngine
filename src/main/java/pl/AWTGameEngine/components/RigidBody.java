@@ -164,7 +164,9 @@ public abstract class RigidBody extends ObjectComponent {
                 setAngularVelocity(savedAngularVelocity);
                 savedAngularVelocity = null;
             }
-            physXManager.getPxScene(getScene()).addActor(rigidDynamic);
+            getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
+                physXManager.getPxScene(getScene()).addActor(rigidDynamic);
+            });
         }
 
         @Override
@@ -261,7 +263,9 @@ public abstract class RigidBody extends ObjectComponent {
             rigidStatic = physics.createRigidStatic(pose);
             rigidStatic.setName(getObject().getIdentifier());
             rigidStatic.attachShape(shape);
-            physXManager.getPxScene(getScene()).addActor(rigidStatic);
+            getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
+                physXManager.getPxScene(getScene()).addActor(rigidStatic);
+            });
         }
 
         @Override

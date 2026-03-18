@@ -137,10 +137,12 @@ public class SceneBuilder {
     private static void initNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
         String nodeName = node.getNodeName().toLowerCase();
         switch(nodeName) {
-            case "object" -> initObjectNode(fileBuilder, methodBuilder, node);
-            case "styles" -> initStyleNode(fileBuilder, methodBuilder, node);
-            case "scene" -> initNestedSceneNode(fileBuilder, methodBuilder, node);
-            default -> Logger.warning("Unrecognized node name: " + nodeName);
+            case "object"   -> initObjectNode(fileBuilder, methodBuilder, node);
+            case "styles"   -> initStyleNode(fileBuilder, methodBuilder, node);
+            case "scene"    -> initNestedSceneNode(fileBuilder, methodBuilder, node);
+            case "prefab"   -> initPrefabNode(fileBuilder, methodBuilder, node);
+            case "prefabs"  -> initPrefabListNode(fileBuilder, methodBuilder, node);
+            default         -> Logger.warning("Unrecognized node name: " + nodeName);
         }
     }
 
@@ -222,6 +224,14 @@ public class SceneBuilder {
 
     private static void initNestedSceneNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
         appendMethodBody(fileBuilder, createCall("scene", "loadAfterLoad", "String.class, String.class", "\"" + getValue(node, "source") + "\", \"" + getValue(node, "renderEngine") + "\""));
+    }
+
+    private static void initPrefabNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
+//        appendMethodBody(fileBuilder, createCall("scene", "initPrefabFromString", "String.class", ""));
+    }
+
+    private static void initPrefabListNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
+//        appendMethodBody(fileBuilder, createCall("scene", "addPrefabExternalSource", "String.class", "\"" +node.getAttributes().getNamedItem("source").getNodeValue() + "\""));
     }
 
     private static String getValue(Node node, String name) {

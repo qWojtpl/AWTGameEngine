@@ -4,6 +4,9 @@ import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.windows.Window;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("BusyWait")
 public abstract class BaseLoop extends Thread {
 
@@ -14,6 +17,7 @@ public abstract class BaseLoop extends Thread {
     private double actualFpsIterator = 0;
     private boolean killed = false;
     private Runnable killOperation;
+    private final List<Runnable> nextFrameOperations = new ArrayList<>();
 
     public BaseLoop(Window window, String loopName) {
         this.window = window;
@@ -51,6 +55,19 @@ public abstract class BaseLoop extends Thread {
             } catch (InterruptedException ignored) {
                 break;
             }
+            if(!nextFrameOperations.isEmpty()) {
+                try {
+                    List<Runnable> runnableList = new ArrayList<>(nextFrameOperations);
+                    nextFrameOperations.clear();
+                    for (Runnable runnable : runnableList) {
+                        runnable.run();
+                    }
+                } catch (Exception e) {
+                    Logger.exception("Unhandled exception caught while running a next frame operation of " + loopName, e);
+                    kill();
+                    break;
+                }
+            }
             try {
                 iteration();
             } catch(Exception e) {
@@ -78,6 +95,10 @@ public abstract class BaseLoop extends Thread {
     public void kill(Runnable operation) {
         killOperation = operation;
         this.killed = true;
+    }
+
+    public void addNextFrameOperation(Runnable operation) {
+        nextFrameOperations.add(operation);
     }
 
     public Window getWindow() {

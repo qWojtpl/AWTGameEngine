@@ -229,6 +229,10 @@ public class ResourceManager extends CommandConsole.ParentCommand {
         spriteResources.clear();
     }
 
+    public void releaseSpriteResource(String name) {
+        spriteResources.remove(name);
+    }
+
     public void clearAudioClips() {
         for(AudioClip audioClip : audioClips) {
             try {
