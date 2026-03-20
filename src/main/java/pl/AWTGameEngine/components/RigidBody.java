@@ -173,8 +173,10 @@ public abstract class RigidBody extends ObjectComponent {
         public void destroy() {
             rigidDynamic.detachShape(shape);
             releaseObjects();
-            physXManager.getPxScene(getScene()).removeActor(rigidDynamic);
-            rigidDynamic.release();
+            getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
+                physXManager.getPxScene(getScene()).removeActor(rigidDynamic);
+                rigidDynamic.release();
+            });
         }
 
         @Override
@@ -272,8 +274,10 @@ public abstract class RigidBody extends ObjectComponent {
         public void destroy() {
             rigidStatic.detachShape(shape);
             releaseObjects();
-            physXManager.getPxScene(getScene()).removeActor(rigidStatic);
-            rigidStatic.release();
+            getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
+                physXManager.getPxScene(getScene()).removeActor(rigidStatic);
+                rigidStatic.release();
+            });
         }
 
         @Override

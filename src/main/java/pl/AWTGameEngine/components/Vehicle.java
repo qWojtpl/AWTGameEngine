@@ -107,7 +107,10 @@ public class Vehicle extends ObjectComponent {
                 new PxQuat(PxIDENTITYEnum.PxIdentity));
 
         vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(vehiclePose);
-        physXManager.getPxScene(getScene()).addActor(vehicle.getPhysXState().getPhysxActor().getRigidBody());
+
+        getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
+            physXManager.getPxScene(getScene()).addActor(vehicle.getPhysXState().getPhysxActor().getRigidBody());
+        });
 
         vehicle.getEngineDriveState().getGearboxState().setCurrentGear(vehicle.getEngineDriveParams().getGearBoxParams().getNeutralGear() + 1);
         vehicle.getEngineDriveState().getGearboxState().setTargetGear(vehicle.getEngineDriveParams().getGearBoxParams().getNeutralGear() + 1);
