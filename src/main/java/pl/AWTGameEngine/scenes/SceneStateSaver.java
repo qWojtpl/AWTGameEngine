@@ -23,7 +23,7 @@ public class SceneStateSaver {
     public static void saveState(String path, Scene scene, boolean build) {
         Logger.info("Saving scene state...");
         List<GameObject> objects = scene.getGameObjects();
-        StringBuilder bobTheBuilder = new StringBuilder();
+        StringBuilder bobTheBuilder = new StringBuilder("<!-- Auto-generated using SceneStateSaver at " + System.currentTimeMillis() / 1000L + " -->\n");
         addSceneParams(scene, bobTheBuilder);
         addNestedScenes(scene, bobTheBuilder);
         addPrefabs(scene, bobTheBuilder);

@@ -50,6 +50,9 @@ public abstract class RigidBody extends ObjectComponent {
         shape = physics.createShape(geometry, material, true, physXManager.getShapeFlags());
         shape.setSimulationFilterData(filterData);
         updatePosition(getObject().getPosition());
+        if(!getObject().getRotation().isEmpty()) {
+            updateRotation();
+        }
     }
 
     public abstract void destroy();
@@ -181,6 +184,9 @@ public abstract class RigidBody extends ObjectComponent {
 
         @Override
         public void physicsUpdate() {
+            if(rigidDynamic == null) {
+                return;
+            }
             updateCachedPosition(rigidDynamic.getGlobalPose().getP());
             updateCachedRotation(rigidDynamic.getGlobalPose().getQ());
         }
@@ -282,6 +288,9 @@ public abstract class RigidBody extends ObjectComponent {
 
         @Override
         public void physicsUpdate() {
+            if(rigidStatic == null) {
+                return;
+            }
             updateCachedPosition(rigidStatic.getGlobalPose().getP());
             updateCachedRotation(rigidStatic.getGlobalPose().getQ());
         }
@@ -309,6 +318,9 @@ public abstract class RigidBody extends ObjectComponent {
 
         @Override
         public void physicsUpdate() {
+            if(rigidDynamic == null) {
+                return;
+            }
             PxVec3 vec3 = new PxVec3(
                     (float) getObject().getPosition().getX(),
                     (float) getObject().getPosition().getY(),
@@ -364,6 +376,9 @@ public abstract class RigidBody extends ObjectComponent {
 
             @Override
             public void physicsUpdate() {
+                if(rigidDynamic == null) {
+                    return;
+                }
                 PxVec3 vec3 = rigidDynamic.getGlobalPose().getP();
                 PxVec3 newVec = new PxVec3(vec3.getX(), vec3.getZ(), 5);
                 updateCachedPosition(newVec);
@@ -421,6 +436,9 @@ public abstract class RigidBody extends ObjectComponent {
 
             @Override
             public void physicsUpdate() {
+                if(rigidStatic == null) {
+                    return;
+                }
                 PxVec3 position = rigidStatic.getGlobalPose().getP();
                 PxVec3 newVec = new PxVec3(position.getX(), position.getZ(), position.getY());
                 updateCachedPosition(newVec);
@@ -455,6 +473,9 @@ public abstract class RigidBody extends ObjectComponent {
 
             @Override
             public void physicsUpdate() {
+                if(rigidDynamic == null) {
+                    return;
+                }
                 PxVec3 vec3 = new PxVec3(
                         (float) getObject().getPosition().getX(),
                         (float) getObject().getPosition().getZ(),

@@ -15,7 +15,7 @@
         <RigidBody.Static />
     </object>
 
-    <object id="floor2" x="500" y="-89" z="-500" size="100,10,100">
+    <object id="floor2" x="500" y="-89" z="-500" size="100,10,100" rotation="0,0,45">
         <Box3D spriteSource="hdr_sprites/glass.png" />
         <RigidBody.Static />
     </object>

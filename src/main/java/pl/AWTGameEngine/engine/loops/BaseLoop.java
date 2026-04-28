@@ -23,6 +23,7 @@ public abstract class BaseLoop extends Thread {
         this.window = window;
         this.loopName = loopName;
         this.setName(loopName);
+        this.setDaemon(true);
     }
 
     @Override

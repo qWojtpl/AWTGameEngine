@@ -44,7 +44,7 @@ public class VehicleSteer extends ObjectComponent {
             steer = steerSensitivity;
         }
         if(getKeyListener().hasPressedKey(KeyCode.S.value)) {
-            brake = 5;
+            brake = 4;
         }
         if(getKeyListener().hasPressedKey(KeyCode.D.value)) {
             steer = -steerSensitivity;
