@@ -4,6 +4,7 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.VRManager;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.windows.Window;
 import pl.AWTGameEngine.windows.WindowsManager;
@@ -40,6 +41,7 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
             window.getPhysicsLoop().kill(() -> {
                 window.unloadScenes();
                 PhysXManager.getInstance().cleanup();
+                VRManager.getInstance().shutdown();
                 Logger.info("Stopped app.");
                 System.exit(0);
             });

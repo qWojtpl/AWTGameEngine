@@ -143,4 +143,18 @@ public class MatrixHelper {
         return m;
     }
 
+    public static float[] invert(float[] m) {
+        float[] inv = identity();
+
+        inv[0] = m[0]; inv[1] = m[4]; inv[2] = m[8];
+        inv[4] = m[1]; inv[5] = m[5]; inv[6] = m[9];
+        inv[8] = m[2]; inv[9] = m[6]; inv[10] = m[10];
+
+        inv[12] = -(m[12] * inv[0] + m[13] * inv[4] + m[14] * inv[8]);
+        inv[13] = -(m[12] * inv[1] + m[13] * inv[5] + m[14] * inv[9]);
+        inv[14] = -(m[12] * inv[2] + m[13] * inv[6] + m[14] * inv[10]);
+
+        return inv;
+    }
+
 }

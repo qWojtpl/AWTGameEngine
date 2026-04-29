@@ -1,9 +1,15 @@
 package pl.AWTGameEngine;
 
+import org.lwjgl.openvr.OpenVR;
+import org.lwjgl.openvr.VR;
+import org.lwjgl.system.MemoryStack;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.CommandConsole;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.VRManager;
 import pl.AWTGameEngine.scenes.SceneBuilder;
+
+import java.nio.IntBuffer;
 
 public class Main {
 
@@ -20,6 +26,9 @@ public class Main {
         Logger.redirectJULLogger();
         if(SceneBuilder.isSceneBuilder(args)) {
             return;
+        }
+        if(appProperties.isStartupArgumentPresent("--vr")) {
+            VRManager.getInstance().init();
         }
         Logger.info("Requesting default window...");
         Dependencies.getWindowsManager().createDefaultWindow();

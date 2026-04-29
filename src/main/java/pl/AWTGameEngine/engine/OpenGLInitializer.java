@@ -81,6 +81,10 @@ public class OpenGLInitializer implements GLEventListener {
         float[] view = MatrixHelper.lookAt(camera);
         float[] viewProj = MatrixHelper.mul(projection, view);
 
+        if(VRManager.isEnabled()) {
+            VRManager.getInstance().render(gl, graphicsManagerGL);
+        }
+
         graphicsManagerGL.drawScene(gl, viewProj);
         gl.glUseProgram(0);
     }
