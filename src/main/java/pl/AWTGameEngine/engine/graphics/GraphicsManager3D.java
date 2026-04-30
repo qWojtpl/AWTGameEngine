@@ -36,6 +36,8 @@ public abstract class GraphicsManager3D {
 
     public abstract void updateColor(String identifier, ShapeType shape, ColorObject color);
 
+    public abstract void updateXray(String identifier, ShapeType shape, boolean xray);
+
     public enum ShapeType {
         BOX,
         CYLINDER,
@@ -55,6 +57,7 @@ public abstract class GraphicsManager3D {
         private ShapeType shapeType;
         private boolean frontCullFace = false;
         private String shader;
+        private boolean xrayRender = false;
 
         public RenderOptions(String identifier) {
             this.identifier = identifier;
@@ -125,6 +128,10 @@ public abstract class GraphicsManager3D {
             return frontCullFace;
         }
 
+        public boolean isXrayRender() {
+            return xrayRender;
+        }
+
         public void setPosition(TransformSet position) {
             this.position = position;
         }
@@ -155,6 +162,10 @@ public abstract class GraphicsManager3D {
 
         public void setFrontCullFace(boolean frontCullFace) {
             this.frontCullFace = frontCullFace;
+        }
+
+        public void setXrayRender(boolean xrayRender) {
+            this.xrayRender = xrayRender;
         }
 
         public void setShapeType(ShapeType shapeType) {

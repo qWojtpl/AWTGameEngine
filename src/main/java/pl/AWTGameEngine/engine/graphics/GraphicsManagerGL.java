@@ -115,6 +115,18 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                     ro.getSize()
             );
 
+            if(ro.isXrayRender()) {
+                int xray = panelGL.getInitializer().getProgram(gl, "shaders/xray");
+                gl.glUseProgram(xray);
+                gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "viewProj"), 1, false, viewProj, 0);
+                gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "model"), 1, false, model, 0);
+                gl.glDepthFunc(GL4.GL_GREATER);
+                gl.glDepthMask(false);
+                gl.glDrawArrays(GL4.GL_TRIANGLES, 0, 36);
+                gl.glDepthFunc(GL4.GL_LESS);
+                gl.glDepthMask(true);
+            }
+
             int program = panelGL.getInitializer().getProgram(gl, ro.getShader());
 
             gl.glUseProgram(program);
@@ -213,6 +225,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     @Override
     public void updateColor(String identifier, ShapeType shape, ColorObject color) {
         renderables.get(identifier).setColor(color);
+    }
+
+    @Override
+    public void updateXray(String identifier, ShapeType shape, boolean xray) {
+        renderables.get(identifier).setXrayRender(xray);
     }
 
     public void createTexture(Sprite sprite) {

@@ -314,6 +314,11 @@ public class GraphicsManagerFX extends GraphicsManager3D {
         });
     }
 
+    @Override
+    public void updateXray(String identifier, ShapeType shape, boolean xray) {
+
+    }
+
     private Node getNode(String identifier, ShapeType shape) {
         switch(shape) {
             case BOX, SPHERE, CYLINDER -> {

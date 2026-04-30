@@ -30,11 +30,11 @@
         <Joint.Revolute reference="box0" />
     </object>
     <object id="box2" x="0" y="-80" z="30" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D spriteSource="sprites/beaver.jpg" xray="true" />
         <RigidBody.Dynamic />
     </object>
     <object id="box3" x="0" y="-60" z="30" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D spriteSource="sprites/beaver.jpg" xray="true" />
         <RigidBody.Dynamic />
     </object>
 
