@@ -4,6 +4,7 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.CommandConsole;
 import pl.AWTGameEngine.engine.AppProperties;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.loops.*;
@@ -121,6 +122,10 @@ public class WindowsManager extends CommandConsole.ParentCommand {
     }
 
     private void showSplashScreen() {
+        if(!Dependencies.getAppProperties().getPropertyAsBoolean("splashScreen")) {
+            return;
+        }
+        Logger.info("Creating splash screen...");
         splashScreenWindow = new SplashScreenWindow();
         splashScreenWindow.init();
     }

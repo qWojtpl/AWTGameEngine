@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.windows;
 
+import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
 
 import javax.imageio.ImageIO;
@@ -9,6 +11,8 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SplashScreenWindow is used for create a splash screen, which will be shown
@@ -17,12 +21,17 @@ import java.io.InputStream;
 @SuppressWarnings("deprecation")
 public class SplashScreenWindow extends JFrame {
 
-    private final int width = 400;
-    private final int height = 200;
-    private final int rows = 3;
-    private final int columns = 3;
+    private int width;
+    private int height;
+    private int rows;
+    private int columns;
 
     public void init() {
+        AppProperties appProperties = Dependencies.getAppProperties();
+        width = appProperties.getPropertyAsInteger("splashScreenWidth");
+        height = appProperties.getPropertyAsInteger("splashScreenHeight");
+        columns = appProperties.getPropertyAsInteger("splashScreenColumns");
+        rows = appProperties.getPropertyAsInteger("splashScreenRows");
         setSize(width, height);
         setLocationRelativeTo(null);
         setUndecorated(true);
@@ -30,22 +39,34 @@ public class SplashScreenWindow extends JFrame {
         setCursor(Cursor.WAIT_CURSOR);
         GridLayout grid = new GridLayout(rows, columns);
         setLayout(grid);
-        //
-        addLabel("");
-        addLabel("Loading", 20);
-        addLabel("");
-        //
-        addLabel("");
-        JLabel logLabel = addLabel(Logger.getLastLog(), 10);
-        addLabel("");
-        //
-        addLabel("");
-        addLogo("/sprites/base/opengl_logo.png");
-        addLabel("");
+        List<JLabel> logLabels = new ArrayList<>();
+        String content = appProperties.getProperty("splashScreenContent");
+        String[] split = content.split(",", -1);
+        if(split.length != columns * rows) {
+            throw new RuntimeException("Cannot show a splash screen - incorrect content.");
+        }
+        for(int i = 0; i < columns * rows; i++) {
+            if(split[i].startsWith("/")) {
+                addLogo(split[i]);
+            } else {
+                String[] sizeSplit = split[i].split("\\*");
+                JLabel label;
+                if(sizeSplit.length != 1) {
+                    label = addLabel(sizeSplit[0], Integer.parseInt(sizeSplit[1]));
+                } else {
+                    label = addLabel(split[i], 0);
+                }
+                if(split[i].contains("{LOGGER}")) {
+                    logLabels.add(label);
+                }
+            }
+        }
         setVisible(true);
         new Thread(() -> {
             while(isVisible()) {
-                logLabel.setText(Logger.getLastLog());
+                for(JLabel logLabel : logLabels) {
+                    logLabel.setText(Logger.getLastLog());
+                }
                 try {
                     //noinspection BusyWait
                     Thread.sleep(1);
@@ -58,10 +79,6 @@ public class SplashScreenWindow extends JFrame {
 
     public void close() {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-    }
-
-    private JLabel addLabel(String text) {
-        return addLabel(text, 0);
     }
 
     private JLabel addLabel(String text, float fontSize) {
