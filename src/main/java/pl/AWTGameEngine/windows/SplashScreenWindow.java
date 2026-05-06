@@ -3,6 +3,7 @@ package pl.AWTGameEngine.windows;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.objects.ColorObject;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -38,6 +39,7 @@ public class SplashScreenWindow extends JFrame {
         setAlwaysOnTop(true);
         setCursor(Cursor.WAIT_CURSOR);
         GridLayout grid = new GridLayout(rows, columns);
+        setBackground(ColorObject.deserialize(appProperties.getProperty("splashScreenColor")));
         setLayout(grid);
         List<JLabel> logLabels = new ArrayList<>();
         String content = appProperties.getProperty("splashScreenContent");
