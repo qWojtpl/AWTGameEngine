@@ -20,19 +20,20 @@ import pl.AWTGameEngine.objects.GameObject;
 })
 public class Box3D extends Base3DShape {
 
-    private final GraphicsManager3D graphicsManager3D;
+    private GraphicsManager3D graphicsManager3D;
 
     public Box3D(GameObject object) {
         super(object);
-        if(getScene().getPanel() instanceof PanelFX) {
-            graphicsManager3D = ((PanelFX) getScene().getPanel()).getGraphicsManager3D();
-        } else {
-            graphicsManager3D = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
-        }
     }
 
     @Override
     protected void createShape() {
+
+        if(getScene().getPanel() instanceof PanelFX) {
+            graphicsManager3D = ((PanelFX) getScene().getPanel()).getGraphicsManager3D();
+        } else if(getScene().getPanel() instanceof PanelGL) {
+            graphicsManager3D = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
+        }
 
         if(graphicsManager3D == null) {
             return;

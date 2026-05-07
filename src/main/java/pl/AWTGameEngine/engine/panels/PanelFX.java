@@ -26,7 +26,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
 
     public PanelFX(Scene scene, int width, int height) {
         this.scene = scene;
-        this.window = scene.getWindow();
+        this.window = (Window) scene.getWindow();
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManagerFX(this);
         this.physXManager = PhysXManager.getInstance();
@@ -46,7 +46,7 @@ public class PanelFX extends JFXPanel implements PanelObject {
 
     @Override
     public Window getWindow() {
-        return this.scene.getWindow();
+        return (Window) this.scene.getWindow();
     }
 
     @Override

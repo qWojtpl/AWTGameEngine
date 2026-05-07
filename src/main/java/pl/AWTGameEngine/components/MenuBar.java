@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +27,7 @@ public class MenuBar extends ObjectComponent {
 
     @Override
     public void onRemoveComponent() {
-        getWindow().setMenuBar(null);
+        ((Window) getWindow()).setMenuBar(null);
     }
 
     @FromXML

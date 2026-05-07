@@ -10,7 +10,7 @@ import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Prefab;
 import pl.AWTGameEngine.objects.TransformSet;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,14 +20,14 @@ public class Scene {
     private final String name;
     private final ConcurrentHashMap<String, GameObject> gameObjects = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Prefab> prefabs = new ConcurrentHashMap<>();
-    private final Window window;
+    private final BaseWindow window;
     private final RenderEngine renderEngine;
     private PanelObject panel;
     private EventHandler sceneEventHandler;
     private String customStyles = "";
     private final HashMap<String, RenderEngine> loadAfterLoad = new HashMap<>();
 
-    public Scene(String name, Window window, RenderEngine renderEngine) {
+    public Scene(String name, BaseWindow window, RenderEngine renderEngine) {
         this.name = name;
         this.window = window;
         this.renderEngine = renderEngine;
@@ -182,7 +182,7 @@ public class Scene {
         return this.panel;
     }
 
-    public Window getWindow() {
+    public BaseWindow getWindow() {
         return this.window;
     }
 

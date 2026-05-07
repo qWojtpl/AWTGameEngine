@@ -12,13 +12,13 @@ import pl.AWTGameEngine.engine.deserializers.*;
 import pl.AWTGameEngine.engine.panels.*;
 import pl.AWTGameEngine.exceptions.scenes.SceneDataException;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
+import pl.AWTGameEngine.windows.HeadlessWindow;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -26,9 +26,9 @@ import java.net.URLClassLoader;
 
 public class SceneLoader {
 
-    private final Window window;
+    private final BaseWindow window;
 
-    public SceneLoader(Window window) {
+    public SceneLoader(BaseWindow window) {
         this.window = window;
     }
 
@@ -72,7 +72,11 @@ public class SceneLoader {
                 window.setSameSize(sameSize);
             }
             newScene = new Scene(scenePath, window, renderEngine);
-            newScene.setPanel(createPanel(newScene, renderEngine));
+            if(window instanceof HeadlessWindow) {
+                newScene.setPanel(new HeadlessPanel(newScene));
+            } else {
+                newScene.setPanel(createPanel(newScene, renderEngine));
+            }
             window.addScene(newScene);
             if(!nestedScene) {
                 window.setCurrentScene(newScene);
@@ -301,7 +305,7 @@ public class SceneLoader {
         }
     }
 
-    public Window getWindow() {
+    public BaseWindow getWindow() {
         return this.window;
     }
 

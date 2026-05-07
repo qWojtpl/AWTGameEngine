@@ -17,7 +17,7 @@ import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public abstract class ObjectComponent {
         return getObject().getScene().getPanel().getCamera();
     }
 
-    protected final Window getWindow() {
+    protected final BaseWindow getWindow() {
         return getScene().getWindow();
     }
 

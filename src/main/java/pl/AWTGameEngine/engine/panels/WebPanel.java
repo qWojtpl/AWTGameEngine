@@ -24,7 +24,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
     public WebPanel(Scene scene) {
         this.scene = scene;
-        this.window = scene.getWindow();
+        this.window = (Window) scene.getWindow();
         setLayout(null);
         setBackground(Color.BLACK);
 

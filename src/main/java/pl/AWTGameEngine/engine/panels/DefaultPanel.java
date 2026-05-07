@@ -21,7 +21,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
         super();
         setLayout(null);
         setBackground(Color.WHITE);
-        this.window = scene.getWindow();
+        this.window = (Window) scene.getWindow();
         this.scene = scene;
         this.camera = new Camera(this);
         PhysXManager.getInstance().createScene(scene);

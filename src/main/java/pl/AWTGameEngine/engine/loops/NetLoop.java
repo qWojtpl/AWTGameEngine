@@ -1,13 +1,13 @@
 package pl.AWTGameEngine.engine.loops;
 
 import pl.AWTGameEngine.scenes.Scene;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.util.ArrayList;
 
 public class NetLoop extends BaseLoop {
 
-    public NetLoop(Window window) {
+    public NetLoop(BaseWindow window) {
         super(window, "NetLoop");
     }
 

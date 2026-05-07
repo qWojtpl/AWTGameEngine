@@ -23,7 +23,7 @@ public class OpenGLInitializer implements GLEventListener {
 
     public OpenGLInitializer(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL) {
         this.scene = scene;
-        this.window = scene.getWindow();
+        this.window = (Window) scene.getWindow();
         this.camera = camera;
         this.profile = profile;
         this.graphicsManagerGL = graphicsManagerGL;

@@ -1,15 +1,14 @@
 package pl.AWTGameEngine.engine.panels;
 
-import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.scenes.Scene;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.awt.*;
 
 public interface PanelObject {
 
-    Window getWindow();
+    BaseWindow getWindow();
     Camera getCamera();
     Scene getParentScene();
     Component add(Component comp);

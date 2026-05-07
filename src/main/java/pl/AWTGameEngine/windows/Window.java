@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Window extends Frame {
+public class Window extends Frame implements BaseWindow {
 
     private final boolean serverWindow;
     private boolean sameSize = false;

@@ -1,13 +1,13 @@
 package pl.AWTGameEngine.engine.loops;
 
 import pl.AWTGameEngine.engine.panels.PanelObject;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.util.ArrayList;
 
 public class RenderLoop extends BaseLoop {
 
-    public RenderLoop(Window window) {
+    public RenderLoop(BaseWindow window) {
         super(window, "RenderLoop");
     }
 

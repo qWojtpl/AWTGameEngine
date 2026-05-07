@@ -2,7 +2,7 @@ package pl.AWTGameEngine.engine.loops;
 
 import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 @SuppressWarnings("BusyWait")
 public abstract class BaseLoop extends Thread {
 
-    protected final Window window;
+    protected final BaseWindow window;
     private final String loopName;
     private double targetFps = 1;
     private double actualFps = 0;
@@ -19,7 +19,7 @@ public abstract class BaseLoop extends Thread {
     private Runnable killOperation;
     private final List<Runnable> nextFrameOperations = new ArrayList<>();
 
-    public BaseLoop(Window window, String loopName) {
+    public BaseLoop(BaseWindow window, String loopName) {
         this.window = window;
         this.loopName = loopName;
         this.setName(loopName);
@@ -102,7 +102,7 @@ public abstract class BaseLoop extends Thread {
         nextFrameOperations.add(operation);
     }
 
-    public Window getWindow() {
+    public BaseWindow getWindow() {
         return this.window;
     }
 

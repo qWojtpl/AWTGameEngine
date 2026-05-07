@@ -5,7 +5,7 @@ import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.Scene;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -13,7 +13,7 @@ import java.awt.event.MouseWheelEvent;
 
 public class MouseListener {
 
-    private final Window window;
+    private final BaseWindow window;
     private int mouseX;
     private int mouseY;
     private int mouseWindowX;
@@ -31,7 +31,7 @@ public class MouseListener {
 
     private AWTListener awtListener;
 
-    public MouseListener(Window window) {
+    public MouseListener(BaseWindow window) {
         this.window = window;
     }
 

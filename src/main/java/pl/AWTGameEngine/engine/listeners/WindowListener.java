@@ -2,11 +2,8 @@ package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.panels.PanelObject;
-import pl.AWTGameEngine.windows.Window;
-import pl.AWTGameEngine.windows.WindowsManager;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -15,35 +12,18 @@ import java.awt.event.WindowEvent;
 
 public class WindowListener extends ComponentAdapter implements java.awt.event.WindowListener {
 
-    private final Window window;
+    private final BaseWindow window;
     private boolean opened = true;
     private boolean iconified = false;
     private boolean activated = true;
 
-    public WindowListener(Window window) {
+    public WindowListener(BaseWindow window) {
         this.window = window;
     }
 
     private void removeWindow() {
         opened = false;
-        WindowsManager windowsManager = Dependencies.getWindowsManager();
-        windowsManager.removeWindow(window);
-        if(window.equals(windowsManager.getDefaultWindow())) {
-            if(window.getCurrentScene() != null) {
-                for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowClosing")) {
-                    component.onWindowClosing();
-                }
-            }
-            // kill physics loop, because remove actor operation
-            // can't be executed while simulation is running,
-            // so we need to wait for PhysicsLoop to end a simulation.
-            window.getPhysicsLoop().kill(() -> {
-                window.unloadScenes();
-                PhysXManager.getInstance().cleanup();
-                Logger.info("Stopped app.");
-                System.exit(0);
-            });
-        }
+        Dependencies.getWindowsManager().close(window);
     }
 
     public boolean isOpened() {

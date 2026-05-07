@@ -2,6 +2,7 @@ package pl.AWTGameEngine.windows;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.Command;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.CommandConsole;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.Logger;
@@ -18,24 +19,32 @@ import java.util.List;
 @Command("wmanager")
 public class WindowsManager extends CommandConsole.ParentCommand {
 
-    private final List<Window> windows = new ArrayList<>();
-    private Window defaultWindow;
+    private final List<BaseWindow> windows = new ArrayList<>();
+    private BaseWindow defaultWindow;
     private Font defaultFont;
 
     private SplashScreenWindow splashScreenWindow;
 
     @Command(value = "create", argumentNames = { "path" })
-    public Window createWindow(String scenePath) {
+    public BaseWindow createWindow(String scenePath) {
         return createWindow(scenePath, null);
     }
 
-    public Window createWindow(String scenePath, RenderEngine renderEngine) {
+    public BaseWindow createWindow(String scenePath, RenderEngine renderEngine) {
         AppProperties appProperties = Dependencies.getAppProperties();
         boolean server = appProperties.getPropertyAsBoolean("server");
-        if (renderEngine == null) {
+        if(renderEngine == null) {
             renderEngine = RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase());
         }
-        Window window = new Window(server);
+
+        BaseWindow window;
+
+        if(server) {
+            window = new HeadlessWindow();
+        } else {
+            window = new Window(server);
+        }
+
         if (windows.isEmpty()) {
             defaultFont = window.getFont();
         }
@@ -71,7 +80,7 @@ public class WindowsManager extends CommandConsole.ParentCommand {
     }
 
     @Command("default")
-    public Window getDefaultWindow() {
+    public BaseWindow getDefaultWindow() {
         return defaultWindow;
     }
 
@@ -79,11 +88,11 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         return defaultFont;
     }
 
-    public List<Window> getWindows() {
+    public List<BaseWindow> getWindows() {
         return windows;
     }
 
-    public void removeWindow(Window window) {
+    public void removeWindow(BaseWindow window) {
         windows.remove(window);
     }
 
@@ -91,7 +100,7 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         return this.splashScreenWindow;
     }
 
-    private void createLoops(Window window) {
+    private void createLoops(BaseWindow window) {
         AppProperties appProperties = Dependencies.getAppProperties();
         BaseLoop updateLoop = new UpdateLoop(window);
         updateLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));
@@ -110,7 +119,7 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         window.setNetLoop(netLoop);
     }
 
-    private void startLoops(Window window, boolean server) {
+    private void startLoops(BaseWindow window, boolean server) {
         window.getUpdateLoop().start();
 
         if(!server) {
@@ -130,13 +139,31 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         splashScreenWindow.init();
     }
 
-    public void showWindow(Window window) {
-        if(!window.isServerWindow()) {
-            window.setVisible(true);
-        }
+    public void showWindow(BaseWindow window) {
+        window.setVisible(true);
         if(splashScreenWindow != null) {
             splashScreenWindow.close();
             splashScreenWindow = null;
+        }
+    }
+
+    public void close(BaseWindow window) {
+        removeWindow(window);
+        if(window.equals(defaultWindow)) {
+            if(window.getCurrentScene() != null) {
+                for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowClosing")) {
+                    component.onWindowClosing();
+                }
+            }
+            // kill physics loop, because remove actor operation
+            // can't be executed while simulation is running,
+            // so we need to wait for PhysicsLoop to end a simulation.
+            window.getPhysicsLoop().kill(() -> {
+                window.unloadScenes();
+                PhysXManager.getInstance().cleanup();
+                Logger.info("Stopped app.");
+                System.exit(0);
+            });
         }
     }
 

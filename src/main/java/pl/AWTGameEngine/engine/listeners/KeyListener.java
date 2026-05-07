@@ -2,7 +2,7 @@ package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.scenes.Scene;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -10,11 +10,11 @@ import java.util.Set;
 
 public class KeyListener implements java.awt.event.KeyListener {
 
-    private final Window window;
+    private final BaseWindow window;
     private final Set<Integer> pressedKeys = new HashSet<>();
     private final Set<Character> pressedKeysChars = new HashSet<>();
 
-    public KeyListener(Window window) {
+    public KeyListener(BaseWindow window) {
         this.window = window;
     }
 

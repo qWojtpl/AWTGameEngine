@@ -30,7 +30,7 @@ public class PanelGL extends Panel implements PanelObject {
 
     public PanelGL(Scene scene, int width, int height) {
         this.scene = scene;
-        this.window = scene.getWindow();
+        this.window = (Window) scene.getWindow();
         this.camera = new Camera(this);
         this.physXManager = PhysXManager.getInstance();
         physXManager.createScene(scene);

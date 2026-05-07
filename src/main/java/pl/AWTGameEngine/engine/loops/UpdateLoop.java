@@ -1,13 +1,13 @@
 package pl.AWTGameEngine.engine.loops;
 
 import pl.AWTGameEngine.scenes.Scene;
-import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.util.ArrayList;
 
 public class UpdateLoop extends BaseLoop {
 
-    public UpdateLoop(Window window) {
+    public UpdateLoop(BaseWindow window) {
         super(window, "UpdateLoop");
     }
 
