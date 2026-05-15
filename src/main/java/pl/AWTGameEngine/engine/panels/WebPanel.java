@@ -8,11 +8,14 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
+import pl.AWTGameEngine.engine.helpers.FXHelper;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 public class WebPanel extends JFXPanel implements PanelObject {
 
@@ -36,7 +39,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
             return;
         }
 
-        Platform.runLater(() -> {
+        FXHelper.synchronizedCall(() -> {
             this.webView = new WebView();
 
             // transparent
@@ -62,6 +65,8 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
             setScene(fxScene);
             loadWebView();
+
+            return null;
         });
 
     }

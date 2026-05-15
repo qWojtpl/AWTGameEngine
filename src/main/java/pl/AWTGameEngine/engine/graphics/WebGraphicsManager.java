@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSException;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.helpers.FXHelper;
 import pl.AWTGameEngine.objects.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
@@ -36,14 +37,19 @@ public class WebGraphicsManager {
                 object.getIdentifier(), object.getRotation().getX()));
     }
 
-    public void execute(String script) {
-        Platform.runLater(() -> {
+    public String execute(String script) {
+        Object result = FXHelper.synchronizedCall(() -> {
             try {
-                webView.getEngine().executeScript(script);
+                return webView.getEngine().executeScript(script);
             } catch(JSException e) {
                 Logger.exception("Cannot execute script", e);
             }
+            return null;
         });
+        if(result == null) {
+            return null;
+        }
+        return result.toString();
     }
 
     public WebView getWebView() {
