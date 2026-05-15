@@ -85,13 +85,15 @@ public class Logger {
     public static void exception(String message, Exception exception) {
         String title = exception.getClass().getSimpleName() + ": " + exception.getMessage();
         message += "\n┌" + TextUtils.getCharacters('─', "", TABLE_SIZE - 2) + "┐\n"; // top
-        message += "│ " + title + TextUtils.getSpaces(title, TABLE_SIZE - 4) + " │";
+        message += "│ " + title + ((title.length() <= TABLE_SIZE - 4) ? (TextUtils.getSpaces(title, TABLE_SIZE - 4) + " │") : "");
         StringBuilder messageBuilder = new StringBuilder(message);
         for(StackTraceElement element : exception.getStackTrace()) {
             messageBuilder.append("\n│     ");
             messageBuilder.append(element.toString());
-            messageBuilder.append(TextUtils.getSpaces(element.toString(), TABLE_SIZE - 8));
-            messageBuilder.append(" │");
+            if(TABLE_SIZE - 8 >= element.toString().length()) {
+                messageBuilder.append(TextUtils.getSpaces(element.toString(), TABLE_SIZE - 8));
+                messageBuilder.append(" │");
+            }
         }
         messageBuilder.append("\n└");
         messageBuilder.append(TextUtils.getCharacters('─', "", TABLE_SIZE - 2));
