@@ -25,18 +25,22 @@ public class Logger {
     }
 
     public static void info(String message) {
-        log(1, message, "", ConsoleColor.RESET);
+        log(1, "[INFO]", ConsoleColor.GREEN, message, ConsoleColor.RESET);
+    }
+
+    private static void julInfo(String message) {
+        log(1, "[JUL]", ConsoleColor.CYAN, message, ConsoleColor.RESET);
     }
 
     public static void error(String message) {
-        log(2, message, "[ERROR] ", ConsoleColor.RED);
+        log(2, "[ERROR]", ConsoleColor.RED, message, ConsoleColor.RED);
     }
 
     public static void warning(String message) {
-        log(3, message, "[WARN] ", ConsoleColor.YELLOW);
+        log(3, "[WARN]", ConsoleColor.YELLOW, message, ConsoleColor.YELLOW);
     }
 
-    public static void log(int level, String message, String prefix, ConsoleColor color) {
+    public static void log(int level, String prefix, ConsoleColor prefixColor, String message, ConsoleColor color) {
         if(Logger.level < level) {
             return;
         }
@@ -51,8 +55,9 @@ public class Logger {
             className = " [" + split[split.length - 1] + "]";
             className = TextUtils.getSpaces(className, 20) + className;
         }
+        prefix = prefix + TextUtils.getSpaces(prefix, 8);
         Calendar calendar = Calendar.getInstance();
-        message = "[" +
+        String output = "[" +
                 parseNumber(calendar.get(Calendar.DAY_OF_MONTH)) + "-" +
                 parseNumber(calendar.get(Calendar.MONTH) + 1) + "-" +
                 calendar.get(Calendar.YEAR) + " " +
@@ -60,11 +65,10 @@ public class Logger {
                 parseNumber(calendar.get(Calendar.MINUTE)) + ":" +
                 parseNumber(calendar.get(Calendar.SECOND)) + ":" +
                 parseThreeNumber(calendar.get(Calendar.MILLISECOND)) + "]" +
-                className + " " + prefix +
-                message + "\n";
+                className + " ";
         if(logFile) {
             try(FileWriter writer = new FileWriter(getLogFile(), append)) {
-                writer.write(message);
+                writer.write(output + prefix + message + "\n");
             } catch(IOException e) {
                 System.out.println("Exception while saving log: " + message);
                 e.printStackTrace();
@@ -73,7 +77,7 @@ public class Logger {
                 append = true;
             }
         }
-        System.out.print("\r" + color.value + message + ConsoleColor.RESET.value);
+        System.out.print("\r" + output + prefixColor.value + prefix + color.value + message + "\n" + ConsoleColor.RESET.value);
         CommandConsole.pass();
     }
 
@@ -162,7 +166,7 @@ public class Logger {
         rootLogger.addHandler(new Handler() {
             @Override
             public void publish(LogRecord record) {
-                Logger.info(ConsoleColor.CYAN.value + "[JUL] " + ConsoleColor.RESET.value + record.getMessage());
+                Logger.julInfo(record.getMessage());
             }
 
             @Override
