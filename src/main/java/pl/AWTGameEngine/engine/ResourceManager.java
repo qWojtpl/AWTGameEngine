@@ -1,12 +1,14 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.Command;
-import pl.AWTGameEngine.exceptions.ResourceSecurityException;
+import pl.AWTGameEngine.exceptions.resources.ResourceNotFoundException;
+import pl.AWTGameEngine.exceptions.resources.ResourceSecurityException;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.Sprite;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
@@ -66,7 +68,7 @@ public class ResourceManager extends CommandConsole.ParentCommand {
         try {
             InputStream stream = getStream(name);
             if(stream == null) {
-                throw new Exception("Stream is null. Cannot find this resource.");
+                throw new ResourceNotFoundException();
             }
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             List<String> lines = new ArrayList<>();
@@ -77,7 +79,7 @@ public class ResourceManager extends CommandConsole.ParentCommand {
             resources.put(name, lines);
             stream.close();
             return lines;
-        } catch(Exception e) {
+        } catch(ResourceNotFoundException | IOException e) {
             Logger.exception("Cannot get file resource: " + name, e);
         }
         return null;
@@ -94,14 +96,14 @@ public class ResourceManager extends CommandConsole.ParentCommand {
         try {
             InputStream stream = getStream(name);
             if(stream == null) {
-                throw new Exception("Stream is null. Cannot find this resource.");
+                throw new ResourceNotFoundException();
             }
             BufferedImage img = ImageIO.read(stream);
             Sprite sprite = new Sprite(realPath, img);
             spriteResources.put(name, sprite);
             stream.close();
             return sprite;
-        } catch(Exception e) {
+        } catch(ResourceNotFoundException | IOException e) {
             Logger.exception("Cannot get sprite from resource: " + name, e);
         }
         return null;
@@ -113,13 +115,13 @@ public class ResourceManager extends CommandConsole.ParentCommand {
         try {
             InputStream stream = getStream(name);
             if(stream == null) {
-                throw new Exception("Stream is null. Cannot find this resource.");
+                throw new ResourceNotFoundException();
             }
             BufferedInputStream bufferedStream = new BufferedInputStream(stream);
             AudioClip audioClip = new AudioClip(name, AudioSystem.getAudioInputStream(bufferedStream));
             audioClips.add(audioClip);
             return audioClip;
-        } catch(Exception e) {
+        } catch(ResourceNotFoundException | IOException | UnsupportedAudioFileException e) {
             Logger.exception("Cannot get audio from resource: " + name, e);
         }
         return null;
@@ -131,10 +133,10 @@ public class ResourceManager extends CommandConsole.ParentCommand {
         try {
             InputStream stream = getStream(name);
             if(stream == null) {
-                throw new Exception("Stream is null. Cannot find this resource.");
+                throw new ResourceNotFoundException();
             }
             return stream;
-        } catch(Exception e) {
+        } catch(ResourceNotFoundException | IOException e) {
             Logger.exception("Cannot get stream from resource: " + name, e);
         }
         return null;
@@ -148,11 +150,11 @@ public class ResourceManager extends CommandConsole.ParentCommand {
         try {
             URL url = ResourceManager.class.getResource(name);
             if(url == null) {
-                throw new Exception("URL is null. Cannot find this resource.");
+                throw new ResourceNotFoundException();
             }
             urlResources.put(name, url);
             return url;
-        } catch(Exception e) {
+        } catch(ResourceNotFoundException e) {
             Logger.exception("Cannot get URL from resource: " + name, e);
         }
         return null;

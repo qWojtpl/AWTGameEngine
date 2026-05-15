@@ -7,6 +7,12 @@ import java.util.concurrent.FutureTask;
 
 public class FXHelper {
 
+    /**
+     * Used to execute task on JavaFX thread, but synchronized - invoking thread
+     * will wait for the result of the task.
+     * @param task  Task to be executed
+     * @return      Result of a task
+     */
     public static <T> T synchronizedCall(Callable<T> task) {
         if(Platform.isFxApplicationThread()) {
             try {

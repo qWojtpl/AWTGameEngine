@@ -13,6 +13,7 @@ import java.util.logging.*;
 @SuppressWarnings("CallToPrintStackTrace")
 public class Logger {
 
+    private static final int TABLE_SIZE = 100;
     private static int level = 0;
     private static boolean append = false;
     private static boolean logFile = false;
@@ -82,12 +83,19 @@ public class Logger {
     }
 
     public static void exception(String message, Exception exception) {
-        message += "\n" + exception.getClass().getSimpleName() + ": " + exception.getMessage();
+        String title = exception.getClass().getSimpleName() + ": " + exception.getMessage();
+        message += "\n┌" + TextUtils.getCharacters('─', "", TABLE_SIZE - 2) + "┐\n"; // top
+        message += "│ " + title + TextUtils.getSpaces(title, TABLE_SIZE - 4) + " │";
         StringBuilder messageBuilder = new StringBuilder(message);
         for(StackTraceElement element : exception.getStackTrace()) {
-            messageBuilder.append("\n\t");
+            messageBuilder.append("\n│     ");
             messageBuilder.append(element.toString());
+            messageBuilder.append(TextUtils.getSpaces(element.toString(), TABLE_SIZE - 8));
+            messageBuilder.append(" │");
         }
+        messageBuilder.append("\n└");
+        messageBuilder.append(TextUtils.getCharacters('─', "", TABLE_SIZE - 2));
+        messageBuilder.append("┘");
         error(messageBuilder.toString());
     }
 

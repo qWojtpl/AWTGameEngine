@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.exceptions;
+package pl.AWTGameEngine.exceptions.resources;
 
 public class ResourceSecurityException extends SecurityException {
 

@@ -116,7 +116,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             );
 
             if(ro.isXrayRender()) {
-                int xray = panelGL.getInitializer().getProgram(gl, "shaders/xray");
+                int xray = panelGL.getManager().getProgram(gl, "shaders/xray");
                 gl.glUseProgram(xray);
                 gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "viewProj"), 1, false, viewProj, 0);
                 gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "model"), 1, false, model, 0);
@@ -127,7 +127,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                 gl.glDepthMask(true);
             }
 
-            int program = panelGL.getInitializer().getProgram(gl, ro.getShader());
+            int program = panelGL.getManager().getProgram(gl, ro.getShader());
 
             gl.glUseProgram(program);
 
@@ -137,7 +137,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             gl.glUniformMatrix4fv(vpLoc, 1, false, viewProj, 0);
             gl.glUniformMatrix4fv(modelLoc, 1, false, model, 0);
 
-            if (ro.getSprite() != null) {
+            if(ro.getSprite() != null) {
                 if(textures.getOrDefault(ro.getSprite(), null) == null) {
                     createTexture(ro.getSprite());
                 }

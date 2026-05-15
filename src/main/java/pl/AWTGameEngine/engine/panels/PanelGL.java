@@ -4,7 +4,7 @@ import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.OpenGLInitializer;
+import pl.AWTGameEngine.engine.OpenGLManager;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
@@ -26,7 +26,7 @@ public class PanelGL extends Panel implements PanelObject {
     private GLProfile profile;
     private GLCapabilities capabilities;
     private GLCanvas gljPanel;
-    private OpenGLInitializer initializer;
+    private OpenGLManager manager;
 
     public PanelGL(Scene scene, int width, int height) {
         this.scene = scene;
@@ -73,8 +73,8 @@ public class PanelGL extends Panel implements PanelObject {
         return this.gljPanel;
     }
 
-    public OpenGLInitializer getInitializer() {
-        return this.initializer;
+    public OpenGLManager getManager() {
+        return this.manager;
     }
 
     @Override
@@ -121,8 +121,8 @@ public class PanelGL extends Panel implements PanelObject {
         capabilities.setDepthBits(24);
         gljPanel = new GLCanvas(capabilities);
         gljPanel.setSize(width, height);
-        initializer = new OpenGLInitializer(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D);
-        gljPanel.addGLEventListener(initializer);
+        manager = new OpenGLManager(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D);
+        gljPanel.addGLEventListener(manager);
         gljPanel.setFocusable(false);
         Logger.info("OpenGL initialized.");
     }

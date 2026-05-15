@@ -12,7 +12,7 @@ import pl.AWTGameEngine.windows.Window;
 
 import java.util.HashMap;
 
-public class OpenGLInitializer implements GLEventListener {
+public class OpenGLManager implements GLEventListener {
 
     private final Scene scene;
     private final Window window;
@@ -21,7 +21,7 @@ public class OpenGLInitializer implements GLEventListener {
     private final GraphicsManagerGL graphicsManagerGL;
     private final HashMap<String, Integer> programs = new HashMap<>();
 
-    public OpenGLInitializer(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL) {
+    public OpenGLManager(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL) {
         this.scene = scene;
         this.window = (Window) scene.getWindow();
         this.camera = camera;
