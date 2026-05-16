@@ -161,6 +161,9 @@ public class WindowsManager extends CommandConsole.ParentCommand {
             window.getPhysicsLoop().kill(() -> {
                 window.unloadScenes();
                 PhysXManager.getInstance().cleanup();
+                window.getNetLoop().kill();
+                window.getRenderLoop().kill();
+                window.getUpdateLoop().kill();
                 Logger.info("Stopped app.");
                 System.exit(0);
             });

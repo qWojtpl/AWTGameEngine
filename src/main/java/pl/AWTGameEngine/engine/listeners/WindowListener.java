@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.windows.BaseWindow;
 
@@ -22,6 +23,7 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
     }
 
     private void removeWindow() {
+        Logger.warning("Received signal to close the window");
         opened = false;
         Dependencies.getWindowsManager().close(window);
     }

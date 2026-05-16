@@ -29,7 +29,7 @@ public abstract class BaseLoop extends Thread {
     @Override
     public void run() {
         new Thread(() -> {
-            while (window.getWindowListener().isOpened() && !killed) {
+            while(!killed) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {
@@ -89,13 +89,16 @@ public abstract class BaseLoop extends Thread {
     protected abstract void everySecondIteration();
 
     public void kill() {
+        if(this.killed) {
+            return;
+        }
         Logger.warning(loopName + " was killed.");
         this.killed = true;
     }
 
     public void kill(Runnable operation) {
         killOperation = operation;
-        this.killed = true;
+        kill();
     }
 
     public void addNextFrameOperation(Runnable operation) {
