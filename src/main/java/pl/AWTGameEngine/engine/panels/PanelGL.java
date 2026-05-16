@@ -114,6 +114,11 @@ public class PanelGL extends Panel implements PanelObject {
         //todo
     }
 
+    @Override
+    public void onSceneLoad() {
+
+    }
+
     private void initOpenGL(int width, int height) {
         Logger.info("Initializing OpenGL...");
         profile = GLProfile.get(GLProfile.GL4bc);

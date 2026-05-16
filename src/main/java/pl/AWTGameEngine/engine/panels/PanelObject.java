@@ -20,5 +20,6 @@ public interface PanelObject {
     void setCursor(Cursor cursor);
     void setOpaque(boolean opaque);
     void printToGraphics(Graphics2D g);
+    void onSceneLoad();
 
 }

@@ -90,8 +90,14 @@ public class SceneLoader {
             Logger.exception("Cannot load scene " + scenePath, e);
             return;
         }
+        newScene.getPanel().onSceneLoad();
         Logger.info("Scene " + scenePath + " loaded.");
         newScene.triggerAfterLoad();
+        if(!nestedScene) {
+            if(!newScene.getLoadAfterLoad().isEmpty()) {
+                Logger.info("All scenes loaded.");
+            }
+        }
     }
 
     public void loadSceneBinary(String scenePath, RenderEngine renderEngine, boolean nestedScene) {

@@ -107,4 +107,9 @@ public class PanelFX extends JFXPanel implements PanelObject {
         super.print(g);
     }
 
+    @Override
+    public void onSceneLoad() {
+
+    }
+
 }

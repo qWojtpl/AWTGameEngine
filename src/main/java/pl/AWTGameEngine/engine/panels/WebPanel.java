@@ -35,13 +35,16 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
         PhysXManager.getInstance().createScene(scene);
 
+    }
+
+    @Override
+    public void onSceneLoad() {
         if(window.isServerWindow()) {
             return;
         }
 
         FXHelper.synchronizedCall(() -> {
             this.webView = new WebView();
-
             // transparent
             javafx.scene.Scene fxScene = new javafx.scene.Scene(webView, new javafx.scene.paint.Color(0, 0, 0, 0));
             webView.setStyle("-fx-background-color: transparent;");
@@ -63,12 +66,13 @@ public class WebPanel extends JFXPanel implements PanelObject {
                 getWindow().getKeyListener().asKeyRelease(event.getCode().getCode());
             });
 
+
             setScene(fxScene);
+
             loadWebView();
 
             return null;
         });
-
     }
 
     private void loadWebView() {

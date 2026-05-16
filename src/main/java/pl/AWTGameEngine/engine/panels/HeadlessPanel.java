@@ -78,4 +78,9 @@ public class HeadlessPanel implements PanelObject {
 
     }
 
+    @Override
+    public void onSceneLoad() {
+
+    }
+
 }

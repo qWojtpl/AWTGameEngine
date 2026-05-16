@@ -78,4 +78,9 @@ public class DefaultPanel extends JPanel implements PanelObject {
         super.print(g);
     }
 
+    @Override
+    public void onSceneLoad() {
+
+    }
+
 }
