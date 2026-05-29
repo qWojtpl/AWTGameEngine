@@ -3,6 +3,16 @@ package pl.AWTGameEngine.objects;
 import java.util.ArrayList;
 import java.util.List;
 
+/** NetBlock is used as a frame to transport data through the network.<br>
+ *  Structure is simple:
+ *  <code>IDENTIFIER;COMPONENT;DATA</code><br>
+ *  Where:<br>
+ *  <code>IDENTIFIER</code> is GameObject's identifier,<br>
+ *  <code>COMPONENT</code> is component's name (/w package),<br>
+ *  <code>DATA is</code> data which is being sent<br>
+ *  <code>╚</code> is a standard delimiter for data, which allows to send more than one
+ *  information to component - use method <code>formData</code> to add delimiters
+ */
 public class NetBlock {
 
     private final String identifier;

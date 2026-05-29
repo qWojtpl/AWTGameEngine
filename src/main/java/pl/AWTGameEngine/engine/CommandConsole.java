@@ -179,8 +179,15 @@ public class CommandConsole {
     public static void runScanner() {
         new Thread(() ->  {
             while(true) {
-                Scanner scanner = new Scanner(System.in);
-                execute(scanner.nextLine());
+                String command = "";
+                try {
+                    Scanner scanner = new Scanner(System.in);
+                    command = scanner.nextLine();
+                    execute(command);
+                } catch(Exception e) {
+                    Logger.exception("Exception while executing a command " + command, e);
+                }
+
             }
         }).start();
     }

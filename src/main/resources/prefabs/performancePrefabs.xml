@@ -1,6 +1,6 @@
 <prefabs>
     <prefab id="box">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D spriteSource="hdr_sprites/test3.gif" />
         <RigidBody.Dynamic />
     </prefab>
     <prefab id="player">

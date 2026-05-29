@@ -18,6 +18,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Window extends Frame implements BaseWindow {
 
@@ -31,7 +32,7 @@ public class Window extends Frame implements BaseWindow {
     private MouseListener mouseListener;
     private KeyListener keyListener;
     private WindowListener windowListener;
-    private final HashMap<Scene, Boolean> scenes = new HashMap<>();
+    private final ConcurrentHashMap<Scene, Boolean> scenes = new ConcurrentHashMap<>();
     private SceneLoader sceneLoader;
     private boolean fullScreen;
     private final Font font;

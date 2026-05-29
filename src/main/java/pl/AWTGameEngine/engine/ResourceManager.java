@@ -1,12 +1,16 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.Command;
+import pl.AWTGameEngine.exceptions.resources.GifReaderNotFoundException;
 import pl.AWTGameEngine.exceptions.resources.ResourceNotFoundException;
 import pl.AWTGameEngine.exceptions.resources.ResourceSecurityException;
+import pl.AWTGameEngine.objects.AnimatedSprite;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.Sprite;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
@@ -17,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 @Command("res")
@@ -98,8 +103,26 @@ public class ResourceManager extends CommandConsole.ParentCommand {
             if(stream == null) {
                 throw new ResourceNotFoundException();
             }
-            BufferedImage img = ImageIO.read(stream);
-            Sprite sprite = new Sprite(realPath, img);
+            Sprite sprite;
+            if(name.endsWith(".gif")) {
+                Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("gif");
+                if(!readers.hasNext()) {
+                    throw new GifReaderNotFoundException();
+                }
+                ImageReader reader = readers.next();
+                ImageInputStream imageStream = ImageIO.createImageInputStream(stream);
+                reader.setInput(imageStream);
+                int count = reader.getNumImages(true);
+                List<Sprite> sprites = new ArrayList<>();
+                for(int i = 0; i < count; i++) {
+                    sprites.add(new Sprite(realPath + ":" + i, reader.read(i)));
+                }
+                sprite = new AnimatedSprite(realPath, sprites);
+                imageStream.close();
+            } else {
+                BufferedImage img = ImageIO.read(stream);
+                sprite = new Sprite(realPath, img);
+            }
             spriteResources.put(name, sprite);
             stream.close();
             return sprite;

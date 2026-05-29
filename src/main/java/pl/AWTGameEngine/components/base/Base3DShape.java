@@ -4,10 +4,7 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.objects.ColorObject;
-import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.NetBlock;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.*;
 
 import java.util.Objects;
 
@@ -53,8 +50,11 @@ public abstract class Base3DShape extends NetComponent {
             updateRotation = false;
         }
         if(updateSprite) {
-            g.updateSprite(getObject().getIdentifier(), shapeType, sprite);
-            updateSprite = false;
+            if(sprite instanceof AnimatedSprite) {
+                g.updateSprite(getObject().getIdentifier(), shapeType, ((AnimatedSprite) sprite).requestSprite());
+            } else {
+                g.updateSprite(getObject().getIdentifier(), shapeType, sprite);
+            }
         }
         if(updateShader) {
             g.updateShader(getObject().getIdentifier(), shapeType, shader);

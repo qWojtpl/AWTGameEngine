@@ -7,6 +7,8 @@ import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.deserializers.PrefabDeserializer;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.panels.PanelObject;
+import pl.AWTGameEngine.exceptions.PrefabAlreadyExistsException;
+import pl.AWTGameEngine.exceptions.scenes.GameObjectAddToSceneException;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Prefab;
 import pl.AWTGameEngine.objects.TransformSet;
@@ -61,7 +63,7 @@ public class Scene {
 
     public void addPrefab(Prefab prefab) {
         if(prefabs.containsKey(prefab.getIdentifier())) {
-            throw new RuntimeException("Prefab with identifier " + prefab.getIdentifier() + " already exists.");
+            throw new PrefabAlreadyExistsException(prefab.getIdentifier());
         }
         this.prefabs.put(prefab.getIdentifier(), prefab);
     }
@@ -93,19 +95,19 @@ public class Scene {
         if(object.getIdentifier().contains("$")) {
             String errorMsg = "Cannot add object with identifier which contains $ sign - this sign is reserved.";
             Logger.error(errorMsg);
-            throw new RuntimeException(errorMsg);
+            throw new GameObjectAddToSceneException(errorMsg);
         }
         if(gameObjects.containsKey(object.getIdentifier())) {
             String errorMsg = "Cannot add object with identifier "
                     + object.getIdentifier() + ", object with this identifier already exists in this scene.";
             Logger.error(errorMsg);
-            throw new RuntimeException(errorMsg);
+            throw new GameObjectAddToSceneException(errorMsg);
         }
         if(!this.equals(object.getScene())) {
             String errorMsg = "Cannot add object with identifier"
-                    + object.getIdentifier() + ", object's scene is not set to this scene";
+                    + object.getIdentifier() + ", object's scene is not set to this scene.";
             Logger.error(errorMsg);
-            throw new RuntimeException(errorMsg);
+            throw new GameObjectAddToSceneException(errorMsg);
         }
         gameObjects.put(object.getIdentifier(), object);
     }

@@ -46,7 +46,7 @@ public abstract class BaseLoop extends Thread {
                 }
             }
         }, loopName + "-everySecond").start();
-        while(window.getWindowListener().isOpened() && !killed) {
+        while(!killed) {
             try {
                 if(getTargetFps() != 0) {
                     if(getTargetFps() / 2 < getActualFps()) {
