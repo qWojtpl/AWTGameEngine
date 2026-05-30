@@ -8,6 +8,7 @@ import pl.AWTGameEngine.components.Box3D;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.CameraFollow;
+import pl.AWTGameEngine.engine.WaitForSeconds;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.TransformSet;
 

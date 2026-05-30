@@ -22,9 +22,9 @@ public class GameObjectDeserializer {
         if(!getValue(node, "position").equals("0")) {
             object.setPosition(new TransformSet().deserialize(getValue(node, "position")));
         } else {
-            object.setX(Double.parseDouble(getValue(node, "x")));
-            object.setY(Double.parseDouble(getValue(node, "y")));
-            object.setZ(Double.parseDouble(getValue(node, "z")));
+            object.getPosition().setX(Double.parseDouble(getValue(node, "x")));
+            object.getPosition().setY(Double.parseDouble(getValue(node, "y")));
+            object.getPosition().setZ(Double.parseDouble(getValue(node, "z")));
         }
         if(!getValue(node, "size").equals("0")) {
             object.setSize(new TransformSet().deserialize(getValue(node, "size")));

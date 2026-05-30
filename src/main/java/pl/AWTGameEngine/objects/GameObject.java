@@ -30,6 +30,18 @@ public class GameObject {
         if(RenderEngine.WEB.equals(getScene().getRenderEngine())) {
             this.addComponent(new WebHandler(this));
         }
+        setupPositionNotifyAction(position);
+    }
+
+    private void setupPositionNotifyAction(TransformSet position) {
+        position.setNotifyAction(() -> {
+            for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
+                component.onUpdatePosition(this.position.getX(), this.position.getY());
+            }
+            for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
+                component.onUpdatePosition(this.position.getX(), this.position.getY(), this.position.getZ());
+            }
+        });
     }
 
     public void addComponent(ObjectComponent component) {
@@ -132,7 +144,7 @@ public class GameObject {
         double direction = delta < 0 ? -1 : 1;
         for(double i = 0; i < Math.abs(delta); i++) {
             if(tryMoveX(direction)) {
-                setX(this.position.getX() + direction);
+                this.position.setX(this.position.getX() + direction);
                 continue;
             }
             return;
@@ -156,7 +168,7 @@ public class GameObject {
         double direction = delta < 0 ? -1 : 1;
         for(double i = 0; i < Math.abs(delta); i++) {
             if(tryMoveY(direction)) {
-                setY(this.position.getY() + direction);
+                this.position.setY(this.position.getY() + direction);
                 continue;
             }
             return;
@@ -245,7 +257,7 @@ public class GameObject {
 
     @SaveState(name = "position")
     public TransformSet getPosition() {
-        return this.position.clone();
+        return this.position;
     }
 
     @SaveState(name = "rotation")
@@ -316,65 +328,10 @@ public class GameObject {
         this.active = active;
     }
 
-    public void setX(double x) {
-        double delta = x - this.position.getX();
-        if(delta == 0) {
-            return;
-        }
-        this.position.setX(x);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
-            component.onUpdatePosition(x, this.position.getY());
-        }
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
-            component.onUpdatePosition(x, this.position.getY(), this.position.getZ());
-        }
-    }
-
-    public void setX(String x) {
-        setX(Integer.parseInt(x));
-    }
-
-    public void setY(double y) {
-        double delta = y - this.position.getY();
-        if(delta == 0) {
-            return;
-        }
-        this.position.setY(y);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
-            component.onUpdatePosition(this.position.getX(), y);
-        }
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
-            component.onUpdatePosition(this.position.getX(), y, this.position.getZ());
-        }
-    }
-
-    public void setY(String y) {
-        setY(Integer.parseInt(y));
-    }
-
-    public void setZ(double z) {
-        double delta = z - this.position.getZ();
-        if(delta == 0) {
-            return;
-        }
-        this.position.setZ(z);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
-            component.onUpdatePosition(this.position.getX(), this.position.getY(), z);
-        }
-    }
-
-    public void setZ(String z) {
-        setZ(Integer.parseInt(z));
-    }
-
     public void setPosition(TransformSet transform) {
-        this.position = transform.clone();
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
-            component.onUpdatePosition(this.position.getX(), this.position.getY());
-        }
-        for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
-            component.onUpdatePosition(this.position.getX(), this.position.getY(), this.position.getZ());
-        }
+        this.position = transform;
+        setupPositionNotifyAction(transform); // attach notify
+        transform.getNotifyAction().run(); // run notify
     }
 
     public void setRotation(TransformSet transform) {

@@ -7,6 +7,7 @@ public class TransformSet {
     private double x = 0;
     private double y = 0;
     private double z = 0;
+    private Runnable notifyAction;
 
     public TransformSet() {
 
@@ -35,6 +36,7 @@ public class TransformSet {
         this.x = 0;
         this.y = 0;
         this.z = 0;
+        runNotify();
     }
 
     public double getX() {
@@ -51,16 +53,19 @@ public class TransformSet {
 
     public TransformSet setX(double x) {
         this.x = x;
+        runNotify();
         return this;
     }
 
     public TransformSet setY(double y) {
         this.y = y;
+        runNotify();
         return this;
     }
 
     public TransformSet setZ(double z) {
         this.z = z;
+        runNotify();
         return this;
     }
 
@@ -87,12 +92,13 @@ public class TransformSet {
     public TransformSet deserialize(String values) {
         String[] split = values.split(",");
         if(split.length >= 2) {
-            setX(Double.parseDouble(split[0]));
-            setY(Double.parseDouble(split[1]));
+            this.x = Double.parseDouble(split[0]);
+            this.y = Double.parseDouble(split[1]);
         }
         if(split.length == 3) {
-            setZ(Double.parseDouble(split[2]));
+            this.z = Double.parseDouble(split[2]);
         }
+        runNotify();
         return this;
     }
 
@@ -114,8 +120,27 @@ public class TransformSet {
         return this.x == transformSet.getX() && this.y == transformSet.getY() && this.z == transformSet.getZ();
     }
 
-    public static TransformSet fromPhysX(PxVec3 pxVec3) {
-        return new TransformSet(pxVec3.getX(), pxVec3.getY(), pxVec3.getZ());
+    public TransformSet fromPhysX(PxVec3 pxVec3) {
+        this.x = pxVec3.getX();
+        this.y = pxVec3.getY();
+        this.z = pxVec3.getZ();
+        runNotify();
+        return this;
+    }
+
+    public Runnable getNotifyAction() {
+        return this.notifyAction;
+    }
+
+    public void setNotifyAction(Runnable action) {
+        this.notifyAction = action;
+    }
+
+    private void runNotify() {
+        if(this.notifyAction == null) {
+            return;
+        }
+        this.notifyAction.run();
     }
 
 }

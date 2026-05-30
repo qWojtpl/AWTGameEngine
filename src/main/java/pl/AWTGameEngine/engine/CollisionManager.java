@@ -52,9 +52,9 @@ public class CollisionManager extends PxSimulationEventCallbackImpl {
             for (int j = 0; j < contactPoints; j++) {
                 PxContactPairPoint cp = contacts.get(j);
                 points.add(new ContactPoint(
-                        TransformSet.fromPhysX(cp.getPosition()),
-                        TransformSet.fromPhysX(cp.getNormal()),
-                        TransformSet.fromPhysX(cp.getImpulse()),
+                        new TransformSet().fromPhysX(cp.getPosition()),
+                        new TransformSet().fromPhysX(cp.getNormal()),
+                        new TransformSet().fromPhysX(cp.getImpulse()),
                         cp.getSeparation()
                 ));
             }

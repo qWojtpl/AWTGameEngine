@@ -114,7 +114,7 @@ public abstract class RigidBody extends ObjectComponent {
 
     protected void updateCachedPosition(PxVec3 position) {
         if(position.getX() != getObject().getPosition().getX() || position.getY() != getObject().getPosition().getY() || position.getZ() != getObject().getPosition().getZ()) {
-            getObject().setPosition(TransformSet.fromPhysX(position)/*, this*/);
+            getObject().getPosition().fromPhysX(position); //TODO: block this component notify
         }
     }
 
@@ -210,7 +210,7 @@ public abstract class RigidBody extends ObjectComponent {
 
         @SaveState(name = "linearVelocity")
         public TransformSet getLinearVelocity() {
-            return TransformSet.fromPhysX(rigidDynamic.getLinearVelocity());
+            return new TransformSet().fromPhysX(rigidDynamic.getLinearVelocity());
         }
 
         public void setLinearVelocity(TransformSet linearVelocity) {
@@ -230,7 +230,7 @@ public abstract class RigidBody extends ObjectComponent {
 
         @SaveState(name = "angularVelocity")
         public TransformSet getAngularVelocity() {
-            return TransformSet.fromPhysX(rigidDynamic.getAngularVelocity());
+            return new TransformSet().fromPhysX(rigidDynamic.getAngularVelocity());
         }
 
         public void setAngularVelocity(TransformSet angularVelocity) {

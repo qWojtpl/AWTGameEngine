@@ -88,7 +88,7 @@ public class ScrollComponent extends ObjectComponent {
 
     private void updatePosition() {
         if(!horizontal) {
-            scroll.setX(getObject().getX());
+            scroll.getPosition().setX(getObject().getX());
             scroll.setSizeX(getObject().getSizeX());
             if(scrollSize == 0) {
                 scroll.setSizeY(0);
@@ -105,9 +105,9 @@ public class ScrollComponent extends ObjectComponent {
                 y = getObject().getY() + getObject().getSizeY() - scroll.getSizeY();
                 value = 1;
             }
-            scroll.setY(y);
+            scroll.getPosition().setY(y);
         } else {
-            scroll.setY(getObject().getY());
+            scroll.getPosition().setY(getObject().getY());
             if(scrollSize == 0) {
                 scroll.setSizeX(0);
             } else {
@@ -124,7 +124,7 @@ public class ScrollComponent extends ObjectComponent {
                 x = getObject().getX() + getObject().getSizeX() - scroll.getSizeX();
                 value = 1;
             }
-            scroll.setX(x);
+            scroll.getPosition().setX(x);
         }
     }
 
