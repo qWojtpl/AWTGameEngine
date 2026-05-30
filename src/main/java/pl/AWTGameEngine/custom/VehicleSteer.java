@@ -53,6 +53,10 @@ public class VehicleSteer extends ObjectComponent {
 
     @Override
     public void onPhysicsUpdate() {
+        if(vehicle == null) {
+            return;
+        }
+
         vehicle.getPxVehicle().getCommandState().setThrottle(torque);
         vehicle.getPxVehicle().getCommandState().setSteer(steer);
         vehicle.getPxVehicle().getCommandState().setNbBrakes(brake);

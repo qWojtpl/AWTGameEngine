@@ -57,6 +57,11 @@ public class Box3D extends Base3DShape {
 
     @Override
     protected void removeShape() {
+
+        if(graphicsManager3D == null) {
+            return;
+        }
+
         graphicsManager3D.removeBox(getObject().getIdentifier());
     }
 
