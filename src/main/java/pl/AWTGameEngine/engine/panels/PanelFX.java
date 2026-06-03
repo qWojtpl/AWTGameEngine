@@ -24,14 +24,14 @@ public class PanelFX extends JFXPanel implements PanelObject {
     private final javafx.scene.Group rootGroup;
     private final javafx.scene.Scene fxScene;
 
-    public PanelFX(Scene scene, int width, int height) {
+    public PanelFX(Scene scene) {
         this.scene = scene;
         this.window = (Window) scene.getWindow();
         this.camera = new Camera(this);
         this.graphicsManager3D = new GraphicsManagerFX(this);
         this.physXManager = PhysXManager.getInstance();
         this.rootGroup = new Group(new AmbientLight());
-        this.fxScene = new javafx.scene.Scene(rootGroup, width, height, true, SceneAntialiasing.BALANCED);
+        this.fxScene = new javafx.scene.Scene(rootGroup, getWindow().getBaseWidth(), getWindow().getBaseHeight(), true, SceneAntialiasing.BALANCED);
         physXManager.init();
         physXManager.createScene(scene);
         initListeners();

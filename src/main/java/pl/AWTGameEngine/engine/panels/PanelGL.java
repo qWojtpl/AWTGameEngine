@@ -28,7 +28,7 @@ public class PanelGL extends Panel implements PanelObject {
     private GLCanvas gljPanel;
     private OpenGLManager manager;
 
-    public PanelGL(Scene scene, int width, int height) {
+    public PanelGL(Scene scene) {
         this.scene = scene;
         this.window = (Window) scene.getWindow();
         this.camera = new Camera(this);
@@ -36,9 +36,9 @@ public class PanelGL extends Panel implements PanelObject {
         physXManager.createScene(scene);
         if(!window.isServerWindow()) {
             this.graphicsManager3D = new GraphicsManagerGL(this);
-            initOpenGL(width, height);
+            initOpenGL(getWindow().getBaseWidth(), getWindow().getBaseHeight());
         }
-        printBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        printBuffer = new BufferedImage(getWindow().getBaseWidth(), getWindow().getBaseHeight(), BufferedImage.TYPE_INT_ARGB);
     }
 
     @Override

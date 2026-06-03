@@ -40,6 +40,11 @@ public class SceneLoader {
     }
 
     public void loadSceneFile(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
+/*        if(!nestedScene && window.getCurrentScene() != null) { //TODO: interview this, because may be bugged
+                window.unloadScenes();
+                loadSceneFile(scenePath, renderEngine, false);
+            return;
+        }*/
         Logger.info("Loading scene: " + scenePath);
         if(scenePath.endsWith(".class")) {
             loadSceneBinary(scenePath, renderEngine, nestedScene);
@@ -131,15 +136,13 @@ public class SceneLoader {
     }
 
     public PanelObject createPanel(Scene scene, RenderEngine renderEngine) {
+        Class<? extends PanelObject> panelClass = renderEngine.getPanelClass();
         PanelObject panel = null;
-        if (RenderEngine.DEFAULT.equals(renderEngine)) {
-            panel = new DefaultPanel(scene);
-        } else if (RenderEngine.WEB.equals(renderEngine)) {
-            panel = new WebPanel(scene);
-        } else if (RenderEngine.FX3D.equals(renderEngine)) {
-            panel = new PanelFX(scene, scene.getWindow().getBaseWidth(), scene.getWindow().getBaseHeight());
-        } else if (RenderEngine.OPENGL.equals(renderEngine)) {
-            panel = new PanelGL(scene, scene.getWindow().getBaseWidth(), scene.getWindow().getBaseHeight());
+        try {
+            panel = panelClass.getConstructor(Scene.class).newInstance(scene);
+            Logger.info("Panel created.");
+        } catch (Exception e) {
+            Logger.exception("Cannot create panel: ", e);
         }
         assert panel != null;
         panel.setSize(new Dimension(scene.getWindow().getBaseWidth(), scene.getWindow().getBaseHeight()));
