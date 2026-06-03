@@ -427,9 +427,9 @@ public class GameObject {
             if(getPosition().equals(cachedPosition) && getSize().equals(cachedSize) && getQuaternionRotation().equals(cachedRotation)) {
                 return new NetBlock();
             }
-            cachedPosition = getPosition();
-            cachedSize = getSize();
-            cachedRotation = getQuaternionRotation();
+            cachedPosition = getPosition().clone();
+            cachedSize = getSize().clone();
+            cachedRotation = getQuaternionRotation().clone();
             return new NetBlock(
                     getIdentifier(),
                     null, // null component points to GameObject synchronization
@@ -449,19 +449,19 @@ public class GameObject {
                 // (cl) create -> (srv) received -> (srv) send new -> server don't want a cache to exist in onPositionSynchronize,
                 // because it would be blocked, so if it's a new object, cache won't be initialized here
                 if(cachedPosition != null) {
-                    cachedPosition = newPosition;
+                    cachedPosition = newPosition.clone();
                 }
                 setPosition(newPosition);
             }
             if(!newSize.equals(cachedSize)) {
                 if(cachedSize != null) {
-                    cachedSize = newSize;
+                    cachedSize = newSize.clone();
                 }
                 setSize(newSize);
             }
             if(!newRotation.equals(cachedRotation)) {
                 if(cachedRotation != null) {
-                    cachedRotation = newRotation;
+                    cachedRotation = newRotation.clone();
                 }
                 setQuaternionRotation(newRotation);
             }
