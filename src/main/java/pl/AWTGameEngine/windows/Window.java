@@ -16,7 +16,6 @@ import pl.AWTGameEngine.scenes.SceneLoader;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 

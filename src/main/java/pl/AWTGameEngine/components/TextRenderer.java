@@ -1,13 +1,15 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.EventMethod;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
-import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.NetBlock;
 import pl.AWTGameEngine.objects.RenderOptions;
 
 import java.awt.*;
@@ -15,7 +17,7 @@ import java.awt.font.FontRenderContext;
 
 @DefaultComponent
 @WebComponent
-public class TextRenderer extends ObjectComponent {
+public class TextRenderer extends NetComponent {
 
     private String text = "Text";
     private ColorObject color = new ColorObject();
@@ -23,6 +25,7 @@ public class TextRenderer extends ObjectComponent {
     private HorizontalAlign horizontal = HorizontalAlign.LEFT;
     private VerticalAlign vertical = VerticalAlign.TOP;
     private boolean propertyChanged = false;
+    private boolean netPropertyChanged = false;
 
     public TextRenderer(GameObject object) {
         super(object);
@@ -98,6 +101,7 @@ public class TextRenderer extends ObjectComponent {
     public void setText(String text) {
         this.text = text;
         propertyChanged = true;
+        netPropertyChanged = true;
     }
 
     public void setColor(ColorObject color) {
@@ -106,6 +110,7 @@ public class TextRenderer extends ObjectComponent {
         }
         this.color = color;
         propertyChanged = true;
+        netPropertyChanged = true;
     }
 
     @FromXML
@@ -116,6 +121,7 @@ public class TextRenderer extends ObjectComponent {
     public void setSize(float size) {
         this.size = size;
         propertyChanged = true;
+        netPropertyChanged = true;
     }
 
     @FromXML
@@ -169,6 +175,31 @@ public class TextRenderer extends ObjectComponent {
                 color.serialize(),
                 size * getCamera().getMultiplier()));
         propertyChanged = false;
+    }
+
+    public NetBlock onSynchronize() {
+        netPropertyChanged = false;
+        return new NetBlock(getObject().getIdentifier(), "pl.AWTGameEngine.components.TextRenderer",
+                getText() + NetBlock.getDelimiter() + getColor() + NetBlock.getDelimiter() + getSize() + NetBlock.getDelimiter() +
+                getHorizontalAlign().toString() + NetBlock.getDelimiter() + getVerticalAlign().toString());
+    }
+
+    @EventMethod
+    public void onSynchronizeReceived(String data) {
+        String[] split = data.split(NetBlock.getDelimiter());
+        setText(split[0]);
+        setColor(split[1]);
+        setSize(split[2]);
+        setHorizontal(split[3]);
+        setVertical(split[4]);
+    }
+
+    public boolean canSynchronize() {
+        return netPropertyChanged;
+    }
+
+    public void clearNetCache() {
+        netPropertyChanged = true;
     }
 
     public enum HorizontalAlign {

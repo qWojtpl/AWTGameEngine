@@ -54,7 +54,7 @@ public class NetBlock {
         for(Object o : objects) {
             stringList.add(o.toString());
         }
-        this.data = String.join("╚", stringList);
+        this.data = String.join(getDelimiter(), stringList);
     }
 
     public boolean isEmpty() {
@@ -62,7 +62,15 @@ public class NetBlock {
     }
 
     public String formMessage() {
-        return getIdentifier() + ";" + getComponent() + ";" + getData();
+        return getIdentifier() + getMessageStructureDelimiter() + getComponent() + getMessageStructureDelimiter() + getData();
+    }
+
+    public static String getMessageStructureDelimiter() {
+        return ";";
+    }
+
+    public static String getDelimiter() {
+        return "╚";
     }
 
 }

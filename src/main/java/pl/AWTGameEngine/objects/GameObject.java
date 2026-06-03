@@ -441,7 +441,7 @@ public class GameObject {
         }
 
         public final void onPositionSynchronizeReceived(String data, boolean server) {
-            String[] split = data.split("╚");
+            String[] split = data.split(NetBlock.getDelimiter());
             TransformSet newPosition = new TransformSet().deserializeFromToString(split[0]);
             TransformSet newSize = new TransformSet().deserializeFromToString(split[1]);
             QuaternionTransformSet newRotation = new QuaternionTransformSet().deserializeFromToString(split[2]);
