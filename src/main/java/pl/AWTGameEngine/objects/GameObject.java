@@ -18,7 +18,7 @@ public class GameObject {
     private boolean active = true;
     private TransformSet position = new TransformSet(0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
-    private final TransformSet rotation = new TransformSet(0, 0, 0);
+    private TransformSet rotation = new TransformSet(0, 0, 0);
     private final QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
     private Net net;
     private final EventHandler eventHandler = new EventHandler();
@@ -30,21 +30,65 @@ public class GameObject {
         if(RenderEngine.WEB.equals(getScene().getRenderEngine())) {
             this.addComponent(new WebHandler(this));
         }
-        setupPositionNotifyAction(position);
+        hookPositionNotifyAction(position);
     }
 
-    private void setupPositionNotifyAction(TransformSet position) {
-        position.setNotifyAction(() -> {
+    private void hookPositionNotifyAction(TransformSet position) {
+        position.setNotifyAction((exclude) -> {
             for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
+                if(exclude != null) {
+                    if(exclude.contains(component)) {
+                        continue;
+                    }
+                }
                 component.onUpdatePosition(this.position.getX(), this.position.getY());
             }
             for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double#double")) {
+                if(exclude != null) {
+                    if(exclude.contains(component)) {
+                        continue;
+                    }
+                }
                 component.onUpdatePosition(this.position.getX(), this.position.getY(), this.position.getZ());
             }
         });
     }
 
-    public void addComponent(ObjectComponent component) {
+    private void hookSizeNotifyAction(TransformSet size) {
+        size.setNotifyAction((exclude) -> {
+            for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
+                if(exclude != null) {
+                    if(exclude.contains(component)) {
+                        continue;
+                    }
+                }
+                component.onUpdateSize(this.size.getX(), this.size.getY());
+            }
+            for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
+                if(exclude != null) {
+                    if(exclude.contains(component)) {
+                        continue;
+                    }
+                }
+                component.onUpdateSize(this.size.getX(), this.size.getY(), this.size.getZ());
+            }
+        });
+    }
+
+    private void hookRotationNotifyAction(TransformSet rotation) {
+        rotation.setNotifyAction((exclude) -> {
+            for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation")) {
+                if(exclude != null) {
+                    if(exclude.contains(component)) {
+                        continue;
+                    }
+                }
+                component.onUpdateRotation();
+            }
+        });
+    }
+
+    public void addComponent(ObjectComponent component) { // TODO: EXCEPTIONS
         RenderEngine renderEngine = scene.getRenderEngine();
         if(RenderEngine.WEB.equals(renderEngine)) {
             if(!component.isWebComponent()) {
@@ -317,7 +361,7 @@ public class GameObject {
 
     @SaveState(name = "size")
     public TransformSet getSize() {
-        return this.size.clone();
+        return this.size;
     }
 
     public EventHandler getEventHandler() {
@@ -330,18 +374,15 @@ public class GameObject {
 
     public void setPosition(TransformSet transform) {
         this.position = transform;
-        setupPositionNotifyAction(transform); // attach notify
-        transform.getNotifyAction().run(); // run notify
+        hookPositionNotifyAction(transform); // attach notify
+        transform.getNotifyAction().accept(null); // run notify
     }
 
     public void setRotation(TransformSet transform) {
-        this.rotation.setX(transform.getX());
-        this.rotation.setY(transform.getY());
-        this.rotation.setZ(transform.getZ());
+        this.rotation = transform;
+        hookRotationNotifyAction(transform);
+        transform.getNotifyAction().accept(null);
         this.quaternionRotation.clear();
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation")) {
-            component.onUpdateRotation();
-        }
     }
 
     public void setQuaternionRotation(QuaternionTransformSet transform, ObjectComponent blockNotify) {
@@ -360,55 +401,12 @@ public class GameObject {
     
     public void setQuaternionRotation(QuaternionTransformSet transform) {
         setQuaternionRotation(transform, null);
-    } 
-
-    public void setSizeX(double x) {
-        this.size.setX(x);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
-            component.onUpdateSize(x, this.size.getY());
-        }
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
-            component.onUpdateSize(x, this.size.getY(), this.size.getZ());
-        }
-    }
-
-    public void setSizeX(String x) {
-        setSizeX(Integer.parseInt(x));
-    }
-
-    public void setSizeY(double y) {
-        this.size.setY(y);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
-            component.onUpdateSize(this.size.getX(), y);
-        }
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
-            component.onUpdateSize(this.size.getX(), y, this.size.getZ());
-        }
-    }
-
-    public void setSizeY(String y) {
-        setSizeY(Integer.parseInt(y));
-    }
-
-    public void setSizeZ(double z) {
-        this.size.setZ(z);
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
-            component.onUpdateSize(this.size.getX(), this.size.getY(), z);
-        }
-    }
-
-    public void setSizeZ(String z) {
-        setSizeZ(Integer.parseInt(z));
     }
 
     public void setSize(TransformSet transform) {
-        this.size = transform.clone();
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
-            component.onUpdateSize(this.size.getX(), this.size.getY());
-        }
-        for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double#double")) {
-            component.onUpdateSize(this.size.getX(), this.size.getY(), this.size.getZ());
-        }      
+        this.size = transform;
+        hookSizeNotifyAction(transform);
+        transform.getNotifyAction().accept(null);
     }
 
     public Net getNet() {

@@ -6,7 +6,9 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
 
-// Component is automatically added to every GameObject if render engine is set to web
+/** Component is automatically added to every <code>GameObject</code> when <code>RenderEngine</code> is set to web.
+ * Handles communication between <code>GameObject</code> and <code>WebGraphicsManager</code>.
+ */
 @WebComponent
 @Unique
 public class WebHandler extends ObjectComponent {

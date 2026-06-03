@@ -271,11 +271,11 @@ public class Window extends Frame implements BaseWindow {
         if(dialogs.size() != scenes.keySet().size() - 1) {
             Dialog dialog = new Dialog(this, false);
             dialog.setUndecorated(true);
-            dialog.setBackground(new Color(100, 0, 0));
             dialog.setVisible(true);
+            dialog.setBackground(new Color(100, 0, 0, 0));
+            dialog.setBounds(getX(), getY(), getBaseWidth(), getBaseHeight());
             dialog.setFocusable(false);
             dialogs.add(dialog);
-            updateDialogs();
         }
     }
 
@@ -293,7 +293,6 @@ public class Window extends Frame implements BaseWindow {
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-        updateDialogs();
     }
 
     public void setCurrentScene(Scene newCurrentScene) {

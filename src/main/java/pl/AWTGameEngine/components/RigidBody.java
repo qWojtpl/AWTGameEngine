@@ -113,8 +113,13 @@ public abstract class RigidBody extends ObjectComponent {
     public abstract void physicsUpdate();
 
     protected void updateCachedPosition(PxVec3 position) {
-        if(position.getX() != getObject().getPosition().getX() || position.getY() != getObject().getPosition().getY() || position.getZ() != getObject().getPosition().getZ()) {
-            getObject().getPosition().fromPhysX(position); //TODO: block this component notify
+        if(
+                position.getX() != getObject().getPosition().getX() ||
+                position.getY() != getObject().getPosition().getY() ||
+                position.getZ() != getObject().getPosition().getZ()
+        ) {
+            getObject().getPosition().addNotifyExcludeComponent(this);
+            getObject().getPosition().fromPhysX(position);
         }
     }
 

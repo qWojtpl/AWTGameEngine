@@ -1,13 +1,19 @@
 package pl.AWTGameEngine.objects;
 
 import physx.common.PxVec3;
+import pl.AWTGameEngine.components.base.ObjectComponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class TransformSet {
 
     private double x = 0;
     private double y = 0;
     private double z = 0;
-    private Runnable notifyAction;
+    private Consumer<List<ObjectComponent>> notifyAction;
+    private List<ObjectComponent> excludeComponents;
 
     public TransformSet() {
 
@@ -128,19 +134,27 @@ public class TransformSet {
         return this;
     }
 
-    public Runnable getNotifyAction() {
+    public Consumer<List<ObjectComponent>> getNotifyAction() {
         return this.notifyAction;
     }
 
-    public void setNotifyAction(Runnable action) {
+    public void setNotifyAction(Consumer<List<ObjectComponent>> action) {
         this.notifyAction = action;
+    }
+
+    public void addNotifyExcludeComponent(ObjectComponent component) {
+        if(this.excludeComponents == null) {
+            this.excludeComponents = new ArrayList<>();
+        }
+        this.excludeComponents.add(component);
     }
 
     private void runNotify() {
         if(this.notifyAction == null) {
             return;
         }
-        this.notifyAction.run();
+        this.notifyAction.accept(this.excludeComponents);
+        this.excludeComponents = null;
     }
 
 }

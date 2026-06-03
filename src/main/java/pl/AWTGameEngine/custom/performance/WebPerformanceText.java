@@ -27,10 +27,15 @@ public class WebPerformanceText extends WebText {
                 "<br>Total threads: {threads}" +
                 "<br>Registered global events: {events}"
         );
+        updateValues();
     }
 
     @Override
     public void onEverySecond() {
+        updateValues();
+    }
+
+    private void updateValues() {
         setValue("updateFPS", getFpsString(getWindow().getUpdateLoop()));
         setValue("renderFPS", getFpsString(getWindow().getRenderLoop()));
         setValue("physicsFPS", getFpsString(getWindow().getPhysicsLoop()));

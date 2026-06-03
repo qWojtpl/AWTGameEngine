@@ -29,9 +29,9 @@ public class GameObjectDeserializer {
         if(!getValue(node, "size").equals("0")) {
             object.setSize(new TransformSet().deserialize(getValue(node, "size")));
         } else {
-            object.setSizeX(Double.parseDouble(getValue(node, "sizeX")));
-            object.setSizeY(Double.parseDouble(getValue(node, "sizeY")));
-            object.setSizeZ(Double.parseDouble(getValue(node, "sizeZ")));
+            object.getSize().setX(Double.parseDouble(getValue(node, "sizeX")));
+            object.getSize().setY(Double.parseDouble(getValue(node, "sizeY")));
+            object.getSize().setZ(Double.parseDouble(getValue(node, "sizeZ")));
         }
         if(!getValue(node, "rotation").equals("0")) {
             object.setRotation(new TransformSet().deserialize(getValue(node, "rotation")));

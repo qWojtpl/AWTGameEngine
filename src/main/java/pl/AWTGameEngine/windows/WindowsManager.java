@@ -140,6 +140,7 @@ public class WindowsManager extends CommandConsole.ParentCommand {
     }
 
     public void showWindow(BaseWindow window) {
+        window.updateDialogs();
         window.setVisible(true);
         if(splashScreenWindow != null) {
             splashScreenWindow.close();
