@@ -8,6 +8,7 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.RenderOptions;
 
 @DefaultComponent
 @WebComponent
@@ -31,7 +32,7 @@ public class Border extends ObjectComponent {
                 getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
                 getCamera().parsePlainValue(getObject().getSizeX()),
                 getCamera().parsePlainValue(getObject().getSizeY()),
-                new GraphicsManager.RenderOptions()
+                new RenderOptions()
                         .setColor(color.getColor())
                         .setRotation(getObject().getRotation().getX())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getX()))

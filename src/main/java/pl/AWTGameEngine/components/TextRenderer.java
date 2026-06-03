@@ -8,6 +8,7 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.RenderOptions;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -59,7 +60,7 @@ public class TextRenderer extends ObjectComponent {
                     line,
                     getCamera().parseX(getObject(), getObject().getX() + x),
                     getCamera().parseY(getObject(), getObject().getY() + y + height * i),
-                    new GraphicsManager.RenderOptions()
+                    new RenderOptions()
                             .setColor(color.getColor())
                             .setFont(getWindow().getFont(getSize() * getCamera().getMultiplier()))
                             .setRotation(getObject().getRotation().getX())

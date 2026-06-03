@@ -9,6 +9,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.RenderOptions3D;
 import pl.AWTGameEngine.objects.Sprite;
 
 @ComponentFX
@@ -32,17 +33,13 @@ public class Model3D extends ObjectComponent {
     public void onAddComponent() {
         getObject().getRotation().setZ(180);
         ((PanelFX) getScene().getPanel()).getGraphicsManager3D().createCustomModel(
-                new GraphicsManager3D.RenderOptions(
-                        getObject().getIdentifier(),
-                        getObject().getPosition(),
-                        getObject().getSize(),
-                        getObject().getRotation(),
-                        getObject().getQuaternionRotation(),
-                        getSprite(),
-                        GraphicsManager3D.ShapeType.MODEL,
-                        null,
-                        null
-                ),
+                new RenderOptions3D(getObject().getIdentifier())
+                        .setPosition(getObject().getPosition())
+                        .setSize(getObject().getSize())
+                        .setRotation(getObject().getRotation())
+                        .setQuaternionRotation(getObject().getQuaternionRotation())
+                        .setSprite(getSprite())
+                        .setShapeType(GraphicsManager3D.ShapeType.MODEL),
                 modelPath
         );
         initialized = true;

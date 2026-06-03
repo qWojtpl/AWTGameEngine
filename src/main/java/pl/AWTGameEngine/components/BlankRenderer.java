@@ -11,6 +11,7 @@ import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.RenderOptions;
 
 import java.text.MessageFormat;
 
@@ -33,7 +34,7 @@ public class BlankRenderer extends NetComponent {
                 getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
                 getCamera().parsePlainValue(getObject().getSizeX()),
                 getCamera().parsePlainValue(getObject().getSizeY()),
-                new GraphicsManager.RenderOptions()
+                new RenderOptions()
                         .setColor(color.getColor())
                         .setRotation(getObject().getRotation().getX())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getX()))

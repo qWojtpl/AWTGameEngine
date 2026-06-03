@@ -9,6 +9,7 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.RenderOptions3D;
 
 @ComponentFX
 @ComponentGL
@@ -31,17 +32,15 @@ public class Sphere3D extends Base3DShape {
 
     @Override
     protected void createShape() {
-        GraphicsManager3D.RenderOptions options = new GraphicsManager3D.RenderOptions(
-                getObject().getIdentifier(),
-                getObject().getPosition(),
-                getObject().getSize(),
-                getObject().getRotation(),
-                getObject().getQuaternionRotation(),
-                getSprite(),
-                GraphicsManager3D.ShapeType.BOX,
-                null,
-                getColor()
-        );
+        RenderOptions3D options = new RenderOptions3D(getObject().getIdentifier())
+                .setPosition(getObject().getPosition())
+                .setSize(getObject().getSize())
+                .setRotation(getObject().getRotation())
+                .setQuaternionRotation(getObject().getQuaternionRotation())
+                .setSprite(getSprite())
+                .setShapeType(GraphicsManager3D.ShapeType.SPHERE)
+                .setShader(getShader())
+                .setColor(getColor());
 
         graphicsManager3D.createSphere(options);
         initialized = true;

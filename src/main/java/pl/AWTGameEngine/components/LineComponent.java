@@ -5,6 +5,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.RenderOptions;
 
 import java.awt.*;
 
@@ -24,7 +25,7 @@ public class LineComponent extends ObjectComponent {
                 getCamera().parseY(getObject(), getObject().getY()),
                 getCamera().parseX(getObject(), getObject().getX() + getObject().getSizeX()),
                 getCamera().parseY(getObject(), getObject().getY() + getObject().getSizeY()),
-                new GraphicsManager.RenderOptions()
+                new RenderOptions()
                         .setColor(color.getColor())
                         .setStroke(thickness)
         );

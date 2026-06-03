@@ -1,26 +1,23 @@
 
 package pl.AWTGameEngine.engine.graphics;
 
-import pl.AWTGameEngine.objects.ColorObject;
-import pl.AWTGameEngine.objects.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.Sprite;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.*;
 
 public abstract class GraphicsManager3D {
 
-    public abstract void createBox(RenderOptions options);
+    public abstract void createBox(RenderOptions3D options);
 
     public abstract void removeBox(String identifier);
 
-    public abstract void createSphere(RenderOptions options);
+    public abstract void createSphere(RenderOptions3D options);
 
     public abstract void removeSphere(String identifier);
 
-    public abstract void createCylinder(RenderOptions options);
+    public abstract void createCylinder(RenderOptions3D options);
 
     public abstract void removeCylinder(String identifier);
 
-    public abstract void createCustomModel(RenderOptions options, String modelPath);
+    public abstract void createCustomModel(RenderOptions3D options, String modelPath);
 
     public abstract void removeCustomModel(String identifier);
 
@@ -43,135 +40,6 @@ public abstract class GraphicsManager3D {
         CYLINDER,
         SPHERE,
         MODEL
-    }
-
-    public static class RenderOptions {
-
-        private final String identifier;
-        private TransformSet position;
-        private TransformSet size;
-        private TransformSet rotation;
-        private QuaternionTransformSet quaternionRotation;
-        private Sprite sprite;
-        private ColorObject color;
-        private ShapeType shapeType;
-        private boolean frontCullFace = false;
-        private String shader;
-        private boolean xrayRender = false;
-
-        public RenderOptions(String identifier) {
-            this.identifier = identifier;
-        }
-
-        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, QuaternionTransformSet quaternionRotation, Sprite sprite, ShapeType shapeType, String shader, ColorObject color) {
-            this.identifier = identifier;
-            this.position = position;
-            this.size = size;
-            this.rotation = rotation;
-            this.quaternionRotation = quaternionRotation;
-            this.sprite = sprite;
-            this.shader = shader;
-            this.color = color;
-            this.shapeType = shapeType;
-        }
-
-        public RenderOptions(String identifier, TransformSet position, TransformSet size, TransformSet rotation, QuaternionTransformSet quaternionRotation, Sprite sprite, ShapeType shapeType, String shader, ColorObject color, boolean frontCullFace) {
-            this.identifier = identifier;
-            this.position = position;
-            this.size = size;
-            this.rotation = rotation;
-            this.quaternionRotation = quaternionRotation;
-            this.sprite = sprite;
-            this.shader = shader;
-            this.color = color;
-            this.shapeType = shapeType;
-            this.frontCullFace = frontCullFace;
-        }
-
-        public String getIdentifier() {
-            return identifier;
-        }
-
-        public TransformSet getPosition() {
-            return position;
-        }
-
-        public TransformSet getSize() {
-            return size;
-        }
-
-        public TransformSet getRotation() {
-            return rotation;
-        }
-
-        public QuaternionTransformSet getQuaternionRotation() {
-            return quaternionRotation;
-        }
-
-        public Sprite getSprite() {
-            return sprite;
-        }
-
-        public ColorObject getColor() {
-            return color;
-        }
-
-        public ShapeType getShapeType() {
-            return this.shapeType;
-        }
-
-        public String getShader() {
-            return this.shader;
-        }
-
-        public boolean isFrontCullFace() {
-            return frontCullFace;
-        }
-
-        public boolean isXrayRender() {
-            return xrayRender;
-        }
-
-        public void setPosition(TransformSet position) {
-            this.position = position;
-        }
-
-        public void setSize(TransformSet size) {
-            this.size = size;
-        }
-
-        public void setRotation(TransformSet rotation) {
-            this.rotation = rotation;
-        }
-
-        public void setQuaternionRotation(QuaternionTransformSet rotation) {
-            this.quaternionRotation = rotation;
-        }
-
-        public void setSprite(Sprite sprite) {
-            this.sprite = sprite;
-        }
-
-        public void setColor(ColorObject color) {
-            this.color = color;
-        }
-
-        public void setShader(String shader) {
-            this.shader = shader;
-        }
-
-        public void setFrontCullFace(boolean frontCullFace) {
-            this.frontCullFace = frontCullFace;
-        }
-
-        public void setXrayRender(boolean xrayRender) {
-            this.xrayRender = xrayRender;
-        }
-
-        public void setShapeType(ShapeType shapeType) {
-            this.shapeType = shapeType;
-        }
-
     }
 
 }

@@ -7,6 +7,7 @@ import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.RenderOptions3D;
 
 @ComponentFX
 @Conflicts({
@@ -21,17 +22,16 @@ public class Cylinder3D extends Base3DShape {
 
     @Override
     protected void createShape() {
-        ((PanelFX) getScene().getPanel()).getGraphicsManager3D().createCylinder(new GraphicsManager3D.RenderOptions(
-                getObject().getIdentifier(),
-                getObject().getPosition(),
-                getObject().getSize(),
-                getObject().getRotation(),
-                getObject().getQuaternionRotation(),
-                getSprite(),
-                GraphicsManager3D.ShapeType.CYLINDER,
-                null,
-                getColor())
-        );
+        ((PanelFX) getScene().getPanel()).getGraphicsManager3D().createCylinder(new RenderOptions3D(getObject().getIdentifier())
+                .setPosition(getObject().getPosition())
+                .setSize(getObject().getSize())
+                .setRotation(getObject().getRotation())
+                .setQuaternionRotation(getObject().getQuaternionRotation())
+                .setSprite(getSprite())
+                .setShapeType(GraphicsManager3D.ShapeType.CYLINDER)
+                .setShader(getShader())
+                .setColor(getColor()));
+
         initialized = true;
     }
 

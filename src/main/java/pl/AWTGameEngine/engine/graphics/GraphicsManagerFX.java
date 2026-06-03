@@ -11,10 +11,7 @@ import javafx.scene.transform.Rotate;
 import org.fxyz3d.importers.obj.ObjImporter;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.panels.PanelFX;
-import pl.AWTGameEngine.objects.ColorObject;
-import pl.AWTGameEngine.objects.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.Sprite;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,15 +30,15 @@ public class GraphicsManagerFX extends GraphicsManager3D {
 
     public static class Renderable {
 
-        private final RenderOptions renderOptions;
+        private final RenderOptions3D renderOptions;
         private final Group group;
 
-        public Renderable(RenderOptions renderOptions, Group group) {
+        public Renderable(RenderOptions3D renderOptions, Group group) {
             this.renderOptions = renderOptions;
             this.group = group;
         }
 
-        public RenderOptions getRenderOptions() {
+        public RenderOptions3D getRenderOptions() {
             return this.renderOptions;
         }
 
@@ -56,7 +53,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     }
 
     @Override
-    public void createBox(RenderOptions options) {
+    public void createBox(RenderOptions3D options) {
         Platform.runLater(() -> {
             Renderable renderable = renderables.getOrDefault(options.getIdentifier(), null);
             Box box = null;
@@ -99,7 +96,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     }
 
     @Override
-    public void createSphere(RenderOptions options) {
+    public void createSphere(RenderOptions3D options) {
         Platform.runLater(() -> {
             Renderable renderable = renderables.getOrDefault(options.getIdentifier(), null);
             Sphere sphere = null;
@@ -142,7 +139,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     }
 
     @Override
-    public void createCylinder(RenderOptions options) {
+    public void createCylinder(RenderOptions3D options) {
         Platform.runLater(() -> {
             Renderable renderable = renderables.getOrDefault(options.getIdentifier(), null);
             Cylinder cylinder = null;
@@ -185,7 +182,7 @@ public class GraphicsManagerFX extends GraphicsManager3D {
     }
 
     @Override
-    public void createCustomModel(RenderOptions options, String modelPath) {
+    public void createCustomModel(RenderOptions3D options, String modelPath) {
         Platform.runLater(() -> {
             try {
                 Group model = renderables.getOrDefault(options.getIdentifier(), null).getGroup();

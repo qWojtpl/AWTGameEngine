@@ -7,10 +7,7 @@ import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
-import pl.AWTGameEngine.objects.ColorObject;
-import pl.AWTGameEngine.objects.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.Sprite;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.*;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -20,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GraphicsManagerGL extends GraphicsManager3D {
 
     private final PanelGL panelGL;
-    private final ConcurrentHashMap<String, RenderOptions> renderables = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, RenderOptions3D> renderables = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Sprite, Texture> textures = new ConcurrentHashMap<>();
     private int vao;
     private int vbo;
@@ -106,8 +103,8 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         gl.glBindVertexArray(vao);
 
-        List<RenderOptions> renderableList = new ArrayList<>(renderables.values());
-        for (RenderOptions ro : renderableList) {
+        List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values());
+        for (RenderOptions3D ro : renderableList) {
 
             float[] model = MatrixHelper.composeModelMatrix(
                     ro.getPosition(),
@@ -151,7 +148,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     @Override
-    public void createBox(RenderOptions options) {
+    public void createBox(RenderOptions3D options) {
         if(renderables.containsKey(options.getIdentifier())) {
             return;
         }
@@ -164,7 +161,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     @Override
-    public void createSphere(RenderOptions options) {
+    public void createSphere(RenderOptions3D options) {
         if(renderables.containsKey(options.getIdentifier())) {
             return;
         }
@@ -177,7 +174,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     @Override
-    public void createCylinder(RenderOptions options) {
+    public void createCylinder(RenderOptions3D options) {
 
     }
 
@@ -187,7 +184,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     @Override
-    public void createCustomModel(RenderOptions options, String modelPath) {
+    public void createCustomModel(RenderOptions3D options, String modelPath) {
 
     }
 

@@ -10,6 +10,7 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.RenderOptions;
 import pl.AWTGameEngine.objects.Sprite;
 
 import java.text.MessageFormat;
@@ -38,7 +39,7 @@ public class SpriteRenderer extends NetComponent {
                 getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
                 getCamera().parsePlainValue(getObject().getSizeX()),
                 getCamera().parsePlainValue(getObject().getSizeY()),
-                new GraphicsManager.RenderOptions()
+                new RenderOptions()
                         .setRotation(getObject().getRotation().getX())
                         .setRotationCenterX(getCamera().parseX(getObject(), getObject().getX()))
                         .setRotationCenterY(getCamera().parseY(getObject(), getObject().getY()))
