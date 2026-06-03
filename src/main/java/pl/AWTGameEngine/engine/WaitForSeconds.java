@@ -29,6 +29,15 @@ public class WaitForSeconds {
         awaitingTasks++;
     }
 
+    /** This method blocks the current thread and waits for <code>delay</code> seconds. */
+    public void here() {
+        try {
+            Thread.sleep((long) (delay * 1000));
+        } catch(Exception e) {
+            Logger.exception("Exception caught while running operation in WaitForSeconds", e);
+        }
+    }
+
     public static int getNumberOfAwaitingTasks() {
         return awaitingTasks;
     }

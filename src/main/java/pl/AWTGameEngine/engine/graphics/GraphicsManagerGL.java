@@ -11,6 +11,7 @@ import pl.AWTGameEngine.objects.*;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -104,6 +105,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         gl.glBindVertexArray(vao);
 
         List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values());
+        renderableList.sort(Comparator.comparing(RenderOptions3D::isXrayRender));
         for (RenderOptions3D ro : renderableList) {
 
             float[] model = MatrixHelper.composeModelMatrix(
