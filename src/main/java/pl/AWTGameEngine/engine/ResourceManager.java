@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.Command;
+import pl.AWTGameEngine.annotations.tests.Test;
 import pl.AWTGameEngine.exceptions.resources.GifReaderNotFoundException;
 import pl.AWTGameEngine.exceptions.resources.ResourceNotFoundException;
 import pl.AWTGameEngine.exceptions.resources.ResourceSecurityException;
@@ -25,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Command("res")
+@Test(name = "getResourceTest", testClass = "pl.AWTGameEngineTests.engine.ResourceManager.GetResourceTest")
 public class ResourceManager extends CommandConsole.ParentCommand {
 
     private final Path BASE_DIR = Paths.get(System.getProperty("user.dir") + "/data/");

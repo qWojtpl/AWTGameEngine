@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Command("preferences")
-@Test(name = "saveAndGetPreference", testClass = "pl.AWTGameEngineTests.engine.SaveAndGetPreferenceTest")
+@Test(name = "saveAndGetPreference", testClass = "pl.AWTGameEngineTests.engine.Preferences.SaveAndGetPreferenceTest")
 public class Preferences extends CommandConsole.ParentCommand {
 
     private final HashMap<String, String> preferences = new HashMap<>();
