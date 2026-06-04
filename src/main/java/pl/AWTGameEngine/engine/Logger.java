@@ -41,6 +41,10 @@ public class Logger {
         log(3, "[WARN]", ConsoleColor.YELLOW, message, ConsoleColor.YELLOW);
     }
 
+    public static void netInfo(String message, boolean server) {
+        log(1, "[NET" + (server ? "-S" : "-C") + "]", ConsoleColor.BLUE, message, ConsoleColor.YELLOW);
+    }
+
     public static void logTest(String message) {
         log(1, "[TEST]", ConsoleColor.PURPLE, message, ConsoleColor.RESET);
     }

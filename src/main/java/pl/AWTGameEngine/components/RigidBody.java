@@ -20,8 +20,8 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 public abstract class RigidBody extends ObjectComponent {
 

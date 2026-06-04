@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.objects;
+package pl.AWTGameEngine.objects.net;
 
 import java.io.BufferedReader;
 import java.io.IOException;

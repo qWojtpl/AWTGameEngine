@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.engine.helpers;
-import pl.AWTGameEngine.objects.Camera;
-import pl.AWTGameEngine.objects.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.render.Camera;
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 public class MatrixHelper {
 

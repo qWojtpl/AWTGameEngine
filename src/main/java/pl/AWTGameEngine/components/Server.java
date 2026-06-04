@@ -10,9 +10,9 @@ import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
-import pl.AWTGameEngine.objects.ConnectedClient;
+import pl.AWTGameEngine.objects.net.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.net.NetBlock;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -47,10 +47,10 @@ public class Server extends NetComponent {
     @Override
     public void onSerializationFinish() {
         try {
-            Logger.info("Starting server on port " + port + "...");
+            Logger.netInfo("Starting server on port " + port + "...", true);
             this.tcpSocket = new ServerSocket(port);
             tcpThread.start();
-            Logger.info("Server started.");
+            Logger.netInfo("Server started.", true);
         } catch (IOException e) {
             Logger.exception("Cannot start server", e);
         }
@@ -58,12 +58,12 @@ public class Server extends NetComponent {
 
     @Override
     public void onRemoveComponent() {
-        Logger.info("Closing server...");
+        Logger.netInfo("Closing server...", true);
         try {
             for(ConnectedClient client : new ArrayList<>(connectedClients.values())) {
                 disconnect(client);
             }
-            Logger.info("Server closed.");
+            Logger.netInfo("Server closed.", true);
             tcpSocket.close();
         } catch (IOException e) {
             Logger.exception("Cannot close server socket!", e);
@@ -149,8 +149,8 @@ public class Server extends NetComponent {
         }
 
         int id = currentId++;
-        Logger.info("Client " + getClientAddress(clientSocket) + " connected.");
-        Logger.info("\t\t-> Assigned new client to ID " + id);
+        Logger.netInfo("Client " + getClientAddress(clientSocket) + " connected.", true);
+        Logger.netInfo("\t\t-> Assigned new client to ID " + id, true);
 
         ConnectedClient connectedClient;
         try {
@@ -201,8 +201,8 @@ public class Server extends NetComponent {
 
     public void disconnect(ConnectedClient client) {
         try {
-            Logger.info("Client " + getClientAddress(client.getSocket()) +
-                    " (ID " + client.getId() + ") disconnected.");
+            Logger.netInfo("Client " + getClientAddress(client.getSocket()) +
+                    " (ID " + client.getId() + ") disconnected.", true);
             for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#ConnectedClient")) {
                 ((NetComponent) component).onClientDisconnect(this, client);
             }
@@ -218,7 +218,7 @@ public class Server extends NetComponent {
             ConnectedClient temp = new ConnectedClient(-1, socket);
             temp.sendMessage(message);
             temp.close();
-            Logger.info("Client " + getClientAddress(socket) + " tried to connect, but had to disconnect him because: " + message);
+            Logger.netInfo("Client " + getClientAddress(socket) + " tried to connect, but had to disconnect him because: " + message, true);
         } catch(IOException e) {
             Logger.exception("Cannot join-disconnect client", e);
         }

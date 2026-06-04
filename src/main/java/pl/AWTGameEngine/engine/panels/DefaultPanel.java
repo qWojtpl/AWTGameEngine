@@ -3,7 +3,7 @@ package pl.AWTGameEngine.engine.panels;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
-import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 

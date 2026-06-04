@@ -9,7 +9,7 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.loops.*;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
 import java.awt.*;

@@ -6,7 +6,7 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 @DefaultComponent
 @ComponentGL

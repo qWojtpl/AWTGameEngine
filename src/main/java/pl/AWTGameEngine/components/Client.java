@@ -9,10 +9,10 @@ import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
-import pl.AWTGameEngine.objects.ConnectedClient;
+import pl.AWTGameEngine.objects.net.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.NetBlock;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.net.NetBlock;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -51,7 +51,7 @@ public class Client extends NetComponent {
             return;
         }
         String address = ip + ":" + port;
-        Logger.info("Connecting to " + address + "...");
+        Logger.netInfo("Connecting to " + address + "...", false);
         try {
             this.connectedClient = new ConnectedClient(-1, new Socket(ip, port));
             handleConnection();
@@ -70,7 +70,7 @@ public class Client extends NetComponent {
         try {
             connectedClient.close();
             connectedClient = null;
-            Logger.info("Disconnected.");
+            Logger.netInfo("Disconnected.", false);
         } catch (IOException e) {
             Logger.exception("Cannot disconnect!", e);
         }
@@ -96,8 +96,8 @@ public class Client extends NetComponent {
                             return;
                         }
                         connectedClient.updateId(id); // first response is an id
-                        Logger.info("\t\t-> Server assigned ID " + connectedClient.getId() + " for me.");
-                        Logger.info("Connected.");
+                        Logger.netInfo("\t\t-> Server assigned ID " + connectedClient.getId() + " for me.", false);
+                        Logger.netInfo("Connected.", false);
                         continue;
                     }
                     NetDeserializer.deserialize(getScene(), response, connectedClient);

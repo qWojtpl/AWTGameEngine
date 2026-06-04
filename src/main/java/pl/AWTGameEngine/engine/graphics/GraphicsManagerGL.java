@@ -8,6 +8,10 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
+import pl.AWTGameEngine.objects.render.RenderOptions3D;
+import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;

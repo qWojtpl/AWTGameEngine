@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.engine.panels;
 
-import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.BaseWindow;
 

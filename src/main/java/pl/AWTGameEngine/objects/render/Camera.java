@@ -1,8 +1,10 @@
-package pl.AWTGameEngine.objects;
+package pl.AWTGameEngine.objects.render;
 
 import pl.AWTGameEngine.components.Canvas;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.panels.PanelObject;
+import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.util.List;
 

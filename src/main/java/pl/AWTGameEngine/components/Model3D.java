@@ -9,8 +9,8 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.RenderOptions3D;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.render.RenderOptions3D;
+import pl.AWTGameEngine.objects.render.Sprite;
 
 @ComponentFX
 @ComponentGL

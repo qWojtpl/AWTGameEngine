@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.objects;
 
+import pl.AWTGameEngine.objects.transform.TransformSet;
+
 public class ContactPoint {
 
     private final TransformSet position;

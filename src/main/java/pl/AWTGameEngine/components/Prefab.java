@@ -6,7 +6,7 @@ import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.engine.deserializers.PrefabDeserializer;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.net.NetBlock;
 
 /**
  * Injects a prefab to an object

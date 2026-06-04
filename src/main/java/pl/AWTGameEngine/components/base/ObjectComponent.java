@@ -15,6 +15,8 @@ import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.listeners.KeyListener;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.*;
+import pl.AWTGameEngine.objects.ContactPoint;
+import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.scenes.SceneLoader;
 import pl.AWTGameEngine.windows.BaseWindow;

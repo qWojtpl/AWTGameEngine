@@ -2,9 +2,9 @@ package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.annotations.methods.EventMethod;
 import pl.AWTGameEngine.components.Server;
-import pl.AWTGameEngine.objects.ConnectedClient;
+import pl.AWTGameEngine.objects.net.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.NetBlock;
+import pl.AWTGameEngine.objects.net.NetBlock;
 
 import java.net.Socket;
 

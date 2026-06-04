@@ -1,6 +1,8 @@
-package pl.AWTGameEngine.objects;
+package pl.AWTGameEngine.objects.render;
 
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.objects.GameObject;
 
 import java.awt.*;
 

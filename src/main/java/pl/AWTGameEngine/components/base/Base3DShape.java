@@ -5,6 +5,9 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.objects.*;
+import pl.AWTGameEngine.objects.net.NetBlock;
+import pl.AWTGameEngine.objects.render.AnimatedSprite;
+import pl.AWTGameEngine.objects.render.Sprite;
 
 import java.util.Objects;
 

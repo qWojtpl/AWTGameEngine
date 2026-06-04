@@ -11,7 +11,7 @@ import pl.AWTGameEngine.exceptions.PrefabAlreadyExistsException;
 import pl.AWTGameEngine.exceptions.scenes.GameObjectAddToSceneException;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Prefab;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.util.*;

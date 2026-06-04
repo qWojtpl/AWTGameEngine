@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.engine.graphics;
 
-import pl.AWTGameEngine.objects.RenderOptions;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.render.RenderOptions;
+import pl.AWTGameEngine.objects.render.Sprite;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

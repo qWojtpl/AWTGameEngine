@@ -9,9 +9,9 @@ import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.NetBlock;
-import pl.AWTGameEngine.objects.RenderOptions;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.net.NetBlock;
+import pl.AWTGameEngine.objects.render.RenderOptions;
+import pl.AWTGameEngine.objects.render.Sprite;
 
 import java.text.MessageFormat;
 

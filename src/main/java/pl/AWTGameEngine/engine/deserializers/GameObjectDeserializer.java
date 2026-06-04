@@ -6,7 +6,7 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.lang.reflect.InvocationTargetException;
 

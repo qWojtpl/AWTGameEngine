@@ -2,6 +2,10 @@
 package pl.AWTGameEngine.engine.graphics;
 
 import pl.AWTGameEngine.objects.*;
+import pl.AWTGameEngine.objects.render.RenderOptions3D;
+import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 public abstract class GraphicsManager3D {
 

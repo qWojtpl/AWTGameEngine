@@ -6,7 +6,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.exceptions.ShaderCompileException;
-import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 

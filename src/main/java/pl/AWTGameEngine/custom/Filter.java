@@ -8,7 +8,7 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.helpers.ScreenShooter;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.render.Sprite;
 
 @DefaultComponent
 @WebComponent

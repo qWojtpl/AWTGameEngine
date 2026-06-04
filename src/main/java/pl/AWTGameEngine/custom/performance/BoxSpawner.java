@@ -4,13 +4,10 @@ import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
-import pl.AWTGameEngine.components.Box3D;
-import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.CameraFollow;
-import pl.AWTGameEngine.engine.WaitForSeconds;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 @ComponentGL
 @ComponentFX

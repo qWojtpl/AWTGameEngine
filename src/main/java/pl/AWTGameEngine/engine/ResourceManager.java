@@ -5,9 +5,9 @@ import pl.AWTGameEngine.annotations.tests.Test;
 import pl.AWTGameEngine.exceptions.resources.GifReaderNotFoundException;
 import pl.AWTGameEngine.exceptions.resources.ResourceNotFoundException;
 import pl.AWTGameEngine.exceptions.resources.ResourceSecurityException;
-import pl.AWTGameEngine.objects.AnimatedSprite;
+import pl.AWTGameEngine.objects.render.AnimatedSprite;
 import pl.AWTGameEngine.objects.AudioClip;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.render.Sprite;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;

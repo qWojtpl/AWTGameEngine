@@ -7,7 +7,7 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Prefab;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.io.FileWriter;
 import java.io.IOException;

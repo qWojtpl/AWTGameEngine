@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.objects;
+package pl.AWTGameEngine.objects.render;
 
 import pl.AWTGameEngine.annotations.Command;
 

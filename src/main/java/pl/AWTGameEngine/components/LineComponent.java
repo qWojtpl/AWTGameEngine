@@ -5,7 +5,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.RenderOptions;
+import pl.AWTGameEngine.objects.render.RenderOptions;
 
 import java.awt.*;
 

@@ -8,7 +8,7 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.RenderOptions;
+import pl.AWTGameEngine.objects.render.RenderOptions;
 
 @DefaultComponent
 @WebComponent

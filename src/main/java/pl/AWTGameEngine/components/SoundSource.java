@@ -9,7 +9,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import javax.sound.sampled.*;
 import java.io.IOException;

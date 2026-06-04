@@ -20,12 +20,11 @@ import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.helpers.VehicleHelper;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 @ComponentFX

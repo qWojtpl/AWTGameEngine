@@ -12,6 +12,10 @@ import org.fxyz3d.importers.obj.ObjImporter;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.*;
+import pl.AWTGameEngine.objects.render.RenderOptions3D;
+import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.io.File;
 import java.io.IOException;

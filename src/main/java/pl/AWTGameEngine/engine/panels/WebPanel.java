@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.engine.panels;
 
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.web.WebView;
 import pl.AWTGameEngine.Dependencies;
@@ -9,13 +8,11 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.helpers.FXHelper;
-import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 public class WebPanel extends JFXPanel implements PanelObject {
 

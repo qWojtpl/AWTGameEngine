@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.engine.helpers;
 
 import pl.AWTGameEngine.engine.panels.PanelObject;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.render.Sprite;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

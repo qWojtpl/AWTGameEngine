@@ -6,9 +6,9 @@ import pl.AWTGameEngine.components.BlankRenderer;
 import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.objects.ConnectedClient;
+import pl.AWTGameEngine.objects.net.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.util.HashMap;
 

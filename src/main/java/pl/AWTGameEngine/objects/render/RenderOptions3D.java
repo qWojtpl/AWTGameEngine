@@ -1,6 +1,9 @@
-package pl.AWTGameEngine.objects;
+package pl.AWTGameEngine.objects.render;
 
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
+import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 public class RenderOptions3D {
 

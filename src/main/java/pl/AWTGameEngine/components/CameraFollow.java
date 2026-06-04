@@ -6,9 +6,9 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
-import pl.AWTGameEngine.objects.Camera;
+import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.TransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 @ComponentFX
 @ComponentGL

@@ -12,7 +12,7 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.PanelFX;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.Sprite;
+import pl.AWTGameEngine.objects.render.Sprite;
 
 @ComponentFX
 public class MirrorTexture extends ObjectComponent {

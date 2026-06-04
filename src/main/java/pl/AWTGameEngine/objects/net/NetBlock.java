@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.objects;
+package pl.AWTGameEngine.objects.net;
 
 import java.util.ArrayList;
 import java.util.List;

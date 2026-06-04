@@ -4,7 +4,7 @@ import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.objects.ConnectedClient;
+import pl.AWTGameEngine.objects.net.ConnectedClient;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.Scene;
 
@@ -35,7 +35,7 @@ public class NetDeserializer {
                 return;
             }
             // create component
-            ObjectComponent component = createComponent(componentName, object);
+            ObjectComponent component = createComponent(componentName, object, server);
             if(component == null) {
                 return;
             }
@@ -64,23 +64,23 @@ public class NetDeserializer {
                     return null;
                 }
             }
-            Logger.warning(input + " object not found, creating a new one...");
+            Logger.netInfo(input + " object not found, creating a new one...", server != null);
             object = scene.createGameObject(input);
             if(server != null) {
                 object.getNet().setOwner(client.getId());
-                Logger.warning("Assigned ownership of " + input + " to client " + client.getId());
+                Logger.netInfo("Assigned ownership of " + input + " to client " + client.getId(), true);
             }
         }
         if(server != null) {
             if(object.getNet().getOwner() != client.getId()) {
-                Logger.error("Client " + client.getId() + " tried to change an object, but don't have permission for it.");
+                Logger.netInfo("Client " + client.getId() + " tried to change an object, but don't have permission for it.", true);
                 return null;
             }
         }
         return object;
     }
 
-    private static ObjectComponent createComponent(String input, GameObject object) throws Exception {
+    private static ObjectComponent createComponent(String input, GameObject object, Server server) throws Exception {
         if(object == null) {
             return null;
         }
@@ -89,7 +89,7 @@ public class NetDeserializer {
         ObjectComponent component = object.getComponentByClass(clazz);
         //todo: many same components inside one object
         if(component == null) {
-            Logger.warning(object.getIdentifier() + " object doesn't have component " + input + ", adding a new one...");
+            Logger.netInfo(object.getIdentifier() + " object doesn't have component " + input + ", adding a new one...", server != null);
             component = clazz.getConstructor(GameObject.class).newInstance(object);
             object.addComponent(component);
         }
