@@ -2,13 +2,14 @@ package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.Command;
+import pl.AWTGameEngine.annotations.tests.Test;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 
 @Command("preferences")
+@Test(name = "saveAndGetPreference", testClass = "pl.AWTGameEngineTests.engine.SaveAndGetPreferenceTest")
 public class Preferences extends CommandConsole.ParentCommand {
 
     private final HashMap<String, String> preferences = new HashMap<>();
@@ -42,12 +43,17 @@ public class Preferences extends CommandConsole.ParentCommand {
         AppProperties appProperties = Dependencies.getAppProperties();
         try {
             boolean append = false;
+            FileWriter writer = Dependencies.getResourceManager().getWriter("preferences.bin", false);
             for(String key : preferences.keySet()) {
-                FileWriter writer = Dependencies.getResourceManager().getWriter("preferences.bin", append);
                 if(!append) {
                     append = true;
+                    writer.close();
+                    writer = Dependencies.getResourceManager().getWriter("preferences.bin", true);
                 }
                 String preference = preferences.get(key);
+                if(preference.isEmpty()) {
+                    continue;
+                }
                 StringBuilder newKey = new StringBuilder();
                 StringBuilder newPreference = new StringBuilder();
                 for(int i = 0; i < key.length(); i++) {
@@ -58,8 +64,8 @@ public class Preferences extends CommandConsole.ParentCommand {
                 }
                 writer.write(newKey + "\n");
                 writer.write(newPreference + "\n");
-                writer.close();
             }
+            writer.close();
         } catch(IOException e) {
             Logger.exception("Cannot create preferences file!", e);
         }
@@ -85,6 +91,7 @@ public class Preferences extends CommandConsole.ParentCommand {
         } catch(Exception e) {
             Logger.exception("Cannot read preferences file.", e);
         }
+        Dependencies.getResourceManager().releaseFileResource("./preferences.bin");
     }
 
 }

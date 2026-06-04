@@ -1,11 +1,12 @@
 <scene title="Net demo (server)" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="WEB" />
     <object id="server">
-        <Server port="5555" />
+        <Server port="5556" />
         <PlayerSpawner _package="pl.AWTGameEngine.custom" />
     </object>
     <object id="blankSquare" x="200" y="200" sizeX="200" sizeY="200">
         <BlankRenderer color="red" />
         <Movement2D _package="pl.AWTGameEngine.custom" />
+        <TextRenderer text="HELLO WORLD" size="50" vertical="center" horizontal="center" />
     </object>
 </scene>

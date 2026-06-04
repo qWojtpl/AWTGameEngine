@@ -254,6 +254,10 @@ public class ResourceManager extends CommandConsole.ParentCommand {
         spriteResources.clear();
     }
 
+    public void releaseFileResource(String name) {
+        resources.remove(name);
+    }
+
     public void releaseSpriteResource(String name) {
         spriteResources.remove(name);
     }

@@ -3,6 +3,7 @@ package pl.AWTGameEngine;
 import pl.AWTGameEngine.engine.AppProperties;
 import pl.AWTGameEngine.engine.CommandConsole;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.TestPerformer;
 import pl.AWTGameEngine.scenes.SceneBuilder;
 
 public class Main {
@@ -18,6 +19,9 @@ public class Main {
         Logger.setLogFile(appProperties.getPropertyAsBoolean("logFile"));
         Logger.setCallerClass(appProperties.getPropertyAsBoolean("logCallerClass"));
         Logger.redirectJULLogger();
+        if(TestPerformer.isRunningTests(args)) {
+            return;
+        }
         if(SceneBuilder.isSceneBuilder(args)) {
             return;
         }

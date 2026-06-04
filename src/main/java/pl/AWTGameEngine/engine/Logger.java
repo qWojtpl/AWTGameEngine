@@ -41,6 +41,10 @@ public class Logger {
         log(3, "[WARN]", ConsoleColor.YELLOW, message, ConsoleColor.YELLOW);
     }
 
+    public static void logTest(String message) {
+        log(1, "[TEST]", ConsoleColor.PURPLE, message, ConsoleColor.RESET);
+    }
+
     public static void log(int level, String prefix, ConsoleColor prefixColor, String message, ConsoleColor color) {
         if(Logger.level < level) {
             return;
