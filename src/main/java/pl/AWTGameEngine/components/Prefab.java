@@ -41,7 +41,7 @@ public class Prefab extends NetComponent {
 
     @Override
     public NetBlock onSynchronize() {
-        return new NetBlock(getObject().getIdentifier(), getComponentName(), "");
+        return new NetBlock(getObject().getIdentifier(), Prefab.class, "");
     }
 
     @Override

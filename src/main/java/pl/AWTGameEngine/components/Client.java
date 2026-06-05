@@ -157,7 +157,7 @@ public class Client extends NetComponent {
         connectedClient.sendBlock(new NetBlock(identifier, null, position, size, rotation, connectedClient.getId()));
     }
 
-    public void requestComponent(String identifier, String component, String data) {
+    public void requestComponent(String identifier, Class<? extends ObjectComponent> component, String data) {
         Logger.info("Requesting component...");
         connectedClient.sendBlock(new NetBlock(identifier, component, data));
     }

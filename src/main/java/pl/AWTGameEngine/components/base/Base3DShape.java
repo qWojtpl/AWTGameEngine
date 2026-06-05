@@ -137,7 +137,7 @@ public abstract class Base3DShape extends NetComponent {
         if(getSprite() == null) {
             return new NetBlock();
         }
-        return new NetBlock(getObject().getIdentifier(), this.getClass().getName(), getSprite().getImagePath());
+        return new NetBlock(getObject().getIdentifier(), this.getClass(), getSprite().getImagePath());
     }
 
     @Override

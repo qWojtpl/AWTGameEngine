@@ -85,7 +85,7 @@ public class SpriteRenderer extends NetComponent {
     @Override
     public NetBlock onSynchronize() {
         netSpriteChanged = false;
-        return new NetBlock(getObject().getIdentifier(), getComponentName(), getSpriteSource());
+        return new NetBlock(getObject().getIdentifier(), SpriteRenderer.class, getSpriteSource());
     }
 
     @Override

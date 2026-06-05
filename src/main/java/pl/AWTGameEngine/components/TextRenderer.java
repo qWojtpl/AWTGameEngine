@@ -179,7 +179,7 @@ public class TextRenderer extends NetComponent {
 
     public NetBlock onSynchronize() {
         netPropertyChanged = false;
-        return new NetBlock(getObject().getIdentifier(), "pl.AWTGameEngine.components.TextRenderer",
+        return new NetBlock(getObject().getIdentifier(), TextRenderer.class,
                 getText() + NetBlock.getDelimiter() + getColor() + NetBlock.getDelimiter() + getSize() + NetBlock.getDelimiter() +
                 getHorizontalAlign().toString() + NetBlock.getDelimiter() + getVerticalAlign().toString());
     }

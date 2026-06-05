@@ -63,7 +63,7 @@ public class Movement2D extends NetComponent {
 
     @Override
     public NetBlock onSynchronize() {
-        return new NetBlock(getObject().getIdentifier(), "pl.AWTGameEngine.custom.Movement2D", "discover");
+        return new NetBlock(getObject().getIdentifier(), Movement2D.class, "discover");
     }
 
     @Override

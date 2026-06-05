@@ -95,7 +95,7 @@ public class BlankRenderer extends NetComponent {
         netColorChanged = false;
         return new NetBlock(
                 getObject().getIdentifier(),
-                this.getClass().getName(),
+                BlankRenderer.class,
                 getColor()
         );
     }

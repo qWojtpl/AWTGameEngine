@@ -1,5 +1,7 @@
 package pl.AWTGameEngine.objects.net;
 
+import pl.AWTGameEngine.components.base.ObjectComponent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ import java.util.List;
 public class NetBlock {
 
     private final String identifier;
-    private final String component;
+    private final Class<? extends ObjectComponent> component;
     private String data;
 
     public NetBlock() {
@@ -25,13 +27,13 @@ public class NetBlock {
         this.data = null;
     }
 
-    public NetBlock(String identifier, String component, String data) {
+    public NetBlock(String identifier, Class<? extends ObjectComponent> component, String data) {
         this.identifier = identifier;
         this.component = component;
         this.data = data;
     }
 
-    public NetBlock(String identifier, String component, Object... data) {
+    public NetBlock(String identifier, Class<? extends ObjectComponent> component, Object... data) {
         this.identifier = identifier;
         this.component = component;
         formData(data);
@@ -41,7 +43,7 @@ public class NetBlock {
         return this.identifier;
     }
 
-    public String getComponent() {
+    public Class<? extends ObjectComponent> getComponent() {
         return this.component;
     }
 
@@ -62,7 +64,9 @@ public class NetBlock {
     }
 
     public String formMessage() {
-        return getIdentifier() + getMessageStructureDelimiter() + getComponent() + getMessageStructureDelimiter() + getData();
+        return getIdentifier() + getMessageStructureDelimiter() +
+                (getComponent() != null ? getComponent().getCanonicalName() : null)
+                + getMessageStructureDelimiter() + getData();
     }
 
     public static String getMessageStructureDelimiter() {

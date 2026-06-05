@@ -3,6 +3,7 @@ package pl.AWTGameEngine.engine;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.tests.Test;
 import pl.AWTGameEngine.engine.enums.ConsoleColor;
+import pl.AWTGameEngine.exceptions.tests.TestNotFoundException;
 
 public class TestPerformer {
 
@@ -28,16 +29,34 @@ public class TestPerformer {
                 fails++;
             }
         }
-
         return fails;
     }
 
     public static boolean performTest(Object context, Test test) {
         Logger.logTest("Running test " + test.name());
-        BaseTest baseTest = getInstance(test);
-        baseTest.setup(context);
-        boolean result = baseTest.perform();
-        baseTest.end();
+        BaseTest baseTest;
+        try {
+            baseTest = getInstance(test);
+        } catch(TestNotFoundException e) {
+            Logger.exception("Cannot get instance of a test.", e);
+            return false;
+        }
+        try {
+            baseTest.setup(context);
+        } catch(Exception e) {
+            Logger.exception("Exception in setup of a test " + test.name(), e);
+        }
+        boolean result = false;
+        try {
+            result = baseTest.perform();
+        } catch(Exception e) {
+            Logger.exception("Exception while performing a test " + test.name(), e);
+        }
+        try {
+            baseTest.end();
+        } catch(Exception e) {
+            Logger.exception("Exception in ending a test " + test.name(), e);
+        }
         if(result) {
             Logger.logTest(ConsoleColor.GREEN.value + "Test " + test.name() + " successfully passed.");
         } else {
@@ -50,8 +69,8 @@ public class TestPerformer {
         try {
             Class<?> clazz = Class.forName(test.testClass());
             return (BaseTest) clazz.getConstructor().newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch(Exception e) {
+            throw new TestNotFoundException(test.testClass());
         }
     }
 
