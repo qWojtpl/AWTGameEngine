@@ -5,6 +5,7 @@ import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.deserializers.ObjLoader;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
@@ -35,59 +36,12 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     public void initShape(String path, GL4 gl) {
 
-        float[] vertices = new float[0];
-
-        if("box".equals(path)) {
-            vertices = new float[]{
-                    // pos              // uv
-                    // front
-                    -1, -1,  1,  0, 1,
-                    1, -1,  1,  1, 1,
-                    1,  1,  1,  1, 0,
-                    -1, -1,  1,  0, 1,
-                    1,  1,  1,  1, 0,
-                    -1,  1,  1,  0, 0,
-
-                    // back
-                    -1, -1, -1,  1, 1,
-                    -1,  1, -1,  1, 0,
-                    1,  1, -1,  0, 0,
-                    -1, -1, -1,  1, 1,
-                    1,  1, -1,  0, 0,
-                    1, -1, -1,  0, 1,
-
-                    // left
-                    -1, -1, -1,  0, 1,
-                    -1, -1,  1,  1, 1,
-                    -1,  1,  1,  1, 0,
-                    -1, -1, -1,  0, 1,
-                    -1,  1,  1,  1, 0,
-                    -1,  1, -1,  0, 0,
-
-                    // right
-                    1, -1, -1,  1, 1,
-                    1,  1, -1,  1, 0,
-                    1,  1,  1,  0, 0,
-                    1, -1, -1,  1, 1,
-                    1,  1,  1,  0, 0,
-                    1, -1,  1,  0, 1,
-
-                    // top
-                    -1,  1, -1,  0, 0,
-                    -1,  1,  1,  0, 1,
-                    1,  1,  1,  1, 1,
-                    -1,  1, -1,  0, 0,
-                    1,  1,  1,  1, 1,
-                    1,  1, -1,  1, 0,
-
-                    // bottom
-                    -1, -1, -1,  1, 0,
-                    1, -1, -1,  0, 0,
-                    1, -1,  1,  0, 1,
-                    -1, -1, -1,  1, 0,
-                    1, -1,  1,  0, 1,
-                    -1, -1,  1,  1, 1
-            };
+        float[] vertices;
+        try {
+             vertices = ObjLoader.getVertices(path);
+        } catch(Exception e) {
+            Logger.exception("Exception while getting vertices of " + path, e);
+            return;
         }
 
         int[] tmp = new int[1];
@@ -124,7 +78,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             if(ro.getShapePath() == null) {
                 return;
             }
-            
+
             if(!shapes.containsKey(ro.getShapePath())) {
                 initShape(ro.getShapePath(), gl);
             }
