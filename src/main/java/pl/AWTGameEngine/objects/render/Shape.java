@@ -5,11 +5,13 @@ public class Shape {
     private final String path;
     private final int vao;
     private final int vbo;
+    private final int vertexCount;
 
-    public Shape(String path, int vao, int vbo) {
+    public Shape(String path, int vao, int vbo, int vertexCount) {
         this.path = path;
         this.vao = vao;
         this.vbo = vbo;
+        this.vertexCount = vertexCount;
     }
 
     public String getPath() {
@@ -22,6 +24,10 @@ public class Shape {
 
     public int getVbo() {
         return this.vbo;
+    }
+
+    public int getVertexCount() {
+        return this.vertexCount;
     }
 
 }

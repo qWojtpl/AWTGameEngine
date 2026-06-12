@@ -53,6 +53,10 @@
 <!--        <SpinningObject _package="pl.AWTGameEngine.custom.performance" />-->
     </object>
 
+    <object id="box7" x="50" y="-50" z="50" size="100,100,100" rotation="0,0,0">
+        <Plane3D spriteSource="sprites/beaver.jpg" shader="shaders/billboard" />
+    </object>
+
     <object id="vehicle" x="200" y="50" z="200" size="10,10,150">
         <Box3D spriteSource="sprites/beaver.jpg" />
         <Vehicle mass="15870" />

@@ -64,7 +64,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         gl.glBindVertexArray(0);
 
-        shapes.put(path, new Shape(path, vao, vbo));
+        shapes.put(path, new Shape(path, vao, vbo, vertices.length));
     }
 
     public void drawScene(GL4 gl, float[] viewProj) {
@@ -100,7 +100,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                 gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "model"), 1, false, model, 0);
                 gl.glDepthFunc(GL4.GL_GREATER);
                 gl.glDepthMask(false);
-                gl.glDrawArrays(GL4.GL_TRIANGLES, 0, 36);
+                gl.glDrawArrays(GL4.GL_TRIANGLES, 0, shape.getVertexCount());
                 gl.glDepthFunc(GL4.GL_LESS);
                 gl.glDepthMask(true);
             }
@@ -122,7 +122,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                 textures.get(ro.getSprite()).bind(gl);
             }
 
-            gl.glDrawArrays(GL.GL_TRIANGLES, 0, 36);
+            gl.glDrawArrays(GL.GL_TRIANGLES, 0, shape.getVertexCount());
         }
 
         gl.glBindVertexArray(0);
