@@ -9,6 +9,7 @@ import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
+import pl.AWTGameEngine.objects.render.Shape;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
@@ -24,6 +25,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     private final PanelGL panelGL;
     private final ConcurrentHashMap<String, RenderOptions3D> renderables = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Sprite, Texture> textures = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Shape> shapes = new ConcurrentHashMap<>();
     private int vao;
     private int vbo;
 
@@ -31,57 +33,62 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         this.panelGL = panelGL;
     }
 
-    public void init(GL4 gl) {
-        float[] vertices = {
-                // pos              // uv
-                // front
-                -1, -1,  1,  0, 1,
-                1, -1,  1,  1, 1,
-                1,  1,  1,  1, 0,
-                -1, -1,  1,  0, 1,
-                1,  1,  1,  1, 0,
-                -1,  1,  1,  0, 0,
+    public void initShape(String path, GL4 gl) {
 
-                // back
-                -1, -1, -1,  1, 1,
-                -1,  1, -1,  1, 0,
-                1,  1, -1,  0, 0,
-                -1, -1, -1,  1, 1,
-                1,  1, -1,  0, 0,
-                1, -1, -1,  0, 1,
+        float[] vertices = new float[0];
 
-                // left
-                -1, -1, -1,  0, 1,
-                -1, -1,  1,  1, 1,
-                -1,  1,  1,  1, 0,
-                -1, -1, -1,  0, 1,
-                -1,  1,  1,  1, 0,
-                -1,  1, -1,  0, 0,
+        if("box".equals(path)) {
+            vertices = new float[]{
+                    // pos              // uv
+                    // front
+                    -1, -1,  1,  0, 1,
+                    1, -1,  1,  1, 1,
+                    1,  1,  1,  1, 0,
+                    -1, -1,  1,  0, 1,
+                    1,  1,  1,  1, 0,
+                    -1,  1,  1,  0, 0,
 
-                // right
-                1, -1, -1,  1, 1,
-                1,  1, -1,  1, 0,
-                1,  1,  1,  0, 0,
-                1, -1, -1,  1, 1,
-                1,  1,  1,  0, 0,
-                1, -1,  1,  0, 1,
+                    // back
+                    -1, -1, -1,  1, 1,
+                    -1,  1, -1,  1, 0,
+                    1,  1, -1,  0, 0,
+                    -1, -1, -1,  1, 1,
+                    1,  1, -1,  0, 0,
+                    1, -1, -1,  0, 1,
 
-                // top
-                -1,  1, -1,  0, 0,
-                -1,  1,  1,  0, 1,
-                1,  1,  1,  1, 1,
-                -1,  1, -1,  0, 0,
-                1,  1,  1,  1, 1,
-                1,  1, -1,  1, 0,
+                    // left
+                    -1, -1, -1,  0, 1,
+                    -1, -1,  1,  1, 1,
+                    -1,  1,  1,  1, 0,
+                    -1, -1, -1,  0, 1,
+                    -1,  1,  1,  1, 0,
+                    -1,  1, -1,  0, 0,
 
-                // bottom
-                -1, -1, -1,  1, 0,
-                1, -1, -1,  0, 0,
-                1, -1,  1,  0, 1,
-                -1, -1, -1,  1, 0,
-                1, -1,  1,  0, 1,
-                -1, -1,  1,  1, 1
-        };
+                    // right
+                    1, -1, -1,  1, 1,
+                    1,  1, -1,  1, 0,
+                    1,  1,  1,  0, 0,
+                    1, -1, -1,  1, 1,
+                    1,  1,  1,  0, 0,
+                    1, -1,  1,  0, 1,
+
+                    // top
+                    -1,  1, -1,  0, 0,
+                    -1,  1,  1,  0, 1,
+                    1,  1,  1,  1, 1,
+                    -1,  1, -1,  0, 0,
+                    1,  1,  1,  1, 1,
+                    1,  1, -1,  1, 0,
+
+                    // bottom
+                    -1, -1, -1,  1, 0,
+                    1, -1, -1,  0, 0,
+                    1, -1,  1,  0, 1,
+                    -1, -1, -1,  1, 0,
+                    1, -1,  1,  0, 1,
+                    -1, -1,  1,  1, 1
+            };
+        }
 
         int[] tmp = new int[1];
 
@@ -92,7 +99,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         gl.glGenBuffers(1, tmp, 0);
         vbo = tmp[0];
         gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vbo);
-        gl.glBufferData(GL.GL_ARRAY_BUFFER, vertices.length * Float.BYTES,
+        gl.glBufferData(GL.GL_ARRAY_BUFFER, (long) vertices.length * Float.BYTES,
                 FloatBuffer.wrap(vertices), GL.GL_STATIC_DRAW);
 
         gl.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 5 * Float.BYTES, 0);
@@ -102,6 +109,8 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         gl.glEnableVertexAttribArray(1);
 
         gl.glBindVertexArray(0);
+
+        shapes.put(path, new Shape(path, vao, vbo));
     }
 
     public void drawScene(GL4 gl, float[] viewProj) {
@@ -111,6 +120,18 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values());
         renderableList.sort(Comparator.comparing(RenderOptions3D::isXrayRender));
         for (RenderOptions3D ro : renderableList) {
+
+            if(ro.getShapePath() == null) {
+                return;
+            }
+            
+            if(!shapes.containsKey(ro.getShapePath())) {
+                initShape(ro.getShapePath(), gl);
+            }
+
+            Shape shape = shapes.get(ro.getShapePath());
+
+            gl.glBindVertexArray(shape.getVao());
 
             float[] model = MatrixHelper.composeModelMatrix(
                     ro.getPosition(),

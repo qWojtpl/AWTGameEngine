@@ -43,7 +43,6 @@ public class OpenGLManager implements GLEventListener {
         gl.glDepthFunc(GL.GL_LEQUAL);
 
         Thread.currentThread().setName("RenderLoop-opengl");
-        graphicsManagerGL.init(gl);
     }
 
     @Override

@@ -48,7 +48,8 @@ public class Box3D extends Base3DShape {
                 .setSprite(getSprite())
                 .setShapeType(GraphicsManager3D.ShapeType.BOX)
                 .setShader(getShader())
-                .setColor(getColor());
+                .setColor(getColor())
+                .setShapePath("box");
 
         graphicsManager3D.createBox(options);
         initialized = true;

@@ -18,6 +18,7 @@ public class RenderOptions3D {
     private boolean frontCullFace = false;
     private String shader;
     private boolean xrayRender = false;
+    private String shapePath;
 
     public RenderOptions3D(String identifier) {
         this.identifier = identifier;
@@ -57,6 +58,10 @@ public class RenderOptions3D {
 
     public String getShader() {
         return this.shader;
+    }
+
+    public String getShapePath() {
+        return this.shapePath;
     }
 
     public boolean isFrontCullFace() {
@@ -114,6 +119,11 @@ public class RenderOptions3D {
 
     public RenderOptions3D setShapeType(GraphicsManager3D.ShapeType shapeType) {
         this.shapeType = shapeType;
+        return this;
+    }
+
+    public RenderOptions3D setShapePath(String path) {
+        this.shapePath = path;
         return this;
     }
 
