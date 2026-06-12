@@ -2,7 +2,6 @@ package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.annotations.components.ComponentMeta;
 import pl.AWTGameEngine.annotations.components.management.*;
-import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
@@ -331,10 +330,6 @@ public abstract class ObjectComponent {
 
     public final boolean isWebComponent() {
         return this.getClass().isAnnotationPresent(WebComponent.class);
-    }
-
-    public final boolean isFXComponent() {
-        return this.getClass().isAnnotationPresent(ComponentFX.class);
     }
 
     public final boolean isGLComponent() {

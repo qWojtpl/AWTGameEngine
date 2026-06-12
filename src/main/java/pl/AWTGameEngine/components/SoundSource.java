@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
@@ -14,7 +13,6 @@ import pl.AWTGameEngine.objects.transform.TransformSet;
 import javax.sound.sampled.*;
 import java.io.IOException;
 
-@ComponentFX
 @ComponentGL
 public class SoundSource extends ObjectComponent {
 

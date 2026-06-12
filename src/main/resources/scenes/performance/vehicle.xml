@@ -6,7 +6,6 @@
 <!--        <MovementGL _package="pl.AWTGameEngine.custom" />-->
 <!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
-        <CameraFX />
         <Server port="53780" />
     </object>
 

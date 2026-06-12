@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.objects.render;
 
-import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
@@ -14,8 +13,6 @@ public class RenderOptions3D {
     private QuaternionTransformSet quaternionRotation;
     private Sprite sprite;
     private ColorObject color;
-    private GraphicsManager3D.ShapeType shapeType;
-    private boolean frontCullFace = false;
     private String shader;
     private boolean xrayRender = false;
     private String shapePath;
@@ -52,20 +49,12 @@ public class RenderOptions3D {
         return color;
     }
 
-    public GraphicsManager3D.ShapeType getShapeType() {
-        return this.shapeType;
-    }
-
     public String getShader() {
         return this.shader;
     }
 
     public String getShapePath() {
         return this.shapePath;
-    }
-
-    public boolean isFrontCullFace() {
-        return frontCullFace;
     }
 
     public boolean isXrayRender() {
@@ -107,18 +96,8 @@ public class RenderOptions3D {
         return this;
     }
 
-    public RenderOptions3D setFrontCullFace(boolean frontCullFace) {
-        this.frontCullFace = frontCullFace;
-        return this;
-    }
-
     public RenderOptions3D setXrayRender(boolean xrayRender) {
         this.xrayRender = xrayRender;
-        return this;
-    }
-
-    public RenderOptions3D setShapeType(GraphicsManager3D.ShapeType shapeType) {
-        this.shapeType = shapeType;
         return this;
     }
 

@@ -36,40 +36,40 @@ public abstract class Base3DShape extends NetComponent {
 
     protected abstract void removeShape();
 
-    protected void handleUpdates(GraphicsManager3D g, GraphicsManager3D.ShapeType shapeType) {
+    protected void handleUpdates(GraphicsManager3D g) {
         if(!initialized) {
             return;
         }
         if(updatePosition) {
-            g.updatePosition(getObject().getIdentifier(), shapeType, getObject().getPosition());
+            g.updatePosition(getObject().getIdentifier(), getObject().getPosition());
             updatePosition = false;
         }
         if(updateSize) {
-            g.updateSize(getObject().getIdentifier(), shapeType, getObject().getSize());
+            g.updateSize(getObject().getIdentifier(), getObject().getSize());
             updateSize = false;
         }
         if(updateRotation) {
-            g.updateRotation(getObject().getIdentifier(), shapeType, getObject().getRotation(), getObject().getQuaternionRotation());
+            g.updateRotation(getObject().getIdentifier(), getObject().getRotation(), getObject().getQuaternionRotation());
             updateRotation = false;
         }
         if(updateSprite) {
             if(sprite instanceof AnimatedSprite) {
-                g.updateSprite(getObject().getIdentifier(), shapeType, ((AnimatedSprite) sprite).requestSprite());
+                g.updateSprite(getObject().getIdentifier(), ((AnimatedSprite) sprite).requestSprite());
             } else {
-                g.updateSprite(getObject().getIdentifier(), shapeType, sprite);
+                g.updateSprite(getObject().getIdentifier(), sprite);
                 updateSprite = false;
             }
         }
         if(updateShader) {
-            g.updateShader(getObject().getIdentifier(), shapeType, shader);
+            g.updateShader(getObject().getIdentifier(), shader);
             updateShader = false;
         }
         if(updateColor) {
-            g.updateColor(getObject().getIdentifier(), shapeType, color);
+            g.updateColor(getObject().getIdentifier(), color);
             updateColor = false;
         }
         if(updateXray) {
-            g.updateXray(getObject().getIdentifier(), shapeType, xray);
+            g.updateXray(getObject().getIdentifier(), xray);
             updateXray = false;
         }
     }

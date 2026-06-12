@@ -13,7 +13,6 @@ import pl.AWTGameEngine.objects.net.NetBlock;
  */
 @DefaultComponent
 @WebComponent
-@ComponentFX
 @ComponentGL
 public class Prefab extends NetComponent {
 

@@ -9,7 +9,6 @@ import physx.geometry.PxGeometry;
 import physx.physics.*;
 import physx.vehicle2.*;
 import pl.AWTGameEngine.annotations.components.management.*;
-import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
@@ -27,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@ComponentFX
 @ComponentGL
 @Unique
 public class Vehicle extends ObjectComponent {
@@ -440,7 +438,6 @@ public class Vehicle extends ObjectComponent {
 
     @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
     @ComponentGL
-    @ComponentFX
     @DefaultComponent
     @WebComponent
     @Unique
@@ -519,7 +516,6 @@ public class Vehicle extends ObjectComponent {
 
     @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
     @ComponentGL
-    @ComponentFX
     @DefaultComponent
     @WebComponent
     @Unique
@@ -650,7 +646,6 @@ public class Vehicle extends ObjectComponent {
 
     @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
     @ComponentGL
-    @ComponentFX
     @DefaultComponent
     @WebComponent
     public static class Wheel extends VehicleComponent {

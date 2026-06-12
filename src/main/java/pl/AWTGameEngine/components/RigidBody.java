@@ -10,7 +10,6 @@ import physx.physics.*;
 import pl.AWTGameEngine.annotations.components.management.Conflicts;
 import pl.AWTGameEngine.annotations.components.management.ConflictsWith;
 import pl.AWTGameEngine.annotations.components.management.Unique;
-import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
@@ -131,7 +130,6 @@ public abstract class RigidBody extends ObjectComponent {
         }
     }
 
-    @ComponentFX
     @ComponentGL
     @Unique
     @Conflicts({
@@ -255,7 +253,6 @@ public abstract class RigidBody extends ObjectComponent {
 
     }
 
-    @ComponentFX
     @ComponentGL
     @Unique
     @Conflicts({
@@ -302,7 +299,6 @@ public abstract class RigidBody extends ObjectComponent {
 
     }
 
-    @ComponentFX
     @ComponentGL
     @Unique
     @Conflicts({

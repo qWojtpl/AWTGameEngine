@@ -9,41 +9,22 @@ import pl.AWTGameEngine.objects.transform.TransformSet;
 
 public abstract class GraphicsManager3D {
 
-    public abstract void createBox(RenderOptions3D options);
+    public abstract void createRenderable(RenderOptions3D options);
 
-    public abstract void removeBox(String identifier);
+    public abstract void removeRenderable(String identifier);
 
-    public abstract void createSphere(RenderOptions3D options);
+    public abstract void updatePosition(String identifier, TransformSet position);
 
-    public abstract void removeSphere(String identifier);
+    public abstract void updateSize(String identifier, TransformSet scale);
 
-    public abstract void createCylinder(RenderOptions3D options);
+    public abstract void updateRotation(String identifier, TransformSet rotation, QuaternionTransformSet quaternionRotation);
 
-    public abstract void removeCylinder(String identifier);
+    public abstract void updateSprite(String identifier, Sprite sprite);
 
-    public abstract void createCustomModel(RenderOptions3D options, String modelPath);
+    public abstract void updateShader(String identifier, String shader);
 
-    public abstract void removeCustomModel(String identifier);
+    public abstract void updateColor(String identifier, ColorObject color);
 
-    public abstract void updatePosition(String identifier, ShapeType shape, TransformSet position);
-
-    public abstract void updateSize(String identifier, ShapeType shape, TransformSet scale);
-
-    public abstract void updateRotation(String identifier, ShapeType shape, TransformSet rotation, QuaternionTransformSet quaternionRotation);
-
-    public abstract void updateSprite(String identifier, ShapeType shape, Sprite sprite);
-
-    public abstract void updateShader(String identifier, ShapeType shape, String shader);
-
-    public abstract void updateColor(String identifier, ShapeType shape, ColorObject color);
-
-    public abstract void updateXray(String identifier, ShapeType shape, boolean xray);
-
-    public enum ShapeType {
-        BOX,
-        CYLINDER,
-        SPHERE,
-        MODEL
-    }
+    public abstract void updateXray(String identifier, boolean xray);
 
 }

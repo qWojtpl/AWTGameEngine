@@ -129,7 +129,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     @Override
-    public void createBox(RenderOptions3D options) {
+    public void createRenderable(RenderOptions3D options) {
         if(renderables.containsKey(options.getIdentifier())) {
             return;
         }
@@ -137,76 +137,43 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     @Override
-    public void removeBox(String identifier) {
-
+    public void removeRenderable(String identifier) {
+        renderables.remove(identifier);
     }
 
     @Override
-    public void createSphere(RenderOptions3D options) {
-        if(renderables.containsKey(options.getIdentifier())) {
-            return;
-        }
-        renderables.put(options.getIdentifier(), options);
-    }
-
-    @Override
-    public void removeSphere(String identifier) {
-
-    }
-
-    @Override
-    public void createCylinder(RenderOptions3D options) {
-
-    }
-
-    @Override
-    public void removeCylinder(String identifier) {
-
-    }
-
-    @Override
-    public void createCustomModel(RenderOptions3D options, String modelPath) {
-
-    }
-
-    @Override
-    public void removeCustomModel(String identifier) {
-
-    }
-
-    @Override
-    public void updatePosition(String identifier, ShapeType shape, TransformSet position) {
+    public void updatePosition(String identifier, TransformSet position) {
         renderables.get(identifier).setPosition(position);
     }
 
     @Override
-    public void updateSize(String identifier, ShapeType shape, TransformSet scale) {
+    public void updateSize(String identifier, TransformSet scale) {
         renderables.get(identifier).setSize(scale);
     }
 
     @Override
-    public void updateRotation(String identifier, ShapeType shape, TransformSet rotation, QuaternionTransformSet quaternionRotation) {
+    public void updateRotation(String identifier, TransformSet rotation, QuaternionTransformSet quaternionRotation) {
         renderables.get(identifier).setRotation(rotation);
         renderables.get(identifier).setQuaternionRotation(quaternionRotation);
     }
 
     @Override
-    public void updateSprite(String identifier, ShapeType shape, Sprite sprite) {
+    public void updateSprite(String identifier, Sprite sprite) {
         renderables.get(identifier).setSprite(sprite);
     }
 
     @Override
-    public void updateShader(String identifier, ShapeType shape, String shader) {
+    public void updateShader(String identifier, String shader) {
         renderables.get(identifier).setShader(shader);
     }
 
     @Override
-    public void updateColor(String identifier, ShapeType shape, ColorObject color) {
+    public void updateColor(String identifier, ColorObject color) {
         renderables.get(identifier).setColor(color);
     }
 
     @Override
-    public void updateXray(String identifier, ShapeType shape, boolean xray) {
+    public void updateXray(String identifier, boolean xray) {
         renderables.get(identifier).setXrayRender(xray);
     }
 

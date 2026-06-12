@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.custom.performance;
 
-import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
@@ -8,7 +7,6 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 
 @ComponentGL
-@ComponentFX
 @WebComponent
 @DefaultComponent
 public class FPSMeter extends ObjectComponent {

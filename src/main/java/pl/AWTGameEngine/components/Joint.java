@@ -4,7 +4,6 @@ import physx.PxTopLevelFunctions;
 import physx.extensions.PxDistanceJoint;
 import physx.extensions.PxDistanceJointFlagEnum;
 import physx.extensions.PxRevoluteJoint;
-import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -52,7 +51,6 @@ public abstract class Joint extends ObjectComponent {
     }
 
     @ComponentGL
-    @ComponentFX
     public static class Distance extends Joint {
 
         private PxDistanceJoint joint;
@@ -94,7 +92,6 @@ public abstract class Joint extends ObjectComponent {
     }
 
     @ComponentGL
-    @ComponentFX
     public static class Revolute extends Joint {
 
         private PxRevoluteJoint joint;
@@ -134,7 +131,6 @@ public abstract class Joint extends ObjectComponent {
     }
 
     //todo
-//    @ComponentFX
 //    @ComponentGL
 //    public static class Articulation extends Joint {
 //

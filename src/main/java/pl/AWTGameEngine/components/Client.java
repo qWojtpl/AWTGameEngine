@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
@@ -19,7 +18,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-@ComponentFX
 @ComponentGL
 @DefaultComponent
 @WebComponent

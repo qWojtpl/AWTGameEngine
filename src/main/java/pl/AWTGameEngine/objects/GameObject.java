@@ -105,12 +105,6 @@ public class GameObject {
                         " cannot be added to " + identifier + " because is not marked as DefaultComponent");
                 return;
             }
-        } else if(RenderEngine.FX3D.equals(renderEngine)) {
-            if(!component.isFXComponent()) {
-                Logger.error("Component " + component.getComponentName() +
-                        " cannot be added to " + identifier + " because is not marked as ComponentFX");
-                return;
-            }
         } else if(RenderEngine.OPENGL.equals(renderEngine)) {
             if(!component.isGLComponent()) {
                 Logger.error("Component " + component.getComponentName() +

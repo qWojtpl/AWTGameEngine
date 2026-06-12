@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.components.types.ComponentFX;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
@@ -12,12 +11,10 @@ import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.GameObject;
 
 import javax.sound.sampled.*;
-import java.io.IOException;
 
 @DefaultComponent
 @WebComponent
 @ComponentGL
-@ComponentFX
 public class MusicPlayer extends ObjectComponent {
 
     private Clip clip;
