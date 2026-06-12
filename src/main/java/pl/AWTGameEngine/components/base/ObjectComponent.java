@@ -228,6 +228,16 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
+    public void onTriggerEnter(RigidBody.Trigger trigger) {
+
+    }
+
+    @EventMethod
+    public void onTriggerLeave(RigidBody.Trigger trigger) {
+
+    }
+
+    @EventMethod
     public void onButtonClick() {
 
     }

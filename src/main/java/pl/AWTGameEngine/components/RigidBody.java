@@ -301,6 +301,23 @@ public abstract class RigidBody extends ObjectComponent {
 
     @ComponentGL
     @Unique
+    public static class Trigger extends RigidBody.Static {
+
+        public Trigger(GameObject object) {
+            super(object);
+        }
+
+        @Override
+        public void initialize() {
+            super.initialize();
+            shape.setFlag(PxShapeFlagEnum.eSIMULATION_SHAPE, false);
+            shape.setFlag(PxShapeFlagEnum.eTRIGGER_SHAPE, true);
+        }
+
+    }
+
+    @ComponentGL
+    @Unique
     @Conflicts({
             @ConflictsWith(RigidBody.Dynamic.class),
             @ConflictsWith(RigidBody.Static.class)

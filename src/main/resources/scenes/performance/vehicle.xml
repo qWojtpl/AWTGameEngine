@@ -19,6 +19,11 @@
         <RigidBody.Static />
     </object>
 
+    <object id="trigger" x="500" y="-89" z="-500" size="100,10,100">
+        <Box3D />
+        <RigidBody.Trigger />
+    </object>
+
     <object id="box0" x="30" y="-80" z="0" size="10,10,10">
         <Box3D spriteSource="sprites/beaver.jpg" />
         <RigidBody.Dynamic />
@@ -52,7 +57,7 @@
 <!--        <SpinningObject _package="pl.AWTGameEngine.custom.performance" />-->
     </object>
 
-    <object id="box7" x="50" y="-50" z="50" size="100,100,100" rotation="0,0,0">
+    <object id="box7" x="50" y="-50" z="50" size="100,100,100">
         <Plane3D spriteSource="sprites/beaver.jpg" shader="shaders/billboard" />
     </object>
 

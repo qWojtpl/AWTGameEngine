@@ -70,6 +70,28 @@ public class CollisionManager extends PxSimulationEventCallbackImpl {
         }
     }
 
+    @Override
+    public void onTrigger(PxTriggerPair pairs, int nbPairs) {
+        for(int i = 0; i < nbPairs; i++) {
+            PxTriggerPair pair = PxTriggerPair.arrayGet(pairs.getAddress(), i);
+
+            GameObject triggerGo = getScene().getGameObjectByName(pair.getTriggerActor().getName());
+            RigidBody.Trigger trigger = (RigidBody.Trigger) triggerGo.getComponentByClass(RigidBody.Trigger.class);
+
+            GameObject obj = getScene().getGameObjectByName(pair.getOtherActor().getName());
+
+            if(pair.getStatus().equals(PxPairFlagEnum.eNOTIFY_TOUCH_FOUND)) {
+                for(ObjectComponent c : obj.getEventHandler().getComponents("onTriggerEnter#RigidBody.Trigger")) {
+                    c.onTriggerEnter(trigger);
+                }
+            } else if(pair.getStatus().equals(PxPairFlagEnum.eNOTIFY_TOUCH_LOST)) {
+                for(ObjectComponent c : obj.getEventHandler().getComponents("onTriggerLeave#RigidBody.Trigger")) {
+                    c.onTriggerLeave(trigger);
+                }
+            }
+        }
+    }
+
     public Scene getScene() {
         return this.scene;
     }
