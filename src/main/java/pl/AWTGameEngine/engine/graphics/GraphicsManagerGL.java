@@ -216,6 +216,9 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                 texturesToDelete.add(oldSprite);
             }
         }
+        if(!renderables.containsKey(identifier)) {
+            return;
+        }
         renderables.get(identifier).setSprite(sprite);
     }
 

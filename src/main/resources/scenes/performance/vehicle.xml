@@ -20,7 +20,9 @@
     </object>
 
     <object id="trigger" x="500" y="-89" z="-500" size="100,10,100">
+        #EDITOR
         <Box3D />
+        #END
         <RigidBody.Trigger />
     </object>
 

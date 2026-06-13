@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
+import pl.AWTGameEngine.engine.helpers.EditorSegmentHelper;
 import pl.AWTGameEngine.exceptions.JavaBuildException;
 
 import java.io.*;
@@ -28,7 +29,7 @@ public class SceneBuilder {
         StringBuilder fileBuilder = new StringBuilder();
         appendStructure(fileBuilder, getFileName(path));
 
-        try(InputStream stream = resourceManager.getResourceAsStream(path)) {
+        try(InputStream stream = EditorSegmentHelper.patchStream(resourceManager.getResourceAsStream(path), false)) {
             SceneLoader sceneLoader = new SceneLoader(null);
             Document document = sceneLoader.getDocument(stream);
             SceneOptions options = sceneLoader.getSceneOptions(document);

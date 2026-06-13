@@ -9,6 +9,7 @@ import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.ResourceManager;
 import pl.AWTGameEngine.engine.deserializers.*;
+import pl.AWTGameEngine.engine.helpers.EditorSegmentHelper;
 import pl.AWTGameEngine.engine.panels.*;
 import pl.AWTGameEngine.exceptions.scenes.SceneDataException;
 import pl.AWTGameEngine.objects.GameObject;
@@ -53,7 +54,7 @@ public class SceneLoader {
         Scene newScene;
         ResourceManager resourceManager = Dependencies.getResourceManager();
         AppProperties appProperties = Dependencies.getAppProperties();
-        try(InputStream sceneStream = resourceManager.getResourceAsStream(scenePath)) {
+        try(InputStream sceneStream = EditorSegmentHelper.patchStream(resourceManager.getResourceAsStream(scenePath), false)) {
             Document document = getDocument(sceneStream);
             SceneOptions sceneOptions = getSceneOptions(document);
             if(!nestedScene) {
@@ -300,8 +301,8 @@ public class SceneLoader {
             Logger.exception("Prefab list doesn't have a source.", e);
             return;
         }
-        try(InputStream sceneStream = Dependencies.getResourceManager().getResourceAsStream(source)) {
-            Document document = getDocument(sceneStream);
+        try(InputStream prefabStream = EditorSegmentHelper.patchStream(Dependencies.getResourceManager().getResourceAsStream(source), false)) {
+            Document document = getDocument(prefabStream);
             NodeList prefabsData = document.getElementsByTagName("prefabs").item(0).getChildNodes();
             for(int i = 0; i < prefabsData.getLength(); i++) {
                 if(prefabsData.item(i).getNodeName().startsWith("#")) {
