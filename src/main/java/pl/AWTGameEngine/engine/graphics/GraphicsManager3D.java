@@ -19,7 +19,7 @@ public abstract class GraphicsManager3D {
 
     public abstract void updateRotation(String identifier, TransformSet rotation, QuaternionTransformSet quaternionRotation);
 
-    public abstract void updateSprite(String identifier, Sprite sprite);
+    public abstract void updateSprite(String identifier, Sprite sprite, boolean releaseOldTexture);
 
     public abstract void updateShader(String identifier, String shader);
 

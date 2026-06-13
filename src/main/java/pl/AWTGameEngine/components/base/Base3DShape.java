@@ -55,9 +55,9 @@ public abstract class Base3DShape extends NetComponent {
         }
         if(updateSprite) {
             if(sprite instanceof AnimatedSprite) {
-                g.updateSprite(getObject().getIdentifier(), ((AnimatedSprite) sprite).requestSprite());
+                g.updateSprite(getObject().getIdentifier(), ((AnimatedSprite) sprite).requestSprite(), false);
             } else {
-                g.updateSprite(getObject().getIdentifier(), sprite);
+                g.updateSprite(getObject().getIdentifier(), sprite, true);
                 updateSprite = false;
             }
         }

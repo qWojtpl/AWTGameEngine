@@ -28,6 +28,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     private final PanelGL panelGL;
     private final ConcurrentHashMap<String, RenderOptions3D> renderables = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Sprite, Texture> textures = new ConcurrentHashMap<>();
+    private final ConcurrentLinkedQueue<Texture> alphaTextures = new ConcurrentLinkedQueue<>();
     private final ConcurrentHashMap<String, Shape> shapes = new ConcurrentHashMap<>();
     private final ConcurrentLinkedQueue<Sprite> texturesToDelete = new ConcurrentLinkedQueue<>();
 
@@ -70,9 +71,53 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     public void drawScene(GL4 gl, float[] viewProj) {
 
+        List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values());
+        renderableList.sort(Comparator.comparing(RenderOptions3D::isXrayRender));
+
+        List<RenderOptions3D> transparentRenders = new ArrayList<>();
+
+        for(RenderOptions3D ro : renderableList) {
+            if(ro.getSprite() != null) {
+                if(alphaTextures.contains(textures.get(ro.getSprite()))) {
+                    transparentRenders.add(ro);
+                    continue;
+                }
+            }
+            drawShape(gl, ro, viewProj);
+        }
+
+        for(RenderOptions3D ro : transparentRenders) {
+            drawShape(gl, ro, viewProj);
+        }
+
+        gl.glBindVertexArray(0);
+    }
+
+    private void freeTextures(GL4 gl) {
+
         if(!texturesToDelete.isEmpty()) {
-            Logger.info("Freeing " + texturesToDelete.size() + " textures...");
+            List<Sprite> ttd = new ArrayList<>(texturesToDelete);
+            for(Sprite s : ttd) {
+                boolean remove = false;
+                for(RenderOptions3D ro : renderables.values()) {
+                    if(s.getImagePath().equals(ro.getSprite().getImagePath())) {
+                        remove = true;
+                        break;
+                    }
+                }
+                if(remove) {
+                    texturesToDelete.remove(s);
+                }
+            }
+        }
+
+        if(!texturesToDelete.isEmpty()) {
+            Logger.info("Freeing (" + texturesToDelete.size() + ") textures...");
             for(Sprite sprite : texturesToDelete) {
+                if(!textures.containsKey(sprite)) {
+                    continue;
+                }
+                alphaTextures.remove(textures.get(sprite));
                 textures.get(sprite).destroy(gl);
                 textures.remove(sprite);
                 Dependencies.getResourceManager().releaseSpriteResource(sprite.getImagePath());
@@ -80,63 +125,57 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
             texturesToDelete.clear();
         }
+    }
 
-        List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values());
-        renderableList.sort(Comparator.comparing(RenderOptions3D::isXrayRender));
-        //todo: transparent render order
-        for (RenderOptions3D ro : renderableList) {
-
-            if(ro.getShapePath() == null) {
-                return;
-            }
-
-            if(!shapes.containsKey(ro.getShapePath())) {
-                initShape(ro.getShapePath(), gl);
-            }
-
-            Shape shape = shapes.get(ro.getShapePath());
-
-            gl.glBindVertexArray(shape.getVao());
-
-            float[] model = MatrixHelper.composeModelMatrix(
-                    ro.getPosition(),
-                    ro.getQuaternionRotation(),
-                    ro.getSize()
-            );
-
-            if(ro.isXrayRender()) {
-                int xray = panelGL.getManager().getProgram(gl, "shaders/xray");
-                gl.glUseProgram(xray);
-                gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "viewProj"), 1, false, viewProj, 0);
-                gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "model"), 1, false, model, 0);
-                gl.glDepthFunc(GL4.GL_GREATER);
-                gl.glDepthMask(false);
-                gl.glDrawArrays(GL4.GL_TRIANGLES, 0, shape.getVertexCount());
-                gl.glDepthFunc(GL4.GL_LESS);
-                gl.glDepthMask(true);
-            }
-
-            int program = panelGL.getManager().getProgram(gl, ro.getShader());
-
-            gl.glUseProgram(program);
-
-            int modelLoc = gl.glGetUniformLocation(program, "model");
-            int vpLoc = gl.glGetUniformLocation(program, "viewProj");
-
-            gl.glUniformMatrix4fv(vpLoc, 1, false, viewProj, 0);
-            gl.glUniformMatrix4fv(modelLoc, 1, false, model, 0);
-
-            if(ro.getSprite() != null) {
-                if(textures.getOrDefault(ro.getSprite(), null) == null) {
-                    createTexture(ro.getSprite());
-                }
-                textures.get(ro.getSprite()).bind(gl);
-            }
-
-            gl.glDrawArrays(GL.GL_TRIANGLES, 0, shape.getVertexCount());
+    private void drawShape(GL4 gl, RenderOptions3D ro, float[] viewProj) {
+        if(ro.getShapePath() == null) {
+            return;
         }
 
-        gl.glBindVertexArray(0);
+        if(!shapes.containsKey(ro.getShapePath())) {
+            initShape(ro.getShapePath(), gl);
+        }
+
+        Shape shape = shapes.get(ro.getShapePath());
+
+        gl.glBindVertexArray(shape.getVao());
+
+        float[] model = MatrixHelper.composeModelMatrix(
+                ro.getPosition(),
+                ro.getQuaternionRotation(),
+                ro.getSize()
+        );
+
+        if(ro.isXrayRender()) {
+            int xray = panelGL.getManager().getProgram(gl, "shaders/xray");
+            gl.glUseProgram(xray);
+            gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "viewProj"), 1, false, viewProj, 0);
+            gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "model"), 1, false, model, 0);
+            gl.glDepthFunc(GL4.GL_GREATER);
+            gl.glDepthMask(false);
+            gl.glDrawArrays(GL4.GL_TRIANGLES, 0, shape.getVertexCount());
+            gl.glDepthFunc(GL4.GL_LESS);
+            gl.glDepthMask(true);
+        }
+
+        int program = panelGL.getManager().getProgram(gl, ro.getShader());
+
+        gl.glUseProgram(program);
+
+        int modelLoc = gl.glGetUniformLocation(program, "model");
+        int vpLoc = gl.glGetUniformLocation(program, "viewProj");
+
+        gl.glUniformMatrix4fv(vpLoc, 1, false, viewProj, 0);
+        gl.glUniformMatrix4fv(modelLoc, 1, false, model, 0);
+
+        if(ro.getSprite() != null) {
+            if(textures.getOrDefault(ro.getSprite(), null) == null) {
+                createTexture(gl, ro.getSprite());
+            }
+            textures.get(ro.getSprite()).bind(gl);
+        }
+
+        gl.glDrawArrays(GL.GL_TRIANGLES, 0, shape.getVertexCount());
     }
 
     @Override
@@ -149,7 +188,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     @Override
     public void removeRenderable(String identifier) {
-        updateSprite(identifier, null);
+        updateSprite(identifier, null, true);
         renderables.remove(identifier);
     }
 
@@ -170,20 +209,10 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     @Override
-    public void updateSprite(String identifier, Sprite sprite) {
-        Sprite oldSprite = renderables.get(identifier).getSprite();
-        if(oldSprite != null) {
-            boolean remove = true;
-            for(RenderOptions3D ro : renderables.values()) {
-                if(ro.equals(renderables.get(identifier))) {
-                    continue;
-                }
-                if(oldSprite.getImagePath().equals(ro.getSprite().getImagePath())) {
-                    remove = false;
-                    break;
-                }
-            }
-            if(remove) {
+    public void updateSprite(String identifier, Sprite sprite, boolean releaseOldTexture) {
+        if(releaseOldTexture) {
+            Sprite oldSprite = renderables.get(identifier).getSprite();
+            if(oldSprite != null) {
                 texturesToDelete.add(oldSprite);
             }
         }
@@ -210,9 +239,16 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         renderables.get(identifier).setXrayRender(xray);
     }
 
-    public void createTexture(Sprite sprite) {
+    public void createTexture(GL4 gl, Sprite sprite) {
         Logger.info("Initializing texture from sprite " + sprite.getImagePath());
-        textures.put(sprite, AWTTextureIO.newTexture(panelGL.getGlProfile(), sprite.getImage(), true));
+        Texture texture = AWTTextureIO.newTexture(panelGL.getGlProfile(), sprite.getImage(), true);
+        textures.put(sprite, texture);
+        if(sprite.isTransparent()) {
+            alphaTextures.add(texture);
+        }
+        if(gl != null) {
+            freeTextures(gl);
+        }
     }
 
 }

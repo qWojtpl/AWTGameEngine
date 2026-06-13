@@ -91,6 +91,23 @@ public class Sprite {
         return this;
     }
 
+    public boolean isTransparent() {
+        if(image == null) {
+            return false;
+        }
+        for(int y = 0; y < image.getHeight(); y++) {
+            for(int x = 0; x < image.getWidth(); x++) {
+                int pixel = image.getRGB(x, y);
+                int alpha = (pixel >> 24) & 0xff;
+
+                if(alpha < 255) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Command(value = "base64")
     public String getImageBase64() {
         return getImageBase64(false);
