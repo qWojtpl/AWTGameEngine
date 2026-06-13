@@ -73,6 +73,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values());
         renderableList.sort(Comparator.comparing(RenderOptions3D::isXrayRender));
+        //todo: transparent render order
         for (RenderOptions3D ro : renderableList) {
 
             if(ro.getShapePath() == null) {
@@ -165,6 +166,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     @Override
     public void updateShader(String identifier, String shader) {
         renderables.get(identifier).setShader(shader);
+    }
+
+    @Override
+    public void updateShapePath(String identifier, String shapePath) {
+        renderables.get(identifier).setShapePath(shapePath);
     }
 
     @Override

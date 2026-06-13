@@ -23,6 +23,8 @@ public abstract class GraphicsManager3D {
 
     public abstract void updateShader(String identifier, String shader);
 
+    public abstract void updateShapePath(String identifier, String shapePath);
+
     public abstract void updateColor(String identifier, ColorObject color);
 
     public abstract void updateXray(String identifier, boolean xray);

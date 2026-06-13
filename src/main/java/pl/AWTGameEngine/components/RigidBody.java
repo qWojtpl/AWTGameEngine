@@ -31,7 +31,7 @@ public abstract class RigidBody extends ObjectComponent {
     protected PxShape shape;
     protected PxPhysics physics;
     protected final PxTransform pose = new PxTransform(PxIDENTITYEnum.PxIdentity);
-    protected final PxFilterData filterData = new PxFilterData(1, -1, PxPairFlagEnum.eNOTIFY_TOUCH_FOUND.value | PxPairFlagEnum.eNOTIFY_TOUCH_LOST.value | PxPairFlagEnum.eNOTIFY_CONTACT_POINTS.value, 0);
+    protected PxFilterData filterData = new PxFilterData(1, -1, PxPairFlagEnum.eNOTIFY_TOUCH_FOUND.value | PxPairFlagEnum.eNOTIFY_TOUCH_LOST.value | PxPairFlagEnum.eNOTIFY_CONTACT_POINTS.value, 0);
 
     // Internal variables
     protected double mass = 0.03;
@@ -46,7 +46,7 @@ public abstract class RigidBody extends ObjectComponent {
         createGeometry();
 //        material = physics.createMaterial(0.5f, 0.5f, 0.5f);
         material = physXManager.getDefaultMaterial();
-        shape = physics.createShape(geometry, material, true, physXManager.getShapeFlags());
+        shape = physics.createShape(geometry, material, true, getShapeFlags());
         shape.setSimulationFilterData(filterData);
         updatePosition(getObject().getPosition());
         if(!getObject().getRotation().isEmpty()) {
@@ -84,6 +84,10 @@ public abstract class RigidBody extends ObjectComponent {
                 (float) getObject().getSize().getY(),
                 (float) getObject().getSize().getZ()
         );
+    }
+
+    protected PxShapeFlags getShapeFlags() {
+        return physXManager.getShapeFlags();
     }
 
     public void updatePosition(TransformSet position) {
@@ -309,9 +313,14 @@ public abstract class RigidBody extends ObjectComponent {
 
         @Override
         public void initialize() {
+            filterData.destroy();
+            filterData = new PxFilterData(1, -1, PxPairFlagEnum.eTRIGGER_DEFAULT.value | PxPairFlagEnum.eNOTIFY_TOUCH_FOUND.value | PxPairFlagEnum.eNOTIFY_TOUCH_LOST.value, 0);
             super.initialize();
-            shape.setFlag(PxShapeFlagEnum.eSIMULATION_SHAPE, false);
-            shape.setFlag(PxShapeFlagEnum.eTRIGGER_SHAPE, true);
+        }
+
+        @Override
+        public PxShapeFlags getShapeFlags() {
+            return physXManager.getTriggerShapeFlags();
         }
 
     }

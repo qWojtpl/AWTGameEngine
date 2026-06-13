@@ -25,6 +25,7 @@ public final class PhysXManager {
     private final PxDefaultCpuDispatcher cpuDispatcher;
     private final PxVec3 gravityVector;
     private final PxShapeFlags shapeFlags;
+    private final PxShapeFlags triggerShapeFlags;
     private final HashMap<Scene, PhysXScene> scenes = new HashMap<>();
     private PxMaterial defaultMaterial;
 
@@ -38,6 +39,7 @@ public final class PhysXManager {
         cpuDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(NUM_THREADS);
         gravityVector = new PxVec3(0f, -9.807f, 0f);
         shapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eSCENE_QUERY_SHAPE.value | PxShapeFlagEnum.eSIMULATION_SHAPE.value));
+        triggerShapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eTRIGGER_SHAPE.value));
     }
 
     public void init() {
@@ -97,6 +99,10 @@ public final class PhysXManager {
         return this.shapeFlags;
     }
 
+    public PxShapeFlags getTriggerShapeFlags() {
+        return this.triggerShapeFlags;
+    }
+
     public PxCookingParams getCookingParams() {
         return this.cookingParams;
     }
@@ -116,6 +122,7 @@ public final class PhysXManager {
         tolerances.destroy();
         gravityVector.destroy();
         shapeFlags.destroy();
+        triggerShapeFlags.destroy();
         foundation.release();
         errorCb.destroy();
         allocator.destroy();
