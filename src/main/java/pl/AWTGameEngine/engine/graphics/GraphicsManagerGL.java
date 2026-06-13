@@ -4,6 +4,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.ObjLoader;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GraphicsManagerGL extends GraphicsManager3D {
 
@@ -27,8 +29,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     private final ConcurrentHashMap<String, RenderOptions3D> renderables = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Sprite, Texture> textures = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Shape> shapes = new ConcurrentHashMap<>();
-    private int vao;
-    private int vbo;
+    private final ConcurrentLinkedQueue<Sprite> texturesToDelete = new ConcurrentLinkedQueue<>();
 
     public GraphicsManagerGL(PanelGL panelGL) {
         this.panelGL = panelGL;
@@ -47,11 +48,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         int[] tmp = new int[1];
 
         gl.glGenVertexArrays(1, tmp, 0);
-        vao = tmp[0];
+        int vao = tmp[0];
         gl.glBindVertexArray(vao);
 
         gl.glGenBuffers(1, tmp, 0);
-        vbo = tmp[0];
+        int vbo = tmp[0];
         gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vbo);
         gl.glBufferData(GL.GL_ARRAY_BUFFER, (long) vertices.length * Float.BYTES,
                 FloatBuffer.wrap(vertices), GL.GL_STATIC_DRAW);
@@ -69,7 +70,16 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     public void drawScene(GL4 gl, float[] viewProj) {
 
-        gl.glBindVertexArray(vao);
+        if(!texturesToDelete.isEmpty()) {
+            Logger.info("Freeing " + texturesToDelete.size() + " textures...");
+            for(Sprite sprite : texturesToDelete) {
+                textures.get(sprite).destroy(gl);
+                textures.remove(sprite);
+                Dependencies.getResourceManager().releaseSpriteResource(sprite.getImagePath());
+            }
+
+            texturesToDelete.clear();
+        }
 
         List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values());
         renderableList.sort(Comparator.comparing(RenderOptions3D::isXrayRender));
@@ -139,6 +149,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     @Override
     public void removeRenderable(String identifier) {
+        updateSprite(identifier, null);
         renderables.remove(identifier);
     }
 
@@ -160,6 +171,22 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     @Override
     public void updateSprite(String identifier, Sprite sprite) {
+        Sprite oldSprite = renderables.get(identifier).getSprite();
+        if(oldSprite != null) {
+            boolean remove = true;
+            for(RenderOptions3D ro : renderables.values()) {
+                if(ro.equals(renderables.get(identifier))) {
+                    continue;
+                }
+                if(oldSprite.getImagePath().equals(ro.getSprite().getImagePath())) {
+                    remove = false;
+                    break;
+                }
+            }
+            if(remove) {
+                texturesToDelete.add(oldSprite);
+            }
+        }
         renderables.get(identifier).setSprite(sprite);
     }
 

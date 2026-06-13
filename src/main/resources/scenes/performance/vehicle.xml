@@ -58,6 +58,7 @@
     </object>
 
     <object id="box7" x="50" y="-50" z="50" size="100,100,100">
+        <TextRenderer3D text="Hello" />
         <Plane3D spriteSource="sprites/beaver.jpg" shader="shaders/billboard" />
     </object>
 

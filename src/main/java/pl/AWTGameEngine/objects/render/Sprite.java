@@ -25,8 +25,13 @@ public class Sprite {
     }
 
     public Sprite(WritableImage writableImage) {
-        this.imagePath = "WritableImage";
+        this.imagePath = "WritableImage-" + writableImage.hashCode();
         this.image = ImageHelper.imageToBufferedImage(writableImage);
+    }
+
+    public Sprite(BufferedImage image) {
+        this.imagePath = "BufferedImage-" + image.hashCode();
+        this.image = image;
     }
 
     public String getImagePath() {
