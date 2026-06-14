@@ -7,6 +7,9 @@ import pl.AWTGameEngine.engine.helpers.FXHelper;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.objects.GameObject;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+
 public class WebGraphicsManager {
 
     private WebView webView;
@@ -49,6 +52,29 @@ public class WebGraphicsManager {
             return null;
         }
         return result.toString();
+    }
+
+    public String executeGetResult(String script) {
+        return call(() -> webView.getEngine().executeScript(script)).toString();
+    }
+
+    private static <T> T call(Callable<T> task) {
+        if (Platform.isFxApplicationThread()) {
+            try {
+                return task.call();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        FutureTask<T> future = new FutureTask<>(task);
+        Platform.runLater(future);
+
+        try {
+            return future.get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public WebView getWebView() {

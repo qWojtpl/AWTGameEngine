@@ -167,6 +167,9 @@ public class Scene {
     }
 
     public void triggerAfterLoad() {
+        if(getPanel() instanceof WebPanel) {
+            ((WebPanel) getPanel()).loadWebView();
+        }
         int c = loadAfterLoad.keySet().size();
         for(String path : loadAfterLoad.keySet()) {
             getWindow().getSceneLoader().loadSceneFile(path, loadAfterLoad.get(path), true);

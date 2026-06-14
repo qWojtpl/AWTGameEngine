@@ -1,0 +1,40 @@
+object {
+    background-color: #1f1f1f;
+}
+
+.x-top-menu {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    margin: 20px;
+    color: white;
+}
+
+.x-center {
+    text-align: center;
+}
+
+#x-top-menu-gap {
+    width: 60%;
+}
+
+.button {
+    background-color: #0078d4;
+    border: none;
+    font-style: bold;
+    padding: 5px;
+    font-size: 20px;
+    color: white;
+    margin-right: 20px;
+    border-radius: 2px;
+    transition: .1s;
+}
+
+.button:hover {
+    background-color: #0069ba;
+    cursor: pointer;
+}
+
+#x-form {
+    text-align: center;
+}
