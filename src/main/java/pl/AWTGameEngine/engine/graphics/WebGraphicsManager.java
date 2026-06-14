@@ -36,6 +36,10 @@ public class WebGraphicsManager {
                 object.getIdentifier(), object.getRotation().getX()));
     }
 
+    public void declareVariable(String variable, String value) {
+        execute(String.format("var %s = %s", variable, value));
+    }
+
     public String execute(String script) {
         Object result = FXHelper.synchronizedCall(() -> {
             try {

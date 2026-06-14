@@ -61,6 +61,11 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
 
     @Override
     public void componentMoved(ComponentEvent e) {
+        if(window.getCurrentScene() != null) {
+            for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowMove")) {
+                component.onWindowMove();
+            }
+        }
         window.updateDialogs();
     }
 

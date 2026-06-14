@@ -293,6 +293,11 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
+    public void onWindowMove() {
+
+    }
+
+    @EventMethod
     public void onSerializationFinish() {
 
     }

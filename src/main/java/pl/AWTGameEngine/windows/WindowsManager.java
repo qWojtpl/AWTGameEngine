@@ -27,10 +27,10 @@ public class WindowsManager extends CommandConsole.ParentCommand {
 
     @Command(value = "create", argumentNames = { "path" })
     public BaseWindow createWindow(String scenePath) {
-        return createWindow(scenePath, null);
+        return createWindow(scenePath, null, true);
     }
 
-    public BaseWindow createWindow(String scenePath, RenderEngine renderEngine) {
+    public BaseWindow createWindow(String scenePath, RenderEngine renderEngine, boolean decorated) {
         AppProperties appProperties = Dependencies.getAppProperties();
         boolean server = appProperties.getPropertyAsBoolean("server");
         if(renderEngine == null) {
@@ -43,6 +43,10 @@ public class WindowsManager extends CommandConsole.ParentCommand {
             window = new HeadlessWindow();
         } else {
             window = new Window(server);
+            if(!decorated) {
+                ((Window) window).setUndecorated(true);
+                ((Window) window).setType(java.awt.Window.Type.UTILITY);
+            }
         }
 
         if (windows.isEmpty()) {

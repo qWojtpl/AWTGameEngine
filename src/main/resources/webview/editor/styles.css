@@ -1,0 +1,15 @@
+.standard {
+    background-color: #272D2E;
+    width: 100%;
+    height: 100%;
+    color: #E1E1E1
+}
+
+.menubar {
+    display: flex;
+}
+
+.toolbar {
+    box-shadow: inset 0px 0px 20px 10px rgba(0,0,0,0.6);
+    display: flex;
+}

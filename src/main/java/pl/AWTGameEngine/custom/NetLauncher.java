@@ -19,7 +19,7 @@ public class NetLauncher extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        Dependencies.getWindowsManager().createWindow("scenes/net/server.xml", RenderEngine.DEFAULT);
+        Dependencies.getWindowsManager().createWindow("scenes/net/server.xml", RenderEngine.DEFAULT, true);
         getSceneLoader().loadSceneFile("scenes/net/client.xml");
     }
 

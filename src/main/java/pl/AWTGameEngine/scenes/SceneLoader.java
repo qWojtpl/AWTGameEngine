@@ -33,14 +33,14 @@ public class SceneLoader {
         this.window = window;
     }
 
-    public void loadSceneFile(String scenePath) {
-        loadSceneFile(
+    public Scene loadSceneFile(String scenePath) {
+        return loadSceneFile(
                 scenePath,
                 RenderEngine.valueOf(Dependencies.getAppProperties().getProperty("renderEngine").toUpperCase()),
                 false);
     }
 
-    public void loadSceneFile(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
+    public Scene loadSceneFile(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
 /*        if(!nestedScene && window.getCurrentScene() != null) { //TODO: interview this, because may be bugged
                 window.unloadScenes();
                 loadSceneFile(scenePath, renderEngine, false);
@@ -48,8 +48,7 @@ public class SceneLoader {
         }*/
         Logger.info("Loading scene: " + scenePath);
         if(scenePath.endsWith(".class")) {
-            loadSceneBinary(scenePath, renderEngine, nestedScene);
-            return;
+            return loadSceneBinary(scenePath, renderEngine, nestedScene);
         }
         Scene newScene;
         ResourceManager resourceManager = Dependencies.getResourceManager();
@@ -97,7 +96,7 @@ public class SceneLoader {
             attachSceneData(newScene, data);
         } catch(Exception e) {
             Logger.exception("Cannot load scene " + scenePath, e);
-            return;
+            return null;
         }
         newScene.getPanel().onSceneLoad();
         Logger.info("Scene " + scenePath + " loaded.");
@@ -107,9 +106,10 @@ public class SceneLoader {
                 Logger.info("All scenes loaded.");
             }
         }
+        return newScene;
     }
 
-    public void loadSceneBinary(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
+    public Scene loadSceneBinary(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
         Scene newScene = new Scene(scenePath, window, renderEngine);
         newScene.setPanel(createPanel(newScene, renderEngine));
         window.addScene(newScene);
@@ -134,9 +134,12 @@ public class SceneLoader {
 
         } catch (InvocationTargetException e) {
             Logger.error("Cannot load scene binary " + scenePath + ":\n\t" + e.getCause());
+            return null;
         } catch (Exception e) {
             Logger.exception("Cannot load scene binary " + scenePath, e);
+            return null;
         }
+        return newScene;
     }
 
     public PanelObject createPanel(Scene scene, RenderEngine renderEngine) {

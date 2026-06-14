@@ -62,6 +62,10 @@ public class EventHandler {
         return returnedEvents;
     }
 
+    public void clear() {
+        registeredEvents.clear();
+    }
+
     public int getNumberOfRegisteredEvents() {
         int c = 0;
         HashMap<String, List<ObjectComponent>> registered = getRegisteredEvents();

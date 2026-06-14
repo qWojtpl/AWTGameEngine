@@ -19,6 +19,9 @@ public interface BaseWindow {
     boolean isFocused();
     int getWidth();
     int getHeight();
+    void setResizable(boolean resizable);
+    void setSize(int x, int y);
+    Point getLocation();
     //
     void moveMouseTo(double x, double y);
     void moveMouseToCenter();

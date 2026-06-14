@@ -65,6 +65,21 @@ public class HeadlessWindow implements BaseWindow {
     }
 
     @Override
+    public void setResizable(boolean resizable) {
+
+    }
+
+    @Override
+    public void setSize(int x, int y) {
+
+    }
+
+    @Override
+    public Point getLocation() {
+        return new Point(0, 0);
+    }
+
+    @Override
     public void moveMouseTo(double x, double y) {
 
     }

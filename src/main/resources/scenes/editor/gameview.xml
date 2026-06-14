@@ -1,0 +1,7 @@
+<scene title="AWTGameEngine Editor" renderFPS="60" updateFPS="60" netFPS="10" physicsFPS="10" fullscreen="false">
+
+    <object id="hook">
+
+    </object>
+
+</scene>
