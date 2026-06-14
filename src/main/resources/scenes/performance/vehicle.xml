@@ -1,6 +1,7 @@
 <scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="360">
-
+    #EDITOR
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
+    #END
 
     <object id="player">
 <!--        <MovementGL _package="pl.AWTGameEngine.custom" />-->

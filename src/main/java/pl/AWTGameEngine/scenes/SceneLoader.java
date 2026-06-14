@@ -54,7 +54,10 @@ public class SceneLoader {
         Scene newScene;
         ResourceManager resourceManager = Dependencies.getResourceManager();
         AppProperties appProperties = Dependencies.getAppProperties();
-        try(InputStream sceneStream = EditorSegmentHelper.patchStream(resourceManager.getResourceAsStream(scenePath), false)) {
+        try(InputStream sceneStream = EditorSegmentHelper.patchStream(
+                resourceManager.getResourceAsStream(scenePath),
+                Dependencies.getAppProperties().getPropertyAsBoolean("editorMode"))
+        ) {
             Document document = getDocument(sceneStream);
             SceneOptions sceneOptions = getSceneOptions(document);
             if(!nestedScene) {
@@ -301,7 +304,10 @@ public class SceneLoader {
             Logger.exception("Prefab list doesn't have a source.", e);
             return;
         }
-        try(InputStream prefabStream = EditorSegmentHelper.patchStream(Dependencies.getResourceManager().getResourceAsStream(source), false)) {
+        try(InputStream prefabStream = EditorSegmentHelper.patchStream(
+                Dependencies.getResourceManager().getResourceAsStream(source),
+                Dependencies.getAppProperties().getPropertyAsBoolean("editorMode"))
+        ) {
             Document document = getDocument(prefabStream);
             NodeList prefabsData = document.getElementsByTagName("prefabs").item(0).getChildNodes();
             for(int i = 0; i < prefabsData.getLength(); i++) {
