@@ -145,6 +145,29 @@
             return object;
         }
 
+        /*    COMMS    */
+
+        const feedbacks = [];
+
+        function feedback(identifier, component, value) {
+            if(!feedbacks[identifier]) {
+                feedbacks[identifier] = {};
+            }
+            feedbacks[identifier][component] = value;
+        }
+
+        function getFeedbacks(identifier, component) {
+            if(!feedbacks.hasOwnProperty(identifier)) {
+                return null;
+            }
+            if(!feedbacks[identifier].hasOwnProperty(component)) {
+                return null;
+            }
+            let f = feedbacks[identifier][component];
+            feedbacks[identifier][component] = null;
+            return f;
+        }
+
     </script>
 </body>
 </html>

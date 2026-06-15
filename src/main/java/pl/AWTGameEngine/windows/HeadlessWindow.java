@@ -70,6 +70,11 @@ public class HeadlessWindow implements BaseWindow {
     }
 
     @Override
+    public Dimension getSize() {
+        return new Dimension(0, 0);
+    }
+
+    @Override
     public void setSize(int x, int y) {
 
     }

@@ -18,7 +18,7 @@ public class GameObjectDeserializer {
         gameObject.triggerSerializationFinish();
     }
 
-    private static void deserializeObjectAttributes(GameObject object, Node node) {
+    public static void deserializeObjectAttributes(GameObject object, Node node) {
         if(!getValue(node, "position").equals("0")) {
             object.setPosition(new TransformSet().deserialize(getValue(node, "position")));
         } else {
@@ -48,7 +48,7 @@ public class GameObjectDeserializer {
         }
     }
 
-    private static void deserializeObjectComponents(GameObject object, Node node) {
+    public static void deserializeObjectComponents(GameObject object, Node node) {
         String className = "";
         try {
             for(int i = 0; i < node.getChildNodes().getLength(); i++) {
@@ -84,7 +84,7 @@ public class GameObjectDeserializer {
         }
     }
 
-    private static void deserializeComponentAttributes(ObjectComponent component, Class<?> componentClass, String componentName, Node node) {
+    public static void deserializeComponentAttributes(ObjectComponent component, Class<?> componentClass, String componentName, Node node) {
         String methodName = "";
         try {
             for(int j = 0; j < node.getAttributes().getLength(); j++) {

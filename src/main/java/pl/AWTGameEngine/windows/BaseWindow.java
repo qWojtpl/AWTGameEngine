@@ -20,6 +20,7 @@ public interface BaseWindow {
     int getWidth();
     int getHeight();
     void setResizable(boolean resizable);
+    Dimension getSize();
     void setSize(int x, int y);
     Point getLocation();
     //

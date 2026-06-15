@@ -61,7 +61,7 @@ public class Button extends ObjectComponent {
     }
 
     @Override
-    public void onMouseClick() {
+    public void onMouseClick(int x, int y, int xs, int ys) {
         for(ObjectComponent component : getObject().getEventHandler().getComponents("onButtonClick")) {
             component.onButtonClick();
         }

@@ -258,7 +258,7 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
-    public void onMouseClick() {
+    public void onMouseClick(int x, int y, int xOnScreen, int yOnScreen) {
 
     }
 

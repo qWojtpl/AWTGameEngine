@@ -14,6 +14,7 @@ import java.awt.*;
 public class GameView extends ObjectComponent {
 
     private Window gameViewWindow;
+    private boolean focusMainWindow = true;
 
     public GameView(GameObject object) {
         super(object);
@@ -21,31 +22,26 @@ public class GameView extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        gameViewWindow = (Window) Dependencies.getWindowsManager().createWindow("scenes/net/server.xml", RenderEngine.DEFAULT, false);
-        for(Scene scene : gameViewWindow.getScenes()) {
-            scene.getSceneEventHandler().clear();
-            for(GameObject go : scene.getGameObjects()) {
-                go.getEventHandler().clear();
-            }
-        }
-        gameViewWindow.getUpdateLoop().kill();
-        gameViewWindow.getPhysicsLoop().kill();
-        gameViewWindow.getNetLoop().kill();
+        gameViewWindow = (Window) Dependencies.getWindowsManager().createWindow("scenes/editor/gameview.xml", RenderEngine.DEFAULT, false);
         updateLocation();
+    }
+
+    public void loadScene() {
+
     }
 
     @Override
     public void onUpdate() {
-        if(gameViewWindow.isFocused() || ((Window) getWindow()).isFocused()) {
-            gameViewWindow.toFront();
-        } else {
-            for(Dialog dialog : gameViewWindow.getDialogs()) {
-                if(dialog.isFocused()) {
-                    gameViewWindow.toFront();
-                    return;
-                }
+        boolean shouldBeOnTop = getWindow().getWindowListener().isActivated();
+        if(getWindow().getWindowListener().isIconified()) {
+            shouldBeOnTop = false;
+        }
+        if (gameViewWindow.isAlwaysOnTop() != shouldBeOnTop) {
+            gameViewWindow.setAlwaysOnTop(shouldBeOnTop);
+            if(focusMainWindow && shouldBeOnTop) {
+                ((Window) getWindow()).requestFocus();
+                focusMainWindow = false;
             }
-            gameViewWindow.toBack();
         }
     }
 
@@ -59,6 +55,11 @@ public class GameView extends ObjectComponent {
         updateLocation();
     }
 
+    @Override
+    public void onMouseClick(int x, int y, int xOnScreen, int yOnScreen) {
+        focusMainWindow = true;
+    }
+
     public void updateLocation() {
         Insets windowInsets = ((Window) getWindow()).getInsets();
         double widthMultiplier = (double) getWindow().getWidth() / getWindow().getBaseWidth();
@@ -70,6 +71,14 @@ public class GameView extends ObjectComponent {
                 (int) getWindow().getLocation().getX() + windowInsets.left + (int) (300 * widthMultiplier),
                 (int) getWindow().getLocation().getY() + windowInsets.top + (int) (80 * heightMultiplier)
         );
+    }
+
+    public void setFocusMainWindow(boolean focus) {
+        this.focusMainWindow = focus;
+    }
+
+    public Window getGameViewWindow() {
+        return this.gameViewWindow;
     }
 
 }

@@ -2,6 +2,7 @@ package pl.AWTGameEngine.engine.graphics;
 
 import javafx.scene.web.WebView;
 import netscape.javascript.JSException;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.helpers.FXHelper;
 import pl.AWTGameEngine.objects.render.Camera;
@@ -38,6 +39,10 @@ public class WebGraphicsManager {
 
     public void declareVariable(String variable, String value) {
         execute(String.format("var %s = %s", variable, value));
+    }
+
+    public String getFeedbacks(String identifier, Class<? extends ObjectComponent> clazz) {
+        return execute(String.format("getFeedbacks(\"%s\", \"%s\");", identifier, clazz.getCanonicalName()));
     }
 
     public String execute(String script) {

@@ -1,16 +1,19 @@
 <scene title="AWTGameEngine Editor" renderFPS="60" updateFPS="60" netFPS="10" physicsFPS="10" fullscreen="false">
-    <object id="menu-bar" x="960" y="10" size="1920,20">
-        <MenuBar _package="pl.AWTGameEngineEditor.components" />
-    </object>
     <object id="toolbar" x="960" y="50" size="1920,60">
         <ToolBar _package="pl.AWTGameEngineEditor.components" />
     </object>
-    <object id="objects-hierarchy" x="150" y="560" size="300,960">
-        <BlankRenderer color="red" />
+    <object id="objects-hierarchy" x="150" y="320" size="300,480">
+        <ObjectsHierarchy _package="pl.AWTGameEngineEditor.components" />
+    </object>
+    <object id="file-list" x="150" y="800" size="300,480">
+        <BlankRenderer color="green" />
     </object>
     <object id="game-view" x="1110" y="536" size="1620,912">
         <BlankRenderer color="white" />
         <GameView _package="pl.AWTGameEngineEditor.components" />
+    </object>
+    <object id="menu-bar" x="960" y="10" size="1920,20">
+        <MenuBar _package="pl.AWTGameEngineEditor.components" />
     </object>
     <styles source="webview/editor/styles.css" />
 </scene>

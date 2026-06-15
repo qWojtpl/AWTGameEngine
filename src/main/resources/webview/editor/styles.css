@@ -7,9 +7,49 @@
 
 .menubar {
     display: flex;
+    vertical-align: center;
+}
+
+.menubar-menu {
+    display: none;
+    min-width: 10vw;
+    z-index: 100;
+    position: absolute;
+    font-size: 1vw;
+}
+
+.menubar span {
+    font-size: 0.75vw;
+    padding-top: 0.1vw;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    position: relative;
+    display: flex;
+}
+
+.menubar span:hover .menubar-menu {
+    display: block;
+}
+
+.menubar-menu:hover {
+    display: block;
 }
 
 .toolbar {
     box-shadow: inset 0px 0px 20px 10px rgba(0,0,0,0.6);
     display: flex;
+    vertical-align: center;
+}
+
+select {
+    overflow-y: scroll;
+}
+
+select option:nth-child(odd), .menubar-menu span:nth-child(odd) {
+    background-color: #23282b;
+}
+
+.menubar span:hover, .menubar-menu span:hover {
+    background-color: #1C87E1;
+    cursor: pointer;
 }

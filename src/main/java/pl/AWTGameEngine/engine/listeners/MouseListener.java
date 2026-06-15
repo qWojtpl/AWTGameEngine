@@ -37,22 +37,13 @@ public class MouseListener {
 
     public void mouseClicked(MouseEvent e) {
         clickEvent = e;
-        for(Scene scene : window.getScenes()) {
-            if(!RenderEngine.DEFAULT.equals(scene.getRenderEngine()) && !RenderEngine.WEB.equals(scene.getRenderEngine())) {
-                continue;
-            }
-            GameObject clickedObject = null;
-            for(GameObject object : scene.getGameObjects()) {
-                if (getMouseX() >= object.getX() && getMouseX() <= object.getX() + object.getSizeX()
-                        && getMouseY() >= object.getY() && getMouseY() <= object.getY() + object.getSizeY()) {
-                    for (ObjectComponent component : object.getEventHandler().getComponents("onMouseClick")) {
-                        component.onMouseClick();
+        if(e.getXOnScreen() >= window.getLocation().x && e.getXOnScreen() <= window.getLocation().x + window.getSize().getWidth()) {
+            if(e.getYOnScreen() >= window.getLocation().y && e.getYOnScreen() <= window.getLocation().y + window.getSize().getHeight()) {
+                for(Scene scene : window.getScenes()) {
+                    for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onMouseClick#int#int#int#int")) {
+                        component.onMouseClick(e.getX(), e.getY(), e.getXOnScreen(), e.getYOnScreen());
                     }
-                    clickedObject = object;
                 }
-            }
-            for(ObjectComponent component : scene.getSceneEventHandler().getComponents("onMouseClick#GameObject")) {
-                component.onMouseClick(clickedObject);
             }
         }
     }

@@ -87,7 +87,7 @@ public class TextArea extends ObjectComponent {
     }
 
     @Override
-    public void onMouseClick() {
+    public void onMouseClick(int x, int y, int xs, int ys) {
         focused = true;
         setPointerLocation(text.length());
     }
