@@ -125,7 +125,12 @@ public class HeadlessWindow implements BaseWindow {
     }
 
     @Override
-    public void updateRatio(int r1, int r2) {
+    public void setRatio(int r1, int r2) {
+
+    }
+
+    @Override
+    public void updateRatio() {
 
     }
 

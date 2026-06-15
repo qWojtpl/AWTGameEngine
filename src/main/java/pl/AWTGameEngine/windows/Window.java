@@ -39,6 +39,7 @@ public class Window extends Frame implements BaseWindow {
     private Robot robot;
     private double screenWidth;
     private double screenHeight;
+    private int[] ratio = new int[]{16,9};
     private final List<Dialog> dialogs = new ArrayList<>();
 
     public Window(boolean serverWindow) {
@@ -114,9 +115,14 @@ public class Window extends Frame implements BaseWindow {
         addComponentListener(getWindowListener());
     }
 
-    public void updateRatio(int r1, int r2) {
+    public void setRatio(int r1, int r2) {
+        this.ratio = new int[]{r1,r2};
+        updateRatio();
+    }
+
+    public void updateRatio() {
         for(Scene scene : scenes.keySet()) {
-            scene.getPanel().setSize(new Dimension(getWidth(), getWidth() * r2 / r1));
+            scene.getPanel().setSize(new Dimension(getWidth(), (int) (getWidth() * ((double) this.ratio[1] / this.ratio[0]))));
         }
     }
 

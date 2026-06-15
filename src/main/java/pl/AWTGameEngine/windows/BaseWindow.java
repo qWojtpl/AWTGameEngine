@@ -30,7 +30,8 @@ public interface BaseWindow {
     void close();
     void unloadScenes();
     void init();
-    void updateRatio(int r1, int r2);
+    void setRatio(int r1, int r2);
+    void updateRatio();
     boolean isSameSize();
     List<PanelObject> getPanels();
     BaseLoop getRenderLoop();

@@ -53,3 +53,28 @@ select option:nth-child(odd), .menubar-menu span:nth-child(odd) {
     background-color: #1C87E1;
     cursor: pointer;
 }
+
+input {
+    width: 100%;
+    height: 3vh;
+}
+
+.object-details {
+    padding: 1vw;
+    display: flex;
+}
+
+.object-details div {
+    width: 50%;
+    overflow-y: scroll;
+}
+
+.object-details label {
+    margin-right: 3vw;
+    margin-left: 1vw;
+    margin-bottom: 1vh;
+}
+
+.object-details input {
+    margin-bottom: 1vw;
+}

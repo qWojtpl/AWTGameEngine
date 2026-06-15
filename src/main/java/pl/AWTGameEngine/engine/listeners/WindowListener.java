@@ -48,7 +48,7 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
         int newWidth = e.getComponent().getWidth();
         int newHeight = e.getComponent().getHeight();
         if(window.isSameSize()) {
-            window.updateRatio(16, 9);
+            window.updateRatio();
         } else {
             for(PanelObject panel : window.getPanels()) {
                 panel.setSize(new Dimension(newWidth, newHeight));

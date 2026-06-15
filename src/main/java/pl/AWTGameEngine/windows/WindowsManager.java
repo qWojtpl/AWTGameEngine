@@ -174,11 +174,11 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         // so we need to wait for PhysicsLoop to end a simulation.
         window.getPhysicsLoop().kill(() -> {
             window.unloadScenes();
-            PhysXManager.getInstance().cleanup();
             window.getNetLoop().kill();
             window.getRenderLoop().kill();
             window.getUpdateLoop().kill();
             if(window.equals(defaultWindow)) {
+                PhysXManager.getInstance().cleanup();
                 Dependencies.getResourceManager().clearAudioClips();
                 Logger.info("Stopped app.");
                 System.exit(0);

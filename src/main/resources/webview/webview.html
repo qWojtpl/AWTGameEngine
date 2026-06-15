@@ -104,6 +104,10 @@
             getObject(identifier).children[0].value = value;
         }
 
+        function validateInputNumber(input) {
+            input.value = input.value.replace(/[^0-9.]/g, '');
+        }
+
         /*    FLEX    */
 
         function setFlex(identifier) {
@@ -164,7 +168,9 @@
                 return null;
             }
             let f = feedbacks[identifier][component];
-            feedbacks[identifier][component] = null;
+            if(f != null) {
+                feedbacks[identifier][component] = null;
+            }
             return f;
         }
 

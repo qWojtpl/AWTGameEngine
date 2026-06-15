@@ -50,7 +50,8 @@ public class WebPanel extends JFXPanel implements PanelObject {
             webPage.setBackgroundColor((new javafx.scene.paint.Color(0, 0, 0, 0)).hashCode());
             //
 
-            webView.setFocusTraversable(false);
+            setFocusable(true);
+//            webView.setFocusTraversable(false);
 
             webView.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, (event) -> {
                 getWindow().getKeyListener().asKeyPress(event.getCode().getCode());
