@@ -106,7 +106,6 @@ public class WebPanel extends JFXPanel implements PanelObject {
     @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
-        setScene(null);
         window.remove(this);
     }
 

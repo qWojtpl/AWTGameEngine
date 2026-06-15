@@ -23,6 +23,9 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
     }
 
     private void removeWindow() {
+        if(!opened) {
+            return;
+        }
         Logger.warning("Received signal to close the window");
         opened = false;
         Dependencies.getWindowsManager().close(window);

@@ -91,6 +91,7 @@ public class Window extends Frame implements BaseWindow {
 
     public void close() {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        dispose();
     }
 
     public void unloadScenes() {
@@ -98,7 +99,6 @@ public class Window extends Frame implements BaseWindow {
         for(Scene scene : scenes.keySet()) {
             scene.removeAllObjects();
         }
-        Dependencies.getResourceManager().clearAudioClips();
         for(Scene scene : scenes.keySet()) {
             scene.getPanel().unload();
         }

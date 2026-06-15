@@ -219,6 +219,7 @@ public class ResourceManager extends CommandConsole.ParentCommand {
     public FileWriter getWriter(String path, boolean append) throws IOException {
         final Path resolvedPath = resolvePath(path);
         final File file = new File(resolvedPath.toUri());
+        file.getParentFile().mkdirs();
         if(!file.exists()) {
             try {
                 file.createNewFile();

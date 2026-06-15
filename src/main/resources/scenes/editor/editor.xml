@@ -1,4 +1,7 @@
 <scene title="AWTGameEngine Editor" renderFPS="60" updateFPS="60" netFPS="10" physicsFPS="10" fullscreen="false">
+    <object id="manager">
+        <ProjectManager _package="pl.AWTGameEngineEditor.components" />
+    </object>
     <object id="toolbar" x="960" y="50" size="1920,60">
         <ToolBar _package="pl.AWTGameEngineEditor.components" />
     </object>

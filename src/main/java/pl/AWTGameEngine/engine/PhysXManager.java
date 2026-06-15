@@ -112,6 +112,7 @@ public final class PhysXManager {
     }
 
     public void cleanup() {
+        Logger.info("Cleaning up PhysX objects...");
         for(PhysXScene physXScene : scenes.values()) {
             physXScene.destroy();
         }

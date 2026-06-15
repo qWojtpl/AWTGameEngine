@@ -154,25 +154,36 @@ public class WindowsManager extends CommandConsole.ParentCommand {
 
     public void close(BaseWindow window) {
         removeWindow(window);
-        if(window.equals(defaultWindow)) {
-            if(window.getCurrentScene() != null) {
-                for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowClosing")) {
-                    component.onWindowClosing();
-                }
+        window.close();
+        if(window.getCurrentScene() != null) {
+            for(ObjectComponent component : window.getCurrentScene().getSceneEventHandler().getComponents("onWindowClosing")) {
+                component.onWindowClosing();
             }
-            // kill physics loop, because remove actor operation
-            // can't be executed while simulation is running,
-            // so we need to wait for PhysicsLoop to end a simulation.
-            window.getPhysicsLoop().kill(() -> {
-                window.unloadScenes();
-                PhysXManager.getInstance().cleanup();
-                window.getNetLoop().kill();
-                window.getRenderLoop().kill();
-                window.getUpdateLoop().kill();
+        }
+        if(window.equals(defaultWindow)) {
+            List<BaseWindow> copy = new ArrayList<>(windows);
+            for(BaseWindow w : copy) {
+                if(w.equals(window)) {
+                    continue;
+                }
+                w.close();
+            }
+        }
+        // kill physics loop, because remove actor operation
+        // can't be executed while simulation is running,
+        // so we need to wait for PhysicsLoop to end a simulation.
+        window.getPhysicsLoop().kill(() -> {
+            window.unloadScenes();
+            PhysXManager.getInstance().cleanup();
+            window.getNetLoop().kill();
+            window.getRenderLoop().kill();
+            window.getUpdateLoop().kill();
+            if(window.equals(defaultWindow)) {
+                Dependencies.getResourceManager().clearAudioClips();
                 Logger.info("Stopped app.");
                 System.exit(0);
-            });
-        }
+            }
+        });
     }
 
 }
