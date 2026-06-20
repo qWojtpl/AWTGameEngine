@@ -1,7 +1,6 @@
 <scene title="Object details" renderFPS="60" updateFPS="60" physicsFPS="10" netFPS="10" sameSize="true">
     <object id="object-details" x="960" y="720" size="1920,1440"> <!-- 4:3 resolution -->
-        <ObjectDetails _package="pl.AWTGameEngineEditor.components.details" />
-        <BlankRenderer color="red" />
+        <ObjectDetails file="webview/editor/objectdetails.html" _package="pl.AWTGameEngineEditor.components.details" />
     </object>
     <styles source="webview/editor/styles.css" />
 </scene>

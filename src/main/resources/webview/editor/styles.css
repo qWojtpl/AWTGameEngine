@@ -65,7 +65,7 @@ input {
 }
 
 .object-details div {
-    width: 50%;
+    width: 49%;
     overflow-y: scroll;
 }
 
@@ -77,4 +77,12 @@ input {
 
 .object-details input {
     margin-bottom: 1vw;
+}
+
+#objectdetails-rotation-w {
+    display: none;
+}
+
+#objectdetails-rotation-quaternion:checked ~ #objectdetails-rotation-w {
+    display: inline-block;
 }

@@ -5,15 +5,14 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
+import pl.AWTGameEngineEditor.manager.EditorManager;
 
 import java.awt.*;
 
 @WebComponent
 public class GameView extends ObjectComponent {
 
-    private Window gameViewWindow;
     private boolean focusMainWindow = true;
 
     public GameView(GameObject object) {
@@ -22,7 +21,7 @@ public class GameView extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        gameViewWindow = (Window) Dependencies.getWindowsManager().createWindow("scenes/editor/gameview.xml", RenderEngine.DEFAULT, false);
+        EditorManager.getInstance().setGameViewWindow((Window) Dependencies.getWindowsManager().createWindow("scenes/editor/gameview.xml", RenderEngine.DEFAULT, false));
         updateLocation();
     }
 
@@ -36,7 +35,8 @@ public class GameView extends ObjectComponent {
         if(getWindow().getWindowListener().isIconified()) {
             shouldBeOnTop = false;
         }
-        if (gameViewWindow.isAlwaysOnTop() != shouldBeOnTop) {
+        Window gameViewWindow = EditorManager.getInstance().getGameViewWindow();
+        if(gameViewWindow.isAlwaysOnTop() != shouldBeOnTop) {
             gameViewWindow.setAlwaysOnTop(shouldBeOnTop);
             if(focusMainWindow && shouldBeOnTop) {
                 ((Window) getWindow()).requestFocus();
@@ -64,6 +64,7 @@ public class GameView extends ObjectComponent {
         Insets windowInsets = ((Window) getWindow()).getInsets();
         double widthMultiplier = (double) getWindow().getWidth() / getWindow().getBaseWidth();
         double heightMultiplier = (double) getWindow().getHeight() / getWindow().getBaseHeight();
+        Window gameViewWindow = EditorManager.getInstance().getGameViewWindow();
         gameViewWindow.setSize(
                 (int) (1620 * widthMultiplier) - windowInsets.left - windowInsets.right,
                 (int) (912 * heightMultiplier) - windowInsets.top - windowInsets.bottom);
@@ -75,10 +76,6 @@ public class GameView extends ObjectComponent {
 
     public void setFocusMainWindow(boolean focus) {
         this.focusMainWindow = focus;
-    }
-
-    public Window getGameViewWindow() {
-        return this.gameViewWindow;
     }
 
 }
