@@ -3,6 +3,7 @@ package pl.AWTGameEngineEditor.components;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.BlankRenderer;
+import pl.AWTGameEngine.components.TextRenderer;
 import pl.AWTGameEngine.components.base.HTMLComponent;
 import pl.AWTGameEngine.components.base.HTMLFileComponent;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -34,6 +35,8 @@ public class MenuBar extends HTMLFileComponent {
             BlankRenderer renderer = new BlankRenderer(object);
             renderer.setColor("green");
             object.addComponent(renderer);
+            TextRenderer textRenderer = new TextRenderer(object);
+            object.addComponent(textRenderer);
             ((ObjectsHierarchy) getScene().getGameObjectByName("objects-hierarchy").getComponentByClass(ObjectsHierarchy.class)).releaseLock();
         }
     }

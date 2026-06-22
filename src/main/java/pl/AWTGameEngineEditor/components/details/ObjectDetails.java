@@ -1,12 +1,18 @@
 package pl.AWTGameEngineEditor.components.details;
 
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.HTMLFileComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.enums.DataType;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngineEditor.manager.EditorManager;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @WebComponent
 public class ObjectDetails extends HTMLFileComponent {
@@ -29,9 +35,20 @@ public class ObjectDetails extends HTMLFileComponent {
             return data;
         }
         StringBuilder builder = new StringBuilder();
-        builder.append("<option>- Object transform</option>");
+        builder.append(String.format(
+                "<option ondblclick=\"feedback('%s', '%s', 'transform')\">",
+                getObject().getIdentifier(),
+                getClass().getCanonicalName())
+        );
+        builder.append("- Object transform</option>");
         for(ObjectComponent component : gameObject.getComponents()) {
-            builder.append("<option>");
+            builder.append(
+                    String.format(
+                            "<option ondblclick=\"feedback('%s', '%s', 'option.%s')\">",
+                            getObject().getIdentifier(),
+                            getClass().getCanonicalName(),
+                            component.getComponentName())
+            );
             builder.append(component.getComponentName());
             builder.append("</option>");
         }
@@ -39,6 +56,7 @@ public class ObjectDetails extends HTMLFileComponent {
     }
 
     public void setup(String identifier) {
+        this.panelBuilder.setLength(0);
         this.gameObject = EditorManager.getInstance().getGameViewWindow().getCurrentScene().getGameObjectByName(identifier);
         createInput("identifier", "Identifier", "id", false, identifier);
         createSection("Position");
@@ -53,8 +71,47 @@ public class ObjectDetails extends HTMLFileComponent {
         createInput("rotation-x", "X", "rotation.x", true, gameObject.getRotation().getX() + "");
         createInput("rotation-y", "Y", "rotation.y", true, gameObject.getRotation().getY() + "");
         createInput("rotation-z", "Z", "rotation.z", true, gameObject.getRotation().getZ() + "");
-        createCheckbox("rotation-quaternion", "Quaternion?", "rotation.quaternion");
+        createCheckbox("rotation-quaternion", "Quaternion?", "rotation.quaternion", false);
         createInput("rotation-w", "W", "rotation.w", true, "0.0");
+    }
+
+    public void setupComponent(ObjectComponent component) {
+        this.panelBuilder.setLength(0);
+        for(Method method : component.getClass().getMethods()) {
+            if(!method.isAnnotationPresent(FromXML.class)) {
+                continue;
+            }
+            FromXML fromXML = method.getAnnotation(FromXML.class);
+            String value;
+            try {
+                Method foundGetMethod = getMethod(component, method);
+                value = foundGetMethod.invoke(component).toString();
+            } catch (Exception e) {
+                Logger.exception("Cannot get value of " + method.getName(), e);
+                continue;
+            }
+            String dataName = method.getName().replace("set", "");
+            if(fromXML.type().equals(DataType.BOOLEAN)) {
+                createCheckbox(dataName, dataName, dataName, value.equals("true"));
+            } else {
+                createInput(dataName, dataName, dataName, fromXML.type().equals(DataType.NUMBER), value);
+            }
+        }
+    }
+
+    private static Method getMethod(ObjectComponent component, Method method) {
+        String getMethodName = method.getName().replace("set", "get");
+        Method foundGetMethod = null;
+        for(Method getMethod : component.getClass().getMethods()) {
+            if(getMethod.getName().equals(getMethodName)) {
+                foundGetMethod = getMethod;
+                break;
+            }
+        }
+        if(foundGetMethod == null) {
+            throw new RuntimeException("Cannot find get method.");
+        }
+        return foundGetMethod;
     }
 
     private void createInput(String name, String placeHolder, String feedBackIdentifier, boolean validateNumber, String defaultValue) {
@@ -75,14 +132,16 @@ public class ObjectDetails extends HTMLFileComponent {
         panelBuilder.append(builder);
     }
 
-    private void createCheckbox(String name, String placeHolder, String feedBackIdentifier) {
+    private void createCheckbox(String name, String placeHolder, String feedBackIdentifier, boolean checked) {
         String builder = String.format("<label for=\"%s\">", "objectdetails-" + name) +
                 placeHolder +
-                String.format("</label><input type=\"checkbox\" id=\"objectdetails-%s\" onchange=\"feedback('%s', '%s', '%s:' + this.checked);\"><br>",
+                String.format("</label><input type=\"checkbox\" id=\"objectdetails-%s\" onchange=\"feedback('%s', '%s', '%s:' + this.checked);\"",
                         name,
                         this.getObject().getIdentifier(),
                         this.getClass().getCanonicalName(),
-                        feedBackIdentifier);
+                        feedBackIdentifier)
+                + (checked ? " checked" : "") +
+                "><br>";
         panelBuilder.append(builder);
     }
 
@@ -98,6 +157,29 @@ public class ObjectDetails extends HTMLFileComponent {
             return;
         }
         String[] split = feedback.split(":");
+        if(split.length == 1) {
+            if(feedback.equals("transform")) {
+                setup(gameObject.getIdentifier());
+                return;
+            } else {
+                String[] optSplit = split[0].split("\\.");
+                if(optSplit.length == 2) {
+                    if(!optSplit[0].equals("option")) {
+                        return;
+                    }
+                    ObjectComponent objectComponent = null;
+                    for(ObjectComponent component : gameObject.getComponents()) {
+                        if(component.getComponentName().equals(optSplit[1])) {
+                            objectComponent = component;
+                        }
+                    }
+                    if(objectComponent != null) {
+                        setupComponent(objectComponent);
+                    }
+                }
+            }
+            return;
+        }
         switch(split[0]) {
             case "pos.x":
                 gameObject.getPosition().setX(Double.parseDouble(split[1]));
