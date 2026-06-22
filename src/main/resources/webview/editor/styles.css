@@ -79,10 +79,15 @@ input {
     margin-bottom: 1vw;
 }
 
-#objectdetails-rotation-w {
+#objectdetails-rotation-w, label[for="objectdetails-rotation-w"] {
     display: none;
 }
 
-#objectdetails-rotation-quaternion:checked ~ #objectdetails-rotation-w {
+#objectdetails-rotation-quaternion:checked ~ #objectdetails-rotation-w, #objectdetails-rotation-quaternion:checked ~ label[for="objectdetails-rotation-w"] {
     display: inline-block;
+}
+
+.details-select {
+    width: 99%;
+    height: 90%;
 }

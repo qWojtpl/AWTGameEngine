@@ -50,7 +50,7 @@ public class WebGraphicsManager {
             try {
                 return webView.getEngine().executeScript(script);
             } catch(JSException e) {
-                Logger.exception("Cannot execute script", e);
+                Logger.exception("Cannot execute script: " + script, e);
             }
             return null;
         });

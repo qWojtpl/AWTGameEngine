@@ -61,12 +61,7 @@ public class ObjectsHierarchy extends HTMLFileComponent {
                 return;
             }
         }
-        GameObject go = EditorManager.getInstance().getGameViewWindow().getCurrentScene().getGameObjectByName(identifier);
-        Window detailsWindow = (Window) Dependencies.getWindowsManager().createWindow("scenes/editor/details.xml", RenderEngine.WEB, true);
-        detailsWindow.setResizable(false);
-        detailsWindow.setSize(800, 600);
-        detailsWindow.setRatio(4, 3);
-        detailsWindow.toFront();
+        Window detailsWindow = EditorManager.getInstance().createWindow("scenes/editor/details.xml", RenderEngine.WEB);
         detailsWindows.put(identifier, detailsWindow);
         ObjectDetails details = ((ObjectDetails) detailsWindow.getCurrentScene().getGameObjectByName("object-details").getComponentByClass(ObjectDetails.class));
         new WaitForSeconds(0.5).here();

@@ -1,0 +1,6 @@
+<scene title="Scene options" renderFPS="60" updateFPS="60" physicsFPS="10" netFPS="10" sameSize="true">
+    <object id="scene-options" x="960" y="720" size="1920,1440"> <!-- 4:3 resolution -->
+        <SceneOptions file="webview/editor/tools/sceneoptions.html" _package="pl.AWTGameEngineEditor.components.tools" />
+    </object>
+    <styles source="webview/editor/styles.css" />
+</scene>
