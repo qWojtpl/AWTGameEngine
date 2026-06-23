@@ -17,6 +17,7 @@ public class Logger {
     private static int level = 0;
     private static boolean append = false;
     private static boolean logFile = false;
+    private static String fileName;
     private static boolean callerClass = false;
 
     private static String lastLog = "";
@@ -115,7 +116,7 @@ public class Logger {
     }
 
     public static File getLogFile() {
-        File logFile = new File(Dependencies.getAppProperties().getProperty("logFileName"));
+        File logFile = new File(fileName);
         try {
             if(!logFile.exists()) {
                 if(!logFile.createNewFile()) {
@@ -137,6 +138,10 @@ public class Logger {
         return logFile;
     }
 
+    public static String getLogFileName() {
+        return fileName;
+    }
+
     public static boolean isCallerClass() {
         return callerClass;
     }
@@ -150,6 +155,10 @@ public class Logger {
 
     public static void setLogFile(boolean logFile) {
         Logger.logFile = logFile;
+    }
+
+    public static void setLogFileName(String name) {
+        Logger.fileName = name;
     }
 
     public static void setCallerClass(boolean callerClass) {

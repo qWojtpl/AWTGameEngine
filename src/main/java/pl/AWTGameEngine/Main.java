@@ -17,6 +17,7 @@ public class Main {
         }
         Logger.setLevel(appProperties.getPropertyAsInteger("logLevel"));
         Logger.setLogFile(appProperties.getPropertyAsBoolean("logFile"));
+        Logger.setLogFileName(appProperties.getProperty("logFileName"));
         Logger.setCallerClass(appProperties.getPropertyAsBoolean("logCallerClass"));
         Logger.redirectJULLogger();
         if(TestPerformer.isRunningTests(args)) {

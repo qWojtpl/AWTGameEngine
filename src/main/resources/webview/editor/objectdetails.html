@@ -1,26 +1,18 @@
 <div class="standard object-details">
     <div>
-<!--        <label for="objectdetails-identifier">Identifier</label>-->
-<!--        <input type="text" id="objectdetails-identifier" placeholder="Identifier...">-->
-<!--        <h2>Position</h2><br>-->
-<!--        <label for="objectdetails-position-x">X</label><input type="text" id="objectdetails-position-x" placeholder="X" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'pos.x:' + this.value);"><br>-->
-<!--        <label for="objectdetails-position-y">Y</label><input type="text" id="objectdetails-position-y" placeholder="Y" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'pos.y:' + this.value);"><br>-->
-<!--        <label for="objectdetails-position-z">Z</label><input type="text" id="objectdetails-position-z" placeholder="Z" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'pos.z:' + this.value);"><br>-->
-<!--        <h2>Size</h2><br>-->
-<!--        <label for="objectdetails-size-x">X</label><input type="text" id="objectdetails-size-x" placeholder="X" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'size.x:' + this.value);"><br>-->
-<!--        <label for="objectdetails-size-y">Y</label><input type="text" id="objectdetails-size-y" placeholder="Y" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'size.y:' + this.value);"><br>-->
-<!--        <label for="objectdetails-size-z">Z</label><input type="text" id="objectdetails-size-z" placeholder="Z" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'size.z:' + this.value);"><br>-->
-<!--        <h2>Rotation</h2><br>-->
-<!--        <label for="objectdetails-rotation-x">X</label><input type="text" id="objectdetails-rotation-x" placeholder="X" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'rotation.x:' + this.value);"><br>-->
-<!--        <label for="objectdetails-rotation-y">Y</label><input type="text" id="objectdetails-rotation-y" placeholder="Y" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'rotation.y:' + this.value);"><br>-->
-<!--        <label for="objectdetails-rotation-z">Z</label><input type="text" id="objectdetails-rotation-z" placeholder="Z" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'rotation.z:' + this.value);"><br>-->
-<!--        -->
-<!--        <label for="objectdetails-rotation-w">W</label><input type="text" id="objectdetails-rotation-w" placeholder="W" oninput="validateInputNumber(this)" onchange="feedback('object-details', 'pl.AWTGameEngineEditor.components.details.ObjectDetails', 'rotation.w:' + this.value);">-->
         {{panel}}
     </div>
     <div>
         <select class="standard details-select" multiple>
             {{components}}
+        </select>
+        <div>
+            <button>Clone object</button>
+            <button>Clone as a prefab</button>
+            <button>Delete object</button>
+        </div>
+        <select class="standard components-select">
+            {{all_components}}
         </select>
     </div>
 </div>

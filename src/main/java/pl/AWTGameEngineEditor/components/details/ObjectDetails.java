@@ -11,7 +11,6 @@ import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngineEditor.manager.EditorManager;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 @WebComponent
@@ -52,7 +51,9 @@ public class ObjectDetails extends HTMLFileComponent {
             builder.append(component.getComponentName());
             builder.append("</option>");
         }
-        return data.replace("{{components}}", builder).replace("{{panel}}", panelBuilder);
+        StringBuilder allComponentsBuilder = new StringBuilder();
+
+        return data.replace("{{components}}", builder).replace("{{all_components}}", allComponentsBuilder).replace("{{panel}}", panelBuilder);
     }
 
     public void setup(String identifier) {
@@ -77,6 +78,7 @@ public class ObjectDetails extends HTMLFileComponent {
 
     public void setupComponent(ObjectComponent component) {
         this.panelBuilder.setLength(0);
+        createSection(component.getComponentName());
         for(Method method : component.getClass().getMethods()) {
             if(!method.isAnnotationPresent(FromXML.class)) {
                 continue;
@@ -97,9 +99,10 @@ public class ObjectDetails extends HTMLFileComponent {
                 createInput(dataName, dataName, dataName, fromXML.type().equals(DataType.NUMBER), value);
             }
         }
+        createButton("Remove component");
     }
 
-    private static Method getMethod(ObjectComponent component, Method method) {
+    private Method getMethod(ObjectComponent component, Method method) {
         String getMethodName = method.getName().replace("set", "get");
         Method foundGetMethod = null;
         for(Method getMethod : component.getClass().getMethods()) {
@@ -148,6 +151,12 @@ public class ObjectDetails extends HTMLFileComponent {
     private void createSection(String name) {
         String section = String.format("<h2>%s</h2><br>", name);
         panelBuilder.append(section);
+    }
+
+    private void createButton(String content) {
+        panelBuilder.append("<button>");
+        panelBuilder.append(content);
+        panelBuilder.append("</button><br>");
     }
 
     private void checkDetailsFeedbacks() {

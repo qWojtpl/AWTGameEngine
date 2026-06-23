@@ -47,6 +47,7 @@ public class CommandConsole {
                 result = newResult;
             }
         }
+        parentCommand.onExecuteCommand();
         displayObject(result);
     }
 
@@ -219,6 +220,10 @@ public class CommandConsole {
                 return;
             }
             CommandConsole.register(getClass().getAnnotation(Command.class).value(), this);
+        }
+
+        public void onExecuteCommand() {
+
         }
 
     }
