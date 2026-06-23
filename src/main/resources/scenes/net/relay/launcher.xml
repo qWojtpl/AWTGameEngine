@@ -1,0 +1,5 @@
+<scene title="Net demo (relay launcher)" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+    <object id="launcher">
+        <NetRelayLauncher _package="pl.AWTGameEngine.custom" />
+    </object>
+</scene>

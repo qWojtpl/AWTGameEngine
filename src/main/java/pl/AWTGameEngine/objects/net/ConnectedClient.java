@@ -16,8 +16,13 @@ public class ConnectedClient {
     public ConnectedClient(int id, Socket socket) throws IOException {
         this.id = id;
         this.socket = socket;
-        this.printWriter = new PrintWriter(socket.getOutputStream(), true);
-        this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        if(socket != null) {
+            this.printWriter = new PrintWriter(socket.getOutputStream(), true);
+            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } else {
+            this.printWriter = null;
+            this.bufferedReader = null;
+        }
     }
 
     public void sendInitMessage() {

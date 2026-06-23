@@ -5,8 +5,7 @@ import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
-import pl.AWTGameEngine.components.base.NetComponent;
-import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.components.base.NetServer;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
 import pl.AWTGameEngine.objects.GameObject;
@@ -20,7 +19,7 @@ import java.util.List;
 @DefaultComponent
 @WebComponent
 @ComponentGL
-public class RelayServer extends NetComponent {
+public class RelayServer extends NetServer {
 
     private String relayServerAddress;
     private ConnectedClient relayConnection;
@@ -61,59 +60,28 @@ public class RelayServer extends NetComponent {
         sessionId = Integer.parseInt(response.replaceFirst("\\$sessionId:", ""));
         Logger.info("Received sessionId: " + sessionId);
         new Thread(() -> {
-            try {
-                String data = relayConnection.getBufferedReader().readLine();
-                if(!data.startsWith("$")) {
-                    NetDeserializer.deserialize(getScene(), data, null);
+            while(!relayConnection.getSocket().isClosed()) {
+                try {
+                    String data = relayConnection.getBufferedReader().readLine();
+                    if(!data.startsWith("$")) {
+                        NetDeserializer.deserialize(getScene(), data, new ConnectedClient(0, null), new Server(null));
+                    } else {
+                        if(data.startsWith("$clientConnect:")) {
+                            clearObjectCaches();
+                        }
+                    }
+                } catch(Exception e) {
+                    Logger.exception("Exception while reading data from relay server", e);
+                    // disconnect
                 }
-            } catch(Exception e) {
-                Logger.exception("Exception while reading data from relay server", e);
-                // disconnect
             }
         }).start();
     }
 
     @Override
     public void onNetUpdate() {
-        sendObjectsPosition();
-        sendComponents();
-    }
-
-    private void sendObjectsPosition() {
-        List<NetBlock> blocks = new ArrayList<>();
-        for(GameObject object : getScene().getGameObjects()) {
-            NetBlock block = object.getNet().onPositionSynchronize();
-            if(block.isEmpty()) {
-                continue;
-            }
-            if(block.getIdentifier() != null) {
-                blocks.add(block);
-            } else {
-                Logger.error("Incorrect NetBlock in " + object.getIdentifier());
-            }
-        }
-        for(NetBlock block : blocks) {
-            relayConnection.sendBlock(block);
-        }
-    }
-
-    private void sendComponents() {
-        List<NetBlock> blocks = new ArrayList<>();
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
-            NetComponent netComponent = (NetComponent) component;
-            if(!netComponent.canSynchronize()) {
-                continue;
-            }
-            NetBlock block = netComponent.onSynchronize();
-            if(block.isEmpty()) {
-                continue;
-            }
-            if(block.getIdentifier() != null && block.getComponent() != null) {
-                blocks.add(block);
-            } else {
-                Logger.error("Incorrect NetBlock in " + component.getObject().getIdentifier() + " in component " + component.getClass().getName());
-            }
-        }
+        List<NetBlock> blocks = new ArrayList<>(getObjectPositionBlocks());
+        blocks.addAll(getComponentBlocks());
         for(NetBlock block : blocks) {
             relayConnection.sendBlock(block);
         }

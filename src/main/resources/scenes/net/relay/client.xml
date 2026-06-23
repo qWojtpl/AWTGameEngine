@@ -1,0 +1,5 @@
+<scene title="Net demo (relay client)" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+    <object id="client">
+        <RelayClient relayServerAddress="127.0.0.1:4444" autoConnect="0" />
+    </object>
+</scene>
