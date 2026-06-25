@@ -27,6 +27,7 @@ public class Scene {
     private PanelObject panel;
     private EventHandler sceneEventHandler;
     private String customStyles = "";
+    private SceneOptions originalOptions;
     private final HashMap<String, RenderEngine> loadAfterLoad = new HashMap<>();
 
     public Scene(String name, BaseWindow window, RenderEngine renderEngine) {
@@ -49,12 +50,20 @@ public class Scene {
         return this.customStyles;
     }
 
+    public SceneOptions getOriginalOptions() {
+        return this.originalOptions;
+    }
+
     public void setSceneEventHandler(EventHandler sceneEventHandler) {
         this.sceneEventHandler = sceneEventHandler;
     }
 
     public void setCustomStyles(String styles) {
         this.customStyles = styles;
+    }
+
+    public void setOriginalOptions(SceneOptions options) {
+        this.originalOptions = options;
     }
 
     public void setPanel(PanelObject panel) {

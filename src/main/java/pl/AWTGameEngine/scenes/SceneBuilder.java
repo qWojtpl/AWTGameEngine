@@ -220,7 +220,7 @@ public class SceneBuilder {
 
     private static void initStyleNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {
         //todo: styles from file
-        appendMethodBody(fileBuilder, createCall("scene", "setCustomStyles", "String.class", "\"" + node.getTextContent().replace("\n", "\\n") + "\""));
+        appendMethodBody(fileBuilder, createCall("scene", "setCustomStyles", "String.class", "\"" + node.getTextContent().replace("\n", "\\n").replace("\"", "\\\"") + "\""));
     }
 
     private static void initNestedSceneNode(StringBuilder fileBuilder, StringBuilder methodBuilder, Node node) {

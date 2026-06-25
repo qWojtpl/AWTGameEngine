@@ -9,12 +9,13 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 public class GameObjectDeserializer {
 
-    public static void deserialize(GameObject gameObject, Node data) {
+    public static void deserialize(GameObject gameObject, List<String> packages, Node data) {
         deserializeObjectAttributes(gameObject, data);
-        deserializeObjectComponents(gameObject, data);
+        deserializeObjectComponents(gameObject, packages, data);
         gameObject.triggerSerializationFinish();
     }
 
@@ -48,7 +49,7 @@ public class GameObjectDeserializer {
         }
     }
 
-    public static void deserializeObjectComponents(GameObject object, Node node) {
+    public static void deserializeObjectComponents(GameObject object, List<String> packages, Node node) {
         String className = "";
         try {
             for(int i = 0; i < node.getChildNodes().getLength(); i++) {
@@ -61,13 +62,25 @@ public class GameObjectDeserializer {
                 }
                 className = ((Element) childNode).getTagName().replace(".", "$");
                 String pckg = getValue(childNode, "_package");
+                Class<? extends ObjectComponent> clazz = null;
                 if(!pckg.equals("0")) {
                     className = pckg + "." + className;
+                    clazz = Class.forName(className)
+                            .asSubclass(ObjectComponent.class);
                 } else {
-                    className = "pl.AWTGameEngine.components." + className;
+                    for(String p : packages) {
+                        try {
+                            clazz = Class.forName(p + "." + className).asSubclass(ObjectComponent.class);
+                            className = p + "." + className;
+                            break;
+                        } catch(ClassNotFoundException e) {
+                            continue;
+                        }
+                    }
+                    if(clazz == null) {
+                        throw new ClassNotFoundException();
+                    }
                 }
-                Class<? extends ObjectComponent> clazz = Class.forName(className)
-                        .asSubclass(ObjectComponent.class);
                 ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(object);
                 if(childNode.getAttributes() == null) {
                     continue;

@@ -85,6 +85,7 @@ public class SceneLoader {
             } else {
                 newScene.setPanel(createPanel(newScene, renderEngine));
             }
+            newScene.setOriginalOptions(sceneOptions);
             window.addScene(newScene);
             if(!nestedScene) {
                 window.setCurrentScene(newScene);
@@ -168,6 +169,7 @@ public class SceneLoader {
         int renderFPS = properties.getPropertyAsInteger("renderFPS"),
             updateFPS = properties.getPropertyAsInteger("updateFPS"),
             physicsFPS = properties.getPropertyAsInteger("physicsFPS");
+        String packages = "pl.AWTGameEngine.components";
         for(int i = 0; i < node.getAttributes().getLength(); i++) {
             Node item = node.getAttributes().item(i);
             switch(item.getNodeName().toUpperCase()) {
@@ -189,6 +191,9 @@ public class SceneLoader {
                 case "SAMESIZE":
                     sameSize = Boolean.parseBoolean(item.getNodeValue());
                     break;
+                case "PACKAGES":
+                    packages = item.getNodeValue();
+                    break;
             }
         }
         return new SceneOptions(
@@ -197,7 +202,8 @@ public class SceneLoader {
                 renderFPS,
                 updateFPS,
                 physicsFPS,
-                sameSize
+                sameSize,
+                packages
         );
     }
 
@@ -246,7 +252,7 @@ public class SceneLoader {
             Logger.warning("Cannot initialize object with identifier " + identifier + ", skipping its children!");
             return;
         }
-        GameObjectDeserializer.deserialize(object, node);
+        GameObjectDeserializer.deserialize(object, scene.getOriginalOptions().getPackages(), node);
         for(int i = 0; i < node.getChildNodes().getLength(); i++) {
             if(node.getChildNodes().item(i).getNodeName().equals("object")) {
                 Logger.error("Cannot initialize object with identifier " +
