@@ -52,13 +52,9 @@ public class LineComponent extends ObjectComponent {
         setColorObject(new ColorObject(color));
     }
 
+    @FromXML
     public void setThickness(float thickness) {
         this.thickness = thickness;
-    }
-
-    @FromXML
-    public void setThickness(String thickness) {
-        setThickness(Float.parseFloat(thickness));
     }
 
 }

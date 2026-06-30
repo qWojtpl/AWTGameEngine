@@ -254,23 +254,15 @@ public class Server extends NetComponent {
         return this.maxClients;
     }
 
+    @FromXML
     public void setPort(int port) {
         this.port = port;
     }
 
     @FromXML
-    public void setPort(String port) {
-        setPort(Integer.parseInt(port));
-    }
-
     public void setMaxClients(int clients) {
         clients = Math.abs(clients);
         this.maxClients = clients;
-    }
-
-    @FromXML
-    public void setMaxClients(String clients) {
-        setMaxClients(Integer.parseInt(clients));
     }
 
 }

@@ -123,22 +123,14 @@ public class MovementGL extends ObjectComponent {
         return this.speed;
     }
 
+    @FromXML
     public void setNoclip(boolean noclip) {
         this.noclip = noclip;
     }
 
+    @FromXML
     public void setSpeed(double speed) {
         this.speed = speed;
-    }
-
-    @FromXML
-    public void setNoclip(String noclip) {
-        setNoclip(Boolean.parseBoolean(noclip));
-    }
-
-    @FromXML
-    public void setSpeed(String speed) {
-        setSpeed(Double.parseDouble(speed));
     }
 
 }

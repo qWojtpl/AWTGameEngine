@@ -30,13 +30,9 @@ public class SpinningObject extends ObjectComponent {
         collisions++;
     }
 
+    @FromXML
     public void setSpeed(double speed) {
         this.speed = speed;
-    }
-
-    @FromXML
-    public void setSpeed(String speed) {
-        setSpeed(Double.parseDouble(speed));
     }
 
 }

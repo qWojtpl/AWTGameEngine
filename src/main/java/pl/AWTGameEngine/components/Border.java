@@ -62,14 +62,10 @@ public class Border extends ObjectComponent {
         return this.color.serialize();
     }
 
+    @FromXML
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         propertyChanged = true;
-    }
-
-    @FromXML
-    public void setEnabled(String enabled) {
-        setEnabled(Boolean.parseBoolean(enabled));
     }
 
     public void setColor(ColorObject color) {

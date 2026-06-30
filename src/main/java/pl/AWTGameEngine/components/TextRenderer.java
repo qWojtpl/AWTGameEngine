@@ -118,15 +118,11 @@ public class TextRenderer extends NetComponent {
         setColor(new ColorObject(color));
     }
 
+    @FromXML
     public void setSize(float size) {
         this.size = size;
         propertyChanged = true;
         netPropertyChanged = true;
-    }
-
-    @FromXML
-    public void setSize(String size) {
-        setSize(Float.parseFloat(size));
     }
 
     public void align(HorizontalAlign horizontal, VerticalAlign vertical) {
@@ -189,7 +185,7 @@ public class TextRenderer extends NetComponent {
         String[] split = data.split(NetBlock.getDelimiter());
         setText(split[0]);
         setColor(split[1]);
-        setSize(split[2]);
+        setSize(Float.parseFloat(split[2]));
         setHorizontal(split[3]);
         setVertical(split[4]);
     }

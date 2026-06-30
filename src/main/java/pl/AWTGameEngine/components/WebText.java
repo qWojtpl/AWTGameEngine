@@ -50,21 +50,13 @@ public class WebText extends HTMLComponent {
     }
 
     @FromXML
-    public void setSize(String size) {
-        setSize(Integer.parseInt(size));
-    }
-
     public void setSize(int size) {
         this.size = size;
     }
 
+    @FromXML
     public void setPadding(int padding) {
         this.padding = padding;
-    }
-
-    @FromXML
-    public void setPadding(String padding) {
-        setPadding(Integer.parseInt(padding));
     }
 
     @FromXML

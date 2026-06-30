@@ -109,15 +109,12 @@ public class MusicPlayer extends ObjectComponent {
         setSource(Dependencies.getResourceManager().getResourceAsAudioClip(sourcePath));
     }
 
+    @FromXML
     public void setAutoPlay(boolean autoPlay) {
         this.autoPlay = autoPlay;
     }
 
     @FromXML
-    public void setAutoPlay(String autoPlay) {
-        setAutoPlay(Boolean.parseBoolean(autoPlay));
-    }
-
     public void setLoopCount(int loop) {
         this.loopCount = loop;
         if(loop == -1) {
@@ -125,11 +122,6 @@ public class MusicPlayer extends ObjectComponent {
         } else {
             clip.loop(this.loopCount);
         }
-    }
-
-    @FromXML
-    public void setLoopCount(String loop) {
-        setLoopCount(Integer.parseInt(loop));
     }
 
 }

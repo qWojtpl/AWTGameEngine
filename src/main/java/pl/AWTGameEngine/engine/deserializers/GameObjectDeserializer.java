@@ -1,8 +1,6 @@
 package pl.AWTGameEngine.engine.deserializers;
 
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
@@ -10,6 +8,8 @@ import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
+import static pl.AWTGameEngine.engine.deserializers.XMLDeserializer.printError;
 
 public class GameObjectDeserializer {
 
@@ -60,32 +60,12 @@ public class GameObjectDeserializer {
                 if(childNode.getNodeType() != Node.ELEMENT_NODE) {
                     continue;
                 }
-                className = ((Element) childNode).getTagName().replace(".", "$");
-                String pckg = getValue(childNode, "_package");
-                Class<? extends ObjectComponent> clazz = null;
-                if(!pckg.equals("0")) {
-                    className = pckg + "." + className;
-                    clazz = Class.forName(className)
-                            .asSubclass(ObjectComponent.class);
-                } else {
-                    for(String p : packages) {
-                        try {
-                            clazz = Class.forName(p + "." + className).asSubclass(ObjectComponent.class);
-                            className = p + "." + className;
-                            break;
-                        } catch(ClassNotFoundException e) {
-                            continue;
-                        }
-                    }
-                    if(clazz == null) {
-                        throw new ClassNotFoundException();
-                    }
-                }
+                Class<? extends ObjectComponent> clazz = XMLDeserializer.getClassFromTag(childNode, packages);
                 ObjectComponent o = clazz.getConstructor(GameObject.class).newInstance(object);
                 if(childNode.getAttributes() == null) {
                     continue;
                 }
-                deserializeComponentAttributes(o, clazz, className, childNode);
+                deserializeComponentAttributes(o, childNode);
                 object.addComponent(o);
             }
         } catch(ClassNotFoundException e) {
@@ -97,42 +77,17 @@ public class GameObjectDeserializer {
         }
     }
 
-    public static void deserializeComponentAttributes(ObjectComponent component, Class<?> componentClass, String componentName, Node node) {
-        String methodName = "";
-        try {
-            for(int j = 0; j < node.getAttributes().getLength(); j++) {
-                String fieldName = node.getAttributes().item(j).getNodeName();
-                if(fieldName.equals("_package")) {
-                    continue;
-                }
-                String value = node.getAttributes().item(j).getNodeValue();
-                methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-
-                if (componentClass.getMethod(methodName, String.class).isAnnotationPresent(FromXML.class)) {
-                    componentClass.getMethod(methodName, String.class).invoke(component, value);
-                } else {
-                    printError(component.getObject().getIdentifier(), componentName);
-                    Logger.error("Method " + methodName + " is not annotated as FromXML");
-                }
+    public static void deserializeComponentAttributes(ObjectComponent component, Node node) {
+        for(int j = 0; j < node.getAttributes().getLength(); j++) {
+            String fieldName = node.getAttributes().item(j).getNodeName();
+            if(fieldName.equals("_package")) {
+                continue;
             }
-        } catch(NoSuchMethodException e) {
-            printError(component.getObject().getIdentifier(), componentName);
-            Logger.exception("Method " + methodName + " not found", e);
-        } catch(IllegalAccessException e) {
-            printError(component.getObject().getIdentifier(), componentName);
-            Logger.exception("Can't access method " + methodName, e);
-        } catch(InvocationTargetException e) {
-            printError(component.getObject().getIdentifier(), componentName);
-            Logger.exception("Method " + methodName + " invocation exception (probable type mismatch)", e);
-        }
-    }
+            String value = node.getAttributes().item(j).getNodeValue();
+            String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
-    private static void printError(String identifier, String componentName) {
-        String component = "";
-        if(componentName != null) {
-            component = " (component " + componentName + ")";
+            XMLDeserializer.handleSetMethod(component, methodName, value);
         }
-        Logger.error("Error while deserializing GameObject " + identifier + component);
     }
 
     public static String getValue(Node node, String name) {

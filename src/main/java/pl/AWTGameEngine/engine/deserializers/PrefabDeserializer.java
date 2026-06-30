@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.engine.deserializers;
 
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -12,18 +11,19 @@ import pl.AWTGameEngine.scenes.Scene;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 
-import static pl.AWTGameEngine.engine.deserializers.GameObjectDeserializer.getValue;
+import static pl.AWTGameEngine.engine.deserializers.XMLDeserializer.printError;
 
 public class PrefabDeserializer {
 
     public static void deserialize(String prefabIdentifier, Scene scene, Node node, String externalPrefabPath) {
         Prefab prefab = new Prefab(prefabIdentifier, externalPrefabPath);
-        deserializePrefabComponents(prefab, node);
+        deserializePrefabComponents(prefab, scene.getOriginalOptions().getPackages(), node);
         scene.addPrefab(prefab);
     }
 
-    private static void deserializePrefabComponents(Prefab prefab, Node node) {
+    private static void deserializePrefabComponents(Prefab prefab, List<String> packages, Node node) {
         String className = "";
         try {
             for(int i = 0; i < node.getChildNodes().getLength(); i++) {
@@ -34,15 +34,7 @@ public class PrefabDeserializer {
                 if(childNode.getNodeType() != Node.ELEMENT_NODE) {
                     continue;
                 }
-                className = ((Element) childNode).getTagName().replace(".", "$");
-                String pckg = getValue(childNode, "_package");
-                if(!pckg.equals("0")) {
-                    className = pckg + "." + className;
-                } else {
-                    className = "pl.AWTGameEngine.components." + className;
-                }
-                Class<? extends ObjectComponent> clazz = Class.forName(className)
-                        .asSubclass(ObjectComponent.class);
+                Class<? extends ObjectComponent> clazz = XMLDeserializer.getClassFromTag(childNode, packages);
                 Prefab.PrefabComponent prefabComponent = new Prefab.PrefabComponent(prefab, clazz, new HashMap<>());
                 deserializeComponentAttributes(prefab, prefabComponent, childNode);
                 prefab.addComponent(prefabComponent);
@@ -64,11 +56,19 @@ public class PrefabDeserializer {
                 String value = node.getAttributes().item(i).getNodeValue();
                 methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
-                if(component.getComponentClass().getMethod(methodName, String.class).isAnnotationPresent(FromXML.class)) {
-                    component.getValues().put(methodName, value);
-                } else {
-                    printError(prefab.getIdentifier(), component.getComponentClass().getSimpleName());
-                    Logger.error("Method " + methodName + " is not annotated as FromXML");
+                boolean found = false;
+                for(Method method : component.getComponentClass().getMethods()) {
+                    if(method.getName().equals(methodName)) {
+                        if(method.isAnnotationPresent(FromXML.class)) {
+                            component.getValues().put(methodName, value);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(!found) {
+                    throw new NoSuchMethodException();
                 }
             }
         } catch(NoSuchMethodException e) {
@@ -77,24 +77,12 @@ public class PrefabDeserializer {
         }
     }
 
-    private static void printError(String identifier, String componentName) {
-        String component = "";
-        if(componentName != null) {
-            component = " (component " + componentName + ")";
-        }
-        Logger.error("Error while deserializing Prefab " + identifier + component);
-    }
-
     public static void injectPrefab(Prefab prefab, GameObject object, boolean triggerSerializationFinish) {
         try {
             for(Prefab.PrefabComponent prefabComponent : prefab.getComponents()) {
                 ObjectComponent objectComponent = prefabComponent.getComponentClass().getConstructor(GameObject.class).newInstance(object);
                 for(String methodName : prefabComponent.getValues().keySet()) {
-                    Method method = objectComponent.getClass().getMethod(methodName, String.class);
-                    if(!method.isAnnotationPresent(FromXML.class)) {
-                        continue;
-                    }
-                    method.invoke(objectComponent, prefabComponent.getValues().get(methodName));
+                    XMLDeserializer.handleSetMethod(objectComponent, methodName, prefabComponent.getValues().get(methodName));
                 }
                 object.addComponent(objectComponent);
             }

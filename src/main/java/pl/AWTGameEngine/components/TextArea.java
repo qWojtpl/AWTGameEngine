@@ -275,6 +275,7 @@ public class TextArea extends ObjectComponent {
         textRenderer.setText(text);
     }
 
+    @FromXML
     public void setDisabled(boolean disabled) {
         if(disabled) {
             backgroundDisabled.getColorObject().transientAlpha(255, 100);
@@ -285,11 +286,6 @@ public class TextArea extends ObjectComponent {
         if(disabled) {
             focused = false;
         }
-    }
-
-    @FromXML
-    public void setDisabled(String disabled) {
-        setDisabled(Boolean.parseBoolean(disabled));
     }
 
     public void setPointerLocation(int location) {

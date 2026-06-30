@@ -15,6 +15,7 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.helpers.VehicleHelper;
@@ -73,13 +74,9 @@ public class Vehicle extends ObjectComponent {
         return this.mass;
     }
 
+    @FromXML
     public void setMass(double mass) {
         this.mass = mass;
-    }
-
-    @FromXML
-    public void setMass(String mass) {
-        setMass(Double.parseDouble(mass));
     }
 
     private void initialize() {
@@ -485,31 +482,19 @@ public class Vehicle extends ObjectComponent {
             return this.maxRPM;
         }
 
+        @FromXML
         public void setPeakTorque(float peakTorque) {
             this.peakTorque = peakTorque;
         }
 
         @FromXML
-        public void setPeakTorque(String peakTorque) {
-            setPeakTorque(Float.parseFloat(peakTorque));
-        }
-
         public void setIdleRPM(float idleRPM) {
             this.idleRPM = idleRPM;
         }
 
         @FromXML
-        public void setIdleRPM(String idleRPM) {
-            setIdleRPM(Float.parseFloat(idleRPM));
-        }
-
         public void setMaxRPM(float maxRPM) {
             this.maxRPM = maxRPM;
-        }
-
-        @FromXML
-        public void setMaxRPM(String maxRPM) {
-            setMaxRPM(Float.parseFloat(maxRPM));
         }
 
     }
@@ -590,23 +575,15 @@ public class Vehicle extends ObjectComponent {
             setGearRatios(newRatios);
         }
 
+        @FromXML
         public void setNeutralGearIndex(int index) {
             checkInitialized();
             this.neutralGearIndex = index;
         }
 
         @FromXML
-        public void setNeutralGearIndex(String index) {
-            setNeutralGearIndex(Integer.parseInt(index));
-        }
-
         public void setSwitchTime(float switchTime) {
             this.switchTime = switchTime;
-        }
-
-        @FromXML
-        public void setSwitchTime(String switchTime) {
-            setSwitchTime(Float.parseFloat(switchTime));
         }
 
         public void setCurrentGear(int gear) {

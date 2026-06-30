@@ -100,6 +100,7 @@ public abstract class Base3DShape extends NetComponent {
         updateColor = true;
     }
 
+    @FromXML
     public void setXray(boolean xray) {
         this.xray = xray;
         updateXray = true;
@@ -135,11 +136,6 @@ public abstract class Base3DShape extends NetComponent {
     @FromXML
     public void setColor(String color) {
         setColor(new ColorObject(color));
-    }
-
-    @FromXML
-    public void setXray(String xray) {
-        setXray(Boolean.parseBoolean(xray));
     }
 
     @Override

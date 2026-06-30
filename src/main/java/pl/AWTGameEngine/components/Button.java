@@ -123,17 +123,9 @@ public class Button extends ObjectComponent {
         textRenderer.setText(text);
     }
 
+    @FromXML
     public void setSize(float size) {
         textRenderer.setSize(size);
-    }
-
-    @FromXML
-    public void setSize(String size) {
-        try {
-            setSize(Float.parseFloat(size));
-        } catch(NumberFormatException e) {
-            setSize(20f);
-        }
     }
 
     public void setBackgroundColor(ColorObject color) {

@@ -55,13 +55,9 @@ public class Animator extends ObjectComponent {
         return this.loop;
     }
 
+    @FromXML
     public void setLoop(boolean loop) {
         this.loop = loop;
-    }
-
-    @FromXML
-    public void setLoop(String loop) {
-        this.loop = Boolean.parseBoolean(loop);
     }
 
     public void setNextFrame(AnimationFrame frame) {

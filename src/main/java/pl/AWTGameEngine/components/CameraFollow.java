@@ -107,40 +107,25 @@ public class CameraFollow extends ObjectComponent {
         return this.rotateUsingMouse;
     }
 
+    @FromXML
     public void setRadius(double radius) {
         this.radius = radius;
     }
 
     @FromXML
-    public void setRadius(String radius) {
-        setRadius(Integer.parseInt(radius));
-    }
-
     public void setHorizontalAngle(double angle) {
         this.horizontalAngle = angle;
     }
 
     @FromXML
-    public void setHorizontalAngle(String angle) {
-        setHorizontalAngle(Integer.parseInt(angle));
-    }
-
     public void setVerticalAngle(double angle) {
         this.verticalAngle = angle;
     }
 
     @FromXML
-    public void setVerticalAngle(String angle) {
-        setVerticalAngle(Integer.parseInt(angle));
-    }
-
     public void setRotateUsingMouse(boolean rotate) {
         this.rotateUsingMouse = rotate;
     }
 
-    @FromXML
-    public void setRotateUsingMouse(String rotate) {
-        setRotateUsingMouse(Boolean.parseBoolean(rotate));
-    }
 
 }

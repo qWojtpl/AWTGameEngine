@@ -5,7 +5,6 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.HTMLFileComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.enums.DataType;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
@@ -83,20 +82,29 @@ public class ObjectDetails extends HTMLFileComponent {
             if(!method.isAnnotationPresent(FromXML.class)) {
                 continue;
             }
-            FromXML fromXML = method.getAnnotation(FromXML.class);
+
             String value;
+            String dataName;
             try {
                 Method foundGetMethod = getMethod(component, method);
                 value = foundGetMethod.invoke(component).toString();
+                dataName = method.getName().replace("set", "");
             } catch (Exception e) {
                 Logger.exception("Cannot get value of " + method.getName(), e);
                 continue;
             }
-            String dataName = method.getName().replace("set", "");
-            if(fromXML.type().equals(DataType.BOOLEAN)) {
+
+            Class<?> type = method.getParameters()[0].getType();
+
+            if(type.equals(boolean.class)) {
                 createCheckbox(dataName, dataName, dataName, value.equals("true"));
             } else {
-                createInput(dataName, dataName, dataName, fromXML.type().equals(DataType.NUMBER), value);
+                createInput(dataName, dataName, dataName,
+                        type.equals(int.class) ||
+                                type.equals(float.class) ||
+                                type.equals(double.class),
+                        value
+                );
             }
         }
         createButton("Remove component");

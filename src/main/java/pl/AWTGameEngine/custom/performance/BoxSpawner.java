@@ -59,13 +59,9 @@ public class BoxSpawner extends ObjectComponent {
         return this.boxCounter;
     }
 
+    @FromXML
     public void setIterator(int iterator) {
         this.boxCounter = iterator;
-    }
-
-    @FromXML
-    public void setIterator(String iterator) {
-        setIterator(Integer.parseInt(iterator));
     }
 
 }

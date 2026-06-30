@@ -8,7 +8,6 @@ import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
-import pl.AWTGameEngine.engine.enums.DataType;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.net.ConnectedClient;
 
@@ -93,13 +92,9 @@ public class RelayClient extends NetComponent {
         return this.autoConnect;
     }
 
+    @FromXML
     public void setAutoConnect(int autoConnect) {
         this.autoConnect = autoConnect;
-    }
-
-    @FromXML(type = DataType.NUMBER)
-    public void setAutoConnect(String autoConnect) {
-        setAutoConnect(Integer.parseInt(autoConnect));
     }
 
     @SaveState(name = "relayServerAddress")
