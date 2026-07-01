@@ -128,6 +128,17 @@ public abstract class XMLDeserializer {
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
+                return long.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, Long.parseLong(value));
+            }
+        });
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
                 return double.class.equals(type);
             }
 
@@ -158,13 +169,6 @@ public abstract class XMLDeserializer {
                 method.invoke(component, new TransformSet().deserialize(value));
             }
         });
-    }
-
-    public interface ParameterTypeHandler {
-
-        boolean equalsTypeClass(Class<?> type);
-        void invoke(Method method, ObjectComponent component, String value) throws Exception;
-
     }
 
 }

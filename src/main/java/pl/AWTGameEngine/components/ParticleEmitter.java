@@ -29,6 +29,8 @@ public class ParticleEmitter extends ObjectComponent {
     private String vectors;
     private final List<TransformSet> parsedVectors = new ArrayList<>();
     private TransformSet particleSize = new TransformSet(10, 10, 10);
+    private long ttl = 1200;
+    private double iterationsPerSecond = 10;
 
     public ParticleEmitter(GameObject object) {
         super(object);
@@ -38,7 +40,8 @@ public class ParticleEmitter extends ObjectComponent {
     public void onSerializationFinish() {
         graphicsManager3D = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
         particleLoop = new ParticleLoop();
-        particleLoop.setTargetFps(10);
+        particleLoop.setTargetFps(iterationsPerSecond);
+        particleLoop.setUnlockBlock(true);
         particleLoop.start();
     }
 
@@ -72,7 +75,7 @@ public class ParticleEmitter extends ObjectComponent {
                 .setSize(particleSize.clone())
                 .setQuaternionRotation(new QuaternionTransformSet())
                 .setPosition(getObject().getPosition().clone());
-        ParticleMeta meta = new ParticleMeta(renderable, updateVector.clone(), 1200);
+        ParticleMeta meta = new ParticleMeta(renderable, updateVector.clone(), ttl);
         particles.add(meta);
         graphicsManager3D.createRenderable(renderable);
     }
@@ -128,6 +131,29 @@ public class ParticleEmitter extends ObjectComponent {
     @FromXML
     public void setParticleSize(TransformSet particleSize) {
         this.particleSize = particleSize;
+    }
+
+    @SaveState(name = "ttl")
+    public long getTtl() {
+        return this.ttl;
+    }
+
+    @FromXML
+    public void setTtl(long ttl) {
+        this.ttl = ttl;
+    }
+
+    @SaveState(name = "iterationsPerSecond")
+    public double getIterationsPerSecond() {
+        return this.iterationsPerSecond;
+    }
+
+    @FromXML
+    public void setIterationsPerSecond(double iterationsPerSecond) {
+        this.iterationsPerSecond = iterationsPerSecond;
+        if(particleLoop != null) {
+            particleLoop.setTargetFps(iterationsPerSecond);
+        }
     }
 
     class ParticleLoop extends BaseLoop {

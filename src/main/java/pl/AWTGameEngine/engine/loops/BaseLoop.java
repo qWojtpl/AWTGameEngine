@@ -18,6 +18,7 @@ public abstract class BaseLoop extends Thread {
     private boolean killed = false;
     private Runnable killOperation;
     private final List<Runnable> nextFrameOperations = new ArrayList<>();
+    private boolean blockUnlock = false;
 
     public BaseLoop(BaseWindow window, String loopName) {
         this.window = window;
@@ -49,7 +50,7 @@ public abstract class BaseLoop extends Thread {
         while(!killed) {
             try {
                 if(getTargetFps() != 0) {
-                    if(getTargetFps() / 2 < getActualFps()) {
+                    if(getTargetFps() / 2 < getActualFps() || blockUnlock) {
                         Thread.sleep((long) (1000 / getTargetFps()));
                     }
                 }
@@ -122,6 +123,14 @@ public abstract class BaseLoop extends Thread {
     @Command("actualFps")
     public double getActualFps() {
         return this.actualFps;
+    }
+
+    public boolean isUnlockBlocked() {
+        return this.blockUnlock;
+    }
+
+    public void setUnlockBlock(boolean state) {
+        this.blockUnlock = state;
     }
 
 }
