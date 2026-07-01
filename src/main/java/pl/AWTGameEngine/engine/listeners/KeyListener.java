@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.engine.listeners;
 
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.enums.KeyCode;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.BaseWindow;
 
@@ -71,6 +72,10 @@ public class KeyListener implements java.awt.event.KeyListener {
 
     public boolean hasPressedKey(int key) {
         return pressedKeys.contains(key);
+    }
+
+    public boolean hasPressedKey(KeyCode key) {
+        return hasPressedKey(key.value);
     }
 
     public void releaseKey(int key) {

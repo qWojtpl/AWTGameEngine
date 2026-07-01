@@ -60,7 +60,7 @@ public abstract class BaseLoop extends Thread {
                 try {
                     List<Runnable> runnableList = new ArrayList<>(nextFrameOperations);
                     nextFrameOperations.clear();
-                    for (Runnable runnable : runnableList) {
+                    for(Runnable runnable : runnableList) {
                         runnable.run();
                     }
                 } catch (Exception e) {
