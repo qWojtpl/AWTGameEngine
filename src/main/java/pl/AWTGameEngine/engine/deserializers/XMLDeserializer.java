@@ -5,13 +5,25 @@ import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import static pl.AWTGameEngine.engine.deserializers.GameObjectDeserializer.getValue;
 
 public abstract class XMLDeserializer {
+
+    private static final List<ParameterTypeHandler> handlers = new ArrayList<>();
+
+    static {
+        addDefaultHandlers();
+    }
+
+    public static void addParameterTypeHandler(ParameterTypeHandler handler) {
+        handlers.add(handler);
+    }
 
     public static Class<? extends ObjectComponent> getClassFromTag(Node childNode, List<String> packages) throws ClassNotFoundException {
         String className = ((Element) childNode).getTagName().replace(".", "$");
@@ -46,17 +58,15 @@ public abstract class XMLDeserializer {
                     found = true;
                     if(method.isAnnotationPresent(FromXML.class)) {
                         Class<?> type = method.getParameters()[0].getType();
-                        if(type.equals(boolean.class)) {
-                            method.invoke(component, Boolean.parseBoolean(value));
-                        } else if(type.equals(String.class)) {
-                            method.invoke(component, value);
-                        } else if(type.equals(int.class)) {
-                            method.invoke(component, Integer.parseInt(value));
-                        } else if(type.equals(double.class)) {
-                            method.invoke(component, Double.parseDouble(value));
-                        } else if(type.equals(float.class)) {
-                            method.invoke(component, Float.parseFloat(value));
-                        } else {
+                        boolean handlerFound = false;
+                        for(ParameterTypeHandler handler : handlers) {
+                            if(handler.equalsTypeClass(type)) {
+                                handlerFound = true;
+                                handler.invoke(method, component, value);
+                                break;
+                            }
+                        }
+                        if(!handlerFound) {
                             throw new RuntimeException("FromXML doesn't support this parameter type: " + method.getParameters()[0].getType().getCanonicalName());
                         }
                         break;
@@ -79,6 +89,82 @@ public abstract class XMLDeserializer {
             component = " (component " + componentName + ")";
         }
         Logger.error("Error while deserializing " + identifier + component);
+    }
+
+    private static void addDefaultHandlers() {
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return boolean.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, Boolean.parseBoolean(value));
+            }
+        });
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return String.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, value);
+            }
+        });
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return int.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, Integer.parseInt(value));
+            }
+        });
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return double.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, Double.parseDouble(value));
+            }
+        });
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return float.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, Float.parseFloat(value));
+            }
+        });
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return TransformSet.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, new TransformSet().deserialize(value));
+            }
+        });
+    }
+
+    public interface ParameterTypeHandler {
+
+        boolean equalsTypeClass(Class<?> type);
+        void invoke(Method method, ObjectComponent component, String value) throws Exception;
+
     }
 
 }
