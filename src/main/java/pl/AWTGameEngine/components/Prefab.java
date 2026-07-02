@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.components.types.*;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.NetComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.PrefabDeserializer;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.net.NetBlock;
@@ -24,7 +25,12 @@ public class Prefab extends NetComponent {
 
     @Override
     public void onAddComponent() {
-        PrefabDeserializer.injectPrefab(getScene().getPrefab(prefabName), getObject(), false);
+        pl.AWTGameEngine.objects.Prefab prefab = getScene().getPrefab(prefabName);
+        if(prefab == null) {
+            Logger.error("Prefab " + prefabName + " not found.");
+            return;
+        }
+        PrefabDeserializer.injectPrefab(prefab, getObject(), false);
         getObject().removeComponent(this);
     }
 

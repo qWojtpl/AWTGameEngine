@@ -7,6 +7,7 @@ import pl.AWTGameEngine.engine.helpers.TextUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.logging.*;
 
@@ -91,7 +92,10 @@ public class Logger {
         CommandConsole.pass();
     }
 
-    public static void exception(String message, Exception exception) {
+    public static void exception(String message, Throwable exception) {
+        if(exception instanceof InvocationTargetException && exception.getCause() != null) {
+            exception = exception.getCause();
+        }
         String title = exception.getClass().getSimpleName() + ": " + exception.getMessage();
         message += "\n┌" + TextUtils.getCharacters('─', "", TABLE_SIZE - 2) + "┐\n"; // top
         message += "│ " + title + ((title.length() <= TABLE_SIZE - 4) ? (TextUtils.getSpaces(title, TABLE_SIZE - 4) + " │") : "");

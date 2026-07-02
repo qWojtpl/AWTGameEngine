@@ -375,11 +375,19 @@ public class GameObject {
         transform.getNotifyAction().accept(null); // run notify
     }
 
+    public void setPosition(double x, double y, double z) {
+        setPosition(new TransformSet(x, y, z));
+    }
+
     public void setRotation(TransformSet transform) {
         this.rotation = transform;
         hookRotationNotifyAction(transform);
         transform.getNotifyAction().accept(null);
         this.quaternionRotation.clear();
+    }
+
+    public void setRotation(double x, double y, double z) {
+        setRotation(new TransformSet(x, y, z));
     }
 
     public void setQuaternionRotation(QuaternionTransformSet transform, ObjectComponent blockNotify) {
@@ -404,6 +412,10 @@ public class GameObject {
         this.size = transform;
         hookSizeNotifyAction(transform);
         transform.getNotifyAction().accept(null);
+    }
+
+    public void setSize(double x, double y, double z) {
+        setSize(new TransformSet(x, y, z));
     }
 
     public Net getNet() {

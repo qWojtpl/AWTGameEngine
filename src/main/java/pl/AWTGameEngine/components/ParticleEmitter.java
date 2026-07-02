@@ -11,6 +11,7 @@ import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.ParticleMeta;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
+import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
@@ -31,6 +32,7 @@ public class ParticleEmitter extends ObjectComponent {
     private TransformSet particleSize = new TransformSet(10, 10, 10);
     private long ttl = 1200;
     private double iterationsPerSecond = 10;
+    private Sprite sprite;
 
     public ParticleEmitter(GameObject object) {
         super(object);
@@ -71,7 +73,7 @@ public class ParticleEmitter extends ObjectComponent {
         renderable
                 .setShapePath("models/plane.obj")
                 .setShader("shaders/billboard")
-                .setSprite(Dependencies.getResourceManager().getResourceAsSprite("sprites/base/error.png"))
+                .setSprite(sprite == null ? Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg") : sprite)
                 .setSize(particleSize.clone())
                 .setQuaternionRotation(new QuaternionTransformSet())
                 .setPosition(getObject().getPosition().clone());
@@ -107,6 +109,7 @@ public class ParticleEmitter extends ObjectComponent {
 
     @FromXML
     public void setVectors(String vectors) {
+        parsedVectors.clear();
         String[] split = vectors.trim().split("\\s+");
         double x = 0, y = 0, z;
         for(int i = 0, j = 0; i < split.length; i++, j++) {
@@ -154,6 +157,24 @@ public class ParticleEmitter extends ObjectComponent {
         if(particleLoop != null) {
             particleLoop.setTargetFps(iterationsPerSecond);
         }
+    }
+
+    @SaveState(name = "spriteSource")
+    public String getSpriteSource() {
+        return this.sprite.getImagePath();
+    }
+
+    @FromXML
+    public void setSpriteSource(String spriteSource) {
+        setSprite(Dependencies.getResourceManager().getResourceAsSprite(spriteSource));
+    }
+
+    public Sprite getSprite() {
+        return this.sprite;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
     }
 
     class ParticleLoop extends BaseLoop {

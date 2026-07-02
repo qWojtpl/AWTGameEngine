@@ -128,15 +128,12 @@ public class SceneLoader {
 
                 Class<?> cls = cl.loadClass(className);
                 Object object = cls.getConstructor().newInstance();
-                object.getClass().getMethod("load", Object.class, Object.class).invoke(object, window, newScene);
+                object.getClass().getMethod("load", Object.class, Object.class, Object.class).invoke(object, window, newScene, XMLDeserializer.getInstance());
                 Logger.info("Scene " + scenePath + " loaded.");
                 newScene.triggerAfterLoad();
             }
 
-        } catch (InvocationTargetException e) {
-            Logger.error("Cannot load scene binary " + scenePath + ":\n\t" + e.getCause());
-            return null;
-        } catch (Exception e) {
+        } catch(Exception e) {
             Logger.exception("Cannot load scene binary " + scenePath, e);
             return null;
         }

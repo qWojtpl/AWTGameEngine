@@ -86,7 +86,7 @@ public class GameObjectDeserializer {
             String value = node.getAttributes().item(j).getNodeValue();
             String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
 
-            XMLDeserializer.handleSetMethod(component, methodName, value);
+            XMLDeserializer.getInstance().handleSetMethod(component, methodName, value);
         }
     }
 

@@ -13,15 +13,23 @@ import java.util.List;
 
 import static pl.AWTGameEngine.engine.deserializers.GameObjectDeserializer.getValue;
 
-public abstract class XMLDeserializer {
+public class XMLDeserializer {
 
-    private static final List<ParameterTypeHandler> handlers = new ArrayList<>();
+    private static XMLDeserializer instance;
+    private final List<ParameterTypeHandler> handlers = new ArrayList<>();
 
-    static {
+    XMLDeserializer() {
         addDefaultHandlers();
     }
 
-    public static void addParameterTypeHandler(ParameterTypeHandler handler) {
+    public static XMLDeserializer getInstance() {
+        if(instance == null) {
+            instance = new XMLDeserializer();
+        }
+        return instance;
+    }
+
+    public void addParameterTypeHandler(ParameterTypeHandler handler) {
         handlers.add(handler);
     }
 
@@ -50,7 +58,7 @@ public abstract class XMLDeserializer {
         return clazz;
     }
 
-    public static void handleSetMethod(ObjectComponent component, String methodName, String value) {
+    public void handleSetMethod(ObjectComponent component, String methodName, String value) {
         try {
             boolean found = false;
             for(Method method : component.getClass().getMethods()) {
@@ -91,11 +99,11 @@ public abstract class XMLDeserializer {
         Logger.error("Error while deserializing " + identifier + component);
     }
 
-    private static void addDefaultHandlers() {
+    private void addDefaultHandlers() {
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
-                return boolean.class.equals(type);
+                return boolean.class.equals(type) || Boolean.class.equals(type);
             }
 
             @Override
@@ -128,7 +136,7 @@ public abstract class XMLDeserializer {
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
-                return long.class.equals(type);
+                return long.class.equals(type) || Long.class.equals(type);
             }
 
             @Override
@@ -139,7 +147,7 @@ public abstract class XMLDeserializer {
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
-                return double.class.equals(type);
+                return double.class.equals(type) || Double.class.equals(type);
             }
 
             @Override
@@ -150,7 +158,7 @@ public abstract class XMLDeserializer {
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
-                return float.class.equals(type);
+                return float.class.equals(type) || Float.class.equals(type);
             }
 
             @Override

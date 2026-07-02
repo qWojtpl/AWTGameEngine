@@ -82,7 +82,7 @@ public class PrefabDeserializer {
             for(Prefab.PrefabComponent prefabComponent : prefab.getComponents()) {
                 ObjectComponent objectComponent = prefabComponent.getComponentClass().getConstructor(GameObject.class).newInstance(object);
                 for(String methodName : prefabComponent.getValues().keySet()) {
-                    XMLDeserializer.handleSetMethod(objectComponent, methodName, prefabComponent.getValues().get(methodName));
+                    XMLDeserializer.getInstance().handleSetMethod(objectComponent, methodName, prefabComponent.getValues().get(methodName));
                 }
                 object.addComponent(objectComponent);
             }
