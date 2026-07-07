@@ -32,6 +32,7 @@ public class ParticleEmitter extends ObjectComponent {
     private TransformSet particleSize = new TransformSet(10, 10, 10);
     private long ttl = 1200;
     private double iterationsPerSecond = 10;
+    private long fadeOutStart = 600;
     private Sprite sprite;
 
     public ParticleEmitter(GameObject object) {
@@ -66,6 +67,10 @@ public class ParticleEmitter extends ObjectComponent {
             if(newPosition == null) {
                 particles.remove(meta);
                 graphicsManager3D.removeRenderable(meta.getIdentifier());
+            } else {
+                if(ttl - meta.getTtl() >= fadeOutStart) {
+                    meta.getRenderable().setOpacity((meta.getTtl()) / (float) (ttl - fadeOutStart));
+                }
             }
         }
     }
@@ -147,6 +152,16 @@ public class ParticleEmitter extends ObjectComponent {
     @FromXML
     public void setTtl(long ttl) {
         this.ttl = ttl;
+    }
+
+    @SaveState(name = "fadeOutStart")
+    public long getFadeOutStart() {
+        return this.fadeOutStart;
+    }
+
+    @FromXML
+    public void setFadeOutStart(long start) {
+        this.fadeOutStart = start;
     }
 
     @SaveState(name = "iterationsPerSecond")

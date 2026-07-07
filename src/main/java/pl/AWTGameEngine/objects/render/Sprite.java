@@ -91,6 +91,8 @@ public class Sprite {
         return this;
     }
 
+
+
     public boolean isTransparent() {
         if(image == null) {
             return false;

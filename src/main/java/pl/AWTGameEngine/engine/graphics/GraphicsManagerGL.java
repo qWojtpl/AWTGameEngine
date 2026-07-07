@@ -78,7 +78,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         for(RenderOptions3D ro : renderableList) {
             if(ro.getSprite() != null) {
-                if(alphaTextures.contains(textures.get(ro.getSprite()))) {
+                if(alphaTextures.contains(textures.get(ro.getSprite())) || ro.getOpacity() != 1) {
                     transparentRenders.add(ro);
                     continue;
                 }
@@ -164,9 +164,18 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         int modelLoc = gl.glGetUniformLocation(program, "model");
         int vpLoc = gl.glGetUniformLocation(program, "viewProj");
+        int opacityLoc = gl.glGetUniformLocation(program, "opacity");
 
         gl.glUniformMatrix4fv(vpLoc, 1, false, viewProj, 0);
         gl.glUniformMatrix4fv(modelLoc, 1, false, model, 0);
+
+        float opacity = ro.getOpacity();
+
+        if(opacity > 1) {
+            opacity = 1;
+        }
+
+        gl.glUniform1f(opacityLoc, opacity);
 
         if(ro.getSprite() != null) {
             if(textures.getOrDefault(ro.getSprite(), null) == null) {

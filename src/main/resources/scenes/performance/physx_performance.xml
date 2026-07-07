@@ -17,10 +17,12 @@
     <object id="emitter" x="20" y="0" z="20" size="10,10,10">
         <Box3D />
         <ParticleEmitter
-                ttl="1200"
+                ttl="300"
+                fadeOutStart="150"
                 iterationsPerSecond="30"
                 particleSize="6,6,6"
                 iterationStep="0,0.02,0"
+                spriteSource="sprites/base/error.png"
                 vectors="
         1 0 0
         0.866 0 0.5

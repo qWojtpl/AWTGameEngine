@@ -16,6 +16,7 @@ public class RenderOptions3D {
     private String shader;
     private boolean xrayRender = false;
     private String shapePath;
+    private float opacity = 1;
 
     public RenderOptions3D(String identifier) {
         this.identifier = identifier;
@@ -61,6 +62,10 @@ public class RenderOptions3D {
         return xrayRender;
     }
 
+    public float getOpacity() {
+        return this.opacity;
+    }
+
     public RenderOptions3D setPosition(TransformSet position) {
         this.position = position;
         return this;
@@ -103,6 +108,11 @@ public class RenderOptions3D {
 
     public RenderOptions3D setShapePath(String path) {
         this.shapePath = path;
+        return this;
+    }
+
+    public RenderOptions3D setOpacity(float opacity) {
+        this.opacity = opacity;
         return this;
     }
 

@@ -33,4 +33,12 @@ public class ParticleMeta {
         return renderable.getIdentifier();
     }
 
+    public long getTtl() {
+        return this.ttl;
+    }
+
+    public RenderOptions3D getRenderable() {
+        return this.renderable;
+    }
+
 }

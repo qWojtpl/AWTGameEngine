@@ -66,8 +66,10 @@ public class OpenGLManager implements GLEventListener {
             for(ObjectComponent c :
                     scene.getSceneEventHandler()
                             .getComponents("on3DRenderRequest#GraphicsManager3D")) {
-                c.getObject().getPosition().lock();
-                locks.add(c.getObject().getPosition());
+                if(!locks.contains(c.getObject().getPosition())) {
+                    c.getObject().getPosition().lock();
+                    locks.add(c.getObject().getPosition());
+                }
                 c.on3DRenderRequest(graphicsManagerGL);
             }
         } catch(Exception e) {
