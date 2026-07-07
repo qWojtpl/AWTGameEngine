@@ -96,7 +96,11 @@ public class OpenGLManager implements GLEventListener {
             Logger.exception("Unhandled exception caught while drawing a OpenGL scene", e);
         } finally {
             for(TransformSet locked : locks) {
-                locked.unlock();
+                try {
+                    locked.unlock();
+                } catch(IllegalMonitorStateException e) {
+                    Logger.exception("Failed to unlock transform", e);
+                }
             }
             gl.glUseProgram(0);
         }

@@ -49,15 +49,15 @@ public class TransformSet {
     }
 
     public void clear() {
-        lock.lock();
+        lock();
         try {
             this.x = 0;
             this.y = 0;
             this.z = 0;
-            runNotify();
         } finally {
-            lock.unlock();
+            unlock();
         }
+        runNotify();
     }
 
     public double getX() {
@@ -73,36 +73,49 @@ public class TransformSet {
     }
 
     public TransformSet setX(double x) {
-        lock.lock();
+        lock();
         try {
             this.x = x;
-            runNotify();
-            return this;
         } finally {
-            lock.unlock();
+            unlock();
         }
+        runNotify();
+        return this;
     }
 
     public TransformSet setY(double y) {
-        lock.lock();
+        lock();
         try {
             this.y = y;
-            runNotify();
-            return this;
         } finally {
-            lock.unlock();
+            unlock();
         }
+        runNotify();
+        return this;
     }
 
     public TransformSet setZ(double z) {
-        lock.lock();
+        lock();
         try {
             this.z = z;
-            runNotify();
-            return this;
         } finally {
-            lock.unlock();
+            unlock();
         }
+        runNotify();
+        return this;
+    }
+
+    public TransformSet set(double x, double y, double z) {
+        lock();
+        try {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        } finally {
+            unlock();
+        }
+        runNotify();
+        return this;
     }
 
     @Override
@@ -126,21 +139,21 @@ public class TransformSet {
     }
 
     public TransformSet deserialize(String values) {
-        lock.lock();
+        lock();
         try {
             String[] split = values.split(",");
-            if (split.length >= 2) {
+            if(split.length >= 2) {
                 this.x = Double.parseDouble(split[0]);
                 this.y = Double.parseDouble(split[1]);
             }
-            if (split.length == 3) {
+            if(split.length == 3) {
                 this.z = Double.parseDouble(split[2]);
             }
-            runNotify();
-            return this;
         } finally {
-            lock.unlock();
+            unlock();
         }
+        runNotify();
+        return this;
     }
 
     public double distanceTo(TransformSet transformSet) {
@@ -162,16 +175,16 @@ public class TransformSet {
     }
 
     public TransformSet fromPhysX(PxVec3 pxVec3) {
-        lock.lock();
+        lock();
         try {
             this.x = pxVec3.getX();
             this.y = pxVec3.getY();
             this.z = pxVec3.getZ();
-            runNotify();
-            return this;
         } finally {
-            lock.unlock();
+            unlock();
         }
+        runNotify();
+        return this;
     }
 
     public Consumer<List<ObjectComponent>> getNotifyAction() {

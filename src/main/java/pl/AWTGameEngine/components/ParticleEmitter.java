@@ -6,6 +6,7 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
+import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
@@ -17,6 +18,7 @@ import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @ComponentGL
 public class ParticleEmitter extends ObjectComponent {
@@ -24,7 +26,7 @@ public class ParticleEmitter extends ObjectComponent {
     private boolean loop = true;
     private ParticleLoop particleLoop;
     private GraphicsManager3D graphicsManager3D;
-    private final List<ParticleMeta> particles = new ArrayList<>();
+    private final ConcurrentLinkedQueue<ParticleMeta> particles = new ConcurrentLinkedQueue<>();
     private long particleCounter = 0;
     private TransformSet iterationStep = new TransformSet();
     private String vectors;
@@ -58,12 +60,12 @@ public class ParticleEmitter extends ObjectComponent {
         if(graphicsManager3D == null || particles.isEmpty()) {
             return;
         }
-        List<ParticleMeta> p = new ArrayList<>(particles);
-        for(ParticleMeta meta : p) {
+        float[] rotation = MatrixHelper.rotate(getObject().getQuaternionRotation());
+        for(ParticleMeta meta : particles) {
             if(meta == null) { //TODO: change arraylist
                 continue;
             }
-            TransformSet newPosition = meta.iterate(iterationStep);
+            TransformSet newPosition = meta.iterate(iterationStep, rotation);
             if(newPosition == null) {
                 particles.remove(meta);
                 graphicsManager3D.removeRenderable(meta.getIdentifier());

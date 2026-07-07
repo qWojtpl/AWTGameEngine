@@ -130,7 +130,7 @@ public abstract class RigidBody extends ObjectComponent {
         if(rotation.getX() != cachedRotation.getX() || rotation.getY() != cachedRotation.getY() ||
                 rotation.getZ() != cachedRotation.getZ() || rotation.getW() != cachedRotation.getW()) {
             cachedRotation = QuaternionTransformSet.fromPhysX(rotation);
-            getObject().setQuaternionRotation(QuaternionTransformSet.fromPhysX(rotation), this);
+            getObject().setQuaternionRotation(cachedRotation.clone(), this);
         }
     }
 

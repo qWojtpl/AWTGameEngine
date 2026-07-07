@@ -77,6 +77,7 @@
         <RigidBody.Kinematic />
         <CameraFollow />
         <VehicleSteer _package="pl.AWTGameEngine.custom" />
+        <ParticleEmitter spriteSource="sprites/base/files/directory.png" ttl="20" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5 1 0" />
     </object>
 
 </scene>
