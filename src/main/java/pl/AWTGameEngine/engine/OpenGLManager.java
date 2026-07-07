@@ -7,10 +7,11 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.exceptions.ShaderCompileException;
 import pl.AWTGameEngine.objects.render.Camera;
+import pl.AWTGameEngine.objects.transform.TransformSet;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.Window;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class OpenGLManager implements GLEventListener {
 
@@ -59,14 +60,21 @@ public class OpenGLManager implements GLEventListener {
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
+        Set<TransformSet> locks = new LinkedHashSet<>();
+
         try {
-            for (ObjectComponent c :
+            for(ObjectComponent c :
                     scene.getSceneEventHandler()
                             .getComponents("on3DRenderRequest#GraphicsManager3D")) {
+                c.getObject().getPosition().lock();
+                locks.add(c.getObject().getPosition());
                 c.on3DRenderRequest(graphicsManagerGL);
             }
         } catch(Exception e) {
             Logger.exception("Unhandled exception caught while running an iteration of OpenGL 3D render request", e);
+            for(TransformSet locked : locks) {
+                locked.unlock();
+            }
             return;
         }
 
@@ -84,9 +92,12 @@ public class OpenGLManager implements GLEventListener {
             graphicsManagerGL.drawScene(gl, viewProj);
         } catch(Exception e) {
             Logger.exception("Unhandled exception caught while drawing a OpenGL scene", e);
-            return;
+        } finally {
+            for(TransformSet locked : locks) {
+                locked.unlock();
+            }
+            gl.glUseProgram(0);
         }
-        gl.glUseProgram(0);
     }
 
     @Override

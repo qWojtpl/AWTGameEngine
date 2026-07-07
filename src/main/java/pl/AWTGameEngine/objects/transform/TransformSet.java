@@ -5,6 +5,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 public class TransformSet {
@@ -14,6 +15,7 @@ public class TransformSet {
     private double z = 0;
     private Consumer<List<ObjectComponent>> notifyAction;
     private List<ObjectComponent> excludeComponents;
+    private final ReentrantLock lock = new ReentrantLock();
 
     public TransformSet() {
 
@@ -34,15 +36,28 @@ public class TransformSet {
         this.z = z;
     }
 
+    public void lock() {
+        lock.lock();
+    }
+
+    public void unlock() {
+        lock.unlock();
+    }
+
     public TransformSet clone() {
         return new TransformSet(this.x, this.y, this.z);
     }
 
     public void clear() {
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-        runNotify();
+        lock.lock();
+        try {
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+            runNotify();
+        } finally {
+            lock.unlock();
+        }
     }
 
     public double getX() {
@@ -58,21 +73,36 @@ public class TransformSet {
     }
 
     public TransformSet setX(double x) {
-        this.x = x;
-        runNotify();
-        return this;
+        lock.lock();
+        try {
+            this.x = x;
+            runNotify();
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public TransformSet setY(double y) {
-        this.y = y;
-        runNotify();
-        return this;
+        lock.lock();
+        try {
+            this.y = y;
+            runNotify();
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public TransformSet setZ(double z) {
-        this.z = z;
-        runNotify();
-        return this;
+        lock.lock();
+        try {
+            this.z = z;
+            runNotify();
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
@@ -96,16 +126,21 @@ public class TransformSet {
     }
 
     public TransformSet deserialize(String values) {
-        String[] split = values.split(",");
-        if(split.length >= 2) {
-            this.x = Double.parseDouble(split[0]);
-            this.y = Double.parseDouble(split[1]);
+        lock.lock();
+        try {
+            String[] split = values.split(",");
+            if (split.length >= 2) {
+                this.x = Double.parseDouble(split[0]);
+                this.y = Double.parseDouble(split[1]);
+            }
+            if (split.length == 3) {
+                this.z = Double.parseDouble(split[2]);
+            }
+            runNotify();
+            return this;
+        } finally {
+            lock.unlock();
         }
-        if(split.length == 3) {
-            this.z = Double.parseDouble(split[2]);
-        }
-        runNotify();
-        return this;
     }
 
     public double distanceTo(TransformSet transformSet) {
@@ -127,11 +162,16 @@ public class TransformSet {
     }
 
     public TransformSet fromPhysX(PxVec3 pxVec3) {
-        this.x = pxVec3.getX();
-        this.y = pxVec3.getY();
-        this.z = pxVec3.getZ();
-        runNotify();
-        return this;
+        lock.lock();
+        try {
+            this.x = pxVec3.getX();
+            this.y = pxVec3.getY();
+            this.z = pxVec3.getZ();
+            runNotify();
+            return this;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public Consumer<List<ObjectComponent>> getNotifyAction() {

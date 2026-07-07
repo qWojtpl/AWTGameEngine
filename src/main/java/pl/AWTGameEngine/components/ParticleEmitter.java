@@ -59,6 +59,9 @@ public class ParticleEmitter extends ObjectComponent {
         }
         List<ParticleMeta> p = new ArrayList<>(particles);
         for(ParticleMeta meta : p) {
+            if(meta == null) { //TODO: change arraylist
+                continue;
+            }
             TransformSet newPosition = meta.iterate(iterationStep);
             if(newPosition == null) {
                 particles.remove(meta);
