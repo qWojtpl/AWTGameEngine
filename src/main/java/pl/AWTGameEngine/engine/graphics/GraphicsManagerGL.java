@@ -6,7 +6,7 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.deserializers.ObjLoader;
+import pl.AWTGameEngine.engine.deserializers.ModelLoader;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
@@ -40,7 +40,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         float[] vertices;
         try {
-             vertices = ObjLoader.getVertices(path);
+             vertices = ModelLoader.getVertices(path);
         } catch(Exception e) {
             Logger.exception("Exception while getting vertices of " + path, e);
             return;
@@ -58,11 +58,14 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         gl.glBufferData(GL.GL_ARRAY_BUFFER, (long) vertices.length * Float.BYTES,
                 FloatBuffer.wrap(vertices), GL.GL_STATIC_DRAW);
 
-        gl.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 5 * Float.BYTES, 0);
+        gl.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 8 * Float.BYTES, 0);
         gl.glEnableVertexAttribArray(0);
 
-        gl.glVertexAttribPointer(1, 2, GL.GL_FLOAT, false, 5 * Float.BYTES, 3 * Float.BYTES);
+        gl.glVertexAttribPointer(1, 3, GL.GL_FLOAT, false, 8 * Float.BYTES, 3 * Float.BYTES);
         gl.glEnableVertexAttribArray(1);
+
+        gl.glVertexAttribPointer(2, 2, GL.GL_FLOAT, false, 8 * Float.BYTES, 6 * Float.BYTES);
+        gl.glEnableVertexAttribArray(2);
 
         gl.glBindVertexArray(0);
 

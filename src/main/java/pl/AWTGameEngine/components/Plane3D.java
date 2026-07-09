@@ -36,4 +36,9 @@ public class Plane3D extends Base3DShape {
         initialized = true;
     }
 
+    @Override
+    protected void patchRender() {
+
+    }
+
 }

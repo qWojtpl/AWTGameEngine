@@ -62,7 +62,7 @@ public class ParticleEmitter extends ObjectComponent {
         }
         float[] rotation = MatrixHelper.rotate(getObject().getQuaternionRotation());
         for(ParticleMeta meta : particles) {
-            if(meta == null) { //TODO: change arraylist
+            if(meta == null) {
                 continue;
             }
             TransformSet newPosition = meta.iterate(iterationStep, rotation);

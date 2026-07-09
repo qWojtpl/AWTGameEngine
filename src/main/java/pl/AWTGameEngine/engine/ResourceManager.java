@@ -17,6 +17,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -185,6 +186,19 @@ public class ResourceManager extends CommandConsole.ParentCommand {
         return null;
     }
 
+    public ByteBuffer getResourceAsByteBuffer(String name) {
+        try(InputStream stream = getResourceAsStream(name)) {
+            byte[] bytes = stream.readAllBytes();
+            ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length);
+            buffer.put(bytes);
+            buffer.flip();
+            return buffer;
+        } catch(IOException e) {
+            Logger.exception("Cannot get ByteBuffer from resource: " + name, e);
+        }
+        return null;
+    }
+
     public HashMap<String, List<String>> getResources() {
         return new HashMap<>(resources);
     }
@@ -263,6 +277,10 @@ public class ResourceManager extends CommandConsole.ParentCommand {
 
     public void releaseSpriteResource(String name) {
         spriteResources.remove(name);
+    }
+
+    public void releaseUrlResource(String name) {
+        urlResources.remove(name);
     }
 
     public void clearAudioClips() {

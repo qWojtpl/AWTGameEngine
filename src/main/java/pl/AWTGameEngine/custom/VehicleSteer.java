@@ -35,16 +35,16 @@ public class VehicleSteer extends ObjectComponent {
         torque = 0;
         steer = 0;
         brake = 0;
-        if(getKeyListener().hasPressedKey(KeyCode.W.value)) {
+        if(getKeyListener().hasPressedKey(KeyCode.W)) {
             torque = 1;
         }
-        if(getKeyListener().hasPressedKey(KeyCode.A.value)) {
+        if(getKeyListener().hasPressedKey(KeyCode.A)) {
             steer = steerSensitivity;
         }
-        if(getKeyListener().hasPressedKey(KeyCode.S.value)) {
+        if(getKeyListener().hasPressedKey(KeyCode.S)) {
             brake = 4;
         }
-        if(getKeyListener().hasPressedKey(KeyCode.D.value)) {
+        if(getKeyListener().hasPressedKey(KeyCode.D)) {
             steer = -steerSensitivity;
         }
     }

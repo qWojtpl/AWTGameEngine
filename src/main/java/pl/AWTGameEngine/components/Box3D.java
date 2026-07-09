@@ -35,4 +35,9 @@ public class Box3D extends Base3DShape {
         initialized = true;
     }
 
+    @Override
+    protected void patchRender() {
+
+    }
+
 }

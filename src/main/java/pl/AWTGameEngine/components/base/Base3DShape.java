@@ -36,6 +36,7 @@ public abstract class Base3DShape extends NetComponent {
     }
 
     protected abstract void createShape();
+    protected abstract void patchRender();
 
     protected void handleUpdates(GraphicsManager3D g) {
         if(!initialized) {
@@ -196,6 +197,7 @@ public abstract class Base3DShape extends NetComponent {
 
     @Override
     public void on3DRenderRequest(GraphicsManager3D g) {
+        patchRender();
         handleUpdates(g);
     }
 
