@@ -15,7 +15,6 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.helpers.VehicleHelper;
@@ -23,9 +22,7 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @ComponentGL
 @Unique
@@ -39,7 +36,10 @@ public class Vehicle extends ObjectComponent {
     private Gearbox gearbox;
     private final List<Wheel> wheels = new ArrayList<>();
 
-    private double mass = 870;
+    private float mass = 870f;
+    private float maxBrakeResponse = 2000f;
+    private float maxHandBrakeResponse = 2500f;
+    private float maxSteerResponse = 0.25f;
 
     public Vehicle(GameObject object) {
         super(object);
@@ -54,6 +54,7 @@ public class Vehicle extends ObjectComponent {
     }
 
     public void registerWheel(Wheel wheel) {
+        wheel.setId(wheels.size());
         wheels.add(wheel);
     }
 
@@ -70,13 +71,43 @@ public class Vehicle extends ObjectComponent {
     }
 
     @SaveState(name = "mass")
-    public double getMass() {
+    public float getMass() {
         return this.mass;
     }
 
     @FromXML
-    public void setMass(double mass) {
+    public void setMass(float mass) {
         this.mass = mass;
+    }
+
+    @SaveState(name = "maxBrakeResponse")
+    public float getMaxBrakeResponse() {
+        return this.maxBrakeResponse;
+    }
+
+    @FromXML
+    public void setMaxBrakeResponse(float maxBrakeResponse) {
+        this.maxBrakeResponse = maxBrakeResponse;
+    }
+
+    @SaveState(name = "maxHandBrakeResponse")
+    public float getMaxHandBrakeResponse() {
+        return this.maxHandBrakeResponse;
+    }
+
+    @FromXML
+    public void setMaxHandBrakeResponse(float maxHandBrakeResponse) {
+        this.maxHandBrakeResponse = maxHandBrakeResponse;
+    }
+
+    @SaveState(name = "maxSteerResponse")
+    public float getMaxSteerResponse() {
+        return this.maxHandBrakeResponse;
+    }
+
+    @FromXML
+    public void setMaxSteerResponse(float maxSteerResponse) {
+        this.maxSteerResponse = maxSteerResponse;
     }
 
     private void initialize() {
@@ -84,6 +115,12 @@ public class Vehicle extends ObjectComponent {
 //        initializeBaseParams(vehicle.getBaseParams());
 
         setBaseParams(vehicle.getBaseParams());
+        initializeAxle();
+        initializeMass();
+        initializeResponseParams();
+        for(Wheel wheel : wheels) {
+            wheel.init();
+        }
         setPhysxIntegrationParams(vehicle.getPhysXParams(), vehicle.getBaseParams().getAxleDescription(), geometry);
         setEngineDriveParams(vehicle.getEngineDriveParams());
 
@@ -143,25 +180,64 @@ public class Vehicle extends ObjectComponent {
         return getObject().getPosition();
     }
 
+    private void initializeAxle() {
+        PxVehicleAxleDescription axle = vehicle.getBaseParams().getAxleDescription();
+        HashMap<Integer, List<Wheel>> axleWheels = new HashMap<>();
+        for(Wheel wheel : wheels) {
+            List<Wheel> wheelList = axleWheels.getOrDefault(wheel.getAxleId(), new ArrayList<>());
+            wheelList.add(wheel);
+            axleWheels.put(wheel.getAxleId(), wheelList);
+        }
+        axle.setNbAxles(axleWheels.keySet().size());
+        axle.setNbWheels(wheels.size());
+        for(int axleId : axleWheels.keySet()) {
+            axle.setNbWheelsPerAxle(axleId, axleWheels.get(axleId).size());
+            for(Wheel wheel : axleWheels.get(axleId)) {
+                axle.setAxleToWheelIds(axleId, wheels.indexOf(wheel));
+            }
+        }
+        for(Wheel wheel : wheels) {
+            axle.setWheelIdsInAxleOrder(wheel.getId(), wheel.getId());
+        }
+    }
+
+    private void initializeMass() {
+        PxVehicleRigidBodyParams rigidBody = vehicle.getBaseParams().getRigidBodyParams();
+        rigidBody.setMass(mass);
+
+        double width  = getVehicleSize().getX();
+        double height = getVehicleSize().getY();
+        double length = getVehicleSize().getZ();
+
+        float moiX = (float) ((1 / 12.0) * mass * (height * height + length * length));
+        float moiY = (float) ((1 / 12.0) * mass * (width * width + length * length));
+        float moiZ = (float) ((1 / 12.0) * mass * (width * width + height * height));
+        PxVec3 moi = new PxVec3(moiX, moiY, moiZ);
+        rigidBody.setMoi(moi);
+        moi.destroy();
+    }
+
+    private void initializeResponseParams() {
+        var brakeResponse = vehicle.getBaseParams().getBrakeResponseParams(0);
+        var handBrakeResponse = vehicle.getBaseParams().getBrakeResponseParams(1);
+        var steerResponse = vehicle.getBaseParams().getSteerResponseParams();
+
+        brakeResponse.setMaxResponse(maxBrakeResponse);
+        handBrakeResponse.setMaxResponse(maxHandBrakeResponse);
+        steerResponse.setMaxResponse(maxSteerResponse);
+
+        for(Wheel wheel : wheels) {
+            brakeResponse.setWheelResponseMultipliers(wheel.getId(), wheel.getBrakeResponseMultiplier());
+            handBrakeResponse.setWheelResponseMultipliers(wheel.getId(), wheel.getHandBrakeResponseMultiplier());
+            steerResponse.setWheelResponseMultipliers(wheel.getId(), wheel.getSteeringResponseMultiplier());
+        }
+    }
+
     private void setBaseParams(BaseVehicleParams baseParams) {
 
         //
         // most values taken from Physx/physx/snippets/media/vehicledata/Base.json
         //
-
-        var axleDesc = baseParams.getAxleDescription();
-        axleDesc.setNbAxles(wheels.size() / 2);
-        axleDesc.setNbWheels(wheels.size());
-
-        for(int i = 0; i < wheels.size() / 2; i++) {
-            axleDesc.setNbWheelsPerAxle(i, wheels.size() / 2);
-        }
-
-        axleDesc.setAxleToWheelIds(0, 0);
-        axleDesc.setAxleToWheelIds(1, 2);
-        for (int i = 0; i < 4; i++) {
-            axleDesc.setWheelIdsInAxleOrder(i, i);
-        }
 
         var frame = baseParams.getFrame();
         frame.setLatAxis(PxVehicleAxesEnum.ePosX);
@@ -169,36 +245,6 @@ public class Vehicle extends ObjectComponent {
         frame.setVrtAxis(PxVehicleAxesEnum.ePosY);
 
         baseParams.getScale().setScale(1f);
-
-        var rigidBody = baseParams.getRigidBodyParams();
-        rigidBody.setMass((float) mass);
-        double width  = getVehicleSize().getX();
-        double height = getVehicleSize().getY();
-        double length = getVehicleSize().getZ();
-
-        float moiX = (float)((1/12.0) * mass * (height*height + length*length));
-        float moiY = (float)((1/12.0) * mass * (width*width + length*length));
-        float moiZ = (float)((1/12.0) * mass * (width*width + height*height));
-        PxVec3 moi = new PxVec3(moiX, moiY, moiZ);
-        rigidBody.setMoi(moi);
-
-        var brakeResponse = baseParams.getBrakeResponseParams(0);
-        brakeResponse.setMaxResponse(2000f);
-        for (int i = 0; i < 4; i++) {
-            brakeResponse.setWheelResponseMultipliers(i, 1f);
-        }
-
-        var handBrakeResponse = baseParams.getBrakeResponseParams(0);
-        handBrakeResponse.setMaxResponse(2000f);
-        for (int i = 0; i < 4; i++) {
-            handBrakeResponse.setWheelResponseMultipliers(i, i < 2 ? 1f : 0f);
-        }
-
-        var steerResponse = baseParams.getSteerResponseParams();
-        steerResponse.setMaxResponse(0.25f);
-        for (int i = 0; i < 4; i++) {
-            steerResponse.setWheelResponseMultipliers(i, i < 2 ? 1f : 0f);
-        }
 
         var ackermann = baseParams.getAckermannParams(0);
         ackermann.setWheelIds(0, 0);
@@ -627,6 +673,12 @@ public class Vehicle extends ObjectComponent {
     @WebComponent
     public static class Wheel extends VehicleComponent {
 
+        private int id = -1;
+        private int axleId = 0;
+        private float brakeResponseMultiplier = 1;
+        private float handBrakeResponseMultiplier = 0;
+        private float steeringResponseMultiplier = 0;
+
         public Wheel(GameObject object) {
             super(object);
         }
@@ -638,7 +690,61 @@ public class Vehicle extends ObjectComponent {
         }
 
         public void init() {
+            if(id == -1) {
+                throw new RuntimeException("Wheel cannot be initialized, because wheel ID is not set.");
+            }
+            BaseVehicleParams params = vehicle.getPxVehicle().getBaseParams();
+            params.getWheelParams(id);
+        }
 
+        @SaveState(name = "id")
+        public int getId() {
+            return this.id;
+        }
+
+        @FromXML
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        @SaveState(name = "axleId")
+        public int getAxleId() {
+            return this.axleId;
+        }
+
+        @FromXML
+        public void setAxleId(int axleId) {
+            this.axleId = axleId;
+        }
+
+        @SaveState(name = "brakeResponseMultiplier")
+        public float getBrakeResponseMultiplier() {
+            return this.brakeResponseMultiplier;
+        }
+
+        @FromXML
+        public void setBrakeResponseMultiplier(float brakeResponseMultiplier) {
+            this.brakeResponseMultiplier = brakeResponseMultiplier;
+        }
+
+        @SaveState(name = "handBrakeResponseMultiplier")
+        public float getHandBrakeResponseMultiplier() {
+            return this.handBrakeResponseMultiplier;
+        }
+
+        @FromXML
+        public void setHandBrakeResponseMultiplier(float handBrakeResponseMultiplier) {
+            this.handBrakeResponseMultiplier = handBrakeResponseMultiplier;
+        }
+
+        @SaveState(name = "steeringResponseMultiplier")
+        public float getSteeringResponseMultiplier() {
+            return this.steeringResponseMultiplier;
+        }
+
+        @FromXML
+        public void setSteeringResponseMultiplier(float steeringResponseMultiplier) {
+            this.steeringResponseMultiplier = steeringResponseMultiplier;
         }
 
     }

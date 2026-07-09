@@ -42,7 +42,7 @@ public class VehicleSteer extends ObjectComponent {
             steer = steerSensitivity;
         }
         if(getKeyListener().hasPressedKey(KeyCode.S)) {
-            brake = 4;
+            brake = 1;
         }
         if(getKeyListener().hasPressedKey(KeyCode.D)) {
             steer = -steerSensitivity;
@@ -57,7 +57,8 @@ public class VehicleSteer extends ObjectComponent {
 
         vehicle.getPxVehicle().getCommandState().setThrottle(torque);
         vehicle.getPxVehicle().getCommandState().setSteer(steer);
-        vehicle.getPxVehicle().getCommandState().setNbBrakes(brake);
+        vehicle.getPxVehicle().getCommandState().setNbBrakes(0);
+        vehicle.getPxVehicle().getCommandState().setBrakes(0, brake);
 
         int currentGear = vehicle.getPxVehicle().getEngineDriveState().getGearboxState().getCurrentGear();
 
