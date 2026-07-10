@@ -40,7 +40,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         float[] vertices;
         try {
-             vertices = ModelLoader.getVertices(path);
+             vertices = ModelLoader.getVertices(path, true);
         } catch(Exception e) {
             Logger.exception("Exception while getting vertices of " + path, e);
             return;
@@ -103,6 +103,9 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             for(Sprite s : ttd) {
                 boolean remove = false;
                 for(RenderOptions3D ro : renderables.values()) {
+                    if(ro.getSprite() == null) {
+                        continue;
+                    }
                     if(s.getImagePath().equals(ro.getSprite().getImagePath())) {
                         remove = true;
                         break;

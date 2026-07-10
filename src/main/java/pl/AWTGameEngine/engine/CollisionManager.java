@@ -24,6 +24,10 @@ public class CollisionManager extends PxSimulationEventCallbackImpl {
         PxActor actor0 = pairHeader.getActors(0);
         PxActor actor1 = pairHeader.getActors(1);
 
+        if(actor0.getName() == null || actor1.getName() == null) {
+            return;
+        }
+
         GameObject g0 = getScene().getGameObjectByName(actor0.getName());
         GameObject g1 = getScene().getGameObjectByName(actor1.getName());
         RigidBody r0 = (RigidBody) g0.getComponentByClass(RigidBody.class);
@@ -74,6 +78,10 @@ public class CollisionManager extends PxSimulationEventCallbackImpl {
     public void onTrigger(PxTriggerPair pairs, int nbPairs) {
         for(int i = 0; i < nbPairs; i++) {
             PxTriggerPair pair = PxTriggerPair.arrayGet(pairs.getAddress(), i);
+
+            if(pair.getTriggerActor().getName() == null) {
+                continue;
+            }
 
             GameObject triggerGo = getScene().getGameObjectByName(pair.getTriggerActor().getName());
             RigidBody.Trigger trigger = (RigidBody.Trigger) triggerGo.getComponentByClass(RigidBody.Trigger.class);

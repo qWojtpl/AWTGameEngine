@@ -59,6 +59,20 @@ public class QuaternionTransformSet {
         this.w = 0;
     }
 
+    public QuaternionTransformSet multiply(QuaternionTransformSet q) {
+        double nW = this.w * q.w - this.x * q.x - this.y * q.y - this.z * q.z;
+        double nX = this.w * q.x + this.x * q.w + this.y * q.z - this.z * q.y;
+        double nY = this.w * q.y - this.x * q.z + this.y * q.w + this.z * q.x;
+        double nZ = this.w * q.z + this.x * q.y - this.y * q.x + this.z * q.w;
+
+        this.x = nX;
+        this.y = nY;
+        this.z = nZ;
+        this.w = nW;
+
+        return this;
+    }
+
     public QuaternionTransformSet clone() {
         return new QuaternionTransformSet(this.x, this.y, this.z, this.w);
     }

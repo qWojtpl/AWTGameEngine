@@ -1,5 +1,8 @@
 package pl.AWTGameEngine.engine.helpers;
 
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.TransformSet;
+
 public class RotationHelper {
 
     public static double[] quaternionToEulerXYZ(double x, double y, double z, double w) {
@@ -152,6 +155,16 @@ public class RotationHelper {
         double camZ = objPosZ + radius * Math.cos(phi) * Math.cos(theta);
 
         return new double[]{camX, camY, camZ};
+    }
+
+    public static TransformSet multiplyWithQuaternion(TransformSet transformSet, QuaternionTransformSet q) {
+        float[] m = MatrixHelper.rotate(q);
+
+        double rx = m[0] * transformSet.getX() + m[4] * transformSet.getY() + m[8]  * transformSet.getZ();
+        double ry = m[1] * transformSet.getX() + m[5] * transformSet.getY() + m[9]  * transformSet.getZ();
+        double rz = m[2] * transformSet.getX() + m[6] * transformSet.getY() + m[10] * transformSet.getZ();
+
+        return new TransformSet(rx, ry, rz);
     }
 
 }

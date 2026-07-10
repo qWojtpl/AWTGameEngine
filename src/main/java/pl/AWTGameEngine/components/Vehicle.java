@@ -7,6 +7,7 @@ import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.physics.*;
+import physx.support.PxShapePtr;
 import physx.vehicle2.*;
 import pl.AWTGameEngine.annotations.components.management.*;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
@@ -15,10 +16,16 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
+import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
+import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.helpers.VehicleHelper;
+import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
@@ -258,8 +265,7 @@ public class Vehicle extends ObjectComponent {
         float halfWidth  = (float) getVehicleSize().getX() / 2;
         float halfHeight  = (float) getVehicleSize().getY() / 2;
         float halfLength = (float) getVehicleSize().getZ() / 2;
-        float wheelRadius = 0.35f;
-        float yPos = halfHeight + wheelRadius;
+        float yPos = halfHeight + wheels.get(0).getWheelRadius();
 
         PxVec3 pos = new PxVec3(-halfWidth, yPos, halfLength);
         PxQuat quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
@@ -356,6 +362,7 @@ public class Vehicle extends ObjectComponent {
         float wheelMass = 12f;
 
         for (int i = 0; i < 4; i++) {
+            float wheelRadius = wheels.get(i).getWheelRadius();
             var wheel = baseParams.getWheelParams(i);
             wheel.setMass(wheelMass);
             wheel.setRadius(wheelRadius);
@@ -380,7 +387,7 @@ public class Vehicle extends ObjectComponent {
 
         var actorShapeLocalPose = new PxTransform(vec3, quat);
 
-        PxMaterial material = physXManager.getPxPhysics().createMaterial(0.5f, 0.5f, 0.5f);
+        PxMaterial material = physXManager.getPxPhysics().createMaterial(0.5f, 4.5f, 0.5f);
 
         PxVehiclePhysXMaterialFriction materialFriction = new PxVehiclePhysXMaterialFriction();
         materialFriction.setFriction(1f);
@@ -678,6 +685,9 @@ public class Vehicle extends ObjectComponent {
         private float brakeResponseMultiplier = 1;
         private float handBrakeResponseMultiplier = 0;
         private float steeringResponseMultiplier = 0;
+        private float wheelRadius = 3.5f;
+
+        private RenderOptions3D options;
 
         public Wheel(GameObject object) {
             super(object);
@@ -689,12 +699,46 @@ public class Vehicle extends ObjectComponent {
             vehicle.registerWheel(this);
         }
 
+        @Override
+        public void onRemoveComponent() {
+            if(getScene().getPanel() instanceof PanelGL) {
+                GraphicsManager3D g = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
+                g.removeRenderable(options.getIdentifier());
+            }
+        }
+
+        @Override
+        public void onPhysicsUpdate() {
+            if(id == -1 || options == null) {
+                return;
+            }
+            PxTransform wheelLocalPose = vehicle.getPxVehicle().getBaseState().getWheelLocalPoses(id).getLocalPose();
+            QuaternionTransformSet newRotation =
+                    getObject().getQuaternionRotation().clone().multiply(QuaternionTransformSet.fromPhysX(wheelLocalPose.getQ()));
+            options.setQuaternionRotation(newRotation);
+
+            TransformSet wheelLocalPos = new TransformSet().fromPhysX(wheelLocalPose.getP());
+            TransformSet wheelPosition = RotationHelper.multiplyWithQuaternion(wheelLocalPos, getObject().getQuaternionRotation());
+            options.setPosition(wheelPosition.add(getObject().getPosition()));
+        }
+
         public void init() {
             if(id == -1) {
                 throw new RuntimeException("Wheel cannot be initialized, because wheel ID is not set.");
             }
             BaseVehicleParams params = vehicle.getPxVehicle().getBaseParams();
             params.getWheelParams(id);
+            if(getScene().getPanel() instanceof PanelGL) {
+                GraphicsManager3D g = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
+                options = new RenderOptions3D(getObject().getIdentifier() + "$WHEEL-" + id)
+                        .setPosition(getObject().getPosition())
+                        .setSize(new TransformSet(wheelRadius, wheelRadius, wheelRadius))
+                        .setRotation(getObject().getRotation())
+                        .setQuaternionRotation(new QuaternionTransformSet())
+                        .setShader("shaders/shader")
+                        .setShapePath("models/box.obj");
+                g.createRenderable(options);
+            }
         }
 
         @SaveState(name = "id")
@@ -745,6 +789,16 @@ public class Vehicle extends ObjectComponent {
         @FromXML
         public void setSteeringResponseMultiplier(float steeringResponseMultiplier) {
             this.steeringResponseMultiplier = steeringResponseMultiplier;
+        }
+
+        @SaveState(name = "wheelRadius")
+        public float getWheelRadius() {
+            return this.wheelRadius;
+        }
+
+        @FromXML
+        public void setWheelRadius(float radius) {
+            this.wheelRadius = radius;
         }
 
     }

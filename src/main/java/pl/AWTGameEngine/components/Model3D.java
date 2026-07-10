@@ -4,12 +4,8 @@ import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.Base3DShape;
-import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
 @ComponentGL

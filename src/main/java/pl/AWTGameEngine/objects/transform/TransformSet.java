@@ -118,6 +118,19 @@ public class TransformSet {
         return this;
     }
 
+    public TransformSet add(TransformSet transformSet) {
+        lock();
+        try {
+            this.x = x + transformSet.getX();
+            this.y = y + transformSet.getY();
+            this.z = z + transformSet.getZ();
+        } finally {
+            unlock();
+        }
+        runNotify();
+        return this;
+    }
+
     @Override
     public String toString() {
         return "[TransformSet[x=" + x + ",y=" + y + ",z=" + z + "]]";
