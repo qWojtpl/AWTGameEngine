@@ -4,12 +4,12 @@
         <RigidBody.Dynamic />
     </prefab>
     <prefab id="player">
-        <!--        <MovementGL _package="pl.AWTGameEngine.custom" />-->
+        <MovementGL _package="pl.AWTGameEngine.custom" />
         <!--        <CameraFX />-->
         <!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
 
         <!--        <MusicPlayer sourcePath="audio/swingin.wav" />-->
-        <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />
+<!--        <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />-->
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
         <Server />
     </prefab>

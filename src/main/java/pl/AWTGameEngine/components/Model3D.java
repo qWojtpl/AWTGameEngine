@@ -12,7 +12,6 @@ import pl.AWTGameEngine.objects.transform.TransformSet;
 public class Model3D extends Base3DShape {
 
     private RenderOptions3D options;
-    private String modelPath;
     private TransformSet modelSize;
 
     public Model3D(GameObject object) {
@@ -21,7 +20,7 @@ public class Model3D extends Base3DShape {
 
     @Override
     protected void createShape() {
-        if(graphicsManager3D == null || modelPath == null) {
+        if(graphicsManager3D == null || shapePath == null) {
             return;
         }
 
@@ -33,7 +32,7 @@ public class Model3D extends Base3DShape {
                 .setSprite(getSprite())
                 .setShader(getShader())
                 .setColor(getColor())
-                .setShapePath(modelPath);
+                .setShapePath(shapePath);
 
         graphicsManager3D.createRenderable(options);
 
@@ -48,16 +47,6 @@ public class Model3D extends Base3DShape {
         if(modelSize != null) {
             updateSize = false;
         }
-    }
-
-    @FromXML
-    public void setModelPath(String modelPath) {
-        this.modelPath = modelPath;
-    }
-
-    @SaveState(name = "modelPath")
-    public String getModelPath() {
-        return this.modelPath;
     }
 
     @FromXML

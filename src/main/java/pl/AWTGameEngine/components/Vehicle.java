@@ -7,7 +7,6 @@ import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.physics.*;
-import physx.support.PxShapePtr;
 import physx.vehicle2.*;
 import pl.AWTGameEngine.annotations.components.management.*;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
@@ -16,11 +15,8 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
-import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.helpers.VehicleHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
@@ -61,7 +57,9 @@ public class Vehicle extends ObjectComponent {
     }
 
     public void registerWheel(Wheel wheel) {
-        wheel.setId(wheels.size());
+        if(wheel.getId() == -1) {
+            wheel.setId(wheels.size());
+        }
         wheels.add(wheel);
     }
 
@@ -119,12 +117,11 @@ public class Vehicle extends ObjectComponent {
 
     private void initialize() {
         PxGeometry geometry = createGeometry();
-//        initializeBaseParams(vehicle.getBaseParams());
 
-        setBaseParams(vehicle.getBaseParams());
-        initializeAxle();
         initializeMass();
+        initializeAxle();
         initializeResponseParams();
+        setBaseParams(vehicle.getBaseParams());
         for(Wheel wheel : wheels) {
             wheel.init();
         }
@@ -187,6 +184,22 @@ public class Vehicle extends ObjectComponent {
         return getObject().getPosition();
     }
 
+    private void initializeMass() {
+        PxVehicleRigidBodyParams rigidBody = vehicle.getBaseParams().getRigidBodyParams();
+        rigidBody.setMass(mass);
+
+        double width  = getVehicleSize().getX();
+        double height = getVehicleSize().getY();
+        double length = getVehicleSize().getZ();
+
+        float moiX = (float) ((1 / 12.0) * mass * (height * height + length * length));
+        float moiY = (float) ((1 / 12.0) * mass * (width * width + length * length));
+        float moiZ = (float) ((1 / 12.0) * mass * (width * width + height * height));
+        PxVec3 moi = new PxVec3(moiX, moiY, moiZ);
+        rigidBody.setMoi(moi);
+        moi.destroy();
+    }
+
     private void initializeAxle() {
         PxVehicleAxleDescription axle = vehicle.getBaseParams().getAxleDescription();
         HashMap<Integer, List<Wheel>> axleWheels = new HashMap<>();
@@ -208,26 +221,10 @@ public class Vehicle extends ObjectComponent {
         }
     }
 
-    private void initializeMass() {
-        PxVehicleRigidBodyParams rigidBody = vehicle.getBaseParams().getRigidBodyParams();
-        rigidBody.setMass(mass);
-
-        double width  = getVehicleSize().getX();
-        double height = getVehicleSize().getY();
-        double length = getVehicleSize().getZ();
-
-        float moiX = (float) ((1 / 12.0) * mass * (height * height + length * length));
-        float moiY = (float) ((1 / 12.0) * mass * (width * width + length * length));
-        float moiZ = (float) ((1 / 12.0) * mass * (width * width + height * height));
-        PxVec3 moi = new PxVec3(moiX, moiY, moiZ);
-        rigidBody.setMoi(moi);
-        moi.destroy();
-    }
-
     private void initializeResponseParams() {
-        var brakeResponse = vehicle.getBaseParams().getBrakeResponseParams(0);
-        var handBrakeResponse = vehicle.getBaseParams().getBrakeResponseParams(1);
-        var steerResponse = vehicle.getBaseParams().getSteerResponseParams();
+        PxVehicleBrakeCommandResponseParams brakeResponse = vehicle.getBaseParams().getBrakeResponseParams(0);
+        PxVehicleBrakeCommandResponseParams handBrakeResponse = vehicle.getBaseParams().getBrakeResponseParams(1);
+        PxVehicleSteerCommandResponseParams steerResponse = vehicle.getBaseParams().getSteerResponseParams();
 
         brakeResponse.setMaxResponse(maxBrakeResponse);
         handBrakeResponse.setMaxResponse(maxHandBrakeResponse);
@@ -260,58 +257,6 @@ public class Vehicle extends ObjectComponent {
         ackermann.setTrackWidth(1.6f);
         ackermann.setStrength(1f);
 
-        List<PxTransform> suspensionAttachmentPoses = new ArrayList<>();
-
-        float halfWidth  = (float) getVehicleSize().getX() / 2;
-        float halfHeight  = (float) getVehicleSize().getY() / 2;
-        float halfLength = (float) getVehicleSize().getZ() / 2;
-        float yPos = halfHeight + wheels.get(0).getWheelRadius();
-
-        PxVec3 pos = new PxVec3(-halfWidth, yPos, halfLength);
-        PxQuat quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
-
-        PxTransform transform = new PxTransform(pos, quat);
-
-        suspensionAttachmentPoses.add(transform);
-
-        pos = new PxVec3(halfWidth, yPos, halfLength);
-        quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
-
-        transform = new PxTransform(pos, quat);
-
-        suspensionAttachmentPoses.add(transform);
-
-        pos = new PxVec3(-halfWidth, yPos, -halfLength);
-        quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
-
-        transform = new PxTransform(pos, quat);
-
-        suspensionAttachmentPoses.add(transform);
-
-        pos = new PxVec3(halfWidth, yPos, -halfLength);
-        quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
-
-        transform = new PxTransform(pos, quat);
-
-        suspensionAttachmentPoses.add(transform);
-
-        pos = new PxVec3(0f, 0f, 0f);
-        quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
-
-        var wheelAttachmentPose = new PxTransform(
-                pos,
-                quat
-        );
-
-        var suspensionTravelDir = new PxVec3(0f, -1f, 0f);
-        for (int i = 0; i < 4; i++) {
-            var suspension = baseParams.getSuspensionParams(i);
-            suspension.setSuspensionAttachment(suspensionAttachmentPoses.get(i));
-            suspension.setSuspensionTravelDir(suspensionTravelDir);
-            suspension.setWheelAttachment(wheelAttachmentPose);
-            suspension.setSuspensionTravelDist(0.3f/*(float) (getObject().getSizeY() + wheelRadius)*/);
-        }
-
         var suspensionCalc = baseParams.getSuspensionStateCalculationParams();
         suspensionCalc.setSuspensionJounceCalculationType(PxVehicleSuspensionJounceCalculationTypeEnum.eSWEEP);
         suspensionCalc.setLimitSuspensionExpansionVelocity(true);
@@ -330,7 +275,7 @@ public class Vehicle extends ObjectComponent {
             float naturalFrequency = 6f;
             float dampingRatio = 1.8f;
 
-            float sprungMass = (float) mass / 4f;
+            float sprungMass = mass / 4f;
             float stiffness = naturalFrequency * naturalFrequency * sprungMass;
             float damping = dampingRatio * 2f * (float) Math.sqrt(stiffness * sprungMass);
 
@@ -357,18 +302,6 @@ public class Vehicle extends ObjectComponent {
             PxVehicleTireForceParamsExt.setLoadFilter(tireForce, 0, 1, 0.23f);
             PxVehicleTireForceParamsExt.setLoadFilter(tireForce, 1, 0, 3f);
             PxVehicleTireForceParamsExt.setLoadFilter(tireForce, 1, 1, 3f);
-        }
-
-        float wheelMass = 12f;
-
-        for (int i = 0; i < 4; i++) {
-            float wheelRadius = wheels.get(i).getWheelRadius();
-            var wheel = baseParams.getWheelParams(i);
-            wheel.setMass(wheelMass);
-            wheel.setRadius(wheelRadius);
-            wheel.setHalfWidth(0.3f);
-            wheel.setDampingRate(0.5f);
-            wheel.setMoi(0.5f * wheelMass * wheelRadius * wheelRadius);
         }
     }
 
@@ -685,7 +618,12 @@ public class Vehicle extends ObjectComponent {
         private float brakeResponseMultiplier = 1;
         private float handBrakeResponseMultiplier = 0;
         private float steeringResponseMultiplier = 0;
-        private float wheelRadius = 3.5f;
+        private float radius = 3.5f;
+        private float mass = 12f;
+        private float dampingRate = 0.5f;
+        private float width = 0.6f;
+        private TransformSet localPosition = new TransformSet();
+        private float suspensionTravelDistance = 0.3f;
 
         private RenderOptions3D options;
 
@@ -727,12 +665,52 @@ public class Vehicle extends ObjectComponent {
                 throw new RuntimeException("Wheel cannot be initialized, because wheel ID is not set.");
             }
             BaseVehicleParams params = vehicle.getPxVehicle().getBaseParams();
-            params.getWheelParams(id);
+            initWheelParams(params.getWheelParams(id));
+            initSuspensionParams(params.getSuspensionParams(id));
+            createRenderable();
+        }
+
+        private void initWheelParams(PxVehicleWheelParams params) {
+            params.setMass(mass);
+            params.setRadius(radius);
+            params.setHalfWidth(width / 2);
+            params.setDampingRate(dampingRate);
+            params.setMoi(0.5f * mass * radius * radius);
+        }
+
+        private void initSuspensionParams(PxVehicleSuspensionParams params) {
+            PxVec3 travelDirection = new PxVec3(0, -1, 0);
+            params.setSuspensionTravelDir(travelDirection);
+            //
+            PxVec3 suspensionAttachment = new PxVec3((float) localPosition.getX(), (float) localPosition.getY(), (float) localPosition.getZ());
+            PxQuat suspensionAttachmentRotation = new PxQuat(PxIDENTITYEnum.PxIdentity);
+            PxTransform suspensionAttachmentTransform = new PxTransform(suspensionAttachment, suspensionAttachmentRotation);
+            params.setSuspensionAttachment(suspensionAttachmentTransform);
+            //
+            PxVec3 wheelAttachment = new PxVec3(0, 0, 0);
+            PxQuat wheelAttachmentRotation = new PxQuat(PxIDENTITYEnum.PxIdentity);
+            PxTransform wheelAttachmentTransform = new PxTransform(wheelAttachment, wheelAttachmentRotation);
+            params.setWheelAttachment(wheelAttachmentTransform);
+            //
+            params.setSuspensionTravelDist(suspensionTravelDistance);
+            //
+            travelDirection.destroy();
+            //
+            suspensionAttachmentTransform.destroy();
+            suspensionAttachment.destroy();
+            suspensionAttachmentRotation.destroy();
+            //
+            wheelAttachmentTransform.destroy();
+            wheelAttachment.destroy();
+            wheelAttachmentRotation.destroy();
+        }
+
+        private void createRenderable() {
             if(getScene().getPanel() instanceof PanelGL) {
                 GraphicsManager3D g = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
                 options = new RenderOptions3D(getObject().getIdentifier() + "$WHEEL-" + id)
                         .setPosition(getObject().getPosition())
-                        .setSize(new TransformSet(wheelRadius, wheelRadius, wheelRadius))
+                        .setSize(new TransformSet(width, radius, radius))
                         .setRotation(getObject().getRotation())
                         .setQuaternionRotation(new QuaternionTransformSet())
                         .setShader("shaders/shader")
@@ -791,14 +769,64 @@ public class Vehicle extends ObjectComponent {
             this.steeringResponseMultiplier = steeringResponseMultiplier;
         }
 
-        @SaveState(name = "wheelRadius")
-        public float getWheelRadius() {
-            return this.wheelRadius;
+        @SaveState(name = "radius")
+        public float getRadius() {
+            return this.radius;
         }
 
         @FromXML
-        public void setWheelRadius(float radius) {
-            this.wheelRadius = radius;
+        public void setRadius(float radius) {
+            this.radius = radius;
+        }
+
+        @SaveState(name = "mass")
+        public float getMass() {
+            return this.mass;
+        }
+
+        @FromXML
+        public void setMass(float mass) {
+            this.mass = mass;
+        }
+
+        @SaveState(name = "dampingRate")
+        public float getDampingRate() {
+            return this.dampingRate;
+        }
+
+        @FromXML
+        public void setDampingRate(float dampingRate) {
+            this.dampingRate = dampingRate;
+        }
+
+        @SaveState(name = "width")
+        public float getWidth() {
+            return this.width;
+        }
+
+        @FromXML
+        public void setWidth(float width) {
+            this.width = width;
+        }
+
+        @SaveState(name = "localPosition")
+        public TransformSet getLocalPosition() {
+            return this.localPosition;
+        }
+
+        @FromXML
+        public void setLocalPosition(TransformSet localPosition) {
+            this.localPosition = localPosition;
+        }
+
+        @SaveState(name = "suspensionTravelDistance")
+        public float getSuspensionTravelDistance() {
+            return this.suspensionTravelDistance;
+        }
+
+        @FromXML
+        public void setSuspensionTravelDistance(float distance) {
+            this.suspensionTravelDistance = distance;
         }
 
     }

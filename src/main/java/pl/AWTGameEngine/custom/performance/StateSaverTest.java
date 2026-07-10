@@ -19,7 +19,7 @@ public class StateSaverTest extends ObjectComponent {
     @Override
     public void onPhysicsUpdate() {
         if(getKeyListener().hasPressedKey(KeyCode.P)) {
-            getScene().saveState("./saved_state.xml", true);
+            getScene().saveState("./saved_state.xml", false);
         }
     }
 
