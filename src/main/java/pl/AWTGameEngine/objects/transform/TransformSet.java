@@ -60,15 +60,15 @@ public class TransformSet {
         runNotify();
     }
 
-    public double getX() {
+    public synchronized double getX() {
         return this.x;
     }
 
-    public double getY() {
+    public synchronized double getY() {
         return this.y;
     }
 
-    public double getZ() {
+    public synchronized double getZ() {
         return this.z;
     }
 
@@ -132,11 +132,11 @@ public class TransformSet {
     }
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
         return "[TransformSet[x=" + x + ",y=" + y + ",z=" + z + "]]";
     }
 
-    public String toSimpleString() {
+    public synchronized String toSimpleString() {
         return x + "," + y + "," + z;
     }
 

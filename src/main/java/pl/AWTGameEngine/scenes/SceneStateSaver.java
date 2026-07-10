@@ -143,6 +143,9 @@ public class SceneStateSaver {
             SaveState saveState = method.getAnnotation(SaveState.class);
             try {
                 Object result = method.invoke(object);
+                if(result == null) {
+                    continue;
+                }
                 String value = String.valueOf(result);
                 if(result instanceof TransformSet) {
                     value = ((TransformSet) result).toSimpleString();

@@ -107,7 +107,7 @@ public class Vehicle extends ObjectComponent {
 
     @SaveState(name = "maxSteerResponse")
     public float getMaxSteerResponse() {
-        return this.maxHandBrakeResponse;
+        return this.maxSteerResponse;
     }
 
     @FromXML

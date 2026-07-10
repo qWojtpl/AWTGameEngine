@@ -16,6 +16,7 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.GameObject;
@@ -116,6 +117,9 @@ public abstract class RigidBody extends ObjectComponent {
     public abstract void physicsUpdate();
 
     protected void updateCachedPosition(PxVec3 position) {
+        if(Float.isNaN(position.getX()) || Float.isNaN(position.getY()) || Float.isNaN(position.getZ())) {
+            return;
+        }
         if(
                 position.getX() != getObject().getPosition().getX() ||
                 position.getY() != getObject().getPosition().getY() ||
@@ -369,6 +373,26 @@ public abstract class RigidBody extends ObjectComponent {
         @Override
         public void addForce(TransformSet vector, float force) {
             throw new RuntimeException("Body must be non-kinematic. Kinematic add force may be implemented later.");
+        }
+
+        @SaveState(name = "linearVelocity")
+        @Override
+        public TransformSet getLinearVelocity() {
+            PxVec3 linearVelocity = rigidDynamic.getLinearVelocity();
+            if(Float.isNaN(linearVelocity.getX()) || Float.isNaN(linearVelocity.getY()) || Float.isNaN(linearVelocity.getZ())) {
+                return null;
+            }
+            return new TransformSet().fromPhysX(linearVelocity);
+        }
+
+        @SaveState(name = "angularVelocity")
+        @Override
+        public TransformSet getAngularVelocity() {
+            PxVec3 angularVelocity = rigidDynamic.getAngularVelocity();
+            if(Float.isNaN(angularVelocity.getX()) || Float.isNaN(angularVelocity.getY()) || Float.isNaN(angularVelocity.getZ())) {
+                return null;
+            }
+            return new TransformSet().fromPhysX(angularVelocity);
         }
 
     }
