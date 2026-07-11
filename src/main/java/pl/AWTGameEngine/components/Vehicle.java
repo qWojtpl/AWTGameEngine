@@ -144,7 +144,7 @@ public class Vehicle extends ObjectComponent {
         vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(vehiclePose);
 
         getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
-            physXManager.getPxScene(getScene()).addActor(vehicle.getPhysXState().getPhysxActor().getRigidBody());
+            physXManager.getScene(getScene()).getPxScene().addActor(vehicle.getPhysXState().getPhysxActor().getRigidBody());
         });
 
         vehicle.getEngineDriveState().getGearboxState().setCurrentGear(vehicle.getEngineDriveParams().getGearBoxParams().getNeutralGear() + 1);
@@ -155,8 +155,8 @@ public class Vehicle extends ObjectComponent {
         context.getFrame().setLatAxis(PxVehicleAxesEnum.ePosX);
         context.getFrame().setVrtAxis(PxVehicleAxesEnum.ePosY);
         context.getScale().setScale(1f);
-        context.setGravity(physXManager.getPxScene(getScene()).getGravity());
-        context.setPhysxScene(physXManager.getPxScene(getScene()));
+        context.setGravity(physXManager.getScene(getScene()).getPxScene().getGravity());
+        context.setPhysxScene(physXManager.getScene(getScene()).getPxScene());
         context.setPhysxActorUpdateMode(PxVehiclePhysXActorUpdateModeEnum.eAPPLY_ACCELERATION);
         context.setPhysxUnitCylinderSweepMesh(
                 PxVehicleTopLevelFunctions.VehicleUnitCylinderSweepMeshCreate(context.getFrame(), physXManager.getPxPhysics(), physXManager.getCookingParams()));
@@ -290,7 +290,7 @@ public class Vehicle extends ObjectComponent {
             tireForce.setLatStiffX(3f);
             tireForce.setLatStiffY(200_000f);
             tireForce.setCamberStiff(0f);
-            tireForce.setRestLoad(5500f);
+            tireForce.setRestLoad(mass / 4f * 9.81f);
             PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 0, 0, 1.2f);
             PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 0, 1, 1.2f);
             PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 1, 0, 1.1f);
@@ -834,7 +834,7 @@ public class Vehicle extends ObjectComponent {
     protected void updateWorldPositions() {
         PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
         PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
-        getObject().getPosition().set(vec3.getX(), vec3.getY() + getObject().getSizeY() * 1.5 + 1.35, vec3.getZ());
+        getObject().getPosition().set(vec3.getX(), vec3.getY(), vec3.getZ());
         getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
     }
 

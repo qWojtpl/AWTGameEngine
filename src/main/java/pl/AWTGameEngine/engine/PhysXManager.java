@@ -23,7 +23,6 @@ public final class PhysXManager {
     private final PxCookingParams cookingParams;
     private final PxPhysics physics;
     private final PxDefaultCpuDispatcher cpuDispatcher;
-    private final PxVec3 gravityVector;
     private final PxShapeFlags shapeFlags;
     private final PxShapeFlags triggerShapeFlags;
     private final HashMap<Scene, PhysXScene> scenes = new HashMap<>();
@@ -37,7 +36,6 @@ public final class PhysXManager {
         cookingParams = new PxCookingParams(tolerances);
         physics = PxTopLevelFunctions.CreatePhysics(VERSION, foundation, tolerances);
         cpuDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(NUM_THREADS);
-        gravityVector = new PxVec3(0f, -9.807f, 0f);
         shapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eSCENE_QUERY_SHAPE.value | PxShapeFlagEnum.eSIMULATION_SHAPE.value));
         triggerShapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eTRIGGER_SHAPE.value));
     }
@@ -87,8 +85,8 @@ public final class PhysXManager {
         return this.physics;
     }
 
-    public PxScene getPxScene(Scene scene) {
-        return this.scenes.get(scene).pxScene;
+    public PhysXScene getScene(Scene scene) {
+        return this.scenes.get(scene);
     }
 
     public CollisionManager getCollisionManager(Scene scene) {
@@ -121,7 +119,6 @@ public final class PhysXManager {
         physics.release();
         cookingParams.destroy();
         tolerances.destroy();
-        gravityVector.destroy();
         shapeFlags.destroy();
         triggerShapeFlags.destroy();
         foundation.release();
@@ -137,12 +134,13 @@ public final class PhysXManager {
         return INSTANCE;
     }
 
-    class PhysXScene {
+    public class PhysXScene {
 
         private PxScene pxScene;
         private PxSceneDesc pxSceneDesc;
         private final CollisionManager collisionManager;
         private final List<Vehicle> vehicles = new ArrayList<>();
+        private float gravity = -9.807f;
 
         public PhysXScene(Scene scene) {
             collisionManager = new CollisionManager(scene);
@@ -150,12 +148,27 @@ public final class PhysXManager {
 
         public void init() {
             pxSceneDesc = new PxSceneDesc(tolerances);
-            pxSceneDesc.setGravity(gravityVector);
             pxSceneDesc.setCpuDispatcher(cpuDispatcher);
             pxSceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
             pxSceneDesc.setSolverType(PxSolverTypeEnum.ePGS);
             pxSceneDesc.setSimulationEventCallback(collisionManager);
             pxScene = physics.createScene(pxSceneDesc);
+            setGravity(gravity);
+        }
+
+        public float getGravity() {
+            return this.gravity;
+        }
+
+        public void setGravity(float gravity) {
+            this.gravity = gravity;
+            PxVec3 gravityVector = new PxVec3(0, gravity, 0);
+            pxScene.setGravity(gravityVector);
+            gravityVector.destroy();
+        }
+
+        public PxScene getPxScene() {
+            return this.pxScene;
         }
 
         public void destroy() {

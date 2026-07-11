@@ -57,7 +57,7 @@ public class VehicleSteer extends ObjectComponent {
 
         vehicle.getPxVehicle().getCommandState().setThrottle(torque);
         vehicle.getPxVehicle().getCommandState().setSteer(steer);
-        vehicle.getPxVehicle().getCommandState().setNbBrakes(0);
+        vehicle.getPxVehicle().getCommandState().setNbBrakes(1);
         vehicle.getPxVehicle().getCommandState().setBrakes(0, brake);
 
         int currentGear = vehicle.getPxVehicle().getEngineDriveState().getGearboxState().getCurrentGear();

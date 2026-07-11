@@ -178,7 +178,7 @@ public abstract class RigidBody extends ObjectComponent {
                 savedAngularVelocity = null;
             }
             getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
-                physXManager.getPxScene(getScene()).addActor(rigidDynamic);
+                physXManager.getScene(getScene()).getPxScene().addActor(rigidDynamic);
             });
         }
 
@@ -187,7 +187,7 @@ public abstract class RigidBody extends ObjectComponent {
             rigidDynamic.detachShape(shape);
             releaseObjects();
             getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
-                physXManager.getPxScene(getScene()).removeActor(rigidDynamic);
+                physXManager.getScene(getScene()).getPxScene().removeActor(rigidDynamic);
                 rigidDynamic.release();
             });
         }
@@ -281,7 +281,7 @@ public abstract class RigidBody extends ObjectComponent {
             rigidStatic.setName(getObject().getIdentifier());
             rigidStatic.attachShape(shape);
             getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
-                physXManager.getPxScene(getScene()).addActor(rigidStatic);
+                physXManager.getScene(getScene()).getPxScene().addActor(rigidStatic);
             });
         }
 
@@ -290,7 +290,7 @@ public abstract class RigidBody extends ObjectComponent {
             rigidStatic.detachShape(shape);
             releaseObjects();
             getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
-                physXManager.getPxScene(getScene()).removeActor(rigidStatic);
+                physXManager.getScene(getScene()).getPxScene().removeActor(rigidStatic);
                 rigidStatic.release();
             });
         }

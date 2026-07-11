@@ -8,6 +8,7 @@
 <!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
         <Server port="53780" />
+        <PlayerController />
     </object>
 
     <object id="floor" x="500" y="-100" z="-500" size="1000,10,10000">
@@ -65,19 +66,19 @@
         <Plane3D spriteSource="sprites/beaver.jpg" shader="shaders/billboard" />
     </object>
 
-    <object id="vehicle" x="200" y="50" z="200" size="80,40,80">
+    <object id="vehicle" x="200" y="50" z="200" size="80,20,80">
         <Model3D shapePath="./untitled.obj" modelSize="20,20,20" spriteSource="sprites/beaver.jpg" />
 <!--        <Box3D />-->
         <Vehicle mass="15870" maxBrakeResponse="80000" />
-        <Vehicle.Engine peakTorque="18000" maxRPM="120000" idleRPM="1200" />
+        <Vehicle.Engine peakTorque="18000" maxRPM="12000" idleRPM="1200" />
         <Vehicle.Gearbox gearRatios="-4,0,4,2,1.5,1.1,1,0.8,0.7,0.3" />
-        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="10" localPosition="-40,30,40" />
-        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="10" localPosition="40,30,40" />
-        <Vehicle.Wheel axleId="1" brakeResponseMultiplier="1" handBrakeResponseMultiplier="1" radius="10" localPosition="-40,30,-40" />
-        <Vehicle.Wheel axleId="1" brakeResponseMultiplier="1" radius="10" localPosition="40,30,-40" />
+        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="-30,-25,60" width="2.5" />
+        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="30,-25,60" width="2.5" />
+        <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="-30,-25,-55" width="5" />
+        <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="30,-25,-55" width="5" />
         <RigidBody.Kinematic />
-        <CameraFollow />
-        <VehicleSteer _package="pl.AWTGameEngine.custom" />
+<!--        <CameraFollow />-->
+<!--        <VehicleSteer _package="pl.AWTGameEngine.custom" />-->
         <ParticleEmitter spriteSource="sprites/base/files/directory.png" ttl="20" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5 1 0" />
     </object>
 
