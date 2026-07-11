@@ -4,6 +4,7 @@ import org.w3c.dom.Node;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.lang.reflect.InvocationTargetException;
@@ -41,6 +42,9 @@ public class GameObjectDeserializer {
             double y = Double.parseDouble(getValue(node, "rotationY"));
             double z = Double.parseDouble(getValue(node, "rotationZ"));
             object.setRotation(new TransformSet(x, y, z));
+        }
+        if(!getValue(node, "quaternionRotation").equals("0")) {
+            object.setQuaternionRotation(new QuaternionTransformSet().deserialize(getValue(node, "quaternionRotation")));
         }
         if(getValue(node, "active").equals("0")) {
             object.setActive(true);

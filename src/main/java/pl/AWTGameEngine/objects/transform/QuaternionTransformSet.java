@@ -110,6 +110,10 @@ public class QuaternionTransformSet {
         return this.x == 0 && this.y == 0 && this.z == 0 && this.w == 0;
     }
 
+    public String toSimpleString() {
+        return x + "," + y + "," + z + "," + w;
+    }
+
     @Override
     public String toString() {
         return "QuaternionTransformSet[x=" + x + ",y=" + y + ",z=" + z + ",w=" + w + "]";

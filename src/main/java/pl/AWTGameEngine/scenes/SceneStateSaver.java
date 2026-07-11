@@ -7,12 +7,14 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Prefab;
+import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.cert.PolicyQualifierInfo;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -148,10 +150,15 @@ public class SceneStateSaver {
                 }
                 String value = String.valueOf(result);
                 if(result instanceof TransformSet) {
-                    value = ((TransformSet) result).toSimpleString();
                     if(((TransformSet) result).isEmpty()) {
                         continue;
                     }
+                    value = ((TransformSet) result).toSimpleString();
+                } else if(result instanceof QuaternionTransformSet) {
+                    if(((QuaternionTransformSet) result).isEmpty()) {
+                        continue;
+                    }
+                    value = ((QuaternionTransformSet) result).toSimpleString();
                 }
                 parameterBuilder.append(" ");
                 parameterBuilder.append(saveState.name());

@@ -301,7 +301,6 @@ public class GameObject {
         return this.position;
     }
 
-    @SaveState(name = "rotation")
     public TransformSet getRotation() {
         synchronized(this.rotation) {
             synchronized(this.quaternionRotation) {
@@ -321,6 +320,7 @@ public class GameObject {
         }
     }
 
+    @SaveState(name = "quaternionRotation")
     public QuaternionTransformSet getQuaternionRotation() {
         synchronized(this.rotation) {
             synchronized(this.quaternionRotation) {
