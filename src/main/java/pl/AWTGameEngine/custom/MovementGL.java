@@ -4,8 +4,10 @@ import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.components.ComponentMeta;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.helpers.MovementHelper;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.windows.Window;
 
 @ComponentGL
 @ComponentMeta(
@@ -25,6 +27,10 @@ public class MovementGL extends ObjectComponent {
 
     @Override
     public void onUpdate() {
+
+        if(!(getWindow() instanceof Window)) {
+            return;
+        }
 
         if(getKeyListener().hasPressedKey(27)) { // ESC
             focused = !focused;
@@ -50,7 +56,7 @@ public class MovementGL extends ObjectComponent {
         }
 
         handleMovement(forward, right, up);
-        handleRotation();
+        MovementHelper.handleRotation((Window) getWindow(), getMouseListener(), getCamera(), getObject());
     }
 
     private void handleMovement(double forward, double right, double up) {
@@ -80,35 +86,6 @@ public class MovementGL extends ObjectComponent {
         TransformSet position = new TransformSet(getCamera().getX() + dx, getCamera().getY() + dy, getCamera().getZ() + dz);
         getCamera().setPosition(position);
         getObject().setPosition(position);
-    }
-
-    private void handleRotation() {
-        int mouseX = getMouseListener().getMouseScreenX();
-        int mouseY = getMouseListener().getMouseScreenY();
-
-        double[] screenCenter = getWindow().getScreenCenter();
-
-        int delta = (int) (screenCenter[0] - mouseX);
-        if(delta != 0) {
-            moveMouse();
-        }
-        double newRotationY = getCamera().getRotation().getY() + delta * -1;
-        newRotationY = newRotationY % 360;
-
-        delta = (int) (screenCenter[1] - mouseY);
-        if(delta != 0) {
-            moveMouse();
-        }
-        double newRotationX = getCamera().getRotation().getX() + delta;
-        if(newRotationX > 90) {
-            newRotationX = 90;
-        } else if(newRotationX < -90) {
-            newRotationX = -90;
-        }
-
-        TransformSet rotation = new TransformSet(newRotationX, newRotationY, 30);
-        getCamera().setRotation(rotation);
-        getObject().setRotation(rotation);
     }
 
     private void moveMouse() {

@@ -8,7 +8,7 @@
 <!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
         <Server port="53780" />
-        <PlayerController />
+        <PlayerController height="20" cameraHeight="19" speed="30" jumpForce="40" radius="3" />
     </object>
 
     <object id="floor" x="500" y="-100" z="-500" size="1000,10,10000">

@@ -65,6 +65,7 @@ public final class PhysXManager {
         for(Vehicle vehicle : physXScene.vehicles) {
             vehicle.getPxVehicle().step(step, vehicle.getContext());
         }
+        physXScene.setPreviousStep(step);
         physXScene.pxScene.simulate(step);
         physXScene.pxScene.fetchResults(true);
     }
@@ -141,6 +142,7 @@ public final class PhysXManager {
         private final CollisionManager collisionManager;
         private final List<Vehicle> vehicles = new ArrayList<>();
         private float gravity = -9.807f;
+        private double previousStep = 0;
 
         public PhysXScene(Scene scene) {
             collisionManager = new CollisionManager(scene);
@@ -165,6 +167,14 @@ public final class PhysXManager {
             PxVec3 gravityVector = new PxVec3(0, gravity, 0);
             pxScene.setGravity(gravityVector);
             gravityVector.destroy();
+        }
+
+        public double getPreviousStep() {
+            return this.previousStep;
+        }
+
+        public void setPreviousStep(double previousStep) {
+            this.previousStep = previousStep;
         }
 
         public PxScene getPxScene() {
