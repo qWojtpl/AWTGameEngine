@@ -6,7 +6,7 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.deserializers.ModelLoader;
+import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
@@ -69,7 +69,8 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         gl.glBindVertexArray(0);
 
-        shapes.put(path, new Shape(path, vao, vbo, vertices.length));
+        shapes.put(path, new Shape(path, vao, vbo, vertices.length / 8));
+        Logger.info("Model " + path + " loaded.");
     }
 
     public void drawScene(GL4 gl, float[] viewProj) {

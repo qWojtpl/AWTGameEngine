@@ -67,7 +67,7 @@
     </object>
 
     <object id="vehicle" x="200" y="50" z="200" size="80,20,80">
-        <Model3D shapePath="./untitled.obj" modelSize="20,20,20" spriteSource="sprites/beaver.jpg" />
+        <Model3D shapePath="./test.o3d" modelSize="20,20,20" spriteSource="sprites/beaver.jpg" />
 <!--        <Box3D />-->
         <Vehicle mass="15870" maxBrakeResponse="80000" />
         <Vehicle.Engine peakTorque="18000" maxRPM="12000" idleRPM="1200" />

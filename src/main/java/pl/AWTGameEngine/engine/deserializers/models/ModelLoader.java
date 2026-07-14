@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.engine.deserializers;
+package pl.AWTGameEngine.engine.deserializers.models;
 
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.assimp.AIMesh;
@@ -7,6 +7,7 @@ import org.lwjgl.assimp.AIVector3D;
 import org.lwjgl.assimp.Assimp;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.helpers.ModelHelper;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -15,10 +16,13 @@ import java.util.List;
 public class ModelLoader {
 
     public static float[] getVertices(String path, boolean center) {
-        Logger.info("Loading 3D model: " + path + (center ? " (with center correction)" : ""));
-        ByteBuffer buffer = Dependencies.getResourceManager().getResourceAsByteBuffer(path);
+        Logger.info("Loading 3D model: " + path + (center ? " (with center correction)" : "") + "...");
         String[] split = path.split("\\.");
         String type = split[split.length - 1];
+        if(type.equals("o3d")) {
+            return O3DLoader.getVertices(path, center);
+        }
+        ByteBuffer buffer = Dependencies.getResourceManager().getResourceAsByteBuffer(path);
         try(AIScene scene = Assimp.aiImportFileFromMemory(
                 buffer,
                 Assimp.aiProcess_Triangulate | Assimp.aiProcess_GenNormals,
@@ -54,42 +58,10 @@ public class ModelLoader {
                 mesh.close();
             }
             if(center) {
-                float minX = Float.POSITIVE_INFINITY, minY = Float.POSITIVE_INFINITY, minZ = Float.POSITIVE_INFINITY;
-                float maxX = Float.NEGATIVE_INFINITY, maxY = Float.NEGATIVE_INFINITY, maxZ = Float.NEGATIVE_INFINITY;
-                for(float[] seg : vertices) {
-                    if(seg[0] < minX) {
-                        minX = seg[0];
-                    }
-                    if(seg[0] > maxX) {
-                        maxX = seg[0];
-                    }
-                    if(seg[1] < minY) {
-                        minY = seg[1];
-                    }
-                    if(seg[1] > maxY) {
-                        maxY = seg[1];
-                    }
-                    if(seg[2] < minZ) {
-                        minZ = seg[2];
-                    }
-                    if(seg[2] > maxZ) {
-                        maxZ = seg[2];
-                    }
-                }
-                float centerX = ((minX + maxX) / 2), centerY = ((minY + maxY) / 2), centerZ = ((minZ + maxZ) / 2);
-                for(float[] seg : vertices) {
-                    seg[0] -= centerX;
-                    seg[1] -= centerY;
-                    seg[2] -= centerZ;
-                }
+                ModelHelper.centerCorrection(vertices);
             }
-            float[] v = new float[vertices.size() * 8];
-            int i = 0;
-            for(float[] seg : vertices) {
-                System.arraycopy(seg, 0, v, i, 8);
-                i += 8;
-            }
-            return v;
+
+            return ModelHelper.convertToArray(vertices);
         } catch(Exception e) {
             Logger.exception("Cannot get vertices from " + path, e);
             return new float[0];
