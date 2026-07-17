@@ -136,7 +136,7 @@ public class HeadlessWindow implements BaseWindow {
 
     @Override
     public boolean isSameSize() {
-        return false;
+        return true;
     }
 
     @Override

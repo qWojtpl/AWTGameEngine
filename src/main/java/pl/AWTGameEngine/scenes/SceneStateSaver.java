@@ -14,7 +14,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.cert.PolicyQualifierInfo;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -53,11 +52,23 @@ public class SceneStateSaver {
         builder.append("<scene title=\"");
         builder.append(scene.getWindow().getTitle());
         builder.append("\" renderFPS=\"");
-        builder.append((int) scene.getWindow().getRenderLoop().getTargetFps());
+        if(scene.getWindow().getRenderLoop() != null) {
+            builder.append((int) scene.getWindow().getRenderLoop().getTargetFps());
+        } else {
+            builder.append(60);
+        }
         builder.append("\" updateFPS=\"");
-        builder.append((int) scene.getWindow().getUpdateLoop().getTargetFps());
+        if(scene.getWindow().getUpdateLoop() != null) {
+            builder.append((int) scene.getWindow().getUpdateLoop().getTargetFps());
+        } else {
+            builder.append(60);
+        }
         builder.append("\" physicsFPS=\"");
-        builder.append((int) scene.getWindow().getPhysicsLoop().getTargetFps());
+        if(scene.getWindow().getPhysicsLoop() != null) {
+            builder.append((int) scene.getWindow().getPhysicsLoop().getTargetFps());
+        } else {
+            builder.append(60);
+        }
         builder.append("\" sameSize=\"");
         builder.append(scene.getWindow().isSameSize());
         builder.append("\" fullscreen=\"");

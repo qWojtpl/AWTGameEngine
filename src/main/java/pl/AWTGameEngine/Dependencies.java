@@ -10,10 +10,10 @@ import pl.AWTGameEngine.windows.WindowsManager;
 @Command("dependencies")
 public class Dependencies extends CommandConsole.ParentCommand {
 
-    private static WindowsManager windowsManager = new WindowsManager();
-    private static AppProperties appProperties = new AppProperties();
-    private static ResourceManager resourceManager = new ResourceManager();
-    private static Preferences preferences = new Preferences();
+    private static WindowsManager windowsManager;
+    private static AppProperties appProperties;
+    private static ResourceManager resourceManager;
+    private static Preferences preferences;
 
     static {
         new Dependencies();
