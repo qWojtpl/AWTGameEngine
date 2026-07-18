@@ -145,6 +145,10 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         Shape shape = shapes.get(ro.getShapePath());
 
+        if(shape == null) {
+            return;
+        }
+
         gl.glBindVertexArray(shape.getVao());
 
         float[] model = MatrixHelper.composeModelMatrix(

@@ -21,7 +21,12 @@ public class O3DLoader {
         if((buffer.get() & 0xFF) != 0x84 || (buffer.get() & 0xFF) != 0x19) {
             throw new RuntimeException("File is not valid O3D model!");
         }
-        buffer.get();
+        boolean longHeader = false;
+        if((buffer.get() & 0xFF) > 3) {
+            longHeader = true;
+            buffer.get();
+            buffer.getInt();
+        }
         List<Float> vertices = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
         boolean done = false;
@@ -29,7 +34,7 @@ public class O3DLoader {
             byte section = buffer.get();
             switch(section & 0xFF) {
                 case 0x17:
-                    int numVertices = buffer.getShort();
+                    int numVertices = longHeader ? buffer.getInt() : (buffer.getShort() & 0xFFFF);
                     for(int i = 0; i < numVertices; i++) {
                         for(int j = 0; j < 8; j++) {
                             vertices.add(buffer.getFloat());
@@ -37,7 +42,7 @@ public class O3DLoader {
                     }
                     break;
                 case 0x49:
-                    int numTriangles = buffer.getShort();
+                    int numTriangles = longHeader ? buffer.getInt() : (buffer.getShort() & 0xFFFF);
                     for(int i = 0; i < numTriangles; i++) {
                         int b1 = buffer.getShort();
                         int b2 = buffer.getShort();

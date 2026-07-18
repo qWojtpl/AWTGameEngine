@@ -262,6 +262,10 @@ public class GameObject {
         return new ArrayList<>(this.components);
     }
 
+    public List<ObjectComponent> getRawComponents() {
+        return this.components;
+    }
+
     public List<ObjectComponent> getComponentsByClass(Class<? extends ObjectComponent> clazz) {
         List<ObjectComponent> componentList = new ArrayList<>();
         for(ObjectComponent component : components) {
