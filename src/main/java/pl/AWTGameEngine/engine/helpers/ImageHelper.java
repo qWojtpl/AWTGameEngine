@@ -6,6 +6,7 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritablePixelFormat;
 
 import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 public class ImageHelper {
@@ -26,6 +27,23 @@ public class ImageHelper {
             image.getRaster().setDataElements(0, y, width, 1, buffer);
         }
 
+        return image;
+    }
+
+    public static BufferedImage bytesToBufferedImage(ByteBuffer buffer, int width, int height) {
+        buffer.rewind();
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        int[] pixels = new int[width * height];
+        for(int i = 0; i < pixels.length; i++) {
+            int r = buffer.get() & 0xFF;
+            int g = buffer.get() & 0xFF;
+            int b = buffer.get() & 0xFF;
+            int a = buffer.get() & 0xFF;
+
+            pixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
+        }
+
+        image.setRGB(0, 0, width, height, pixels, 0, width);
         return image;
     }
 
