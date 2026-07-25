@@ -1,9 +1,8 @@
 package pl.AWTGameEngine;
 
-import pl.AWTGameEngine.engine.AppProperties;
-import pl.AWTGameEngine.engine.CommandConsole;
-import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.TestPerformer;
+import pl.AWTGameEngine.engine.*;
+import pl.AWTGameEngine.engine.helpers.SteamHelper;
+import pl.AWTGameEngine.engine.steam.SteamManager;
 import pl.AWTGameEngine.scenes.SceneBuilder;
 
 public class Main {
@@ -25,6 +24,9 @@ public class Main {
         }
         if(SceneBuilder.isSceneBuilder(args)) {
             return;
+        }
+        if(SteamHelper.isSteamAvailable()) {
+            SteamManager.getInstance().init();
         }
         Logger.info("Requesting default window...");
         Dependencies.getWindowsManager().createDefaultWindow();

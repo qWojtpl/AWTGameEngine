@@ -3,12 +3,11 @@ package pl.AWTGameEngine.windows;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.CommandConsole;
-import pl.AWTGameEngine.engine.AppProperties;
-import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
+import pl.AWTGameEngine.engine.helpers.SteamHelper;
 import pl.AWTGameEngine.engine.loops.*;
+import pl.AWTGameEngine.engine.steam.SteamManager;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
@@ -180,6 +179,9 @@ public class WindowsManager extends CommandConsole.ParentCommand {
             if(window.equals(defaultWindow)) {
                 PhysXManager.getInstance().cleanup();
                 Dependencies.getResourceManager().clearAudioClips();
+                if(SteamHelper.isSteamAvailable()) {
+                    SteamManager.getInstance().dispose();
+                }
                 Logger.info("Stopped app.");
                 System.exit(0);
             }

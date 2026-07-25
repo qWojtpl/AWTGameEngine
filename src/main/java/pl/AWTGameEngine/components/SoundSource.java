@@ -50,8 +50,6 @@ public class SoundSource extends ObjectComponent {
         TransformSet cameraPosition = new TransformSet(getCamera().getX(), getCamera().getY(), getCamera().getZ());
         FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 
-
-
         float newVolume = 1 - ((float) getObject().getPosition().distanceTo(cameraPosition) / spreadDistance);
         if(newVolume < -80) {
             newVolume = -80;
@@ -91,6 +89,16 @@ public class SoundSource extends ObjectComponent {
     @FromXML
     public void setClipSource(String source) {
         setAudioClip(Dependencies.getResourceManager().getResourceAsAudioClip(source));
+    }
+
+    @SaveState(name = "spreadDistance")
+    public float getSpreadDistance() {
+        return this.spreadDistance;
+    }
+
+    @FromXML
+    public void setSpreadDistance(float spreadDistance) {
+        this.spreadDistance = spreadDistance;
     }
 
 }

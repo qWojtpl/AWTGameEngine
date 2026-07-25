@@ -2,7 +2,9 @@ package pl.AWTGameEngine.custom.performance;
 
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.WebText;
+import pl.AWTGameEngine.engine.helpers.SteamHelper;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
+import pl.AWTGameEngine.engine.steam.SteamManager;
 import pl.AWTGameEngine.objects.GameObject;
 
 @WebComponent
@@ -23,6 +25,7 @@ public class WebPerformanceText extends WebText {
                 "<br>Render FPS: {renderFPS}" +
                 "<br>Physics FPS: {physicsFPS}" +
                 "<br>Net FPS: {netFPS}" +
+                "<br>Steam FPS: {steamFPS}" +
                 "<br>Objects: {objects}" +
                 "<br>Total threads: {threads}" +
                 "<br>Registered global events: {events}"
@@ -40,6 +43,9 @@ public class WebPerformanceText extends WebText {
         setValue("renderFPS", getFpsString(getWindow().getRenderLoop()));
         setValue("physicsFPS", getFpsString(getWindow().getPhysicsLoop()));
         setValue("netFPS", getFpsString(getWindow().getNetLoop()));
+        if(SteamHelper.isSteamAvailable()) {
+            setValue("steamFPS", getFpsString(SteamManager.getInstance().getSteamLoop()));
+        }
         setValue("objects", getWindow().getCurrentScene().getGameObjects().size() + "");
         setValue("threads", Thread.getAllStackTraces().size() + "");
         setValue("events", getWindow().getCurrentScene().getSceneEventHandler().getNumberOfRegisteredEvents() + "");
