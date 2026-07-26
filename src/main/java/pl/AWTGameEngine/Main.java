@@ -25,7 +25,7 @@ public class Main {
         if(SceneBuilder.isSceneBuilder(args)) {
             return;
         }
-        if(SteamHelper.isSteamAvailable()) {
+        if(SteamHelper.canInitSteam()) {
             SteamManager.getInstance().init();
         }
         Logger.info("Requesting default window...");

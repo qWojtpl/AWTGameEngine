@@ -6,15 +6,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ConnectedClient {
+public class StandardNetConnection extends NetConnection {
 
-    private int id;
     private final Socket socket;
     private final PrintWriter printWriter;
     private final BufferedReader bufferedReader;
 
-    public ConnectedClient(int id, Socket socket) throws IOException {
-        this.id = id;
+    public StandardNetConnection(long id, Socket socket) throws IOException {
+        super(id);
         this.socket = socket;
         if(socket != null) {
             this.printWriter = new PrintWriter(socket.getOutputStream(), true);
@@ -25,26 +24,26 @@ public class ConnectedClient {
         }
     }
 
+    @Override
     public void sendInitMessage() {
         sendMessage(String.valueOf(id));
     }
 
+    @Override
     public void sendMessage(String message) {
         printWriter.println(message);
     }
 
+    @Override
     public void sendBlock(NetBlock block) {
         sendMessage(block.formMessage());
     }
 
+    @Override
     public void close() throws IOException {
         printWriter.close();
         bufferedReader.close();
         socket.close();
-    }
-
-    public int getId() {
-        return this.id;
     }
 
     public Socket getSocket() {

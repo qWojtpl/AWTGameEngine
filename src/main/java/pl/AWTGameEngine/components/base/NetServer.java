@@ -22,7 +22,7 @@ public abstract class NetServer extends NetComponent {
             ((NetComponent) component).clearNetCache();
         }
 
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#ConnectedClient")) {
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#NetConnection")) {
 //            ((NetComponent) component).onClientConnect(this, connectedClient); //todo
         }
     }

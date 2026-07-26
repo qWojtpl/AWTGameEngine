@@ -21,11 +21,14 @@ public class SteamManager {
     private static SteamManager steamManager;
     private SteamLoop steamLoop;
     private boolean initialized = false;
+    private boolean gameServerInitialized = false;
     // Steam closeable objects
     private SteamUser user;
     private SteamUserStats stats;
     private SteamFriends friends;
     private SteamUtils utils;
+    // Steam network closeable objects
+    private SteamNetworking network;
     // Managers
     private SteamAchievementsManager achievementsManager;
     // Cache
@@ -36,6 +39,9 @@ public class SteamManager {
     }
 
     public void init() {
+        if(initialized) {
+            throw new RuntimeException("Steam is already initialized!");
+        }
         try {
             Logger.info("Initializing Steamworks API...");
             createSteamIdFile(Dependencies.getAppProperties().getPropertyAsInteger("steamAppId"));
@@ -58,20 +64,54 @@ public class SteamManager {
         }
     }
 
+    public void initGameServer(short gamePort, short queryPort, String version) {
+        if(gameServerInitialized) {
+            throw new RuntimeException("Steam GameServer is already initialized!");
+        }
+        try {
+            Logger.info("Initializing Steamworks GameServer...");
+            SteamLibraryLoader loader = new SteamLibraryLoaderLwjgl3();
+            if(!SteamGameServerAPI.loadLibraries(loader)) {
+                throw new RuntimeException("Cannot load native libraries!");
+            }
+            if(!SteamGameServerAPI.init(
+                    0x7F000001, gamePort, queryPort,
+                    SteamGameServerAPI.ServerMode.Authentication, version)) {
+                throw new RuntimeException("Cannot init GameServer!");
+            }
+            createNetworkObjects();
+            Logger.info("GameServer initialized.");
+            gameServerInitialized = true;
+        } catch(Exception e) {
+            Logger.exception("Exception while initializing Steamworks GameServer", e);
+        }
+    }
+
     public void dispose() {
         Logger.info("Shutting down Steam API connection...");
-        user.dispose();
-        stats.dispose();
-        friends.dispose();
-        utils.dispose();
-        SteamAPI.shutdown();
-        steamLoop.kill();
-        steamLoop = null;
-        playerAvatars.clear();
+        if(initialized) {
+            user.dispose();
+            stats.dispose();
+            friends.dispose();
+            utils.dispose();
+            SteamAPI.shutdown();
+            steamLoop.kill();
+            steamLoop = null;
+            playerAvatars.clear();
+        }
+        if(gameServerInitialized) {
+            network.dispose();
+            SteamGameServerAPI.shutdown();
+        }
     }
 
     public void updateCallbacks() {
-        SteamAPI.runCallbacks();
+        if(initialized) {
+            SteamAPI.runCallbacks();
+        }
+        if(gameServerInitialized) {
+            SteamGameServerAPI.runCallbacks();
+        }
     }
 
     private void createLoop() {
@@ -89,6 +129,11 @@ public class SteamManager {
         friends = new SteamFriends(friendsHandler);
         SteamUtilsHandler utilsHandler = new SteamUtilsHandler();
         utils = new SteamUtils(utilsHandler);
+    }
+
+    private void createNetworkObjects() {
+        SteamNetworkingHandler networkingHandler = new SteamNetworkingHandler();
+        network = new SteamNetworking(networkingHandler);
     }
 
     public SteamLoop getSteamLoop() {
@@ -113,6 +158,10 @@ public class SteamManager {
 
     public SteamUtils getUtils() {
         return utils;
+    }
+
+    public SteamNetworking getNetwork() {
+        return network;
     }
 
     public Sprite getPlayerAvatarSprite(SteamID steamID) {
@@ -175,5 +224,7 @@ public class SteamManager {
     static class SteamStatsHandler implements SteamUserStatsCallback { }
     static class SteamFriendsHandler implements SteamFriendsCallback { }
     static class SteamUtilsHandler implements SteamUtilsCallback { }
+
+    static class SteamNetworkingHandler implements SteamNetworkingCallback { }
 
 }

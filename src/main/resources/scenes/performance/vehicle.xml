@@ -7,7 +7,8 @@
 <!--        <MovementGL _package="pl.AWTGameEngine.custom" />-->
 <!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
-        <Server port="53780" />
+<!--        <Server port="53780" />-->
+        <SteamRelayServer />
         <PlayerController height="20" cameraHeight="19" speed="30" jumpForce="40" radius="3" />
     </object>
 
@@ -59,7 +60,7 @@
         <Box3D spriteSource="sprites/beaver.jpg" />
         <RigidBody.Kinematic />
 <!--        <SpinningObject _package="pl.AWTGameEngine.custom.performance" />-->
-        <SoundSource clipSource="audio/swingin.wav" spreadDistance="20" />
+<!--        <SoundSource clipSource="audio/swingin.wav" spreadDistance="20" />-->
     </object>
 
     <object id="box7" x="50" y="-50" z="50" size="100,100,100">

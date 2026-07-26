@@ -8,9 +8,10 @@ import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
-import pl.AWTGameEngine.objects.net.ConnectedClient;
+import pl.AWTGameEngine.objects.net.NetConnection;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.net.NetBlock;
+import pl.AWTGameEngine.objects.net.StandardNetConnection;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ import java.util.List;
 @WebComponent
 public class Client extends NetComponent {
 
-    private ConnectedClient connectedClient;
+    private StandardNetConnection netConnection;
     private String autoConnectAddress = null;
 
     public Client(GameObject object) {
@@ -44,14 +45,14 @@ public class Client extends NetComponent {
     }
 
     public void connect(String ip, int port) {
-        if(connectedClient != null) {
+        if(netConnection != null) {
             Logger.error("Client already connected.");
             return;
         }
         String address = ip + ":" + port;
         Logger.netInfo("Connecting to " + address + "...", false);
         try {
-            this.connectedClient = new ConnectedClient(-1, new Socket(ip, port));
+            this.netConnection = new StandardNetConnection(-1, new Socket(ip, port));
             handleConnection();
 //            requestGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100), new TransformSet());
 //            requestComponent("player{id}", "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)");
@@ -62,12 +63,12 @@ public class Client extends NetComponent {
     }
 
     public void disconnect() {
-        if(connectedClient == null) {
+        if(netConnection == null) {
             return;
         }
         try {
-            connectedClient.close();
-            connectedClient = null;
+            netConnection.close();
+            netConnection = null;
             Logger.netInfo("Disconnected.", false);
         } catch (IOException e) {
             Logger.exception("Cannot disconnect!", e);
@@ -76,29 +77,29 @@ public class Client extends NetComponent {
 
     private void handleConnection() {
         new Thread(() -> {
-            while(connectedClient.getSocket().isConnected()) {
+            while(netConnection.getSocket().isConnected()) {
                 String response = "";
                 try {
-                    response = connectedClient.getBufferedReader().readLine();
+                    response = netConnection.getBufferedReader().readLine();
                     if(response == null) {
                         continue;
                     }
-                    if(connectedClient.getId() == -1) {
+                    if(netConnection.getId() == -1) {
                         int id;
                         try {
                             id = Integer.parseInt(response);
                         } catch(NumberFormatException e) {
                             Logger.error("Cannot connect to server: " + response);
-                            connectedClient.getSocket().close();
-                            connectedClient = null;
+                            netConnection.getSocket().close();
+                            netConnection = null;
                             return;
                         }
-                        connectedClient.updateId(id); // first response is an id
-                        Logger.netInfo("\t\t-> Server assigned ID " + connectedClient.getId() + " for me.", false);
+                        netConnection.updateId(id); // first response is an id
+                        Logger.netInfo("\t\t-> Server assigned ID " + netConnection.getId() + " for me.", false);
                         Logger.netInfo("Connected.", false);
                         continue;
                     }
-                    NetDeserializer.deserialize(getScene(), response, connectedClient);
+                    NetDeserializer.deserialize(getScene(), response, netConnection);
                 } catch (Exception e) {
                     if(response.isEmpty()) {
                         Logger.error("Server closed a connection.");
@@ -113,13 +114,13 @@ public class Client extends NetComponent {
 
     @Override
     public void onNetUpdate() {
-        if(this.connectedClient == null) {
+        if(this.netConnection == null) {
             return;
         }
         List<NetBlock> blocks = new ArrayList<>();
         for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
             NetComponent netComponent = (NetComponent) component;
-            if(component.getObject().getNet().getOwner() != connectedClient.getId()) {
+            if(component.getObject().getNet().getOwner() != netConnection.getId()) {
                 continue;
             }
             if(!netComponent.canSynchronize()) {
@@ -131,13 +132,13 @@ public class Client extends NetComponent {
             }
         }
         for(NetBlock block : blocks) {
-            connectedClient.sendBlock(block);
+            netConnection.sendBlock(block);
         }
         // synchronize position
         //todo: UDP instead of TCP
         blocks.clear();
         for(GameObject object : getScene().getGameObjects()) {
-            if(object.getNet().getOwner() != connectedClient.getId()) {
+            if(object.getNet().getOwner() != netConnection.getId()) {
                 continue;
             }
             NetBlock block = object.getNet().onPositionSynchronize();
@@ -146,22 +147,22 @@ public class Client extends NetComponent {
             }
         }
         for(NetBlock block : blocks) {
-            connectedClient.sendBlock(block);
+            netConnection.sendBlock(block);
         }
     }
 
     public void requestGameObject(String identifier, TransformSet position, TransformSet size, TransformSet rotation) {
         Logger.info("Requesting object...");
-        connectedClient.sendBlock(new NetBlock(identifier, null, position, size, rotation, connectedClient.getId()));
+        netConnection.sendBlock(new NetBlock(identifier, null, position, size, rotation, netConnection.getId()));
     }
 
     public void requestComponent(String identifier, Class<? extends ObjectComponent> component, String data) {
         Logger.info("Requesting component...");
-        connectedClient.sendBlock(new NetBlock(identifier, component, data));
+        netConnection.sendBlock(new NetBlock(identifier, component, data));
     }
 
-    public ConnectedClient getConnectedClient() {
-        return this.connectedClient;
+    public NetConnection getConnectedClient() {
+        return this.netConnection;
     }
 
     @FromXML

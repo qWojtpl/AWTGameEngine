@@ -5,8 +5,12 @@ import pl.AWTGameEngine.engine.steam.SteamManager;
 
 public class SteamHelper {
 
+    public static boolean canInitSteam() {
+        return Dependencies.getAppProperties().getPropertyAsBoolean("useSteamworks");
+    }
+
     public static boolean isSteamAvailable() {
-        return Dependencies.getAppProperties().getPropertyAsBoolean("useSteamworks") && SteamManager.getInstance().isInitialized();
+        return SteamManager.getInstance().isInitialized();
     }
 
 }

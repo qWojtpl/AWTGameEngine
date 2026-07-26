@@ -434,7 +434,7 @@ public class GameObject {
         private TransformSet cachedPosition = null;
         private TransformSet cachedSize = null;
         private QuaternionTransformSet cachedRotation = null;
-        private int owner = -1;
+        private long owner = -1;
 
         public final NetBlock onPositionSynchronize() {
             if(getPosition().equals(cachedPosition) && getSize().equals(cachedSize) && getQuaternionRotation().equals(cachedRotation)) {
@@ -489,11 +489,11 @@ public class GameObject {
             cachedRotation = null;
         }
 
-        public int getOwner() {
+        public long getOwner() {
             return this.owner;
         }
 
-        public void setOwner(int owner) {
+        public void setOwner(long owner) {
             this.owner = owner;
         }
 

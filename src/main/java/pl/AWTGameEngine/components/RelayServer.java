@@ -9,8 +9,8 @@ import pl.AWTGameEngine.components.base.NetServer;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.net.ConnectedClient;
 import pl.AWTGameEngine.objects.net.NetBlock;
+import pl.AWTGameEngine.objects.net.StandardNetConnection;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.List;
 public class RelayServer extends NetServer {
 
     private String relayServerAddress;
-    private ConnectedClient relayConnection;
+    private StandardNetConnection relayConnection;
     private int sessionId;
 
     public RelayServer(GameObject object) {
@@ -38,7 +38,7 @@ public class RelayServer extends NetServer {
         Logger.info("Connecting to relay server (" + relayServerAddress + ")...");
         try {
             String[] address = relayServerAddress.split(":");
-            relayConnection = new ConnectedClient(0, new Socket(address[0], Integer.parseInt(address[1])));
+            relayConnection = new StandardNetConnection(0, new Socket(address[0], Integer.parseInt(address[1])));
         } catch(Exception e) {
             Logger.exception("Cannot connect to relay server", e);
             return;
@@ -64,7 +64,7 @@ public class RelayServer extends NetServer {
                 try {
                     String data = relayConnection.getBufferedReader().readLine();
                     if(!data.startsWith("$")) {
-                        NetDeserializer.deserialize(getScene(), data, new ConnectedClient(0, null), new Server(null));
+                        NetDeserializer.deserialize(getScene(), data, new StandardNetConnection(0, null), new Server(null));
                     } else {
                         if(data.startsWith("$clientConnect:")) {
                             clearObjectCaches();

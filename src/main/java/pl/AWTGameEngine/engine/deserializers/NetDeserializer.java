@@ -4,17 +4,17 @@ import pl.AWTGameEngine.components.Server;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
-import pl.AWTGameEngine.objects.net.ConnectedClient;
+import pl.AWTGameEngine.objects.net.NetConnection;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.scenes.Scene;
 
 public class NetDeserializer {
 
-    public static void deserialize(Scene scene, String response, ConnectedClient client) {
+    public static void deserialize(Scene scene, String response, NetConnection client) {
         deserialize(scene, response, client, null);
     }
 
-    public static void deserialize(Scene scene, String response, ConnectedClient client, Server server) {
+    public static void deserialize(Scene scene, String response, NetConnection client, Server server) {
         try {
             String[] split = response.split(";");
             String objectId = split[0];
@@ -48,14 +48,14 @@ public class NetDeserializer {
         }
     }
 
-    private static String parseVariables(String input, String variable, ConnectedClient client) {
+    private static String parseVariables(String input, String variable, NetConnection client) {
         if(input.contains(variable)) {
             input.replace(variable, String.valueOf(client.getId()));
         }
         return input;
     }
 
-    private static GameObject createObject(String input, Scene scene, ConnectedClient client, Server server) {
+    private static GameObject createObject(String input, Scene scene, NetConnection client, Server server) {
         GameObject object = scene.getGameObjectByName(input);
         if(object == null) {
             if(server != null) {

@@ -2,7 +2,7 @@ package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.annotations.methods.EventMethod;
 import pl.AWTGameEngine.components.Server;
-import pl.AWTGameEngine.objects.net.ConnectedClient;
+import pl.AWTGameEngine.objects.net.NetConnection;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.net.NetBlock;
 
@@ -15,8 +15,8 @@ import java.net.Socket;
  * <br><br>
  * Available events:
  * <ul>
- * <li>{@link #onClientConnect(Server, ConnectedClient)}</li>
- * <li>{@link #onClientDisconnect(Server, ConnectedClient)}</li>
+ * <li>{@link #onClientConnect(Server, NetConnection)}</li>
+ * <li>{@link #onClientDisconnect(Server, NetConnection)}</li>
  * <li>{@link #onClientTryToConnect(Socket)}</li>
  * <li>{@link #onSynchronize()}</li>
  * <li>{@link #onSynchronizeReceived(String)}</li>
@@ -32,12 +32,12 @@ public abstract class NetComponent extends ObjectComponent {
     }
 
     @EventMethod
-    public void onClientConnect(Server server, ConnectedClient client) {
+    public void onClientConnect(Server server, NetConnection client) {
 
     }
 
     @EventMethod
-    public void onClientDisconnect(Server server, ConnectedClient client) {
+    public void onClientDisconnect(Server server, NetConnection client) {
 
     }
 
@@ -55,7 +55,6 @@ public abstract class NetComponent extends ObjectComponent {
 
     /**
      * Object synchronization is handled over a TCP connection to ensure that component will be updated.
-     * onSynchronize event is executed only on server side.
      * @return NetBlock
      */
     @EventMethod
@@ -63,6 +62,10 @@ public abstract class NetComponent extends ObjectComponent {
         return new NetBlock();
     }
 
+    /**
+     * Event is fired when synchronization is received in the component.
+     * @param data Data from the NetBlock
+     */
     @EventMethod
     public void onSynchronizeReceived(String data) {
 
@@ -73,10 +76,19 @@ public abstract class NetComponent extends ObjectComponent {
 
     }
 
+    /**
+     * Before component synchronization, canSynchronize() will be fired.
+     * Here you can check cache, if the component was updated.
+     * @return State if component can be synchronized
+     */
     public boolean canSynchronize() {
         return true;
     }
 
+    /**
+     * Method is called when net cache should be cleared (e.g. new client connected).
+     * You can change here, for example, a boolean which points if the component was updated.
+     */
     public void clearNetCache() {
 
     }
