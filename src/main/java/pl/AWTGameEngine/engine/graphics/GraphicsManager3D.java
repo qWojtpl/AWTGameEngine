@@ -9,9 +9,13 @@ import pl.AWTGameEngine.objects.transform.TransformSet;
 
 public abstract class GraphicsManager3D {
 
+    public abstract void preloadShape(String path);
+
     public abstract void createRenderable(RenderOptions3D options);
 
     public abstract void removeRenderable(String identifier);
+
+    public abstract RenderOptions3D getRenderable(String identifier);
 
     public abstract void updatePosition(String identifier, TransformSet position);
 

@@ -167,6 +167,7 @@ public abstract class Base3DShape extends NetComponent {
     public void onAddComponent() {
         this.graphicsManager3D = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
         createShape();
+        graphicsManager3D.preloadShape(graphicsManager3D.getRenderable(getObject().getIdentifier()).getShapePath());
     }
 
     @Override

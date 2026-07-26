@@ -20,6 +20,7 @@ public class SteamManager {
 
     private static SteamManager steamManager;
     private SteamLoop steamLoop;
+    private boolean initialized = false;
     // Steam closeable objects
     private SteamUser user;
     private SteamUserStats stats;
@@ -48,6 +49,7 @@ public class SteamManager {
             createLoop();
             createObjects();
             Logger.info("Connection initialized.");
+            initialized = true;
         } catch(Exception e) {
             Logger.exception("Exception while initializing Steamworks API", e);
             if(Dependencies.getAppProperties().getPropertyAsBoolean("crashWithoutSteam")) {
@@ -91,6 +93,10 @@ public class SteamManager {
 
     public SteamLoop getSteamLoop() {
         return this.steamLoop;
+    }
+
+    public boolean isInitialized() {
+        return this.initialized;
     }
 
     public SteamUser getUser() {

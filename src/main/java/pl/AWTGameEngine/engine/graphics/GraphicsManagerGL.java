@@ -31,6 +31,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     private final ConcurrentLinkedQueue<Texture> alphaTextures = new ConcurrentLinkedQueue<>();
     private final ConcurrentHashMap<String, Shape> shapes = new ConcurrentHashMap<>();
     private final ConcurrentLinkedQueue<Sprite> texturesToDelete = new ConcurrentLinkedQueue<>();
+    private final ConcurrentHashMap<String, float[]> preloadedVertices = new ConcurrentHashMap<>();
 
     public GraphicsManagerGL(PanelGL panelGL) {
         this.panelGL = panelGL;
@@ -39,11 +40,16 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     public void initShape(String path, GL4 gl) {
 
         float[] vertices;
-        try {
-             vertices = ModelLoader.getVertices(path, true);
-        } catch(Exception e) {
-            Logger.exception("Exception while getting vertices of " + path, e);
-            return;
+        if(preloadedVertices.containsKey(path)) {
+            vertices = preloadedVertices.get(path);
+            preloadedVertices.remove(path);
+        } else {
+            try {
+                vertices = ModelLoader.getVertices(path, true);
+            } catch (Exception e) {
+                Logger.exception("Exception while getting vertices of " + path, e);
+                return;
+            }
         }
 
         int[] tmp = new int[1];
@@ -71,6 +77,10 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         shapes.put(path, new Shape(path, vao, vbo, vertices.length / 8));
         Logger.info("Model " + path + " loaded.");
+    }
+
+    public void preloadShape(String path) {
+        preloadedVertices.put(path, ModelLoader.getVertices(path, true));
     }
 
     public void drawScene(GL4 gl, float[] viewProj) {
@@ -210,6 +220,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     public void removeRenderable(String identifier) {
         updateSprite(identifier, null, true);
         renderables.remove(identifier);
+    }
+
+    @Override
+    public RenderOptions3D getRenderable(String identifier) {
+        return renderables.get(identifier);
     }
 
     @Override
