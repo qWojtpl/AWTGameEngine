@@ -114,8 +114,8 @@ public class Server extends NetServer {
             return;
         }
 
-        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientTryToConnect#Socket")) {
-            String message = ((NetComponent) component).onClientTryToConnect(clientSocket);
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientTryToConnect#String")) {
+            String message = ((NetComponent) component).onClientTryToConnect(getClientAddress(clientSocket));
             if(message != null) {
                 joinDisconnect(clientSocket, message);
                 return;

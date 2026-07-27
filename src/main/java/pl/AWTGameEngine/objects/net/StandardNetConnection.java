@@ -15,7 +15,7 @@ public class StandardNetConnection extends NetConnection {
     public StandardNetConnection(long id, Socket socket) throws IOException {
         super(id);
         this.socket = socket;
-        if(socket != null) {
+        if (socket != null) {
             this.printWriter = new PrintWriter(socket.getOutputStream(), true);
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } else {
@@ -24,7 +24,6 @@ public class StandardNetConnection extends NetConnection {
         }
     }
 
-    @Override
     public void sendInitMessage() {
         sendMessage(String.valueOf(id));
     }
@@ -32,11 +31,6 @@ public class StandardNetConnection extends NetConnection {
     @Override
     public void sendMessage(String message) {
         printWriter.println(message);
-    }
-
-    @Override
-    public void sendBlock(NetBlock block) {
-        sendMessage(block.formMessage());
     }
 
     @Override

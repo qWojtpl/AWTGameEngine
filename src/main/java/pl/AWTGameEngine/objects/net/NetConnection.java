@@ -10,11 +10,11 @@ public abstract class NetConnection {
         this.id = id;
     }
 
-    public abstract void sendInitMessage();
-
     public abstract void sendMessage(String message);
 
-    public abstract void sendBlock(NetBlock block);
+    public void sendBlock(NetBlock block) {
+        sendMessage(block.formMessage());
+    }
 
     public abstract void close() throws IOException;
 

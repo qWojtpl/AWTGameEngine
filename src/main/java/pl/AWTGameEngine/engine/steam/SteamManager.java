@@ -2,6 +2,10 @@ package pl.AWTGameEngine.engine.steam;
 
 import com.codedisaster.steamworks.*;
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.components.SteamRelayClient;
+import pl.AWTGameEngine.components.SteamRelayServer;
+import pl.AWTGameEngine.components.base.NetComponent;
+import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.WaitForSeconds;
 import pl.AWTGameEngine.engine.helpers.ImageHelper;
@@ -21,7 +25,9 @@ public class SteamManager {
     private static SteamManager steamManager;
     private SteamLoop steamLoop;
     private boolean initialized = false;
-    private boolean gameServerInitialized = false;
+    private boolean networkInitialized = false;
+    private SteamRelayServer serverHandler;
+    private SteamRelayClient clientHandler;
     // Steam closeable objects
     private SteamUser user;
     private SteamUserStats stats;
@@ -29,6 +35,7 @@ public class SteamManager {
     private SteamUtils utils;
     // Steam network closeable objects
     private SteamNetworking network;
+    private SteamMatchmaking matchmaking;
     // Managers
     private SteamAchievementsManager achievementsManager;
     // Cache
@@ -64,29 +71,6 @@ public class SteamManager {
         }
     }
 
-    public void initGameServer(short gamePort, short queryPort, String version) {
-        if(gameServerInitialized) {
-            throw new RuntimeException("Steam GameServer is already initialized!");
-        }
-        try {
-            Logger.info("Initializing Steamworks GameServer...");
-            SteamLibraryLoader loader = new SteamLibraryLoaderLwjgl3();
-            if(!SteamGameServerAPI.loadLibraries(loader)) {
-                throw new RuntimeException("Cannot load native libraries!");
-            }
-            if(!SteamGameServerAPI.init(
-                    0x7F000001, gamePort, queryPort,
-                    SteamGameServerAPI.ServerMode.Authentication, version)) {
-                throw new RuntimeException("Cannot init GameServer!");
-            }
-            createNetworkObjects();
-            Logger.info("GameServer initialized.");
-            gameServerInitialized = true;
-        } catch(Exception e) {
-            Logger.exception("Exception while initializing Steamworks GameServer", e);
-        }
-    }
-
     public void dispose() {
         Logger.info("Shutting down Steam API connection...");
         if(initialized) {
@@ -99,18 +83,17 @@ public class SteamManager {
             steamLoop = null;
             playerAvatars.clear();
         }
-        if(gameServerInitialized) {
+        if(networkInitialized) {
             network.dispose();
-            SteamGameServerAPI.shutdown();
+            matchmaking.dispose();
+            serverHandler = null;
+            clientHandler = null;
         }
     }
 
     public void updateCallbacks() {
         if(initialized) {
             SteamAPI.runCallbacks();
-        }
-        if(gameServerInitialized) {
-            SteamGameServerAPI.runCallbacks();
         }
     }
 
@@ -131,9 +114,15 @@ public class SteamManager {
         utils = new SteamUtils(utilsHandler);
     }
 
-    private void createNetworkObjects() {
+    public void createNetworkObjects() {
+        if(networkInitialized) {
+            return;
+        }
         SteamNetworkingHandler networkingHandler = new SteamNetworkingHandler();
         network = new SteamNetworking(networkingHandler);
+        SteamMatchmakingHandler matchmakingHandler = new SteamMatchmakingHandler();
+        matchmaking = new SteamMatchmaking(matchmakingHandler);
+        networkInitialized = true;
     }
 
     public SteamLoop getSteamLoop() {
@@ -162,6 +151,10 @@ public class SteamManager {
 
     public SteamNetworking getNetwork() {
         return network;
+    }
+
+    public SteamMatchmaking getMatchmaking() {
+        return matchmaking;
     }
 
     public Sprite getPlayerAvatarSprite(SteamID steamID) {
@@ -206,6 +199,14 @@ public class SteamManager {
         }
     }
 
+    public void setServerHandler(SteamRelayServer server) {
+        this.serverHandler = server;
+    }
+
+    public void setClientHandler(SteamRelayClient client) {
+        this.clientHandler = client;
+    }
+
     public static SteamManager getInstance() {
         if(steamManager == null) {
             steamManager = new SteamManager();
@@ -222,9 +223,41 @@ public class SteamManager {
 
     static class SteamUserHandler implements SteamUserCallback { }
     static class SteamStatsHandler implements SteamUserStatsCallback { }
-    static class SteamFriendsHandler implements SteamFriendsCallback { }
+    static class SteamFriendsHandler implements SteamFriendsCallback {
+
+        @Override
+        public void onGameLobbyJoinRequested(SteamID steamIDLobby, SteamID steamIDFriend) {
+            getInstance().clientHandler.join(steamIDLobby, steamIDFriend);
+        }
+
+    }
     static class SteamUtilsHandler implements SteamUtilsCallback { }
 
-    static class SteamNetworkingHandler implements SteamNetworkingCallback { }
+    static class SteamNetworkingHandler implements SteamNetworkingCallback {
+
+        @Override
+        public void onP2PSessionRequest(SteamID steamIDRemote) {
+            Logger.info("Client with ID " + steamIDRemote + " tries to connect...");
+            boolean accept = true;
+            for(ObjectComponent component : getInstance().serverHandler.getObject().getScene().getSceneEventHandler().getComponents("onClientTryToConnect#String")) {
+                String reason = ((NetComponent) component).onClientTryToConnect(String.valueOf(SteamID.getNativeHandle(steamIDRemote)));
+                if(reason != null) {
+                    accept = false;
+                }
+            }
+            if(accept) {
+                getInstance().serverHandler.acceptClient(steamIDRemote);
+            } else {
+                getInstance().serverHandler.rejectClient(steamIDRemote);
+            }
+        }
+
+    }
+
+    static class SteamMatchmakingHandler implements SteamMatchmakingCallback {
+
+
+
+    }
 
 }

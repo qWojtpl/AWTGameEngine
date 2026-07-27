@@ -1,0 +1,6 @@
+<scene title="Net demo (Steam client)" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+    <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="WEB" />
+    <object id="client">
+        <SteamRelayClient />
+    </object>
+</scene>

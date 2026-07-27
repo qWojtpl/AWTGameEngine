@@ -17,7 +17,7 @@ import java.net.Socket;
  * <ul>
  * <li>{@link #onClientConnect(Server, NetConnection)}</li>
  * <li>{@link #onClientDisconnect(Server, NetConnection)}</li>
- * <li>{@link #onClientTryToConnect(Socket)}</li>
+ * <li>{@link #onClientTryToConnect(String)}</li>
  * <li>{@link #onSynchronize()}</li>
  * <li>{@link #onSynchronizeReceived(String)}</li>
  * <li>{@link #onNetUpdate()}</li>
@@ -45,11 +45,12 @@ public abstract class NetComponent extends ObjectComponent {
      * Event is fired when client tries to connect and after max client check is fired.
      * You can check authentication, blacklist or whitelist here.
      * Return null to let the client in, or return a string, to send a message to the client.
-     * @param socket Client socket
+     * @param clientIdentifier Client IP address if you're using {@link pl.AWTGameEngine.objects.net.StandardNetConnection},
+     *                         or SteamID (long) if you're using {@link pl.AWTGameEngine.objects.net.SteamNetConnection}
      * @return null or join-disconnect message
      */
     @EventMethod
-    public String onClientTryToConnect(Socket socket) {
+    public String onClientTryToConnect(String clientIdentifier) {
         return null;
     }
 
