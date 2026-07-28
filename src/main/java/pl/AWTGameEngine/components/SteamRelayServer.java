@@ -36,7 +36,7 @@ public class SteamRelayServer extends NetServer {
         }
         SteamManager.getInstance().createNetworkObjects();
         SteamManager.getInstance().setServerHandler(this);
-        SteamManager.getInstance().getMatchmaking().createLobby(SteamMatchmaking.LobbyType.FriendsOnly, 4);
+        SteamManager.getInstance().getMatchmaking().createLobby(SteamMatchmaking.LobbyType.FriendsOnly, maxClients);
     }
 
     public void acceptClient(SteamID steamId) {
