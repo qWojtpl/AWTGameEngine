@@ -36,8 +36,8 @@ public class GUIRenderer extends ObjectComponent {
     public void onAddComponent() {
         PanelGL panelGL = (PanelGL) getWindow().getCurrentScene().getPanel();
         graphicsManagerGL = (GraphicsManagerGL) panelGL.getGraphicsManager3D();
-        renderOptions3D = new RenderOptions3D(getObject().getIdentifier() + "-" + "GUIRenderer");
-        renderOptions3D.setPosition(new TransformSet(10, 0, 10))
+        renderOptions3D = new RenderOptions3D(getObject().getIdentifier() + "-" + "GUIRenderer")
+                .setPosition(new TransformSet(10, 0, 10))
                 .setSize(new TransformSet(100, 100, 100))
                 .setShader("shaders/shader")
                 .setShapePath("models/box.obj")

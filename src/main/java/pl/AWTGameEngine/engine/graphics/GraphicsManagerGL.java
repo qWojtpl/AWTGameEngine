@@ -151,9 +151,8 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                 textures.get(sprite).destroy(gl);
                 textures.remove(sprite);
                 Dependencies.getResourceManager().releaseSpriteResource(sprite.getImagePath());
+                texturesToDelete.remove(sprite);
             }
-
-            texturesToDelete.clear();
         }
     }
 
