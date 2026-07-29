@@ -120,6 +120,10 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         BaseLoop netLoop = new NetLoop(window);
         netLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));
         window.setNetLoop(netLoop);
+
+        BaseLoop guiLoop = new GUILoop(window);
+        guiLoop.setTargetFps(15);
+        window.setGUILoop(guiLoop);
     }
 
     private void startLoops(BaseWindow window, boolean server) {
@@ -127,6 +131,7 @@ public class WindowsManager extends CommandConsole.ParentCommand {
 
         if(!server) {
             window.getRenderLoop().start();
+            window.getGUILoop().start();
         }
 
         window.getPhysicsLoop().start();

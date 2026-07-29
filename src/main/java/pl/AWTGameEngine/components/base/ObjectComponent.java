@@ -140,6 +140,11 @@ public abstract class ObjectComponent {
 
     }
 
+    @EventMethod
+    public void onGUIUpdate() {
+
+    }
+
     /**
      * Method is called when X or Y of object is changed.
      * @return True when position can be updated. Return false to cancel position update.

@@ -235,6 +235,12 @@ public class Scene {
         }
     }
 
+    public void guiUpdate() {
+        for(ObjectComponent component : sceneEventHandler.getComponents("onGUIUpdate")) {
+            component.onGUIUpdate();
+        }
+    }
+
     public void updateSecond() {
         for(ObjectComponent component : sceneEventHandler.getComponents("onEverySecond")) {
             component.onEverySecond();

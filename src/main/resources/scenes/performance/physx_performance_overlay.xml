@@ -1,5 +1,6 @@
 <scene updateFPS="60" renderFPS="60" physicsFPS="1" sameSize="true">
     <object id="health">
+        <GUIRenderer />
         <WebPerformanceText _package="pl.AWTGameEngine.custom.performance" />
     </object>
 </scene>

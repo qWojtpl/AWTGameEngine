@@ -38,6 +38,7 @@ public interface BaseWindow {
     BaseLoop getUpdateLoop();
     BaseLoop getPhysicsLoop();
     BaseLoop getNetLoop();
+    BaseLoop getGUILoop();
     MouseListener getMouseListener();
     KeyListener getKeyListener();
     WindowListener getWindowListener();
@@ -55,6 +56,7 @@ public interface BaseWindow {
     void setUpdateLoop(BaseLoop loop);
     void setPhysicsLoop(BaseLoop loop);
     void setNetLoop(BaseLoop loop);
+    void setGUILoop(BaseLoop loop);
     void setMouseListener(MouseListener listener);
     void setKeyListener(KeyListener listener);
     void setWindowListener(WindowListener windowListener);

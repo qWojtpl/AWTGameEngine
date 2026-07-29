@@ -1,4 +1,7 @@
-<scene title="Web demo" renderFPS="144" updateFPS="60" physicsFPS="10" sameSize="true">
+<scene title="Web demo" renderFPS="0" updateFPS="60" physicsFPS="10" sameSize="true">
+    <object id="gui">
+        <GUIRenderer />
+    </object>
     <object id="blankSquare" x="200" y="200" sizeX="200" sizeY="200">
         <BlankRenderer color="red" />
     </object>

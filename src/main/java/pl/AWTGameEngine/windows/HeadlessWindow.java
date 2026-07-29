@@ -26,6 +26,7 @@ public class HeadlessWindow implements BaseWindow {
     private BaseLoop renderLoop;
     private BaseLoop physicsLoop;
     private BaseLoop netLoop;
+    private BaseLoop guiLoop;
     private SceneLoader sceneLoader;
     private final HashMap<Scene, Boolean> scenes = new HashMap<>();
 
@@ -165,6 +166,11 @@ public class HeadlessWindow implements BaseWindow {
     }
 
     @Override
+    public BaseLoop getGUILoop() {
+        return this.guiLoop;
+    }
+
+    @Override
     public MouseListener getMouseListener() {
         return this.mouseListener;
     }
@@ -252,6 +258,11 @@ public class HeadlessWindow implements BaseWindow {
     @Override
     public void setNetLoop(BaseLoop loop) {
         this.netLoop = loop;
+    }
+
+    @Override
+    public void setGUILoop(BaseLoop loop) {
+        this.guiLoop = loop;
     }
 
     @Override

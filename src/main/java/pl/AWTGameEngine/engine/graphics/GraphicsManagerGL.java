@@ -3,10 +3,13 @@ package pl.AWTGameEngine.engine.graphics;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
+import javafx.scene.image.WritableImage;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
+import pl.AWTGameEngine.engine.helpers.ImageHelper;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
@@ -16,10 +19,14 @@ import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -31,6 +38,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     private final ConcurrentLinkedQueue<Texture> alphaTextures = new ConcurrentLinkedQueue<>();
     private final ConcurrentHashMap<String, Shape> shapes = new ConcurrentHashMap<>();
     private final ConcurrentLinkedQueue<Sprite> texturesToDelete = new ConcurrentLinkedQueue<>();
+    private final Set<Sprite> texturesToUpdate = ConcurrentHashMap.newKeySet();
     private final ConcurrentHashMap<String, float[]> preloadedVertices = new ConcurrentHashMap<>();
 
     public GraphicsManagerGL(PanelGL panelGL) {
@@ -84,6 +92,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     public void drawScene(GL4 gl, float[] viewProj) {
+
+        for(Sprite s : texturesToUpdate) {
+            updateTexture(gl, s);
+            texturesToUpdate.remove(s);
+        }
 
         List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values());
         renderableList.sort(Comparator.comparing(RenderOptions3D::isXrayRender));
@@ -287,6 +300,47 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         if(gl != null) {
             freeTextures(gl);
         }
+    }
+
+    public void updateTexture(Sprite sprite) {
+        if(texturesToUpdate.contains(sprite)) {
+            return;
+        }
+        texturesToUpdate.add(sprite);
+    }
+
+    public void updateTexture(GL4 gl, Sprite sprite) {
+        if(!textures.containsKey(sprite)) {
+            createTexture(gl, sprite);
+            return;
+        }
+        BufferedImage image = sprite.getImage();
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        int[] pixels = ((DataBufferInt) image
+                .getRaster()
+                .getDataBuffer())
+                .getData();
+
+        IntBuffer buffer = IntBuffer.wrap(pixels);
+
+        textures.get(sprite).bind(gl);
+
+        gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 4);
+
+        gl.glTexSubImage2D(
+                GL.GL_TEXTURE_2D,
+                0,
+                0,
+                0,
+                width,
+                height,
+                GL.GL_BGRA,
+                GL.GL_UNSIGNED_BYTE,
+                buffer
+        );
     }
 
 }

@@ -52,6 +52,7 @@ public class SpriteRenderer extends NetComponent {
         if(sprite != null && spriteChanged) {
             g.execute(MessageFormat.format("drawImage(\"{0}\", \"{1}\");",
                     getObject().getIdentifier(), sprite.getImageBase64(true)));
+            spriteChanged = false;
         }
     }
 

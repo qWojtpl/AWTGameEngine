@@ -28,6 +28,7 @@ public class Window extends Frame implements BaseWindow {
     private BaseLoop updateLoop;
     private BaseLoop physicsLoop;
     private BaseLoop netLoop;
+    private BaseLoop guiLoop;
     private MouseListener mouseListener;
     private KeyListener keyListener;
     private WindowListener windowListener;
@@ -162,6 +163,11 @@ public class Window extends Frame implements BaseWindow {
         return this.netLoop;
     }
 
+    @Command("guiLoop")
+    public BaseLoop getGUILoop() {
+        return this.guiLoop;
+    }
+
     public MouseListener getMouseListener() {
         return this.mouseListener;
     }
@@ -234,6 +240,10 @@ public class Window extends Frame implements BaseWindow {
 
     public void setNetLoop(BaseLoop loop) {
         this.netLoop = loop;
+    }
+
+    public void setGUILoop(BaseLoop loop) {
+        this.guiLoop = loop;
     }
 
     public void setMouseListener(MouseListener listener) {

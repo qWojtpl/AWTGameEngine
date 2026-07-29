@@ -34,6 +34,14 @@ public class Sprite {
         this.image = image;
     }
 
+    public void updateImage(WritableImage image) {
+        this.image = ImageHelper.imageToBufferedImage(image);
+    }
+
+    public void updateImage(BufferedImage image) {
+        this.image = image;
+    }
+
     public String getImagePath() {
         return this.imagePath;
     }
@@ -92,7 +100,6 @@ public class Sprite {
     }
 
 
-
     public boolean isTransparent() {
         if(image == null) {
             return false;
@@ -122,7 +129,11 @@ public class Sprite {
         String returnable;
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             String[] split = imagePath.split("\\.");
-            ImageIO.write(image, split[split.length - 1], stream);
+            String extension = "png";
+            if(split.length > 1) {
+                extension = split[split.length - 1];
+            }
+            ImageIO.write(image, extension, stream);
             byte[] imageBytes = stream.toByteArray();
             returnable = new String(Base64.getEncoder().encode(imageBytes), StandardCharsets.UTF_8);
         } catch(IOException e) {
