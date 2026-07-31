@@ -118,11 +118,11 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         window.setPhysicsLoop(physicsLoop);
 
         BaseLoop netLoop = new NetLoop(window);
-        netLoop.setTargetFps(appProperties.getPropertyAsInteger("updateFps"));
+        netLoop.setTargetFps(appProperties.getPropertyAsInteger("netFps"));
         window.setNetLoop(netLoop);
 
         BaseLoop guiLoop = new GUILoop(window);
-        guiLoop.setTargetFps(15);
+        guiLoop.setTargetFps(appProperties.getPropertyAsInteger("guiFps"));
         window.setGUILoop(guiLoop);
     }
 
@@ -178,6 +178,7 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         // so we need to wait for PhysicsLoop to end a simulation.
         window.getPhysicsLoop().kill(() -> {
             window.unloadScenes();
+            window.getGUILoop().kill();
             window.getNetLoop().kill();
             window.getRenderLoop().kill();
             window.getUpdateLoop().kill();

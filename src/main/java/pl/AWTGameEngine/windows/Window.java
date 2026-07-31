@@ -286,7 +286,7 @@ public class Window extends Frame implements BaseWindow {
         if(dialogs.size() != scenes.keySet().size() - 1) {
             Dialog dialog = new Dialog(this, false);
             dialog.setUndecorated(true);
-            dialog.setVisible(true);
+//            dialog.setVisible(true);
             dialog.setBackground(new Color(100, 0, 0, 0));
             dialog.setBounds(getX(), getY(), getBaseWidth(), getBaseHeight());
             dialog.setFocusable(false);

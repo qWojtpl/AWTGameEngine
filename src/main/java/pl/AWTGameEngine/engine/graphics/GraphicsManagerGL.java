@@ -37,7 +37,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     private final ConcurrentHashMap<Sprite, Texture> textures = new ConcurrentHashMap<>();
     private final ConcurrentLinkedQueue<Texture> alphaTextures = new ConcurrentLinkedQueue<>();
     private final ConcurrentHashMap<String, Shape> shapes = new ConcurrentHashMap<>();
-    private final ConcurrentLinkedQueue<Sprite> texturesToDelete = new ConcurrentLinkedQueue<>();
+    private final Set<Sprite> texturesToDelete = ConcurrentHashMap.newKeySet();
     private final Set<Sprite> texturesToUpdate = ConcurrentHashMap.newKeySet();
     private final ConcurrentHashMap<String, float[]> preloadedVertices = new ConcurrentHashMap<>();
 
@@ -313,31 +313,17 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             createTexture(gl, sprite);
             return;
         }
-        BufferedImage image = sprite.getImage();
 
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        int[] pixels = ((DataBufferInt) image
-                .getRaster()
-                .getDataBuffer())
-                .getData();
-
-        IntBuffer buffer = IntBuffer.wrap(pixels);
+        IntBuffer buffer = IntBuffer.wrap(((DataBufferInt) sprite.getImage().getRaster().getDataBuffer()).getData());
 
         textures.get(sprite).bind(gl);
 
         gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 4);
 
-        gl.glTexSubImage2D(
-                GL.GL_TEXTURE_2D,
-                0,
-                0,
-                0,
-                width,
-                height,
-                GL.GL_BGRA,
-                GL.GL_UNSIGNED_BYTE,
+        gl.glTexSubImage2D(GL.GL_TEXTURE_2D, 0, 0, 0,
+                sprite.getImage().getWidth(),
+                sprite.getImage().getHeight(),
+                GL.GL_BGRA, GL.GL_UNSIGNED_BYTE,
                 buffer
         );
     }
