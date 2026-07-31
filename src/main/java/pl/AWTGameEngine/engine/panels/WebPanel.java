@@ -10,6 +10,8 @@ import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.helpers.FXHelper;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.scenes.Scene;
+import pl.AWTGameEngine.windows.BaseWindow;
+import pl.AWTGameEngine.windows.HeadlessWindow;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
@@ -17,14 +19,14 @@ import java.awt.*;
 public class WebPanel extends JFXPanel implements PanelObject {
 
     private final Scene scene;
-    private final Window window;
+    private final BaseWindow window;
     private WebView webView;
     private final Camera camera;
     private WebGraphicsManager graphicsManager;
 
     public WebPanel(Scene scene) {
         this.scene = scene;
-        this.window = (Window) scene.getWindow();
+        this.window = scene.getWindow();
         setLayout(null);
         setBackground(Color.BLACK);
 
@@ -36,7 +38,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
     @Override
     public void onSceneLoad() {
-        if(window.isServerWindow()) {
+        if(window instanceof HeadlessWindow) {
             return;
         }
 
@@ -107,7 +109,9 @@ public class WebPanel extends JFXPanel implements PanelObject {
     @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
-        window.remove(this);
+        if(!(window instanceof HeadlessWindow)) {
+            ((Window) window).remove(this);
+        }
     }
 
     @Override
@@ -115,7 +119,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
         return this.scene;
     }
 
-    public Window getWindow() {
+    public BaseWindow getWindow() {
         return this.window;
     }
 

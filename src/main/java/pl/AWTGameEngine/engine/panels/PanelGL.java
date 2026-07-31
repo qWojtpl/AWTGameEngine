@@ -9,6 +9,8 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.scenes.Scene;
+import pl.AWTGameEngine.windows.BaseWindow;
+import pl.AWTGameEngine.windows.HeadlessWindow;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
@@ -17,7 +19,7 @@ import java.awt.image.BufferedImage;
 public class PanelGL extends Panel implements PanelObject {
 
     private final Scene scene;
-    private final Window window;
+    private final BaseWindow window;
     private final Camera camera;
     private GraphicsManager3D graphicsManager3D;
     private final PhysXManager physXManager;
@@ -29,11 +31,11 @@ public class PanelGL extends Panel implements PanelObject {
 
     public PanelGL(Scene scene) {
         this.scene = scene;
-        this.window = (Window) scene.getWindow();
+        this.window = scene.getWindow();
         this.camera = new Camera(this);
         this.physXManager = PhysXManager.getInstance();
         physXManager.createScene(scene);
-        if(!window.isServerWindow()) {
+        if(!(window instanceof HeadlessWindow)) {
             this.graphicsManager3D = new GraphicsManagerGL(this);
             initOpenGL(getWindow().getBaseWidth(), getWindow().getBaseHeight());
         }
@@ -51,7 +53,7 @@ public class PanelGL extends Panel implements PanelObject {
     }
 
     @Override
-    public Window getWindow() {
+    public BaseWindow getWindow() {
         return this.window;
     }
 
@@ -90,7 +92,9 @@ public class PanelGL extends Panel implements PanelObject {
     @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
-        window.remove(glCanvas);
+        if(!(window instanceof HeadlessWindow)) {
+            ((Window) window).remove(glCanvas);
+        }
     }
 
     @Override

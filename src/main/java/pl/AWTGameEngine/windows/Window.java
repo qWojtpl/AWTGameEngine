@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Window extends Frame implements BaseWindow {
 
-    private final boolean serverWindow;
     private boolean sameSize = false;
     private final int WIDTH = 1920;
     private BaseLoop renderLoop;
@@ -43,8 +42,7 @@ public class Window extends Frame implements BaseWindow {
     private int[] ratio = new int[]{16,9};
     private final List<Dialog> dialogs = new ArrayList<>();
 
-    public Window(boolean serverWindow) {
-        this.serverWindow = serverWindow;
+    public Window() {
         AppProperties appProperties = Dependencies.getAppProperties();
         font = new Font(
                 appProperties.getProperty("font"),
@@ -125,10 +123,6 @@ public class Window extends Frame implements BaseWindow {
         for(Scene scene : scenes.keySet()) {
             scene.getPanel().setSize(new Dimension(getWidth(), (int) (getWidth() * ((double) this.ratio[1] / this.ratio[0]))));
         }
-    }
-
-    public boolean isServerWindow() {
-        return this.serverWindow;
     }
 
     public boolean isSameSize() {
@@ -286,8 +280,7 @@ public class Window extends Frame implements BaseWindow {
         if(dialogs.size() != scenes.keySet().size() - 1) {
             Dialog dialog = new Dialog(this, false);
             dialog.setUndecorated(true);
-//            dialog.setVisible(true);
-            dialog.setBackground(new Color(100, 0, 0, 0));
+            dialog.setBackground(new Color(0, 0, 0, 0));
             dialog.setBounds(getX(), getY(), getBaseWidth(), getBaseHeight());
             dialog.setFocusable(false);
             dialogs.add(dialog);

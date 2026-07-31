@@ -6,6 +6,8 @@ import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.scenes.Scene;
+import pl.AWTGameEngine.windows.BaseWindow;
+import pl.AWTGameEngine.windows.HeadlessWindow;
 import pl.AWTGameEngine.windows.Window;
 
 import javax.swing.*;
@@ -14,7 +16,7 @@ import java.awt.image.BufferStrategy;
 
 public class DefaultPanel extends JPanel implements PanelObject {
 
-    private final Window window;
+    private final BaseWindow window;
     private final Scene scene;
     private final Camera camera;
     private final GraphicsManager graphicsManager = new GraphicsManager();
@@ -25,7 +27,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
         super(false);
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
-        this.window = (Window) scene.getWindow();
+        this.window = scene.getWindow();
         this.scene = scene;
         this.camera = new Camera(this);
         PhysXManager.getInstance().createScene(scene);
@@ -85,7 +87,9 @@ public class DefaultPanel extends JPanel implements PanelObject {
     @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
-        window.remove(this);
+        if(!(window instanceof HeadlessWindow)) {
+            ((Window) window).remove(this);
+        }
     }
 
     @Override
@@ -93,7 +97,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
         return this.scene;
     }
 
-    public Window getWindow() {
+    public BaseWindow getWindow() {
         return this.window;
     }
 

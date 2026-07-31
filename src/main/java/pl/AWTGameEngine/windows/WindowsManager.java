@@ -26,7 +26,7 @@ public class WindowsManager extends CommandConsole.ParentCommand {
 
     @Command(value = "create", argumentNames = { "path" })
     public BaseWindow createWindow(String scenePath) {
-        return createWindow(scenePath, null, true);
+        return createWindow(scenePath, null, !SteamHelper.isSteamAvailable());
     }
 
     public BaseWindow createWindow(String scenePath, RenderEngine renderEngine, boolean decorated) {
@@ -41,10 +41,9 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         if(server) {
             window = new HeadlessWindow();
         } else {
-            window = new Window(server);
+            window = new Window();
             if(!decorated) {
                 ((Window) window).setUndecorated(true);
-                ((Window) window).setType(java.awt.Window.Type.UTILITY);
             }
         }
 
