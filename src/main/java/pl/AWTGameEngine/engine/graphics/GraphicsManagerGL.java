@@ -32,13 +32,16 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     private final PanelGL panelGL;
     private final ConcurrentHashMap<String, RenderOptions3D> renderables = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<Sprite, Texture> textures = new ConcurrentHashMap<>();
-    private final ConcurrentLinkedQueue<Texture> alphaTextures = new ConcurrentLinkedQueue<>();
     private final ConcurrentHashMap<String, Shape> shapes = new ConcurrentHashMap<>();
-    private final Set<Sprite> texturesToDelete = ConcurrentHashMap.newKeySet();
-    private final Set<Sprite> texturesToUpdate = ConcurrentHashMap.newKeySet();
     private final ConcurrentHashMap<String, float[]> preloadedVertices = new ConcurrentHashMap<>();
 
+    // Textures
+    private final ConcurrentHashMap<Sprite, Texture> textures = new ConcurrentHashMap<>();
+    private final ConcurrentLinkedQueue<Texture> alphaTextures = new ConcurrentLinkedQueue<>();
+    private final Set<Sprite> texturesToDelete = ConcurrentHashMap.newKeySet();
+    private final Set<Sprite> texturesToUpdate = ConcurrentHashMap.newKeySet();
+
+    // Skybox
     private Shape skyboxShape;
     private Texture skyboxTexture;
     private List<Sprite> skyboxSprites;

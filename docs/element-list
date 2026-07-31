@@ -11,12 +11,14 @@ pl.AWTGameEngine.custom
 pl.AWTGameEngine.custom.performance
 pl.AWTGameEngine.engine
 pl.AWTGameEngine.engine.deserializers
+pl.AWTGameEngine.engine.deserializers.models
 pl.AWTGameEngine.engine.enums
 pl.AWTGameEngine.engine.graphics
 pl.AWTGameEngine.engine.helpers
 pl.AWTGameEngine.engine.listeners
 pl.AWTGameEngine.engine.loops
 pl.AWTGameEngine.engine.panels
+pl.AWTGameEngine.engine.steam
 pl.AWTGameEngine.exceptions
 pl.AWTGameEngine.exceptions.resources
 pl.AWTGameEngine.exceptions.scenes
