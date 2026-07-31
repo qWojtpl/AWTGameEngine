@@ -24,7 +24,7 @@ public class PanelGL extends Panel implements PanelObject {
     private final BufferedImage printBuffer;
     private GLProfile profile;
     private GLCapabilities capabilities;
-    private GLCanvas gljPanel;
+    private GLCanvas glCanvas;
     private OpenGLManager manager;
 
     public PanelGL(Scene scene) {
@@ -68,8 +68,8 @@ public class PanelGL extends Panel implements PanelObject {
         return this.physXManager;
     }
 
-    public GLCanvas getGljPanel() {
-        return this.gljPanel;
+    public GLCanvas getGlCanvas() {
+        return this.glCanvas;
     }
 
     public OpenGLManager getManager() {
@@ -84,13 +84,13 @@ public class PanelGL extends Panel implements PanelObject {
         if(graphicsManager3D == null) {
             return;
         }
-        gljPanel.display();
+        glCanvas.display();
     }
 
     @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
-        window.remove(gljPanel);
+        window.remove(glCanvas);
     }
 
     @Override
@@ -123,19 +123,19 @@ public class PanelGL extends Panel implements PanelObject {
         profile = GLProfile.get(GLProfile.GL4bc);
         capabilities = new GLCapabilities(profile);
         capabilities.setDepthBits(24);
-        gljPanel = new GLCanvas(capabilities);
-        gljPanel.setSize(width, height);
+        glCanvas = new GLCanvas(capabilities);
+        glCanvas.setSize(width, height);
         manager = new OpenGLManager(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D);
-        gljPanel.addGLEventListener(manager);
-        gljPanel.setFocusable(false);
+        glCanvas.addGLEventListener(manager);
+        glCanvas.setFocusable(false);
         Logger.info("OpenGL initialized.");
     }
 
     @Override
     public void setSize(Dimension dimension) {
 //        super.setSize(dimension);
-        if(gljPanel != null) {
-            gljPanel.setSize(dimension);
+        if(glCanvas != null) {
+            glCanvas.setSize(dimension);
         }
     }
 

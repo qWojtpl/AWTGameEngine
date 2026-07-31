@@ -99,6 +99,8 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     public void drawScene(GL4 gl, float[] viewProj, float[] skyboxViewProj) {
 
+        gl.glDisable(GL.GL_CULL_FACE);
+
         for(Sprite s : texturesToUpdate) {
             updateTexture(gl, s);
             texturesToUpdate.remove(s);
@@ -119,11 +121,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             drawShape(gl, ro, viewProj);
         }
 
+        drawSkybox(gl, skyboxViewProj);
+
         for(RenderOptions3D ro : transparentRenders) {
             drawShape(gl, ro, viewProj);
         }
-
-        drawSkybox(gl, skyboxViewProj);
 
         gl.glBindVertexArray(0);
     }
@@ -243,6 +245,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             skyboxShape = shapes.get("$skybox");
         }
 
+        gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glDepthMask(false);
         gl.glDisable(GL.GL_CULL_FACE);
@@ -251,10 +254,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         int vpLoc = gl.glGetUniformLocation(shader, "viewProj");
         gl.glUniformMatrix4fv(vpLoc, 1, false, skyboxViewProj, 0);
 
+        gl.glActiveTexture(GL.GL_TEXTURE0);
         skyboxTexture.bind(gl);
 
         int skyboxLoc = gl.glGetUniformLocation(shader, "skybox");
-        gl.glUniform1f(skyboxLoc, 0);
+        gl.glUniform1i(skyboxLoc, 0);
 
         gl.glBindVertexArray(shapes.get("$skybox").getVao());
         gl.glDrawArrays(gl.GL_TRIANGLES, 0, shapes.get("$skybox").getVertexCount());

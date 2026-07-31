@@ -322,8 +322,8 @@ public class Window extends Frame implements BaseWindow {
             scene.getPanel().setOpaque(scene.equals(newCurrentScene));
             if(scene.equals(newCurrentScene) && scenes.keySet().size() > 1) {
                 if(scene.getPanel() instanceof PanelGL) {
-                    add(((PanelGL) scene.getPanel()).getGljPanel());
-                    ((PanelGL) scene.getPanel()).getGljPanel().setFocusable(false);
+                    add(((PanelGL) scene.getPanel()).getGlCanvas());
+                    ((PanelGL) scene.getPanel()).getGlCanvas().setFocusable(false);
                     requestFocusInWindow();
                 } else {
                     add((Component) scene.getPanel());
@@ -337,7 +337,7 @@ public class Window extends Frame implements BaseWindow {
                 } else {
                     scene.getPanel().setSize(new Dimension(getWidth(), getHeight()));
                     if(scene.getPanel() instanceof PanelGL) {
-                        add(((PanelGL) scene.getPanel()).getGljPanel());
+                        add(((PanelGL) scene.getPanel()).getGlCanvas());
                         ((PanelGL) scene.getPanel()).setFocusable(false);
                     } else {
                         add((Component) scene.getPanel());
