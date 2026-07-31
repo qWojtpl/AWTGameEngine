@@ -5,12 +5,11 @@ import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
-import javafx.scene.image.WritableImage;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
-import pl.AWTGameEngine.engine.helpers.ImageHelper;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
+import pl.AWTGameEngine.engine.helpers.SkyboxHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
@@ -19,7 +18,6 @@ import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
-import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -41,6 +39,10 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     private final Set<Sprite> texturesToUpdate = ConcurrentHashMap.newKeySet();
     private final ConcurrentHashMap<String, float[]> preloadedVertices = new ConcurrentHashMap<>();
 
+    private Shape skyboxShape;
+    private Texture skyboxTexture;
+    private List<Sprite> skyboxSprites;
+
     public GraphicsManagerGL(PanelGL panelGL) {
         this.panelGL = panelGL;
     }
@@ -60,6 +62,10 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             }
         }
 
+        initShape(path, vertices, gl);
+    }
+
+    public void initShape(String path, float[] vertices, GL4 gl) {
         int[] tmp = new int[1];
 
         gl.glGenVertexArrays(1, tmp, 0);
@@ -91,7 +97,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         preloadedVertices.put(path, ModelLoader.getVertices(path, true));
     }
 
-    public void drawScene(GL4 gl, float[] viewProj) {
+    public void drawScene(GL4 gl, float[] viewProj, float[] skyboxViewProj) {
 
         for(Sprite s : texturesToUpdate) {
             updateTexture(gl, s);
@@ -116,6 +122,8 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         for(RenderOptions3D ro : transparentRenders) {
             drawShape(gl, ro, viewProj);
         }
+
+        drawSkybox(gl, skyboxViewProj);
 
         gl.glBindVertexArray(0);
     }
@@ -218,6 +226,43 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         }
 
         gl.glDrawArrays(GL.GL_TRIANGLES, 0, shape.getVertexCount());
+    }
+
+    private void drawSkybox(GL4 gl, float[] skyboxViewProj) {
+        if(skyboxTexture == null) {
+            if(skyboxSprites != null) {
+                skyboxTexture = createCubeMap(gl, skyboxSprites);
+                skyboxSprites = null;
+            } else {
+                return;
+            }
+        }
+
+        if(skyboxShape == null) {
+            initShape("$skybox", SkyboxHelper.getSkyboxVertices(), gl);
+            skyboxShape = shapes.get("$skybox");
+        }
+
+        gl.glDepthFunc(GL.GL_LEQUAL);
+        gl.glDepthMask(false);
+        gl.glDisable(GL.GL_CULL_FACE);
+        int shader = panelGL.getManager().getProgram(gl, "shaders/skybox");
+        gl.glUseProgram(shader);
+        int vpLoc = gl.glGetUniformLocation(shader, "viewProj");
+        gl.glUniformMatrix4fv(vpLoc, 1, false, skyboxViewProj, 0);
+
+        skyboxTexture.bind(gl);
+
+        int skyboxLoc = gl.glGetUniformLocation(shader, "skybox");
+        gl.glUniform1f(skyboxLoc, 0);
+
+        gl.glBindVertexArray(shapes.get("$skybox").getVao());
+        gl.glDrawArrays(gl.GL_TRIANGLES, 0, shapes.get("$skybox").getVertexCount());
+        gl.glBindVertexArray(0);
+
+        gl.glDepthMask(true);
+        gl.glDepthFunc(GL.GL_LESS);
+        gl.glEnable(GL.GL_CULL_FACE);
     }
 
     @Override
@@ -326,6 +371,38 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                 GL.GL_BGRA, GL.GL_UNSIGNED_BYTE,
                 buffer
         );
+    }
+
+    public void setSkyboxSprites(List<Sprite> sprites) {
+        this.skyboxSprites = new ArrayList<>(sprites);
+        skyboxTexture = null;
+    }
+
+    public Texture createCubeMap(GL gl, List<Sprite> sprites) {
+        int[] targets = {
+                GL.GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+                GL.GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+                GL.GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+                GL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+                GL.GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+                GL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+        };
+
+        Texture cubemap = AWTTextureIO.newTexture(GL.GL_TEXTURE_CUBE_MAP);
+
+        cubemap.bind(gl);
+
+        gl.glTexParameteri(GL.GL_TEXTURE_CUBE_MAP, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+        gl.glTexParameteri(GL.GL_TEXTURE_CUBE_MAP, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+        gl.glTexParameteri(GL.GL_TEXTURE_CUBE_MAP, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
+        gl.glTexParameteri(GL.GL_TEXTURE_CUBE_MAP, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
+
+        for (int i = 0; i < targets.length; i++) {
+            TextureData data = AWTTextureIO.newTextureData(panelGL.getGlProfile(), sprites.get(i).getImage(), true);
+            cubemap.updateImage(gl, data, targets[i]);
+        }
+
+        return cubemap;
     }
 
 }

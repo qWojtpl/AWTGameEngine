@@ -90,8 +90,15 @@ public class OpenGLManager implements GLEventListener {
         float[] view = MatrixHelper.lookAt(camera);
         float[] viewProj = MatrixHelper.mul(projection, view);
 
+        float[] skyboxView = view.clone();
+        skyboxView[12] = 0;
+        skyboxView[13] = 0;
+        skyboxView[14] = 0;
+
+        float[] skyboxViewProj = MatrixHelper.mul(projection, skyboxView);
+
         try {
-            graphicsManagerGL.drawScene(gl, viewProj);
+            graphicsManagerGL.drawScene(gl, viewProj, skyboxViewProj);
         } catch(Exception e) {
             Logger.exception("Unhandled exception caught while drawing a OpenGL scene", e);
         } finally {

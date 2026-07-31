@@ -1,7 +1,7 @@
 <scene title="Vehicle test" renderFPS="0" updateFPS="60" physicsFPS="360">
     #EDITOR
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
-    <scene source="scenes/web_i.xml" renderEngine="web" />
+<!--    <scene source="scenes/web_i.xml" renderEngine="web" />-->
     #END
 
     <object id="player">
@@ -11,6 +11,7 @@
 <!--        <Server port="53780" />-->
         <SteamRelayServer />
         <PlayerController height="20" cameraHeight="19" speed="30" jumpForce="40" radius="3" />
+        <Skybox />
     </object>
 
     <object id="floor" x="500" y="-100" z="-500" size="1000,10,10000">
