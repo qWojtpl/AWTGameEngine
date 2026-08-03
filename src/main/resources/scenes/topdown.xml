@@ -14,12 +14,14 @@
     </prefab>
     <prefab id="vehicle">
         <SpriteRenderer spriteSource="hdr_sprites/mercedes.png" />
-        <Vehicle.TopDown />
-        <Vehicle.Engine />
-        <Vehicle.Wheel />
-        <Vehicle.Wheel />
-        <Vehicle.Wheel />
-        <Vehicle.Wheel />
+        <Vehicle.TopDown mass="15870" maxBrakeResponse="80000" />
+        <Vehicle.Engine peakTorque="18000" maxRPM="12000" idleRPM="1200" />
+        <Vehicle.Gearbox gearRatios="-4,0,4,2,1.5,1.1,1,0.8,0.7,0.3" />
+        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="-30,-25,60" width="2.5" />
+        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="30,-25,60" width="2.5" />
+        <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="-30,-25,-55" width="5" />
+        <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="30,-25,-55" width="5" />
+        <VehicleSteer _package="pl.AWTGameEngine.custom" />
         <Border color="red" />
     </prefab>
     <!-- Objects -->
@@ -36,13 +38,12 @@
     <object id="test3" x="500" y="50" sizeX="100" sizeY="100">
         <Prefab prefabName="staticBox" />
     </object>
-    <object id="vehicle2" x="700" y="300" sizeX="100" sizeY="150">
+<!--    <object id="vehicle2" x="700" y="300" sizeX="100" sizeY="150">
         <Prefab prefabName="vehicle" />
         <Vehicle.Gearbox gearRatios="4,2,1.5,1.1,1,0.8,0.7,0.3" />
-    </object>
+    </object>-->
     <object id="vehicle" x="500" y="200" sizeX="100" sizeY="150">
         <Prefab prefabName="vehicle" />
-        <Vehicle.Gearbox gearRatios="-4,0,4,2,1.5,1.1,1,0.8,0.7,0.3" />
         <VehicleSteer _package="pl.AWTGameEngine.custom" />
     </object>
 </scene>

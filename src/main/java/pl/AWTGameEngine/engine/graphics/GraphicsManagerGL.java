@@ -97,7 +97,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     public void preloadShape(String path) {
-        preloadedVertices.put(path, ModelLoader.getVertices(path, true));
+        addPreloadedVertices(path, ModelLoader.getVertices(path, true));
+    }
+
+    public void addPreloadedVertices(String path, float[] vertices) {
+        preloadedVertices.put(path, vertices);
     }
 
     public void drawScene(GL4 gl, float[] viewProj, float[] skyboxViewProj) {

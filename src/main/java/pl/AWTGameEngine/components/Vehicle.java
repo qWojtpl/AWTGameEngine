@@ -870,7 +870,7 @@ public class Vehicle extends ObjectComponent {
         protected void updateWorldPositions() {
             PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
             PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
-            getObject().setPosition(new TransformSet(vec3.getX(), vec3.getZ(), 10));
+            getObject().getPosition().set(vec3.getX(), vec3.getZ(), 10);
             getObject().setRotation(new TransformSet(RotationHelper.quaternionToYaw(rotation.getY(), rotation.getW()), 0, 0));
         }
 
@@ -888,7 +888,7 @@ public class Vehicle extends ObjectComponent {
 
         @Override
         protected TransformSet getVehicleInitializationPose() {
-            return new TransformSet(getObject().getX(), 10, getObject().getY());
+            return new TransformSet(getObject().getX(), 50, getObject().getY());
         }
 
     }
