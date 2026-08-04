@@ -20,6 +20,7 @@ public abstract class Base3DShape extends NetComponent {
     protected String shader = "shaders/shader";
     protected String shapePath = "models/box.obj";
     protected boolean xray = false;
+    protected int repeatTexture = 1;
     protected boolean initialized = false;
     protected boolean updatePosition = false;
     protected boolean updateSize = false;
@@ -30,6 +31,7 @@ public abstract class Base3DShape extends NetComponent {
     protected boolean updateShader = false;
     protected boolean updateShapePath = false;
     protected boolean updateXray = false;
+    protected boolean updateRepeat = false;
 
     public Base3DShape(GameObject object) {
         super(object);
@@ -77,6 +79,9 @@ public abstract class Base3DShape extends NetComponent {
         if(updateXray) {
             g.updateXray(getObject().getIdentifier(), xray);
             updateXray = false;
+        }
+        if(updateRepeat) {
+            g.updateRepeatTexture(getObject().getIdentifier(), repeatTexture);
         }
     }
 
@@ -137,6 +142,17 @@ public abstract class Base3DShape extends NetComponent {
     @FromXML
     public void setColor(String color) {
         setColor(new ColorObject(color));
+    }
+
+    @SaveState(name = "repeatTexture")
+    public int getRepeatTexture() {
+        return this.repeatTexture;
+    }
+
+    @FromXML
+    public void setRepeatTexture(int repeatTexture) {
+        this.repeatTexture = repeatTexture;
+        updateRepeat = true;
     }
 
     @Override

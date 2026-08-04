@@ -33,4 +33,6 @@ public abstract class GraphicsManager3D {
 
     public abstract void updateXray(String identifier, boolean xray);
 
+    public abstract void updateRepeatTexture(String identifier, int repeat);
+
 }

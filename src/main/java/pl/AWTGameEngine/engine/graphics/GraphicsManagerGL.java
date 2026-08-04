@@ -351,6 +351,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         renderables.get(identifier).setXrayRender(xray);
     }
 
+    @Override
+    public void updateRepeatTexture(String identifier, int repeat) {
+        renderables.get(identifier).setRepeatTexture(repeat);
+    }
+
     public void createTexture(GL4 gl, Sprite sprite) {
         Logger.info("Initializing texture from sprite " + sprite.getImagePath());
         Texture texture = AWTTextureIO.newTexture(panelGL.getGlProfile(), sprite.getImage(), true);
