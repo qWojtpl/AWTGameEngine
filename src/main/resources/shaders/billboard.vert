@@ -8,10 +8,11 @@ out vec2 TexCoords;
 
 uniform mat4 model;
 uniform mat4 viewProj;
+uniform float repeat;
 
 void main()
 {
-    TexCoords = aTexCoords;
+    TexCoords = aTexCoords * repeat;
 
     vec3 worldPosition = vec3(model[3][0], model[3][1], model[3][2]);
 

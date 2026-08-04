@@ -5,10 +5,11 @@ layout(location = 2) in vec2 aUV;
 
 uniform mat4 model;
 uniform mat4 viewProj;
+uniform float repeat;
 
 out vec2 uv;
 
 void main() {
-    uv = aUV;
+    uv = aUV * repeat;
     gl_Position = viewProj * model * vec4(aPos, 1.0);
 }

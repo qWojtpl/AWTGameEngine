@@ -1,19 +1,18 @@
 package pl.AWTGameEngine.components;
 
 import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.MemoryUtil;
 import physx.PxTopLevelFunctions;
 import physx.common.*;
-import physx.extensions.PxExtensionTopLevelFunctions;
 import physx.extensions.PxRigidActorExt;
 import physx.geometry.*;
 import physx.physics.*;
 import physx.support.PxArray_PxHeightFieldSample;
-import physx.vehicle2.PxVehicleTopLevelFunctions;
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
-import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.HeightFieldHelper;
 import pl.AWTGameEngine.engine.helpers.ModelHelper;
@@ -29,7 +28,11 @@ import java.util.List;
 @ComponentGL
 public class Terrain extends ObjectComponent {
 
-    private List<Short> height = new ArrayList<>();
+    private final List<Short> heights = new ArrayList<>();
+    private int cols = 64;
+    private int rows = 64;
+    private RenderOptions3D renderOptions3D;
+    private PxRigidActor actor;
 
     public Terrain(GameObject object) {
         super(object);
@@ -42,10 +45,7 @@ public class Terrain extends ObjectComponent {
             PhysXManager.PhysXScene physXScene = PhysXManager.getInstance().getScene(getScene());
 
             PxTransform identityPose = PxTransform.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity);
-            PxRigidActor actor = PhysXManager.getInstance().getPxPhysics().createRigidStatic(identityPose);
-
-            int rows = 64;
-            int cols = 64;
+            actor = PhysXManager.getInstance().getPxPhysics().createRigidStatic(identityPose);
 
             PxArray_PxHeightFieldSample samples = PxArray_PxHeightFieldSample.createAt(stack, MemoryStack::nmalloc, rows * cols);
             PxHeightFieldSample sample = PxHeightFieldSample.createAt(stack, MemoryStack::nmalloc);
@@ -57,7 +57,7 @@ public class Terrain extends ObjectComponent {
                     }
                     sample.setHeight(h);
                     samples.set(col * rows + row, sample);
-                    height.add(h);
+                    heights.add(h);
                 }
             }
 
@@ -86,23 +86,56 @@ public class Terrain extends ObjectComponent {
 
             physXScene.getPxScene().addActor(actor);
 
-            List<float[]> vertices = HeightFieldHelper.generateHeightFieldVertices(this::getHeight, rows, cols, geometry.getRowScale(), geometry.getColumnScale(), geometry.getHeightScale());
-
-            GraphicsManagerGL graphicsManagerGL = (GraphicsManagerGL) ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
-            String identifier = "$terrain-" + getObject().getIdentifier();
-            graphicsManagerGL.addPreloadedVertices(identifier, ModelHelper.convertToArray(vertices));
-            RenderOptions3D renderOptions3D = new RenderOptions3D(getObject().getIdentifier() + "$terrain")
-                    .setPosition(new TransformSet(0, 0, 0))
-                    .setSize(new TransformSet(1, 1, 1))
-                    .setQuaternionRotation(new QuaternionTransformSet())
-                    .setShapePath(identifier)
-                    .setShader("shaders/shader");
-            graphicsManagerGL.createRenderable(renderOptions3D);
+            createRenderable(geometry.getRowScale(), geometry.getColumnScale(), geometry.getHeightScale());
         }
     }
 
-    public short getHeight(int row, int col) {
-        return height.get(row * 64 + col);
+    private void createRenderable(float rowScale, float columnScale, float heightScale) {
+        List<float[]> vertices = HeightFieldHelper.generateHeightFieldVertices(this::getHeight, rows, cols, rowScale, columnScale, heightScale);
+
+        GraphicsManagerGL graphicsManagerGL = (GraphicsManagerGL) ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
+        String identifier = "$terrain-" + getObject().getIdentifier();
+        graphicsManagerGL.addPreloadedVertices(identifier, ModelHelper.convertToArray(vertices));
+        renderOptions3D = new RenderOptions3D(identifier)
+                .setPosition(getObject().getPosition())
+                .setSize(new TransformSet(1, 1, 1))
+                .setQuaternionRotation(new QuaternionTransformSet())
+                .setShapePath(identifier)
+                .setSprite(Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/grass.jpg"))
+                .setRepeatTexture(16)
+                .setShader("shaders/shader");
+
+        graphicsManagerGL.createRenderable(renderOptions3D);
     }
-    
+
+    public short getHeight(int row, int col) {
+        return heights.get(row * cols + col);
+    }
+
+    @SaveState(name = "rows")
+    public int getRows() {
+        return this.rows;
+    }
+
+    @FromXML
+    public void setRows(int rows) {
+        if(rows <= 0) {
+            rows = 1;
+        }
+        this.rows = rows;
+    }
+
+    @SaveState(name = "columns")
+    public int getColumns() {
+        return this.cols;
+    }
+
+    @FromXML
+    public void setColumns(int cols) {
+        if(cols <= 0) {
+            cols = 1;
+        }
+        this.cols = cols;
+    }
+
 }

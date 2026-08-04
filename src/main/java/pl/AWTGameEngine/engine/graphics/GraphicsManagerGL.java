@@ -215,6 +215,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         int modelLoc = gl.glGetUniformLocation(program, "model");
         int vpLoc = gl.glGetUniformLocation(program, "viewProj");
         int opacityLoc = gl.glGetUniformLocation(program, "opacity");
+        int repeatLoc = gl.glGetUniformLocation(program, "repeat");
 
         gl.glUniformMatrix4fv(vpLoc, 1, false, viewProj, 0);
         gl.glUniformMatrix4fv(modelLoc, 1, false, model, 0);
@@ -226,12 +227,17 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         }
 
         gl.glUniform1f(opacityLoc, opacity);
+        gl.glUniform1f(repeatLoc, (float) ro.getRepeatTexture());
 
         if(ro.getSprite() != null) {
             if(textures.getOrDefault(ro.getSprite(), null) == null) {
                 createTexture(gl, ro.getSprite());
             }
             textures.get(ro.getSprite()).bind(gl);
+            if(ro.getRepeatTexture() > 1) {
+                gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
+                gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
+            }
         }
 
         gl.glDrawArrays(GL.GL_TRIANGLES, 0, shape.getVertexCount());

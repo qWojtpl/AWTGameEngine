@@ -17,6 +17,7 @@ public class RenderOptions3D {
     private boolean xrayRender = false;
     private String shapePath;
     private float opacity = 1;
+    private int repeatTexture = 1;
 
     public RenderOptions3D(String identifier) {
         this.identifier = identifier;
@@ -66,6 +67,10 @@ public class RenderOptions3D {
         return this.opacity;
     }
 
+    public int getRepeatTexture() {
+        return this.repeatTexture;
+    }
+
     public RenderOptions3D setPosition(TransformSet position) {
         this.position = position;
         return this;
@@ -113,6 +118,11 @@ public class RenderOptions3D {
 
     public RenderOptions3D setOpacity(float opacity) {
         this.opacity = opacity;
+        return this;
+    }
+
+    public RenderOptions3D setRepeatTexture(int repeatTexture) {
+        this.repeatTexture = repeatTexture;
         return this;
     }
 
