@@ -22,7 +22,7 @@ public class GameObject {
     private TransformSet position = new TransformSet(0, 0, 0);
     private TransformSet size = new TransformSet(0, 0, 0);
     private TransformSet rotation = new TransformSet(0, 0, 0);
-    private final QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 0);
+    private final QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 1);
     private Net net;
     private final EventHandler eventHandler = new EventHandler();
     private final List<ObjectComponent> components = new ArrayList<>();

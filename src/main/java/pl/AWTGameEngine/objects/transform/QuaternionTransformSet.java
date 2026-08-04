@@ -7,7 +7,7 @@ public class QuaternionTransformSet {
     private double x = 0;
     private double y = 0;
     private double z = 0;
-    private double w = 0;
+    private double w = 1;
 
     public QuaternionTransformSet() {
 
@@ -56,7 +56,7 @@ public class QuaternionTransformSet {
         this.x = 0;
         this.y = 0;
         this.z = 0;
-        this.w = 0;
+        this.w = 1;
     }
 
     public QuaternionTransformSet multiply(QuaternionTransformSet q) {
@@ -107,7 +107,7 @@ public class QuaternionTransformSet {
     }
 
     public boolean isEmpty() {
-        return this.x == 0 && this.y == 0 && this.z == 0 && this.w == 0;
+        return this.x == 0 && this.y == 0 && this.z == 0 && this.w == 1;
     }
 
     public String toSimpleString() {

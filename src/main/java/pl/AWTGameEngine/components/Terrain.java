@@ -44,8 +44,15 @@ public class Terrain extends ObjectComponent {
 
             PhysXManager.PhysXScene physXScene = PhysXManager.getInstance().getScene(getScene());
 
-            PxTransform identityPose = PxTransform.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity);
-            actor = PhysXManager.getInstance().getPxPhysics().createRigidStatic(identityPose);
+            PxTransform pose = PxTransform.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity);
+            pose.getP().setX((float) getObject().getPosition().getX());
+            pose.getP().setY((float) getObject().getPosition().getY());
+            pose.getP().setZ((float) getObject().getPosition().getZ());
+            pose.getQ().setX((float) getObject().getQuaternionRotation().getX());
+            pose.getQ().setY((float) getObject().getQuaternionRotation().getY());
+            pose.getQ().setZ((float) getObject().getQuaternionRotation().getZ());
+            pose.getQ().setW((float) getObject().getQuaternionRotation().getW());
+            actor = PhysXManager.getInstance().getPxPhysics().createRigidStatic(pose);
 
             PxArray_PxHeightFieldSample samples = PxArray_PxHeightFieldSample.createAt(stack, MemoryStack::nmalloc, rows * cols);
             PxHeightFieldSample sample = PxHeightFieldSample.createAt(stack, MemoryStack::nmalloc);
@@ -91,7 +98,7 @@ public class Terrain extends ObjectComponent {
     }
 
     private void createRenderable(float rowScale, float columnScale, float heightScale) {
-        List<float[]> vertices = HeightFieldHelper.generateHeightFieldVertices(this::getHeight, rows, cols, rowScale, columnScale, heightScale);
+        List<float[]> vertices = HeightFieldHelper.generateHeightFieldVertices(this::getInvertedHeight, rows, cols, rowScale, columnScale, heightScale);
 
         GraphicsManagerGL graphicsManagerGL = (GraphicsManagerGL) ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
         String identifier = "$terrain-" + getObject().getIdentifier();
@@ -102,13 +109,17 @@ public class Terrain extends ObjectComponent {
                 .setQuaternionRotation(new QuaternionTransformSet())
                 .setShapePath(identifier)
                 .setSprite(Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/grass.jpg"))
-                .setRepeatTexture(16)
+                .setRepeatTexture(196)
                 .setShader("shaders/shader");
 
         graphicsManagerGL.createRenderable(renderOptions3D);
     }
 
     public short getHeight(int row, int col) {
+        return heights.get(col * rows + row);
+    }
+
+    public short getInvertedHeight(int row, int col) {
         return heights.get(row * cols + col);
     }
 
