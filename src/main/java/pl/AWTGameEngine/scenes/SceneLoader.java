@@ -50,12 +50,15 @@ public class SceneLoader {
         if(scenePath.endsWith(".class")) {
             return loadSceneBinary(scenePath, renderEngine, nestedScene);
         }
-        Scene newScene;
-        ResourceManager resourceManager = Dependencies.getResourceManager();
+        return loadSceneStream(Dependencies.getResourceManager().getResourceAsStream(scenePath), scenePath, renderEngine, nestedScene);
+    }
+
+    public Scene loadSceneStream(InputStream inputStream, String scenePath, RenderEngine renderEngine, boolean nestedScene) {
         AppProperties appProperties = Dependencies.getAppProperties();
+        Scene newScene;
         try(InputStream sceneStream = EditorSegmentHelper.patchStream(
-                resourceManager.getResourceAsStream(scenePath),
-                Dependencies.getAppProperties().getPropertyAsBoolean("editorMode"))
+                inputStream,
+                appProperties.getPropertyAsBoolean("editorMode"))
         ) {
             Document document = getDocument(sceneStream);
             SceneOptions sceneOptions = getSceneOptions(document);

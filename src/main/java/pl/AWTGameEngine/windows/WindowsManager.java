@@ -12,6 +12,7 @@ import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.scenes.SceneLoader;
 
 import java.awt.*;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,36 @@ public class WindowsManager extends CommandConsole.ParentCommand {
         startLoops(window, server);
 
         showWindow(window);
+
+        return window;
+    }
+
+    public BaseWindow createNestedEditorWindow(InputStream sceneStream, String scenePath, RenderEngine renderEngine) {
+        AppProperties appProperties = Dependencies.getAppProperties();
+        if(renderEngine == null) {
+            renderEngine = RenderEngine.valueOf(appProperties.getProperty("renderEngine").toUpperCase());
+        }
+
+        BaseWindow window;
+
+        window = new Window();
+
+        if(windows.isEmpty()) {
+            defaultFont = window.getFont();
+        }
+
+        window.setSceneLoader(new SceneLoader(window));
+        window.setTitle(appProperties.getProperty("title"));
+
+        PhysXManager.getInstance();
+
+        createLoops(window);
+
+        window.init();
+        window.getSceneLoader().loadSceneStream(sceneStream, scenePath, renderEngine, false);
+        windows.add(window);
+
+        window.getRenderLoop().start();
 
         return window;
     }
