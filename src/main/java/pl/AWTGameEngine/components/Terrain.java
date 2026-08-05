@@ -12,6 +12,7 @@ import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.HeightFieldHelper;
@@ -29,8 +30,8 @@ import java.util.List;
 public class Terrain extends ObjectComponent {
 
     private final List<Short> heights = new ArrayList<>();
-    private int cols = 64;
-    private int rows = 64;
+    private int cols = 640;
+    private int rows = 640;
     private RenderOptions3D renderOptions3D;
     private PxRigidActor actor;
 
@@ -40,6 +41,7 @@ public class Terrain extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
+        Logger.info("Loading terrain...");
         try(MemoryStack stack = MemoryStack.stackPush()) {
 
             PhysXManager.PhysXScene physXScene = PhysXManager.getInstance().getScene(getScene());
@@ -58,10 +60,10 @@ public class Terrain extends ObjectComponent {
             PxHeightFieldSample sample = PxHeightFieldSample.createAt(stack, MemoryStack::nmalloc);
             for (int row = 0; row < rows; row++) {
                 for (int col = 0; col < cols; col++) {
-                    short h = (short) (Math.sin(row + col) * 1.25);
-                    if(col + row == 64) {
-                        h = 40;
-                    }
+                    short h = (short) (Math.sin(row + col) * 1.25 * Math.cos(row));
+/*                    if(col + row == 64) {
+                        h = 40 * 100;
+                    }*/
                     sample.setHeight(h);
                     samples.set(col * rows + row, sample);
                     heights.add(h);
@@ -83,7 +85,7 @@ public class Terrain extends ObjectComponent {
             PxHeightFieldGeometry geometry = PxHeightFieldGeometry.createAt(stack, MemoryStack::nmalloc);
             geometry.setColumnScale(10);
             geometry.setRowScale(10);
-            geometry.setHeightScale(1);
+            geometry.setHeightScale(5);
             geometry.setHeightField(heightField);
 
             PxMeshGeometryFlags geometryFlags = PxMeshGeometryFlags.createAt(stack, MemoryStack::nmalloc, (byte) 0);
@@ -109,7 +111,7 @@ public class Terrain extends ObjectComponent {
                 .setQuaternionRotation(new QuaternionTransformSet())
                 .setShapePath(identifier)
                 .setSprite(Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/grass.jpg"))
-                .setRepeatTexture(196)
+                .setRepeatTexture(160)
                 .setShader("shaders/shader");
 
         graphicsManagerGL.createRenderable(renderOptions3D);

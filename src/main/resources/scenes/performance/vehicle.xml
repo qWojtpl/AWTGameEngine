@@ -1,4 +1,4 @@
-<scene title="Vehicle test" renderFPS="0" updateFPS="60" physicsFPS="360">
+<scene title="Vehicle test" renderFPS="144" updateFPS="60" physicsFPS="360">
     #EDITOR
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
 <!--    <scene source="scenes/web_i.xml" renderEngine="web" />-->
@@ -10,7 +10,7 @@
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
 <!--        <Server port="53780" />-->
         <SteamRelayServer />
-        <PlayerController height="20" cameraHeight="19" speed="30" jumpForce="40" radius="3" />
+<!--        <PlayerController height="20" cameraHeight="19" speed="30" jumpForce="40" radius="3" />-->
         <Skybox />
     </object>
 
@@ -75,14 +75,14 @@
 <!--        <Box3D />-->
         <Vehicle mass="15870" maxBrakeResponse="80000" />
         <Vehicle.Engine peakTorque="18000" maxRPM="12000" idleRPM="1200" />
-        <Vehicle.Gearbox gearRatios="-4,0,4,2,1.5,1.1,1,0.8,0.7,0.3" />
-        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="-30,-25,60" width="2.5" />
-        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="30,-25,60" width="2.5" />
-        <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="-30,-25,-55" width="5" />
-        <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="7" localPosition="30,-25,-55" width="5" />
+        <Vehicle.Gearbox gearRatios="-4,0,28,14,7,4,2,1.0,0.8,0.6" />
+        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="-30,-21,55.5" width="2.5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
+        <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="30,-21,55.5" width="2.5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
+        <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="-30,-21,-44.5" width="5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
+        <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="30,-21,-44.5" width="5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
         <RigidBody.Kinematic />
-<!--        <CameraFollow />-->
-<!--        <VehicleSteer _package="pl.AWTGameEngine.custom" />-->
+        <CameraFollow />
+        <VehicleSteer _package="pl.AWTGameEngine.custom" />
         <ParticleEmitter spriteSource="sprites/base/files/directory.png" ttl="20" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5 1 0" />
     </object>
 

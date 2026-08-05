@@ -157,7 +157,7 @@ public class Vehicle extends ObjectComponent {
         context.getScale().setScale(1f);
         context.setGravity(physXManager.getScene(getScene()).getPxScene().getGravity());
         context.setPhysxScene(physXManager.getScene(getScene()).getPxScene());
-        context.setPhysxActorUpdateMode(PxVehiclePhysXActorUpdateModeEnum.eAPPLY_ACCELERATION);
+        context.setPhysxActorUpdateMode(PxVehiclePhysXActorUpdateModeEnum.eAPPLY_VELOCITY);
         context.setPhysxUnitCylinderSweepMesh(
                 PxVehicleTopLevelFunctions.VehicleUnitCylinderSweepMeshCreate(context.getFrame(), physXManager.getPxPhysics(), physXManager.getCookingParams()));
 
@@ -625,7 +625,12 @@ public class Vehicle extends ObjectComponent {
         private TransformSet localPosition = new TransformSet();
         private float suspensionTravelDistance = 0.3f;
 
+        // Visualization
         private RenderOptions3D options;
+        private TransformSet shapeSizeMultiplier = new TransformSet(1, 1, 1);
+        private TransformSet shapePositionCorrection = new TransformSet();
+        private String shapePath = "models/box.obj";
+        private String shader = "shaders/shader";
 
         public Wheel(GameObject object) {
             super(object);
@@ -655,7 +660,7 @@ public class Vehicle extends ObjectComponent {
                     getObject().getQuaternionRotation().clone().multiply(QuaternionTransformSet.fromPhysX(wheelLocalPose.getQ()));
             options.setQuaternionRotation(newRotation);
 
-            TransformSet wheelLocalPos = new TransformSet().fromPhysX(wheelLocalPose.getP());
+            TransformSet wheelLocalPos = new TransformSet().fromPhysX(wheelLocalPose.getP()).add(shapePositionCorrection);
             TransformSet wheelPosition = RotationHelper.multiplyWithQuaternion(wheelLocalPos, getObject().getQuaternionRotation());
             options.setPosition(wheelPosition.add(getObject().getPosition()));
         }
@@ -709,12 +714,16 @@ public class Vehicle extends ObjectComponent {
             if(getScene().getPanel() instanceof PanelGL) {
                 GraphicsManager3D g = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
                 options = new RenderOptions3D(getObject().getIdentifier() + "$WHEEL-" + id)
-                        .setPosition(getObject().getPosition())
-                        .setSize(new TransformSet(width, radius, radius))
+                        .setPosition(getObject().getPosition().clone().add(shapePositionCorrection))
+                        .setSize(new TransformSet(
+                                width * shapeSizeMultiplier.getX(),
+                                radius * shapeSizeMultiplier.getY(),
+                                radius * shapeSizeMultiplier.getZ())
+                        )
                         .setRotation(getObject().getRotation())
                         .setQuaternionRotation(new QuaternionTransformSet())
-                        .setShader("shaders/shader")
-                        .setShapePath("models/box.obj");
+                        .setShader(shader)
+                        .setShapePath(shapePath);
                 g.createRenderable(options);
             }
         }
@@ -827,6 +836,48 @@ public class Vehicle extends ObjectComponent {
         @FromXML
         public void setSuspensionTravelDistance(float distance) {
             this.suspensionTravelDistance = distance;
+        }
+
+        // Visualization
+
+        @SaveState(name = "shapeSizeMultiplier")
+        public TransformSet getShapeSizeMultiplier() {
+            return this.shapeSizeMultiplier;
+        }
+
+        @FromXML
+        public void setShapeSizeMultiplier(TransformSet shapeSizeMultiplier) {
+            this.shapeSizeMultiplier = shapeSizeMultiplier;
+        }
+
+        @SaveState(name = "shapePositionCorrection")
+        public TransformSet getShapePositionCorrection() {
+            return this.shapePositionCorrection;
+        }
+
+        @FromXML
+        public void setShapePositionCorrection(TransformSet correction) {
+            this.shapePositionCorrection = correction;
+        }
+
+        @SaveState(name = "shapePath")
+        public String getShapePath() {
+            return this.shapePath;
+        }
+
+        @FromXML
+        public void setShapePath(String shapePath) {
+            this.shapePath = shapePath;
+        }
+
+        @SaveState(name = "shader")
+        public String getShader() {
+            return this.shader;
+        }
+
+        @FromXML
+        public void setShader(String shader) {
+            this.shader = shader;
         }
 
     }

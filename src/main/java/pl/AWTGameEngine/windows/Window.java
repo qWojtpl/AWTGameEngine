@@ -177,7 +177,7 @@ public class Window extends Frame implements BaseWindow {
     @Command("currentScene")
     public Scene getCurrentScene() {
         for(Scene scene : scenes.keySet()) {
-            if(scenes.get(scene)) {
+            if(scenes.getOrDefault(scene, false)) {
                 return scene;
             }
         }

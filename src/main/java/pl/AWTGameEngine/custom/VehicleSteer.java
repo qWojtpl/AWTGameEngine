@@ -70,9 +70,9 @@ public class VehicleSteer extends ObjectComponent {
 
         float speed = vehicle.getPxVehicle().getPhysXState().getPhysxActor().getRigidBody().getLinearVelocity().magnitude();
 
-        if(speed > 3 * currentGear * currentGear) {
+/*        if(speed > 3 * currentGear * currentGear) {
             vehicle.getGearbox().setCurrentGear(currentGear + 1);
-        }
+        }*/
 
 /*        System.out.println("Torque: " + torque);
         System.out.println("Steer: " + steer);
