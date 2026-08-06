@@ -18,6 +18,14 @@ public class AppProperties extends CommandConsole.ParentCommand {
         properties = getCustomProperties("app.properties");
     }
 
+    public AppProperties(String propertiesPath) {
+        properties = getCustomProperties(propertiesPath);
+    }
+
+    public AppProperties(String propertiesPath, InputStream propertiesStream) {
+        properties = getCustomProperties(propertiesPath, propertiesStream);
+    }
+
     public void addStartupArgument(String argument) {
         startupArgs.add(argument);
     }
@@ -86,6 +94,24 @@ public class AppProperties extends CommandConsole.ParentCommand {
                 return null;
             }
             properties.load(stream);
+            customProperties.put(propertiesPath, properties);
+            return properties;
+        } catch (IOException e) {
+            Logger.exception("Cannot load properties: ", e);
+        }
+        return null;
+    }
+
+    public Properties getCustomProperties(String propertiesPath, InputStream propertiesStream) {
+        if(customProperties.containsKey(propertiesPath)) {
+            return customProperties.get(propertiesPath);
+        }
+        Properties properties = new Properties();
+        try {
+            if(propertiesStream == null) {
+                return null;
+            }
+            properties.load(propertiesStream);
             customProperties.put(propertiesPath, properties);
             return properties;
         } catch (IOException e) {
