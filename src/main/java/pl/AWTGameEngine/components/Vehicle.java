@@ -21,6 +21,7 @@ import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.helpers.VehicleHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.lists.FloatValues;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
@@ -493,7 +494,7 @@ public class Vehicle extends ObjectComponent {
     public static class Gearbox extends VehicleComponent {
 
         private GearboxType gearboxType;
-        private List<Float> gearRatios = new ArrayList<>(Arrays.asList(-4f, 0f, 4f, 2f, 1.5f, 1.1f, 1f));
+        private FloatValues gearRatios = new FloatValues(Arrays.asList(-4f, 0f, 4f, 2f, 1.5f, 1.1f, 1f));
         private int neutralGearIndex = 1;
         private float switchTime = 0.5f;
 
@@ -527,15 +528,6 @@ public class Vehicle extends ObjectComponent {
             }
         }
 
-        @SaveState(name = "gearRatios")
-        public String getGearRatiosAsString() {
-            List<String> ratios = new ArrayList<>();
-            for(Float f : gearRatios) {
-                ratios.add(f.toString());
-            }
-            return String.join(",", ratios);
-        }
-
         public void setGearboxType(GearboxType gearboxType) {
             checkInitialized();
             this.gearboxType = gearboxType;
@@ -546,19 +538,10 @@ public class Vehicle extends ObjectComponent {
             setGearboxType(GearboxType.valueOf(type));
         }
 
-        public void setGearRatios(List<Float> ratios) {
+        @FromXML
+        public void setGearRatios(FloatValues ratios) {
             checkInitialized();
             this.gearRatios = ratios;
-        }
-
-        @FromXML
-        public void setGearRatios(String ratios) {
-            String[] split = ratios.replace(" ", "").split(",");
-            List<Float> newRatios = new ArrayList<>();
-            for(String s : split) {
-                newRatios.add(Float.parseFloat(s));
-            }
-            setGearRatios(newRatios);
         }
 
         @FromXML
@@ -584,10 +567,12 @@ public class Vehicle extends ObjectComponent {
             return this.gearboxType;
         }
 
-        public List<Float> getGearRatios() {
-            return new ArrayList<>(this.gearRatios);
+        @SaveState(name = "gearRatios")
+        public FloatValues getGearRatios() {
+            return new FloatValues(this.gearRatios);
         }
 
+        @SaveState(name = "neutralGearIndex")
         public int getNeutralGearIndex() {
             return this.neutralGearIndex;
         }
@@ -596,6 +581,7 @@ public class Vehicle extends ObjectComponent {
             return vehicle.getPxVehicle().getEngineDriveState().getGearboxState().getCurrentGear();
         }
 
+        @SaveState(name = "switchTime")
         public float getSwitchTime() {
             return this.switchTime;
         }

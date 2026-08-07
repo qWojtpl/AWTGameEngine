@@ -10,14 +10,13 @@ import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.lists.TransformSetValues;
 import pl.AWTGameEngine.objects.render.ParticleMeta;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @ComponentGL
@@ -29,8 +28,7 @@ public class ParticleEmitter extends ObjectComponent {
     private final ConcurrentLinkedQueue<ParticleMeta> particles = new ConcurrentLinkedQueue<>();
     private long particleCounter = 0;
     private TransformSet iterationStep = new TransformSet();
-    private String vectors;
-    private final List<TransformSet> parsedVectors = new ArrayList<>();
+    private TransformSetValues vectors = new TransformSetValues();
     private TransformSet particleSize = new TransformSet(10, 10, 10);
     private long ttl = 1200;
     private double iterationsPerSecond = 10;
@@ -113,26 +111,12 @@ public class ParticleEmitter extends ObjectComponent {
     }
 
     @SaveState(name = "vectors")
-    public String getVectors() {
+    public TransformSetValues getVectors() {
         return this.vectors;
     }
 
     @FromXML
-    public void setVectors(String vectors) {
-        parsedVectors.clear();
-        String[] split = vectors.trim().split("\\s+");
-        double x = 0, y = 0, z;
-        for(int i = 0, j = 0; i < split.length; i++, j++) {
-            if(j == 0) {
-                x = Double.parseDouble(split[i]);
-            } else if(j == 1) {
-                y = Double.parseDouble(split[i]);
-            } else if(j == 2) {
-                z = Double.parseDouble(split[i]);
-                parsedVectors.add(new TransformSet(x, y, z));
-                j = -1;
-            }
-        }
+    public void setVectors(TransformSetValues vectors) {
         this.vectors = vectors;
     }
 
@@ -206,7 +190,7 @@ public class ParticleEmitter extends ObjectComponent {
         @Override
         protected void iteration() {
             if(loop && graphicsManager3D != null) {
-                for(TransformSet vector : parsedVectors) {
+                for(TransformSet vector : vectors) {
                     createParticle(vector);
                 }
             }

@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.objects.lists.*;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
 import pl.AWTGameEngine.objects.transform.TransformSet;
 
@@ -101,6 +102,7 @@ public class XMLDeserializer {
     }
 
     private void addDefaultHandlers() {
+        // Boolean
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
@@ -112,6 +114,7 @@ public class XMLDeserializer {
                 method.invoke(component, Boolean.parseBoolean(value));
             }
         });
+        // String
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
@@ -123,6 +126,7 @@ public class XMLDeserializer {
                 method.invoke(component, value);
             }
         });
+        // Integer
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
@@ -134,6 +138,19 @@ public class XMLDeserializer {
                 method.invoke(component, Integer.parseInt(value));
             }
         });
+        // ArrayList<Integer> (IntegerValues)
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return IntegerValues.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, new IntegerValues(value));
+            }
+        });
+        // Long
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
@@ -145,6 +162,19 @@ public class XMLDeserializer {
                 method.invoke(component, Long.parseLong(value));
             }
         });
+        // ArrayList<Long> (LongValues)
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return LongValues.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, new LongValues(value));
+            }
+        });
+        // Double
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
@@ -156,6 +186,19 @@ public class XMLDeserializer {
                 method.invoke(component, Double.parseDouble(value));
             }
         });
+        // ArrayList<Double> (DoubleValues)
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return DoubleValues.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, new DoubleValues(value));
+            }
+        });
+        // Float
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
@@ -167,6 +210,19 @@ public class XMLDeserializer {
                 method.invoke(component, Float.parseFloat(value));
             }
         });
+        // ArrayList<Float> (FloatValues)
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return FloatValues.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, new FloatValues(value));
+            }
+        });
+        // TransformSet
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
@@ -178,6 +234,20 @@ public class XMLDeserializer {
                 method.invoke(component, new TransformSet().deserialize(value));
             }
         });
+        // ArrayList<TransformSet> (TransformSetValues)
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return TransformSetValues.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, new TransformSetValues(value));
+            }
+        });
+
+        // QuaternionTransformSet
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
