@@ -30,9 +30,5 @@ pl.AWTGameEngine.objects.render
 pl.AWTGameEngine.objects.transform
 pl.AWTGameEngine.scenes
 pl.AWTGameEngine.windows
-pl.AWTGameEngineEditor.components
-pl.AWTGameEngineEditor.components.details
-pl.AWTGameEngineEditor.components.tools
-pl.AWTGameEngineEditor.manager
 pl.AWTGameEngineTests.engine.Preferences
 pl.AWTGameEngineTests.engine.ResourceManager
