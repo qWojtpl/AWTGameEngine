@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.engine.helpers;
 
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
 public class RotationHelper {
@@ -157,7 +157,7 @@ public class RotationHelper {
         return new double[]{camX, camY, camZ};
     }
 
-    public static Vector3 multiplyWithQuaternion(Vector3 vector3, QuaternionTransformSet q) {
+    public static Vector3 multiplyWithQuaternion(Vector3 vector3, Vector4 q) {
         float[] m = MatrixHelper.rotate(q);
 
         double rx = m[0] * vector3.getX() + m[4] * vector3.getY() + m[8]  * vector3.getZ();

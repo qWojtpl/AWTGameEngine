@@ -15,7 +15,7 @@ import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Shape;
 import pl.AWTGameEngine.objects.render.Sprite;
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.awt.image.DataBufferInt;
@@ -312,7 +312,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     @Override
-    public void updateRotation(String identifier, Vector3 rotation, QuaternionTransformSet quaternionRotation) {
+    public void updateRotation(String identifier, Vector3 rotation, Vector4 quaternionRotation) {
         renderables.get(identifier).setRotation(rotation);
         renderables.get(identifier).setQuaternionRotation(quaternionRotation);
     }

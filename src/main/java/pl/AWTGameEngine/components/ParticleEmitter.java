@@ -10,11 +10,11 @@ import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.lists.TransformSetValues;
+import pl.AWTGameEngine.objects.lists.Vector3Values;
 import pl.AWTGameEngine.objects.render.ParticleMeta;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -28,7 +28,7 @@ public class ParticleEmitter extends ObjectComponent {
     private final ConcurrentLinkedQueue<ParticleMeta> particles = new ConcurrentLinkedQueue<>();
     private long particleCounter = 0;
     private Vector3 iterationStep = new Vector3();
-    private TransformSetValues vectors = new TransformSetValues();
+    private Vector3Values vectors = new Vector3Values();
     private Vector3 particleSize = new Vector3(10, 10, 10);
     private long ttl = 1200;
     private double iterationsPerSecond = 10;
@@ -83,7 +83,7 @@ public class ParticleEmitter extends ObjectComponent {
                 .setShader("shaders/billboard")
                 .setSprite(sprite == null ? Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg") : sprite)
                 .setSize(particleSize.clone())
-                .setQuaternionRotation(new QuaternionTransformSet())
+                .setQuaternionRotation(new Vector4())
                 .setPosition(getObject().getPosition().clone());
         ParticleMeta meta = new ParticleMeta(renderable, updateVector.clone(), ttl);
         particles.add(meta);
@@ -111,12 +111,12 @@ public class ParticleEmitter extends ObjectComponent {
     }
 
     @SaveState(name = "vectors")
-    public TransformSetValues getVectors() {
+    public Vector3Values getVectors() {
         return this.vectors;
     }
 
     @FromXML
-    public void setVectors(TransformSetValues vectors) {
+    public void setVectors(Vector3Values vectors) {
         this.vectors = vectors;
     }
 

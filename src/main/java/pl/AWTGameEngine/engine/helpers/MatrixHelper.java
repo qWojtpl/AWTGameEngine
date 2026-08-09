@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.engine.helpers;
 import pl.AWTGameEngine.objects.render.Camera;
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
 public class MatrixHelper {
@@ -45,7 +45,7 @@ public class MatrixHelper {
         return m;
     }
 
-    public static float[] rotate(QuaternionTransformSet q) {
+    public static float[] rotate(Vector4 q) {
         float x = (float) q.getX();
         float y = (float) q.getY();
         float z = (float) q.getZ();
@@ -71,7 +71,7 @@ public class MatrixHelper {
 
     public static float[] composeModelMatrix(
             Vector3 pos,
-            QuaternionTransformSet rot,
+            Vector4 rot,
             Vector3 scale
     ) {
         float[] T = translate((float) pos.getX(), (float) pos.getY(), (float) pos.getZ());

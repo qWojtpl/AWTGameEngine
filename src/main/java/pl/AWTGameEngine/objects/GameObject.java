@@ -7,7 +7,7 @@ import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.net.NetBlock;
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.scenes.Scene;
 
@@ -22,7 +22,7 @@ public class GameObject {
     private Vector3 position = new Vector3(0, 0, 0);
     private Vector3 size = new Vector3(0, 0, 0);
     private Vector3 rotation = new Vector3(0, 0, 0);
-    private final QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 1);
+    private final Vector4 quaternionRotation = new Vector4(0, 0, 0, 1);
     private Net net;
     private final EventHandler eventHandler = new EventHandler();
     private final List<ObjectComponent> components = new ArrayList<>();
@@ -325,7 +325,7 @@ public class GameObject {
     }
 
     @SaveState(name = "quaternionRotation")
-    public QuaternionTransformSet getQuaternionRotation() {
+    public Vector4 getQuaternionRotation() {
         synchronized(this.rotation) {
             synchronized(this.quaternionRotation) {
                 if(this.quaternionRotation.isEmpty() && !this.rotation.isEmpty()) {
@@ -394,7 +394,7 @@ public class GameObject {
         setRotation(new Vector3(x, y, z));
     }
 
-    public void setQuaternionRotation(QuaternionTransformSet transform, ObjectComponent blockNotify) {
+    public void setQuaternionRotation(Vector4 transform, ObjectComponent blockNotify) {
         this.rotation.clear();
         this.quaternionRotation.setX(transform.getX());
         this.quaternionRotation.setY(transform.getY());
@@ -408,7 +408,7 @@ public class GameObject {
         }
     }
     
-    public void setQuaternionRotation(QuaternionTransformSet transform) {
+    public void setQuaternionRotation(Vector4 transform) {
         setQuaternionRotation(transform, null);
     }
 
@@ -433,7 +433,7 @@ public class GameObject {
 
         private Vector3 cachedPosition = null;
         private Vector3 cachedSize = null;
-        private QuaternionTransformSet cachedRotation = null;
+        private Vector4 cachedRotation = null;
         private long owner = -1;
 
         public final NetBlock onPositionSynchronize() {
@@ -457,7 +457,7 @@ public class GameObject {
             String[] split = data.split(NetBlock.getDelimiter());
             Vector3 newPosition = new Vector3().deserializeFromToString(split[0]);
             Vector3 newSize = new Vector3().deserializeFromToString(split[1]);
-            QuaternionTransformSet newRotation = new QuaternionTransformSet().deserializeFromToString(split[2]);
+            Vector4 newRotation = new Vector4().deserializeFromToString(split[2]);
             if(!newPosition.equals(cachedPosition)) {
                 // (cl) create -> (srv) received -> (srv) send new -> server don't want a cache to exist in onPositionSynchronize,
                 // because it would be blocked, so if it's a new object, cache won't be initialized here

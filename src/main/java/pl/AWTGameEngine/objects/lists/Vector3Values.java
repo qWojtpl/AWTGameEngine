@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TransformSetValues is an object, which extends from {@link ArrayList}.
+ * Vector3Values is an object, which extends from {@link ArrayList}.
  * <p>
  * You cannot pass {@link List} or {@link ArrayList} directly
  * into method annotated as {@link pl.AWTGameEngine.annotations.methods.FromXML} due to
@@ -14,22 +14,22 @@ import java.util.List;
  * receive a {@link ArrayList} directly from XML.
  * </p>
  */
-public class TransformSetValues extends Values<Vector3> {
+public class Vector3Values extends Values<Vector3> {
 
-    public TransformSetValues() {
+    public Vector3Values() {
         super();
     }
 
-    public TransformSetValues(String values) {
+    public Vector3Values(String values) {
         super(values);
     }
 
-    public TransformSetValues(List<Vector3> values) {
+    public Vector3Values(List<Vector3> values) {
         super(values);
     }
 
     @Override
-    public TransformSetValues of(String values) {
+    public Vector3Values of(String values) {
         String[] split = splitAndClear(values);
         double x = 0, y = 0, z;
         for(int i = 0, j = 0; i < split.length; i++, j++) {

@@ -23,7 +23,7 @@ import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.lists.FloatValues;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.*;
@@ -642,8 +642,8 @@ public class Vehicle extends ObjectComponent {
                 return;
             }
             PxTransform wheelLocalPose = vehicle.getPxVehicle().getBaseState().getWheelLocalPoses(id).getLocalPose();
-            QuaternionTransformSet newRotation =
-                    getObject().getQuaternionRotation().clone().multiply(QuaternionTransformSet.fromPhysX(wheelLocalPose.getQ()));
+            Vector4 newRotation =
+                    getObject().getQuaternionRotation().clone().multiply(Vector4.fromPhysX(wheelLocalPose.getQ()));
             options.setQuaternionRotation(newRotation);
 
             Vector3 wheelLocalPos = new Vector3().fromPhysX(wheelLocalPose.getP()).add(shapePositionCorrection);
@@ -707,7 +707,7 @@ public class Vehicle extends ObjectComponent {
                                 radius * shapeSizeMultiplier.getZ())
                         )
                         .setRotation(getObject().getRotation())
-                        .setQuaternionRotation(new QuaternionTransformSet())
+                        .setQuaternionRotation(new Vector4())
                         .setShader(shader)
                         .setShapePath(shapePath);
                 g.createRenderable(options);
@@ -872,7 +872,7 @@ public class Vehicle extends ObjectComponent {
         PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
         PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
         getObject().getPosition().set(vec3.getX(), vec3.getY(), vec3.getZ());
-        getObject().setQuaternionRotation(new QuaternionTransformSet(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
+        getObject().setQuaternionRotation(new Vector4(rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW()));
     }
 
     // Events

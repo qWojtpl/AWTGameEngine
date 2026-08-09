@@ -19,7 +19,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
 public abstract class RigidBody extends ObjectComponent {
@@ -35,7 +35,7 @@ public abstract class RigidBody extends ObjectComponent {
 
     // Internal variables
     protected double mass = 0.03;
-    private QuaternionTransformSet cachedRotation = new QuaternionTransformSet(0, 0, 0, 0);
+    private Vector4 cachedRotation = new Vector4(0, 0, 0, 0);
 
     public RigidBody(GameObject object) {
         super(object);
@@ -132,7 +132,7 @@ public abstract class RigidBody extends ObjectComponent {
     protected void updateCachedRotation(PxQuat rotation) {
         if(rotation.getX() != cachedRotation.getX() || rotation.getY() != cachedRotation.getY() ||
                 rotation.getZ() != cachedRotation.getZ() || rotation.getW() != cachedRotation.getW()) {
-            cachedRotation = QuaternionTransformSet.fromPhysX(rotation);
+            cachedRotation = Vector4.fromPhysX(rotation);
             getObject().setQuaternionRotation(cachedRotation.clone(), this);
         }
     }

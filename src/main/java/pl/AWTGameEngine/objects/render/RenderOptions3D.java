@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.objects.render;
 
 import pl.AWTGameEngine.objects.ColorObject;
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
 public class RenderOptions3D {
@@ -10,7 +10,7 @@ public class RenderOptions3D {
     private Vector3 position;
     private Vector3 size;
     private Vector3 rotation;
-    private QuaternionTransformSet quaternionRotation;
+    private Vector4 quaternionRotation;
     private Sprite sprite;
     private ColorObject color;
     private String shader;
@@ -39,7 +39,7 @@ public class RenderOptions3D {
         return rotation;
     }
 
-    public QuaternionTransformSet getQuaternionRotation() {
+    public Vector4 getQuaternionRotation() {
         return quaternionRotation;
     }
 
@@ -86,7 +86,7 @@ public class RenderOptions3D {
         return this;
     }
 
-    public RenderOptions3D setQuaternionRotation(QuaternionTransformSet rotation) {
+    public RenderOptions3D setQuaternionRotation(Vector4 rotation) {
         this.quaternionRotation = rotation;
         return this;
     }

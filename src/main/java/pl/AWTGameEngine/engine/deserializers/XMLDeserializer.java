@@ -6,7 +6,7 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.lists.*;
-import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
+import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.lang.reflect.Method;
@@ -234,29 +234,29 @@ public class XMLDeserializer {
                 method.invoke(component, new Vector3().deserialize(value));
             }
         });
-        // ArrayList<Vector3> (TransformSetValues)
+        // ArrayList<Vector3> (Vector3Values)
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
-                return TransformSetValues.class.equals(type);
+                return Vector3Values.class.equals(type);
             }
 
             @Override
             public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new TransformSetValues(value));
+                method.invoke(component, new Vector3Values(value));
             }
         });
 
-        // QuaternionTransformSet
+        // Vector4
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
-                return QuaternionTransformSet.class.equals(type);
+                return Vector4.class.equals(type);
             }
 
             @Override
             public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new QuaternionTransformSet().deserialize(value));
+                method.invoke(component, new Vector4().deserialize(value));
             }
         });
     }

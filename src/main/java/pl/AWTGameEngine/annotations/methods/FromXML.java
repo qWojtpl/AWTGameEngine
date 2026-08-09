@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.annotations.methods;
 
 import pl.AWTGameEngine.engine.deserializers.ParameterTypeHandler;
+import pl.AWTGameEngine.objects.lists.Vector3Values;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -24,7 +25,7 @@ import java.lang.annotation.Target;
  * boolean, String, Vector3). You can add your own parameter type handler, using
  * {@link pl.AWTGameEngine.engine.deserializers.XMLDeserializer#addParameterTypeHandler(ParameterTypeHandler)}.<br><br>
  * If you want to pass a list instead of single number or object, check out {@link pl.AWTGameEngine.objects.lists.FloatValues},
- * {@link pl.AWTGameEngine.objects.lists.TransformSetValues} or any similar classes.
+ * {@link Vector3Values} or any similar classes.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
