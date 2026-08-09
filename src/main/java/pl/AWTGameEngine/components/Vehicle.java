@@ -24,7 +24,7 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.lists.FloatValues;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.*;
 
@@ -136,7 +136,7 @@ public class Vehicle extends ObjectComponent {
                 EngineDriveVehicleEnum.eDIFFTYPE_MULTIWHEELDRIVE
         );
 
-        TransformSet initializationPose = getVehicleInitializationPose();
+        Vector3 initializationPose = getVehicleInitializationPose();
 
         var vehiclePose = new PxTransform(
                 new PxVec3((float) initializationPose.getX(), (float) initializationPose.getY(), (float) initializationPose.getZ()),
@@ -177,11 +177,11 @@ public class Vehicle extends ObjectComponent {
                 (float) getObject().getSize().getZ());
     }
 
-    protected TransformSet getVehicleSize() {
+    protected Vector3 getVehicleSize() {
         return getObject().getSize();
     }
 
-    protected TransformSet getVehicleInitializationPose() {
+    protected Vector3 getVehicleInitializationPose() {
         return getObject().getPosition();
     }
 
@@ -608,13 +608,13 @@ public class Vehicle extends ObjectComponent {
         private float mass = 12f;
         private float dampingRate = 0.5f;
         private float width = 0.6f;
-        private TransformSet localPosition = new TransformSet();
+        private Vector3 localPosition = new Vector3();
         private float suspensionTravelDistance = 0.3f;
 
         // Visualization
         private RenderOptions3D options;
-        private TransformSet shapeSizeMultiplier = new TransformSet(1, 1, 1);
-        private TransformSet shapePositionCorrection = new TransformSet();
+        private Vector3 shapeSizeMultiplier = new Vector3(1, 1, 1);
+        private Vector3 shapePositionCorrection = new Vector3();
         private String shapePath = "models/box.obj";
         private String shader = "shaders/shader";
 
@@ -646,8 +646,8 @@ public class Vehicle extends ObjectComponent {
                     getObject().getQuaternionRotation().clone().multiply(QuaternionTransformSet.fromPhysX(wheelLocalPose.getQ()));
             options.setQuaternionRotation(newRotation);
 
-            TransformSet wheelLocalPos = new TransformSet().fromPhysX(wheelLocalPose.getP()).add(shapePositionCorrection);
-            TransformSet wheelPosition = RotationHelper.multiplyWithQuaternion(wheelLocalPos, getObject().getQuaternionRotation());
+            Vector3 wheelLocalPos = new Vector3().fromPhysX(wheelLocalPose.getP()).add(shapePositionCorrection);
+            Vector3 wheelPosition = RotationHelper.multiplyWithQuaternion(wheelLocalPos, getObject().getQuaternionRotation());
             options.setPosition(wheelPosition.add(getObject().getPosition()));
         }
 
@@ -701,7 +701,7 @@ public class Vehicle extends ObjectComponent {
                 GraphicsManager3D g = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
                 options = new RenderOptions3D(getObject().getIdentifier() + "$WHEEL-" + id)
                         .setPosition(getObject().getPosition().clone().add(shapePositionCorrection))
-                        .setSize(new TransformSet(
+                        .setSize(new Vector3(
                                 width * shapeSizeMultiplier.getX(),
                                 radius * shapeSizeMultiplier.getY(),
                                 radius * shapeSizeMultiplier.getZ())
@@ -805,12 +805,12 @@ public class Vehicle extends ObjectComponent {
         }
 
         @SaveState(name = "localPosition")
-        public TransformSet getLocalPosition() {
+        public Vector3 getLocalPosition() {
             return this.localPosition;
         }
 
         @FromXML
-        public void setLocalPosition(TransformSet localPosition) {
+        public void setLocalPosition(Vector3 localPosition) {
             this.localPosition = localPosition;
         }
 
@@ -827,22 +827,22 @@ public class Vehicle extends ObjectComponent {
         // Visualization
 
         @SaveState(name = "shapeSizeMultiplier")
-        public TransformSet getShapeSizeMultiplier() {
+        public Vector3 getShapeSizeMultiplier() {
             return this.shapeSizeMultiplier;
         }
 
         @FromXML
-        public void setShapeSizeMultiplier(TransformSet shapeSizeMultiplier) {
+        public void setShapeSizeMultiplier(Vector3 shapeSizeMultiplier) {
             this.shapeSizeMultiplier = shapeSizeMultiplier;
         }
 
         @SaveState(name = "shapePositionCorrection")
-        public TransformSet getShapePositionCorrection() {
+        public Vector3 getShapePositionCorrection() {
             return this.shapePositionCorrection;
         }
 
         @FromXML
-        public void setShapePositionCorrection(TransformSet correction) {
+        public void setShapePositionCorrection(Vector3 correction) {
             this.shapePositionCorrection = correction;
         }
 
@@ -908,7 +908,7 @@ public class Vehicle extends ObjectComponent {
             PxVec3 vec3 = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getP();
             PxQuat rotation = vehicle.getPhysXState().getPhysxActor().getRigidBody().getGlobalPose().getQ();
             getObject().getPosition().set(vec3.getX(), vec3.getZ(), 10);
-            getObject().setRotation(new TransformSet(RotationHelper.quaternionToYaw(rotation.getY(), rotation.getW()), 0, 0));
+            getObject().setRotation(new Vector3(RotationHelper.quaternionToYaw(rotation.getY(), rotation.getW()), 0, 0));
         }
 
         protected PxGeometry createGeometry() {
@@ -919,13 +919,13 @@ public class Vehicle extends ObjectComponent {
             );
         }
 
-        protected TransformSet getVehicleSize() {
-            return new TransformSet(getObject().getSize().getX(), (double) 5 / 2, getObject().getSize().getY());
+        protected Vector3 getVehicleSize() {
+            return new Vector3(getObject().getSize().getX(), (double) 5 / 2, getObject().getSize().getY());
         }
 
         @Override
-        protected TransformSet getVehicleInitializationPose() {
-            return new TransformSet(getObject().getX(), 50, getObject().getY());
+        protected Vector3 getVehicleInitializationPose() {
+            return new Vector3(getObject().getX(), 50, getObject().getY());
         }
 
     }

@@ -11,7 +11,7 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.awt.image.BufferedImage;
 
@@ -33,8 +33,8 @@ public class GUIRenderer extends ObjectComponent {
         PanelGL panelGL = (PanelGL) getWindow().getCurrentScene().getPanel();
         graphicsManagerGL = (GraphicsManagerGL) panelGL.getGraphicsManager3D();
         renderOptions3D = new RenderOptions3D(getObject().getIdentifier() + "-" + "GUIRenderer" + "-" + getScene().getName())
-                .setPosition(new TransformSet())
-                .setSize(new TransformSet())
+                .setPosition(new Vector3())
+                .setSize(new Vector3())
                 .setQuaternionRotation(new QuaternionTransformSet())
                 .setShader("shaders/gui")
                 .setShapePath("models/plane.obj")

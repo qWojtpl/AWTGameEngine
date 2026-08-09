@@ -4,7 +4,7 @@ import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 @ComponentGL
 public class ForceTest extends ObjectComponent {
@@ -17,7 +17,7 @@ public class ForceTest extends ObjectComponent {
     public void onUpdate() {
         RigidBody.Dynamic rigidBody = (RigidBody.Dynamic) getScene().getGameObjectByName("box0").getComponentByClass(RigidBody.Dynamic.class);
         if(getKeyListener().hasPressedKey(69)) {
-            rigidBody.addForce(new TransformSet(0, 1, 0), 1);
+            rigidBody.addForce(new Vector3(0, 1, 0), 1);
         }
     }
 

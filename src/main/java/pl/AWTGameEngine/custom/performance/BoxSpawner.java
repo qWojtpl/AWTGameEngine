@@ -6,7 +6,7 @@ import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.components.CameraFollow;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 @ComponentGL
 public class BoxSpawner extends ObjectComponent {
@@ -29,15 +29,15 @@ public class BoxSpawner extends ObjectComponent {
 //        for(int i = 0; i < boxCounter; i++) {
 //            GameObject object = getScene().getGameObjectByName("boxspawner-" + i);
 //            RigidBody.Dynamic rigidBody = (RigidBody.Dynamic) object.getComponentByClass(RigidBody.Dynamic.class);
-//            rigidBody.addForce(new TransformSet(0, 10, 0));
+//            rigidBody.addForce(new Vector3(0, 10, 0));
 //        }
         GameObject lastObject = getScene().getGameObjectByName("boxspawner-" + (boxCounter - 1));
         for(int i = 0; i < count; i++) {
             getScene().createGameObjectFromPrefab(
                     "boxspawner-" + boxCounter++,
                     "box",
-                    new TransformSet(0, 100 + (size * 2 + 4) * i, 0),
-                    new TransformSet(size, size, size)
+                    new Vector3(0, 100 + (size * 2 + 4) * i, 0),
+                    new Vector3(size, size, size)
             );
         }
         if(lastObject != null) {

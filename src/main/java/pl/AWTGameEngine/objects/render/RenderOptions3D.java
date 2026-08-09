@@ -2,14 +2,14 @@ package pl.AWTGameEngine.objects.render;
 
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 public class RenderOptions3D {
 
     private final String identifier;
-    private TransformSet position;
-    private TransformSet size;
-    private TransformSet rotation;
+    private Vector3 position;
+    private Vector3 size;
+    private Vector3 rotation;
     private QuaternionTransformSet quaternionRotation;
     private Sprite sprite;
     private ColorObject color;
@@ -27,15 +27,15 @@ public class RenderOptions3D {
         return identifier;
     }
 
-    public TransformSet getPosition() {
+    public Vector3 getPosition() {
         return position;
     }
 
-    public TransformSet getSize() {
+    public Vector3 getSize() {
         return size;
     }
 
-    public TransformSet getRotation() {
+    public Vector3 getRotation() {
         return rotation;
     }
 
@@ -71,17 +71,17 @@ public class RenderOptions3D {
         return this.repeatTexture;
     }
 
-    public RenderOptions3D setPosition(TransformSet position) {
+    public RenderOptions3D setPosition(Vector3 position) {
         this.position = position;
         return this;
     }
 
-    public RenderOptions3D setSize(TransformSet size) {
+    public RenderOptions3D setSize(Vector3 size) {
         this.size = size;
         return this;
     }
 
-    public RenderOptions3D setRotation(TransformSet rotation) {
+    public RenderOptions3D setRotation(Vector3 rotation) {
         this.rotation = rotation;
         return this;
     }

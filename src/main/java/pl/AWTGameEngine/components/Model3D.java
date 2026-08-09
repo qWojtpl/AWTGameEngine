@@ -6,13 +6,13 @@ import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 @ComponentGL
 public class Model3D extends Base3DShape {
 
     private RenderOptions3D options;
-    private TransformSet modelSize;
+    private Vector3 modelSize;
 
     public Model3D(GameObject object) {
         super(object);
@@ -50,12 +50,12 @@ public class Model3D extends Base3DShape {
     }
 
     @FromXML
-    public void setModelSize(TransformSet modelSize) {
+    public void setModelSize(Vector3 modelSize) {
         this.modelSize = modelSize;
     }
 
     @SaveState(name = "modelSize")
-    public TransformSet getModelSize() {
+    public Vector3 getModelSize() {
         return this.modelSize;
     }
 

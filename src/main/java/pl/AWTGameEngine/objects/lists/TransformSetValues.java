@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.objects.lists;
 
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * receive a {@link ArrayList} directly from XML.
  * </p>
  */
-public class TransformSetValues extends Values<TransformSet> {
+public class TransformSetValues extends Values<Vector3> {
 
     public TransformSetValues() {
         super();
@@ -24,7 +24,7 @@ public class TransformSetValues extends Values<TransformSet> {
         super(values);
     }
 
-    public TransformSetValues(List<TransformSet> values) {
+    public TransformSetValues(List<Vector3> values) {
         super(values);
     }
 
@@ -39,7 +39,7 @@ public class TransformSetValues extends Values<TransformSet> {
                 y = Double.parseDouble(split[i]);
             } else if(j == 2) {
                 z = Double.parseDouble(split[i]);
-                add(new TransformSet(x, y, z));
+                add(new Vector3(x, y, z));
                 j = -1;
             }
         }

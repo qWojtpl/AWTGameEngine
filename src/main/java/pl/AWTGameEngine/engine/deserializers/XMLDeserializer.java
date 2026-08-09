@@ -7,7 +7,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.lists.*;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -222,19 +222,19 @@ public class XMLDeserializer {
                 method.invoke(component, new FloatValues(value));
             }
         });
-        // TransformSet
+        // Vector3
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {
-                return TransformSet.class.equals(type);
+                return Vector3.class.equals(type);
             }
 
             @Override
             public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new TransformSet().deserialize(value));
+                method.invoke(component, new Vector3().deserialize(value));
             }
         });
-        // ArrayList<TransformSet> (TransformSetValues)
+        // ArrayList<Vector3> (TransformSetValues)
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
             public boolean equalsTypeClass(Class<?> type) {

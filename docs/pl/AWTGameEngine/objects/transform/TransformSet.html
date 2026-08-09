@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class TransformSet" class="title">Class TransformSet</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">pl.AWTGameEngine.objects.transform.TransformSet</div>
+<div class="inheritance">pl.AWTGameEngine.objects.transform.Vector3</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
@@ -129,7 +129,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(pl.AWTGameEngine.objects.transform.TransformSet)" class="member-name-link">add</a><wbr>(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;transformSet)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(pl.AWTGameEngine.objects.transform.TransformSet)" class="member-name-link">add</a><wbr>(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;vector3)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addNotifyExcludeComponent(pl.AWTGameEngine.components.base.ObjectComponent)" class="member-name-link">addNotifyExcludeComponent</a><wbr>(<a href="../../components/base/ObjectComponent.html" title="class in pl.AWTGameEngine.components.base">ObjectComponent</a>&nbsp;component)</code></div>
@@ -147,10 +147,10 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deserializeFromToString(java.lang.String)" class="member-name-link">deserializeFromToString</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;data)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#distanceTo(pl.AWTGameEngine.objects.transform.TransformSet)" class="member-name-link">distanceTo</a><wbr>(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;transformSet)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#distanceTo(pl.AWTGameEngine.objects.transform.TransformSet)" class="member-name-link">distanceTo</a><wbr>(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;vector3)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(pl.AWTGameEngine.objects.transform.TransformSet)" class="member-name-link">equals</a><wbr>(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;transformSet)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(pl.AWTGameEngine.objects.transform.TransformSet)" class="member-name-link">equals</a><wbr>(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;vector3)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fromPhysX(physx.common.PxVec3)" class="member-name-link">fromPhysX</a><wbr>(physx.common.PxVec3&nbsp;pxVec3)</code></div>
@@ -326,7 +326,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(pl.AWTGameEngine.objects.transform.TransformSet)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;transformSet)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;vector3)</span></div>
 </section>
 </li>
 <li>
@@ -360,7 +360,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="distanceTo(pl.AWTGameEngine.objects.transform.TransformSet)">
 <h3>distanceTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">distanceTo</span><wbr><span class="parameters">(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;transformSet)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">distanceTo</span><wbr><span class="parameters">(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;vector3)</span></div>
 </section>
 </li>
 <li>
@@ -372,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(pl.AWTGameEngine.objects.transform.TransformSet)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;transformSet)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="TransformSet.html" title="class in pl.AWTGameEngine.objects.transform">TransformSet</a>&nbsp;vector3)</span></div>
 </section>
 </li>
 <li>

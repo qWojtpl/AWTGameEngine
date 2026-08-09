@@ -6,7 +6,7 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.helpers.MovementHelper;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.windows.Window;
 
 @ComponentGL
@@ -61,7 +61,7 @@ public class MovementGL extends ObjectComponent {
 
     private void handleMovement(double forward, double right, double up) {
 
-        TransformSet rotation = getCamera().getRotation();
+        Vector3 rotation = getCamera().getRotation();
 
         double pitchRad = Math.toRadians(rotation.getX());
         double yawRad = Math.toRadians(rotation.getY());
@@ -83,7 +83,7 @@ public class MovementGL extends ObjectComponent {
             dy = 0;
         }
 
-        TransformSet position = new TransformSet(getCamera().getX() + dx, getCamera().getY() + dy, getCamera().getZ() + dz);
+        Vector3 position = new Vector3(getCamera().getX() + dx, getCamera().getY() + dy, getCamera().getZ() + dz);
         getCamera().setPosition(position);
         getObject().setPosition(position);
     }

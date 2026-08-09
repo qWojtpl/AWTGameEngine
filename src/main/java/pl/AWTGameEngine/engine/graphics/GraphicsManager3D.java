@@ -5,7 +5,7 @@ import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 public abstract class GraphicsManager3D {
 
@@ -17,11 +17,11 @@ public abstract class GraphicsManager3D {
 
     public abstract RenderOptions3D getRenderable(String identifier);
 
-    public abstract void updatePosition(String identifier, TransformSet position);
+    public abstract void updatePosition(String identifier, Vector3 position);
 
-    public abstract void updateSize(String identifier, TransformSet scale);
+    public abstract void updateSize(String identifier, Vector3 scale);
 
-    public abstract void updateRotation(String identifier, TransformSet rotation, QuaternionTransformSet quaternionRotation);
+    public abstract void updateRotation(String identifier, Vector3 rotation, QuaternionTransformSet quaternionRotation);
 
     public abstract void updateSprite(String identifier, Sprite sprite, boolean releaseOldTexture);
 

@@ -24,6 +24,7 @@ pl.AWTGameEngine.exceptions.resources
 pl.AWTGameEngine.exceptions.scenes
 pl.AWTGameEngine.exceptions.tests
 pl.AWTGameEngine.objects
+pl.AWTGameEngine.objects.lists
 pl.AWTGameEngine.objects.net
 pl.AWTGameEngine.objects.render
 pl.AWTGameEngine.objects.transform

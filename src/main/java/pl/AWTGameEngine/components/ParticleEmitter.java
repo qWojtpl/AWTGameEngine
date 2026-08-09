@@ -15,7 +15,7 @@ import pl.AWTGameEngine.objects.render.ParticleMeta;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -27,9 +27,9 @@ public class ParticleEmitter extends ObjectComponent {
     private GraphicsManager3D graphicsManager3D;
     private final ConcurrentLinkedQueue<ParticleMeta> particles = new ConcurrentLinkedQueue<>();
     private long particleCounter = 0;
-    private TransformSet iterationStep = new TransformSet();
+    private Vector3 iterationStep = new Vector3();
     private TransformSetValues vectors = new TransformSetValues();
-    private TransformSet particleSize = new TransformSet(10, 10, 10);
+    private Vector3 particleSize = new Vector3(10, 10, 10);
     private long ttl = 1200;
     private double iterationsPerSecond = 10;
     private long fadeOutStart = 600;
@@ -63,7 +63,7 @@ public class ParticleEmitter extends ObjectComponent {
             if(meta == null) {
                 continue;
             }
-            TransformSet newPosition = meta.iterate(iterationStep, rotation);
+            Vector3 newPosition = meta.iterate(iterationStep, rotation);
             if(newPosition == null) {
                 particles.remove(meta);
                 graphicsManager3D.removeRenderable(meta.getIdentifier());
@@ -75,7 +75,7 @@ public class ParticleEmitter extends ObjectComponent {
         }
     }
 
-    public void createParticle(TransformSet updateVector) {
+    public void createParticle(Vector3 updateVector) {
         String particleIdentifier = getObject().getIdentifier() + "$PARTICLE" + particleCounter++;
         RenderOptions3D renderable = new RenderOptions3D(particleIdentifier);
         renderable
@@ -101,12 +101,12 @@ public class ParticleEmitter extends ObjectComponent {
     }
 
     @SaveState(name = "iterationStep")
-    public TransformSet getIterationStep() {
+    public Vector3 getIterationStep() {
         return this.iterationStep;
     }
 
     @FromXML
-    public void setIterationStep(TransformSet iterationStep) {
+    public void setIterationStep(Vector3 iterationStep) {
         this.iterationStep = iterationStep;
     }
 
@@ -121,12 +121,12 @@ public class ParticleEmitter extends ObjectComponent {
     }
 
     @SaveState(name = "particleSize")
-    public TransformSet getParticleSize() {
+    public Vector3 getParticleSize() {
         return this.particleSize;
     }
 
     @FromXML
-    public void setParticleSize(TransformSet particleSize) {
+    public void setParticleSize(Vector3 particleSize) {
         this.particleSize = particleSize;
     }
 
@@ -190,7 +190,7 @@ public class ParticleEmitter extends ObjectComponent {
         @Override
         protected void iteration() {
             if(loop && graphicsManager3D != null) {
-                for(TransformSet vector : vectors) {
+                for(Vector3 vector : vectors) {
                     createParticle(vector);
                 }
             }

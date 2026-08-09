@@ -11,7 +11,7 @@ import pl.AWTGameEngine.exceptions.PrefabAlreadyExistsException;
 import pl.AWTGameEngine.exceptions.scenes.GameObjectAddToSceneException;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Prefab;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.util.*;
@@ -77,11 +77,11 @@ public class Scene {
         this.prefabs.put(prefab.getIdentifier(), prefab);
     }
 
-    public GameObject createGameObjectFromPrefab(String identifier, String prefabIdentifier, TransformSet position, TransformSet size) {
+    public GameObject createGameObjectFromPrefab(String identifier, String prefabIdentifier, Vector3 position, Vector3 size) {
         return createGameObjectFromPrefab(identifier, getPrefab(prefabIdentifier), position, size);
     }
 
-    public GameObject createGameObjectFromPrefab(String identifier, Prefab prefab, TransformSet position, TransformSet size) {
+    public GameObject createGameObjectFromPrefab(String identifier, Prefab prefab, Vector3 position, Vector3 size) {
         GameObject object = createGameObject(identifier);
         object.setPosition(position);
         object.setSize(size);

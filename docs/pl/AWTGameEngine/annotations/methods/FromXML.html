@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Methods which are annotated with <a href="FromXML.html" title="annotation interface in pl.AWTGameEngine.annotations.methods"><code>FromXML</code></a> can be executed
  by <a href="../../engine/deserializers/XMLDeserializer.html" title="class in pl.AWTGameEngine.engine.deserializers"><code>XMLDeserializer</code></a>.
  Methods which are annotated, should look like <code>setField</code>, where <code>Field</code>
- is an name of XML field with first big letter. It can have only one argument.
+ is a name of XML field with first big letter. It can have only one argument.
  <pre>
  <code>
       @FromXML
@@ -99,8 +99,10 @@ loadScripts(document, 'script');</script>
  </code>
  </pre>
  By default, only some argument types are supported (e.g. int, long, float, double,
- boolean, String, TransformSet). You can add your own parameter type handler, using
- <a href="../../engine/deserializers/XMLDeserializer.html#addParameterTypeHandler(pl.AWTGameEngine.engine.deserializers.ParameterTypeHandler)"><code>XMLDeserializer.addParameterTypeHandler(ParameterTypeHandler)</code></a></div>
+ boolean, String, Vector3). You can add your own parameter type handler, using
+ <a href="../../engine/deserializers/XMLDeserializer.html#addParameterTypeHandler(pl.AWTGameEngine.engine.deserializers.ParameterTypeHandler)"><code>XMLDeserializer.addParameterTypeHandler(ParameterTypeHandler)</code></a>.<br><br>
+ If you want to pass a list instead of single number or object, check out <a href="../../objects/lists/FloatValues.html" title="class in pl.AWTGameEngine.objects.lists"><code>FloatValues</code></a>,
+ <a href="../../objects/lists/TransformSetValues.html" title="class in pl.AWTGameEngine.objects.lists"><code>TransformSetValues</code></a> or any similar classes.</div>
 </section>
 <section class="details" id="annotation-interface-element-detail"></section>
 <!-- ========= END OF CLASS DATA ========= -->

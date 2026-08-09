@@ -6,7 +6,7 @@ import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.ContactPoint;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.scenes.Scene;
 
 import java.util.*;
@@ -56,9 +56,9 @@ public class CollisionManager extends PxSimulationEventCallbackImpl {
             for (int j = 0; j < contactPoints; j++) {
                 PxContactPairPoint cp = contacts.get(j);
                 points.add(new ContactPoint(
-                        new TransformSet().fromPhysX(cp.getPosition()),
-                        new TransformSet().fromPhysX(cp.getNormal()),
-                        new TransformSet().fromPhysX(cp.getImpulse()),
+                        new Vector3().fromPhysX(cp.getPosition()),
+                        new Vector3().fromPhysX(cp.getNormal()),
+                        new Vector3().fromPhysX(cp.getImpulse()),
                         cp.getSeparation()
                 ));
             }

@@ -5,7 +5,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -22,26 +22,26 @@ public class GameObjectDeserializer {
 
     public static void deserializeObjectAttributes(GameObject object, Node node) {
         if(!getValue(node, "position").equals("0")) {
-            object.setPosition(new TransformSet().deserialize(getValue(node, "position")));
+            object.setPosition(new Vector3().deserialize(getValue(node, "position")));
         } else {
             object.getPosition().setX(Double.parseDouble(getValue(node, "x")));
             object.getPosition().setY(Double.parseDouble(getValue(node, "y")));
             object.getPosition().setZ(Double.parseDouble(getValue(node, "z")));
         }
         if(!getValue(node, "size").equals("0")) {
-            object.setSize(new TransformSet().deserialize(getValue(node, "size")));
+            object.setSize(new Vector3().deserialize(getValue(node, "size")));
         } else {
             object.getSize().setX(Double.parseDouble(getValue(node, "sizeX")));
             object.getSize().setY(Double.parseDouble(getValue(node, "sizeY")));
             object.getSize().setZ(Double.parseDouble(getValue(node, "sizeZ")));
         }
         if(!getValue(node, "rotation").equals("0")) {
-            object.setRotation(new TransformSet().deserialize(getValue(node, "rotation")));
+            object.setRotation(new Vector3().deserialize(getValue(node, "rotation")));
         } else {
             double x = Double.parseDouble(getValue(node, "rotationX"));
             double y = Double.parseDouble(getValue(node, "rotationY"));
             double z = Double.parseDouble(getValue(node, "rotationZ"));
-            object.setRotation(new TransformSet(x, y, z));
+            object.setRotation(new Vector3(x, y, z));
         }
         if(!getValue(node, "quaternionRotation").equals("0")) {
             object.setQuaternionRotation(new QuaternionTransformSet().deserialize(getValue(node, "quaternionRotation")));

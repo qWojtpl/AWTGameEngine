@@ -1,20 +1,20 @@
 package pl.AWTGameEngine.objects.render;
 
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 public class ParticleMeta {
 
     private final RenderOptions3D renderable;
-    private final TransformSet vector;
+    private final Vector3 vector;
     private long ttl;
 
-    public ParticleMeta(RenderOptions3D renderable, TransformSet vector, long ttl) {
+    public ParticleMeta(RenderOptions3D renderable, Vector3 vector, long ttl) {
         this.renderable = renderable;
         this.vector = vector;
         this.ttl = ttl;
     }
 
-    public TransformSet iterate(TransformSet iterationStep, float[] rotation) {
+    public Vector3 iterate(Vector3 iterationStep, float[] rotation) {
         if(ttl <= 0) {
             return null;
         }
@@ -32,7 +32,7 @@ public class ParticleMeta {
         double moveY = rotation[1] * vector.getX() + rotation[5] * vector.getY() + rotation[9]  * vector.getZ();
         double moveZ = rotation[2] * vector.getX() + rotation[6] * vector.getY() + rotation[10]  * vector.getZ();
 
-        TransformSet currentPosition = renderable.getPosition();
+        Vector3 currentPosition = renderable.getPosition();
         return currentPosition.set(currentPosition.getX() + moveX, currentPosition.getY() + moveY, currentPosition.getZ() + moveZ);
     }
 

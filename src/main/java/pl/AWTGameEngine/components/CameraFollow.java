@@ -7,7 +7,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 @ComponentGL
 @Unique
@@ -23,11 +23,11 @@ public class CameraFollow extends ObjectComponent {
     }
 
     private void updateCamera() {
-        TransformSet position = getObject().getPosition();
+        Vector3 position = getObject().getPosition();
         double[] camPos = RotationHelper.radiusLook(position.getX(), position.getY(), position.getZ(), radius, verticalAngle, horizontalAngle);
-        getCamera().setPosition(new TransformSet(camPos[0], camPos[1], camPos[2]));
+        getCamera().setPosition(new Vector3(camPos[0], camPos[1], camPos[2]));
         double[] look = RotationHelper.lookAt(getCamera().getX(), getCamera().getY(), getCamera().getZ(), position.getX(), position.getY(), position.getZ());
-        getCamera().setRotation(new TransformSet(look[0], look[1], look[2]));
+        getCamera().setRotation(new Vector3(look[0], look[1], look[2]));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CameraFollow extends ObjectComponent {
             forceX /= len;
             forceY /= len;
             forceZ /= len;
-//            dynamic.addForce(new TransformSet(forceX, 0, forceZ), 10);
+//            dynamic.addForce(new Vector3(forceX, 0, forceZ), 10);
         }
     }
 

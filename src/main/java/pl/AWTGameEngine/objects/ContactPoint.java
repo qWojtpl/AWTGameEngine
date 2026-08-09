@@ -1,30 +1,30 @@
 package pl.AWTGameEngine.objects;
 
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 public class ContactPoint {
 
-    private final TransformSet position;
-    private final TransformSet normal;
-    private final TransformSet impulse;
+    private final Vector3 position;
+    private final Vector3 normal;
+    private final Vector3 impulse;
     private final float separation;
 
-    public ContactPoint(TransformSet position, TransformSet normal, TransformSet impulse, float separation) {
+    public ContactPoint(Vector3 position, Vector3 normal, Vector3 impulse, float separation) {
         this.position = position;
         this.normal = normal;
         this.impulse = impulse;
         this.separation = separation;
     }
 
-    public TransformSet getPosition() {
+    public Vector3 getPosition() {
         return this.position.clone();
     }
 
-    public TransformSet getNormal() {
+    public Vector3 getNormal() {
         return this.normal.clone();
     }
 
-    public TransformSet getImpulse() {
+    public Vector3 getImpulse() {
         return this.impulse.clone();
     }
 

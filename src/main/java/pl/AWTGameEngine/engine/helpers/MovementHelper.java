@@ -3,7 +3,7 @@ package pl.AWTGameEngine.engine.helpers;
 import pl.AWTGameEngine.engine.listeners.MouseListener;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.Camera;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.windows.Window;
 
 public class MovementHelper {
@@ -32,7 +32,7 @@ public class MovementHelper {
             newRotationX = -90;
         }
 
-        TransformSet rotation = new TransformSet(newRotationX, newRotationY, 30);
+        Vector3 rotation = new Vector3(newRotationX, newRotationY, 30);
         camera.setRotation(rotation);
         object.setRotation(rotation);
     }

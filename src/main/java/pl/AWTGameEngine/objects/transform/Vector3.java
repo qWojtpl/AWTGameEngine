@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
-public class TransformSet {
+public class Vector3 {
 
     private double x = 0;
     private double y = 0;
@@ -17,20 +17,20 @@ public class TransformSet {
     private List<ObjectComponent> excludeComponents;
     private final ReentrantLock lock = new ReentrantLock();
 
-    public TransformSet() {
+    public Vector3() {
 
     }
 
-    public TransformSet(double x) {
+    public Vector3(double x) {
         this.x = x;
     }
 
-    public TransformSet(double x, double y) {
+    public Vector3(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public TransformSet(double x, double y, double z) {
+    public Vector3(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -44,8 +44,8 @@ public class TransformSet {
         lock.unlock();
     }
 
-    public TransformSet clone() {
-        return new TransformSet(this.x, this.y, this.z);
+    public Vector3 clone() {
+        return new Vector3(this.x, this.y, this.z);
     }
 
     public void clear() {
@@ -72,7 +72,7 @@ public class TransformSet {
         return this.z;
     }
 
-    public TransformSet setX(double x) {
+    public Vector3 setX(double x) {
         lock();
         try {
             this.x = x;
@@ -83,7 +83,7 @@ public class TransformSet {
         return this;
     }
 
-    public TransformSet setY(double y) {
+    public Vector3 setY(double y) {
         lock();
         try {
             this.y = y;
@@ -94,7 +94,7 @@ public class TransformSet {
         return this;
     }
 
-    public TransformSet setZ(double z) {
+    public Vector3 setZ(double z) {
         lock();
         try {
             this.z = z;
@@ -105,7 +105,7 @@ public class TransformSet {
         return this;
     }
 
-    public TransformSet set(double x, double y, double z) {
+    public Vector3 set(double x, double y, double z) {
         lock();
         try {
             this.x = x;
@@ -118,12 +118,12 @@ public class TransformSet {
         return this;
     }
 
-    public TransformSet add(TransformSet transformSet) {
+    public Vector3 add(Vector3 vector3) {
         lock();
         try {
-            this.x = x + transformSet.getX();
-            this.y = y + transformSet.getY();
-            this.z = z + transformSet.getZ();
+            this.x = x + vector3.getX();
+            this.y = y + vector3.getY();
+            this.z = z + vector3.getZ();
         } finally {
             unlock();
         }
@@ -133,25 +133,25 @@ public class TransformSet {
 
     @Override
     public synchronized String toString() {
-        return "[TransformSet[x=" + x + ",y=" + y + ",z=" + z + "]]";
+        return "[Vector3[x=" + x + ",y=" + y + ",z=" + z + "]]";
     }
 
     public synchronized String toSimpleString() {
         return x + "," + y + "," + z;
     }
 
-    public TransformSet deserializeFromToString(String data) {
+    public Vector3 deserializeFromToString(String data) {
         deserialize(data
                 .replace("x=", "")
                 .replace("y=", "")
                 .replace("z=", "")
                 .replaceAll("\\[", "")
                 .replaceAll("]", "")
-                .replaceAll("TransformSet", ""));
+                .replaceAll("Vector3", ""));
         return this;
     }
 
-    public TransformSet deserialize(String values) {
+    public Vector3 deserialize(String values) {
         lock();
         try {
             String[] split = values.split(",");
@@ -169,10 +169,10 @@ public class TransformSet {
         return this;
     }
 
-    public double distanceTo(TransformSet transformSet) {
-        double xR = Math.pow(this.x - transformSet.getX(), 2);
-        double yR = Math.pow(this.y - transformSet.getY(), 2);
-        double zR = Math.pow(this.z - transformSet.getZ(), 2);
+    public double distanceTo(Vector3 vector3) {
+        double xR = Math.pow(this.x - vector3.getX(), 2);
+        double yR = Math.pow(this.y - vector3.getY(), 2);
+        double zR = Math.pow(this.z - vector3.getZ(), 2);
         return Math.sqrt(xR + yR + zR);
     }
 
@@ -180,14 +180,14 @@ public class TransformSet {
         return this.x == 0 && this.y == 0 && this.z == 0;
     }
 
-    public boolean equals(TransformSet transformSet) {
-        if(transformSet == null) {
+    public boolean equals(Vector3 vector3) {
+        if(vector3 == null) {
             return false;
         }
-        return this.x == transformSet.getX() && this.y == transformSet.getY() && this.z == transformSet.getZ();
+        return this.x == vector3.getX() && this.y == vector3.getY() && this.z == vector3.getZ();
     }
 
-    public TransformSet fromPhysX(PxVec3 pxVec3) {
+    public Vector3 fromPhysX(PxVec3 pxVec3) {
         lock();
         try {
             this.x = pxVec3.getX();

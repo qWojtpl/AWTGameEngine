@@ -8,7 +8,7 @@ import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.net.NetConnection;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.HashMap;
 
@@ -25,8 +25,8 @@ public class PlayerSpawner extends NetComponent {
     @Override
     public void onClientConnect(Server server, NetConnection client) {
         GameObject object = getScene().createGameObject("cube" + client.getId());
-        object.setSize(new TransformSet(100, 100));
-        object.setPosition(new TransformSet(300, 300));
+        object.setSize(new Vector3(100, 100));
+        object.setPosition(new Vector3(300, 300));
         object.getNet().setOwner(client.getId());
         BlankRenderer blankRenderer = new BlankRenderer(object);
         blankRenderer.setColor("rgb(0,255,0)");

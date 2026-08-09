@@ -3,17 +3,15 @@ package pl.AWTGameEngine.components;
 import physx.PxTopLevelFunctions;
 import physx.character.*;
 import physx.common.PxVec3;
-import physx.physics.PxScene;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.enums.KeyCode;
 import pl.AWTGameEngine.engine.helpers.MovementHelper;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.windows.Window;
 
 @ComponentGL
@@ -70,7 +68,7 @@ public class PlayerController extends ObjectComponent {
     }
 
     private double[] calculateMovement() {
-        TransformSet rotation = getCamera().getRotation();
+        Vector3 rotation = getCamera().getRotation();
         double yawRad = Math.toRadians(rotation.getY());
 
         double dirX = Math.sin(yawRad);

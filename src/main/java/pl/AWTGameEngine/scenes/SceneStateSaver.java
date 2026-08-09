@@ -8,7 +8,7 @@ import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Prefab;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -160,11 +160,11 @@ public class SceneStateSaver {
                     continue;
                 }
                 String value = String.valueOf(result);
-                if(result instanceof TransformSet) {
-                    if(((TransformSet) result).isEmpty()) {
+                if(result instanceof Vector3) {
+                    if(((Vector3) result).isEmpty()) {
                         continue;
                     }
-                    value = ((TransformSet) result).toSimpleString();
+                    value = ((Vector3) result).toSimpleString();
                 } else if(result instanceof QuaternionTransformSet) {
                     if(((QuaternionTransformSet) result).isEmpty()) {
                         continue;

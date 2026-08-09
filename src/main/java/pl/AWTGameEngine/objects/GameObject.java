@@ -8,7 +8,7 @@ import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.net.NetBlock;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.scenes.Scene;
 
 import java.util.*;
@@ -19,9 +19,9 @@ public class GameObject {
     private final String identifier;
     private final Scene scene;
     private boolean active = true;
-    private TransformSet position = new TransformSet(0, 0, 0);
-    private TransformSet size = new TransformSet(0, 0, 0);
-    private TransformSet rotation = new TransformSet(0, 0, 0);
+    private Vector3 position = new Vector3(0, 0, 0);
+    private Vector3 size = new Vector3(0, 0, 0);
+    private Vector3 rotation = new Vector3(0, 0, 0);
     private final QuaternionTransformSet quaternionRotation = new QuaternionTransformSet(0, 0, 0, 1);
     private Net net;
     private final EventHandler eventHandler = new EventHandler();
@@ -36,7 +36,7 @@ public class GameObject {
         hookPositionNotifyAction(position);
     }
 
-    private void hookPositionNotifyAction(TransformSet position) {
+    private void hookPositionNotifyAction(Vector3 position) {
         position.setNotifyAction((exclude) -> {
             for(ObjectComponent component : eventHandler.getComponents("onUpdatePosition#double#double")) {
                 if(exclude != null) {
@@ -57,7 +57,7 @@ public class GameObject {
         });
     }
 
-    private void hookSizeNotifyAction(TransformSet size) {
+    private void hookSizeNotifyAction(Vector3 size) {
         size.setNotifyAction((exclude) -> {
             for(ObjectComponent component : eventHandler.getComponents("onUpdateSize#double#double")) {
                 if(exclude != null) {
@@ -78,7 +78,7 @@ public class GameObject {
         });
     }
 
-    private void hookRotationNotifyAction(TransformSet rotation) {
+    private void hookRotationNotifyAction(Vector3 rotation) {
         rotation.setNotifyAction((exclude) -> {
             for(ObjectComponent component : eventHandler.getComponents("onUpdateRotation")) {
                 if(exclude != null) {
@@ -233,7 +233,7 @@ public class GameObject {
         double direction = delta < 0 ? -1 : 1;
         for(double i = 0; i < Math.abs(delta); i++) {
             if(tryRotate(direction)) {
-                setRotation(new TransformSet(rotation.getX() + direction, rotation.getY(), rotation.getZ()));
+                setRotation(new Vector3(rotation.getX() + direction, rotation.getY(), rotation.getZ()));
                 continue;
             }
             return;
@@ -301,11 +301,11 @@ public class GameObject {
     }
 
     @SaveState(name = "position")
-    public TransformSet getPosition() {
+    public Vector3 getPosition() {
         return this.position;
     }
 
-    public TransformSet getRotation() {
+    public Vector3 getRotation() {
         synchronized(this.rotation) {
             synchronized(this.quaternionRotation) {
                 if(this.rotation.isEmpty() && !this.quaternionRotation.isEmpty()) {
@@ -361,7 +361,7 @@ public class GameObject {
     }
 
     @SaveState(name = "size")
-    public TransformSet getSize() {
+    public Vector3 getSize() {
         return this.size;
     }
 
@@ -373,17 +373,17 @@ public class GameObject {
         this.active = active;
     }
 
-    public void setPosition(TransformSet transform) {
+    public void setPosition(Vector3 transform) {
         this.position = transform;
         hookPositionNotifyAction(transform); // attach notify
         transform.getNotifyAction().accept(null); // run notify
     }
 
     public void setPosition(double x, double y, double z) {
-        setPosition(new TransformSet(x, y, z));
+        setPosition(new Vector3(x, y, z));
     }
 
-    public void setRotation(TransformSet transform) {
+    public void setRotation(Vector3 transform) {
         this.rotation = transform;
         hookRotationNotifyAction(transform);
         transform.getNotifyAction().accept(null);
@@ -391,7 +391,7 @@ public class GameObject {
     }
 
     public void setRotation(double x, double y, double z) {
-        setRotation(new TransformSet(x, y, z));
+        setRotation(new Vector3(x, y, z));
     }
 
     public void setQuaternionRotation(QuaternionTransformSet transform, ObjectComponent blockNotify) {
@@ -412,14 +412,14 @@ public class GameObject {
         setQuaternionRotation(transform, null);
     }
 
-    public void setSize(TransformSet transform) {
+    public void setSize(Vector3 transform) {
         this.size = transform;
         hookSizeNotifyAction(transform);
         transform.getNotifyAction().accept(null);
     }
 
     public void setSize(double x, double y, double z) {
-        setSize(new TransformSet(x, y, z));
+        setSize(new Vector3(x, y, z));
     }
 
     public Net getNet() {
@@ -431,8 +431,8 @@ public class GameObject {
 
     public class Net {
 
-        private TransformSet cachedPosition = null;
-        private TransformSet cachedSize = null;
+        private Vector3 cachedPosition = null;
+        private Vector3 cachedSize = null;
         private QuaternionTransformSet cachedRotation = null;
         private long owner = -1;
 
@@ -455,8 +455,8 @@ public class GameObject {
 
         public final void onPositionSynchronizeReceived(String data, boolean server) {
             String[] split = data.split(NetBlock.getDelimiter());
-            TransformSet newPosition = new TransformSet().deserializeFromToString(split[0]);
-            TransformSet newSize = new TransformSet().deserializeFromToString(split[1]);
+            Vector3 newPosition = new Vector3().deserializeFromToString(split[0]);
+            Vector3 newSize = new Vector3().deserializeFromToString(split[1]);
             QuaternionTransformSet newRotation = new QuaternionTransformSet().deserializeFromToString(split[2]);
             if(!newPosition.equals(cachedPosition)) {
                 // (cl) create -> (srv) received -> (srv) send new -> server don't want a cache to exist in onPositionSynchronize,

@@ -20,7 +20,7 @@ import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 public abstract class RigidBody extends ObjectComponent {
 
@@ -90,13 +90,13 @@ public abstract class RigidBody extends ObjectComponent {
         return physXManager.getShapeFlags();
     }
 
-    public void updatePosition(TransformSet position) {
+    public void updatePosition(Vector3 position) {
         PxVec3 newVector = new PxVec3((float) position.getX(), (float) position.getY(), (float) position.getZ());
         pose.setP(newVector);
         newVector.destroy();
     }
 
-    public void updateSize(TransformSet size) {
+    public void updateSize(Vector3 size) {
 //        PxVec3 newVector = new PxVec3((float) size.getX(), (float) size.getY(), (float) size.getZ());
 //        boxGeometry.setHalfExtents(newVector);
 //        newVector.destroy();
@@ -148,8 +148,8 @@ public abstract class RigidBody extends ObjectComponent {
         protected PxRigidDynamic rigidDynamic;
 
         private boolean disableGravity = false;
-        private TransformSet savedLinearVelocity = null;
-        private TransformSet savedAngularVelocity = null;
+        private Vector3 savedLinearVelocity = null;
+        private Vector3 savedAngularVelocity = null;
 
         public Dynamic(GameObject object) {
             super(object);
@@ -201,7 +201,7 @@ public abstract class RigidBody extends ObjectComponent {
             updateCachedRotation(rigidDynamic.getGlobalPose().getQ());
         }
 
-        public void addForce(TransformSet vector, float force) {
+        public void addForce(Vector3 vector, float force) {
             PxVec3 vec3 = new PxVec3((float) vector.getX() * force, (float) vector.getY() * force, (float) vector.getZ() * force);
             rigidDynamic.addForce(vec3);
             vec3.destroy();
@@ -219,11 +219,11 @@ public abstract class RigidBody extends ObjectComponent {
         }
 
         @SaveState(name = "linearVelocity")
-        public TransformSet getLinearVelocity() {
-            return new TransformSet().fromPhysX(rigidDynamic.getLinearVelocity());
+        public Vector3 getLinearVelocity() {
+            return new Vector3().fromPhysX(rigidDynamic.getLinearVelocity());
         }
 
-        public void setLinearVelocity(TransformSet linearVelocity) {
+        public void setLinearVelocity(Vector3 linearVelocity) {
             if(rigidDynamic == null) {
                 this.savedLinearVelocity = linearVelocity;
                 return;
@@ -235,15 +235,15 @@ public abstract class RigidBody extends ObjectComponent {
 
         @FromXML
         public void setLinearVelocity(String linearVelocity) {
-            setLinearVelocity(new TransformSet().deserialize(linearVelocity));
+            setLinearVelocity(new Vector3().deserialize(linearVelocity));
         }
 
         @SaveState(name = "angularVelocity")
-        public TransformSet getAngularVelocity() {
-            return new TransformSet().fromPhysX(rigidDynamic.getAngularVelocity());
+        public Vector3 getAngularVelocity() {
+            return new Vector3().fromPhysX(rigidDynamic.getAngularVelocity());
         }
 
-        public void setAngularVelocity(TransformSet angularVelocity) {
+        public void setAngularVelocity(Vector3 angularVelocity) {
             if(rigidDynamic == null) {
                 this.savedAngularVelocity = angularVelocity;
                 return;
@@ -255,7 +255,7 @@ public abstract class RigidBody extends ObjectComponent {
 
         @FromXML
         public void setAngularVelocity(String angularVelocity) {
-            setAngularVelocity(new TransformSet().deserialize(angularVelocity));
+            setAngularVelocity(new Vector3().deserialize(angularVelocity));
         }
 
     }
@@ -370,28 +370,28 @@ public abstract class RigidBody extends ObjectComponent {
         }
 
         @Override
-        public void addForce(TransformSet vector, float force) {
+        public void addForce(Vector3 vector, float force) {
             throw new RuntimeException("Body must be non-kinematic. Kinematic add force may be implemented later.");
         }
 
         @SaveState(name = "linearVelocity")
         @Override
-        public TransformSet getLinearVelocity() {
+        public Vector3 getLinearVelocity() {
             PxVec3 linearVelocity = rigidDynamic.getLinearVelocity();
             if(Float.isNaN(linearVelocity.getX()) || Float.isNaN(linearVelocity.getY()) || Float.isNaN(linearVelocity.getZ())) {
                 return null;
             }
-            return new TransformSet().fromPhysX(linearVelocity);
+            return new Vector3().fromPhysX(linearVelocity);
         }
 
         @SaveState(name = "angularVelocity")
         @Override
-        public TransformSet getAngularVelocity() {
+        public Vector3 getAngularVelocity() {
             PxVec3 angularVelocity = rigidDynamic.getAngularVelocity();
             if(Float.isNaN(angularVelocity.getX()) || Float.isNaN(angularVelocity.getY()) || Float.isNaN(angularVelocity.getZ())) {
                 return null;
             }
-            return new TransformSet().fromPhysX(angularVelocity);
+            return new Vector3().fromPhysX(angularVelocity);
         }
 
     }
@@ -437,20 +437,20 @@ public abstract class RigidBody extends ObjectComponent {
             }
 
             @Override
-            public void updatePosition(TransformSet position) {
+            public void updatePosition(Vector3 position) {
                 PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), 5);
                 pose.setP(vec3);
                 vec3.destroy();
             }
 
             @Override
-            public void addForce(TransformSet vector, float force) {
-                super.addForce(new TransformSet(vector.getX(), vector.getZ(), vector.getY()), force);
+            public void addForce(Vector3 vector, float force) {
+                super.addForce(new Vector3(vector.getX(), vector.getZ(), vector.getY()), force);
             }
 
             @Override
             protected void updateCachedRotation(PxQuat rotation) {
-                getObject().setRotation(new TransformSet(RotationHelper.quaternionToYaw(rotation.getY(), rotation.getW()), 0, 0));
+                getObject().setRotation(new Vector3(RotationHelper.quaternionToYaw(rotation.getY(), rotation.getW()), 0, 0));
             }
 
         }
@@ -478,7 +478,7 @@ public abstract class RigidBody extends ObjectComponent {
 
 
             @Override
-            public void updatePosition(TransformSet position) {
+            public void updatePosition(Vector3 position) {
                 PxVec3 vec3 = new PxVec3((float) position.getX(), layer * 5, (float) position.getY());
                 pose.setP(vec3);
                 vec3.destroy();
@@ -540,7 +540,7 @@ public abstract class RigidBody extends ObjectComponent {
             }
 
             @Override
-            public void updatePosition(TransformSet position) {
+            public void updatePosition(Vector3 position) {
                 PxVec3 vec3 = new PxVec3((float) position.getX(), (float) position.getZ(), (float) position.getY());
                 pose.setP(vec3);
                 vec3.destroy();
@@ -569,13 +569,13 @@ public abstract class RigidBody extends ObjectComponent {
 
     @Override
     public boolean onUpdatePosition(double newX, double newY, double newZ) {
-        updatePosition(new TransformSet(newX, newY, newZ));
+        updatePosition(new Vector3(newX, newY, newZ));
         return true;
     }
 
     @Override
     public boolean onUpdateSize(double newX, double newY, double newZ) {
-        updateSize(new TransformSet(newX, newY, newZ));
+        updateSize(new Vector3(newX, newY, newZ));
         return true;
     }
 

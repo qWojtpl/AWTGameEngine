@@ -8,7 +8,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.AudioClip;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class SoundSource extends ObjectComponent {
             return;
         }
 
-        TransformSet cameraPosition = new TransformSet(getCamera().getX(), getCamera().getY(), getCamera().getZ());
+        Vector3 cameraPosition = new Vector3(getCamera().getX(), getCamera().getY(), getCamera().getZ());
         FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 
         float newVolume = 1 - ((float) getObject().getPosition().distanceTo(cameraPosition) / spreadDistance);

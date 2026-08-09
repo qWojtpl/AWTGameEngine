@@ -4,7 +4,7 @@ import pl.AWTGameEngine.components.Canvas;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.panels.PanelObject;
 import pl.AWTGameEngine.objects.GameObject;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class Camera {
     private double x = 0;
     private double y = 0;
     private double z = 0;
-    private final TransformSet rotation = new TransformSet();
+    private final Vector3 rotation = new Vector3();
 
     public Camera(PanelObject panel) {
         this.panel = panel;
@@ -77,8 +77,8 @@ public class Camera {
         return this.y;
     }
 
-    public TransformSet getRotation() {
-        return new TransformSet(rotation.getX(), rotation.getY(), rotation.getZ());
+    public Vector3 getRotation() {
+        return new Vector3(rotation.getX(), rotation.getY(), rotation.getZ());
     }
 
     public float getMultiplier() {
@@ -109,14 +109,14 @@ public class Camera {
         updatedPosition();
     }
 
-    public void setPosition(TransformSet transform) {
+    public void setPosition(Vector3 transform) {
         this.x = transform.getX();
         this.y = transform.getY();
         this.z = transform.getZ();
         updatedPositionZ();
     }
 
-    public void setRotation(TransformSet transform) {
+    public void setRotation(Vector3 transform) {
         this.rotation.setX(transform.getX());
         this.rotation.setY(transform.getY());
         this.rotation.setZ(transform.getZ());

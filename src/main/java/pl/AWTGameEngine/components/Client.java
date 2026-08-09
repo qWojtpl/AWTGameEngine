@@ -12,7 +12,7 @@ import pl.AWTGameEngine.objects.net.NetConnection;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.net.NetBlock;
 import pl.AWTGameEngine.objects.net.StandardNetConnection;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -54,7 +54,7 @@ public class Client extends NetComponent {
         try {
             this.netConnection = new StandardNetConnection(-1, new Socket(ip, port));
             handleConnection();
-//            requestGameObject("player{id}", new TransformSet(400, 400), new TransformSet(100, 100), new TransformSet());
+//            requestGameObject("player{id}", new Vector3(400, 400), new Vector3(100, 100), new Vector3());
 //            requestComponent("player{id}", "pl.AWTGameEngine.components.BlankRenderer", "rgb(0, 200, 0)");
 //            requestComponent("player{id}", "pl.AWTGameEngine.custom.Movement2D", "discover");
         } catch (IOException e) {
@@ -151,7 +151,7 @@ public class Client extends NetComponent {
         }
     }
 
-    public void requestGameObject(String identifier, TransformSet position, TransformSet size, TransformSet rotation) {
+    public void requestGameObject(String identifier, Vector3 position, Vector3 size, Vector3 rotation) {
         Logger.info("Requesting object...");
         netConnection.sendBlock(new NetBlock(identifier, null, position, size, rotation, netConnection.getId()));
     }

@@ -21,7 +21,7 @@ import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.transform.QuaternionTransformSet;
-import pl.AWTGameEngine.objects.transform.TransformSet;
+import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +107,7 @@ public class Terrain extends ObjectComponent {
         graphicsManagerGL.addPreloadedVertices(identifier, ModelHelper.convertToArray(vertices));
         renderOptions3D = new RenderOptions3D(identifier)
                 .setPosition(getObject().getPosition())
-                .setSize(new TransformSet(1, 1, 1))
+                .setSize(new Vector3(1, 1, 1))
                 .setQuaternionRotation(new QuaternionTransformSet())
                 .setShapePath(identifier)
                 .setSprite(Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/grass.jpg"))
