@@ -200,6 +200,27 @@ public class Vector3 {
         return this;
     }
 
+    public static Vector3 createForwardVector(Vector3 rotation) {
+        double pitch = Math.toRadians(rotation.getX());
+        double yaw = Math.toRadians(rotation.getY());
+
+        return new Vector3(
+                Math.cos(pitch) * Math.sin(yaw),
+                Math.sin(pitch),
+                -Math.cos(pitch) * Math.cos(yaw)
+        ).normalize();
+    }
+
+    public Vector3 normalize() {
+        double l = Math.sqrt(x * x + y * y + z * z);
+        if(l > 0.00001) {
+            set(x / l, y / l, z / l);
+        } else {
+            set(0, 0, 0);
+        }
+        return this;
+    }
+
     public Consumer<List<ObjectComponent>> getNotifyAction() {
         return this.notifyAction;
     }

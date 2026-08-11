@@ -5,6 +5,10 @@ import physx.common.*;
 import physx.cooking.PxCookingParams;
 import physx.physics.*;
 import pl.AWTGameEngine.components.Vehicle;
+import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.RaycastResult;
+import pl.AWTGameEngine.objects.render.Camera;
+import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.scenes.Scene;
 
 import java.util.ArrayList;
@@ -137,6 +141,7 @@ public final class PhysXManager {
 
     public class PhysXScene {
 
+        private Scene scene;
         private PxScene pxScene;
         private PxSceneDesc pxSceneDesc;
         private final CollisionManager collisionManager;
@@ -145,6 +150,7 @@ public final class PhysXManager {
         private double previousStep = 0;
 
         public PhysXScene(Scene scene) {
+            this.scene = scene;
             collisionManager = new CollisionManager(scene);
         }
 
@@ -156,6 +162,70 @@ public final class PhysXManager {
             pxSceneDesc.setSimulationEventCallback(collisionManager);
             pxScene = physics.createScene(pxSceneDesc);
             setGravity(gravity);
+        }
+
+        public List<RaycastResult> createRaycast(Vector3 position, Vector3 rotation) {
+
+            PxVec3 origin = new PxVec3(
+                    (float) position.getX(),
+                    (float) position.getY(),
+                    (float) position.getZ()
+            );
+
+            Vector3 forward = Vector3.createForwardVector(rotation);
+
+            PxVec3 direction = new PxVec3(
+                    (float) forward.getX(),
+                    (float) forward.getY(),
+                    (float) forward.getZ()
+            );
+
+            PxQueryFilterData filterData = new PxQueryFilterData();
+
+            PxQueryFlags queryFlags = new PxQueryFlags(
+                    (short) (
+                            PxQueryFlagEnum.eSTATIC.value |
+                                    PxQueryFlagEnum.eDYNAMIC.value
+                    ));
+
+            filterData.setFlags(queryFlags);
+
+            PxRaycastResult callback = new PxRaycastResult();
+
+            pxScene.raycast(
+                    origin,
+                    direction,
+                    10000f,
+                    callback,
+                    new PxHitFlags((short) PxHitFlagEnum.eDEFAULT.value),
+                    filterData
+            );
+
+            List<RaycastResult> results = new ArrayList<>();
+
+            for (int i = 0; i < callback.getNbAnyHits(); i++) {
+                RaycastResult result = new RaycastResult();
+                PxRaycastHit hit = callback.getAnyHit(i);
+
+                if(hit.getActor() != null) {
+                    if(hit.getActor().getName() == null) {
+                        continue;
+                    }
+                    result.setObject(scene.getGameObjectByName(hit.getActor().getName()));
+                }
+
+                result.setPosition(new Vector3(hit.getPosition().getX(), hit.getPosition().getY(), hit.getPosition().getZ()));
+                result.setDistance(hit.getDistance());
+                results.add(result);
+            }
+
+            origin.destroy();
+            direction.destroy();
+            callback.destroy();
+            queryFlags.destroy();
+            filterData.destroy();
+
+            return results;
         }
 
         public float getGravity() {
