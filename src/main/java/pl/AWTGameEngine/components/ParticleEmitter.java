@@ -44,7 +44,6 @@ public class ParticleEmitter extends ObjectComponent {
         graphicsManager3D = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
         particleLoop = new ParticleLoop();
         particleLoop.setTargetFps(iterationsPerSecond);
-        particleLoop.setUnlockBlock(true);
         particleLoop.start();
     }
 

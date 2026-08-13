@@ -4,8 +4,7 @@ import pl.AWTGameEngine.annotations.Command;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.windows.BaseWindow;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @SuppressWarnings("BusyWait")
 public abstract class BaseLoop extends Thread {
@@ -15,10 +14,9 @@ public abstract class BaseLoop extends Thread {
     private double targetFps = 1;
     private double actualFps = 0;
     private double actualFpsIterator = 0;
-    private boolean killed = false;
+    private volatile boolean killed = false;
     private Runnable killOperation;
-    private final List<Runnable> nextFrameOperations = new ArrayList<>();
-    private boolean blockUnlock = false;
+    private final ConcurrentLinkedQueue<Runnable> nextFrameOperations = new ConcurrentLinkedQueue<>();
 
     public BaseLoop(BaseWindow window, String loopName) {
         this.window = window;
@@ -29,13 +27,32 @@ public abstract class BaseLoop extends Thread {
 
     @Override
     public void run() {
-        new Thread(() -> {
-            while(!killed) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ignored) {
-                    break;
+        long lastTime = System.nanoTime();
+        long timer = System.currentTimeMillis();
+        double delta = 0;
+        while(!killed) {
+            long now = System.nanoTime();
+            if(targetFps > 0) {
+                delta += (now - lastTime) / (1_000_000_000.0 / targetFps);
+                lastTime = now;
+                if(delta >= 1) {
+                    while(delta >= 1) {
+                        executeFrame();
+                        delta--;
+                    }
+                } else {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException ignored) {
+                        break;
+                    }
                 }
+            } else {
+                lastTime = now;
+                executeFrame();
+            }
+            if(System.currentTimeMillis() - timer >= 1000) {
+                timer += 1000;
                 actualFps = actualFpsIterator;
                 actualFpsIterator = 0;
                 try {
@@ -46,43 +63,32 @@ public abstract class BaseLoop extends Thread {
                     break;
                 }
             }
-        }, loopName + "-everySecond").start();
-        while(!killed) {
-            try {
-                if(getTargetFps() != 0) {
-                    if(getTargetFps() / 2 < getActualFps() || blockUnlock) {
-                        Thread.sleep((long) (1000 / getTargetFps()));
-                    }
-                }
-            } catch (InterruptedException ignored) {
-                break;
-            }
-            if(!nextFrameOperations.isEmpty()) {
-                try {
-                    List<Runnable> runnableList = new ArrayList<>(nextFrameOperations);
-                    nextFrameOperations.clear();
-                    for(Runnable runnable : runnableList) {
-                        runnable.run();
-                    }
-                } catch (Exception e) {
-                    Logger.exception("Unhandled exception caught while running a next frame operation of " + loopName, e);
-                    kill();
-                    break;
-                }
-            }
-            try {
-                iteration();
-            } catch(Exception e) {
-                Logger.exception("Unhandled exception caught while running an iteration of " + loopName, e);
-                kill();
-                break;
-            }
-            actualFpsIterator++;
         }
         if(killOperation != null) {
             killOperation.run();
             killOperation = null;
         }
+    }
+
+    private void executeFrame() {
+        if(!nextFrameOperations.isEmpty()) {
+            Runnable operation;
+            while((operation = nextFrameOperations.poll()) != null) {
+                try {
+                    operation.run();
+                } catch(Exception e) {
+                    Logger.exception("Unhandled exception caught while running a next frame operation of " + loopName, e);
+                    kill();
+                }
+            }
+        }
+        try {
+            iteration();
+        } catch(Exception e) {
+            Logger.exception("Unhandled exception caught while running an iteration of " + loopName, e);
+            kill();
+        }
+        actualFpsIterator++;
     }
 
     protected abstract void iteration();
@@ -117,20 +123,11 @@ public abstract class BaseLoop extends Thread {
 
     public void setTargetFps(double fps) {
         this.targetFps = fps;
-        actualFps = fps;
     }
 
     @Command("actualFps")
     public double getActualFps() {
         return this.actualFps;
-    }
-
-    public boolean isUnlockBlocked() {
-        return this.blockUnlock;
-    }
-
-    public void setUnlockBlock(boolean state) {
-        this.blockUnlock = state;
     }
 
 }

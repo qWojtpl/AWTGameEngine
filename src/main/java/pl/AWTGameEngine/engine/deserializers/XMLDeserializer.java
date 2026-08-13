@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.lists.*;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
@@ -246,7 +247,6 @@ public class XMLDeserializer {
                 method.invoke(component, new Vector3Values(value));
             }
         });
-
         // Vector4
         addParameterTypeHandler(new ParameterTypeHandler() {
             @Override
@@ -257,6 +257,18 @@ public class XMLDeserializer {
             @Override
             public void invoke(Method method, ObjectComponent component, String value) throws Exception {
                 method.invoke(component, new Vector4().deserialize(value));
+            }
+        });
+        // ColorObject
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return ColorObject.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, new ColorObject(value));
             }
         });
     }
