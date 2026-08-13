@@ -21,13 +21,13 @@ public class EditorSegmentHelper {
         List<String> patched = new ArrayList<>();
         boolean editor = false;
         for(String line : split) {
-            if (line.trim().startsWith("#EDITOR")) {
+            if (line.trim().toUpperCase().startsWith("#EDITOR")) {
                 if(editor) {
                     throw new EditorSegmentException();
                 }
                 editor = true;
                 continue;
-            } else if(line.trim().startsWith("#END")) {
+            } else if(line.trim().toUpperCase().startsWith("#END")) {
                 if(!editor) {
                     throw new EditorSegmentException();
                 }

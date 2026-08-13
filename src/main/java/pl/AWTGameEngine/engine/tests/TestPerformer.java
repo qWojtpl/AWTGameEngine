@@ -1,7 +1,8 @@
-package pl.AWTGameEngine.engine;
+package pl.AWTGameEngine.engine.tests;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.tests.Test;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.enums.ConsoleColor;
 import pl.AWTGameEngine.exceptions.tests.TestNotFoundException;
 

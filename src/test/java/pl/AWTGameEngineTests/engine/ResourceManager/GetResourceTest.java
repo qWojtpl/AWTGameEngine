@@ -1,6 +1,6 @@
 package pl.AWTGameEngineTests.engine.ResourceManager;
 
-import pl.AWTGameEngine.engine.BaseTest;
+import pl.AWTGameEngine.engine.tests.BaseTest;
 import pl.AWTGameEngine.engine.ResourceManager;
 
 import java.io.File;

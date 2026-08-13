@@ -1,4 +1,4 @@
-package pl.AWTGameEngine.engine;
+package pl.AWTGameEngine.engine.tests;
 
 import java.util.ArrayList;
 import java.util.List;

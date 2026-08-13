@@ -129,7 +129,7 @@ public class PanelGL extends Panel implements PanelObject {
         capabilities.setDepthBits(24);
         glCanvas = new GLCanvas(capabilities);
         glCanvas.setSize(width, height);
-        manager = new OpenGLManager(scene, camera, profile, (GraphicsManagerGL) graphicsManager3D);
+        manager = new OpenGLManager(scene, camera, (GraphicsManagerGL) graphicsManager3D);
         glCanvas.addGLEventListener(manager);
         glCanvas.setFocusable(false);
         Logger.info("OpenGL initialized.");

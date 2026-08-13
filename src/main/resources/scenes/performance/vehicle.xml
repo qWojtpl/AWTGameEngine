@@ -70,7 +70,7 @@
         <Plane3D spriteSource="sprites/beaver.jpg" shader="shaders/billboard" />
     </object>
 
-    <object id="vehicle" x="200" y="50" z="200" size="80,20,80">
+    <object id="vehicle" x="000" y="50" z="-200" size="40,20,80">
         <Model3D shapePath="./test.o3d" modelSize="20,20,20" spriteSource="sprites/beaver.jpg" />
 <!--        <Box3D />-->
         <Vehicle mass="15870" maxBrakeResponse="80000" />
@@ -80,7 +80,6 @@
         <Vehicle.Wheel axleId="0" steeringResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="30,-21,55.5" width="2.5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
         <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="-30,-21,-44.5" width="5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
         <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="30,-21,-44.5" width="5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
-        <RigidBody.Kinematic />
         <CameraFollow />
         <VehicleSteer _package="pl.AWTGameEngine.custom" />
         <ParticleEmitter spriteSource="sprites/base/files/directory.png" ttl="20" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5,1,0" />

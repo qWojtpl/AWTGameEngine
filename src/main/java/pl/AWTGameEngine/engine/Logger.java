@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.engine;
 
-import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.enums.ConsoleColor;
 import pl.AWTGameEngine.engine.helpers.TextUtils;
 
@@ -67,16 +66,7 @@ public class Logger {
             className = TextUtils.getSpaces(className, 20) + className;
         }
         prefix = prefix + TextUtils.getSpaces(prefix, 8);
-        Calendar calendar = Calendar.getInstance();
-        String output = "[" +
-                parseNumber(calendar.get(Calendar.DAY_OF_MONTH)) + "-" +
-                parseNumber(calendar.get(Calendar.MONTH) + 1) + "-" +
-                calendar.get(Calendar.YEAR) + " " +
-                parseNumber(calendar.get(Calendar.HOUR_OF_DAY)) + ":" +
-                parseNumber(calendar.get(Calendar.MINUTE)) + ":" +
-                parseNumber(calendar.get(Calendar.SECOND)) + ":" +
-                parseThreeNumber(calendar.get(Calendar.MILLISECOND)) + "]" +
-                className + " ";
+        String output = getTimeString() + className + " ";
         if(logFile) {
             try(FileWriter writer = new FileWriter(getLogFile(), append)) {
                 writer.write(output + prefix + message + "\n");
@@ -117,6 +107,18 @@ public class Logger {
     public static void clearLog() {
         append = false;
         info("");
+    }
+
+    public static String getTimeString() {
+        Calendar calendar = Calendar.getInstance();
+        return "[" +
+                parseNumber(calendar.get(Calendar.DAY_OF_MONTH)) + "-" +
+                parseNumber(calendar.get(Calendar.MONTH) + 1) + "-" +
+                calendar.get(Calendar.YEAR) + " " +
+                parseNumber(calendar.get(Calendar.HOUR_OF_DAY)) + ":" +
+                parseNumber(calendar.get(Calendar.MINUTE)) + ":" +
+                parseNumber(calendar.get(Calendar.SECOND)) + ":" +
+                parseThreeNumber(calendar.get(Calendar.MILLISECOND)) + "]";
     }
 
     public static File getLogFile() {

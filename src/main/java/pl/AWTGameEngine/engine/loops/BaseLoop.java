@@ -6,7 +6,6 @@ import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-@SuppressWarnings("BusyWait")
 public abstract class BaseLoop extends Thread {
 
     protected final BaseWindow window;

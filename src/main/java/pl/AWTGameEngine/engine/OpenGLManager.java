@@ -18,15 +18,13 @@ public class OpenGLManager implements GLEventListener {
     private final Scene scene;
     private final Window window;
     private final Camera camera;
-    private final GLProfile profile;
     private final GraphicsManagerGL graphicsManagerGL;
     private final HashMap<String, Integer> programs = new HashMap<>();
 
-    public OpenGLManager(Scene scene, Camera camera, GLProfile profile, GraphicsManagerGL graphicsManagerGL) {
+    public OpenGLManager(Scene scene, Camera camera, GraphicsManagerGL graphicsManagerGL) {
         this.scene = scene;
         this.window = (Window) scene.getWindow();
         this.camera = camera;
-        this.profile = profile;
         this.graphicsManagerGL = graphicsManagerGL;
     }
 

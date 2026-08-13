@@ -5,9 +5,7 @@ import physx.common.*;
 import physx.cooking.PxCookingParams;
 import physx.physics.*;
 import pl.AWTGameEngine.components.Vehicle;
-import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.RaycastResult;
-import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.scenes.Scene;
 
@@ -141,7 +139,7 @@ public final class PhysXManager {
 
     public class PhysXScene {
 
-        private Scene scene;
+        private final Scene scene;
         private PxScene pxScene;
         private PxSceneDesc pxSceneDesc;
         private final CollisionManager collisionManager;
@@ -164,7 +162,7 @@ public final class PhysXManager {
             setGravity(gravity);
         }
 
-        public List<RaycastResult> createRaycast(Vector3 position, Vector3 rotation) {
+        public List<RaycastResult> createRaycast(Vector3 position, Vector3 rotation, float distance) {
 
             PxVec3 origin = new PxVec3(
                     (float) position.getX(),
@@ -181,25 +179,12 @@ public final class PhysXManager {
             );
 
             PxQueryFilterData filterData = new PxQueryFilterData();
-
-            PxQueryFlags queryFlags = new PxQueryFlags(
-                    (short) (
-                            PxQueryFlagEnum.eSTATIC.value |
-                                    PxQueryFlagEnum.eDYNAMIC.value
-                    ));
-
+            PxQueryFlags queryFlags = new PxQueryFlags((short) (PxQueryFlagEnum.eSTATIC.value | PxQueryFlagEnum.eDYNAMIC.value));
             filterData.setFlags(queryFlags);
 
             PxRaycastResult callback = new PxRaycastResult();
 
-            pxScene.raycast(
-                    origin,
-                    direction,
-                    10000f,
-                    callback,
-                    new PxHitFlags((short) PxHitFlagEnum.eDEFAULT.value),
-                    filterData
-            );
+            pxScene.raycast(origin, direction, distance, callback, new PxHitFlags((short) PxHitFlagEnum.eDEFAULT.value), filterData);
 
             List<RaycastResult> results = new ArrayList<>();
 

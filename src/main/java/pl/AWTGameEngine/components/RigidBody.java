@@ -34,7 +34,7 @@ public abstract class RigidBody extends ObjectComponent {
     protected PxFilterData filterData = new PxFilterData(1, -1, PxPairFlagEnum.eNOTIFY_TOUCH_FOUND.value | PxPairFlagEnum.eNOTIFY_TOUCH_LOST.value | PxPairFlagEnum.eNOTIFY_CONTACT_POINTS.value, 0);
 
     // Internal variables
-    protected double mass = 0.03;
+    protected double mass = 3;
     private Vector4 cachedRotation = new Vector4(0, 0, 0, 0);
 
     public RigidBody(GameObject object) {

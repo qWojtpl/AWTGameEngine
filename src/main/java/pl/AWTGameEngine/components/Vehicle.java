@@ -7,6 +7,8 @@ import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.physics.*;
+import physx.support.PxArray_PxShapePtr;
+import physx.support.PxShapePtr;
 import physx.vehicle2.*;
 import pl.AWTGameEngine.annotations.components.management.*;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
@@ -128,6 +130,11 @@ public class Vehicle extends ObjectComponent {
         }
         setPhysxIntegrationParams(vehicle.getPhysXParams(), vehicle.getBaseParams().getAxleDescription(), geometry);
         setEngineDriveParams(vehicle.getEngineDriveParams());
+
+        vehicle.getPhysXParams().setPhysxActorShapeFlags(physXManager.getShapeFlags());
+        vehicle.getPhysXParams().setPhysxActorSimulationFilterData(new PxFilterData(1, -1,
+                PxPairFlagEnum.eNOTIFY_TOUCH_FOUND.value | PxPairFlagEnum.eNOTIFY_TOUCH_LOST.value | PxPairFlagEnum.eNOTIFY_CONTACT_POINTS.value,
+                0));
 
         vehicle.initialize(
                 physXManager.getPxPhysics(),
@@ -308,7 +315,7 @@ public class Vehicle extends ObjectComponent {
 
     private void setPhysxIntegrationParams(PhysXIntegrationParams physxParams, PxVehicleAxleDescription axleDesc, PxGeometry actorGeometry) {
         var filterData = new PxFilterData(0, 0, 0, 0);
-        var queryFlags = new PxQueryFlags((short) PxQueryFlagEnum.eSTATIC.value);
+        var queryFlags = new PxQueryFlags((short) (PxQueryFlagEnum.eSTATIC.value | PxQueryFlagEnum.eDYNAMIC.value));
         var roadQueryFilterData = new PxQueryFilterData(filterData, queryFlags);
 
         PxVec3 vec3 = new PxVec3(0f, 0.55f, 1.594f);

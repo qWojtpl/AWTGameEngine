@@ -2,7 +2,6 @@ package pl.AWTGameEngine.engine;
 
 import pl.AWTGameEngine.annotations.methods.EventMethod;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.objects.GameObject;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,16 +40,6 @@ public class EventHandler {
 
     public List<ObjectComponent> getComponents(String event) {
         return new ArrayList<>(registeredEvents.getOrDefault(event, new ArrayList<>()));
-    }
-
-    public List<ObjectComponent> getComponents(String event, GameObject gameObject) {
-        List<ObjectComponent> components = new ArrayList<>();
-        for(ObjectComponent component : getComponents(event)) {
-            if(component.getObject().equals(gameObject)) {
-                components.add(component);
-            }
-        }
-        return components;
     }
 
     public HashMap<String, List<ObjectComponent>> getRegisteredEvents() {

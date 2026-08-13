@@ -22,7 +22,7 @@ public class GUIRenderer extends ObjectComponent {
     private GraphicsManagerGL graphicsManagerGL;
     private volatile boolean finished = true;
     private Sprite sprite = new Sprite("GUIRendererSprite", new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
-    private WritableImage image = new WritableImage(1920, 1080);
+    private WritableImage image = new WritableImage(getWindow().getBaseWidth(), getWindow().getBaseHeight());
 
     public GUIRenderer(GameObject object) {
         super(object);

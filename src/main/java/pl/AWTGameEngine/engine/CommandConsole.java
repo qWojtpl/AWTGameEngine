@@ -7,10 +7,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InaccessibleObjectException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class CommandConsole {
 
@@ -86,10 +83,7 @@ public class CommandConsole {
             }
         }
         try {
-            if(parentCommand.realInstance != null) {
-                return executableCommand.method.invoke(parentCommand.realInstance, (Object[]) args);
-            }
-            return executableCommand.method.invoke(parentCommand, (Object[]) args);
+            return executableCommand.method.invoke(Objects.requireNonNullElse(parentCommand.realInstance, parentCommand), (Object[]) args);
         } catch (IllegalAccessException | InvocationTargetException e) {
             Logger.exception("Cannot execute command", e);
             return null;

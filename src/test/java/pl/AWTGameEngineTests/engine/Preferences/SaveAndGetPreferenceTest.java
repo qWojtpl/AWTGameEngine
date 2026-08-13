@@ -1,6 +1,6 @@
 package pl.AWTGameEngineTests.engine.Preferences;
 
-import pl.AWTGameEngine.engine.BaseTest;
+import pl.AWTGameEngine.engine.tests.BaseTest;
 import pl.AWTGameEngine.engine.Preferences;
 
 public class SaveAndGetPreferenceTest extends BaseTest {

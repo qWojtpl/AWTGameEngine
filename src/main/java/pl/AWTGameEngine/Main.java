@@ -3,6 +3,7 @@ package pl.AWTGameEngine;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.helpers.SteamHelper;
 import pl.AWTGameEngine.engine.steam.SteamManager;
+import pl.AWTGameEngine.engine.tests.TestPerformer;
 import pl.AWTGameEngine.scenes.SceneBuilder;
 
 public class Main {

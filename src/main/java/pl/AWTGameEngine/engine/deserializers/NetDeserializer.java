@@ -22,7 +22,7 @@ public class NetDeserializer {
             String data = split[2];
             // variables
             if(server != null) { // if server is null then deserializing is executing on a client
-                objectId = parseVariables(objectId, "{id}", client);
+                objectId = parseVariables(objectId, "{id}", String.valueOf(client.getId()));
             }
             // create object
             GameObject object = createObject(objectId, scene, client, server);
@@ -48,9 +48,9 @@ public class NetDeserializer {
         }
     }
 
-    private static String parseVariables(String input, String variable, NetConnection client) {
+    private static String parseVariables(String input, String variable, String value) {
         if(input.contains(variable)) {
-            input.replace(variable, String.valueOf(client.getId()));
+            input.replace(variable, value);
         }
         return input;
     }
