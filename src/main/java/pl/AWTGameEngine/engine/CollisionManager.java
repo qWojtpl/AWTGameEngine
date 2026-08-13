@@ -79,7 +79,7 @@ public class CollisionManager extends PxSimulationEventCallbackImpl {
         for(int i = 0; i < nbPairs; i++) {
             PxTriggerPair pair = PxTriggerPair.arrayGet(pairs.getAddress(), i);
 
-            if(pair.getTriggerActor().getName() == null) {
+            if(pair.getTriggerActor().getName() == null || pair.getOtherActor().getName() == null) {
                 continue;
             }
 

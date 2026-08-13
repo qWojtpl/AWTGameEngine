@@ -70,7 +70,7 @@
         <Plane3D spriteSource="sprites/beaver.jpg" shader="shaders/billboard" />
     </object>
 
-    <object id="vehicle" x="000" y="50" z="-200" size="40,20,80">
+    <object id="vehicle" x="000" y="50" z="-200" size="40,20,60">
         <Model3D shapePath="./test.o3d" modelSize="20,20,20" spriteSource="sprites/beaver.jpg" />
 <!--        <Box3D />-->
         <Vehicle mass="15870" maxBrakeResponse="80000" />
