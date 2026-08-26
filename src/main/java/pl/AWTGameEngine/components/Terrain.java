@@ -20,6 +20,7 @@ import pl.AWTGameEngine.engine.helpers.ModelHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
+import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
@@ -29,10 +30,16 @@ import java.util.List;
 @ComponentGL
 public class Terrain extends ObjectComponent {
 
+    // Heights
+
     private final List<Short> heights = new ArrayList<>();
     private int cols = 640;
     private int rows = 640;
-    private RenderOptions3D renderOptions3D;
+
+    // Render
+
+    private String terrainIdentifier = "$terrain-" + getObject().getIdentifier();
+    private RenderOptions3D renderOptions3D = new RenderOptions3D(terrainIdentifier);
     private PxRigidActor actor;
 
     public Terrain(GameObject object) {
@@ -46,15 +53,7 @@ public class Terrain extends ObjectComponent {
 
             PhysXManager.PhysXScene physXScene = PhysXManager.getInstance().getScene(getScene());
 
-            PxTransform pose = PxTransform.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity);
-            pose.getP().setX((float) getObject().getPosition().getX());
-            pose.getP().setY((float) getObject().getPosition().getY());
-            pose.getP().setZ((float) getObject().getPosition().getZ());
-            pose.getQ().setX((float) getObject().getQuaternionRotation().getX());
-            pose.getQ().setY((float) getObject().getQuaternionRotation().getY());
-            pose.getQ().setZ((float) getObject().getQuaternionRotation().getZ());
-            pose.getQ().setW((float) getObject().getQuaternionRotation().getW());
-            actor = PhysXManager.getInstance().getPxPhysics().createRigidStatic(pose);
+            actor = PhysXManager.getInstance().getPxPhysics().createRigidStatic(createPose(stack));
 
             PxArray_PxHeightFieldSample samples = PxArray_PxHeightFieldSample.createAt(stack, MemoryStack::nmalloc, rows * cols);
             PxHeightFieldSample sample = PxHeightFieldSample.createAt(stack, MemoryStack::nmalloc);
@@ -99,18 +98,28 @@ public class Terrain extends ObjectComponent {
         }
     }
 
+    private PxTransform createPose(MemoryStack stack) {
+        PxTransform pose = PxTransform.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity);
+        pose.getP().setX((float) getObject().getPosition().getX());
+        pose.getP().setY((float) getObject().getPosition().getY());
+        pose.getP().setZ((float) getObject().getPosition().getZ());
+        pose.getQ().setX((float) getObject().getQuaternionRotation().getX());
+        pose.getQ().setY((float) getObject().getQuaternionRotation().getY());
+        pose.getQ().setZ((float) getObject().getQuaternionRotation().getZ());
+        pose.getQ().setW((float) getObject().getQuaternionRotation().getW());
+        return pose;
+    }
+
     private void createRenderable(float rowScale, float columnScale, float heightScale) {
         List<float[]> vertices = HeightFieldHelper.generateHeightFieldVertices(this::getInvertedHeight, rows, cols, rowScale, columnScale, heightScale);
 
         GraphicsManagerGL graphicsManagerGL = (GraphicsManagerGL) ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
-        String identifier = "$terrain-" + getObject().getIdentifier();
-        graphicsManagerGL.addPreloadedVertices(identifier, ModelHelper.convertToArray(vertices));
-        renderOptions3D = new RenderOptions3D(identifier)
+        graphicsManagerGL.addPreloadedVertices(terrainIdentifier, ModelHelper.convertToArray(vertices));
+        renderOptions3D
                 .setPosition(getObject().getPosition())
                 .setSize(new Vector3(1, 1, 1))
                 .setQuaternionRotation(new Vector4())
-                .setShapePath(identifier)
-                .setSprite(Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/grass.jpg"))
+                .setShapePath(terrainIdentifier)
                 .setRepeatTexture(160)
                 .setShader("shaders/shader");
 
@@ -124,6 +133,8 @@ public class Terrain extends ObjectComponent {
     public short getInvertedHeight(int row, int col) {
         return heights.get(row * cols + col);
     }
+
+    // Terrain
 
     @SaveState(name = "rows")
     public int getRows() {
@@ -149,6 +160,18 @@ public class Terrain extends ObjectComponent {
             cols = 1;
         }
         this.cols = cols;
+    }
+
+    // Render
+
+    @SaveState(name = "sprite")
+    public Sprite getSprite() {
+        return renderOptions3D.getSprite();
+    }
+
+    @FromXML
+    public void setSprite(Sprite sprite) {
+        renderOptions3D.setSprite(sprite);
     }
 
 }

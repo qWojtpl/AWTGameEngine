@@ -2,11 +2,13 @@ package pl.AWTGameEngine.engine.deserializers;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.lists.*;
+import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
@@ -269,6 +271,18 @@ public class XMLDeserializer {
             @Override
             public void invoke(Method method, ObjectComponent component, String value) throws Exception {
                 method.invoke(component, new ColorObject(value));
+            }
+        });
+        // Sprite
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return Sprite.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, Dependencies.getResourceManager().getResourceAsSprite(value));
             }
         });
     }
