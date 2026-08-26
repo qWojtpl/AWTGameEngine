@@ -162,20 +162,12 @@ public class ParticleEmitter extends ObjectComponent {
         }
     }
 
-    @SaveState(name = "spriteSource")
-    public String getSpriteSource() {
-        return this.sprite.getImagePath();
-    }
-
-    @FromXML
-    public void setSpriteSource(String spriteSource) {
-        setSprite(Dependencies.getResourceManager().getResourceAsSprite(spriteSource));
-    }
-
+    @SaveState(name = "sprite")
     public Sprite getSprite() {
         return this.sprite;
     }
 
+    @FromXML
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
     }

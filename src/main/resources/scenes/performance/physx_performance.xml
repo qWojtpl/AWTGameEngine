@@ -2,14 +2,14 @@
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
     <prefabs source="prefabs/performancePrefabs.xml" />
     <prefab id="box2">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D sprite="sprites/beaver.jpg" />
         <RigidBody.Dynamic />
     </prefab>
     <object id="player">
         <Prefab prefabName="player" />
     </object>
     <object id="spin" x="20" y="-50" z="20" size="10,10,100">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D sprite="sprites/beaver.jpg" />
         <RigidBody.Kinematic />
         <SpinningObject speed="30" />
         <!--        <SoundSource clipSource="audio/dominique.wav" />-->
@@ -22,7 +22,7 @@
                 iterationsPerSecond="30"
                 particleSize="6,6,6"
                 iterationStep="0,0.02,0"
-                spriteSource="sprites/base/error.png"
+                sprite="sprites/base/error.png"
                 vectors="
         1,0,0,
         0.866,0,0.5,

@@ -15,12 +15,12 @@
     </object>
 
     <object id="floor" x="500" y="-100" z="-500" size="1000,10,10000">
-        <Box3D spriteSource="hdr_sprites/glass.png" />
+        <Box3D sprite="hdr_sprites/glass.png" />
         <RigidBody.Static />
     </object>
 
     <object id="floor2" x="500" y="-89" z="-500" size="100,10,100" rotation="0,0,45">
-        <Box3D spriteSource="hdr_sprites/glass.png" />
+        <Box3D sprite="hdr_sprites/glass.png" />
         <RigidBody.Static />
     </object>
 
@@ -32,34 +32,34 @@
     </object>
 
     <object id="box0" x="30" y="-80" z="0" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D sprite="sprites/beaver.jpg" />
         <RigidBody.Dynamic />
     </object>
     <object id="box1" x="30" y="-60" z="0" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D sprite="sprites/beaver.jpg" />
         <RigidBody.Dynamic />
         <Joint.Revolute reference="box0" />
     </object>
     <object id="box2" x="0" y="-80" z="30" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" xray="true" />
+        <Box3D sprite="sprites/beaver.jpg" xray="true" />
         <RigidBody.Dynamic />
     </object>
     <object id="box3" x="0" y="-60" z="30" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" xray="true" />
+        <Box3D sprite="sprites/beaver.jpg" xray="true" />
         <RigidBody.Dynamic />
     </object>
 
     <object id="box4" x="30" y="-80" z="30" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D sprite="sprites/beaver.jpg" />
         <RigidBody.Dynamic />
     </object>
     <object id="box5" x="30" y="-60" z="30" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D sprite="sprites/beaver.jpg" />
         <RigidBody.Dynamic />
     </object>
 
     <object id="box6" x="50" y="-80" z="50" size="10,10,100">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D sprite="sprites/beaver.jpg" />
         <RigidBody.Kinematic />
 <!--        <SpinningObject _package="pl.AWTGameEngine.custom.performance" />-->
 <!--        <SoundSource clipSource="audio/swingin.wav" spreadDistance="20" />-->
@@ -67,11 +67,11 @@
 
     <object id="box7" x="50" y="-50" z="50" size="100,100,100">
         <TextRenderer3D text="Hello" />
-        <Plane3D spriteSource="sprites/beaver.jpg" shader="shaders/billboard" />
+        <Plane3D sprite="sprites/beaver.jpg" shader="shaders/billboard" />
     </object>
 
     <object id="vehicle" x="400" y="50" z="100" size="40,20,60">
-        <Model3D shapePath="./test.o3d" modelSize="20,20,20" spriteSource="sprites/beaver.jpg" />
+        <Model3D shapePath="./test.o3d" modelSize="20,20,20" sprite="sprites/beaver.jpg" />
 <!--        <Box3D />-->
         <Vehicle mass="15870" maxBrakeResponse="80000" />
         <Vehicle.Engine peakTorque="18000" maxRPM="12000" idleRPM="1200" />
@@ -82,7 +82,7 @@
         <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="30,-21,-44.5" width="5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
         <CameraFollow />
         <VehicleSteer _package="pl.AWTGameEngine.custom" />
-        <ParticleEmitter spriteSource="sprites/base/files/directory.png" ttl="20" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5,1,0" />
+        <ParticleEmitter sprite="sprites/base/files/directory.png" ttl="20" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5,1,0" />
     </object>
 
     <object id="terrain">

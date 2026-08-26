@@ -4,6 +4,7 @@ import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Vector3Values is an object, which extends from {@link ArrayList}.
@@ -44,6 +45,13 @@ public class Vector3Values extends Values<Vector3> {
             }
         }
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return stream()
+                .map(Vector3::toSimpleString)
+                .collect(Collectors.joining(","));
     }
 
 }

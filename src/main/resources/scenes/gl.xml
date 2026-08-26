@@ -3,9 +3,9 @@
         <MovementGL _package="pl.AWTGameEngine.custom" />
     </object>
     <object id="box" position="0,0,-10" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D sprite="sprites/beaver.jpg" />
     </object>
     <object id="box1" position="0,200,-10" size="10,10,10">
-        <Box3D spriteSource="sprites/beaver.jpg" />
+        <Box3D sprite="sprites/beaver.jpg" />
     </object>
 </scene>

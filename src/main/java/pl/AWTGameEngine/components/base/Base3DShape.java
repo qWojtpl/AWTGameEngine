@@ -10,8 +10,6 @@ import pl.AWTGameEngine.objects.net.NetBlock;
 import pl.AWTGameEngine.objects.render.AnimatedSprite;
 import pl.AWTGameEngine.objects.render.Sprite;
 
-import java.util.Objects;
-
 public abstract class Base3DShape extends NetComponent {
 
     protected GraphicsManager3D graphicsManager3D;
@@ -85,13 +83,13 @@ public abstract class Base3DShape extends NetComponent {
         }
     }
 
-    @SaveState(name = "spriteSource")
+    @SaveState(name = "sprite")
     public Sprite getSprite() {
         return this.sprite;
     }
 
+    @FromXML
     public void setSprite(Sprite sprite) {
-        Objects.requireNonNull(sprite);
         this.sprite = sprite;
         updateSprite = true;
         netUpdateSprite = true;
@@ -135,11 +133,6 @@ public abstract class Base3DShape extends NetComponent {
     }
 
     @FromXML
-    public void setSpriteSource(String source) {
-        setSprite(Dependencies.getResourceManager().getResourceAsSprite(source));
-    }
-
-    @FromXML
     public void setColor(String color) {
         setColor(new ColorObject(color));
     }
@@ -171,7 +164,7 @@ public abstract class Base3DShape extends NetComponent {
 
     @Override
     public void onSynchronizeReceived(String data) {
-        setSpriteSource(data);
+        setSprite(Dependencies.getResourceManager().getResourceAsSprite(data));
     }
 
     @Override
