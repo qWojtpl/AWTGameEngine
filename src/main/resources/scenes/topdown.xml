@@ -1,19 +1,19 @@
 <scene title="Default2 rendering scene" renderFPS="60" updateFPS="30" physicsFPS="360" sameSize="true">
     <!-- Prefabs -->
     <prefab id="box">
-        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <SpriteRenderer sprite="sprites/beaver.jpg" />
         <RigidBody.TopDown.Dynamic />
     </prefab>
     <prefab id="floor">
         <RigidBody.TopDown.Static layer="0" />
-        <SpriteRenderer spriteSource="sprites/default.jpg" />
+        <SpriteRenderer sprite="sprites/default.jpg" />
     </prefab>
     <prefab id="staticBox">
-        <SpriteRenderer spriteSource="sprites/beaver2.png" />
+        <SpriteRenderer sprite="sprites/beaver2.png" />
         <RigidBody.TopDown.Static layer="1" />
     </prefab>
     <prefab id="vehicle">
-        <SpriteRenderer spriteSource="hdr_sprites/mercedes.png" />
+        <SpriteRenderer sprite="hdr_sprites/mercedes.png" />
         <Vehicle.TopDown mass="15870" maxBrakeResponse="80000" />
         <Vehicle.Engine peakTorque="18000" maxRPM="12000" idleRPM="1200" />
         <Vehicle.Gearbox gearRatios="-4,0,4,2,1.5,1.1,1,0.8,0.7,0.3" />

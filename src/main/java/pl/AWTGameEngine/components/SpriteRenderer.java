@@ -5,6 +5,7 @@ import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.NetComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
@@ -56,37 +57,27 @@ public class SpriteRenderer extends NetComponent {
         }
     }
 
+    @SaveState(name = "sprite")
     public Sprite getSprite() {
         return this.sprite;
     }
 
-    public String getSpriteSource() {
-        if(sprite == null) {
-            return null;
-        }
-        return this.sprite.getImagePath();
-    }
-
+    @FromXML
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
         spriteChanged = true;
         netSpriteChanged = true;
     }
 
-    @FromXML
-    public void setSpriteSource(String spriteSource) {
-        setSprite(Dependencies.getResourceManager().getResourceAsSprite(spriteSource));
-    }
-
     @Override
     public void onSynchronizeReceived(String data) {
-        setSpriteSource(data);
+        setSprite(Dependencies.getResourceManager().getResourceAsSprite(data));
     }
 
     @Override
     public NetBlock onSynchronize() {
         netSpriteChanged = false;
-        return new NetBlock(getObject().getIdentifier(), SpriteRenderer.class, getSpriteSource());
+        return new NetBlock(getObject().getIdentifier(), SpriteRenderer.class, getSprite().getImagePath());
     }
 
     @Override

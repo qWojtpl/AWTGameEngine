@@ -2,6 +2,8 @@ package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.panels.PanelGL;
@@ -14,14 +16,14 @@ import java.util.List;
 public class Skybox extends ObjectComponent {
 
     private GraphicsManagerGL graphicsManagerGL;
-    private final List<Sprite> sprites = List.of(
-            Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/skybox/right.jpg"),
-            Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/skybox/left.jpg"),
-            Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/skybox/top.jpg"),
-            Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/skybox/bottom.jpg"),
-            Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/skybox/front.jpg"),
-            Dependencies.getResourceManager().getResourceAsSprite("hdr_sprites/skybox/back.jpg")
-    );
+
+    private final Sprite defaultSprite = Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg");
+    private Sprite rightSprite = defaultSprite;
+    private Sprite leftSprite = defaultSprite;
+    private Sprite topSprite = defaultSprite;
+    private Sprite bottomSprite = defaultSprite;
+    private Sprite frontSprite = defaultSprite;
+    private Sprite backSprite = defaultSprite;
 
     public Skybox(GameObject object) {
         super(object);
@@ -34,7 +36,74 @@ public class Skybox extends ObjectComponent {
     }
 
     public void updateSkybox() {
-        graphicsManagerGL.setSkyboxSprites(sprites);
+        graphicsManagerGL.setSkyboxSprites(List.of(
+                rightSprite,
+                leftSprite,
+                topSprite,
+                bottomSprite,
+                frontSprite,
+                backSprite
+        ));
+    }
+
+    @SaveState(name = "rightSprite")
+    public Sprite getRightSprite() {
+        return rightSprite;
+    }
+
+    @FromXML
+    public void setRightSprite(Sprite sprite) {
+        this.rightSprite = sprite;
+    }
+
+    @SaveState(name = "leftSprite")
+    public Sprite getLeftSprite() {
+        return leftSprite;
+    }
+
+    @FromXML
+    public void setLeftSprite(Sprite sprite) {
+        this.leftSprite = sprite;
+    }
+
+    @SaveState(name = "topSprite")
+    public Sprite getTopSprite() {
+        return topSprite;
+    }
+
+    @FromXML
+    public void setTopSprite(Sprite sprite) {
+        this.topSprite = sprite;
+    }
+
+    @SaveState(name = "bottomSprite")
+    public Sprite getBottomSprite() {
+        return bottomSprite;
+    }
+
+    @FromXML
+    public void setBottomSprite(Sprite sprite) {
+        this.bottomSprite = sprite;
+    }
+
+    @SaveState(name = "frontSprite")
+    public Sprite getFrontSprite() {
+        return frontSprite;
+    }
+
+    @FromXML
+    public void setFrontSprite(Sprite sprite) {
+        this.frontSprite = sprite;
+    }
+
+    @SaveState(name = "backSprite")
+    public Sprite getBackSprite() {
+        return backSprite;
+    }
+
+    @FromXML
+    public void setBackSprite(Sprite sprite) {
+        this.backSprite = sprite;
     }
 
 }

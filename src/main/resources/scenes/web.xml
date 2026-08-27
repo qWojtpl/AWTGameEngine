@@ -3,7 +3,7 @@
         <BlankRenderer color="red" />
     </object>
     <object id="beaverSquare" x="300" y="300" sizeX="500" sizeY="500">
-        <SpriteRenderer spriteSource="sprites/beaver.jpg" />
+        <SpriteRenderer sprite="sprites/beaver.jpg" />
     </object>
     <object id="flex" x="0" y="0" sizeX="1920" sizeY="1080">
         <FlexDisplay items="blankSquare,beaverSquare" />

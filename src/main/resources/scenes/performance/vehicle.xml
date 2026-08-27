@@ -11,7 +11,13 @@
 <!--        <Server port="53780" />-->
         <SteamRelayServer />
 <!--        <PlayerController height="20" cameraHeight="19" speed="30" jumpForce="40" radius="3" />-->
-        <Skybox />
+        <Skybox rightSprite="hdr_sprites/skybox/right.jpg"
+                leftSprite="hdr_sprites/skybox/left.jpg"
+                topSprite="hdr_sprites/skybox/top.jpg"
+                bottomSprite="hdr_sprites/skybox/bottom.jpg"
+                frontSprite="hdr_sprites/skybox/front.jpg"
+                backSprite="hdr_sprites/skybox/back.jpg"
+        />
     </object>
 
     <object id="floor" x="500" y="-100" z="-500" size="1000,10,10000">
