@@ -15,24 +15,18 @@ public class Box3D extends Base3DShape {
     }
 
     @Override
-    protected void createShape() {
+    protected RenderOptions3D createShape() {
 
         if(graphicsManager3D == null) {
-            return;
+            return null;
         }
 
-        RenderOptions3D options = new RenderOptions3D(getObject().getIdentifier())
+        return renderOptions
                 .setPosition(getObject().getPosition())
                 .setSize(getObject().getSize())
                 .setRotation(getObject().getRotation())
                 .setQuaternionRotation(getObject().getQuaternionRotation())
-                .setSprite(getSprite())
-                .setShader(getShader())
-                .setColor(getColor())
                 .setShapePath("models/box.obj");
-
-        graphicsManager3D.createRenderable(options);
-        initialized = true;
     }
 
     @Override

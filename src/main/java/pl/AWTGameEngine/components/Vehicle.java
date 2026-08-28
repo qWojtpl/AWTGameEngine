@@ -722,6 +722,7 @@ public class Vehicle extends ObjectComponent {
                         .setQuaternionRotation(new Vector4())
                         .setShader(shader)
                         .setShapePath(shapePath);
+                g.preloadShape(shapePath);
                 g.createRenderable(options);
             }
         }

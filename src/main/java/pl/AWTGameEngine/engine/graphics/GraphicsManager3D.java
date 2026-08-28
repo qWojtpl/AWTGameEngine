@@ -1,11 +1,7 @@
 
 package pl.AWTGameEngine.engine.graphics;
 
-import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
-import pl.AWTGameEngine.objects.render.Sprite;
-import pl.AWTGameEngine.objects.transform.Vector4;
-import pl.AWTGameEngine.objects.transform.Vector3;
 
 public abstract class GraphicsManager3D {
 
@@ -15,24 +11,8 @@ public abstract class GraphicsManager3D {
 
     public abstract void removeRenderable(String identifier);
 
+    public abstract void freeTexture(RenderOptions3D options);
+
     public abstract RenderOptions3D getRenderable(String identifier);
-
-    public abstract void updatePosition(String identifier, Vector3 position);
-
-    public abstract void updateSize(String identifier, Vector3 scale);
-
-    public abstract void updateRotation(String identifier, Vector3 rotation, Vector4 quaternionRotation);
-
-    public abstract void updateSprite(String identifier, Sprite sprite, boolean releaseOldTexture);
-
-    public abstract void updateShader(String identifier, String shader);
-
-    public abstract void updateShapePath(String identifier, String shapePath);
-
-    public abstract void updateColor(String identifier, ColorObject color);
-
-    public abstract void updateXray(String identifier, boolean xray);
-
-    public abstract void updateRepeatTexture(String identifier, int repeat);
 
 }

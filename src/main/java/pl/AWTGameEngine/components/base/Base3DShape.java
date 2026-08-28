@@ -8,128 +8,79 @@ import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.objects.net.NetBlock;
 import pl.AWTGameEngine.objects.render.AnimatedSprite;
+import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
 
 public abstract class Base3DShape extends NetComponent {
 
     protected GraphicsManager3D graphicsManager3D;
-    protected Sprite sprite = Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg");
-    protected ColorObject color;
-    protected String shader = "shaders/shader";
-    protected String shapePath = "models/box.obj";
-    protected boolean xray = false;
-    protected int repeatTexture = 1;
+    protected RenderOptions3D renderOptions = new RenderOptions3D(getObject().getIdentifier())
+            .setShader("shaders/shader")
+            .setSprite(Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg"));
     protected boolean initialized = false;
-    protected boolean updatePosition = false;
-    protected boolean updateSize = false;
-    protected boolean updateRotation = false;
-    protected boolean updateSprite = false;
     protected boolean netUpdateSprite = false;
-    protected boolean updateColor = false;
-    protected boolean updateShader = false;
-    protected boolean updateShapePath = false;
-    protected boolean updateXray = false;
-    protected boolean updateRepeat = false;
 
     public Base3DShape(GameObject object) {
         super(object);
     }
 
-    protected abstract void createShape();
+    protected abstract RenderOptions3D createShape();
     protected abstract void patchRender();
 
     protected void handleUpdates(GraphicsManager3D g) {
-        if(!initialized) {
+        if(renderOptions == null) {
             return;
         }
-        if(updatePosition) {
-            g.updatePosition(getObject().getIdentifier(), getObject().getPosition());
-            updatePosition = false;
-        }
-        if(updateSize) {
-            g.updateSize(getObject().getIdentifier(), getObject().getSize());
-            updateSize = false;
-        }
-        if(updateRotation) {
-            g.updateRotation(getObject().getIdentifier(), getObject().getRotation(), getObject().getQuaternionRotation());
-            updateRotation = false;
-        }
-        if(updateSprite) {
-            if(sprite instanceof AnimatedSprite) {
-                g.updateSprite(getObject().getIdentifier(), ((AnimatedSprite) sprite).requestSprite(), false);
-            } else {
-                g.updateSprite(getObject().getIdentifier(), sprite, true);
-                updateSprite = false;
-            }
-        }
-        if(updateShader) {
-            g.updateShader(getObject().getIdentifier(), shader);
-            updateShader = false;
-        }
-        if(updateShapePath) {
-            g.updateShapePath(getObject().getIdentifier(), shapePath);
-            updateShapePath = false;
-        }
-        if(updateColor) {
-            g.updateColor(getObject().getIdentifier(), color);
-            updateColor = false;
-        }
-        if(updateXray) {
-            g.updateXray(getObject().getIdentifier(), xray);
-            updateXray = false;
-        }
-        if(updateRepeat) {
-            g.updateRepeatTexture(getObject().getIdentifier(), repeatTexture);
+        if(renderOptions.getSprite() instanceof AnimatedSprite) {
+            renderOptions.setSprite(((AnimatedSprite) renderOptions.getSprite()).requestSprite());
         }
     }
 
     @SaveState(name = "sprite")
     public Sprite getSprite() {
-        return this.sprite;
+        return this.renderOptions.getSprite();
     }
 
     @FromXML
     public void setSprite(Sprite sprite) {
-        this.sprite = sprite;
-        updateSprite = true;
+        if(graphicsManager3D != null) {
+            graphicsManager3D.freeTexture(renderOptions);
+        }
+        renderOptions.setSprite(sprite);
         netUpdateSprite = true;
     }
 
     public ColorObject getColor() {
-        return this.color;
+        return this.renderOptions.getColor();
     }
 
     public void setColor(ColorObject color) {
-        this.color = color;
-        updateColor = true;
+        this.renderOptions.setColor(color);
     }
 
     @FromXML
     public void setXray(boolean xray) {
-        this.xray = xray;
-        updateXray = true;
+        this.renderOptions.setXrayRender(xray);
     }
 
     @SaveState(name = "shader")
     public String getShader() {
-        return this.shader;
+        return this.renderOptions.getShader();
     }
 
     @FromXML
     public void setShader(String shader) {
-        this.shader = shader;
-        updateShader = true;
+        this.renderOptions.setShader(shader);
     }
 
     @SaveState(name = "shapePath")
     public String getShapePath() {
-        return this.shapePath;
+        return this.renderOptions.getShapePath();
     }
 
     @FromXML
     public void setShapePath(String shapePath) {
-        this.shapePath = shapePath;
-        updateShapePath = true;
+        this.renderOptions.setShapePath(shapePath);
     }
 
     @FromXML
@@ -139,13 +90,12 @@ public abstract class Base3DShape extends NetComponent {
 
     @SaveState(name = "repeatTexture")
     public int getRepeatTexture() {
-        return this.repeatTexture;
+        return this.renderOptions.getRepeatTexture();
     }
 
     @FromXML
     public void setRepeatTexture(int repeatTexture) {
-        this.repeatTexture = repeatTexture;
-        updateRepeat = true;
+        this.renderOptions.setRepeatTexture(repeatTexture);
     }
 
     @Override
@@ -175,7 +125,8 @@ public abstract class Base3DShape extends NetComponent {
     @Override
     public void onAddComponent() {
         this.graphicsManager3D = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
-        createShape();
+        this.renderOptions = createShape();
+        graphicsManager3D.createRenderable(renderOptions);
         graphicsManager3D.preloadShape(graphicsManager3D.getRenderable(getObject().getIdentifier()).getShapePath());
     }
 
@@ -184,25 +135,35 @@ public abstract class Base3DShape extends NetComponent {
         if(graphicsManager3D == null) {
             return;
         }
-
-        graphicsManager3D.removeRenderable(getObject().getIdentifier());
+        graphicsManager3D.removeRenderable(renderOptions.getIdentifier());
     }
 
     @Override
     public boolean onUpdatePosition(double newX, double newY, double newZ) {
-        updatePosition = true;
+        if(renderOptions.getPosition().equals(getObject().getPosition())) {
+            return true;
+        }
+        renderOptions.setPosition(renderOptions.getPosition().set(newX, newY, newZ));
         return true;
     }
 
     @Override
     public boolean onUpdateSize(double newX, double newY, double newZ) {
-        updateSize = true;
+        if(renderOptions.getSize().equals(getObject().getSize())) {
+            return true;
+        }
+        renderOptions.setSize(renderOptions.getSize().set(newX, newY, newZ));
         return true;
     }
 
     @Override
     public void onUpdateRotation() {
-        updateRotation = true;
+        if(!renderOptions.getRotation().equals(getObject().getRotation())) {
+            renderOptions.setRotation(renderOptions.getRotation().clone());
+        }
+        if(!renderOptions.getQuaternionRotation().equals(getObject().getQuaternionRotation())) {
+            renderOptions.setQuaternionRotation(renderOptions.getQuaternionRotation().clone());
+        }
     }
 
     @Override

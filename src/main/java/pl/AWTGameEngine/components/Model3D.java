@@ -11,7 +11,6 @@ import pl.AWTGameEngine.objects.transform.Vector3;
 @ComponentGL
 public class Model3D extends Base3DShape {
 
-    private RenderOptions3D options;
     private Vector3 modelSize;
 
     public Model3D(GameObject object) {
@@ -19,44 +18,36 @@ public class Model3D extends Base3DShape {
     }
 
     @Override
-    protected void createShape() {
-        if(graphicsManager3D == null || shapePath == null) {
-            return;
+    protected RenderOptions3D createShape() {
+        if(graphicsManager3D == null) {
+            return null;
         }
 
-        options = new RenderOptions3D(getObject().getIdentifier())
+        return renderOptions
                 .setPosition(getObject().getPosition())
                 .setSize(modelSize == null ? getObject().getSize() : modelSize)
                 .setRotation(getObject().getRotation())
-                .setQuaternionRotation(getObject().getQuaternionRotation())
-                .setSprite(getSprite())
-                .setShader(getShader())
-                .setColor(getColor())
-                .setShapePath(shapePath);
-
-        graphicsManager3D.createRenderable(options);
-
-        initialized = true;
+                .setQuaternionRotation(getObject().getQuaternionRotation());
     }
 
     @Override
     public void patchRender() {
-        if(options == null) {
+        if(renderOptions == null) {
             return;
         }
         if(modelSize != null) {
-            updateSize = false;
+            renderOptions.setSize(modelSize);
         }
-    }
-
-    @FromXML
-    public void setModelSize(Vector3 modelSize) {
-        this.modelSize = modelSize;
     }
 
     @SaveState(name = "modelSize")
     public Vector3 getModelSize() {
         return this.modelSize;
+    }
+
+    @FromXML
+    public void setModelSize(Vector3 modelSize) {
+        this.modelSize = modelSize;
     }
 
 }

@@ -21,12 +21,10 @@ import pl.AWTGameEngine.objects.transform.Vector3;
 import java.awt.image.DataBufferInt;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public class GraphicsManagerGL extends GraphicsManager3D {
 
@@ -113,7 +111,9 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             texturesToUpdate.remove(s);
         }
 
-        List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values());
+        List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values().stream()
+                .map(RenderOptions3D::clone)
+                .toList());
         renderableList.sort(Comparator.comparing(RenderOptions3D::isXrayRender));
 
         List<RenderOptions3D> transparentRenders = new ArrayList<>();
@@ -292,7 +292,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     @Override
     public void removeRenderable(String identifier) {
-        updateSprite(identifier, null, true);
+        freeTexture(renderables.get(identifier));
         renderables.remove(identifier);
     }
 
@@ -301,59 +301,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         return renderables.get(identifier);
     }
 
-    @Override
-    public void updatePosition(String identifier, Vector3 position) {
-        renderables.get(identifier).setPosition(position);
-    }
-
-    @Override
-    public void updateSize(String identifier, Vector3 scale) {
-        renderables.get(identifier).setSize(scale);
-    }
-
-    @Override
-    public void updateRotation(String identifier, Vector3 rotation, Vector4 quaternionRotation) {
-        renderables.get(identifier).setRotation(rotation);
-        renderables.get(identifier).setQuaternionRotation(quaternionRotation);
-    }
-
-    @Override
-    public void updateSprite(String identifier, Sprite sprite, boolean releaseOldTexture) {
-        if(releaseOldTexture) {
-            Sprite oldSprite = renderables.get(identifier).getSprite();
-            if(oldSprite != null) {
-                texturesToDelete.add(oldSprite);
-            }
+    public void freeTexture(RenderOptions3D renderOptions) {
+        Sprite oldSprite = renderOptions.getSprite();
+        if(oldSprite != null) {
+            texturesToDelete.add(oldSprite);
         }
-        if(!renderables.containsKey(identifier)) {
-            return;
-        }
-        renderables.get(identifier).setSprite(sprite);
-    }
-
-    @Override
-    public void updateShader(String identifier, String shader) {
-        renderables.get(identifier).setShader(shader);
-    }
-
-    @Override
-    public void updateShapePath(String identifier, String shapePath) {
-        renderables.get(identifier).setShapePath(shapePath);
-    }
-
-    @Override
-    public void updateColor(String identifier, ColorObject color) {
-        renderables.get(identifier).setColor(color);
-    }
-
-    @Override
-    public void updateXray(String identifier, boolean xray) {
-        renderables.get(identifier).setXrayRender(xray);
-    }
-
-    @Override
-    public void updateRepeatTexture(String identifier, int repeat) {
-        renderables.get(identifier).setRepeatTexture(repeat);
     }
 
     public void createTexture(GL4 gl, Sprite sprite) {

@@ -126,4 +126,20 @@ public class RenderOptions3D {
         return this;
     }
 
+    @Override
+    public RenderOptions3D clone() {
+        return new RenderOptions3D(identifier)
+                .setPosition(position)
+                .setSize(size)
+                .setRotation(rotation)
+                .setQuaternionRotation(quaternionRotation)
+                .setSprite(sprite)
+                .setColor(color)
+                .setShader(shader)
+                .setXrayRender(xrayRender)
+                .setShapePath(shapePath)
+                .setOpacity(opacity)
+                .setRepeatTexture(repeatTexture);
+    }
+
 }
