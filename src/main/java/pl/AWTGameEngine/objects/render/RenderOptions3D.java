@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.objects.render;
 
 import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.objects.render.shaders.Shader;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
@@ -13,7 +14,7 @@ public class RenderOptions3D {
     private Vector4 quaternionRotation;
     private Sprite sprite;
     private ColorObject color;
-    private String shader;
+    private Shader shader;
     private boolean xrayRender = false;
     private String shapePath;
     private float opacity = 1;
@@ -51,7 +52,7 @@ public class RenderOptions3D {
         return color;
     }
 
-    public String getShader() {
+    public Shader getShader() {
         return this.shader;
     }
 
@@ -101,7 +102,7 @@ public class RenderOptions3D {
         return this;
     }
 
-    public RenderOptions3D setShader(String shader) {
+    public RenderOptions3D setShader(Shader shader) {
         this.shader = shader;
         return this;
     }

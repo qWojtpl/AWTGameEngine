@@ -18,6 +18,7 @@ import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.helpers.VehicleHelper;
@@ -25,6 +26,8 @@ import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.lists.FloatValues;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
+import pl.AWTGameEngine.objects.render.shaders.DefaultShader;
+import pl.AWTGameEngine.objects.render.shaders.Shader;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
@@ -628,7 +631,7 @@ public class Vehicle extends ObjectComponent {
         private Vector3 shapeSizeMultiplier = new Vector3(1, 1, 1);
         private Vector3 shapePositionCorrection = new Vector3();
         private String shapePath = "models/box.obj";
-        private String shader = "shaders/shader";
+        private Shader shader = Shaders.of(DefaultShader.class);
 
         public Wheel(GameObject object) {
             super(object);
@@ -870,12 +873,12 @@ public class Vehicle extends ObjectComponent {
         }
 
         @SaveState(name = "shader")
-        public String getShader() {
+        public Shader getShader() {
             return this.shader;
         }
 
         @FromXML
-        public void setShader(String shader) {
+        public void setShader(Shader shader) {
             this.shader = shader;
         }
 

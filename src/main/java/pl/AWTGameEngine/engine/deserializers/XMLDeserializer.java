@@ -6,9 +6,11 @@ import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.lists.*;
 import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.render.shaders.Shader;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
@@ -283,6 +285,18 @@ public class XMLDeserializer {
             @Override
             public void invoke(Method method, ObjectComponent component, String value) throws Exception {
                 method.invoke(component, Dependencies.getResourceManager().getResourceAsSprite(value));
+            }
+        });
+        // Shader
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return Shader.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, Shaders.of(Class.forName(value).asSubclass(Shader.class)));
             }
         });
     }

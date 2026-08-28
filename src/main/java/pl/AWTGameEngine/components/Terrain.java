@@ -14,6 +14,7 @@ import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.HeightFieldHelper;
 import pl.AWTGameEngine.engine.helpers.ModelHelper;
@@ -21,6 +22,7 @@ import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.render.shaders.DefaultShader;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
@@ -121,7 +123,7 @@ public class Terrain extends ObjectComponent {
                 .setQuaternionRotation(new Vector4())
                 .setShapePath(terrainIdentifier)
                 .setRepeatTexture(160)
-                .setShader("shaders/shader");
+                .setShader(Shaders.of(DefaultShader.class));
 
         graphicsManagerGL.createRenderable(renderOptions3D);
     }

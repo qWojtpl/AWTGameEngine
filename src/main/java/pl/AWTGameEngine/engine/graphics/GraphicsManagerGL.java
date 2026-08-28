@@ -7,6 +7,7 @@ import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.helpers.SkyboxHelper;
@@ -15,6 +16,8 @@ import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Shape;
 import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.render.shaders.Shader;
+import pl.AWTGameEngine.objects.render.shaders.XRayShader;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
@@ -197,37 +200,14 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         );
 
         if(ro.isXrayRender()) {
-            int xray = panelGL.getManager().getProgram(gl, "shaders/xray");
-            gl.glUseProgram(xray);
-            gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "viewProj"), 1, false, viewProj, 0);
-            gl.glUniformMatrix4fv(gl.glGetUniformLocation(xray, "model"), 1, false, model, 0);
-            gl.glDepthFunc(GL4.GL_GREATER);
-            gl.glDepthMask(false);
-            gl.glDrawArrays(GL4.GL_TRIANGLES, 0, shape.getVertexCount());
-            gl.glDepthFunc(GL4.GL_LESS);
-            gl.glDepthMask(true);
+            Shader xrayShader = Shaders.of(XRayShader.class);
+
+            xrayShader.setCurrentContext(gl);
+            xrayShader.use(gl, ro, viewProj, model, shape);
         }
 
-        int program = panelGL.getManager().getProgram(gl, ro.getShader());
-
-        gl.glUseProgram(program);
-
-        int modelLoc = gl.glGetUniformLocation(program, "model");
-        int vpLoc = gl.glGetUniformLocation(program, "viewProj");
-        int opacityLoc = gl.glGetUniformLocation(program, "opacity");
-        int repeatLoc = gl.glGetUniformLocation(program, "repeat");
-
-        gl.glUniformMatrix4fv(vpLoc, 1, false, viewProj, 0);
-        gl.glUniformMatrix4fv(modelLoc, 1, false, model, 0);
-
-        float opacity = ro.getOpacity();
-
-        if(opacity > 1) {
-            opacity = 1;
-        }
-
-        gl.glUniform1f(opacityLoc, opacity);
-        gl.glUniform1f(repeatLoc, (float) ro.getRepeatTexture());
+        ro.getShader().setCurrentContext(gl);
+        ro.getShader().use(gl, ro, viewProj, model, shape);
 
         if(ro.getSprite() != null) {
             if(textures.getOrDefault(ro.getSprite(), null) == null) {
@@ -262,7 +242,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glDepthMask(false);
         gl.glDisable(GL.GL_CULL_FACE);
-        int shader = panelGL.getManager().getProgram(gl, "shaders/skybox");
+        int shader = Shaders.getProgram(gl, "shaders/skybox");
         gl.glUseProgram(shader);
         int vpLoc = gl.glGetUniformLocation(shader, "viewProj");
         gl.glUniformMatrix4fv(vpLoc, 1, false, skyboxViewProj, 0);

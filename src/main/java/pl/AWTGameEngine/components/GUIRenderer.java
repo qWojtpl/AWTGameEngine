@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components;
 import javafx.scene.image.WritableImage;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.FXHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
@@ -10,6 +11,7 @@ import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.render.shaders.GUIShader;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
@@ -36,7 +38,7 @@ public class GUIRenderer extends ObjectComponent {
                 .setPosition(new Vector3())
                 .setSize(new Vector3())
                 .setQuaternionRotation(new Vector4())
-                .setShader("shaders/gui")
+                .setShader(Shaders.of(GUIShader.class))
                 .setShapePath("models/plane.obj")
                 .setSprite(sprite);
         graphicsManagerGL.createRenderable(renderOptions3D);

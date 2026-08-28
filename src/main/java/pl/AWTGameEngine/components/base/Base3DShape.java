@@ -3,6 +3,7 @@ package pl.AWTGameEngine.components.base;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
+import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
@@ -10,12 +11,14 @@ import pl.AWTGameEngine.objects.net.NetBlock;
 import pl.AWTGameEngine.objects.render.AnimatedSprite;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.render.shaders.DefaultShader;
+import pl.AWTGameEngine.objects.render.shaders.Shader;
 
 public abstract class Base3DShape extends NetComponent {
 
     protected GraphicsManager3D graphicsManager3D;
     protected RenderOptions3D renderOptions = new RenderOptions3D(getObject().getIdentifier())
-            .setShader("shaders/shader")
+            .setShader(Shaders.of(DefaultShader.class))
             .setSprite(Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg"));
     protected boolean initialized = false;
     protected boolean netUpdateSprite = false;
@@ -64,12 +67,12 @@ public abstract class Base3DShape extends NetComponent {
     }
 
     @SaveState(name = "shader")
-    public String getShader() {
+    public Shader getShader() {
         return this.renderOptions.getShader();
     }
 
     @FromXML
-    public void setShader(String shader) {
+    public void setShader(Shader shader) {
         this.renderOptions.setShader(shader);
     }
 

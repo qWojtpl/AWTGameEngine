@@ -5,6 +5,7 @@ import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
@@ -14,6 +15,7 @@ import pl.AWTGameEngine.objects.lists.Vector3Values;
 import pl.AWTGameEngine.objects.render.ParticleMeta;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.render.shaders.BillboardShader;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
@@ -79,7 +81,7 @@ public class ParticleEmitter extends ObjectComponent {
         RenderOptions3D renderable = new RenderOptions3D(particleIdentifier);
         renderable
                 .setShapePath("models/plane.obj")
-                .setShader("shaders/billboard")
+                .setShader(Shaders.of(BillboardShader.class))
                 .setSprite(sprite == null ? Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg") : sprite)
                 .setSize(particleSize.clone())
                 .setQuaternionRotation(new Vector4())
