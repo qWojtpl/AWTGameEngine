@@ -38,7 +38,7 @@ public class GUIRenderer extends ObjectComponent {
                 .setPosition(new Vector3())
                 .setSize(new Vector3())
                 .setQuaternionRotation(new Vector4())
-                .setShader(Shaders.of(GUIShader.class))
+                .setShader(Shaders.of(getWindow(), GUIShader.class))
                 .setShapePath("models/plane.obj")
                 .setSprite(sprite);
         graphicsManagerGL.createRenderable(renderOptions3D);

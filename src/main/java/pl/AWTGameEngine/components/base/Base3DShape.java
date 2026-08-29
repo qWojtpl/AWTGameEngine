@@ -18,7 +18,7 @@ public abstract class Base3DShape extends NetComponent {
 
     protected GraphicsManager3D graphicsManager3D;
     protected RenderOptions3D renderOptions = new RenderOptions3D(getObject().getIdentifier())
-            .setShader(Shaders.of(DefaultShader.class))
+            .setShader(Shaders.of(getWindow(), DefaultShader.class))
             .setSprite(Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg"));
     protected boolean initialized = false;
     protected boolean netUpdateSprite = false;

@@ -296,7 +296,7 @@ public class XMLDeserializer {
 
             @Override
             public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, Shaders.of(Class.forName(value).asSubclass(Shader.class)));
+                method.invoke(component, Shaders.of(component.getObject().getScene().getWindow(), Class.forName(value).asSubclass(Shader.class)));
             }
         });
     }

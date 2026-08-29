@@ -1,8 +1,6 @@
 package pl.AWTGameEngine.objects.render.shaders;
 
 import com.jogamp.opengl.GL4;
-import pl.AWTGameEngine.objects.render.RenderOptions3D;
-import pl.AWTGameEngine.objects.render.Shape;
 
 public class XRayShader extends Shader {
 
@@ -11,14 +9,14 @@ public class XRayShader extends Shader {
     }
 
     @Override
-    public void use(GL4 gl, RenderOptions3D renderOptions, float[] viewProj, float[] model, Shape shape) {
-        setFloatMatrixValue(getLocation("viewProj"), viewProj);
-        setFloatMatrixValue(getLocation("model"), model);
+    public void use(ShaderUseContext useContext) {
+        setFloatMatrixValue(getLocation("viewProj"), useContext.getViewProjection());
+        setFloatMatrixValue(getLocation("model"), useContext.getModel());
 
-        gl.glDepthFunc(GL4.GL_GREATER);
-        gl.glDepthMask(false);
-        gl.glDrawArrays(GL4.GL_TRIANGLES, 0, shape.getVertexCount());
-        gl.glDepthFunc(GL4.GL_LESS);
-        gl.glDepthMask(true);
+        useContext.getGl4().glDepthFunc(GL4.GL_GREATER);
+        useContext.getGl4().glDepthMask(false);
+        useContext.getGl4().glDrawArrays(GL4.GL_TRIANGLES, 0, useContext.getShape().getVertexCount());
+        useContext.getGl4().glDepthFunc(GL4.GL_LESS);
+        useContext.getGl4().glDepthMask(true);
     }
 }

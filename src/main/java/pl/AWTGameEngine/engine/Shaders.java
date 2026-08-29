@@ -4,27 +4,37 @@ import com.jogamp.opengl.GL4;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.exceptions.ShaderCompileException;
 import pl.AWTGameEngine.objects.render.shaders.Shader;
+import pl.AWTGameEngine.windows.BaseWindow;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 public class Shaders {
 
-    private static final HashMap<Class<? extends Shader>, Shader> shaderRegistry = new HashMap<>();
+    private static final HashMap<BaseWindow, HashMap<Class<? extends Shader>, Shader>> shaderRegistry = new HashMap<>();
+    //todo: programs with BaseWindow
     private static final HashMap<String, Integer> programs = new HashMap<>();
 
-    public static Shader of(Class<? extends Shader> clazz) {
-        if(!shaderRegistry.containsKey(clazz)) {
+    /**
+     *
+     * @param clazz Class of shader
+     * @return      Singleton of shader class
+     */
+    public static Shader of(BaseWindow window, Class<? extends Shader> clazz) {
+        if(!shaderRegistry.containsKey(window)) {
+            shaderRegistry.put(window, new HashMap<>());
+        }
+        if(!shaderRegistry.get(window).containsKey(clazz)) {
             try {
                 Constructor<?> constructor = clazz.getDeclaredConstructor();
                 constructor.setAccessible(true);
-                shaderRegistry.put(clazz, (Shader) constructor.newInstance());
+                shaderRegistry.get(window).put(clazz, (Shader) constructor.newInstance());
             } catch (Exception e) {
                 Logger.exception("Cannot get shader from " + clazz.getCanonicalName(), e);
             }
         }
 
-        return shaderRegistry.get(clazz);
+        return shaderRegistry.get(window).get(clazz);
     }
 
     private static int createProgram(GL4 gl, String shaderName) {
@@ -86,10 +96,11 @@ public class Shaders {
         return new String(buf);
     }
 
-    public static void disposePrograms(GL4 gl) {
+    public static void disposePrograms(BaseWindow window, GL4 gl) {
         for(int program : programs.values()) {
             gl.glDeleteProgram(program);
         }
+        shaderRegistry.remove(window);
     }
 
 

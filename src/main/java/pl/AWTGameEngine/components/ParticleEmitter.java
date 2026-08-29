@@ -81,7 +81,7 @@ public class ParticleEmitter extends ObjectComponent {
         RenderOptions3D renderable = new RenderOptions3D(particleIdentifier);
         renderable
                 .setShapePath("models/plane.obj")
-                .setShader(Shaders.of(BillboardShader.class))
+                .setShader(Shaders.of(getWindow(), BillboardShader.class))
                 .setSprite(sprite == null ? Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg") : sprite)
                 .setSize(particleSize.clone())
                 .setQuaternionRotation(new Vector4())

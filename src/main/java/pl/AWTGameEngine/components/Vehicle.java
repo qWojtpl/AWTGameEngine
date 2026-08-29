@@ -631,7 +631,7 @@ public class Vehicle extends ObjectComponent {
         private Vector3 shapeSizeMultiplier = new Vector3(1, 1, 1);
         private Vector3 shapePositionCorrection = new Vector3();
         private String shapePath = "models/box.obj";
-        private Shader shader = Shaders.of(DefaultShader.class);
+        private Shader shader = Shaders.of(getWindow(), DefaultShader.class);
 
         public Wheel(GameObject object) {
             super(object);

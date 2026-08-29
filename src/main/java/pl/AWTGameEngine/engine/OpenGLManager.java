@@ -46,7 +46,7 @@ public class OpenGLManager implements GLEventListener {
     @Override
     public void dispose(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();
-        Shaders.disposePrograms(gl);
+        Shaders.disposePrograms(window, gl);
     }
 
     @Override

@@ -17,6 +17,7 @@ import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Shape;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.render.shaders.Shader;
+import pl.AWTGameEngine.objects.render.shaders.ShaderUseContext;
 import pl.AWTGameEngine.objects.render.shaders.XRayShader;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
@@ -200,14 +201,26 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         );
 
         if(ro.isXrayRender()) {
-            Shader xrayShader = Shaders.of(XRayShader.class);
+            Shader xrayShader = Shaders.of(panelGL.getWindow(), XRayShader.class);
 
             xrayShader.setCurrentContext(gl);
-            xrayShader.use(gl, ro, viewProj, model, shape);
+            xrayShader.use(new ShaderUseContext()
+                    .setGL4(gl)
+                    .setRenderOptions(ro)
+                    .setViewProjection(viewProj)
+                    .setModel(model)
+                    .setShape(shape)
+            );
         }
 
         ro.getShader().setCurrentContext(gl);
-        ro.getShader().use(gl, ro, viewProj, model, shape);
+        ro.getShader().use(new ShaderUseContext()
+                .setGL4(gl)
+                .setRenderOptions(ro)
+                .setViewProjection(viewProj)
+                .setModel(model)
+                .setShape(shape)
+        );
 
         if(ro.getSprite() != null) {
             if(textures.getOrDefault(ro.getSprite(), null) == null) {

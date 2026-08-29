@@ -123,7 +123,7 @@ public class Terrain extends ObjectComponent {
                 .setQuaternionRotation(new Vector4())
                 .setShapePath(terrainIdentifier)
                 .setRepeatTexture(160)
-                .setShader(Shaders.of(DefaultShader.class));
+                .setShader(Shaders.of(getWindow(), DefaultShader.class));
 
         graphicsManagerGL.createRenderable(renderOptions3D);
     }
