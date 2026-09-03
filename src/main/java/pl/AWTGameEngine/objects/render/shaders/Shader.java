@@ -26,6 +26,7 @@ public abstract class Shader  {
     private final String name;
     private int program = -1;
     private GL4 currentContext;
+    private BaseWindow currentWindow;
 
     /**
      *
@@ -67,7 +68,7 @@ public abstract class Shader  {
 
     public int getProgram() {
         if(this.program == -1) {
-            setProgram(Shaders.getProgram(currentContext, name));
+            setProgram(Shaders.getProgram(currentWindow, currentContext, name));
         }
         return this.program;
     }
@@ -76,8 +77,9 @@ public abstract class Shader  {
         this.program = program;
     }
 
-    public void setCurrentContext(GL4 context) {
+    public void setCurrentContext(GL4 context, BaseWindow window) {
         this.currentContext = context;
+        this.currentWindow = window;
         context.glUseProgram(getProgram());
     }
 

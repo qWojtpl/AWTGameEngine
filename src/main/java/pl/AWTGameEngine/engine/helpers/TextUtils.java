@@ -35,4 +35,9 @@ public class TextUtils {
         return builder.toString();
     }
 
+    public static String toSentenceCase(String text) {
+        String spaced = text.replaceAll("(?<!^)(?=[A-Z])", " ");
+        return spaced.substring(0, 1).toUpperCase() + spaced.substring(1).toLowerCase();
+    }
+
 }

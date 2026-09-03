@@ -99,6 +99,9 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     public void preloadShape(String path) {
+        if(path == null) {
+            return;
+        }
         addPreloadedVertices(path, ModelLoader.getVertices(path, true));
     }
 
@@ -203,7 +206,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         if(ro.isXrayRender()) {
             Shader xrayShader = Shaders.of(panelGL.getWindow(), XRayShader.class);
 
-            xrayShader.setCurrentContext(gl);
+            xrayShader.setCurrentContext(gl, panelGL.getWindow());
             xrayShader.use(new ShaderUseContext()
                     .setGL4(gl)
                     .setRenderOptions(ro)
@@ -213,7 +216,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             );
         }
 
-        ro.getShader().setCurrentContext(gl);
+        ro.getShader().setCurrentContext(gl, panelGL.getWindow());
         ro.getShader().use(new ShaderUseContext()
                 .setGL4(gl)
                 .setRenderOptions(ro)
@@ -255,7 +258,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         gl.glDepthFunc(GL.GL_LEQUAL);
         gl.glDepthMask(false);
         gl.glDisable(GL.GL_CULL_FACE);
-        int shader = Shaders.getProgram(gl, "shaders/skybox");
+        int shader = Shaders.getProgram(panelGL.getWindow(), gl, "shaders/skybox");
         gl.glUseProgram(shader);
         int vpLoc = gl.glGetUniformLocation(shader, "viewProj");
         gl.glUniformMatrix4fv(vpLoc, 1, false, skyboxViewProj, 0);

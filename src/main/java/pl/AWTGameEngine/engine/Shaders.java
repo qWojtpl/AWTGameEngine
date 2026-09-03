@@ -12,8 +12,7 @@ import java.util.HashMap;
 public class Shaders {
 
     private static final HashMap<BaseWindow, HashMap<Class<? extends Shader>, Shader>> shaderRegistry = new HashMap<>();
-    //todo: programs with BaseWindow
-    private static final HashMap<String, Integer> programs = new HashMap<>();
+    private static final HashMap<BaseWindow, HashMap<String, Integer>> programs = new HashMap<>();
 
     /**
      *
@@ -58,13 +57,16 @@ public class Shaders {
         return program;
     }
 
-    public static int getProgram(GL4 gl, String shaderName) {
-        if(!programs.containsKey(shaderName)) {
+    public static int getProgram(BaseWindow window, GL4 gl, String shaderName) {
+        if(!programs.containsKey(window)) {
+            programs.put(window, new HashMap<>());
+        }
+        if(!programs.get(window).containsKey(shaderName)) {
             int newProgram = createProgram(gl, shaderName);
-            programs.put(shaderName, newProgram);
+            programs.get(window).put(shaderName, newProgram);
             return newProgram;
         }
-        return programs.get(shaderName);
+        return programs.get(window).get(shaderName);
     }
 
     private static String getShaderFile(String fileName) {
@@ -97,11 +99,11 @@ public class Shaders {
     }
 
     public static void disposePrograms(BaseWindow window, GL4 gl) {
-        for(int program : programs.values()) {
+        for(int program : programs.get(window).values()) {
             gl.glDeleteProgram(program);
         }
         shaderRegistry.remove(window);
+        programs.remove(window);
     }
-
 
 }
