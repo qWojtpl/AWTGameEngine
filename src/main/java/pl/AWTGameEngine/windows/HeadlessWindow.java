@@ -236,11 +236,6 @@ public class HeadlessWindow implements BaseWindow {
     }
 
     @Override
-    public List<Dialog> getDialogs() {
-        return List.of();
-    }
-
-    @Override
     public void setRenderLoop(BaseLoop loop) {
         this.renderLoop = loop;
     }
@@ -288,11 +283,6 @@ public class HeadlessWindow implements BaseWindow {
     @Override
     public void addScene(Scene scene) {
         scenes.putIfAbsent(scene, scenes.isEmpty());
-    }
-
-    @Override
-    public void updateDialogs() {
-
     }
 
     @Override

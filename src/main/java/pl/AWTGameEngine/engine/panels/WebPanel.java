@@ -34,6 +34,10 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
         PhysXManager.getInstance().createScene(scene);
 
+        if(!(window instanceof HeadlessWindow) && window.getCurrentScene().equals(scene)) {
+            ((Window) window).add(this);
+        }
+
     }
 
     @Override

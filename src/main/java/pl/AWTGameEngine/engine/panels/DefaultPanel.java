@@ -34,6 +34,9 @@ public class DefaultPanel extends JPanel implements PanelObject {
         this.canvas = new Canvas();
         canvas.setFocusable(false);
         add(this.canvas, BorderLayout.CENTER);
+        if(!(window instanceof HeadlessWindow)) {
+            ((Window) window).add(this);
+        }
     }
 
     @Override

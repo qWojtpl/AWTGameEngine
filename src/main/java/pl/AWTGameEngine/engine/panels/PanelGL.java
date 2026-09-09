@@ -123,6 +123,7 @@ public class PanelGL extends Panel3D implements PanelObject {
         manager = new OpenGLManager(scene, camera, (GraphicsManagerGL) graphicsManager3D);
         glCanvas.addGLEventListener(manager);
         glCanvas.setFocusable(false);
+        ((Window) window).add(glCanvas);
         Logger.info("OpenGL initialized.");
     }
 

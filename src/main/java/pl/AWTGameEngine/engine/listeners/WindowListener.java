@@ -59,7 +59,6 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
                 component.onWindowResize(newWidth, newHeight);
             }
         }
-        window.updateDialogs();
     }
 
     @Override
@@ -69,7 +68,6 @@ public class WindowListener extends ComponentAdapter implements java.awt.event.W
                 component.onWindowMove();
             }
         }
-        window.updateDialogs();
     }
 
     @Override

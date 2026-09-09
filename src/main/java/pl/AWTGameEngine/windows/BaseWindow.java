@@ -51,7 +51,6 @@ public interface BaseWindow {
     int getBaseWidth();
     int getBaseHeight();
     Cursor getCursor();
-    List<Dialog> getDialogs();
     void setRenderLoop(BaseLoop loop);
     void setUpdateLoop(BaseLoop loop);
     void setPhysicsLoop(BaseLoop loop);
@@ -62,7 +61,6 @@ public interface BaseWindow {
     void setWindowListener(WindowListener windowListener);
     void setSameSize(boolean sameSize);
     void addScene(Scene scene);
-    void updateDialogs();
     void setVisible(boolean visible);
     void setCurrentScene(Scene newCurrentScene);
     void setSceneLoader(SceneLoader sceneLoader);

@@ -40,7 +40,6 @@ public class Window extends Frame implements BaseWindow {
     private double screenWidth;
     private double screenHeight;
     private int[] ratio = new int[]{16,9};
-    private final List<Dialog> dialogs = new ArrayList<>();
 
     public Window() {
         AppProperties appProperties = Dependencies.getAppProperties();
@@ -216,10 +215,6 @@ public class Window extends Frame implements BaseWindow {
         return this.cursor;
     }
 
-    public List<Dialog> getDialogs() {
-        return new ArrayList<>(dialogs);
-    }
-
     public void setRenderLoop(BaseLoop loop) {
         this.renderLoop = loop;
     }
@@ -277,25 +272,6 @@ public class Window extends Frame implements BaseWindow {
 
     public void addScene(Scene scene) {
         scenes.putIfAbsent(scene, scenes.isEmpty());
-        if(dialogs.size() != scenes.keySet().size() - 1) {
-            Dialog dialog = new Dialog(this, false);
-            dialog.setUndecorated(true);
-            dialog.setBackground(new Color(0, 0, 0, 0));
-            dialog.setBounds(getX(), getY(), getBaseWidth(), getBaseHeight());
-            dialog.setFocusable(false);
-            dialogs.add(dialog);
-        }
-    }
-
-    public void updateDialogs() {
-        for(Dialog d : dialogs) {
-            if(getWidth() == 0 || getHeight() == 0) {
-                d.setBounds(getX(), getY(), getBaseWidth(), getBaseHeight());
-            } else {
-                d.setBackground(new Color(0, 0, 0, 0));
-                d.setBounds(getX() + getInsets().left, getY() + getInsets().top, getWidth(), getHeight());
-            }
-        }
     }
 
     @Override
@@ -307,37 +283,9 @@ public class Window extends Frame implements BaseWindow {
         if(scenes.getOrDefault(newCurrentScene, null) == null) {
             throw new SceneOwnershipException();
         }
-        int i = 0;
-        removeAll();
         List<Scene> sceneList = new ArrayList<>(scenes.keySet());
         for(Scene scene : sceneList) {
             scenes.replace(scene, scene.equals(newCurrentScene));
-            scene.getPanel().setOpaque(scene.equals(newCurrentScene));
-            if(scene.equals(newCurrentScene) && scenes.keySet().size() > 1) {
-                if(scene.getPanel() instanceof PanelGL) {
-                    add(((PanelGL) scene.getPanel()).getGlCanvas());
-                    ((PanelGL) scene.getPanel()).getGlCanvas().setFocusable(false);
-                    requestFocusInWindow();
-                } else {
-                    add((Component) scene.getPanel());
-                    ((Component) scene.getPanel()).setFocusable(false);
-                    requestFocusInWindow();
-                }
-            } else {
-                if(scenes.keySet().size() > 1) {
-                    dialogs.get(i).removeAll();
-                    dialogs.get(i++).add((Component) scene.getPanel());
-                } else {
-                    scene.getPanel().setSize(new Dimension(getWidth(), getHeight()));
-                    if(scene.getPanel() instanceof PanelGL) {
-                        add(((PanelGL) scene.getPanel()).getGlCanvas());
-                        ((PanelGL) scene.getPanel()).setFocusable(false);
-                    } else {
-                        add((Component) scene.getPanel());
-                        ((Component) scene.getPanel()).setFocusable(false);
-                    }
-                }
-            }
         }
     }
 
