@@ -1,13 +1,13 @@
 package pl.AWTGameEngine.objects.render;
 
-public class Shape {
+public class GLShape {
 
     private final String path;
     private final int vao;
     private final int vbo;
     private final int vertexCount;
 
-    public Shape(String path, int vao, int vbo, int vertexCount) {
+    public GLShape(String path, int vao, int vbo, int vertexCount) {
         this.path = path;
         this.vao = vao;
         this.vbo = vbo;

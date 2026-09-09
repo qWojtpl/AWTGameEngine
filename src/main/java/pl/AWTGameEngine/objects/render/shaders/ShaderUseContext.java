@@ -2,8 +2,8 @@ package pl.AWTGameEngine.objects.render.shaders;
 
 import com.jogamp.opengl.GL4;
 import pl.AWTGameEngine.objects.render.Camera;
+import pl.AWTGameEngine.objects.render.GLShape;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
-import pl.AWTGameEngine.objects.render.Shape;
 
 public class ShaderUseContext {
 
@@ -11,7 +11,7 @@ public class ShaderUseContext {
     private RenderOptions3D renderOptions;
     private float[] viewProj;
     private float[] model;
-    private Shape shape;
+    private GLShape glShape;
     private Camera camera;
 
     public GL4 getGl4() {
@@ -50,12 +50,12 @@ public class ShaderUseContext {
         return this;
     }
 
-    public Shape getShape() {
-        return this.shape;
+    public GLShape getShape() {
+        return this.glShape;
     }
 
-    public ShaderUseContext setShape(Shape shape) {
-        this.shape = shape;
+    public ShaderUseContext setShape(GLShape glShape) {
+        this.glShape = glShape;
         return this;
     }
 

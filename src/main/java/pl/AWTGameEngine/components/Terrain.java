@@ -7,7 +7,6 @@ import physx.extensions.PxRigidActorExt;
 import physx.geometry.*;
 import physx.physics.*;
 import physx.support.PxArray_PxHeightFieldSample;
-import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.components.types.ComponentGL;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
@@ -15,10 +14,10 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.Shaders;
-import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.helpers.HeightFieldHelper;
 import pl.AWTGameEngine.engine.helpers.ModelHelper;
-import pl.AWTGameEngine.engine.panels.PanelGL;
+import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
@@ -115,8 +114,8 @@ public class Terrain extends ObjectComponent {
     private void createRenderable(float rowScale, float columnScale, float heightScale) {
         List<float[]> vertices = HeightFieldHelper.generateHeightFieldVertices(this::getInvertedHeight, rows, cols, rowScale, columnScale, heightScale);
 
-        GraphicsManagerGL graphicsManagerGL = (GraphicsManagerGL) ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
-        graphicsManagerGL.addPreloadedVertices(terrainIdentifier, ModelHelper.convertToArray(vertices));
+        GraphicsManager3D graphicsManager3D = ((Panel3D) getScene().getPanel()).getGraphicsManager3D();
+        graphicsManager3D.addPreloadedVertices(terrainIdentifier, ModelHelper.convertToArray(vertices));
         renderOptions3D
                 .setPosition(getObject().getPosition())
                 .setSize(new Vector3(1, 1, 1))
@@ -125,7 +124,7 @@ public class Terrain extends ObjectComponent {
                 .setRepeatTexture(160)
                 .setShader(Shaders.of(getWindow(), DefaultShader.class));
 
-        graphicsManagerGL.createRenderable(renderOptions3D);
+        graphicsManager3D.createRenderable(renderOptions3D);
     }
 
     public short getHeight(int row, int col) {

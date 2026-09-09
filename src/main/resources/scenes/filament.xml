@@ -1,0 +1,8 @@
+<scene title="Filament" renderFPS="60" updateFPS="60" physicsFPS="60" sameSize="true">
+    <object id="test" x="0" y="0" z="10" sizeX="1" sizeY="1">
+        <Box3D sprite="sprites/beaver.jpg" />
+    </object>
+    <object id="test1" x="1" y="-1" z="-10" size="1,1,1" rotation="0,45,0">
+        <Box3D sprite="sprites/beaver.jpg" />
+    </object>
+</scene>

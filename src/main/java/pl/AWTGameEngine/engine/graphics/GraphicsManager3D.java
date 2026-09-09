@@ -8,6 +8,8 @@ public abstract class GraphicsManager3D {
 
     public abstract void preloadShape(String path);
 
+    public abstract void addPreloadedVertices(String path, float[] vertices);
+
     public abstract void createRenderable(RenderOptions3D options);
 
     public abstract void removeRenderable(String identifier);

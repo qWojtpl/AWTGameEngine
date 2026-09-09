@@ -12,9 +12,8 @@ import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.helpers.SkyboxHelper;
 import pl.AWTGameEngine.engine.panels.PanelGL;
-import pl.AWTGameEngine.objects.*;
+import pl.AWTGameEngine.objects.render.GLShape;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
-import pl.AWTGameEngine.objects.render.Shape;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.render.shaders.Shader;
 import pl.AWTGameEngine.objects.render.shaders.ShaderUseContext;
@@ -31,7 +30,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
     private final PanelGL panelGL;
     private final ConcurrentHashMap<String, RenderOptions3D> renderables = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, Shape> shapes = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, GLShape> shapes = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, float[]> preloadedVertices = new ConcurrentHashMap<>();
 
     // Textures
@@ -41,7 +40,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     private final Set<Sprite> texturesToUpdate = ConcurrentHashMap.newKeySet();
 
     // Skybox
-    private Shape skyboxShape;
+    private GLShape skyboxGLShape;
     private Texture skyboxTexture;
     private List<Sprite> skyboxSprites;
 
@@ -91,10 +90,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         gl.glBindVertexArray(0);
 
-        shapes.put(path, new Shape(path, vao, vbo, vertices.length / 8));
+        shapes.put(path, new GLShape(path, vao, vbo, vertices.length / 8));
         Logger.info("Model " + path + " loaded.");
     }
 
+    @Override
     public void preloadShape(String path) {
         if(path == null) {
             return;
@@ -102,6 +102,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         addPreloadedVertices(path, ModelLoader.getVertices(path, true));
     }
 
+    @Override
     public void addPreloadedVertices(String path, float[] vertices) {
         preloadedVertices.put(path, vertices);
     }
@@ -186,13 +187,13 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             initShape(ro.getShapePath(), gl);
         }
 
-        Shape shape = shapes.get(ro.getShapePath());
+        GLShape glShape = shapes.get(ro.getShapePath());
 
-        if(shape == null) {
+        if(glShape == null) {
             return;
         }
 
-        gl.glBindVertexArray(shape.getVao());
+        gl.glBindVertexArray(glShape.getVao());
 
         float[] model = MatrixHelper.composeModelMatrix(
                 ro.getPosition(),
@@ -209,7 +210,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                     .setRenderOptions(ro)
                     .setViewProjection(viewProj)
                     .setModel(model)
-                    .setShape(shape)
+                    .setShape(glShape)
             );
         }
 
@@ -219,7 +220,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                 .setRenderOptions(ro)
                 .setViewProjection(viewProj)
                 .setModel(model)
-                .setShape(shape)
+                .setShape(glShape)
         );
 
         if(ro.getSprite() != null) {
@@ -233,7 +234,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             }
         }
 
-        gl.glDrawArrays(GL.GL_TRIANGLES, 0, shape.getVertexCount());
+        gl.glDrawArrays(GL.GL_TRIANGLES, 0, glShape.getVertexCount());
     }
 
     private void drawSkybox(GL4 gl, float[] skyboxViewProj) {
@@ -246,9 +247,9 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             }
         }
 
-        if(skyboxShape == null) {
+        if(skyboxGLShape == null) {
             initShape("$skybox", SkyboxHelper.getSkyboxVertices(), gl);
-            skyboxShape = shapes.get("$skybox");
+            skyboxGLShape = shapes.get("$skybox");
         }
 
         gl.glEnable(GL.GL_DEPTH_TEST);

@@ -31,6 +31,9 @@ public class Skybox extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
+        if(!(getScene().getPanel() instanceof PanelGL)) {
+            return;
+        }
         this.graphicsManagerGL = (GraphicsManagerGL) ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
         updateSkybox();
     }
