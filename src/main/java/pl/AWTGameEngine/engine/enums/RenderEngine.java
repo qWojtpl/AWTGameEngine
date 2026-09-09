@@ -6,6 +6,7 @@ public enum RenderEngine {
 
     DEFAULT(DefaultPanel.class),
     WEB(WebPanel.class),
+    FILAMENT(FilamentPanel.class),
     OPENGL(PanelGL.class);
 
     private final Class<? extends PanelObject> panelClass;

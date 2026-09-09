@@ -19,8 +19,6 @@ import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.render.shaders.Shader;
 import pl.AWTGameEngine.objects.render.shaders.ShaderUseContext;
 import pl.AWTGameEngine.objects.render.shaders.XRayShader;
-import pl.AWTGameEngine.objects.transform.Vector4;
-import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.awt.image.DataBufferInt;
 import java.nio.FloatBuffer;
@@ -28,7 +26,6 @@ import java.nio.IntBuffer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
 
 public class GraphicsManagerGL extends GraphicsManager3D {
 
@@ -270,7 +267,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         gl.glUniform1i(skyboxLoc, 0);
 
         gl.glBindVertexArray(shapes.get("$skybox").getVao());
-        gl.glDrawArrays(gl.GL_TRIANGLES, 0, shapes.get("$skybox").getVertexCount());
+        gl.glDrawArrays(GL.GL_TRIANGLES, 0, shapes.get("$skybox").getVertexCount());
         gl.glBindVertexArray(0);
 
         gl.glDepthMask(true);

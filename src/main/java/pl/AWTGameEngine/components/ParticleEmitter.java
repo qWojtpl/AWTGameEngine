@@ -9,6 +9,7 @@ import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
+import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.lists.Vector3Values;
@@ -43,7 +44,7 @@ public class ParticleEmitter extends ObjectComponent {
 
     @Override
     public void onSerializationFinish() {
-        graphicsManager3D = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
+        graphicsManager3D = ((Panel3D) getScene().getPanel()).getGraphicsManager3D();
         particleLoop = new ParticleLoop();
         particleLoop.setTargetFps(iterationsPerSecond);
         particleLoop.start();

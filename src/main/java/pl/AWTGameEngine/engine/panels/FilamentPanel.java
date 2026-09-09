@@ -2,10 +2,11 @@ package pl.AWTGameEngine.engine.panels;
 
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
-import org.jetbrains.annotations.NotNull;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.OpenGLManager;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
+import pl.AWTGameEngine.engine.graphics.GraphicsManagerFilament;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.scenes.Scene;
@@ -14,26 +15,23 @@ import pl.AWTGameEngine.windows.HeadlessWindow;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
-public class PanelGL extends Panel3D implements PanelObject {
+public class FilamentPanel extends Panel3D implements PanelObject {
 
     private final Scene scene;
     private final BaseWindow window;
     private final Camera camera;
     private final PhysXManager physXManager;
-    private GLProfile profile;
-    private GLCanvas glCanvas;
-    private OpenGLManager manager;
 
-    public PanelGL(Scene scene) {
+    public FilamentPanel(Scene scene) {
         this.scene = scene;
         this.window = scene.getWindow();
         this.camera = new Camera(this);
         this.physXManager = PhysXManager.getInstance();
         physXManager.createScene(scene);
         if(!(window instanceof HeadlessWindow)) {
-            this.graphicsManager3D = new GraphicsManagerGL(this);
-            initOpenGL(getWindow().getBaseWidth(), getWindow().getBaseHeight());
+            graphicsManager3D = new GraphicsManagerFilament();
         }
     }
 
@@ -57,16 +55,12 @@ public class PanelGL extends Panel3D implements PanelObject {
         return this.camera;
     }
 
+    public GraphicsManager3D getGraphicsManager3D() {
+        return this.graphicsManager3D;
+    }
+
     public PhysXManager getPhysXManager() {
         return this.physXManager;
-    }
-
-    public GLCanvas getGlCanvas() {
-        return this.glCanvas;
-    }
-
-    public OpenGLManager getManager() {
-        return this.manager;
     }
 
     @Override
@@ -77,15 +71,12 @@ public class PanelGL extends Panel3D implements PanelObject {
         if(graphicsManager3D == null) {
             return;
         }
-        glCanvas.display();
+
     }
 
     @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
-        if(!(window instanceof HeadlessWindow)) {
-            ((Window) window).remove(glCanvas);
-        }
     }
 
     @Override
@@ -105,7 +96,7 @@ public class PanelGL extends Panel3D implements PanelObject {
 
     @Override
     public void printToGraphics(Graphics2D g) {
-        //todo
+
     }
 
     @Override
@@ -113,34 +104,14 @@ public class PanelGL extends Panel3D implements PanelObject {
 
     }
 
-    private void initOpenGL(int width, int height) {
-        Logger.info("Initializing OpenGL...");
-        profile = GLProfile.get(GLProfile.GL4bc);
-        GLCapabilities capabilities = new GLCapabilities(profile);
-        capabilities.setDepthBits(24);
-        glCanvas = new GLCanvas(capabilities);
-        glCanvas.setSize(width, height);
-        manager = new OpenGLManager(scene, camera, (GraphicsManagerGL) graphicsManager3D);
-        glCanvas.addGLEventListener(manager);
-        glCanvas.setFocusable(false);
-        Logger.info("OpenGL initialized.");
-    }
-
     @Override
-    public void setSize(@NotNull Dimension dimension) {
-//        super.setSize(dimension);
-        if(glCanvas != null) {
-            glCanvas.setSize(dimension);
-        }
+    public void setSize(Dimension dimension) {
+        super.setSize(dimension);
     }
 
     @Override
     public void setPreferredSize(Dimension dimension) {
 
-    }
-
-    public GLProfile getGlProfile() {
-        return this.profile;
     }
 
 }

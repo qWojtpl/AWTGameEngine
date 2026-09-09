@@ -4,8 +4,10 @@ import javafx.scene.image.WritableImage;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Shaders;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.FXHelper;
+import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
@@ -21,9 +23,9 @@ import java.awt.image.BufferedImage;
 public class GUIRenderer extends ObjectComponent {
 
     private RenderOptions3D renderOptions3D;
-    private GraphicsManagerGL graphicsManagerGL;
+    private GraphicsManager3D graphicsManager;
     private volatile boolean finished = true;
-    private Sprite sprite = new Sprite("GUIRendererSprite", new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
+    private final Sprite sprite = new Sprite("GUIRendererSprite", new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
     private WritableImage image = new WritableImage(getWindow().getBaseWidth(), getWindow().getBaseHeight());
 
     public GUIRenderer(GameObject object) {
@@ -32,8 +34,8 @@ public class GUIRenderer extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        PanelGL panelGL = (PanelGL) getWindow().getCurrentScene().getPanel();
-        graphicsManagerGL = (GraphicsManagerGL) panelGL.getGraphicsManager3D();
+        Panel3D panel = (Panel3D) getWindow().getCurrentScene().getPanel();
+        graphicsManager = panel.getGraphicsManager3D();
         renderOptions3D = new RenderOptions3D(getObject().getIdentifier() + "-" + "GUIRenderer" + "-" + getScene().getName())
                 .setPosition(new Vector3())
                 .setSize(new Vector3())
@@ -41,12 +43,12 @@ public class GUIRenderer extends ObjectComponent {
                 .setShader(Shaders.of(getWindow(), GUIShader.class))
                 .setShapePath("models/plane.obj")
                 .setSprite(sprite);
-        graphicsManagerGL.createRenderable(renderOptions3D);
+        graphicsManager.createRenderable(renderOptions3D);
     }
 
     @Override
     public void onRemoveComponent() {
-        graphicsManagerGL.removeRenderable(renderOptions3D.getIdentifier());
+        graphicsManager.removeRenderable(renderOptions3D.getIdentifier());
     }
 
     @Override
@@ -59,7 +61,7 @@ public class GUIRenderer extends ObjectComponent {
             try {
                 image = ((WebPanel) getScene().getPanel()).getScene().snapshot(image);
                 sprite.updateImage(image);
-                graphicsManagerGL.updateTexture(sprite);
+                graphicsManager.updateTexture(sprite);
             } finally {
                 finished = true;
             }
