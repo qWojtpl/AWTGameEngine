@@ -3,10 +3,14 @@ package pl.AWTGameEngine.engine.graphics;
 import io.github.erkko68.filament.*;
 import io.github.erkko68.filament.filamat.MaterialBuilder;
 import io.github.erkko68.filament.filamat.MaterialPackage;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
+import pl.AWTGameEngine.engine.helpers.RotationHelper;
+import pl.AWTGameEngine.engine.panels.FilamentPanel;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
+import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.objects.transform.Vector4;
 
 import java.nio.ByteBuffer;
@@ -17,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class GraphicsManagerFilament extends GraphicsManager3D {
 
+    private final FilamentPanel panel;
     private final ConcurrentHashMap<String, RenderOptions3D> renderables = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, float[]> preloadedVertices = new ConcurrentHashMap<>();
 
@@ -27,11 +32,17 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
     private MaterialInstance defaultMaterial;
 
+    public GraphicsManagerFilament(FilamentPanel panel) {
+        this.panel = panel;
+    }
+
     public void update(Engine engine, View view) {
 
         if(defaultMaterial == null) {
             createDefaultMaterial(engine);
         }
+
+        prepareCamera(view);
 
         List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values().stream()
                 .map(RenderOptions3D::clone)
@@ -40,6 +51,20 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         for(RenderOptions3D ro : renderableList) {
             prepareRenderable(ro, engine, view);
         }
+    }
+
+    private void prepareCamera(View view) {
+
+        double x = panel.getCamera().getX(), y = panel.getCamera().getY(), z = panel.getCamera().getZ();
+        Vector3 rot = panel.getCamera().getRotation().clone();
+        double rx = rot.getX(), ry = rot.getY(), rz = rot.getZ();
+
+        assert view.getCamera() != null;
+        double[] look = RotationHelper.rotationToVectorLookAt(
+                x, y, z,
+                rx, ry, rz
+        );
+        view.getCamera().lookAt(x, y, z, look[0], look[1], look[2], 0, 1, 0);
     }
 
     private void prepareRenderable(RenderOptions3D renderOptions3D, Engine engine, View view) {
@@ -68,16 +93,14 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
             engine.getTransformManager().create(entity);
         }
 
-        float[] transformMatrix = MatrixHelper.composeModelMatrix(
-                renderOptions3D.getPosition(),
-                renderOptions3D.getQuaternionRotation(),
-                renderOptions3D.getSize()
-        );
-
         // Position
+
         engine.getTransformManager().setTransform(
                 engine.getTransformManager().getInstance(entities.get(renderOptions3D.getIdentifier())),
-                transformMatrix
+                MatrixHelper.composeModelMatrix(
+                        renderOptions3D.getPosition(),
+                        renderOptions3D.getQuaternionRotation(),
+                        renderOptions3D.getSize())
         );
     }
 
@@ -142,7 +165,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                 .shading(MaterialBuilder.Shading.UNLIT)
                 .culling(MaterialBuilder.CullingMode.NONE)
                 .platform(MaterialBuilder.Platform.DESKTOP)
-                .targetApi(MaterialBuilder.TargetApi.VULKAN)
+                .targetApi(MaterialBuilder.TargetApi.ALL)
                 .material("""
                     void material(inout MaterialInputs material) {
                         prepareMaterial(material);

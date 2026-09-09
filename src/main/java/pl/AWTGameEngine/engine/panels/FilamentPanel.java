@@ -3,17 +3,22 @@ package pl.AWTGameEngine.engine.panels;
 import com.jogamp.opengl.*;
 import io.github.erkko68.filament.*;
 import io.github.erkko68.filament.filamat.MaterialBuilder;
+import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFilament;
 import pl.AWTGameEngine.engine.helpers.FilamentHelper;
 import pl.AWTGameEngine.objects.render.Camera;
+import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.scenes.Scene;
 import pl.AWTGameEngine.windows.BaseWindow;
 import pl.AWTGameEngine.windows.HeadlessWindow;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class FilamentPanel extends Panel3D implements PanelObject {
 
@@ -37,7 +42,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
         this.physXManager = PhysXManager.getInstance();
         physXManager.createScene(scene);
         if(!(window instanceof HeadlessWindow)) {
-            graphicsManager3D = new GraphicsManagerFilament();
+            graphicsManager3D = new GraphicsManagerFilament(this);
         }
     }
 
@@ -81,10 +86,35 @@ public class FilamentPanel extends Panel3D implements PanelObject {
             initFilament();
             initialized = true;
         }
+        Set<Vector3> locks = new LinkedHashSet<>();
+        try {
+            for(ObjectComponent c :
+                    scene.getSceneEventHandler()
+                            .getComponents("on3DRenderRequest#GraphicsManager3D")) {
+                if(!locks.contains(c.getObject().getPosition())) {
+                    c.getObject().getPosition().lock();
+                    locks.add(c.getObject().getPosition());
+                }
+                c.on3DRenderRequest(graphicsManager3D);
+            }
+        } catch(Exception e) {
+            Logger.exception("Unhandled exception caught while running an iteration of OpenGL 3D render request", e);
+            for(Vector3 locked : locks) {
+                locked.unlock();
+            }
+            return;
+        }
         ((GraphicsManagerFilament) graphicsManager3D).update(engine, view);
         if(renderer.beginFrame(swapChain, System.nanoTime())) {
             renderer.render(view);
             renderer.endFrame();
+        }
+        for(Vector3 locked : locks) {
+            try {
+                locked.unlock();
+            } catch(IllegalMonitorStateException e) {
+                Logger.exception("Failed to unlock transform", e);
+            }
         }
     }
 
@@ -156,7 +186,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
 
         io.github.erkko68.filament.Camera cam = engine.createCamera(engine.getEntityManager().create());
 
-        cam.setProjection(60, (double) window.getBaseWidth() / window.getBaseHeight(), 0.1, 100000, io.github.erkko68.filament.Camera.Fov.HORIZONTAL);
+        cam.setProjection(60, (double) window.getBaseWidth() / window.getBaseHeight(), 0.1, 100000, io.github.erkko68.filament.Camera.Fov.VERTICAL);
 
         view.setCamera(cam);
         view.setScene(filamentScene);
