@@ -97,23 +97,20 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 }
                 c.on3DRenderRequest(graphicsManager3D);
             }
-        } catch(Exception e) {
-            Logger.exception("Unhandled exception caught while running an iteration of OpenGL 3D render request", e);
-            for(Vector3 locked : locks) {
-                locked.unlock();
+            ((GraphicsManagerFilament) graphicsManager3D).update(engine, view);
+            if(renderer.beginFrame(swapChain, System.nanoTime())) {
+                renderer.render(view);
+                renderer.endFrame();
             }
-            return;
-        }
-        ((GraphicsManagerFilament) graphicsManager3D).update(engine, view);
-        if(renderer.beginFrame(swapChain, System.nanoTime())) {
-            renderer.render(view);
-            renderer.endFrame();
-        }
-        for(Vector3 locked : locks) {
-            try {
-                locked.unlock();
-            } catch(IllegalMonitorStateException e) {
-                Logger.exception("Failed to unlock transform", e);
+        } catch(Exception e) {
+            Logger.exception("Unhandled exception caught while running an iteration of Filament render request", e);
+        } finally {
+            for(Vector3 locked : locks) {
+                try {
+                    locked.unlock();
+                } catch(IllegalMonitorStateException e) {
+                    Logger.exception("Failed to unlock Vector3", e);
+                }
             }
         }
     }
@@ -164,6 +161,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
 
     private void initFilament() {
         this.canvas = new Canvas();
+        canvas.setFocusable(false);
         ((Window) window).add(canvas);
 
         window.setVisible(true);
@@ -186,11 +184,11 @@ public class FilamentPanel extends Panel3D implements PanelObject {
 
         io.github.erkko68.filament.Camera cam = engine.createCamera(engine.getEntityManager().create());
 
-        cam.setProjection(60, (double) window.getBaseWidth() / window.getBaseHeight(), 0.1, 100000, io.github.erkko68.filament.Camera.Fov.VERTICAL);
+        cam.setProjection(60, (double) window.getBaseWidth() / window.getBaseHeight(), 0.1, 1000, io.github.erkko68.filament.Camera.Fov.VERTICAL);
 
         view.setCamera(cam);
         view.setScene(filamentScene);
-
+        view.setShadowingEnabled(true);
         view.setViewport(new Viewport(0, 0, window.getBaseWidth(), window.getBaseHeight()));
 
         filamentScene.setSkybox(
@@ -199,7 +197,33 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                         .build(engine)
         );
 
-//        createTestTriangle(engine, filamentScene);
+        var options = new LightManager.ShadowOptions();
+        options.setMapSize(8192);
+        options.setShadowCascades(10);
+        options.setBlurWidth(0);
+
+        int sun = engine.getEntityManager().create();
+        new LightManager.Builder(LightManager.Type.SUN)
+                .color(1.0f, 0.95f, 0.8f)
+                .intensity(1000000)
+                .direction(0.5f, -1.0f, 0.3f)
+                .shadowOptions(options)
+                .castShadows(true)
+                .build(engine, sun);
+
+        filamentScene.addEntity(sun);
+
+        int light = engine.getEntityManager().create();
+        new LightManager.Builder(LightManager.Type.POINT)
+                .color(1, 0, 0)
+                .intensity(1000000000)
+                .position(0, 0, 0)
+                .falloff(100.0f)
+                .castShadows(true)
+                .shadowOptions(options)
+                .build(engine, light);
+
+        filamentScene.addEntity(light);
     }
 
 }

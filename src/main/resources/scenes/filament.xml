@@ -2,13 +2,13 @@
     <object id="player">
         <MovementGL speed="1" _package="pl.AWTGameEngine.custom" />
     </object>
-    <object id="test" x="0" y="0" z="10" sizeX="1" sizeY="1">
+    <object id="test" x="0" y="0" z="10" sizeX="1" sizeY="1" sizeZ="1">
         <Box3D sprite="sprites/beaver.jpg" />
     </object>
-    <object id="test1" x="1" y="-1" z="-10" size="1,1,1" rotation="0,45,0">
+    <object id="test1" x="1" y="-1" z="-10" size="1,1,1" rotation="45,45,0">
         <Box3D sprite="sprites/beaver.jpg" />
     </object>
-    <object id="test2" x="0" y="-10" z="0" size="5,5,5">
+    <object id="test2" x="0" y="-10" z="0" size="50,5,50">
         <Box3D />
     </object>
 </scene>

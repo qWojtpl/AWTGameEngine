@@ -3,7 +3,6 @@ package pl.AWTGameEngine.engine.graphics;
 import io.github.erkko68.filament.*;
 import io.github.erkko68.filament.filamat.MaterialBuilder;
 import io.github.erkko68.filament.filamat.MaterialPackage;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
@@ -11,7 +10,6 @@ import pl.AWTGameEngine.engine.panels.FilamentPanel;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.transform.Vector3;
-import pl.AWTGameEngine.objects.transform.Vector4;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -107,18 +105,50 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
     private void createBuffers(String path, float[] vertices, Engine engine) {
         int vertexCount = vertices.length / 8;
 
-        byte[] vertexData = new byte[vertices.length * Float.BYTES];
-        ByteBuffer byteBuf = ByteBuffer
-                .wrap(vertexData)
-                .order(ByteOrder.nativeOrder());
+        float[] positions = new float[vertexCount * 3];
+        float[] normals = new float[vertexCount * 3];
+        float[] uvs = new float[vertexCount * 2];
 
-        for(float v : vertices) {
-            byteBuf.putFloat(v);
+        for(int i = 0; i < vertexCount; i++) {
+            int srcOffset = i * 8;
+            positions[i * 3] = vertices[srcOffset];
+            positions[i * 3 + 1] = vertices[srcOffset + 1];
+            positions[i * 3 + 2] = vertices[srcOffset + 2];
+            normals[i * 3] = vertices[srcOffset + 3];
+            normals[i * 3 + 1] = vertices[srcOffset + 4];
+            normals[i * 3 + 2] = vertices[srcOffset + 5];
+            uvs[i * 2] = vertices[srcOffset + 6];
+            uvs[i * 2 + 1] = vertices[srcOffset + 7];
         }
+
+        int[] triangles = new int[vertexCount];
+        for (int i = 0; i < vertexCount; i++) {
+            triangles[i] = i;
+        }
+
+        SurfaceOrientation surfaceOrientation = new SurfaceOrientation.Builder()
+                .vertexCount(vertexCount)
+                .positions(positions, 0)
+                .normals(normals, 0)
+                .uvs(uvs, 0)
+                .triangleCount(vertexCount / 3)
+                .triangles32(triangles)
+                .build();
+
+        float[] tangentsArray = new float[vertexCount * 4];
+        surfaceOrientation.getQuatsAsFloat(tangentsArray, vertexCount);
+
+        surfaceOrientation.destroy();
+
+        byte[] vertexData = new byte[vertices.length * Float.BYTES];
+        ByteBuffer.wrap(vertexData).order(ByteOrder.nativeOrder()).asFloatBuffer().put(vertices);
+
+        byte[] tangentData = new byte[tangentsArray.length * Float.BYTES];
+        ByteBuffer.wrap(tangentData).order(ByteOrder.nativeOrder()).asFloatBuffer().put(tangentsArray);
 
         VertexBuffer vb = new VertexBuffer.Builder()
                 .vertexCount(vertexCount)
-                .bufferCount(1)
+                .bufferCount(2)
                 .attribute(
                         VertexBuffer.VertexAttribute.POSITION,
                         0,
@@ -133,20 +163,21 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                         6 * Float.BYTES,
                         8 * Float.BYTES
                 )
+                .attribute(
+                        VertexBuffer.VertexAttribute.TANGENTS,
+                        1,
+                        VertexBuffer.AttributeType.FLOAT4,
+                        0,
+                        4 * Float.BYTES
+                )
                 .build(engine);
 
         vb.setBufferAt(engine, 0, vertexData);
+        vb.setBufferAt(engine, 1, tangentData);
         vertexBuffers.put(path, vb);
 
         byte[] indexData = new byte[vertexCount * Integer.BYTES];
-
-        ByteBuffer indexBuf = ByteBuffer
-                .wrap(indexData)
-                .order(ByteOrder.nativeOrder());
-
-        for (short i = 0; i < vertexCount; i++) {
-            indexBuf.putInt(i);
-        }
+        ByteBuffer.wrap(indexData).order(ByteOrder.nativeOrder()).asIntBuffer().put(triangles);
 
         IndexBuffer ib = new IndexBuffer.Builder()
                 .indexCount(vertexCount)
@@ -157,19 +188,20 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         indexBuffers.put(path, ib);
     }
 
+
     private void createDefaultMaterial(Engine engine) {
         MaterialBuilder materialBuilder = new MaterialBuilder();
 
         materialBuilder
                 .name("DefaultMaterial")
-                .shading(MaterialBuilder.Shading.UNLIT)
+                .shading(MaterialBuilder.Shading.LIT)
                 .culling(MaterialBuilder.CullingMode.NONE)
                 .platform(MaterialBuilder.Platform.DESKTOP)
                 .targetApi(MaterialBuilder.TargetApi.ALL)
                 .material("""
                     void material(inout MaterialInputs material) {
                         prepareMaterial(material);
-                        material.baseColor = vec4(1.0, 0.0, 0.0, 1.0);
+                        material.baseColor = vec4(0.0, 0.0, 0.0, 1.0);
                     }
                     """);
 
@@ -203,9 +235,16 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                         0,
                         defaultMaterial
                 )
+                .boundingBox(new Box(
+                        (float) renderOptions3D.getPosition().getX(),
+                        (float) renderOptions3D.getPosition().getY(),
+                        (float) renderOptions3D.getPosition().getZ(),
+                        (float) renderOptions3D.getSize().getX(),
+                        (float) renderOptions3D.getSize().getY(),
+                        (float) renderOptions3D.getSize().getZ()))
                 .culling(false)
-                .castShadows(false)
-                .receiveShadows(false);
+                .castShadows(true)
+                .receiveShadows(true);
 
         renderableBuilder.build(
                 engine,
