@@ -118,6 +118,17 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     @Override
     public void unload() {
         PhysXManager.getInstance().removeScene(scene);
+        if(!(window instanceof HeadlessWindow)) {
+            ((Window) window).remove(canvas);
+            window.getRenderLoop().addNextFrameOperation(() -> {
+                ((GraphicsManagerFilament) graphicsManager3D).dispose(engine);
+                engine.destroyView(view);
+                engine.destroyScene(filamentScene);
+                engine.destroySwapChain(swapChain);
+                engine.destroyRenderer(renderer);
+                engine.destroy();
+            });
+        }
     }
 
     @Override

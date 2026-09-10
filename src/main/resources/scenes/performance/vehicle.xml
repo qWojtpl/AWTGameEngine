@@ -77,8 +77,8 @@
     </object>
 
     <object id="vehicle" x="400" y="50" z="100" size="40,20,60">
-<!--        <Model3D shapePath="./test.o3d" modelSize="20,20,20" sprite="sprites/beaver.jpg" />-->
-        <Box3D />
+        <Model3D shapePath="./test.o3d" modelSize="20,20,20" sprite="sprites/beaver.jpg" />
+<!--        <Box3D />-->
         <Vehicle mass="15870" maxBrakeResponse="80000" />
         <Vehicle.Engine peakTorque="18000" maxRPM="12000" idleRPM="1200" />
         <Vehicle.Gearbox gearRatios="-4,0,28,14,7,4,2,1.0,0.8,0.6" />
@@ -92,7 +92,7 @@
     </object>
 
     <object id="terrain">
-<!--        <Terrain sprite="hdr_sprites/grass.jpg" />-->
+        <Terrain sprite="hdr_sprites/grass.jpg" />
     </object>
 
 </scene>

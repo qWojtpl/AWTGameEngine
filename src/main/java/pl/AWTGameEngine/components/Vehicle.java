@@ -22,7 +22,7 @@ import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.helpers.VehicleHelper;
-import pl.AWTGameEngine.engine.panels.PanelGL;
+import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.lists.FloatValues;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
@@ -645,8 +645,8 @@ public class Vehicle extends ObjectComponent {
 
         @Override
         public void onRemoveComponent() {
-            if(getScene().getPanel() instanceof PanelGL) {
-                GraphicsManager3D g = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
+            if(getScene().getPanel() instanceof Panel3D) {
+                GraphicsManager3D g = ((Panel3D) getScene().getPanel()).getGraphicsManager3D();
                 g.removeRenderable(options.getIdentifier());
             }
         }
@@ -712,8 +712,8 @@ public class Vehicle extends ObjectComponent {
         }
 
         private void createRenderable() {
-            if(getScene().getPanel() instanceof PanelGL) {
-                GraphicsManager3D g = ((PanelGL) getScene().getPanel()).getGraphicsManager3D();
+            if(getScene().getPanel() instanceof Panel3D) {
+                GraphicsManager3D g = ((Panel3D) getScene().getPanel()).getGraphicsManager3D();
                 options = new RenderOptions3D(getObject().getIdentifier() + "$WHEEL-" + id)
                         .setPosition(getObject().getPosition().clone().add(shapePositionCorrection))
                         .setSize(new Vector3(

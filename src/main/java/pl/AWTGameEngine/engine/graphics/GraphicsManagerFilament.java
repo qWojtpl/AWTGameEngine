@@ -16,17 +16,19 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GraphicsManagerFilament extends GraphicsManager3D {
 
     private final FilamentPanel panel;
     private final ConcurrentHashMap<String, RenderOptions3D> renderables = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, float[]> preloadedVertices = new ConcurrentHashMap<>();
+    private final ConcurrentLinkedQueue<String> renderablesToRemove = new ConcurrentLinkedQueue<>();
 
     // Filament
-    private final ConcurrentHashMap<String, VertexBuffer> vertexBuffers = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, IndexBuffer> indexBuffers = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, Integer> entities = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap</* Shape path */String, VertexBuffer> vertexBuffers = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap</* Shape path */String, IndexBuffer> indexBuffers = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap</* Renderable */String, Integer> entities = new ConcurrentHashMap<>();
 
     private MaterialInstance defaultMaterial;
 
@@ -42,6 +44,16 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
         prepareCamera(view);
 
+        String renderableToRemove;
+        while((renderableToRemove = renderablesToRemove.poll()) != null) {
+            renderables.remove(renderableToRemove);
+            if(!entities.containsKey(renderableToRemove)) {
+                continue;
+            }
+            disposeEntity(engine, entities.get(renderableToRemove));
+            entities.remove(renderableToRemove);
+        }
+
         List<RenderOptions3D> renderableList = new ArrayList<>(renderables.values().stream()
                 .map(RenderOptions3D::clone)
                 .toList());
@@ -49,6 +61,34 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         for(RenderOptions3D ro : renderableList) {
             prepareRenderable(ro, engine, view);
         }
+    }
+
+    public void dispose(Engine engine) {
+        for(int entity : entities.values()) {
+            disposeEntity(engine, entity);
+        }
+        entities.clear();
+        for(VertexBuffer vertexBuffer : vertexBuffers.values()) {
+            engine.destroyVertexBuffer(vertexBuffer);
+        }
+        vertexBuffers.clear();
+        for(IndexBuffer indexBuffer : indexBuffers.values()) {
+            engine.destroyIndexBuffer(indexBuffer);
+        }
+        indexBuffers.clear();
+        if(defaultMaterial != null) {
+            engine.destroyMaterialInstance(defaultMaterial);
+            defaultMaterial = null;
+        }
+        renderables.clear();
+        preloadedVertices.clear();
+    }
+
+    private void disposeEntity(Engine engine, int entity) {
+        engine.getTransformManager().destroy(entity);
+        engine.getRenderableManager().destroy(entity);
+        engine.getEntityManager().destroy(entity);
+        engine.destroyEntity(entity);
     }
 
     private void prepareCamera(View view) {
@@ -188,7 +228,6 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         indexBuffers.put(path, ib);
     }
 
-
     private void createDefaultMaterial(Engine engine) {
         MaterialBuilder materialBuilder = new MaterialBuilder();
 
@@ -235,16 +274,13 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                         0,
                         defaultMaterial
                 )
-                .boundingBox(new Box(
-                        (float) renderOptions3D.getPosition().getX(),
-                        (float) renderOptions3D.getPosition().getY(),
-                        (float) renderOptions3D.getPosition().getZ(),
+                .boundingBox(new Box(0, 0, 0,
                         (float) renderOptions3D.getSize().getX(),
                         (float) renderOptions3D.getSize().getY(),
                         (float) renderOptions3D.getSize().getZ()))
                 .culling(false)
-                .castShadows(true)
-                .receiveShadows(true);
+                .castShadows(!renderOptions3D.getSize().isEmpty())
+                .receiveShadows(!renderOptions3D.getSize().isEmpty());
 
         renderableBuilder.build(
                 engine,
@@ -269,7 +305,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
     @Override
     public void removeRenderable(String identifier) {
-
+        renderablesToRemove.add(identifier);
     }
 
     @Override
