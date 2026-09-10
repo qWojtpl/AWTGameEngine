@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -12,7 +12,7 @@ import pl.AWTGameEngine.objects.render.Sprite;
 
 import java.util.List;
 
-@ComponentGL
+@Component3D
 public class Skybox extends ObjectComponent {
 
     private GraphicsManagerGL graphicsManagerGL;

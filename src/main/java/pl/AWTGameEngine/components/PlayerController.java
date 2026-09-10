@@ -3,7 +3,7 @@ package pl.AWTGameEngine.components;
 import physx.PxTopLevelFunctions;
 import physx.character.*;
 import physx.common.PxVec3;
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -14,7 +14,7 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.windows.Window;
 
-@ComponentGL
+@Component3D
 public class PlayerController extends ObjectComponent {
 
     private PhysXManager.PhysXScene physicsScene;

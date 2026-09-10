@@ -4,7 +4,7 @@ import physx.PxTopLevelFunctions;
 import physx.extensions.PxDistanceJoint;
 import physx.extensions.PxDistanceJointFlagEnum;
 import physx.extensions.PxRevoluteJoint;
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.PhysXManager;
@@ -50,7 +50,7 @@ public abstract class Joint extends ObjectComponent {
         setReference((RigidBody) getScene().getGameObjectByName(identifier).getComponentByClass(RigidBody.class));
     }
 
-    @ComponentGL
+    @Component3D
     public static class Distance extends Joint {
 
         private PxDistanceJoint joint;
@@ -91,7 +91,7 @@ public abstract class Joint extends ObjectComponent {
 
     }
 
-    @ComponentGL
+    @Component3D
     public static class Revolute extends Joint {
 
         private PxRevoluteJoint joint;
@@ -131,7 +131,7 @@ public abstract class Joint extends ObjectComponent {
     }
 
     //todo
-//    @ComponentGL
+//    @Component3D
 //    public static class Articulation extends Joint {
 //
 //        private PxArticulationLink link;

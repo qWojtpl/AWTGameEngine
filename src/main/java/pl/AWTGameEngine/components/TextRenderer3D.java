@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.components;
 
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.Base3DShape;
@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
  * TextRenderer3D sets the textures of all Base3DShapes which
  * are in the same object to rendered text.
  */
-@ComponentGL
+@Component3D
 public class TextRenderer3D extends ObjectComponent {
 
     private String text;

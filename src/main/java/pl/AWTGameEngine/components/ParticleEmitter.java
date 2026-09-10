@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -10,7 +10,6 @@ import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.panels.Panel3D;
-import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.lists.Vector3Values;
 import pl.AWTGameEngine.objects.render.ParticleMeta;
@@ -22,7 +21,7 @@ import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-@ComponentGL
+@Component3D
 public class ParticleEmitter extends ObjectComponent {
 
     private boolean loop = true;

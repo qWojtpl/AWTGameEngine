@@ -1,12 +1,12 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.transform.Vector3;
 
-@ComponentGL
+@Component3D
 public class ForceTest extends ObjectComponent {
 
     public ForceTest(GameObject object) {

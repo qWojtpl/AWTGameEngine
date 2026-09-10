@@ -2,9 +2,7 @@ package pl.AWTGameEngine.components.base;
 
 import pl.AWTGameEngine.annotations.components.ComponentMeta;
 import pl.AWTGameEngine.annotations.components.management.*;
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
-import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
-import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.annotations.components.types.*;
 import pl.AWTGameEngine.annotations.methods.EventMethod;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
@@ -350,6 +348,14 @@ public abstract class ObjectComponent {
 
     public final boolean isWebComponent() {
         return this.getClass().isAnnotationPresent(WebComponent.class);
+    }
+
+    public final boolean is3DComponent() {
+        return this.getClass().isAnnotationPresent(Component3D.class);
+    }
+
+    public final boolean isFilamentComponent() {
+        return this.getClass().isAnnotationPresent(Component3D.class);
     }
 
     public final boolean isGLComponent() {

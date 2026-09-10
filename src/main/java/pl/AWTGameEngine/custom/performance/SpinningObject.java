@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.custom.performance;
 
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -9,7 +9,7 @@ import pl.AWTGameEngine.objects.GameObject;
 
 import java.util.List;
 
-@ComponentGL
+@Component3D
 public class SpinningObject extends ObjectComponent {
 
     private double speed = 10;

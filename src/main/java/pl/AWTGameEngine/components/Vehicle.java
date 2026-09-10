@@ -7,11 +7,9 @@ import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.physics.*;
-import physx.support.PxArray_PxShapePtr;
-import physx.support.PxShapePtr;
 import physx.vehicle2.*;
 import pl.AWTGameEngine.annotations.components.management.*;
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
@@ -33,7 +31,7 @@ import pl.AWTGameEngine.objects.transform.Vector3;
 
 import java.util.*;
 
-@ComponentGL
+@Component3D
 @Unique
 public class Vehicle extends ObjectComponent {
 
@@ -436,7 +434,7 @@ public class Vehicle extends ObjectComponent {
     }
 
     @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
-    @ComponentGL
+    @Component3D
     @DefaultComponent
     @WebComponent
     @Unique
@@ -502,7 +500,7 @@ public class Vehicle extends ObjectComponent {
     }
 
     @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
-    @ComponentGL
+    @Component3D
     @DefaultComponent
     @WebComponent
     @Unique
@@ -609,7 +607,7 @@ public class Vehicle extends ObjectComponent {
     }
 
     @RequiresOneOf({Vehicle.class, Vehicle.TopDown.class})
-    @ComponentGL
+    @Component3D
     @DefaultComponent
     @WebComponent
     public static class Wheel extends VehicleComponent {

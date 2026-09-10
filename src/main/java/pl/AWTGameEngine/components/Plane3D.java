@@ -1,12 +1,12 @@
 package pl.AWTGameEngine.components;
 
 import pl.AWTGameEngine.annotations.components.management.Unique;
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 
-@ComponentGL
+@Component3D
 @Unique
 public class Plane3D extends Base3DShape {
 

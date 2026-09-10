@@ -10,7 +10,7 @@ import physx.physics.*;
 import pl.AWTGameEngine.annotations.components.management.Conflicts;
 import pl.AWTGameEngine.annotations.components.management.ConflictsWith;
 import pl.AWTGameEngine.annotations.components.management.Unique;
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.annotations.methods.FromXML;
@@ -137,7 +137,7 @@ public abstract class RigidBody extends ObjectComponent {
         }
     }
 
-    @ComponentGL
+    @Component3D
     @Unique
     @Conflicts({
             @ConflictsWith(RigidBody.Static.class),
@@ -260,7 +260,7 @@ public abstract class RigidBody extends ObjectComponent {
 
     }
 
-    @ComponentGL
+    @Component3D
     @Unique
     @Conflicts({
             @ConflictsWith(RigidBody.Dynamic.class),
@@ -306,7 +306,7 @@ public abstract class RigidBody extends ObjectComponent {
 
     }
 
-    @ComponentGL
+    @Component3D
     @Unique
     public static class Trigger extends RigidBody.Static {
 
@@ -328,7 +328,7 @@ public abstract class RigidBody extends ObjectComponent {
 
     }
 
-    @ComponentGL
+    @Component3D
     @Unique
     @Conflicts({
             @ConflictsWith(RigidBody.Dynamic.class),
@@ -400,7 +400,7 @@ public abstract class RigidBody extends ObjectComponent {
 
         @DefaultComponent
         @WebComponent
-        @ComponentGL
+        @Component3D
         public static class Dynamic extends RigidBody.Dynamic {
 
             public Dynamic(GameObject object) {
@@ -457,7 +457,7 @@ public abstract class RigidBody extends ObjectComponent {
 
         @DefaultComponent
         @WebComponent
-        @ComponentGL
+        @Component3D
         public static class Static extends RigidBody.Static {
 
             private int layer = 0;
@@ -514,7 +514,7 @@ public abstract class RigidBody extends ObjectComponent {
 
         @DefaultComponent
         @WebComponent
-        @ComponentGL
+        @Component3D
         public static class Kinematic extends RigidBody.Kinematic {
 
             public Kinematic(GameObject object) {

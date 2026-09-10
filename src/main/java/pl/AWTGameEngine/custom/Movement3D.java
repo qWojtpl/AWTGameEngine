@@ -1,6 +1,6 @@
 package pl.AWTGameEngine.custom;
 
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.components.ComponentMeta;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -9,19 +9,19 @@ import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.windows.Window;
 
-@ComponentGL
+@Component3D
 @ComponentMeta(
-        name = "MovementGL",
+        name = "Movement3D",
         description = "Basic player movement implementation",
         author = "Wojt_pl"
 )
-public class MovementGL extends ObjectComponent {
+public class Movement3D extends ObjectComponent {
 
     private boolean noclip = true;
     private double speed = 10;
     private boolean focused = true;
 
-    public MovementGL(GameObject object) {
+    public Movement3D(GameObject object) {
         super(object);
     }
 

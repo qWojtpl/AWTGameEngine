@@ -14,7 +14,7 @@ import pl.AWTGameEngine.objects.net.NetBlock;
  */
 @DefaultComponent
 @WebComponent
-@ComponentGL
+@Component3D
 public class Prefab extends NetComponent {
 
     private String prefabName;

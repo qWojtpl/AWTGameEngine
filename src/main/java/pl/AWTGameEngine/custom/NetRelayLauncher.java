@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.annotations.components.types.ComponentGL;
+import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -10,7 +10,7 @@ import pl.AWTGameEngine.objects.GameObject;
 
 @DefaultComponent
 @WebComponent
-@ComponentGL
+@Component3D
 public class NetRelayLauncher extends ObjectComponent {
 
     public NetRelayLauncher(GameObject object) {

@@ -16,7 +16,7 @@ import pl.AWTGameEngine.objects.net.SteamNetConnection;
 import java.util.HashMap;
 import java.util.List;
 
-@ComponentGL
+@Component3D
 @WebComponent
 @DefaultComponent
 public class SteamRelayServer extends NetServer {
