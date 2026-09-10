@@ -162,11 +162,15 @@ public abstract class Base3DShape extends NetComponent {
 
     @Override
     public void onUpdateRotation() {
-        if(!renderOptions.getRotation().equals(getObject().getRotation())) {
-            renderOptions.setRotation(renderOptions.getRotation().clone());
+        if(renderOptions.getRotation() != null) {
+            if(!renderOptions.getRotation().equals(getObject().getRotation())) {
+                renderOptions.setRotation(renderOptions.getRotation().clone());
+            }
         }
-        if(!renderOptions.getQuaternionRotation().equals(getObject().getQuaternionRotation())) {
-            renderOptions.setQuaternionRotation(renderOptions.getQuaternionRotation().clone());
+        if(renderOptions.getQuaternionRotation() != null) {
+            if(!renderOptions.getQuaternionRotation().equals(getObject().getQuaternionRotation())) {
+                renderOptions.setQuaternionRotation(renderOptions.getQuaternionRotation().clone());
+            }
         }
     }
 

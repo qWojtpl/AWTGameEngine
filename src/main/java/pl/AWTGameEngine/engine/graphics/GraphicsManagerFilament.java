@@ -84,11 +84,12 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         preloadedVertices.clear();
     }
 
-    private void disposeEntity(Engine engine, int entity) {
+    public void disposeEntity(Engine engine, int entity) {
         engine.getTransformManager().destroy(entity);
         engine.getRenderableManager().destroy(entity);
         engine.getEntityManager().destroy(entity);
         engine.destroyEntity(entity);
+        panel.getFilamentScene().removeEntity(entity);
     }
 
     private void prepareCamera(View view) {
@@ -132,7 +133,6 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         }
 
         // Position
-
         engine.getTransformManager().setTransform(
                 engine.getTransformManager().getInstance(entities.get(renderOptions3D.getIdentifier())),
                 MatrixHelper.composeModelMatrix(

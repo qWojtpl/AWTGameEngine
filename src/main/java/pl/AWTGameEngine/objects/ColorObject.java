@@ -38,6 +38,11 @@ public class ColorObject {
                 ")";
     }
 
+    @Override
+    public String toString() {
+        return serialize();
+    }
+
     public String serialize() {
         return serialize(this);
     }

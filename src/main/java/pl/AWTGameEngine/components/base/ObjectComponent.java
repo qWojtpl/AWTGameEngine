@@ -305,6 +305,11 @@ public abstract class ObjectComponent {
 
     }
 
+    @EventMethod
+    public void onFilamentInitialization() {
+
+    }
+
     public final boolean isUnique() {
         return this.getClass().isAnnotationPresent(Unique.class);
     }
@@ -355,7 +360,7 @@ public abstract class ObjectComponent {
     }
 
     public final boolean isFilamentComponent() {
-        return this.getClass().isAnnotationPresent(Component3D.class);
+        return this.getClass().isAnnotationPresent(FilamentComponent.class);
     }
 
     public final boolean isGLComponent() {

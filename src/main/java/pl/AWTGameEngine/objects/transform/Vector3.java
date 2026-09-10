@@ -5,6 +5,7 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
@@ -44,6 +45,7 @@ public class Vector3 {
         lock.unlock();
     }
 
+    @Override
     public Vector3 clone() {
         return new Vector3(this.x, this.y, this.z);
     }
@@ -187,6 +189,11 @@ public class Vector3 {
         return this.x == vector3.getX() && this.y == vector3.getY() && this.z == vector3.getZ();
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
+    }
+
     public Vector3 fromPhysX(PxVec3 pxVec3) {
         lock();
         try {
@@ -225,6 +232,19 @@ public class Vector3 {
         return this.notifyAction;
     }
 
+    /**
+     * Notify action is executed every time a Vector3 is updated. By doing this, you can just simply
+     * use {@link Vector3#set(double, double, double)}, {@link Vector3#setX(double)} etc., and ensure
+     * that you will get notified on Vector3 update. To execute action yourself, use:
+     * <pre>
+     * {@code
+     *      myVector3Instance.getNotifyAction().accept(null);
+     * }
+     * </pre>
+     * Or instead of passing null, you can pass the list of ObjectComponent. For example, you can
+     * pass the list of excluded components from notify (e.g. to prevent notify of the same component).
+     * @param action    Action to be performed
+     */
     public void setNotifyAction(Consumer<List<ObjectComponent>> action) {
         this.notifyAction = action;
     }

@@ -34,6 +34,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     private SwapChain swapChain;
     private Renderer renderer;
     private View view;
+    private LightManager.ShadowOptions shadowOptions;
 
     public FilamentPanel(Scene scene) {
         this.scene = scene;
@@ -72,6 +73,14 @@ public class FilamentPanel extends Panel3D implements PanelObject {
 
     public PhysXManager getPhysXManager() {
         return this.physXManager;
+    }
+
+    public Engine getEngine() {
+        return this.engine;
+    }
+
+    public io.github.erkko68.filament.Scene getFilamentScene() {
+        return this.filamentScene;
     }
 
     @Override
@@ -170,6 +179,16 @@ public class FilamentPanel extends Panel3D implements PanelObject {
         return this.canvas;
     }
 
+    public LightManager.ShadowOptions getShadowOptions() {
+        if(this.shadowOptions == null) {
+            this.shadowOptions = new LightManager.ShadowOptions();
+            shadowOptions.setMapSize(8192);
+            shadowOptions.setShadowCascades(10);
+            shadowOptions.setBlurWidth(0);
+        }
+        return this.shadowOptions;
+    }
+
     private void initFilament() {
         this.canvas = new Canvas();
         canvas.setFocusable(false);
@@ -177,7 +196,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
 
         window.setVisible(true);
 
-        if (!canvas.isDisplayable()) {
+        if(!canvas.isDisplayable()) {
             canvas.addNotify();
         }
 
@@ -208,33 +227,33 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                         .build(engine)
         );
 
-        var options = new LightManager.ShadowOptions();
-        options.setMapSize(8192);
-        options.setShadowCascades(10);
-        options.setBlurWidth(0);
-
         int sun = engine.getEntityManager().create();
         new LightManager.Builder(LightManager.Type.SUN)
                 .color(1.0f, 0.95f, 0.8f)
                 .intensity(1000000)
                 .direction(0.5f, -1.0f, 0.3f)
-                .shadowOptions(options)
+                .shadowOptions(getShadowOptions())
                 .castShadows(true)
                 .build(engine, sun);
 
         filamentScene.addEntity(sun);
 
-        int light = engine.getEntityManager().create();
+        for(ObjectComponent component : getParentScene().getSceneEventHandler().getComponents("onFilamentInitialization")) {
+            component.onFilamentInitialization();
+        }
+
+/*        int light = engine.getEntityManager().create();
         new LightManager.Builder(LightManager.Type.POINT)
                 .color(1, 0, 0)
                 .intensity(1000000000)
                 .position(0, 0, 0)
                 .falloff(100.0f)
                 .castShadows(true)
-                .shadowOptions(options)
+                .shadowOptions(getShadowOptions())
                 .build(engine, light);
 
-        filamentScene.addEntity(light);
+        filamentScene.addEntity(light);*/
+
     }
 
 }

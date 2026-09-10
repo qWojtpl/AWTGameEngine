@@ -106,24 +106,12 @@ public class GameObject {
                 return;
             }
         } else if(RenderEngine.OPENGL.equals(renderEngine) || RenderEngine.FILAMENT.equals(renderEngine)) {
-            if(RenderEngine.OPENGL.equals(renderEngine)) {
-                if(!component.isGLComponent()) {
-                    if(!component.is3DComponent()) {
-                        Logger.error("Component " + component.getComponentName() +
-                                " cannot be added to " + identifier + " because is not marked as Component3D");
-                        return;
-                    }
+            if(!component.is3DComponent()) {
+                if(RenderEngine.OPENGL.equals(renderEngine) && !component.isGLComponent()) {
                     Logger.error("Component " + component.getComponentName() +
                             " cannot be added to " + identifier + " because is not marked as ComponentGL");
                     return;
-                }
-            } else {
-                if(!component.isFilamentComponent()) {
-                    if(!component.is3DComponent()) {
-                        Logger.error("Component " + component.getComponentName() +
-                                " cannot be added to " + identifier + " because is not marked as Component3D");
-                        return;
-                    }
+                } else if(RenderEngine.FILAMENT.equals(renderEngine) && !component.isFilamentComponent()) {
                     Logger.error("Component " + component.getComponentName() +
                             " cannot be added to " + identifier + " because is not marked as FilamentComponent");
                     return;

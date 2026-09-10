@@ -3,6 +3,7 @@ package pl.AWTGameEngine.custom;
 import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.components.ComponentMeta;
 import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.helpers.MovementHelper;
 import pl.AWTGameEngine.objects.GameObject;
@@ -96,6 +97,7 @@ public class Movement3D extends ObjectComponent {
         return this.noclip;
     }
 
+    @SaveState(name = "speed")
     public double getSpeed() {
         return this.speed;
     }
