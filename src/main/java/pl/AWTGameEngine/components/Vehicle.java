@@ -326,10 +326,10 @@ public class Vehicle extends ObjectComponent {
 
         PxVec3 vec3 = new PxVec3(0f, 0.55f, 1.594f);
         PxQuat quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
-
+    
         var actorCMassLocalPose = new PxTransform(vec3, quat);
 
-        vec3 = new PxVec3((float) (getVehicleSize().getX() / 2), (float) (getVehicleSize().getY() / 2 - 0.02), (float) getVehicleSize().getZ() / 2);
+        vec3 = new PxVec3(0, 0, 0);
         quat = new PxQuat(PxIDENTITYEnum.PxIdentity);
 
         var actorShapeLocalPose = new PxTransform(vec3, quat);

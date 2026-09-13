@@ -13,7 +13,7 @@ import pl.AWTGameEngine.objects.transform.Vector3;
 @Unique
 public class CameraFollow extends ObjectComponent {
 
-    private double radius = 200;
+    private double radius = 20;
     private double verticalAngle = 30;
     private double horizontalAngle = 0;
     private boolean rotateUsingMouse = true;

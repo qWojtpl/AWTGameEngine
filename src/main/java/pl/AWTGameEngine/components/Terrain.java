@@ -37,11 +37,16 @@ public class Terrain extends ObjectComponent {
     private int cols = 640;
     private int rows = 640;
 
+    private float columnScale = 1;
+    private float rowScale = 1;
+    private float heightScale = 1;
+
     // Render
 
-    private String terrainIdentifier = "$terrain-" + getObject().getIdentifier();
-    private RenderOptions3D renderOptions3D = new RenderOptions3D(terrainIdentifier);
+    private final String terrainIdentifier = "$terrain-" + getObject().getIdentifier();
+    private final RenderOptions3D renderOptions3D = new RenderOptions3D(terrainIdentifier);
     private PxRigidActor actor;
+
 
     public Terrain(GameObject object) {
         super(object);
@@ -83,9 +88,9 @@ public class Terrain extends ObjectComponent {
 
             PxHeightField heightField = PxTopLevelFunctions.CreateHeightField(desc);
             PxHeightFieldGeometry geometry = PxHeightFieldGeometry.createAt(stack, MemoryStack::nmalloc);
-            geometry.setColumnScale(10);
-            geometry.setRowScale(10);
-            geometry.setHeightScale(5);
+            geometry.setColumnScale(columnScale);
+            geometry.setRowScale(rowScale);
+            geometry.setHeightScale(heightScale);
             geometry.setHeightField(heightField);
 
             PxMeshGeometryFlags geometryFlags = PxMeshGeometryFlags.createAt(stack, MemoryStack::nmalloc, (byte) 0);
@@ -150,6 +155,16 @@ public class Terrain extends ObjectComponent {
         this.rows = rows;
     }
 
+    @SaveState(name = "rowScale")
+    public float getRowScale() {
+        return this.rowScale;
+    }
+
+    @FromXML
+    public void setRowScale(float rowScale) {
+        this.rowScale = rowScale;
+    }
+
     @SaveState(name = "columns")
     public int getColumns() {
         return this.cols;
@@ -161,6 +176,26 @@ public class Terrain extends ObjectComponent {
             cols = 1;
         }
         this.cols = cols;
+    }
+
+    @SaveState(name = "columnScale")
+    public float getColumnScale() {
+        return this.columnScale;
+    }
+
+    @FromXML
+    public void setColumnScale(float columnScale) {
+        this.columnScale = columnScale;
+    }
+
+    @SaveState(name = "heightScale")
+    public float getHeightScale() {
+        return this.heightScale;
+    }
+
+    @FromXML
+    public void setHeightScale(float heightScale) {
+        this.heightScale = heightScale;
     }
 
     // Render
