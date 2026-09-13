@@ -92,7 +92,7 @@
         <Light localPosition="0,10,0" />
     </object>
 
-    <object id="terrain">
+    <object id="terrain" y="-89">
         <Terrain sprite="hdr_sprites/grass.jpg" />
     </object>
 

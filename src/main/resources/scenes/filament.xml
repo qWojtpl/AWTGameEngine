@@ -10,7 +10,7 @@
         <Box3D sprite="sprites/beaver.jpg" />
     </object>
     <object id="test2" x="0" y="-10" z="0" size="50,5,50">
-        <Box3D />
+        <Box3D sprite="sprites/beaver.jpg" />
     </object>
     <object id="light">
         <Light />

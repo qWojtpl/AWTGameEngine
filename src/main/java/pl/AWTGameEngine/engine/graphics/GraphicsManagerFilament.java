@@ -3,7 +3,6 @@ package pl.AWTGameEngine.engine.graphics;
 import io.github.erkko68.filament.*;
 import io.github.erkko68.filament.filamat.MaterialBuilder;
 import io.github.erkko68.filament.filamat.MaterialPackage;
-import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
 import pl.AWTGameEngine.engine.helpers.ImageHelper;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
@@ -32,8 +31,9 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
     private final ConcurrentHashMap</* Shape path */String, IndexBuffer> indexBuffers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap</* Renderable */String, Integer> entities = new ConcurrentHashMap<>();
     private final ConcurrentHashMap</* Image path */String, Texture> textures = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap</* Renderable */String, MaterialInstance> materials = new ConcurrentHashMap<>();
 
-    private MaterialInstance defaultMaterial;
+    private Material defaultMaterial;
 
     public GraphicsManagerFilament(FilamentPanel panel) {
         this.panel = panel;
@@ -80,7 +80,10 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         }
         indexBuffers.clear();
         if(defaultMaterial != null) {
-            engine.destroyMaterialInstance(defaultMaterial);
+            for(MaterialInstance instance : materials.values()) {
+                engine.destroyMaterialInstance(instance);
+            }
+            engine.destroyMaterial(defaultMaterial);
             defaultMaterial = null;
         }
         renderables.clear();
@@ -124,6 +127,19 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                 vertices = ModelLoader.getVertices(shapePath, true);
             }
             createBuffers(shapePath, vertices, engine);
+        }
+
+        // Material
+
+        if(!materials.containsKey(renderOptions3D.getIdentifier())) {
+            createMaterial(renderOptions3D, engine);
+        }
+
+        if(renderOptions3D.getSprite() != null) {
+            if(!textures.containsKey(renderOptions3D.getSprite().getImagePath())) {
+                createTexture(renderOptions3D.getSprite(), engine);
+            }
+            materials.get(renderOptions3D.getIdentifier()).setParameter("albedoTexture", textures.get(renderOptions3D.getSprite().getImagePath()), new TextureSampler());
         }
 
         // Entity
@@ -263,13 +279,13 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
             throw new IllegalStateException("Cannot compile default material");
         }
 
-        Material material = new Material.Builder()
+        defaultMaterial = new Material.Builder()
                 .payload(materialPackage.getBuffer())
                 .build(engine);
+    }
 
-        defaultMaterial = material.createInstance();
-
-        createTexture(Dependencies.getResourceManager().getResourceAsSprite("sprites/beaver.jpg"), engine);
+    private void createMaterial(RenderOptions3D renderOptions3D, Engine engine) {
+        materials.put(renderOptions3D.getIdentifier(), defaultMaterial.createInstance());
     }
 
     private void buildEntity(RenderOptions3D renderOptions3D, Engine engine, int entity) {
@@ -287,7 +303,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                 )
                 .material(
                         0,
-                        defaultMaterial
+                        materials.get(renderOptions3D.getIdentifier())
                 )
                 .boundingBox(new Box(0, 0, 0,
                         (float) renderOptions3D.getSize().getX(),
@@ -350,7 +366,8 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         );
         texture.setImage(engine, 0, descriptor);
         texture.generateMipmaps(engine);
-        defaultMaterial.setParameter("albedoTexture", texture, new TextureSampler());
+
+        textures.put(sprite.getImagePath(), texture);
     }
 
     @Override
