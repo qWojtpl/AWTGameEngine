@@ -3,7 +3,9 @@ package pl.AWTGameEngine.engine.graphics;
 import io.github.erkko68.filament.*;
 import io.github.erkko68.filament.filamat.MaterialBuilder;
 import io.github.erkko68.filament.filamat.MaterialPackage;
+import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
+import pl.AWTGameEngine.engine.helpers.ImageHelper;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.engine.panels.FilamentPanel;
@@ -29,6 +31,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
     private final ConcurrentHashMap</* Shape path */String, VertexBuffer> vertexBuffers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap</* Shape path */String, IndexBuffer> indexBuffers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap</* Renderable */String, Integer> entities = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap</* Image path */String, Texture> textures = new ConcurrentHashMap<>();
 
     private MaterialInstance defaultMaterial;
 
@@ -237,10 +240,20 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                 .culling(MaterialBuilder.CullingMode.NONE)
                 .platform(MaterialBuilder.Platform.DESKTOP)
                 .targetApi(MaterialBuilder.TargetApi.ALL)
+                .require(VertexBuffer.VertexAttribute.UV0)
+                .samplerParameter(
+                        MaterialBuilder.SamplerType.SAMPLER_2D,
+                        MaterialBuilder.SamplerFormat.FLOAT,
+                        MaterialBuilder.ParameterPrecision.HIGH,
+                        "albedoTexture"
+                )
                 .material("""
                     void material(inout MaterialInputs material) {
                         prepareMaterial(material);
-                        material.baseColor = vec4(0.0, 0.0, 0.0, 1.0);
+                        //material.baseColor = vec4(0.0, 0.0, 0.0, 1.0);
+                        vec2 uv = getUV0();
+                        uv.y = 1.0 - uv.y;
+                        material.baseColor = texture(materialParams_albedoTexture, uv);
                     }
                     """);
 
@@ -255,6 +268,8 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                 .build(engine);
 
         defaultMaterial = material.createInstance();
+
+        createTexture(Dependencies.getResourceManager().getResourceAsSprite("sprites/beaver.jpg"), engine);
     }
 
     private void buildEntity(RenderOptions3D renderOptions3D, Engine engine, int entity) {
@@ -306,6 +321,36 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
     @Override
     public void removeRenderable(String identifier) {
         renderablesToRemove.add(identifier);
+    }
+
+    private void createTexture(Sprite sprite, Engine engine) {
+        Texture texture = new Texture.Builder()
+                .width(sprite.getImage().getWidth())
+                .height(sprite.getImage().getHeight())
+                .levels(1)
+                .format(Texture.InternalFormat.SRGB8_A8)
+                .usage(
+                        Texture.Usage.Companion.getSAMPLEABLE() |
+                        Texture.Usage.Companion.getCOLOR_ATTACHMENT() |
+                        Texture.Usage.Companion.getUPLOADABLE() |
+                        Texture.Usage.Companion.getGEN_MIPMAPPABLE())
+                .build(engine);
+
+        byte[] byteArray = ImageHelper.bufferedImageToByteArray(sprite.getImage());
+        Texture.PixelBufferDescriptor descriptor = new Texture.PixelBufferDescriptor(
+                byteArray,
+                byteArray.length,
+                Texture.Format.RGBA,
+                Texture.Type.UBYTE,
+                1,
+                0,
+                0,
+                0,
+                null
+        );
+        texture.setImage(engine, 0, descriptor);
+        texture.generateMipmaps(engine);
+        defaultMaterial.setParameter("albedoTexture", texture, new TextureSampler());
     }
 
     @Override
