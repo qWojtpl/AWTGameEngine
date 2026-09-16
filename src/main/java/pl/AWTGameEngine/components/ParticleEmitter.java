@@ -12,6 +12,7 @@ import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.lists.Vector3Values;
+import pl.AWTGameEngine.objects.render.Material;
 import pl.AWTGameEngine.objects.render.ParticleMeta;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
@@ -35,7 +36,7 @@ public class ParticleEmitter extends ObjectComponent {
     private long ttl = 1200;
     private double iterationsPerSecond = 10;
     private long fadeOutStart = 600;
-    private Sprite sprite;
+    private Material material = Material.getDefaultMaterial();
 
     public ParticleEmitter(GameObject object) {
         super(object);
@@ -82,7 +83,7 @@ public class ParticleEmitter extends ObjectComponent {
         renderable
                 .setShapePath("models/plane.obj")
                 .setShader(Shaders.of(getWindow(), BillboardShader.class))
-                .setSprite(sprite == null ? Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg") : sprite)
+                .setMaterial(material)
                 .setSize(particleSize.clone())
                 .setQuaternionRotation(new Vector4())
                 .setPosition(getObject().getPosition().clone());
@@ -164,14 +165,14 @@ public class ParticleEmitter extends ObjectComponent {
         }
     }
 
-    @SaveState(name = "sprite")
-    public Sprite getSprite() {
-        return this.sprite;
+    @SaveState(name = "material")
+    public Material getMaterial() {
+        return this.material;
     }
 
     @FromXML
-    public void setSprite(Sprite sprite) {
-        this.sprite = sprite;
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     class ParticleLoop extends BaseLoop {

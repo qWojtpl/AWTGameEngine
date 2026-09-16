@@ -5,12 +5,11 @@ import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
-import pl.AWTGameEngine.engine.graphics.GraphicsManagerGL;
 import pl.AWTGameEngine.engine.helpers.FXHelper;
 import pl.AWTGameEngine.engine.panels.Panel3D;
-import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.render.Material;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.render.shaders.GUIShader;
@@ -25,8 +24,9 @@ public class GUIRenderer extends ObjectComponent {
     private RenderOptions3D renderOptions3D;
     private GraphicsManager3D graphicsManager;
     private volatile boolean finished = true;
-    private final Sprite sprite = new Sprite("GUIRendererSprite", new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
     private WritableImage image = new WritableImage(getWindow().getBaseWidth(), getWindow().getBaseHeight());
+    private final Material material = new Material(getObject().getIdentifier())
+            .setSprite(new Sprite("GUIRendererSprite", new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)));
 
     public GUIRenderer(GameObject object) {
         super(object);
@@ -42,7 +42,7 @@ public class GUIRenderer extends ObjectComponent {
                 .setQuaternionRotation(new Vector4())
                 .setShader(Shaders.of(getWindow(), GUIShader.class))
                 .setShapePath("models/plane.obj")
-                .setSprite(sprite);
+                .setMaterial(material);
         graphicsManager.createRenderable(renderOptions3D);
     }
 
@@ -60,8 +60,8 @@ public class GUIRenderer extends ObjectComponent {
         FXHelper.synchronizedCall(() -> {
             try {
                 image = ((WebPanel) getScene().getPanel()).getScene().snapshot(image);
-                sprite.updateImage(image);
-                graphicsManager.updateTexture(sprite);
+                material.getSprite().updateImage(image);
+                graphicsManager.updateTexture(material.getSprite());
             } finally {
                 finished = true;
             }

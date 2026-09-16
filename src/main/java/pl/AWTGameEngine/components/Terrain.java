@@ -19,6 +19,7 @@ import pl.AWTGameEngine.engine.helpers.HeightFieldHelper;
 import pl.AWTGameEngine.engine.helpers.ModelHelper;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.render.Material;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.render.shaders.DefaultShader;
@@ -200,14 +201,14 @@ public class Terrain extends ObjectComponent {
 
     // Render
 
-    @SaveState(name = "sprite")
-    public Sprite getSprite() {
-        return renderOptions3D.getSprite();
+    @SaveState(name = "material")
+    public Material getMaterial() {
+        return this.renderOptions3D.getMaterial();
     }
 
     @FromXML
-    public void setSprite(Sprite sprite) {
-        renderOptions3D.setSprite(sprite);
+    public void setMaterial(Material material) {
+        this.renderOptions3D.setMaterial(material);
     }
 
 }

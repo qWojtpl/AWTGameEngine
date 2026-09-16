@@ -135,11 +135,11 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
             createMaterial(renderOptions3D, engine);
         }
 
-        if(renderOptions3D.getSprite() != null) {
-            if(!textures.containsKey(renderOptions3D.getSprite().getImagePath())) {
-                createTexture(renderOptions3D.getSprite(), engine);
+        if(renderOptions3D.getMaterial().getSprite() != null) {
+            if(!textures.containsKey(renderOptions3D.getMaterial().getSprite().getImagePath())) {
+                createTexture(renderOptions3D.getMaterial().getSprite(), engine);
             }
-            materials.get(renderOptions3D.getIdentifier()).setParameter("albedoTexture", textures.get(renderOptions3D.getSprite().getImagePath()), new TextureSampler());
+            materials.get(renderOptions3D.getIdentifier()).setParameter("albedoTexture", textures.get(renderOptions3D.getMaterial().getSprite().getImagePath()), new TextureSampler());
         }
 
         // Entity

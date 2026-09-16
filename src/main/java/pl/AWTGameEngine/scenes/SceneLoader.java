@@ -13,6 +13,7 @@ import pl.AWTGameEngine.engine.helpers.EditorSegmentHelper;
 import pl.AWTGameEngine.engine.panels.*;
 import pl.AWTGameEngine.exceptions.scenes.SceneDataException;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.render.Material;
 import pl.AWTGameEngine.windows.BaseWindow;
 import pl.AWTGameEngine.windows.HeadlessWindow;
 
@@ -235,6 +236,7 @@ public class SceneLoader {
             case "scene"    -> initSceneNode(scene, node);
             case "prefab"   -> initPrefabNode(scene, node, null);
             case "prefabs"  -> initPrefabListNode(scene, node);
+            case "material" -> initMaterialNode(scene, node);
             default         -> Logger.warning("Unrecognized node name: " + nodeName);
         }
     }
@@ -323,11 +325,26 @@ public class SceneLoader {
                 if(prefabsData.item(i).getNodeName().startsWith("#")) {
                     continue;
                 }
-                initPrefabNode(scene, prefabsData.item(i), source);
+                if(prefabsData.item(i).getNodeName().equalsIgnoreCase("prefab")) {
+                    initPrefabNode(scene, prefabsData.item(i), source);
+                } else if(prefabsData.item(i).getNodeName().equalsIgnoreCase("material")) {
+                    initMaterialNode(scene, prefabsData.item(i));
+                }
             }
         } catch(Exception e) {
             Logger.exception("Cannot get prefab list from external source.", e);
         }
+    }
+
+    private void initMaterialNode(Scene scene, Node node) {
+        String name;
+        try {
+            name = node.getAttributes().getNamedItem("name").getNodeValue();
+        } catch(Exception e) {
+            Logger.exception("Material doesn't have name.", e);
+            return;
+        }
+        MaterialDeserializer.deserialize(name, scene, node);
     }
 
     public BaseWindow getWindow() {

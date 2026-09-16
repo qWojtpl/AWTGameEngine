@@ -9,6 +9,7 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.objects.ColorObject;
 import pl.AWTGameEngine.objects.lists.*;
+import pl.AWTGameEngine.objects.render.Material;
 import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.render.shaders.Shader;
 import pl.AWTGameEngine.objects.transform.Vector4;
@@ -90,7 +91,7 @@ public class XMLDeserializer {
             }
 
             if(!found) {
-                throw new NoSuchMethodException("Not found method. Maybe it's not annotated as FromXML?");
+                throw new NoSuchMethodException("Not found method " + methodName + ". Maybe it's not annotated as FromXML?");
             }
         } catch(Exception e) {
             printError(component.getObject().getIdentifier(), component.getComponentName());
@@ -297,6 +298,18 @@ public class XMLDeserializer {
             @Override
             public void invoke(Method method, ObjectComponent component, String value) throws Exception {
                 method.invoke(component, Shaders.of(component.getObject().getScene().getWindow(), Class.forName(value).asSubclass(Shader.class)));
+            }
+        });
+        // Material
+        addParameterTypeHandler(new ParameterTypeHandler() {
+            @Override
+            public boolean equalsTypeClass(Class<?> type) {
+                return Material.class.equals(type);
+            }
+
+            @Override
+            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
+                method.invoke(component, component.getObject().getScene().getMaterial(value));
             }
         });
     }

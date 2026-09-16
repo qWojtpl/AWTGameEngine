@@ -11,6 +11,7 @@ import pl.AWTGameEngine.exceptions.PrefabAlreadyExistsException;
 import pl.AWTGameEngine.exceptions.scenes.GameObjectAddToSceneException;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.Prefab;
+import pl.AWTGameEngine.objects.render.Material;
 import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.windows.BaseWindow;
 
@@ -22,6 +23,7 @@ public class Scene {
     private final String name;
     private final ConcurrentHashMap<String, GameObject> gameObjects = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Prefab> prefabs = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Material> materials = new ConcurrentHashMap<>();
     private final BaseWindow window;
     private final RenderEngine renderEngine;
     private PanelObject panel;
@@ -35,6 +37,7 @@ public class Scene {
         this.window = window;
         this.renderEngine = renderEngine;
         setSceneEventHandler(new EventHandler());
+        addMaterial(Material.getDefaultMaterial());
     }
 
     @Command("name")
@@ -75,6 +78,18 @@ public class Scene {
             throw new PrefabAlreadyExistsException(prefab.getIdentifier());
         }
         this.prefabs.put(prefab.getIdentifier(), prefab);
+    }
+
+    public void addMaterial(Material material) {
+        if(materials.containsKey(material.getName())) {
+            throw new RuntimeException("Material already exists!");
+        }
+        Logger.info("Created material: " + material.getName());
+        this.materials.put(material.getName(), material);
+    }
+
+    public Material getMaterial(String name) {
+        return this.materials.getOrDefault(name, null);
     }
 
     public GameObject createGameObjectFromPrefab(String identifier, String prefabIdentifier, Vector3 position, Vector3 size) {

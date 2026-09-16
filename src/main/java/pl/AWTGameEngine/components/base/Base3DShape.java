@@ -3,15 +3,15 @@ package pl.AWTGameEngine.components.base;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.Panel3D;
-import pl.AWTGameEngine.engine.panels.PanelGL;
 import pl.AWTGameEngine.objects.*;
 import pl.AWTGameEngine.objects.net.NetBlock;
 import pl.AWTGameEngine.objects.render.AnimatedSprite;
+import pl.AWTGameEngine.objects.render.Material;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
-import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.render.shaders.DefaultShader;
 import pl.AWTGameEngine.objects.render.shaders.Shader;
 
@@ -19,8 +19,7 @@ public abstract class Base3DShape extends NetComponent {
 
     protected GraphicsManager3D graphicsManager3D;
     protected RenderOptions3D renderOptions = new RenderOptions3D(getObject().getIdentifier())
-            .setShader(Shaders.of(getWindow(), DefaultShader.class))
-            .setSprite(Dependencies.getResourceManager().getResourceAsSprite("sprites/default.jpg"));
+            .setShader(Shaders.of(getWindow(), DefaultShader.class));
     protected boolean initialized = false;
     protected boolean netUpdateSprite = false;
 
@@ -35,31 +34,26 @@ public abstract class Base3DShape extends NetComponent {
         if(renderOptions == null) {
             return;
         }
-        if(renderOptions.getSprite() instanceof AnimatedSprite) {
-            renderOptions.setSprite(((AnimatedSprite) renderOptions.getSprite()).requestSprite());
+        if(renderOptions.getMaterial().getSprite() instanceof AnimatedSprite) {
+            renderOptions.getMaterial().setSprite(((AnimatedSprite) renderOptions.getMaterial().getSprite()).requestSprite());
         }
     }
 
-    @SaveState(name = "sprite")
-    public Sprite getSprite() {
-        return this.renderOptions.getSprite();
+    @SaveState(name = "material")
+    public Material getMaterial() {
+        return this.renderOptions.getMaterial();
     }
 
     @FromXML
-    public void setSprite(Sprite sprite) {
+    public void setMaterial(Material material) {
+        if(material == null) {
+            return;
+        }
         if(graphicsManager3D != null) {
             graphicsManager3D.freeTexture(renderOptions);
         }
-        renderOptions.setSprite(sprite);
+        renderOptions.setMaterial(material);
         netUpdateSprite = true;
-    }
-
-    public ColorObject getColor() {
-        return this.renderOptions.getColor();
-    }
-
-    public void setColor(ColorObject color) {
-        this.renderOptions.setColor(color);
     }
 
     @FromXML
@@ -87,11 +81,6 @@ public abstract class Base3DShape extends NetComponent {
         this.renderOptions.setShapePath(shapePath);
     }
 
-    @FromXML
-    public void setColor(String color) {
-        setColor(new ColorObject(color));
-    }
-
     @SaveState(name = "repeatTexture")
     public int getRepeatTexture() {
         return this.renderOptions.getRepeatTexture();
@@ -110,15 +99,15 @@ public abstract class Base3DShape extends NetComponent {
     @Override
     public NetBlock onSynchronize() {
         netUpdateSprite = false;
-        if(getSprite() == null) {
+        if(getMaterial().getSprite() == null) {
             return new NetBlock();
         }
-        return new NetBlock(getObject().getIdentifier(), this.getClass(), getSprite().getImagePath());
+        return new NetBlock(getObject().getIdentifier(), this.getClass(), getMaterial().getSprite().getImagePath());
     }
 
     @Override
     public void onSynchronizeReceived(String data) {
-        setSprite(Dependencies.getResourceManager().getResourceAsSprite(data));
+        renderOptions.getMaterial().setSprite(Dependencies.getResourceManager().getResourceAsSprite(data));
     }
 
     @Override

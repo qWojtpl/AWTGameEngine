@@ -124,8 +124,8 @@ public class GraphicsManagerGL extends GraphicsManager3D {
         List<RenderOptions3D> transparentRenders = new ArrayList<>();
 
         for(RenderOptions3D ro : renderableList) {
-            if(ro.getSprite() != null) {
-                if(alphaTextures.contains(textures.get(ro.getSprite())) || ro.getOpacity() != 1) {
+            if(ro.getMaterial().getSprite() != null) {
+                if(alphaTextures.contains(textures.get(ro.getMaterial().getSprite())) || ro.getOpacity() != 1) {
                     transparentRenders.add(ro);
                     continue;
                 }
@@ -149,10 +149,10 @@ public class GraphicsManagerGL extends GraphicsManager3D {
             for(Sprite s : ttd) {
                 boolean remove = false;
                 for(RenderOptions3D ro : renderables.values()) {
-                    if(ro.getSprite() == null) {
+                    if(ro.getMaterial().getSprite() == null) {
                         continue;
                     }
-                    if(s.getImagePath().equals(ro.getSprite().getImagePath())) {
+                    if(s.getImagePath().equals(ro.getMaterial().getSprite().getImagePath())) {
                         remove = true;
                         break;
                     }
@@ -223,11 +223,11 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                 .setShape(glShape)
         );
 
-        if(ro.getSprite() != null) {
-            if(textures.getOrDefault(ro.getSprite(), null) == null) {
-                createTexture(gl, ro.getSprite());
+        if(ro.getMaterial().getSprite() != null) {
+            if(textures.getOrDefault(ro.getMaterial().getSprite(), null) == null) {
+                createTexture(gl, ro.getMaterial().getSprite());
             }
-            textures.get(ro.getSprite()).bind(gl);
+            textures.get(ro.getMaterial().getSprite()).bind(gl);
             if(ro.getRepeatTexture() > 1) {
                 gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
                 gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
@@ -296,7 +296,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
     }
 
     public void freeTexture(RenderOptions3D renderOptions) {
-        Sprite oldSprite = renderOptions.getSprite();
+        Sprite oldSprite = renderOptions.getMaterial().getSprite();
         if(oldSprite != null) {
             texturesToDelete.add(oldSprite);
         }

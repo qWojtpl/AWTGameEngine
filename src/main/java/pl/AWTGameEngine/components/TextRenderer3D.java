@@ -40,7 +40,7 @@ public class TextRenderer3D extends ObjectComponent {
             if(!(component instanceof Base3DShape)) {
                 continue;
             }
-            ((Base3DShape) component).setSprite(textSprite);
+            ((Base3DShape) component).getMaterial().setSprite(textSprite);
         }
     }
 
