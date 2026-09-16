@@ -6,6 +6,7 @@ import io.github.erkko68.filament.filamat.MaterialBuilder;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFilament;
 import pl.AWTGameEngine.engine.helpers.FilamentHelper;
@@ -201,7 +202,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
         }
 
         Filament.INSTANCE.init();
-        engine = Engine.Companion.create(Engine.Backend.VULKAN);
+        engine = Engine.Companion.create(RenderEngine.FILAMENT_VULKAN.equals(scene.getRenderEngine()) ? Engine.Backend.VULKAN : Engine.Backend.OPENGL);
 
         MaterialBuilder.Companion.init();
 
