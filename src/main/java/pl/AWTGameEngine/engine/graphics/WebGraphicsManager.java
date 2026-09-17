@@ -1,7 +1,6 @@
 package pl.AWTGameEngine.engine.graphics;
 
 import javafx.scene.web.WebView;
-import netscape.javascript.JSException;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.helpers.FXHelper;
@@ -49,7 +48,7 @@ public class WebGraphicsManager {
         Object result = FXHelper.synchronizedCall(() -> {
             try {
                 return webView.getEngine().executeScript(script);
-            } catch(JSException e) {
+            } catch(Exception e) {
                 Logger.exception("Cannot execute script: " + script, e);
             }
             return null;
