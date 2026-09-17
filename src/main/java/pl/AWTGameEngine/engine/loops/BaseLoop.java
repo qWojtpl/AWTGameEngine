@@ -70,17 +70,7 @@ public abstract class BaseLoop extends Thread {
     }
 
     private void executeFrame() {
-        if(!nextFrameOperations.isEmpty()) {
-            Runnable operation;
-            while((operation = nextFrameOperations.poll()) != null) {
-                try {
-                    operation.run();
-                } catch(Exception e) {
-                    Logger.exception("Unhandled exception caught while running a next frame operation of " + loopName, e);
-                    kill();
-                }
-            }
-        }
+        executeNextFrameOperations();
         try {
             iteration();
         } catch(Exception e) {
@@ -88,6 +78,21 @@ public abstract class BaseLoop extends Thread {
             kill();
         }
         actualFpsIterator++;
+    }
+
+    public void executeNextFrameOperations() {
+        if(nextFrameOperations.isEmpty()) {
+            return;
+        }
+        Runnable operation;
+        while((operation = nextFrameOperations.poll()) != null) {
+            try {
+                operation.run();
+            } catch(Exception e) {
+                Logger.exception("Unhandled exception caught while running a next frame operation of " + loopName, e);
+                kill();
+            }
+        }
     }
 
     protected abstract void iteration();
