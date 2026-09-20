@@ -93,7 +93,7 @@
         <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="30,-21,-44.5" width="5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
         <CameraFollow radius="200" />
         <VehicleSteer _package="pl.AWTGameEngine.custom" />
-        <ParticleEmitter ttl="20" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5,1,0" />
+        <ParticleEmitter ttl="20" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5,1,0" material="particle" />
         <Light localPosition="0,10,0" />
     </object>
 

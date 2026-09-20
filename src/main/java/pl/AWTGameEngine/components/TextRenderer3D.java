@@ -1,11 +1,13 @@
 package pl.AWTGameEngine.components;
 
+import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.Base3DShape;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.render.Material;
 import pl.AWTGameEngine.objects.render.Sprite;
 
 import java.awt.*;
@@ -16,31 +18,45 @@ import java.awt.image.BufferedImage;
  * are in the same object to rendered text.
  */
 @Component3D
+@Unique
 public class TextRenderer3D extends ObjectComponent {
 
     private String text;
     private String heldImage;
     private Sprite textSprite;
+    private Material textMaterial;
 
     public TextRenderer3D(GameObject object) {
         super(object);
+    }
+
+    @Override
+    public void onAddComponent() {
+        textMaterial = new Material(getObject().getIdentifier() + "$TextRenderer3D");
+        getScene().addMaterial(textMaterial);
+    }
+
+    @Override
+    public void onRemoveComponent() {
+        //TODO: remove material
     }
 
     private void updateText() {
         if(heldImage != null) {
             if(!this.text.equals(heldImage)) {
                 textSprite = new Sprite(getFontImage());
-                heldImage = new String(this.text);
+                heldImage = this.text;
             }
         } else {
             textSprite = new Sprite(getFontImage());
-            heldImage = new String(this.text);
+            heldImage = this.text;
         }
         for(ObjectComponent component : getObject().getComponents()) {
             if(!(component instanceof Base3DShape)) {
                 continue;
             }
-            ((Base3DShape) component).getMaterial().setSprite(textSprite);
+            ((Base3DShape) component).setMaterial(textMaterial);
+            textMaterial.setSprite(textSprite);
         }
     }
 

@@ -11,7 +11,7 @@ public class Material {
     private Sprite sprite;
     private ColorObject color;
     private float opacity = 1;
-    private float repeatTexture = 0;
+    private int repeatTexture = 0;
 
     public Material(String name) {
         this.name = name;
@@ -30,9 +30,42 @@ public class Material {
         return this;
     }
 
+    public float getOpacity() {
+        return this.opacity;
+    }
+
+    public void setOpacity(float opacity) {
+        this.opacity = opacity;
+    }
+
+    public int getRepeatTexture() {
+        return this.repeatTexture;
+    }
+
+    public void setRepeatTexture(int repeatTexture) {
+        this.repeatTexture = repeatTexture;
+    }
+
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public String serialize() {
+        StringBuilder builder = new StringBuilder(name + ";");
+        if(sprite != null) {
+            builder.append(sprite.getImagePath());
+        }
+        builder.append(";");
+        if(color != null) {
+            builder.append(color.serialize());
+        }
+        builder.append(";");
+        builder.append(opacity);
+        builder.append(";");
+        builder.append(repeatTexture);
+        builder.append(";");
+        return builder.toString();
     }
 
     public static Material getDefaultMaterial() {

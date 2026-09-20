@@ -3,6 +3,7 @@ package pl.AWTGameEngine.engine.graphics;
 import io.github.erkko68.filament.*;
 import io.github.erkko68.filament.filamat.MaterialBuilder;
 import io.github.erkko68.filament.filamat.MaterialPackage;
+import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.models.ModelLoader;
 import pl.AWTGameEngine.engine.helpers.ImageHelper;
 import pl.AWTGameEngine.engine.helpers.MatrixHelper;
@@ -31,19 +32,13 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
     private final ConcurrentHashMap</* Shape path */String, IndexBuffer> indexBuffers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap</* Renderable */String, Integer> entities = new ConcurrentHashMap<>();
     private final ConcurrentHashMap</* Image path */String, Texture> textures = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap</* Renderable */String, MaterialInstance> materials = new ConcurrentHashMap<>();
-
-    private Material defaultMaterial;
+    private final ConcurrentHashMap</* Serialized */String, MaterialInstance> materialInstances = new ConcurrentHashMap<>();
 
     public GraphicsManagerFilament(FilamentPanel panel) {
         this.panel = panel;
     }
 
     public void update(Engine engine, View view) {
-
-        if(defaultMaterial == null) {
-            createDefaultMaterial(engine);
-        }
 
         prepareCamera(view);
 
@@ -79,12 +74,8 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
             engine.destroyIndexBuffer(indexBuffer);
         }
         indexBuffers.clear();
-        if(defaultMaterial != null) {
-            for(MaterialInstance instance : materials.values()) {
-                engine.destroyMaterialInstance(instance);
-            }
-            engine.destroyMaterial(defaultMaterial);
-            defaultMaterial = null;
+        for(MaterialInstance instance : materialInstances.values()) {
+            engine.destroyMaterialInstance(instance);
         }
         renderables.clear();
         preloadedVertices.clear();
@@ -131,15 +122,8 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
         // Material
 
-        if(!materials.containsKey(renderOptions3D.getIdentifier())) {
-            createMaterial(renderOptions3D, engine);
-        }
-
-        if(renderOptions3D.getMaterial().getSprite() != null) {
-            if(!textures.containsKey(renderOptions3D.getMaterial().getSprite().getImagePath())) {
-                createTexture(renderOptions3D.getMaterial().getSprite(), engine);
-            }
-            materials.get(renderOptions3D.getIdentifier()).setParameter("albedoTexture", textures.get(renderOptions3D.getMaterial().getSprite().getImagePath()), new TextureSampler());
+        if(!materialInstances.containsKey(renderOptions3D.getMaterial().serialize())) {
+            createMaterial(renderOptions3D.getMaterial(), engine);
         }
 
         // Entity
@@ -247,11 +231,12 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         indexBuffers.put(path, ib);
     }
 
-    private void createDefaultMaterial(Engine engine) {
+    private MaterialInstance buildMaterial(pl.AWTGameEngine.objects.render.Material material, Engine engine) {
+        Logger.info("Building material: " + material.getName() + "...");
         MaterialBuilder materialBuilder = new MaterialBuilder();
 
         materialBuilder
-                .name("DefaultMaterial")
+                .name(material.getName())
                 .shading(MaterialBuilder.Shading.LIT)
                 .culling(MaterialBuilder.CullingMode.NONE)
                 .platform(MaterialBuilder.Platform.DESKTOP)
@@ -273,19 +258,33 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                     }
                     """);
 
+        if(material.getSprite() != null) {
+            if(material.getSprite().isTransparent()) {
+                materialBuilder.blending(MaterialBuilder.BlendingMode.TRANSPARENT);
+            }
+        }
+
         MaterialPackage materialPackage = materialBuilder.build();
 
         if(!materialPackage.isValid()) {
-            throw new IllegalStateException("Cannot compile default material");
+            throw new IllegalStateException("Cannot compile material: " + material.getName());
         }
 
-        defaultMaterial = new Material.Builder()
+        return new Material.Builder()
                 .payload(materialPackage.getBuffer())
-                .build(engine);
+                .build(engine)
+                .createInstance();
     }
 
-    private void createMaterial(RenderOptions3D renderOptions3D, Engine engine) {
-        materials.put(renderOptions3D.getIdentifier(), defaultMaterial.createInstance());
+    private void createMaterial(pl.AWTGameEngine.objects.render.Material material, Engine engine) {
+        MaterialInstance instance = buildMaterial(material, engine);
+        materialInstances.put(material.serialize(), instance);
+        if(material.getSprite() != null) {
+            if(!textures.containsKey(material.getSprite().getImagePath())) {
+                createTexture(material.getSprite(), engine);
+            }
+            instance.setParameter("albedoTexture", textures.get(material.getSprite().getImagePath()), new TextureSampler());
+        }
     }
 
     private void buildEntity(RenderOptions3D renderOptions3D, Engine engine, int entity) {
@@ -303,7 +302,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                 )
                 .material(
                         0,
-                        materials.get(renderOptions3D.getIdentifier())
+                        materialInstances.get(renderOptions3D.getMaterial().serialize())
                 )
                 .boundingBox(new Box(0, 0, 0,
                         (float) renderOptions3D.getSize().getX(),
