@@ -66,19 +66,19 @@ public class XMLDeserializer {
         return clazz;
     }
 
-    public void handleSetMethod(ObjectComponent component, String methodName, String value) {
+    public void handleSetMethod(Object object, String methodName, String value) {
         try {
             boolean found = false;
-            for(Method method : component.getClass().getMethods()) {
+            for(Method method : object.getClass().getMethods()) {
                 if(method.getName().equals(methodName)) {
-                    found = true;
                     if(method.isAnnotationPresent(FromXML.class)) {
+                        found = true;
                         Class<?> type = method.getParameters()[0].getType();
                         boolean handlerFound = false;
                         for(ParameterTypeHandler handler : handlers) {
                             if(handler.equalsTypeClass(type)) {
                                 handlerFound = true;
-                                handler.invoke(method, component, value);
+                                handler.invoke(method, object, value);
                                 break;
                             }
                         }
@@ -94,8 +94,10 @@ public class XMLDeserializer {
                 throw new NoSuchMethodException("Not found method " + methodName + ". Maybe it's not annotated as FromXML?");
             }
         } catch(Exception e) {
-            printError(component.getObject().getIdentifier(), component.getComponentName());
-            Logger.exception("Exception while handling SET component method", e);
+            if(object instanceof ObjectComponent component) {
+                printError(component.getObject().getIdentifier(), component.getComponentName());
+            }
+            Logger.exception("Exception while handling SET method", e);
         }
     }
 
@@ -116,8 +118,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, Boolean.parseBoolean(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, Boolean.parseBoolean(value));
             }
         });
         // String
@@ -128,8 +130,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, value);
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, value);
             }
         });
         // Integer
@@ -140,8 +142,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, Integer.parseInt(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, Integer.parseInt(value));
             }
         });
         // ArrayList<Integer> (IntegerValues)
@@ -152,8 +154,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new IntegerValues(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, new IntegerValues(value));
             }
         });
         // Long
@@ -164,8 +166,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, Long.parseLong(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, Long.parseLong(value));
             }
         });
         // ArrayList<Long> (LongValues)
@@ -176,8 +178,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new LongValues(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, new LongValues(value));
             }
         });
         // Double
@@ -188,8 +190,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, Double.parseDouble(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, Double.parseDouble(value));
             }
         });
         // ArrayList<Double> (DoubleValues)
@@ -200,8 +202,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new DoubleValues(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, new DoubleValues(value));
             }
         });
         // Float
@@ -212,8 +214,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, Float.parseFloat(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, Float.parseFloat(value));
             }
         });
         // ArrayList<Float> (FloatValues)
@@ -224,8 +226,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new FloatValues(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, new FloatValues(value));
             }
         });
         // Vector3
@@ -236,8 +238,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new Vector3().deserialize(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, new Vector3().deserialize(value));
             }
         });
         // ArrayList<Vector3> (Vector3Values)
@@ -248,8 +250,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new Vector3Values(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, new Vector3Values(value));
             }
         });
         // Vector4
@@ -260,8 +262,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new Vector4().deserialize(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, new Vector4().deserialize(value));
             }
         });
         // ColorObject
@@ -272,8 +274,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, new ColorObject(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, new ColorObject(value));
             }
         });
         // Sprite
@@ -284,8 +286,8 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, Dependencies.getResourceManager().getResourceAsSprite(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                method.invoke(object, Dependencies.getResourceManager().getResourceAsSprite(value));
             }
         });
         // Shader
@@ -296,8 +298,10 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, Shaders.of(component.getObject().getScene().getWindow(), Class.forName(value).asSubclass(Shader.class)));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                if(object instanceof ObjectComponent component) {
+                    method.invoke(object, Shaders.of(component.getObject().getScene().getWindow(), Class.forName(value).asSubclass(Shader.class)));
+                }
             }
         });
         // Material
@@ -308,8 +312,10 @@ public class XMLDeserializer {
             }
 
             @Override
-            public void invoke(Method method, ObjectComponent component, String value) throws Exception {
-                method.invoke(component, component.getObject().getScene().getMaterial(value));
+            public void invoke(Method method, Object object, String value) throws Exception {
+                if(object instanceof ObjectComponent component) {
+                    method.invoke(component, component.getObject().getScene().getMaterial(value));
+                }
             }
         });
     }

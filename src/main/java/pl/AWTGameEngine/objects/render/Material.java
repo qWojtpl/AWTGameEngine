@@ -1,6 +1,7 @@
 package pl.AWTGameEngine.objects.render;
 
 import pl.AWTGameEngine.Dependencies;
+import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.objects.ColorObject;
 
 public class Material {
@@ -25,6 +26,7 @@ public class Material {
         return this.sprite;
     }
 
+    @FromXML
     public Material setSprite(Sprite sprite) {
         this.sprite = sprite;
         return this;
@@ -34,6 +36,7 @@ public class Material {
         return this.opacity;
     }
 
+    @FromXML
     public void setOpacity(float opacity) {
         this.opacity = opacity;
     }
@@ -42,6 +45,7 @@ public class Material {
         return this.repeatTexture;
     }
 
+    @FromXML
     public void setRepeatTexture(int repeatTexture) {
         this.repeatTexture = repeatTexture;
     }
