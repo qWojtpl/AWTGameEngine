@@ -33,19 +33,22 @@ public class VehicleSteer extends ObjectComponent {
     @Override
     public void onUpdate() {
         torque = 0;
-        steer = 0;
         brake = 0;
         if(getKeyListener().hasPressedKey(KeyCode.W)) {
             torque = 1;
         }
         if(getKeyListener().hasPressedKey(KeyCode.A)) {
-            steer = steerSensitivity;
+            if(steer < steerSensitivity) {
+                steer += 0.1f;
+            }
         }
         if(getKeyListener().hasPressedKey(KeyCode.S)) {
             brake = 1;
         }
         if(getKeyListener().hasPressedKey(KeyCode.D)) {
-            steer = -steerSensitivity;
+            if(steer > -steerSensitivity) {
+                steer -= 0.1f;
+            }
         }
     }
 

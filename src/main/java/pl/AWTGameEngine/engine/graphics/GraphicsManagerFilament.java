@@ -32,7 +32,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
     private final ConcurrentHashMap</* Shape path */String, IndexBuffer> indexBuffers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap</* Renderable */String, Integer> entities = new ConcurrentHashMap<>();
     private final ConcurrentHashMap</* Image path */String, Texture> textures = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap</* Serialized */String, MaterialInstance> materialInstances = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap</* Material name */String, MaterialInstance> materialInstances = new ConcurrentHashMap<>();
 
     public GraphicsManagerFilament(FilamentPanel panel) {
         this.panel = panel;
@@ -122,9 +122,21 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
         // Material
 
-        if(!materialInstances.containsKey(renderOptions3D.getMaterial().serialize())) {
+        if(!materialInstances.containsKey(renderOptions3D.getMaterial().getName())) {
             createMaterial(renderOptions3D.getMaterial(), engine);
         }
+
+        MaterialInstance materialInstance = materialInstances.get(renderOptions3D.getMaterial().getName());
+
+        if(renderOptions3D.getMaterial().getSprite() != null) {
+            if(!textures.containsKey(renderOptions3D.getMaterial().getSprite().getImagePath())) {
+                createTexture(renderOptions3D.getMaterial().getSprite(), engine);
+            }
+            materialInstance.setParameter("albedoTexture",
+                    textures.get(renderOptions3D.getMaterial().getSprite().getImagePath()), new TextureSampler());
+        }
+
+        materialInstance.setParameter("opacity", renderOptions3D.getOpacity());
 
         // Entity
         if(!entities.containsKey(renderOptions3D.getIdentifier())) {
@@ -237,11 +249,15 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
         materialBuilder
                 .name(material.getName())
-                .shading(MaterialBuilder.Shading.LIT)
                 .culling(MaterialBuilder.CullingMode.NONE)
                 .platform(MaterialBuilder.Platform.DESKTOP)
                 .targetApi(MaterialBuilder.TargetApi.ALL)
                 .require(VertexBuffer.VertexAttribute.UV0)
+                .uniformParameter(
+                        MaterialBuilder.UniformType.FLOAT,
+                        MaterialBuilder.ParameterPrecision.HIGH,
+                        "opacity"
+                )
                 .samplerParameter(
                         MaterialBuilder.SamplerType.SAMPLER_2D,
                         MaterialBuilder.SamplerFormat.FLOAT,
@@ -251,17 +267,22 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                 .material("""
                     void material(inout MaterialInputs material) {
                         prepareMaterial(material);
-                        //material.baseColor = vec4(0.0, 0.0, 0.0, 1.0);
                         vec2 uv = getUV0();
                         uv.y = 1.0 - uv.y;
-                        material.baseColor = texture(materialParams_albedoTexture, uv);
+                        vec4 color = texture(materialParams_albedoTexture, uv);
+                        color.a *= materialParams.opacity;
+                        material.baseColor = color;
                     }
                     """);
 
-        if(material.getSprite() != null) {
-            if(material.getSprite().isTransparent()) {
-                materialBuilder.blending(MaterialBuilder.BlendingMode.TRANSPARENT);
-            }
+        if(material.isTransparentBlend()) {
+            materialBuilder.blending(MaterialBuilder.BlendingMode.TRANSPARENT);
+        }
+
+        if(material.isLitMaterial()) {
+            materialBuilder.shading(MaterialBuilder.Shading.LIT);
+        } else {
+            materialBuilder.shading(MaterialBuilder.Shading.UNLIT);
         }
 
         MaterialPackage materialPackage = materialBuilder.build();
@@ -278,13 +299,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
     private void createMaterial(pl.AWTGameEngine.objects.render.Material material, Engine engine) {
         MaterialInstance instance = buildMaterial(material, engine);
-        materialInstances.put(material.serialize(), instance);
-        if(material.getSprite() != null) {
-            if(!textures.containsKey(material.getSprite().getImagePath())) {
-                createTexture(material.getSprite(), engine);
-            }
-            instance.setParameter("albedoTexture", textures.get(material.getSprite().getImagePath()), new TextureSampler());
-        }
+        materialInstances.put(material.getName(), instance);
     }
 
     private void buildEntity(RenderOptions3D renderOptions3D, Engine engine, int entity) {
@@ -302,7 +317,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                 )
                 .material(
                         0,
-                        materialInstances.get(renderOptions3D.getMaterial().serialize())
+                        materialInstances.get(renderOptions3D.getMaterial().getName())
                 )
                 .boundingBox(new Box(0, 0, 0,
                         (float) renderOptions3D.getSize().getX(),

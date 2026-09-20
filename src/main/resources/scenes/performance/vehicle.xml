@@ -5,7 +5,7 @@
     #END
 
     <material name="beaver" sprite="sprites/beaver.jpg" />
-    <material name="glass" sprite="hdr_sprites/glass.png" />
+    <material name="glass" sprite="hdr_sprites/glass.png" transparentBlend="true" />
 
     <object id="player">
 <!--        <Movement3D _package="pl.AWTGameEngine.custom" />-->
@@ -79,7 +79,7 @@
         <Plane3D material="defaultMaterial" shader="pl.AWTGameEngine.objects.render.shaders.BillboardShader" />
     </object>
 
-    <material name="particle" sprite="sprites/base/files/directory.png" />
+    <material name="particle" sprite="sprites/base/files/directory.png" transparentBlend="true" litMaterial="false" />
 
     <object id="vehicle" x="400" y="50" z="100" size="40,20,60">
         <Model3D shapePath="./test.o3d" modelSize="20,20,20" material="beaver" />
@@ -93,7 +93,7 @@
         <Vehicle.Wheel axleId="1" handBrakeResponseMultiplier="1" brakeResponseMultiplier="1" radius="9" localPosition="30,-21,-44.5" width="5" suspensionTravelDistance="3" shapePath="./wheel.o3d" shapeSizeMultiplier="1,2.5,2.5" shapePositionCorrection="0,1.5,0" />
         <CameraFollow radius="200" />
         <VehicleSteer _package="pl.AWTGameEngine.custom" />
-        <ParticleEmitter ttl="20" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5,1,0" material="particle" />
+        <ParticleEmitter ttl="200" fadeOutStart="2" iterationStep="-0.05,0.02,0" vectors="5,1,0" material="particle" />
         <Light localPosition="0,10,0" />
     </object>
 

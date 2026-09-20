@@ -13,6 +13,8 @@ public class Material {
     private ColorObject color;
     private float opacity = 1;
     private int repeatTexture = 0;
+    private boolean transparentBlend = false;
+    private boolean litMaterial = true;
 
     public Material(String name) {
         this.name = name;
@@ -48,6 +50,28 @@ public class Material {
     @FromXML
     public void setRepeatTexture(int repeatTexture) {
         this.repeatTexture = repeatTexture;
+    }
+
+    public boolean isTransparentBlend() {
+        return this.transparentBlend;
+    }
+
+    /**
+     * This should be set before material building in GraphicsManagerFilament. Setting it afterward
+     * won't make a difference, since you need to rebuild the material.
+     */
+    @FromXML
+    public void setTransparentBlend(boolean blend) {
+        this.transparentBlend = blend;
+    }
+
+    public boolean isLitMaterial() {
+        return this.litMaterial;
+    }
+
+    @FromXML
+    public void setLitMaterial(boolean litMaterial) {
+        this.litMaterial = litMaterial;
     }
 
     @Override
