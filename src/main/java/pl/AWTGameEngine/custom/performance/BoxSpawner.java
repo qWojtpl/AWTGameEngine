@@ -44,7 +44,9 @@ public class BoxSpawner extends ObjectComponent {
             lastObject.removeComponent(lastObject.getComponentByClass(CameraFollow.class));
         }
         lastObject = getScene().getGameObjectByName("boxspawner-" + (boxCounter - 1));
-        lastObject.addComponent(new CameraFollow(lastObject));
+        CameraFollow follow = new CameraFollow(lastObject);
+        follow.setRadius(200);
+        lastObject.addComponent(follow);
     }
 
     @Override

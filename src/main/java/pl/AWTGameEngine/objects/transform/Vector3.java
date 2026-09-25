@@ -42,7 +42,9 @@ public class Vector3 {
     }
 
     public void unlock() {
-        lock.unlock();
+        if(lock.isHeldByCurrentThread()) {
+            lock.unlock();
+        }
     }
 
     @Override

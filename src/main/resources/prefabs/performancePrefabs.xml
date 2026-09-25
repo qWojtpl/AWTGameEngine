@@ -1,6 +1,6 @@
 <prefabs>
     <prefab id="box">
-        <Box3D sprite="hdr_sprites/test2.gif" />
+        <Box3D material="beaver" /> <!--hdr_sprites/test2.gif-->
         <RigidBody.Dynamic />
     </prefab>
     <prefab id="player">
@@ -9,7 +9,7 @@
         <!--        <MovementFX _package="pl.AWTGameEngine.custom" />-->
 
         <!--        <MusicPlayer sourcePath="audio/swingin.wav" />-->
-<!--        <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />-->
+        <BoxSpawner _package="pl.AWTGameEngine.custom.performance" />
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
         <Server />
     </prefab>

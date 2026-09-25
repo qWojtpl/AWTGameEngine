@@ -366,6 +366,12 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                         Texture.Usage.Companion.getGEN_MIPMAPPABLE())
                 .build(engine);
 
+        setTextureImage(texture, sprite, engine);
+
+        textures.put(sprite.getImagePath(), texture);
+    }
+
+    private void setTextureImage(Texture texture, Sprite sprite, Engine engine) {
         byte[] byteArray = ImageHelper.bufferedImageToByteArray(sprite.getImage());
         Texture.PixelBufferDescriptor descriptor = new Texture.PixelBufferDescriptor(
                 byteArray,
@@ -380,8 +386,6 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
         );
         texture.setImage(engine, 0, descriptor);
         texture.generateMipmaps(engine);
-
-        textures.put(sprite.getImagePath(), texture);
     }
 
     @Override
@@ -391,7 +395,14 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
     @Override
     public void updateTexture(Sprite sprite) {
-
+        if(panel.getEngine() == null) {
+            return;
+        }
+        if(!textures.containsKey(sprite.getImagePath())) {
+            createTexture(sprite, panel.getEngine());
+        } else {
+            setTextureImage(textures.get(sprite.getImagePath()), sprite, panel.getEngine());
+        }
     }
 
     @Override

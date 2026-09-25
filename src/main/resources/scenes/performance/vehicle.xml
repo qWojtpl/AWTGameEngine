@@ -74,10 +74,10 @@
 <!--        <SoundSource clipSource="audio/swingin.wav" spreadDistance="20" />-->
     </object>
 
-    <object id="box7" x="50" y="-50" z="50" size="100,100,100">
+<!--    <object id="box7" x="50" y="-50" z="50" size="100,100,100">
         <TextRenderer3D text="Hello" />
         <Plane3D material="defaultMaterial" shader="pl.AWTGameEngine.objects.render.shaders.BillboardShader" />
-    </object>
+    </object>-->
 
     <material name="particle" sprite="sprites/base/files/directory.png" transparentBlend="true" litMaterial="false" />
 

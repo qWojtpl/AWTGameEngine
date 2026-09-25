@@ -39,8 +39,9 @@ public class Material {
     }
 
     @FromXML
-    public void setOpacity(float opacity) {
+    public Material setOpacity(float opacity) {
         this.opacity = opacity;
+        return this;
     }
 
     public int getRepeatTexture() {
@@ -48,8 +49,9 @@ public class Material {
     }
 
     @FromXML
-    public void setRepeatTexture(int repeatTexture) {
+    public Material setRepeatTexture(int repeatTexture) {
         this.repeatTexture = repeatTexture;
+        return this;
     }
 
     public boolean isTransparentBlend() {
@@ -61,8 +63,9 @@ public class Material {
      * won't make a difference, since you need to rebuild the material.
      */
     @FromXML
-    public void setTransparentBlend(boolean blend) {
+    public Material setTransparentBlend(boolean blend) {
         this.transparentBlend = blend;
+        return this;
     }
 
     public boolean isLitMaterial() {
@@ -70,8 +73,9 @@ public class Material {
     }
 
     @FromXML
-    public void setLitMaterial(boolean litMaterial) {
+    public Material setLitMaterial(boolean litMaterial) {
         this.litMaterial = litMaterial;
+        return this;
     }
 
     @Override
