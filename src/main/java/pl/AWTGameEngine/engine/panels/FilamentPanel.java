@@ -9,7 +9,6 @@ import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFilament;
-import pl.AWTGameEngine.engine.helpers.FilamentHelper;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.scenes.Scene;
@@ -18,6 +17,8 @@ import pl.AWTGameEngine.windows.HeadlessWindow;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -36,6 +37,13 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     private Renderer renderer;
     private View view;
     private LightManager.ShadowOptions shadowOptions;
+
+    private byte[] pixelBufferArray;
+    private Texture.PixelBufferDescriptor pixelBufferDescriptor;
+    private BufferedImage reusableImage;
+    private int[] imagePixels;
+    private int cachedWidth = 0;
+    private int cachedHeight = 0;
 
     public FilamentPanel(Scene scene) {
         this.scene = scene;
@@ -86,16 +94,17 @@ public class FilamentPanel extends Panel3D implements PanelObject {
 
     @Override
     public void updateRender() {
-        if(window.getCurrentScene() == null) {
+        if(window.getCurrentScene() == null || graphicsManager3D == null) {
             return;
         }
-        if(graphicsManager3D == null) {
-            return;
-        }
+
         if(!initialized) {
             initFilament();
             initialized = true;
         }
+
+        ensureBuffersSize(window.getBaseWidth(), window.getBaseHeight());
+
         Set<Vector3> locks = new LinkedHashSet<>();
         try {
             for(ObjectComponent c :
@@ -110,7 +119,34 @@ public class FilamentPanel extends Panel3D implements PanelObject {
             ((GraphicsManagerFilament) graphicsManager3D).update(engine, view);
             if(renderer.beginFrame(swapChain, System.nanoTime())) {
                 renderer.render(view);
+
+                renderer.readPixels(0, 0, window.getBaseWidth(), window.getBaseHeight(), pixelBufferDescriptor);
+
                 renderer.endFrame();
+                engine.flush();
+
+                int ptr = 0;
+                int totalPixels = window.getBaseWidth() * window.getBaseHeight();
+                for(int i = 0; i < totalPixels; i++) {
+                    int r = pixelBufferArray[ptr++] & 0xFF;
+                    int g = pixelBufferArray[ptr++] & 0xFF;
+                    int b = pixelBufferArray[ptr++] & 0xFF;
+                    int a = pixelBufferArray[ptr++] & 0xFF;
+
+                    imagePixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
+                }
+
+                Graphics2D g2d = reusableImage.createGraphics();
+                // draw
+                g2d.dispose();
+
+                if(canvas != null && canvas.isDisplayable()) {
+                    Graphics g = canvas.getGraphics();
+                    if(g != null) {
+                        g.drawImage(reusableImage, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
+                        g.dispose();
+                    }
+                }
             }
         } catch(Exception e) {
             Logger.exception("Unhandled exception caught while running an iteration of Filament render request", e);
@@ -123,6 +159,30 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 }
             }
         }
+    }
+
+    private void ensureBuffersSize(int width, int height) {
+        if(width == cachedWidth && height == cachedHeight && reusableImage != null) {
+            return;
+        }
+
+        this.cachedWidth = width;
+        this.cachedHeight = height;
+
+        int sizeInBytes = width * height * 4;
+        this.pixelBufferArray = new byte[sizeInBytes];
+
+        this.pixelBufferDescriptor = new Texture.PixelBufferDescriptor(
+                pixelBufferArray,
+                sizeInBytes,
+                Texture.Format.RGBA,
+                Texture.Type.UBYTE,
+                1, 0, 0, 0,
+                null
+        );
+
+        this.reusableImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        this.imagePixels = ((DataBufferInt) reusableImage.getRaster().getDataBuffer()).getData();
     }
 
     @Override
@@ -181,10 +241,10 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     }
 
     public LightManager.ShadowOptions getShadowOptions() {
-        if(this.shadowOptions == null) {
+        if (this.shadowOptions == null) {
             this.shadowOptions = new LightManager.ShadowOptions();
-            shadowOptions.setMapSize(8192);
-            shadowOptions.setShadowCascades(10);
+            shadowOptions.setMapSize(2048);
+            shadowOptions.setShadowCascades(4);
             shadowOptions.setBlurWidth(0);
         }
         return this.shadowOptions;
@@ -193,6 +253,8 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     private void initFilament() {
         this.canvas = new Canvas();
         canvas.setFocusable(false);
+        canvas.setIgnoreRepaint(true);
+
         ((Window) window).add(canvas);
 
         window.setVisible(true);
@@ -202,12 +264,14 @@ public class FilamentPanel extends Panel3D implements PanelObject {
         }
 
         Filament.INSTANCE.init();
-        engine = Engine.Companion.create(RenderEngine.FILAMENT_VULKAN.equals(scene.getRenderEngine()) ? Engine.Backend.VULKAN : Engine.Backend.OPENGL);
+        engine = Engine.Companion.create(RenderEngine.FILAMENT_VULKAN.equals(scene.getRenderEngine())
+                ? Engine.Backend.VULKAN
+                : Engine.Backend.OPENGL);
 
         MaterialBuilder.Companion.init();
 
         renderer = engine.createRenderer();
-        swapChain = engine.createSwapChain(new NativeSurface(FilamentHelper.getHWND(canvas)));
+        swapChain = engine.createSwapChain(window.getBaseWidth(), window.getBaseHeight(), 0L);
 
         filamentScene = engine.createScene();
 
@@ -242,19 +306,5 @@ public class FilamentPanel extends Panel3D implements PanelObject {
         for(ObjectComponent component : getParentScene().getSceneEventHandler().getComponents("onFilamentInitialization")) {
             component.onFilamentInitialization();
         }
-
-/*        int light = engine.getEntityManager().create();
-        new LightManager.Builder(LightManager.Type.POINT)
-                .color(1, 0, 0)
-                .intensity(1000000000)
-                .position(0, 0, 0)
-                .falloff(100.0f)
-                .castShadows(true)
-                .shadowOptions(getShadowOptions())
-                .build(engine, light);
-
-        filamentScene.addEntity(light);*/
-
     }
-
 }
