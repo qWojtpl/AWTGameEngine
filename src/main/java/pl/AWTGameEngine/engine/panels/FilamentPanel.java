@@ -17,6 +17,7 @@ import pl.AWTGameEngine.windows.HeadlessWindow;
 import pl.AWTGameEngine.windows.Window;
 
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.LinkedHashSet;
@@ -44,6 +45,8 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     private int[] imagePixels;
     private int cachedWidth = 0;
     private int cachedHeight = 0;
+
+    private BufferStrategy strategy;
 
     public FilamentPanel(Scene scene) {
         this.scene = scene;
@@ -123,7 +126,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 renderer.readPixels(0, 0, window.getBaseWidth(), window.getBaseHeight(), pixelBufferDescriptor);
 
                 renderer.endFrame();
-                engine.flush();
+                engine.flushAndWait();
 
                 int ptr = 0;
                 int totalPixels = window.getBaseWidth() * window.getBaseHeight();
@@ -131,9 +134,9 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                     int r = pixelBufferArray[ptr++] & 0xFF;
                     int g = pixelBufferArray[ptr++] & 0xFF;
                     int b = pixelBufferArray[ptr++] & 0xFF;
-                    int a = pixelBufferArray[ptr++] & 0xFF;
+                    ptr++;
 
-                    imagePixels[i] = (a << 24) | (r << 16) | (g << 8) | b;
+                    imagePixels[i] = 0xFF000000 | (r << 16) | (g << 8) | b;
                 }
 
                 Graphics2D g2d = reusableImage.createGraphics();
@@ -141,11 +144,17 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 g2d.dispose();
 
                 if(canvas != null && canvas.isDisplayable()) {
-                    Graphics g = canvas.getGraphics();
-                    if(g != null) {
-                        g.drawImage(reusableImage, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
-                        g.dispose();
-                    }
+                    do {
+                        do {
+                            Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
+                            try {
+                                g.drawImage(reusableImage, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
+                            } finally {
+                                g.dispose();
+                            }
+                        } while(strategy.contentsRestored());
+                        strategy.show();
+                    } while(strategy.contentsLost());
                 }
             }
         } catch(Exception e) {
@@ -181,7 +190,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 null
         );
 
-        this.reusableImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        this.reusableImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         this.imagePixels = ((DataBufferInt) reusableImage.getRaster().getDataBuffer()).getData();
     }
 
@@ -261,6 +270,19 @@ public class FilamentPanel extends Panel3D implements PanelObject {
 
         if(!canvas.isDisplayable()) {
             canvas.addNotify();
+        }
+
+        if(strategy == null) {
+            canvas.createBufferStrategy(2);
+            strategy = canvas.getBufferStrategy();
+            Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
+            try {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            } finally {
+                g.dispose();
+            }
+            strategy.show();
         }
 
         Filament.INSTANCE.init();
