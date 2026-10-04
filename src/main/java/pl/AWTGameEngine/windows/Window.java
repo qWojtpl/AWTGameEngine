@@ -208,7 +208,7 @@ public class Window extends Frame implements BaseWindow {
     }
 
     public int getBaseHeight() {
-        return (int) (WIDTH * 0.5625);
+        return (int) (WIDTH * (ratio[1] / (float) ratio[0]));
     }
 
     public Cursor getCursor() {

@@ -6,6 +6,7 @@ import io.github.erkko68.filament.filamat.MaterialBuilder;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
+import pl.AWTGameEngine.engine.Profiler;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFilament;
@@ -101,6 +102,8 @@ public class FilamentPanel extends Panel3D implements PanelObject {
             return;
         }
 
+        Profiler profiler = new Profiler("FilamentRender");
+
         if(!initialized) {
             initFilament();
             initialized = true;
@@ -120,13 +123,23 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 c.on3DRenderRequest(graphicsManager3D);
             }
             ((GraphicsManagerFilament) graphicsManager3D).update(engine, view);
+            for(Vector3 locked : locks) {
+                try {
+                    locked.unlock();
+                } catch(IllegalMonitorStateException e) {
+                    Logger.exception("Failed to unlock Vector3", e);
+                }
+            }
             if(renderer.beginFrame(swapChain, System.nanoTime())) {
+                profiler.step("beginFrame");
                 renderer.render(view);
 
                 renderer.readPixels(0, 0, window.getBaseWidth(), window.getBaseHeight(), pixelBufferDescriptor);
 
+                profiler.step("readPixels");
+
                 renderer.endFrame();
-                engine.flushAndWait();
+                engine.flush();
 
                 int ptr = 0;
                 int totalPixels = window.getBaseWidth() * window.getBaseHeight();
@@ -139,9 +152,13 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                     imagePixels[i] = 0xFF000000 | (r << 16) | (g << 8) | b;
                 }
 
+                profiler.step("pixelArray");
+
                 Graphics2D g2d = reusableImage.createGraphics();
                 // draw
                 g2d.dispose();
+
+                profiler.step("guiDraw");
 
                 if(canvas != null && canvas.isDisplayable()) {
                     do {
@@ -156,18 +173,14 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                         strategy.show();
                     } while(strategy.contentsLost());
                 }
+
+                profiler.step("drawImage");
             }
         } catch(Exception e) {
             Logger.exception("Unhandled exception caught while running an iteration of Filament render request", e);
-        } finally {
-            for(Vector3 locked : locks) {
-                try {
-                    locked.unlock();
-                } catch(IllegalMonitorStateException e) {
-                    Logger.exception("Failed to unlock Vector3", e);
-                }
-            }
         }
+        profiler.end();
+        profiler.show();
     }
 
     private void ensureBuffersSize(int width, int height) {
