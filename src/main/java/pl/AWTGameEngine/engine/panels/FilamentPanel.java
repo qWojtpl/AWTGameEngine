@@ -23,6 +23,9 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 
 public class FilamentPanel extends Panel3D implements PanelObject {
 
@@ -48,6 +51,8 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     private int cachedHeight = 0;
 
     private BufferStrategy strategy;
+    private final ExecutorService service = Executors.newSingleThreadExecutor();
+    private final Semaphore semaphore = new Semaphore(1);
 
     public FilamentPanel(Scene scene) {
         this.scene = scene;
@@ -122,7 +127,9 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 }
                 c.on3DRenderRequest(graphicsManager3D);
             }
+            profiler.step("pre-update");
             ((GraphicsManagerFilament) graphicsManager3D).update(engine, view);
+            profiler.step("after-update");
             for(Vector3 locked : locks) {
                 try {
                     locked.unlock();
@@ -131,15 +138,13 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 }
             }
             if(renderer.beginFrame(swapChain, System.nanoTime())) {
-                profiler.step("beginFrame");
                 renderer.render(view);
 
                 renderer.readPixels(0, 0, window.getBaseWidth(), window.getBaseHeight(), pixelBufferDescriptor);
 
-                profiler.step("readPixels");
-
                 renderer.endFrame();
-                engine.flush();
+
+                semaphore.acquire();
 
                 int ptr = 0;
                 int totalPixels = window.getBaseWidth() * window.getBaseHeight();
@@ -155,23 +160,31 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 profiler.step("pixelArray");
 
                 Graphics2D g2d = reusableImage.createGraphics();
-                // draw
+                g2d.drawLine(0, 0, 1000, 1000);
                 g2d.dispose();
 
                 profiler.step("guiDraw");
 
                 if(canvas != null && canvas.isDisplayable()) {
-                    do {
-                        do {
-                            Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
-                            try {
-                                g.drawImage(reusableImage, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
-                            } finally {
-                                g.dispose();
-                            }
-                        } while(strategy.contentsRestored());
-                        strategy.show();
-                    } while(strategy.contentsLost());
+                    service.submit(() -> {
+                        try {
+                            do {
+                                do {
+                                    Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
+                                    try {
+                                        g.drawImage(reusableImage, 0, 0, null);
+                                    } finally {
+                                        g.dispose();
+                                    }
+                                } while (strategy.contentsRestored());
+                                strategy.show();
+                            } while (strategy.contentsLost());
+                        } finally {
+                            semaphore.release();
+                        }
+                    });
+                } else {
+                    semaphore.release();
                 }
 
                 profiler.step("drawImage");
@@ -203,7 +216,10 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 null
         );
 
-        this.reusableImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        GraphicsConfiguration gfxConfig = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice().getDefaultConfiguration();
+
+        this.reusableImage = gfxConfig.createCompatibleImage(width, height, Transparency.OPAQUE);
         this.imagePixels = ((DataBufferInt) reusableImage.getRaster().getDataBuffer()).getData();
     }
 

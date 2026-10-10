@@ -36,13 +36,17 @@ public class Profiler {
         StringBuilder builder = new StringBuilder();
         builder.append(profilerName).append(" profiler steps: ");
         long time = 0;
+        long totalMs = 0;
         for(String stepName : steps.keySet()) {
             if(time != 0) {
-                builder.append(" -> ").append((steps.get(stepName) - time) / 1_000_000f).append("ms -> ");
+                float ms = (steps.get(stepName) - time) / 1_000_000f;
+                builder.append(" -> ").append(ms).append("ms -> ");
+                totalMs += ms;
             }
             builder.append(stepName);
             time = steps.get(stepName);
         }
+        builder.append(" (total ").append(totalMs).append("ms)");
         if(ShowMethod.SYSTEM.equals(showMethod)) {
             System.out.println("[PROFILER] " + builder);
         } else if(ShowMethod.LOGGER.equals(showMethod)) {
