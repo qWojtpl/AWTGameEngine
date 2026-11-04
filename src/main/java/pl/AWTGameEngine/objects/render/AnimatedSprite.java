@@ -39,7 +39,7 @@ public class AnimatedSprite extends Sprite {
 
     @Override
     public BufferedImage getImage() {
-        return sprites.get(0).getImage();
+        return sprites.getFirst().getImage();
     }
 
     public String getImagePath() {

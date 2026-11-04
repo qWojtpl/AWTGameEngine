@@ -11,9 +11,9 @@ import java.util.List;
  *  Where:<br>
  *  <code>IDENTIFIER</code> is GameObject's identifier,<br>
  *  <code>COMPONENT</code> is component's name (/w package),<br>
- *  <code>DATA is</code> data which is being sent<br>
+ *  <code>DATA</code> is data which is being sent<br>
  *  <code>╚</code> is a standard delimiter for data, which allows to send more than one
- *  information to component - use method <code>formData</code> to add delimiters
+ *  information to component - use method {@link NetBlock#formData(Object...)} to add delimiters
  */
 public class NetBlock {
 

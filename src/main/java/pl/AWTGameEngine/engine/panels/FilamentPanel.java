@@ -8,7 +8,6 @@ import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
 import pl.AWTGameEngine.engine.Profiler;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
-import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFilament;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.objects.transform.Vector3;
@@ -85,10 +84,6 @@ public class FilamentPanel extends Panel3D implements PanelObject {
         return this.camera;
     }
 
-    public GraphicsManager3D getGraphicsManager3D() {
-        return this.graphicsManager3D;
-    }
-
     public PhysXManager getPhysXManager() {
         return this.physXManager;
     }
@@ -140,21 +135,25 @@ public class FilamentPanel extends Panel3D implements PanelObject {
             if(renderer.beginFrame(swapChain, System.nanoTime())) {
                 renderer.render(view);
 
+                profiler.step("render");
+
                 renderer.readPixels(0, 0, window.getBaseWidth(), window.getBaseHeight(), pixelBufferDescriptor);
+
+                profiler.step("read");
 
                 renderer.endFrame();
 
                 semaphore.acquire();
 
-                int ptr = 0;
-                int totalPixels = window.getBaseWidth() * window.getBaseHeight();
-                for(int i = 0; i < totalPixels; i++) {
-                    int r = pixelBufferArray[ptr++] & 0xFF;
-                    int g = pixelBufferArray[ptr++] & 0xFF;
-                    int b = pixelBufferArray[ptr++] & 0xFF;
-                    ptr++;
+                profiler.step("acquire");
 
-                    imagePixels[i] = 0xFF000000 | (r << 16) | (g << 8) | b;
+                int totalPixels = cachedWidth * cachedHeight;
+                for(int i = 0, ptr = 0; i < totalPixels; i++, ptr += 4) {
+                    imagePixels[i] =
+                            0xFF000000 |
+                                    ((pixelBufferArray[ptr] & 0xFF) << 16) |
+                                    ((pixelBufferArray[ptr + 1] & 0xFF) << 8) |
+                                    (pixelBufferArray[ptr + 2] & 0xFF);
                 }
 
                 profiler.step("pixelArray");
