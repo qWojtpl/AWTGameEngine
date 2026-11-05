@@ -30,7 +30,7 @@ public class PanelGL extends Panel3D implements PanelObject {
         this.window = scene.getWindow();
         this.camera = new Camera(this);
         this.physXManager = PhysXManager.getInstance();
-        physXManager.createScene(scene);
+        physXManager.createPhysXScene(scene);
         if(!(window instanceof HeadlessWindow)) {
             this.graphicsManager3D = new GraphicsManagerGL(this);
             initOpenGL(getWindow().getBaseWidth(), getWindow().getBaseHeight());
@@ -82,7 +82,7 @@ public class PanelGL extends Panel3D implements PanelObject {
 
     @Override
     public void unload() {
-        PhysXManager.getInstance().removeScene(scene);
+        PhysXManager.getInstance().removePhysXScene(scene);
         if(!(window instanceof HeadlessWindow)) {
             ((Window) window).remove(glCanvas);
         }

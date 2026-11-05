@@ -15,7 +15,7 @@ public class HeadlessPanel implements PanelObject {
     public HeadlessPanel(Scene scene) {
         this.scene = scene;
         this.camera = new Camera(this);
-        PhysXManager.getInstance().createScene(scene);
+        PhysXManager.getInstance().createPhysXScene(scene);
     }
 
     @Override

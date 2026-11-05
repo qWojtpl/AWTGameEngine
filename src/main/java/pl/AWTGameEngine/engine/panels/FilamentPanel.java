@@ -1,6 +1,5 @@
 package pl.AWTGameEngine.engine.panels;
 
-import com.jogamp.opengl.*;
 import io.github.erkko68.filament.*;
 import io.github.erkko68.filament.filamat.MaterialBuilder;
 import pl.AWTGameEngine.components.base.ObjectComponent;
@@ -60,7 +59,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
         this.window = scene.getWindow();
         this.camera = new Camera(this);
         this.physXManager = PhysXManager.getInstance();
-        physXManager.createScene(scene);
+        physXManager.createPhysXScene(scene);
         if(!(window instanceof HeadlessWindow)) {
             graphicsManager3D = new GraphicsManagerFilament(this);
         }
@@ -226,7 +225,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
 
     @Override
     public void unload() {
-        PhysXManager.getInstance().removeScene(scene);
+        PhysXManager.getInstance().removePhysXScene(scene);
         if(!(window instanceof HeadlessWindow)) {
             ((Window) window).remove(canvas);
             window.getRenderLoop().addNextFrameOperation(() -> {

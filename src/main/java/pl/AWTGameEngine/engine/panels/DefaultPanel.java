@@ -30,7 +30,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
         this.window = scene.getWindow();
         this.scene = scene;
         this.camera = new Camera(this);
-        PhysXManager.getInstance().createScene(scene);
+        PhysXManager.getInstance().createPhysXScene(scene);
         this.canvas = new Canvas();
         canvas.setFocusable(false);
         add(this.canvas, BorderLayout.CENTER);
@@ -89,7 +89,7 @@ public class DefaultPanel extends JPanel implements PanelObject {
 
     @Override
     public void unload() {
-        PhysXManager.getInstance().removeScene(scene);
+        PhysXManager.getInstance().removePhysXScene(scene);
         if(!(window instanceof HeadlessWindow)) {
             ((Window) window).remove(this);
         }

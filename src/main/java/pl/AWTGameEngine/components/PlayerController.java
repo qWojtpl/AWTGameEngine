@@ -37,7 +37,7 @@ public class PlayerController extends ObjectComponent {
     @Override
     public void onAddComponent() {
         PhysXManager physXManager = PhysXManager.getInstance();
-        this.physicsScene = physXManager.getScene(getScene());
+        this.physicsScene = physXManager.getPhysXScene(getScene());
         this.manager = PxTopLevelFunctions.CreateControllerManager(physicsScene.getPxScene());
         PxCapsuleControllerDesc desc = new PxCapsuleControllerDesc();
         desc.setRadius(radius);

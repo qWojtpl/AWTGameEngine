@@ -47,13 +47,13 @@ public final class PhysXManager {
         defaultMaterial = physics.createMaterial(0.5f, 0.5f, 0.5f);
     }
 
-    public void createScene(Scene scene) {
+    public void createPhysXScene(Scene scene) {
         PhysXScene physXScene = new PhysXScene(scene);
         physXScene.init();
         scenes.putIfAbsent(scene, physXScene);
     }
 
-    public void removeScene(Scene scene) {
+    public void removePhysXScene(Scene scene) {
         scenes.get(scene).destroy();
         scenes.remove(scene);
     }
@@ -88,7 +88,7 @@ public final class PhysXManager {
         return this.physics;
     }
 
-    public PhysXScene getScene(Scene scene) {
+    public PhysXScene getPhysXScene(Scene scene) {
         return this.scenes.get(scene);
     }
 

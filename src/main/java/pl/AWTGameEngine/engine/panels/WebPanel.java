@@ -32,7 +32,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
         this.camera = new Camera(this);
 
-        PhysXManager.getInstance().createScene(scene);
+        PhysXManager.getInstance().createPhysXScene(scene);
 
         if(!(window instanceof HeadlessWindow) && window.getCurrentScene().equals(scene)) {
             ((Window) window).add(this);
@@ -112,7 +112,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
     @Override
     public void unload() {
-        PhysXManager.getInstance().removeScene(scene);
+        PhysXManager.getInstance().removePhysXScene(scene);
         if(!(window instanceof HeadlessWindow)) {
             ((Window) window).remove(this);
         }

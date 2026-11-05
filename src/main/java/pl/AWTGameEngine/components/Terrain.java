@@ -21,7 +21,6 @@ import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.render.Material;
 import pl.AWTGameEngine.objects.render.RenderOptions3D;
-import pl.AWTGameEngine.objects.render.Sprite;
 import pl.AWTGameEngine.objects.render.shaders.DefaultShader;
 import pl.AWTGameEngine.objects.transform.Vector4;
 import pl.AWTGameEngine.objects.transform.Vector3;
@@ -58,7 +57,7 @@ public class Terrain extends ObjectComponent {
         Logger.info("Loading terrain...");
         try(MemoryStack stack = MemoryStack.stackPush()) {
 
-            PhysXManager.PhysXScene physXScene = PhysXManager.getInstance().getScene(getScene());
+            PhysXManager.PhysXScene physXScene = PhysXManager.getInstance().getPhysXScene(getScene());
 
             actor = PhysXManager.getInstance().getPxPhysics().createRigidStatic(createPose(stack));
 

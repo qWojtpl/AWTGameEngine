@@ -158,7 +158,7 @@ public class Vehicle extends ObjectComponent {
         vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(vehiclePose);
 
         getWindow().getPhysicsLoop().addNextFrameOperation(() -> {
-            physXManager.getScene(getScene()).getPxScene().addActor(vehicle.getPhysXState().getPhysxActor().getRigidBody());
+            physXManager.getPhysXScene(getScene()).getPxScene().addActor(vehicle.getPhysXState().getPhysxActor().getRigidBody());
         });
 
         vehicle.getEngineDriveState().getGearboxState().setCurrentGear(vehicle.getEngineDriveParams().getGearBoxParams().getNeutralGear() + 1);
@@ -169,8 +169,8 @@ public class Vehicle extends ObjectComponent {
         context.getFrame().setLatAxis(PxVehicleAxesEnum.ePosX);
         context.getFrame().setVrtAxis(PxVehicleAxesEnum.ePosY);
         context.getScale().setScale(1f);
-        context.setGravity(physXManager.getScene(getScene()).getPxScene().getGravity());
-        context.setPhysxScene(physXManager.getScene(getScene()).getPxScene());
+        context.setGravity(physXManager.getPhysXScene(getScene()).getPxScene().getGravity());
+        context.setPhysxScene(physXManager.getPhysXScene(getScene()).getPxScene());
         context.setPhysxActorUpdateMode(PxVehiclePhysXActorUpdateModeEnum.eAPPLY_VELOCITY);
         context.setPhysxUnitCylinderSweepMesh(
                 PxVehicleTopLevelFunctions.VehicleUnitCylinderSweepMeshCreate(context.getFrame(), physXManager.getPxPhysics(), physXManager.getCookingParams()));
