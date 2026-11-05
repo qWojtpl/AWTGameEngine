@@ -3,6 +3,7 @@ package pl.AWTGameEngine.engine.tests;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.tests.Test;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.Profiler;
 import pl.AWTGameEngine.engine.enums.ConsoleColor;
 import pl.AWTGameEngine.exceptions.tests.TestNotFoundException;
 
@@ -35,6 +36,7 @@ public class TestPerformer {
 
     public static boolean performTest(Object context, Test test) {
         Logger.logTest("Running test " + test.name());
+        Profiler profiler = new Profiler(test.name(), Profiler.ShowMethod.LOGGER);
         BaseTest baseTest;
         try {
             baseTest = getInstance(test);
@@ -42,27 +44,34 @@ public class TestPerformer {
             Logger.exception("Cannot get instance of a test.", e);
             return false;
         }
+        profiler.step("Setup start");
         try {
             baseTest.setup(context);
         } catch(Exception e) {
             Logger.exception("Exception in setup of a test " + test.name(), e);
         }
+        profiler.step("Setup end");
+        profiler.step("Perform start");
         boolean result = false;
         try {
             result = baseTest.perform();
         } catch(Exception e) {
             Logger.exception("Exception while performing a test " + test.name(), e);
         }
+        profiler.step("Perform end");
+        profiler.step("End start");
         try {
             baseTest.end();
         } catch(Exception e) {
             Logger.exception("Exception in ending a test " + test.name(), e);
         }
+        profiler.step("Finished");
         if(result) {
             Logger.logTest(ConsoleColor.GREEN.value + "Test " + test.name() + " successfully passed.");
         } else {
             Logger.logTest(ConsoleColor.RED.value + "Test " + test.name() + " failed!");
         }
+        profiler.show();
         return result;
     }
 

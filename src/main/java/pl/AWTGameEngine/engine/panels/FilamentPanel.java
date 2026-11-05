@@ -53,6 +53,8 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     private final ExecutorService service = Executors.newSingleThreadExecutor();
     private final Semaphore semaphore = new Semaphore(1);
 
+    private BufferedImage guiImage;
+
     public FilamentPanel(Scene scene) {
         this.scene = scene;
         this.window = scene.getWindow();
@@ -159,7 +161,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 profiler.step("pixelArray");
 
                 Graphics2D g2d = reusableImage.createGraphics();
-                g2d.drawLine(0, 0, 1000, 1000);
+                g2d.drawImage(guiImage, 0, 0, null, null);
                 g2d.dispose();
 
                 profiler.step("guiDraw");
@@ -175,9 +177,9 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                                     } finally {
                                         g.dispose();
                                     }
-                                } while (strategy.contentsRestored());
+                                } while(strategy.contentsRestored());
                                 strategy.show();
-                            } while (strategy.contentsLost());
+                            } while(strategy.contentsLost());
                         } finally {
                             semaphore.release();
                         }
@@ -285,6 +287,10 @@ public class FilamentPanel extends Panel3D implements PanelObject {
             shadowOptions.setBlurWidth(0);
         }
         return this.shadowOptions;
+    }
+
+    public void setGUI(BufferedImage image) {
+        this.guiImage = image;
     }
 
     private void initFilament() {

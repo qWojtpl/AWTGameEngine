@@ -6,6 +6,8 @@ import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.helpers.FXHelper;
+import pl.AWTGameEngine.engine.helpers.ImageHelper;
+import pl.AWTGameEngine.engine.panels.FilamentPanel;
 import pl.AWTGameEngine.engine.panels.Panel3D;
 import pl.AWTGameEngine.engine.panels.WebPanel;
 import pl.AWTGameEngine.objects.GameObject;
@@ -23,6 +25,7 @@ public class GUIRenderer extends ObjectComponent {
 
     private RenderOptions3D renderOptions3D;
     private GraphicsManager3D graphicsManager;
+    private Panel3D panel;
     private volatile boolean finished = true;
     private WritableImage image = new WritableImage(getWindow().getBaseWidth(), getWindow().getBaseHeight());
     private final Material material = new Material(getObject().getIdentifier())
@@ -34,21 +37,25 @@ public class GUIRenderer extends ObjectComponent {
 
     @Override
     public void onAddComponent() {
-        Panel3D panel = (Panel3D) getWindow().getCurrentScene().getPanel();
+        panel = (Panel3D) getWindow().getCurrentScene().getPanel();
         graphicsManager = panel.getGraphicsManager3D();
-        renderOptions3D = new RenderOptions3D(getObject().getIdentifier() + "-" + "GUIRenderer" + "-" + getScene().getName())
-                .setPosition(new Vector3())
-                .setSize(new Vector3())
-                .setQuaternionRotation(new Vector4())
-                .setShader(Shaders.of(getWindow(), GUIShader.class))
-                .setShapePath("models/plane.obj")
-                .setMaterial(material);
-        graphicsManager.createRenderable(renderOptions3D);
+        if(!(panel instanceof FilamentPanel)) {
+            renderOptions3D = new RenderOptions3D(getObject().getIdentifier() + "-" + "GUIRenderer" + "-" + getScene().getName())
+                    .setPosition(new Vector3())
+                    .setSize(new Vector3())
+                    .setQuaternionRotation(new Vector4())
+                    .setShader(Shaders.of(getWindow(), GUIShader.class))
+                    .setShapePath("models/plane.obj")
+                    .setMaterial(material);
+            graphicsManager.createRenderable(renderOptions3D);
+        }
     }
 
     @Override
     public void onRemoveComponent() {
-        graphicsManager.removeRenderable(renderOptions3D.getIdentifier());
+        if(renderOptions3D != null) {
+            graphicsManager.removeRenderable(renderOptions3D.getIdentifier());
+        }
     }
 
     @Override
@@ -60,8 +67,12 @@ public class GUIRenderer extends ObjectComponent {
         FXHelper.synchronizedCall(() -> {
             try {
                 image = ((WebPanel) getScene().getPanel()).getScene().snapshot(image);
-                material.getSprite().updateImage(image);
-                graphicsManager.updateTexture(material.getSprite());
+                if(panel instanceof FilamentPanel fpanel) {
+                    fpanel.setGUI(ImageHelper.imageToBufferedImage(image));
+                } else {
+                    material.getSprite().updateImage(image);
+                    graphicsManager.updateTexture(material.getSprite());
+                }
             } finally {
                 finished = true;
             }
