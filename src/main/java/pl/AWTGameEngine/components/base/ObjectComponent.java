@@ -306,6 +306,11 @@ public abstract class ObjectComponent {
     }
 
     @EventMethod
+    public void onWebViewInitialization() {
+
+    }
+
+    @EventMethod
     public void onFilamentInitialization() {
 
     }

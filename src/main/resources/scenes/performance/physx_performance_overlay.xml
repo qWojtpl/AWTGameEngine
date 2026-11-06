@@ -1,6 +1,15 @@
 <scene updateFPS="60" renderFPS="60" physicsFPS="1" sameSize="true">
     <object id="health">
         <GUIRenderer />
+        <GUIMouseSupport />
         <WebPerformanceText _package="pl.AWTGameEngine.custom.performance" />
     </object>
+    <styles>
+
+        p:hover {
+            background-color: red;
+            cursor: pointer;
+        }
+
+    </styles>
 </scene>

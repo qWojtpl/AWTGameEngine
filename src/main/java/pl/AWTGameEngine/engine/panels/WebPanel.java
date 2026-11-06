@@ -34,7 +34,7 @@ public class WebPanel extends JFXPanel implements PanelObject {
 
         PhysXManager.getInstance().createPhysXScene(scene);
 
-        if(!(window instanceof HeadlessWindow) && window.getCurrentScene().equals(scene)) {
+        if(!(window instanceof HeadlessWindow) && (scene.equals(window.getCurrentScene()) || window.getCurrentScene() == null)) {
             ((Window) window).add(this);
         }
 
@@ -95,6 +95,9 @@ public class WebPanel extends JFXPanel implements PanelObject {
         webView.getEngine().loadContent(htmlString.toString());
         graphicsManager = new WebGraphicsManager(webView);
         Logger.info("WebView loaded.");
+        for(ObjectComponent component : getParentScene().getSceneEventHandler().getComponents("onWebViewInitialization")) {
+            component.onWebViewInitialization();
+        }
     }
 
     @Override

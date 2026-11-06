@@ -310,9 +310,7 @@ public class Window extends Frame implements BaseWindow {
     @Override
     public void setCursor(Cursor cursor) {
         this.cursor = cursor;
-        for(Scene scene : scenes.keySet()) {
-            scene.getPanel().setCursor(cursor);
-        }
+        super.setCursor(cursor);
     }
 
 }
