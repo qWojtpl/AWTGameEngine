@@ -158,6 +158,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
     }
 
     private void createBuffers(String path, float[] vertices, Engine engine) {
+        Logger.info("Creating buffers for " + path + "...");
         int vertexCount = vertices.length / 8;
 
         float[] positions = new float[vertexCount * 3];
@@ -241,6 +242,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
         ib.setBuffer(engine, indexData);
         indexBuffers.put(path, ib);
+        Logger.info("Buffers for " + path + " created!");
     }
 
     private MaterialInstance buildMaterial(pl.AWTGameEngine.objects.render.Material material, Engine engine) {
@@ -291,6 +293,8 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
             throw new IllegalStateException("Cannot compile material: " + material.getName());
         }
 
+        Logger.info("Material " + material.getName() + " successfully built!");
+
         return new Material.Builder()
                 .payload(materialPackage.getBuffer())
                 .build(engine)
@@ -335,6 +339,9 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
     @Override
     public void preloadShape(String path) {
+        if(preloadedVertices.containsKey(path)) {
+            return;
+        }
         addPreloadedVertices(path, ModelLoader.getVertices(path, true));
     }
 
