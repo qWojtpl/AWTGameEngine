@@ -64,11 +64,6 @@ public class HeadlessPanel implements PanelObject {
     }
 
     @Override
-    public void setCursor(Cursor cursor) {
-
-    }
-
-    @Override
     public void setOpaque(boolean opaque) {
 
     }

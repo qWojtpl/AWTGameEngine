@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -197,13 +198,10 @@ public class FilamentPanel extends Panel3D implements PanelObject {
         if(canvas == null || !canvas.isDisplayable()) {
             return;
         }
-        ImageHelper.swapRGBandBGR(renderFrame.pixels);
+        ImageHelper.swapRGBandBGRandBlend(renderFrame.pixels, ((DataBufferInt) guiImage.getRaster().getDataBuffer()).getData());
         try {
             do {
                 do {
-                    Graphics2D g2d = renderFrame.getBufferedImage().createGraphics();
-                    g2d.drawImage(guiImage, 0, 0, null, null);
-                    g2d.dispose();
                     Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
                     try {
                         g.drawImage(renderFrame.getBufferedImage(), 0, 0, null);

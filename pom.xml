@@ -226,11 +226,16 @@
             <version>1.10.0</version>
         </dependency>
 
+        <!-- Kotlin -->
+
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
             <version>2.4.10</version>
         </dependency>
+
+
+        <!-- Filament -->
 
         <dependency>
             <groupId>io.github.erkko68.filament</groupId>
@@ -249,7 +254,6 @@
             <artifactId>filamat-jvm</artifactId>
             <version>0.4.0</version>
         </dependency>
-
 
     </dependencies>
 

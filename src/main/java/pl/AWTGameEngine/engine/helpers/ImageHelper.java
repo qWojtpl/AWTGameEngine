@@ -87,11 +87,34 @@ public class ImageHelper {
         return byteArray;
     }
 
-    public static void swapRGBandBGR(byte[] array) {
-        for(int i = 0; i < array.length; i += 3) {
-            byte t = array[i];
-            array[i] = array[i + 2];
-            array[i + 2] = t;
+    public static void swapRGBandBGRandBlend(byte[] source, int[] blend) {
+        int len = blend.length;
+        for (int j = 0; j < len; j++) {
+            int i = j * 3;
+            int blendPixel = blend[j];
+            int alpha = (blendPixel >>> 24) & 0xFF;
+            if(alpha == 255) {
+                source[i]     = (byte) (blendPixel & 0xFF);
+                source[i + 1] = (byte) ((blendPixel >> 8) & 0xFF);
+                source[i + 2] = (byte) ((blendPixel >> 16) & 0xFF);
+            } else if(alpha == 0) {
+                byte t = source[i];
+                source[i]     = source[i + 2];
+                source[i + 2] = t;
+            } else {
+                int srcR = source[i] & 0xFF;
+                int srcG = source[i + 1] & 0xFF;
+                int srcB = source[i + 2] & 0xFF;
+
+                int blnR = blendPixel & 0xFF;
+                int blnG = (blendPixel >> 8) & 0xFF;
+                int blnB = (blendPixel >> 16) & 0xFF;
+
+                int invAlpha = 255 - alpha;
+                source[i]     = (byte) ((blnR * alpha + srcR * invAlpha) >> 8);
+                source[i + 1] = (byte) ((blnG * alpha + srcG * invAlpha) >> 8);
+                source[i + 2] = (byte) ((blnB * alpha + srcB * invAlpha) >> 8);
+            }
         }
     }
 

@@ -94,11 +94,6 @@ public class PanelGL extends Panel3D implements PanelObject {
     }
 
     @Override
-    public void setCursor(Cursor cursor) {
-
-    }
-
-    @Override
     public void setOpaque(boolean opaque) {
 
     }
