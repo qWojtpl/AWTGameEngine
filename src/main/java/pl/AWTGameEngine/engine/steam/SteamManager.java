@@ -53,7 +53,7 @@ public class SteamManager {
             Logger.info("Initializing Steamworks API...");
             createSteamIdFile(Dependencies.getAppProperties().getPropertyAsInteger("steamAppId"));
             SteamLibraryLoader loader = new SteamLibraryLoaderLwjgl3();
-            if (!SteamAPI.loadLibraries(loader)) {
+            if(!SteamAPI.loadLibraries(loader)) {
                 throw new RuntimeException("Cannot load native libraries!");
             }
             if(!SteamAPI.init()) {

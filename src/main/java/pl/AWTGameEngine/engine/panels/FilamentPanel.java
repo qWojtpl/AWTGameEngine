@@ -5,9 +5,9 @@ import io.github.erkko68.filament.filamat.MaterialBuilder;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.PhysXManager;
-import pl.AWTGameEngine.engine.Profiler;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManagerFilament;
+import pl.AWTGameEngine.engine.helpers.ImageHelper;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.scenes.Scene;
@@ -18,8 +18,10 @@ import pl.AWTGameEngine.windows.Window;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
+import java.awt.image.DataBufferByte;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,6 +29,7 @@ import java.util.concurrent.Semaphore;
 
 public class FilamentPanel extends Panel3D implements PanelObject {
 
+    // AWT + engine
     private final Scene scene;
     private final BaseWindow window;
     private final Camera camera;
@@ -34,6 +37,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     private Canvas canvas;
     private boolean initialized = false;
 
+    // Filament
     private Engine engine;
     private io.github.erkko68.filament.Scene filamentScene;
     private SwapChain swapChain;
@@ -41,18 +45,60 @@ public class FilamentPanel extends Panel3D implements PanelObject {
     private View view;
     private LightManager.ShadowOptions shadowOptions;
 
-    private byte[] pixelBufferArray;
-    private Texture.PixelBufferDescriptor pixelBufferDescriptor;
-    private BufferedImage reusableImage;
-    private int[] imagePixels;
+    // Frame pool
+    private final int POOL_SIZE = 3;
+    private final List<RenderFrame> renderFrames = new ArrayList<>();
+    private int currentFrame = 0;
+
     private int cachedWidth = 0;
     private int cachedHeight = 0;
 
     private BufferStrategy strategy;
     private final ExecutorService service = Executors.newSingleThreadExecutor();
-    private final Semaphore semaphore = new Semaphore(1);
 
     private BufferedImage guiImage;
+
+    class RenderFrame {
+
+        private final Texture.PixelBufferDescriptor pixelBufferDescriptor;
+        private final BufferedImage bufferedImage;
+        private final byte[] pixels;
+
+        private volatile boolean isDisplaying = false;
+
+        public RenderFrame() {
+            this.bufferedImage = new BufferedImage(window.getWidth(), window.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            this.pixels = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
+
+            int sizeInBytes = window.getWidth() * window.getHeight() * 3;
+
+            this.pixelBufferDescriptor = new Texture.PixelBufferDescriptor(
+                    pixels,
+                    sizeInBytes,
+                    Texture.Format.RGB,
+                    Texture.Type.UBYTE,
+                    1, 0, 0, 0,
+                    () -> {
+                        while(renderFrames.get(renderFrames.indexOf(this) == 0 ? renderFrames.size() - 1 : renderFrames.indexOf(this) - 1).isDisplaying) {}
+                        isDisplaying = true;
+                        service.submit(() -> {
+                            present(this);
+                        });
+                        return null;
+                    }
+            );
+        }
+
+        public void read() {
+            isDisplaying = false;
+            renderer.readPixels(0, 0, window.getWidth(), window.getHeight(), pixelBufferDescriptor);
+        }
+
+        public BufferedImage getBufferedImage() {
+            return this.bufferedImage;
+        }
+
+    }
 
     public FilamentPanel(Scene scene) {
         this.scene = scene;
@@ -103,8 +149,6 @@ public class FilamentPanel extends Panel3D implements PanelObject {
             return;
         }
 
-        Profiler profiler = new Profiler("FilamentRender");
-
         if(!initialized) {
             initFilament();
             initialized = true;
@@ -123,9 +167,7 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                 }
                 c.on3DRenderRequest(graphicsManager3D);
             }
-            profiler.step("pre-update");
             ((GraphicsManagerFilament) graphicsManager3D).update(engine, view);
-            profiler.step("after-update");
             for(Vector3 locked : locks) {
                 try {
                     locked.unlock();
@@ -133,94 +175,66 @@ public class FilamentPanel extends Panel3D implements PanelObject {
                     Logger.exception("Failed to unlock Vector3", e);
                 }
             }
+
+            if(currentFrame == renderFrames.size()) {
+                currentFrame = 0;
+            }
+
+            while(renderFrames.get(currentFrame).isDisplaying) {}
+
             if(renderer.beginFrame(swapChain, System.nanoTime())) {
                 renderer.render(view);
-
-                profiler.step("render");
-
-                renderer.readPixels(0, 0, window.getBaseWidth(), window.getBaseHeight(), pixelBufferDescriptor);
-
-                profiler.step("read");
-
+                renderFrames.get(currentFrame).read();
                 renderer.endFrame();
-
-                semaphore.acquire();
-
-                profiler.step("acquire");
-
-                int totalPixels = cachedWidth * cachedHeight;
-                for(int i = 0, ptr = 0; i < totalPixels; i++, ptr += 4) {
-                    imagePixels[i] =
-                            0xFF000000 |
-                                    ((pixelBufferArray[ptr] & 0xFF) << 16) |
-                                    ((pixelBufferArray[ptr + 1] & 0xFF) << 8) |
-                                    (pixelBufferArray[ptr + 2] & 0xFF);
-                }
-
-                profiler.step("pixelArray");
-
-                Graphics2D g2d = reusableImage.createGraphics();
-                g2d.drawImage(guiImage, 0, 0, null, null);
-                g2d.dispose();
-
-                profiler.step("guiDraw");
-
-                if(canvas != null && canvas.isDisplayable()) {
-                    service.submit(() -> {
-                        try {
-                            do {
-                                do {
-                                    Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
-                                    try {
-                                        g.drawImage(reusableImage, 0, 0, null);
-                                    } finally {
-                                        g.dispose();
-                                    }
-                                } while(strategy.contentsRestored());
-                                strategy.show();
-                            } while(strategy.contentsLost());
-                        } finally {
-                            semaphore.release();
-                        }
-                    });
-                } else {
-                    semaphore.release();
-                }
-
-                profiler.step("drawImage");
+                currentFrame++;
             }
         } catch(Exception e) {
             Logger.exception("Unhandled exception caught while running an iteration of Filament render request", e);
         }
-        profiler.end();
-        profiler.show();
+    }
+
+    private void present(RenderFrame renderFrame) {
+        if(canvas == null || !canvas.isDisplayable()) {
+            return;
+        }
+        ImageHelper.swapRGBandBGR(renderFrame.pixels);
+        try {
+            do {
+                do {
+                    Graphics2D g2d = renderFrame.getBufferedImage().createGraphics();
+                    g2d.drawImage(guiImage, 0, 0, null, null);
+                    g2d.dispose();
+                    Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
+                    try {
+                        g.drawImage(renderFrame.getBufferedImage(), 0, 0, null);
+                    } finally {
+                        g.dispose();
+                    }
+                } while(strategy.contentsRestored());
+                strategy.show();
+            } while(strategy.contentsLost());
+        } finally {
+            renderFrame.isDisplaying = false;
+        }
     }
 
     private void ensureBuffersSize(int width, int height) {
-        if(width == cachedWidth && height == cachedHeight && reusableImage != null) {
+        if(width == cachedWidth && height == cachedHeight) {
             return;
         }
 
         this.cachedWidth = width;
         this.cachedHeight = height;
+        this.currentFrame = 0;
 
-        int sizeInBytes = width * height * 4;
-        this.pixelBufferArray = new byte[sizeInBytes];
+        for(int i = 0; i < POOL_SIZE; i++) {
+            if(renderFrames.size() == i) {
+                renderFrames.add(new RenderFrame());
+            } else {
+                renderFrames.set(i, new RenderFrame());
+            }
+        }
 
-        this.pixelBufferDescriptor = new Texture.PixelBufferDescriptor(
-                pixelBufferArray,
-                sizeInBytes,
-                Texture.Format.RGBA,
-                Texture.Type.UBYTE,
-                1, 0, 0, 0,
-                null
-        );
-
-        GraphicsConfiguration gfxConfig = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                .getDefaultScreenDevice().getDefaultConfiguration();
-
-        this.reusableImage = gfxConfig.createCompatibleImage(width, height, Transparency.OPAQUE);
-        this.imagePixels = ((DataBufferInt) reusableImage.getRaster().getDataBuffer()).getData();
     }
 
     @Override

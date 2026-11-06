@@ -1,4 +1,4 @@
-<scene title="PhysX Performance test" renderFPS="0" updateFPS="60" physicsFPS="60" fullscreen="false" sameSize="true" packages="pl.AWTGameEngine.components,pl.AWTGameEngine.custom.performance">
+<scene title="PhysX Performance test" renderFPS="0" updateFPS="60" physicsFPS="360" fullscreen="false" sameSize="true" packages="pl.AWTGameEngine.components,pl.AWTGameEngine.custom.performance">
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
     <material name="beaver" sprite="sprites/beaver.jpg" />
     <material name="particle" sprite="sprites/base/error.png" transparentBlend="true" litMaterial="false" />

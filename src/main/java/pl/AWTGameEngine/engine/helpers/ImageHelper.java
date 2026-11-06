@@ -87,4 +87,12 @@ public class ImageHelper {
         return byteArray;
     }
 
+    public static void swapRGBandBGR(byte[] array) {
+        for(int i = 0; i < array.length; i += 3) {
+            byte t = array[i];
+            array[i] = array[i + 2];
+            array[i + 2] = t;
+        }
+    }
+
 }
