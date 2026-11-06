@@ -7,6 +7,7 @@ import javafx.scene.web.WebView;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.enums.KeyCode;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
 import pl.AWTGameEngine.engine.helpers.FXHelper;
 import pl.AWTGameEngine.engine.panels.WebPanel;
@@ -33,6 +34,8 @@ public class GUIMouseSupport extends ObjectComponent {
             "    'default';" +
             "}";
 
+    private boolean pressed = false;
+
     public GUIMouseSupport(GameObject object) {
         super(object);
     }
@@ -45,7 +48,7 @@ public class GUIMouseSupport extends ObjectComponent {
             return;
         }
         try {
-            processMouseEventMethod = webView.getClass().getDeclaredMethod("processMouseEvent", MouseEvent.class);
+            processMouseEventMethod = WebView.class.getDeclaredMethod("processMouseEvent", MouseEvent.class);
             processMouseEventMethod.setAccessible(true);
         } catch(Exception e) {
             Logger.exception("Cannot get process mouse event method", e);
@@ -54,8 +57,24 @@ public class GUIMouseSupport extends ObjectComponent {
 
     @Override
     public void onUpdate() {
-        int x = getMouseListener().getWindowMouseX(), y = getMouseListener().getWindowMouseY();
-        processMouseEvent(MouseEvent.MOUSE_MOVED, x, y, MouseButton.NONE);
+        if(!getWindow().isFocused()) {
+            return;
+        }
+        if(getMouseListener().isMouseMoved() || getMouseListener().isMousePressed() || getMouseListener().isMouseReleased() || getMouseListener().isMouseDragged()) {
+            processMouseEvent(
+                    getMouseEvent(),
+                    getMouseListener().getWindowMouseX(),
+                    getMouseListener().getWindowMouseY(),
+                    getMouseListener().getClickEvent() == null ? MouseButton.NONE : (
+                            switch (getMouseListener().getClickEvent().getButton()) {
+                                case 1 -> MouseButton.PRIMARY;
+                                case 2 -> MouseButton.SECONDARY;
+                                case 3 -> MouseButton.MIDDLE;
+                                default -> MouseButton.NONE;
+                            }
+                    )
+            );
+        }
     }
 
     private void processMouseEvent(EventType<MouseEvent> mouseEvent, int x, int y, MouseButton mouseButton) {
@@ -66,17 +85,24 @@ public class GUIMouseSupport extends ObjectComponent {
                         x, y,
                         x, y,
                         mouseButton,
-                        0, false, false, false, false,
+                        0,
+                        getKeyListener().hasPressedKey(KeyCode.SHIFT),
+                        getKeyListener().hasPressedKey(KeyCode.CTRL),
+                        getKeyListener().hasPressedKey(KeyCode.ALT),
+                        getKeyListener().hasPressedKey(KeyCode.META),
                         mouseButton == MouseButton.PRIMARY,
-                        mouseButton == MouseButton.SECONDARY,
                         mouseButton == MouseButton.MIDDLE,
+                        mouseButton == MouseButton.SECONDARY,
                         false, false, true, null
                 ));
                 handleCursor(webGraphicsManager.execute(String.format(cursorScript, x, y)));
+                if(mouseEvent == MouseEvent.MOUSE_RELEASED) {
+                    processMouseEvent(MouseEvent.MOUSE_CLICKED, x, y, mouseButton);
+                }
             } catch(Exception e) {
                 Logger.exception("Cannot process mouse event", e);
             }
-            return null;
+            return true;
         });
     }
 
@@ -90,6 +116,23 @@ public class GUIMouseSupport extends ObjectComponent {
             default -> Cursor.DEFAULT_CURSOR;
         };
         getWindow().setCursor(Cursor.getPredefinedCursor(c));
+    }
+
+    private EventType<MouseEvent> getMouseEvent() {
+        if(getMouseListener().isMouseMoved()) {
+            if(pressed) {
+                return MouseEvent.MOUSE_DRAGGED;
+            }
+            return MouseEvent.MOUSE_MOVED;
+        } else if(getMouseListener().isMousePressed()) {
+            pressed = true;
+            return MouseEvent.MOUSE_PRESSED;
+        } else if(getMouseListener().isMouseReleased()) {
+            pressed = false;
+            return MouseEvent.MOUSE_RELEASED;
+        } else {
+            return null;
+        }
     }
 
 }
