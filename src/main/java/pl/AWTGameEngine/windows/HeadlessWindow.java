@@ -286,6 +286,11 @@ public class HeadlessWindow implements BaseWindow {
     }
 
     @Override
+    public boolean isVisible() {
+        return false;
+    }
+
+    @Override
     public void setVisible(boolean visible) {
 
     }

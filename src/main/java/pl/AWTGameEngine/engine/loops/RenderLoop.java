@@ -13,6 +13,9 @@ public class RenderLoop extends BaseLoop {
 
     @Override
     public void iteration() {
+        if(!window.isVisible()) {
+            return;
+        }
         for(PanelObject panel : new ArrayList<>(window.getPanels())) {
             panel.updateRender();
         }

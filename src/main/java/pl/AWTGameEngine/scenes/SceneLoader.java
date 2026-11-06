@@ -42,11 +42,9 @@ public class SceneLoader {
     }
 
     public Scene loadSceneFile(String scenePath, RenderEngine renderEngine, boolean nestedScene) {
-/*        if(!nestedScene && window.getCurrentScene() != null) { //TODO: interview this, because may be bugged
-                window.unloadScenes();
-                loadSceneFile(scenePath, renderEngine, false);
-            return;
-        }*/
+        if(!nestedScene && window.getCurrentScene() != null) {
+            window.unloadScenes();
+        }
         Logger.info("Loading scene: " + scenePath);
         if(scenePath.endsWith(".class")) {
             return loadSceneBinary(scenePath, renderEngine, nestedScene);

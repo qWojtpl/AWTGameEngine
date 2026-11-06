@@ -61,6 +61,7 @@ public interface BaseWindow {
     void setWindowListener(WindowListener windowListener);
     void setSameSize(boolean sameSize);
     void addScene(Scene scene);
+    boolean isVisible();
     void setVisible(boolean visible);
     void setCurrentScene(Scene newCurrentScene);
     void setSceneLoader(SceneLoader sceneLoader);
