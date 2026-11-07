@@ -1,15 +1,13 @@
 package pl.AWTGameEngine.engine.deserializers.models;
 
 import org.lwjgl.PointerBuffer;
-import org.lwjgl.assimp.AIMesh;
-import org.lwjgl.assimp.AIScene;
-import org.lwjgl.assimp.AIVector3D;
-import org.lwjgl.assimp.Assimp;
+import org.lwjgl.assimp.*;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.helpers.ModelHelper;
 
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,26 +33,43 @@ public class ModelLoader {
             List<float[]> vertices = new ArrayList<>();
             for(int i = 0; i < scene.mNumMeshes(); i++) {
                 AIMesh mesh = AIMesh.create(meshes.get(i));
-                for(int j = 0; j < mesh.mNumVertices(); j++) {
-                    float[] seg = new float[8];
-                    AIVector3D pos = mesh.mVertices().get(j);
-                    seg[0] = pos.x();
-                    seg[1] = pos.y();
-                    seg[2] = pos.z();
-                    AIVector3D normal = mesh.mNormals().get(j);
-                    seg[3] = normal.x();
-                    seg[4] = normal.y();
-                    seg[5] = normal.z();
-                    if(mesh.mNumUVComponents(0) > 0) {
-                        AIVector3D uv = mesh.mTextureCoords(0).get(j);
-                        seg[6] = uv.x();
-                        seg[7] = 1.0f - uv.y();
-                    } else {
-                        seg[6] = 0f;
-                        seg[7] = 0f;
+
+                AIVector3D.Buffer positions = mesh.mVertices();
+                AIVector3D.Buffer normals = mesh.mNormals();
+                AIVector3D.Buffer uvs = mesh.mTextureCoords(0);
+
+                boolean hasUV = uvs != null && mesh.mNumUVComponents(0) > 0;
+
+                for(int j = 0; j < mesh.mNumFaces(); j++) {
+                    AIFace face = mesh.mFaces().get(j);
+                    IntBuffer indices = face.mIndices();
+
+                    for(int k = 0; k < face.mNumIndices(); k++) {
+                        int index = indices.get(k);
+
+                        float[] seg = new float[8];
+
+                        AIVector3D pos = positions.get(index);
+                        AIVector3D normal = normals.get(index);
+
+                        seg[0] = pos.x();
+                        seg[1] = pos.y();
+                        seg[2] = pos.z();
+
+                        seg[3] = normal.x();
+                        seg[4] = normal.y();
+                        seg[5] = normal.z();
+
+                        if(hasUV) {
+                            AIVector3D uv = uvs.get(index);
+                            seg[6] = uv.x();
+                            seg[7] = 1.0f - uv.y();
+                        }
+
+                        vertices.add(seg);
                     }
-                    vertices.add(seg);
                 }
+
                 mesh.close();
             }
             if(center) {

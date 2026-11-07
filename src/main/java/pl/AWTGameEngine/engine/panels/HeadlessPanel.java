@@ -40,7 +40,7 @@ public class HeadlessPanel implements PanelObject {
 
     @Override
     public void unload() {
-
+        PhysXManager.getInstance().removePhysXScene(scene);
     }
 
     @Override
