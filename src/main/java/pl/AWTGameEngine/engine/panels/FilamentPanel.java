@@ -140,6 +140,10 @@ public class FilamentPanel extends Panel3D implements PanelObject {
         return this.engine;
     }
 
+    public View getView() {
+        return this.view;
+    }
+
     public io.github.erkko68.filament.Scene getFilamentScene() {
         return this.filamentScene;
     }
