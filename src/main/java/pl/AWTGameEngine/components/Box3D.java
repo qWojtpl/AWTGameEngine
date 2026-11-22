@@ -16,11 +16,6 @@ public class Box3D extends Base3DShape {
 
     @Override
     protected RenderOptions3D createShape() {
-
-        if(graphicsManager3D == null) {
-            return null;
-        }
-
         return renderOptions
                 .setPosition(getObject().getPosition())
                 .setSize(getObject().getSize())

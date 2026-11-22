@@ -3,7 +3,6 @@ package pl.AWTGameEngine.components.base;
 import pl.AWTGameEngine.Dependencies;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
-import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.Shaders;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;
 import pl.AWTGameEngine.engine.panels.Panel3D;
@@ -117,8 +116,11 @@ public abstract class Base3DShape extends NetComponent {
 
     @Override
     public void onAddComponent() {
-        this.graphicsManager3D = ((Panel3D) getScene().getPanel()).getGraphicsManager3D();
         this.renderOptions = createShape();
+        if(!(getScene().getPanel() instanceof Panel3D)) {
+            return;
+        }
+        this.graphicsManager3D = ((Panel3D) getScene().getPanel()).getGraphicsManager3D();
         graphicsManager3D.createRenderable(renderOptions);
         graphicsManager3D.preloadShape(renderOptions.getShapePath());
     }

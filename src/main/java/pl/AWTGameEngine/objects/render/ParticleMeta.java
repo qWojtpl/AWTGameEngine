@@ -30,7 +30,7 @@ public class ParticleMeta {
 
         double moveX = rotation[0] * vector.getX() + rotation[4] * vector.getY() + rotation[8]  * vector.getZ();
         double moveY = rotation[1] * vector.getX() + rotation[5] * vector.getY() + rotation[9]  * vector.getZ();
-        double moveZ = rotation[2] * vector.getX() + rotation[6] * vector.getY() + rotation[10]  * vector.getZ();
+        double moveZ = rotation[2] * vector.getX() + rotation[6] * vector.getY() + rotation[10] * vector.getZ();
 
         Vector3 currentPosition = renderable.getPosition();
         return currentPosition.set(currentPosition.getX() + moveX, currentPosition.getY() + moveY, currentPosition.getZ() + moveZ);

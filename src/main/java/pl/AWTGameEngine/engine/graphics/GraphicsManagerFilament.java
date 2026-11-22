@@ -414,7 +414,6 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
 
     @Override
     public RenderOptions3D getRenderable(String identifier) {
-        return null;
+        return renderables.get(identifier);
     }
-
 }

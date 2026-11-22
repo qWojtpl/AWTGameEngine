@@ -68,7 +68,7 @@ public class GUIRenderer extends ObjectComponent {
             try {
                 image = ((WebPanel) getScene().getPanel()).getScene().snapshot(image);
                 if(panel instanceof FilamentPanel fpanel) {
-                    fpanel.setGUI(ImageHelper.imageToBufferedImage(image));
+                    fpanel.getGUIManager().setGUIImage(ImageHelper.imageToBufferedImage(image));
                 } else {
                     material.getSprite().updateImage(image);
                     graphicsManager.updateTexture(material.getSprite());
