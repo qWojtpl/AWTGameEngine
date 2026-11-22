@@ -2,9 +2,9 @@ package pl.AWTGameEngine.engine.steam;
 
 import com.codedisaster.steamworks.*;
 import pl.AWTGameEngine.Dependencies;
-import pl.AWTGameEngine.components.SteamRelayClient;
-import pl.AWTGameEngine.components.SteamRelayServer;
-import pl.AWTGameEngine.components.base.NetComponent;
+import pl.AWTGameEngine.components.net.SteamRelayClient;
+import pl.AWTGameEngine.components.net.SteamRelayServer;
+import pl.AWTGameEngine.components.net.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.WaitForSeconds;

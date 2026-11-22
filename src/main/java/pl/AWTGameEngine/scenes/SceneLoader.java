@@ -168,7 +168,7 @@ public class SceneLoader {
         int renderFPS = properties.getPropertyAsInteger("renderFPS"),
             updateFPS = properties.getPropertyAsInteger("updateFPS"),
             physicsFPS = properties.getPropertyAsInteger("physicsFPS");
-        String packages = "pl.AWTGameEngine.components";
+        String packages = "pl.AWTGameEngine.components,pl.AWTGameEngine.components.physics,pl.AWTGameEngine.components.r2d,pl.AWTGameEngine.components.r3d,pl.AWTGameEngine.components.net,pl.AWTGameEngine.components.web,pl.AWTGameEngine.components.audio,";
         for(int i = 0; i < node.getAttributes().getLength(); i++) {
             Node item = node.getAttributes().item(i);
             switch(item.getNodeName().toUpperCase()) {

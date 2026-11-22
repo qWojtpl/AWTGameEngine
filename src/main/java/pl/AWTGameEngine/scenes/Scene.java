@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.scenes;
 
 import pl.AWTGameEngine.annotations.Command;
-import pl.AWTGameEngine.components.base.NetComponent;
+import pl.AWTGameEngine.components.net.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.deserializers.PrefabDeserializer;

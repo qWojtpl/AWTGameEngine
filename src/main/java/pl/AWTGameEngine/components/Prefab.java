@@ -3,7 +3,7 @@ package pl.AWTGameEngine.components;
 import pl.AWTGameEngine.annotations.components.types.*;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.methods.SaveState;
-import pl.AWTGameEngine.components.base.NetComponent;
+import pl.AWTGameEngine.components.net.base.NetComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.engine.deserializers.PrefabDeserializer;
 import pl.AWTGameEngine.objects.GameObject;

@@ -4,7 +4,7 @@ import pl.AWTGameEngine.annotations.components.ComponentMeta;
 import pl.AWTGameEngine.annotations.components.management.*;
 import pl.AWTGameEngine.annotations.components.types.*;
 import pl.AWTGameEngine.annotations.methods.EventMethod;
-import pl.AWTGameEngine.components.RigidBody;
+import pl.AWTGameEngine.components.physics.RigidBody;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager3D;

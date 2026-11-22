@@ -1,0 +1,244 @@
+package pl.AWTGameEngine.components.net;
+
+import pl.AWTGameEngine.annotations.components.types.Component3D;
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.methods.SaveState;
+import pl.AWTGameEngine.components.net.base.NetComponent;
+import pl.AWTGameEngine.components.net.base.NetServer;
+import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.Logger;
+import pl.AWTGameEngine.engine.deserializers.NetDeserializer;
+import pl.AWTGameEngine.objects.net.NetConnection;
+import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.net.NetBlock;
+import pl.AWTGameEngine.objects.net.StandardNetConnection;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+@Component3D
+@DefaultComponent
+@WebComponent
+public class Server extends NetServer {
+
+    private int port = 5555;
+    private int maxClients = 1;
+    private final Thread tcpThread = new Thread(this::acceptClient);
+    private final Thread udpThread = new Thread(this::onUDPThreadUpdate);
+    private ServerSocket tcpSocket;
+    private DatagramSocket udpSocket;
+
+    // clients
+    private final HashMap<Integer, StandardNetConnection> connectedClients = new HashMap<>();
+    private int currentId = 0;
+
+    public Server(GameObject object) {
+        super(object);
+    }
+
+    @Override
+    public void onSerializationFinish() {
+        try {
+            Logger.netInfo("Starting server on port " + port + "...", true);
+            this.tcpSocket = new ServerSocket(port);
+            tcpThread.start();
+            Logger.netInfo("Server started.", true);
+        } catch (IOException e) {
+            Logger.exception("Cannot start server", e);
+        }
+    }
+
+    @Override
+    public void onRemoveComponent() {
+        Logger.netInfo("Closing server...", true);
+        try {
+            for(StandardNetConnection client : new ArrayList<>(connectedClients.values())) {
+                disconnect(client);
+            }
+            Logger.netInfo("Server closed.", true);
+            tcpSocket.close();
+        } catch (IOException e) {
+            Logger.exception("Cannot close server socket!", e);
+        }
+    }
+
+    @Override
+    public void onNetUpdate() {
+        sendObjectsPosition();
+        sendComponents();
+    }
+
+    private void sendObjectsPosition() {
+        List<NetBlock> blocks = getObjectPositionBlocks();
+        for(NetConnection client : connectedClients.values()) {
+            for(NetBlock block : blocks) {
+                client.sendBlock(block);
+            }
+        }
+    }
+
+    private void sendComponents() {
+        List<NetBlock> blocks = getComponentBlocks();
+        for(NetConnection client : connectedClients.values()) {
+            for(NetBlock block : blocks) {
+                client.sendBlock(block);
+            }
+        }
+    }
+
+    private void acceptClient() {
+        while(!tcpSocket.isClosed()) {
+            try {
+                Socket clientSocket = tcpSocket.accept();
+                new Thread(() -> handleConnection(clientSocket), "SERVER-CLIENT-" + (connectedClients.size() + 1)).start();
+            } catch (IOException e) {
+                if(!tcpSocket.isClosed()) {
+                    Logger.exception("Server TCP exception", e);
+                }
+            }
+        }
+    }
+
+    private void handleConnection(Socket clientSocket) {
+
+        if(connectedClients.size() >= maxClients) {
+            joinDisconnect(clientSocket, "Max client limit reached. (" + maxClients + "/" + maxClients + ").");
+            return;
+        }
+
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientTryToConnect#String")) {
+            String message = ((NetComponent) component).onClientTryToConnect(getClientAddress(clientSocket));
+            if(message != null) {
+                joinDisconnect(clientSocket, message);
+                return;
+            }
+        }
+
+        int id = currentId++;
+        Logger.netInfo("Client " + getClientAddress(clientSocket) + " connected.", true);
+        Logger.netInfo("\t\t-> Assigned new client to ID " + id, true);
+
+        StandardNetConnection netConnection;
+        try {
+            netConnection = new StandardNetConnection(id, clientSocket);
+            netConnection.sendInitMessage();
+        } catch (IOException e) {
+            Logger.exception("Error while initializing client connection with ID " + id, e);
+            return;
+        }
+
+        connectedClients.put(id, netConnection);
+        Logger.info("\t\t-> Established connection.");
+
+        // prepare objects to be sent to the client during next update
+
+        for(GameObject object : getScene().getGameObjects()) {
+            object.getNet().clearCache();
+        }
+
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onSynchronize")) {
+            ((NetComponent) component).clearNetCache();
+        }
+
+        for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#NetConnection")) {
+            ((NetComponent) component).onClientConnect(this, netConnection);
+        }
+
+        while(netConnection.getSocket().isConnected()) {
+            try {
+                String message = netConnection.getBufferedReader().readLine();
+                if(message == null) {
+                    continue;
+                }
+                NetDeserializer.deserialize(getScene(), message, netConnection, this);
+            } catch(IOException e) {
+                break;
+            }
+        }
+
+        disconnect(netConnection);
+    }
+
+    private void onUDPThreadUpdate() {
+/*        while(!udpSocket.isClosed()) {
+
+        }*/
+    }
+
+    public void disconnect(StandardNetConnection client) {
+        try {
+            Logger.netInfo("Client " + getClientAddress(client.getSocket()) +
+                    " (ID " + client.getId() + ") disconnected.", true);
+            for(ObjectComponent component : getScene().getSceneEventHandler().getComponents("onClientDisconnect#Server#NetConnection")) {
+                ((NetComponent) component).onClientDisconnect(this, client);
+            }
+            client.close();
+            connectedClients.remove(client.getId());
+        } catch(IOException e) {
+            Logger.exception("Cannot disconnect client", e);
+        }
+    }
+
+    private void joinDisconnect(Socket socket, String message) {
+        try {
+            NetConnection temp = new StandardNetConnection(-1, socket);
+            temp.sendMessage(message);
+            temp.close();
+            Logger.netInfo("Client " + getClientAddress(socket) + " tried to connect, but had to disconnect him because: " + message, true);
+        } catch(IOException e) {
+            Logger.exception("Cannot join-disconnect client", e);
+        }
+    }
+
+    private String getClientAddress(Socket clientSocket) {
+        return clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort();
+    }
+
+    public void sendPacket(Socket socket, String message) {
+        byte[] buffer = message.getBytes();
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, socket.getInetAddress(), socket.getPort());
+        try {
+            udpSocket.send(packet);
+        } catch (IOException e) {
+            Logger.exception("Cannot send packet", e);
+        }
+    }
+
+    public NetConnection getClientById(int id) {
+        return this.connectedClients.getOrDefault(id, null);
+    }
+
+    public boolean canClientsRequestObject() {
+        return false;
+    }
+
+    @SaveState(name = "port")
+    public int getPort() {
+        return this.port;
+    }
+
+    @SaveState(name = "maxClients")
+    public int getMaxClients() {
+        return this.maxClients;
+    }
+
+    @FromXML
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    @FromXML
+    public void setMaxClients(int clients) {
+        clients = Math.abs(clients);
+        this.maxClients = clients;
+    }
+
+}

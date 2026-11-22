@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.custom.performance;
 
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
-import pl.AWTGameEngine.components.WebText;
+import pl.AWTGameEngine.components.web.WebText;
 import pl.AWTGameEngine.engine.helpers.SteamHelper;
 import pl.AWTGameEngine.engine.loops.BaseLoop;
 import pl.AWTGameEngine.engine.steam.SteamManager;

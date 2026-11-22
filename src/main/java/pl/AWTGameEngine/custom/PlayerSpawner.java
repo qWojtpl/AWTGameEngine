@@ -2,9 +2,9 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
-import pl.AWTGameEngine.components.BlankRenderer;
-import pl.AWTGameEngine.components.Server;
-import pl.AWTGameEngine.components.base.NetComponent;
+import pl.AWTGameEngine.components.r2d.BlankRenderer;
+import pl.AWTGameEngine.components.net.Server;
+import pl.AWTGameEngine.components.net.base.NetComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.net.NetConnection;
 import pl.AWTGameEngine.objects.GameObject;

@@ -2,8 +2,8 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
-import pl.AWTGameEngine.components.Client;
-import pl.AWTGameEngine.components.base.NetComponent;
+import pl.AWTGameEngine.components.net.Client;
+import pl.AWTGameEngine.components.net.base.NetComponent;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.net.NetBlock;
 

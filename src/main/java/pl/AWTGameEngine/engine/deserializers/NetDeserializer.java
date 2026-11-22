@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.engine.deserializers;
 
-import pl.AWTGameEngine.components.Server;
-import pl.AWTGameEngine.components.base.NetComponent;
+import pl.AWTGameEngine.components.net.Server;
+import pl.AWTGameEngine.components.net.base.NetComponent;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.Logger;
 import pl.AWTGameEngine.objects.net.NetConnection;

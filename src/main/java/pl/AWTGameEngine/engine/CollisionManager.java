@@ -2,7 +2,7 @@ package pl.AWTGameEngine.engine;
 
 import physx.physics.*;
 import physx.support.PxArray_PxContactPairPoint;
-import pl.AWTGameEngine.components.RigidBody;
+import pl.AWTGameEngine.components.physics.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.ContactPoint;
 import pl.AWTGameEngine.objects.GameObject;

@@ -4,6 +4,7 @@ import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.methods.FromXML;
 import pl.AWTGameEngine.annotations.components.management.Unique;
 import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.components.physics.RigidBody;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;
 import pl.AWTGameEngine.objects.render.Camera;
 import pl.AWTGameEngine.objects.GameObject;

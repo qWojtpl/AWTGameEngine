@@ -3,7 +3,7 @@ package pl.AWTGameEngine.custom;
 import pl.AWTGameEngine.annotations.components.types.Component3D;
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
-import pl.AWTGameEngine.components.RigidBody;
+import pl.AWTGameEngine.components.physics.RigidBody;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.objects.GameObject;
 import pl.AWTGameEngine.objects.transform.Vector3;

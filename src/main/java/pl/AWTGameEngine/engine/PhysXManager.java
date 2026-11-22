@@ -4,7 +4,7 @@ import physx.PxTopLevelFunctions;
 import physx.common.*;
 import physx.cooking.PxCookingParams;
 import physx.physics.*;
-import pl.AWTGameEngine.components.Vehicle;
+import pl.AWTGameEngine.components.physics.Vehicle;
 import pl.AWTGameEngine.objects.RaycastResult;
 import pl.AWTGameEngine.objects.transform.Vector3;
 import pl.AWTGameEngine.scenes.Scene;

@@ -1,0 +1,84 @@
+package pl.AWTGameEngine.components.r2d;
+
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.components.base.ObjectComponent;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
+import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.render.RenderOptions;
+
+@DefaultComponent
+@WebComponent
+public class Border extends ObjectComponent {
+
+    private boolean enabled = true;
+    private ColorObject color = new ColorObject();
+    private boolean propertyChanged = true;
+
+    public Border(GameObject object) {
+        super(object);
+    }
+
+    @Override
+    public void onAfterRender(GraphicsManager g) {
+        if(!isEnabled()) {
+            return;
+        }
+        g.drawRect(
+                getCamera().parseX(getObject(), getObject().getX() - getObject().getSizeX() / 2),
+                getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
+                getCamera().parsePlainValue(getObject().getSizeX()),
+                getCamera().parsePlainValue(getObject().getSizeY()),
+                new RenderOptions()
+                        .setColor(color.getColor())
+                        .setRotation(getObject().getRotation().getX())
+                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getY()))
+        );
+    }
+
+    @Override
+    public void onWebRenderRequest(WebGraphicsManager g) {
+        if(!propertyChanged || !enabled) {
+            return;
+        }
+        g.execute(String.format("setBorder(\"%s\", \"%s\")",
+                getObject().getIdentifier(),
+                color.serialize()));
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public ColorObject getColorObject() {
+        return this.color;
+    }
+
+    public String getColor() {
+        return this.color.serialize();
+    }
+
+    @FromXML
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        propertyChanged = true;
+    }
+
+    public void setColor(ColorObject color) {
+        if(color == null) {
+            return;
+        }
+        this.color = color;
+        propertyChanged = true;
+    }
+
+    @FromXML
+    public void setColor(String color) {
+        setColor(new ColorObject(color));
+    }
+
+}

@@ -2,7 +2,7 @@ package pl.AWTGameEngine.objects;
 
 import pl.AWTGameEngine.annotations.methods.SaveState;
 import pl.AWTGameEngine.components.base.ObjectComponent;
-import pl.AWTGameEngine.components.WebHandler;
+import pl.AWTGameEngine.components.web.WebHandler;
 import pl.AWTGameEngine.engine.*;
 import pl.AWTGameEngine.engine.enums.RenderEngine;
 import pl.AWTGameEngine.engine.helpers.RotationHelper;

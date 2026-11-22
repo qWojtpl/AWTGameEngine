@@ -1,0 +1,113 @@
+package pl.AWTGameEngine.components.r2d;
+
+import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
+import pl.AWTGameEngine.annotations.methods.FromXML;
+import pl.AWTGameEngine.annotations.components.types.WebComponent;
+import pl.AWTGameEngine.annotations.methods.SaveState;
+import pl.AWTGameEngine.components.net.base.NetComponent;
+import pl.AWTGameEngine.engine.graphics.GraphicsManager;
+import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;
+import pl.AWTGameEngine.objects.ColorObject;
+import pl.AWTGameEngine.objects.GameObject;
+import pl.AWTGameEngine.objects.net.NetBlock;
+import pl.AWTGameEngine.objects.render.RenderOptions;
+
+import java.text.MessageFormat;
+
+@DefaultComponent
+@WebComponent
+public class BlankRenderer extends NetComponent {
+
+    private ColorObject color = new ColorObject();
+    private boolean changedColor = false;
+    private boolean netColorChanged = false;
+
+    public BlankRenderer(GameObject object) {
+        super(object);
+    }
+
+    @Override
+    public void onRender(GraphicsManager g) {
+        g.fillRect(
+                getCamera().parseX(getObject(), getObject().getX() - getObject().getSizeX() / 2),
+                getCamera().parseY(getObject(), getObject().getY() - getObject().getSizeY() / 2),
+                getCamera().parsePlainValue(getObject().getSizeX()),
+                getCamera().parsePlainValue(getObject().getSizeY()),
+                new RenderOptions()
+                        .setColor(color.getColor())
+                        .setRotation(getObject().getRotation().getX())
+                        .setRotationCenterX(getCamera().parseX(getObject(), getObject().getX()))
+                        .setRotationCenterY(getCamera().parseY(getObject(), getObject().getY()))
+        );
+    }
+
+    public ColorObject getColorObject() {
+        return this.color;
+    }
+
+    @SaveState(name = "color")
+    public String getColor() {
+        return this.color.serialize();
+    }
+
+    public void setColor(ColorObject color) {
+        if(color == null) {
+            return;
+        }
+        if(this.color.equals(color)) {
+            return;
+        }
+        this.color = color;
+        changedColor = true;
+        netColorChanged = true;
+    }
+
+    @FromXML
+    public void setColor(String color) {
+        String oldColor = this.color.serialize();
+        this.color.setColor(color);
+        String newColor = this.color.serialize();
+        if(oldColor.equals(newColor)) {
+            return;
+        }
+        changedColor = true;
+        netColorChanged = true;
+    }
+
+    @Override
+    public void onWebRenderRequest(WebGraphicsManager g) {
+        if(changedColor) {
+            g.execute(MessageFormat.format("setColor(\"{0}\", \"{1}\");",
+                    getObject().getIdentifier(), this.color.serialize()));
+            changedColor = false;
+        }
+    }
+
+    // Net
+
+    @Override
+    public boolean canSynchronize() {
+        return netColorChanged;
+    }
+
+    @Override
+    public NetBlock onSynchronize() {
+        netColorChanged = false;
+        return new NetBlock(
+                getObject().getIdentifier(),
+                BlankRenderer.class,
+                getColor()
+        );
+    }
+
+    @Override
+    public void onSynchronizeReceived(String data) {
+        setColor(data);
+    }
+
+    @Override
+    public void clearNetCache() {
+        netColorChanged = true;
+    }
+
+}

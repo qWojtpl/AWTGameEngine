@@ -2,7 +2,7 @@ package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.components.types.DefaultComponent;
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
-import pl.AWTGameEngine.components.SpriteRenderer;
+import pl.AWTGameEngine.components.r2d.SpriteRenderer;
 import pl.AWTGameEngine.components.base.ObjectComponent;
 import pl.AWTGameEngine.engine.graphics.GraphicsManager;
 import pl.AWTGameEngine.engine.graphics.WebGraphicsManager;

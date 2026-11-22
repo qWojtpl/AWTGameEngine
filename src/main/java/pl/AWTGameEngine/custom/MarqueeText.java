@@ -1,7 +1,7 @@
 package pl.AWTGameEngine.custom;
 
 import pl.AWTGameEngine.annotations.components.types.WebComponent;
-import pl.AWTGameEngine.components.base.HTMLComponent;
+import pl.AWTGameEngine.components.web.base.HTMLComponent;
 import pl.AWTGameEngine.objects.GameObject;
 
 @WebComponent
