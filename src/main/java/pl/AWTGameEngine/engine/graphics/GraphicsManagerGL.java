@@ -125,7 +125,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
 
         for(RenderOptions3D ro : renderableList) {
             if(ro.getMaterial().getSprite() != null) {
-                if(alphaTextures.contains(textures.get(ro.getMaterial().getSprite())) || ro.getOpacity() != 1) {
+                if(alphaTextures.contains(textures.get(ro.getMaterial().getSprite())) || ro.getOpacity() != 1 || ro.getMaterial().getOpacity() != 1) {
                     transparentRenders.add(ro);
                     continue;
                 }
@@ -228,7 +228,7 @@ public class GraphicsManagerGL extends GraphicsManager3D {
                 createTexture(gl, ro.getMaterial().getSprite());
             }
             textures.get(ro.getMaterial().getSprite()).bind(gl);
-            if(ro.getRepeatTexture() > 1) {
+            if(ro.getMaterial().getRepeatTexture() > 1) {
                 gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
                 gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
             }

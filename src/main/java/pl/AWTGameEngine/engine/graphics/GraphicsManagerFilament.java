@@ -136,7 +136,7 @@ public class GraphicsManagerFilament extends GraphicsManager3D {
                     textures.get(renderOptions3D.getMaterial().getSprite().getImagePath()), new TextureSampler());
         }
 
-        materialInstance.setParameter("opacity", renderOptions3D.getOpacity());
+        materialInstance.setParameter("opacity", renderOptions3D.getOpacity() * renderOptions3D.getMaterial().getOpacity());
 
         // Entity
         if(!entities.containsKey(renderOptions3D.getIdentifier())) {

@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
+// todo: dispose gui material
 public class FilamentGUIManager {
 
     private int guiEntity = -1;

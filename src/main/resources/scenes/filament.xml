@@ -2,7 +2,7 @@
     <scene source="scenes/performance/physx_performance_overlay.xml" renderEngine="web" />
     <material name="beaver" sprite="sprites/beaver.jpg" />
     <object id="player">
-<!--        <Movement3D speed="1" _package="pl.AWTGameEngine.custom" />-->
+        <Movement3D speed="1" _package="pl.AWTGameEngine.custom" />
         <StateSaverTest _package="pl.AWTGameEngine.custom.performance" />
     </object>
     <object id="test" x="0" y="0" z="10" sizeX="1" sizeY="1" sizeZ="1">
@@ -16,5 +16,14 @@
     </object>
     <object id="light">
         <Light />
+    </object>
+    <object id="tile" z="10" size="1,1,1">
+        <Model3D shapePath="./tile.obj" modelSize="1,1,1" material="default" />
+    </object>
+    <object id="tile2" x="4" z="10">
+        <Model3D shapePath="./tile.obj" modelSize="1,1,1" material="default" />
+    </object>
+    <object id="tile3" x="6" z="10">
+        <Model3D shapePath="./tile.obj" modelSize="1,1,1" material="default" />
     </object>
 </scene>

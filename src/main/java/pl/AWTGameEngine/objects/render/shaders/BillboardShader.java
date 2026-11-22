@@ -11,8 +11,8 @@ public class BillboardShader extends Shader {
         setFloatMatrixValue(getLocation("viewProj"), useContext.getViewProjection());
         setFloatMatrixValue(getLocation("model"), useContext.getModel());
 
-        setFloatValue(getLocation("opacity"), useContext.getRenderOptions().getOpacity());
-        setFloatValue(getLocation("repeat"), useContext.getRenderOptions().getRepeatTexture());
+        setFloatValue(getLocation("opacity"), useContext.getRenderOptions().getMaterial().getOpacity() * useContext.getRenderOptions().getOpacity());
+        setFloatValue(getLocation("repeat"), useContext.getRenderOptions().getMaterial().getRepeatTexture());
     }
 
 }

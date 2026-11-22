@@ -80,14 +80,14 @@ public abstract class Base3DShape extends NetComponent {
         this.renderOptions.setShapePath(shapePath);
     }
 
-    @SaveState(name = "repeatTexture")
-    public int getRepeatTexture() {
-        return this.renderOptions.getRepeatTexture();
+    @SaveState(name = "opacity")
+    public float getOpacity() {
+        return this.renderOptions.getOpacity();
     }
 
     @FromXML
-    public void setRepeatTexture(int repeatTexture) {
-        this.renderOptions.setRepeatTexture(repeatTexture);
+    public void setOpacity(float opacity) {
+        this.renderOptions.setOpacity(opacity);
     }
 
     @Override

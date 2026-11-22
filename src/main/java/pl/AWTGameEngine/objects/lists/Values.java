@@ -20,6 +20,9 @@ public abstract class Values<T> extends ArrayList<T> {
 
     public abstract Values<T> of(String values);
 
+    /**
+     * String is divided into individual values. Before return of the value, the List is being cleared.
+     */
     protected String[] splitAndClear(String values) {
         if(values.isEmpty()) {
             return new String[0];

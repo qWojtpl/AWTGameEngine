@@ -126,7 +126,6 @@ public class Terrain extends ObjectComponent {
                 .setSize(new Vector3(1, 1, 1))
                 .setQuaternionRotation(new Vector4())
                 .setShapePath(terrainIdentifier)
-                .setRepeatTexture(160)
                 .setShader(Shaders.of(getWindow(), DefaultShader.class));
 
         graphicsManager3D.createRenderable(renderOptions3D);

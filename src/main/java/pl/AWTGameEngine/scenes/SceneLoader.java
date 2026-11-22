@@ -191,7 +191,7 @@ public class SceneLoader {
                     sameSize = Boolean.parseBoolean(item.getNodeValue());
                     break;
                 case "PACKAGES":
-                    packages = item.getNodeValue();
+                    packages += item.getNodeValue();
                     break;
             }
         }

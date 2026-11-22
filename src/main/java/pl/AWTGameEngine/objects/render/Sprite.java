@@ -35,7 +35,7 @@ public class Sprite {
     }
 
     public void updateImage(WritableImage image) {
-        this.image = ImageHelper.imageToBufferedImage(image);
+        updateImage(ImageHelper.imageToBufferedImage(image));
     }
 
     public void updateImage(BufferedImage image) {
